@@ -1,4 +1,4 @@
-# Eclipse Corona Agents
+# Agentic Eclipse Library
 
 **Skills, research notes and processing code from the total solar eclipse of 12 August 2026, organised so that
 an AI agent can pick them up and work with them.**
@@ -30,8 +30,8 @@ This repository is that work, published as it is.
 - **Claude Code:** clone the repository and open it; the three skills load from `.claude/skills/`. Or install them
   as a plugin in any project:
   ```
-  /plugin marketplace add PeterWar/Eclipse-Corona-Agents
-  /plugin install eclipse-corona@pere-guerra-eclipse
+  /plugin marketplace add PeterWar/Agentic-Eclipse-Library
+  /plugin install agentic-eclipse-library@pere-guerra-eclipse
   ```
 - **Codex and other agents:** point the agent at [`AGENTS.md`](AGENTS.md). Each skill is a plain `SKILL.md` with
   `references/` and `scripts/`.
@@ -64,7 +64,7 @@ If you use this work — the skills, the notes or the code — or publish an ima
 caption, description or references would be appreciated. This is a courtesy request, not a condition of the
 licence:
 
-    Processed with Eclipse Corona Agents by Pere Guerra — https://github.com/PeterWar/Eclipse-Corona-Agents
+    Processed with Agentic Eclipse Library by Pere Guerra — https://github.com/PeterWar/Agentic-Eclipse-Library
 
 For papers and software, [`CITATION.cff`](CITATION.cff) gives the citation (GitHub shows it under "Cite this
 repository").
