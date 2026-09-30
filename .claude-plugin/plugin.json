@@ -1,7 +1,7 @@
 {
   "name": "agentic-eclipse-library",
   "description": "Three Agent Skills (in Catalan) for processing total-solar-eclipse RAW frames into a faithful HDR image of the corona: linear calibration and stacking, corona post-processing with detail filters, and root-cause repair of recurring artefacts. From the 12 August 2026 eclipse project by Pere Guerra.",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "author": {
     "name": "Pere Guerra Serra",
     "url": "https://github.com/PeterWar"

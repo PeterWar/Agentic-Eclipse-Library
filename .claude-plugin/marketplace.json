@@ -10,7 +10,7 @@
       "name": "agentic-eclipse-library",
       "source": "./",
       "description": "Eclipse corona processing skills: calibration and stacking, post-processing, artefact repair. Written in Catalan.",
-      "version": "2.0.0",
+      "version": "1.0.0",
       "author": { "name": "Pere Guerra Serra" },
       "license": "MIT"
     }
