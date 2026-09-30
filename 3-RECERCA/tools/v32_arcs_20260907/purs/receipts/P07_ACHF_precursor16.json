@@ -1,0 +1,38 @@
+{
+  "tag": "P07_ACHF_precursor16",
+  "parameters": {
+    "source": "Druckmullerova thesis, section5.2 equations5.1-5.2",
+    "identity": "published ACHF precursor, not proprietary Corona ACHF",
+    "sigma_px": 16,
+    "radial_support": [
+      -32,
+      32
+    ],
+    "tangential_arc_support": [
+      -32,
+      32
+    ],
+    "input": "linear corrected G, no log/contrast/H1",
+    "quadrature": {
+      "dr_px": 0.5,
+      "angular_nodes": 32760,
+      "interpolation": "bilinear inside quadrature only; native output grid"
+    },
+    "boundary": "incomplete convolution normalized by observed support",
+    "notation": "coherent offsets u,v; fixes the absolute/offset notation conflict in printed eq5.2"
+  },
+  "physical_support_pixels": 70395270,
+  "float_sha256": "326d4df8e88825b0dc78954769cdf262d9f981731f1e72d03b2050a566f2fc37",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": -3096.22637890625,
+    "white": 182.12764062501083,
+    "sample_percentiles": [
+      0.1,
+      99.9
+    ],
+    "clipped_low_fraction": 0.0010062323789652345,
+    "clipped_high_fraction": 0.0010015871805023264
+  },
+  "u16_sha256": "6a2d7dbc50e06fabe905f95035c3a5524e7c812cad79fad43918bde09668d9ec"
+}

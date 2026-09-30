@@ -1,0 +1,23 @@
+{
+  "tag": "C01_Passa_alt24_lineal",
+  "parameters": {
+    "role": "classic control",
+    "definition": "B-Gaussian24(B), linear G",
+    "boundary": "normalized physical support",
+    "external_processing": "none"
+  },
+  "physical_support_pixels": 70395270,
+  "float_sha256": "4e9ac8a66d9e1ea3e37c783c21014f17acbb22b4ecdcd5cb9882e99161383f60",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": -4850.496046875,
+    "white": 1572.781107422461,
+    "sample_percentiles": [
+      0.1,
+      99.9
+    ],
+    "clipped_low_fraction": 0.0009999109315157113,
+    "clipped_high_fraction": 0.001001303070504595
+  },
+  "u16_sha256": "4bdbc80606d4b56586990fae86aa883a558641ae2700c78ce1d35527fa9a9401"
+}

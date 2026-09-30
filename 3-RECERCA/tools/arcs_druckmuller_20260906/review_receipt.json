@@ -1,0 +1,103 @@
+{
+  "status": "LITERATURE_REVIEW_COMPLETE_CORRECTION_UNRESOLVED",
+  "time_utc": "2026-09-06T16:08:30.224086+00:00",
+  "user_clarification": "Solar-centred arcs only in NON-azimuthal layers. No further localization question pending.",
+  "new_PSB": false,
+  "Desktop_writes": false,
+  "product_unchanged": "V31",
+  "owned_workers": "All synchronous commands completed; both independent reviewers completed.",
+  "files": [
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/arcs_druckmuller_20260906/inspect_h1.py",
+      "bytes": 1740,
+      "sha256": "ec0922e706a1fd10079c583bcd6aeaa2d29a59f43431f35ac057079818484dab"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/arcs_druckmuller_20260906/measure_h1.py",
+      "bytes": 2707,
+      "sha256": "327636930f2afb4cf7a85957296401d26f5d9b99b7e6ea172eb7335a5f4e7d11"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/arcs_druckmuller_20260906/h1_measurements.json",
+      "bytes": 4210,
+      "sha256": "7df877a303b5097b2c98f7bbb5de01c1d5d7d240433fb758785fb2a8636a6537"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/arcs_druckmuller_20260906/H1_01_S_100.png",
+      "bytes": 493746,
+      "sha256": "6b9296e097ea8f19e77a83bbd354ca11072c826926582374f3f204741d83114c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/arcs_druckmuller_20260906/H1_01_N_100.png",
+      "bytes": 443182,
+      "sha256": "28c76988cdc44c955c1663048a0e4e42cfc0c248f633ddb5f0fc4cd922a484a4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/arcs_druckmuller_20260906/H1_01_interior_100.png",
+      "bytes": 488447,
+      "sha256": "29dba77d9adc8d19ccb6b6d064c03a2032492a0c7c88729682fc3fefbb2133e7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/arcs_druckmuller_20260906/TESI_p82.png",
+      "bytes": 313597,
+      "sha256": "edc9a2ddfe088b00efd81b54dd6ae6e0241ca66a7a34c3547b72db32d685fd7d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/arcs_druckmuller_20260906/TESI_p80.png",
+      "bytes": 418753,
+      "sha256": "f6c7f22cb15e24e9317bb05593c04e4bf132927e615e9b83bbd0a6c807df84bf"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/arcs_druckmuller_20260906/H1_01_LLENC_SENCER.png",
+      "bytes": 5998165,
+      "sha256": "c2745afe98820b0f4420b471af8161a0067efc9febef724ab756e8410700f976"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/141_ARCS_SOLARS_DRUCKMULLER_20260906.md",
+      "bytes": 5735,
+      "sha256": "940134eee7a99c097f88a362eab3d9f787c3ece957849cd4c977ee26c35ec96e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-06_ARCS_DRUCKMULLER.md",
+      "bytes": 1154,
+      "sha256": "e65bb53540ddc639f403347f273d1f4ed4d17cf2346e0ae3b6a17d99e54a95ae"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/achf_smoothed.npy",
+      "bytes": 316783352,
+      "sha256": "9f828d88b5509a8137b2d4c59645c26221fbe61c098511bc840343fad0272803"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/achf_u16.npy",
+      "bytes": 158391740,
+      "sha256": "a2e992c61d0a477165fd7310e218560a3c9139347b865ed1a7e74d34f11d2b0a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/passalt24_smoothed.npy",
+      "bytes": 316783352,
+      "sha256": "1d6a76c581e16e2d92f4eb01974878b889bbfced53e749af54e8ad1e50113ebd"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/passalt24_u16.npy",
+      "bytes": 158391740,
+      "sha256": "3b3c795490c214da2a2aca031dd65ac03eb965f71c6e4e453e43eaf7e8db5f3d"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Papers Druckmuller/Druckmullerova_2013_tesi_doctoral_completa_filtres_adaptatius_corona.pdf",
+      "bytes": 14807761,
+      "sha256": "2d6e13b1dcc8f85b7ec5d957b66468016afea0c1a77d52449884bcdad9bfb01f"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Papers Druckmuller/Druckmuller_Rusin_Minarovjech_2006_ACHF_total_solar_eclipse_photography_processing.pdf",
+      "bytes": 3134740,
+      "sha256": "68345f492df5f78c9689791ed356e66436437eac725b0666d253b647c5300aa1"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Papers Druckmuller/Druckmullerova_Morgan_Habbal_2011_ApJ737_88_FNRGF.pdf",
+      "bytes": 3605223,
+      "sha256": "fb783e00568821aa391cefc1397f76fab0cea88a7f8da6ea440c358c18009a88"
+    }
+  ]
+}

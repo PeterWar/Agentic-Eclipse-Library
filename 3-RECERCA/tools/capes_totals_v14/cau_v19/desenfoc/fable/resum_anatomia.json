@@ -1,0 +1,156 @@
+{
+ "fitxer": "V18-DesenfocRadialZoom.psb (extret)",
+ "metode_de_pere": "F = capa1*(1-m) + capa2*m; capa2 = capa1 amb cantonades pintades del color del cel local + Desenfoque Radial ZOOM (max, optima); m = rampa RADIAL pura 0->1 entre 2,25 i 3,25 Rsol",
+ "mascara": {
+  "mitjana_m": 0.88459,
+  "frac_m0_exacte": 0.07033,
+  "frac_m_calaix_max": 0.84809,
+  "rampa_mediana_global": {
+   "m>0,01": 2.45,
+   "m>0,05": 2.55,
+   "m=0,5": 2.85,
+   "m>0,95": 3.05,
+   "m>0,99": 3.15,
+   "m>0,999": 3.25
+  },
+  "amplada_rampa_0p05_a_0p95_Rsol": 0.5,
+  "amplada_rampa_px": 228,
+  "azimut": {
+   "r_m05_min_max": [
+    2.75,
+    2.95
+   ],
+   "r_m095_min_max": [
+    2.95,
+    3.35
+   ],
+   "sector_mes_ample": "-105..-45 graus (y avall)",
+   "rang_mitja_sectors": 0.024
+  },
+  "depen_del_detall": {
+   "R2_f_radi": 0.99209,
+   "R2_g_energia": 0.08212,
+   "corr_residu_radial_amb_logE": -0.0028,
+   "parcial_zona_transicio_controlant_r": 0.132,
+   "veredicte": "NOMES RADI"
+  },
+  "suavitat": {
+   "grad_max_per_px": 0.00844,
+   "amplada_transicio_px_p10_p50_p90": [
+    163,
+    287,
+    891
+   ],
+   "vores_dures_pas05_en_4px": 0
+  }
+ },
+ "capa2_zoom": {
+  "anisotropia_q_gt2_per_anell": {
+   "capa1": [
+    0.671,
+    0.529,
+    0.486,
+    0.463
+   ],
+   "capa2": [
+    0.865,
+    0.627,
+    0.579,
+    0.649
+   ],
+   "anells": [
+    "1,5-2,5",
+    "2,5-3,5",
+    "3,5-5",
+    "5-7"
+   ]
+  },
+  "atenuacio_passaalt_s16fullres_rms": {
+   "2-3": [
+    242.8,
+    60.6
+   ],
+   "3-4,5": [
+    217.2,
+    28.3
+   ],
+   "4,5-6,5": [
+    173.1,
+    7.1
+   ],
+   "6,5-9": [
+    40.5,
+    1.7
+   ]
+  },
+  "dif_c2_c1_DN": {
+   "p50": 296,
+   "p99": 6851,
+   "max": 42827
+  },
+  "veredicte": "mode ZOOM confirmat (vetes radials; mata anells concentrics)"
+ },
+ "cantonades": {
+  "color_pintat_RGB16_mediana": {
+   "NW": [
+    28204,
+    31774,
+    36255
+   ],
+   "NE": [
+    28038,
+    31580,
+    35949
+   ],
+   "SW": [
+    26778,
+    30062,
+    34189
+   ],
+   "SE": [
+    27698,
+    31110,
+    35257
+   ]
+  },
+  "mes_plana": "NE (p95-p5 = 8..30 DN)",
+  "cel_capa1_r8_10": [
+   27762,
+   31192,
+   35359
+  ],
+  "cel_capa1_r6_8": [
+   28002,
+   31436,
+   35587
+  ],
+  "coincidencia": "cada cantonada = cel LOCAL de capa1 (dif 24-64 DN en G, 0,1-0,3%); entre cantonades fins a 4,7%; B/G 1,137+-0,002 = cel (1,132-1,134)",
+  "extensio_zona_llisa_px_radi_des_de_cantonada": {
+   "NW": 1900,
+   "NE": 1500,
+   "SW": 2000,
+   "SE": 1700
+  },
+  "std_passaalt15_dins_zona": {
+   "capa1": [
+    15.9,
+    65.9
+   ],
+   "capa2": [
+    0.35,
+    1.2
+   ]
+  }
+ },
+ "experiments_apagats": {
+  "capa0": {
+   "que_es": "intent previ de cel llis: desenfoc ISOTROP (equivalent gaussia sigma~32 q4 = ~128 px full-res, corr 0,989, rms 962 DN vs capa1) sense vetes de zoom; hp_s4_rms 0,24-0,39 DN (sense detall)",
+   "mascara": "pintada a MA (pinzellades i traços visibles), mitjana 0,777, rampa r05~3,9-4,6, m=1 a ~5,4 Rsol"
+  },
+  "capa3": {
+   "que_es": "capa d'ANOTACIONS, no de desenfoc: fons = escena amb corba mes fosca (pendent 0,706, ofset +1287, mediana -7950 DN) amb detall viu (hp 132 vs 156); tracos de retolador VERD RGB16 (17896,37053,29276) a r 3,7-6,3 Rsol (4,97% px) i TARONJA (32028,26116,20758) p50 5,77 Rsol (2,3%); blob negre poligonal al centre (4,5% px = 0)",
+   "mascara": "blob negre pintat a ma, mitjana 0,699, 14,2% zeros"
+  },
+  "capa0_vs_capa3": "continguts diferents (max absdif 62681 DN)"
+ }
+}

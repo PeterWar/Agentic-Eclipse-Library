@@ -1,0 +1,46 @@
+{
+ "ordre": "Pere (10-09): arregla la V42, les capes no-linealitzades 6-12 no estan alineades amb 00 base, fixa't amb la protuberància principal de l'esquerra",
+ "vector_comu_px": null,
+ "convencio": "moure la capa (+x = cap a l'oest, dreta del llenç; +y = avall); bbox i màscara d'usuari desplaçats, píxels byte a byte",
+ "justificacio": "E3f (Pearson per sectors 1,25-1,6 R, control exacte): D = capa - base = (-10,5...-12, 0...-2,5) a les capes 06-11 (mitjana (-11,2, -1,6)); E4: la Lluna de les capes 12/11/10 és a (-14...-15, -1...-2,6) del forat (mitjana (-14,6, -2,1)); les capes són coherents entre elles a +-2,5 px (E3f: 09-10 = (+1, -1,5); E4: 12-10 = (-1,3, +1,3); i al log de la sessió, força bruta a la zona de les perles, 12-10 = (+2, -1) i 09-10 = (-1, -1)); les mesures a menys d'1,13 R (glow, saturació) són inestables (E5, E5c). Vector comú = compromís entre l'anell exterior (11) i la Lluna (14,6), arrodonit cap a la corona: 12; previsió: la Lluna queda 2-3 px a l'est del centre del forat (mesurat després sobre aquella passada (+12, +2): 1,1-1,9 px). SEGONA PASSADA (verificació independent sobre el PSB amb (+12, +2)): residu de translació a l'anell exterior (+0,9, +0,2) px de mitjana (cap capa > 1,6 px), o sigui que la corona de les capes 06-11 demanava +11; i la capa 12 (les perles) és l'única diferent: la seva Lluna coincideix amb la de la capa 10 (Pere la va registrar per la Lluna) però la seva protuberància queda 3 px a l'est de la de la base i de la 10 (canal R; en G la protuberància vermella és fosca i E5/E6 no la podien mesurar). Com que el criteri de Pere és la protuberància: 12 → (+15, +2) (la seva Lluna cau llavors al forat, que és la Lluna de C2: coherent); 06-11 → (+11, +2). Queda, declarat, un gir de 7-8 minuts d'arc (0,12-0,14 graus) de les capes 06-11 respecte de la base al voltant del Sol (±1,2 px al limbe, ±1,5 px a 1,5 R): cap vector el treu.",
+ "moviments": {
+  "12 1/3200 perles": [
+   15,
+   2
+  ],
+  "11 1/500 limbe": [
+   11,
+   2
+  ],
+  "10 1/125": [
+   11,
+   2
+  ],
+  "09 1/60 x2": [
+   11,
+   2
+  ],
+  "08 1/30 x4 quar": [
+   11,
+   2
+  ],
+  "07 1/15 x2 quar": [
+   11,
+   2
+  ],
+  "06 1/8 x4 quar": [
+   11,
+   2
+  ]
+ },
+ "vectors_px": {
+  "12 1/3200 perles": [
+   15,
+   2
+  ],
+  "altres (06-11)": [
+   11,
+   2
+  ]
+ }
+}

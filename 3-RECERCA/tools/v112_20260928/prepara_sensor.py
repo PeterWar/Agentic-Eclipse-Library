@@ -1,0 +1,20 @@
+from pathlib import Path
+import json,hashlib
+R=Path(__file__).resolve().parents[3];T=Path(__file__).parent;O=R/'4-RESULTATS/v112_20260928'
+p=O/'ADDENDUM_SENSOR_PREVI.json';assert not p.exists()
+p.write_text(json.dumps(dict(reason='Legacy detrend changes full angular support and both legacy/soft alter lunar partial cells. New pilot isolates camera-FOV support deficiency by topology; lunar holes are filled only in a support classifier, never radiance.',operator='Legacy exact where all contributing sector cells have complete sensor support. Only partial sensor cells use smooth confidence and local detrend. Detrend never applied to complete sensor cells. No change to gates.',classification='binary_fill_holes(observation_mask) only used to distinguish enclosed lunar hole from missing detector-field boundary.',candidate='sensor_soft_partial_detrend',preexisting_thresholds_sha256='607e0936fb1799899e3e90d6d8cebe6a198239e8ea7c5eb809c50ff8232aa4df'),indent=2)+'\n')
+s=(R/'3-RECERCA/tools/v98_20260925/rhef_local_sim.py').read_text()
+s=s.replace('from scipy.ndimage import gaussian_filter1d','from scipy.ndimage import gaussian_filter1d, binary_fill_holes')
+s=s.replace('cache = {}; t0 = time.time()', 'cache = {}; t0 = time.time(); sensor = binary_fill_holes(m).astype(np.float32); newout=np.full(len(idx),0.5,np.float32); affected=np.zeros(len(idx),np.float32)')
+s=s.replace('res = []; uu =', "sensor_good = cv2.remap(sensor, mx, my, cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)[0] > .999\n        res = []; uu =")
+s=s.replace('v = p[ix][g]', 'v = p[ix][g]; partial_sensor = not bool(np.all(sensor_good[ix]))')
+s=s.replace('if detrend and v.size >= nmin:', 'if detrend and partial_sensor and v.size >= nmin:')
+s=s.replace('beta, dmax))','beta, dmax, partial_sensor))')
+s=s.replace('float(S_deg / 2)))','float(S_deg / 2), partial_sensor))')
+s=s.replace('vals, vdet, beta, dmax = cache[j][k]', 'vals, vdet, beta, dmax, partial_sensor = cache[j][k]\n                    use = kk == k; ix = ii[use]; weight = wr[use] * ww[use]\n                    if partial_sensor: affected[ix] += weight')
+s=s.replace("if vdet is not None:","rank_old=rank.copy()\n                    if vdet is not None:")
+s=s.replace('out[ix] += weight * rank; denout[ix] += weight', 'out[ix] += weight * rank_old; denout[ix] += weight\n                    confidence = float(np.clip((len(vals)-nmin)/nmin,0,1)) if partial_sensor else 1.0; confidence=confidence*confidence*(3-2*confidence)\n                    newout[ix] += weight*confidence*(rank-0.5)')
+s=s.replace('np.where(denout > 0, out / np.maximum(denout, 1e-9), np.nan)', 'np.where(affected>0, newout, np.where(denout > 0, out / np.maximum(denout, 1e-9), np.nan))')
+(T/'rhef_sensor.py').write_text('"""V112 sensor boundary pilot. Topological support classification does not synthesize samples."""\n'+s)
+p=T/'run_rhef.py';s=p.read_text().replace("if mode=='soft':", "if mode in ('soft','sensor'):").replace("T/'rhef_soft.py'", "T/('rhef_'+mode+'.py')");p.write_text(s)
+print('sensor pilot declared',hashlib.sha256((O/'ADDENDUM_SENSOR_PREVI.json').read_bytes()).hexdigest())

@@ -1,0 +1,618 @@
+[
+  {
+    "tren": "sony",
+    "nom": "DSC06979.ARW",
+    "t": 6.0,
+    "exp": 0.00125,
+    "grup": "sony_A"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC06980.ARW",
+    "t": 6.0,
+    "exp": 0.00015625,
+    "grup": "sony_A"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC06981.ARW",
+    "t": 6.0,
+    "exp": 0.01,
+    "grup": "sony_A"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC06982.ARW",
+    "t": 16.0,
+    "exp": 0.25,
+    "grup": "sony_A"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC06983.ARW",
+    "t": 16.0,
+    "exp": 0.03333333333,
+    "grup": "sony_A"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC06984.ARW",
+    "t": 18.0,
+    "exp": 2.0,
+    "grup": "sony_A"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC06985.ARW",
+    "t": 28.0,
+    "exp": 1.0,
+    "grup": "sony_A"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC06986.ARW",
+    "t": 29.0,
+    "exp": 0.125,
+    "grup": "sony_A"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC06987.ARW",
+    "t": 37.0,
+    "exp": 8.0,
+    "grup": "sony_A"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC06991.ARW",
+    "t": 62.0,
+    "exp": 1.0,
+    "grup": "sony_B"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC06992.ARW",
+    "t": 62.0,
+    "exp": 0.125,
+    "grup": "sony_B"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC06993.ARW",
+    "t": 70.0,
+    "exp": 8.0,
+    "grup": "sony_B"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC06994.ARW",
+    "t": 80.0,
+    "exp": 0.25,
+    "grup": "sony_B"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC06995.ARW",
+    "t": 80.0,
+    "exp": 0.03333333333,
+    "grup": "sony_B"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC06996.ARW",
+    "t": 82.0,
+    "exp": 2.0,
+    "grup": "sony_B"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC06997.ARW",
+    "t": 85.0,
+    "exp": 0.25,
+    "grup": "sony_B"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC06998.ARW",
+    "t": 86.0,
+    "exp": 0.03333333333,
+    "grup": "sony_B"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC06999.ARW",
+    "t": 88.0,
+    "exp": 2.0,
+    "grup": "sony_B"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC07000.ARW",
+    "t": 104.0,
+    "exp": 0.00125,
+    "grup": "sony_B"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC07001.ARW",
+    "t": 104.0,
+    "exp": 0.00015625,
+    "grup": "sony_B"
+  },
+  {
+    "tren": "sony",
+    "nom": "DSC07002.ARW",
+    "t": 104.0,
+    "exp": 0.01,
+    "grup": "sony_B"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2959.CR3",
+    "t": 15.029999999998836,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2960.CR3",
+    "t": 15.680000000007567,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2961.CR3",
+    "t": 16.330000000001746,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2962.CR3",
+    "t": 16.979999999995925,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2963.CR3",
+    "t": 17.610000000000582,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2964.CR3",
+    "t": 18.270000000004075,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2965.CR3",
+    "t": 18.919999999998254,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2966.CR3",
+    "t": 19.570000000006985,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2967.CR3",
+    "t": 20.470000000001164,
+    "exp": 0.0005,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2968.CR3",
+    "t": 21.369999999995343,
+    "exp": 0.002,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2969.CR3",
+    "t": 22.270000000004075,
+    "exp": 0.008,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2970.CR3",
+    "t": 23.19000000000233,
+    "exp": 0.03333333333,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2971.CR3",
+    "t": 24.119999999995343,
+    "exp": 0.125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2972.CR3",
+    "t": 25.139999999999418,
+    "exp": 0.5,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2973.CR3",
+    "t": 26.54000000000815,
+    "exp": 0.001,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2974.CR3",
+    "t": 27.44000000000233,
+    "exp": 0.004,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2975.CR3",
+    "t": 28.339999999996508,
+    "exp": 0.01666666667,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2976.CR3",
+    "t": 29.25999999999476,
+    "exp": 0.06666666667,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2977.CR3",
+    "t": 30.229999999995925,
+    "exp": 0.25,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2978.CR3",
+    "t": 31.380000000004657,
+    "exp": 1.0,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2979.CR3",
+    "t": 33.279999999998836,
+    "exp": 2.0,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2980.CR3",
+    "t": 36.18000000000757,
+    "exp": 2.0,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2981.CR3",
+    "t": 39.08999999999651,
+    "exp": 2.0,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2982.CR3",
+    "t": 42.24000000000524,
+    "exp": 10.0,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2983.CR3",
+    "t": 55.30999999999767,
+    "exp": 10.0,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2984.CR3",
+    "t": 68.7100000000064,
+    "exp": 10.0,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2985.CR3",
+    "t": 82.11000000000058,
+    "exp": 0.0005,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2986.CR3",
+    "t": 83.15000000000873,
+    "exp": 0.002,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2987.CR3",
+    "t": 83.97999999999593,
+    "exp": 0.008,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2988.CR3",
+    "t": 84.88000000000466,
+    "exp": 0.03333333333,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2989.CR3",
+    "t": 85.82000000000698,
+    "exp": 0.125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2990.CR3",
+    "t": 86.85000000000582,
+    "exp": 0.5,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2991.CR3",
+    "t": 88.25,
+    "exp": 0.001,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2992.CR3",
+    "t": 89.15000000000873,
+    "exp": 0.004,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2993.CR3",
+    "t": 90.05000000000291,
+    "exp": 0.01666666667,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2994.CR3",
+    "t": 90.97000000000116,
+    "exp": 0.06666666667,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2995.CR3",
+    "t": 91.94000000000233,
+    "exp": 0.25,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2996.CR3",
+    "t": 93.08999999999651,
+    "exp": 1.0,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2997.CR3",
+    "t": 94.99000000000524,
+    "exp": 0.0005,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2998.CR3",
+    "t": 95.88999999999942,
+    "exp": 0.002,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A2999.CR3",
+    "t": 96.79000000000815,
+    "exp": 0.008,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3000.CR3",
+    "t": 97.69999999999709,
+    "exp": 0.03333333333,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3001.CR3",
+    "t": 98.63000000000466,
+    "exp": 0.125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3002.CR3",
+    "t": 99.65000000000873,
+    "exp": 0.5,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3003.CR3",
+    "t": 101.05000000000291,
+    "exp": 0.0005,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3004.CR3",
+    "t": 101.94999999999709,
+    "exp": 0.002,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3005.CR3",
+    "t": 102.85000000000582,
+    "exp": 0.008,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3006.CR3",
+    "t": 103.77000000000407,
+    "exp": 0.03333333333,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3007.CR3",
+    "t": 104.69999999999709,
+    "exp": 0.125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3008.CR3",
+    "t": 105.72000000000116,
+    "exp": 0.5,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3009.CR3",
+    "t": 107.11999999999534,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3010.CR3",
+    "t": 107.77000000000407,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3011.CR3",
+    "t": 108.41999999999825,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3012.CR3",
+    "t": 109.07000000000698,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3013.CR3",
+    "t": 109.72000000000116,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3014.CR3",
+    "t": 110.36999999999534,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3015.CR3",
+    "t": 111.02000000000407,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3016.CR3",
+    "t": 111.68000000000757,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3017.CR3",
+    "t": 112.33000000000175,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3018.CR3",
+    "t": 112.97999999999593,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3019.CR3",
+    "t": 113.63000000000466,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3020.CR3",
+    "t": 114.27999999999884,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3021.CR3",
+    "t": 114.93000000000757,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3022.CR3",
+    "t": 115.58000000000175,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3023.CR3",
+    "t": 116.22999999999593,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3024.CR3",
+    "t": 116.86000000000058,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  },
+  {
+    "tren": "vixen",
+    "nom": "572A3025.CR3",
+    "t": 117.50999999999476,
+    "exp": 0.0003125,
+    "grup": "vixen"
+  }
+]

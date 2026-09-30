@@ -1,0 +1,1 @@
+app.displayDialogs=DialogModes.ERROR;var f=new File('/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V60.psb');var d=app.open(f);app.activeDocument=d;d.activeLayer=d.layers[1];app.runMenuItem(charIDToTypeID('FtOn'));app.refresh();'V60.psb | '+d.layers.length+' layers | saved='+d.saved+' | '+d.colorProfileName;

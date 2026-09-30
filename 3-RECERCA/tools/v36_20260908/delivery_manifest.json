@@ -1,0 +1,130 @@
+{
+  "psb": {
+    "published_utc": "2026-09-08T16:45:51.693248+00:00",
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V36.psb",
+    "sha256": "fb3f3cefd9492eb8740315b1e567c447787f6af8b3504a6d2a36e5d11385d1bf",
+    "bytes": 4482062742,
+    "layers": 11
+  },
+  "photoshop": {
+    "result": "OBRE 10551 px x 7506 px · 11 capes",
+    "file": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v36_20260908/staging/V36.psb",
+    "sha256": "fb3f3cefd9492eb8740315b1e567c447787f6af8b3504a6d2a36e5d11385d1bf"
+  },
+  "verification_sha256": "fb3f3cefd9492eb8740315b1e567c447787f6af8b3504a6d2a36e5d11385d1bf",
+  "layers": [
+    {
+      "name": "01 ACHF fi 2-32 · V36",
+      "exact": true
+    },
+    {
+      "name": "02 Passa-alt 24 · V36",
+      "exact": true
+    },
+    {
+      "name": "04 ACHF micro 1-16 · V36",
+      "exact": true
+    },
+    {
+      "name": "05 ACHF fi 2-48 · V36",
+      "exact": true
+    },
+    {
+      "name": "06 ACHF estructura 4-64 · V36",
+      "exact": true
+    },
+    {
+      "name": "P01 NRGF · V36",
+      "exact": true
+    },
+    {
+      "name": "P02 RHEF · V36",
+      "exact": true
+    },
+    {
+      "name": "P03 MGN · V36",
+      "exact": true
+    },
+    {
+      "name": "P04 WOW · V36",
+      "exact": true
+    },
+    {
+      "name": "P05 WOW bilateral · V36",
+      "exact": true
+    }
+  ],
+  "base": "fusion_total_v36",
+  "canvis": {
+    "v35": {
+      "composicio_per_grup": "V34 (finestra gradual 0,35→0,85 sat; linealitat Sony; camps B1)",
+      "v34": {
+        "finestra": "terra 12→48 DN igual; sostre smoothstep 0,35·sat → 0,85·sat (V32: lineal 0,70 → 0,85)",
+        "linealitat_sony": {
+          "x": [
+            0.32499999999999996,
+            0.375,
+            0.42499999999999993,
+            0.475,
+            0.5249999999999999,
+            0.575,
+            0.6249999999999999,
+            0.6749999999999999,
+            0.7249999999999999,
+            0.7749999999999999,
+            0.8249999999999998,
+            0.8749999999999999,
+            0.9249999999999998,
+            0.9749999999999999
+          ],
+          "ln_L": [
+            0.0,
+            0.0,
+            0.0,
+            -0.0007884010556153953,
+            -0.0013408624508883804,
+            -0.002568402444012463,
+            -0.004181534692179412,
+            -0.005310029198881239,
+            -0.005615968315396458,
+            -0.0044558143126778305,
+            -0.0051228710799477994,
+            -0.009202939865645021,
+            -0.011979032249655575,
+            -0.016620212176349014
+          ],
+          "aplicacio": "(raw − dark)/L(x) abans del flat; x = (raw − ped)/(sat − ped)"
+        },
+        "vixen_linealitat": "sense correcció (±0,13 % fins al sostre)"
+      },
+      "fusio": {
+        "distancies": "suports plens (forat lunar tapat per a la distància)",
+        "taper_vixen_px": 720.0,
+        "taper_A_px": 480.0,
+        "relleu_R": [
+          1.9,
+          3.5
+        ],
+        "conformacio_vixen": "V·exp(−δ), δ = ⟨ln(V/(S·ρ))⟩ σ256 al solapament, entrada smoothstep (2.0, 2.65)"
+      },
+      "filtres_purs": "P03/P04/P05: entrada = base amb forat lunar i fora del suport omplerts pel perfil azimutal mitjà (ln) de la pròpia imatge; sortida al suport físic; LUT de pantalla de la V34"
+    },
+    "vora_8s_sony": {
+      "fotogrames": [
+        "DSC06987.ARW",
+        "DSC06993.ARW"
+      ],
+      "estat": "RESIDU DECLARAT: dues cures provades i refusades (finestra quadràtica 0,10→0,85: +14 % de gra a tot el camp on els 8 s són al 10–50 % de saturació; esvaïment espacial smoothstep(d,0,900)^3 des del contorn de mig pes: bony de gra fins a +30 % en una banda de 1200 px). Pesos dels 8 s com la V35 (finestra V34).",
+      "motiu": "vora dels 8 s = quadrat arrodonit (vinyetatge del 300 mm sobre el cel) a 3,3–3,8 R☉; graó de gra del 14 % (base) en ~200 px; origen de captura (salt ×4 d'exposició)"
+    },
+    "condicio_contorn_purs": {
+      "radial": "ln B continuat cap endins amb pendent que decau exp(−d/L), L 100 px",
+      "azimutal": "modulació ln B − ⟨ln B⟩ mesurada a (1.05, 1.15) R☉, suavitzada 3.0°",
+      "normalitzacio": "variància (MGN) i potència (WOW) només sobre el suport real"
+    },
+    "radials": {
+      "anells_interiors_incomplets": "estimació de l'anell sencer per la forma azimutal de les primeres corones senceres (com a la vora del llenç)",
+      "rhef": "rang en radi continu: interpolació entre les CDF dels dos anells veïns"
+    }
+  }
+}

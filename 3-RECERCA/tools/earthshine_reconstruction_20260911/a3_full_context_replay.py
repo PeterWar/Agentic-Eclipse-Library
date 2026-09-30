@@ -1,0 +1,7 @@
+"""Replay the recovered CameraRaw recipe in the original full document context."""
+from photoshop_api import *
+src=ROOT/'research/tools/v46_earthshine_20260911/V45_live_source.psd';dst=OUT/'A3_full_context_replay.psd';assert not dst.exists()
+name='V45 font G · dos trens · preferència temporal · vel present'
+js='''var prev=app.activeDocument;var ids=[];for(var i=0;i<app.documents.length;i++)ids.push(app.documents[i].id);var temp=null;try{temp=app.open(new File(__SRC__));for(var j=0;j<ids.length;j++)if(temp.id===ids[j])throw new Error("Expected own newly opened archived source");var layer=null;for(var i=0;i<temp.layers.length;i++)if(temp.layers[i].name===__NAME__)layer=temp.layers[i];if(!layer)throw new Error("Target layer absent");temp.activeLayer=layer;var f=new File(__STREAM__);f.encoding="BINARY";f.open("r");var raw=f.read();f.close();var cr=new ActionDescriptor();cr.fromStream(raw);cr.putString(charIDToTypeID("CMod"),"Filter");executeAction(stringIDToTypeID("Adobe Camera Raw Filter"),cr,DialogModes.NO);var opt=new PhotoshopSaveOptions();opt.layers=true;opt.alphaChannels=true;opt.embedColorProfile=true;temp.saveAs(new File(__DST__),opt,true,Extension.LOWERCASE);}finally{if(temp){var own=true;for(var j=0;j<ids.length;j++)if(temp.id===ids[j])own=false;if(own)temp.close(SaveOptions.DONOTSAVECHANGES);}app.activeDocument=prev;}"FULL_CONTEXT_REPLAY_DONE";'''
+for key,value in [('__SRC__',src),('__STREAM__',OUT/'A2_filter_descriptor.bin'),('__DST__',dst),('__NAME__',name)]:js=js.replace(key,json.dumps(str(value)))
+print(jsx(js),flush=True)

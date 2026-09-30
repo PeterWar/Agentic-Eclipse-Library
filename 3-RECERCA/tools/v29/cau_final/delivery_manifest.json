@@ -1,0 +1,70 @@
+{
+  "created_utc": "2026-09-05T10:59:25.725821+00:00",
+  "output": {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V29.psb",
+    "sha256": "b5c2055b329305b7a8efe6f14159414b739da7a43077e8ba9b7b32288b4ac3ff",
+    "bytes": 4223401864
+  },
+  "inputs": {
+    "V28.psb": {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V28.psb",
+      "snapshot": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau/input_V28.psb",
+      "sha256": "3362c6a53a3fc7b7b46b59958668ed8c156bbc7508590330f18b95f0d50b26e4",
+      "bytes": 3215328980
+    },
+    "V28_Artefactes.psb": {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V28_Artefactes.psb",
+      "snapshot": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau/input_V28_Artefactes.psb",
+      "sha256": "abb2715555c058d54a78c34ce8e9f660ac85b5971396a2b7c1f7515da928089b",
+      "bytes": 895781342
+    }
+  },
+  "code": {
+    "audit_geometry.py": "69aca09b9f50fa4a4e4e4b6290dfcf40e322b30c75ae60f2286970967cf824cd",
+    "build_canvas.py": "afe0255b4fd2f0b1ae4b1d054fdc73f81719e0e16342ff9eb2518f56a30cf663",
+    "coherent_resolution.py": "7e98a1f11dc83a017bba1cfc484f0ecbc380af4e8ae8526bb1e67c364cfe7ff6",
+    "common.py": "1e3966401c811d9921c6af2bc07b6fb78bdb27d5dd6856e2d311d75600f6da6d",
+    "finish_receipt.py": "8472c9c73100d513c63d91df94e7df7eb4997f84c1afb086834aa449fdba52b6",
+    "fuse_and_filter.py": "6877fbaa19d69f33223ec53122e51ed71379ffa38c08e1604c5b2ea82ea376b3",
+    "ghost_roi.py": "abec314e6b7ef6a56539e18b2b6fcabf3f3a90611105123163d00eb31de1e267",
+    "gran_azimuthal.py": "30ea175714f5a0c4509e45bc5fd965a5a0e24c978e9c42fe9bead3d3893044d5",
+    "gran_independent.py": "d7285c4f72f54ca8f737090ca24ee20b53a77e19416fdcb25f911e37cc98fdb9",
+    "inspect_inputs.py": "348b570b71e115d326a8912c063056e7463a27ebf902fc1df8d1ad3e4c6e24d9",
+    "limb_receipt.py": "e998f4bc0909b7b5af02378b957803a12f260e5e0ef19b7515c37b1cdc406401",
+    "make_delivery.py": "1f7c7574c85ff0582b1cbda20f24688d9193e8e2379859c1053759f54fce5250",
+    "merge_pointings.py": "ff665df8d7561d7cf63a58a5d2c4cefccb66919ceae83a8ef61c272c3913562c",
+    "package_psb.py": "56d06955530d5058e72257ff98b68357ab70c44d7d51e8d28599e3f7157f87bf",
+    "prepare_final_grid.py": "3303c59f80526c8b29ace15305c3970164626bcad9f4f3467dfb225ffc4fb43f",
+    "prepare_sources.py": "638af170580fe4782133bc38cc0a5f5056e3052ba057b6febb6609b172c1dac8",
+    "preview_cached.py": "f66d9ec3653ee525d00f8481aec99f3e3ad995804a39522732df75610d092870",
+    "qa_angular_controls.py": "23c50498acc2f41a30869b3d17212fd4d05e0dd502733dd6038e40b4cfa158c5",
+    "qa_rasters.py": "be0b8fbf6df06f1e0d0685e935ba52a41700cdc88c4fc21f41a9118dabd8e9b3",
+    "qa_transfer.py": "847d72f7dd7e48e1680acaea2ba2a216d636713c431498e7e5768d973f92f1ef",
+    "refine_detail.py": "0478718b463016e8f78470c9fafd03b94b153431d1427e9f60eb989aa89f717a",
+    "select_delivery.py": "91f1cc0263faae3614453d3bd439de9b3858bb8be078703635a1f5fad9a1666b",
+    "sony_pointings.py": "4f90388c58671649d17a03f0c5f42d98f927fb36f213d9274073bad469317a5e",
+    "verify_psb.py": "38d2e46b7378e0814d4657c4b386f62c66b2dd8d325ae24756d859e4cbb9720b"
+  },
+  "final_rasters": {
+    "fusion_support.npy": "72f67465aa43a26931a96a016c5a72e67ecf0fa66599bdd3d97abd947cfd8e4a",
+    "gran_support.npy": "9b27b4bdce6d1295c9a29878c20c6b06a06862afee72fb5cec841bff6e206cef",
+    "achf_u16.npy": "a2e992c61d0a477165fd7310e218560a3c9139347b865ed1a7e74d34f11d2b0a",
+    "passalt24_u16.npy": "3b3c795490c214da2a2aca031dd65ac03eb965f71c6e4e453e43eaf7e8db5f3d",
+    "gran_u16.npy": "b3f5f51bc3898fdac6bc4a3aa0e7ebee24df830657865845d5b8b4b1b0873b4c",
+    "achf_mask_final.npy": "1775575a98be78c0343ee51e4f81b8798fa39bb4d27f5ec6adfb317bd9d16cd0",
+    "passalt24_mask_final.npy": "8a3cc720de936b2b5ce0eefcdbcbdbd2322e5ade91d45877b1b6a8322898ed97",
+    "gran_mask_final.npy": "a9776008f249fc69ba8f091dabe79d8a2965900aac6f7efaef14fedc832c8cdb",
+    "base_cel4_final.npy": "74d344de603e269a2bf7513c5ddc974a283591bf5ab0c8dbc11dfbb1f5eae83b",
+    "base_amb_cel_final.npy": "dd6c7a4169bcaddd1edfb08df990a614e21d5ddf258695fa6cb58e51f05d9480",
+    "composite_delivery.npy": "9577a635c2d0d229f446e49ee50d6796955e5c7bd20ee4159d89765af93f16bc"
+  },
+  "Photoshop": "OBRE 10551 px x 7506 px · 25 capes",
+  "dependencies": {
+    "research/tools/eclipse_determinista/comu.py": "241f44b41389389a3ea0ac6277523b660362489f8cbdc5d9984af36b098fa04e",
+    "research/tools/eclipse_determinista/f0.py": "081c1063867000e8ce45028101cfc9db718920d9d0592b27d240c97e9d7dc16d",
+    "research/tools/eclipse_determinista/f2.py": "2bdb0f2e301785b733f77c11eb76479d4d93d566f280dfd97aa252489458924a",
+    "research/tools/eclipse_determinista/f3.py": "546355979034547a06c6bf7a71c17010a06fc6f3920854429ccd6858e73b3609",
+    "research/tools/encaix_sony/psb_utils.py": "f6464a170f48f1a5cebe2a6b3064337c1d95fdefe501af44ce351ed8b53cf037"
+  },
+  "receipt_sha256": "97b062aed5e527dd3b2bd5f0f8d0357fdf681f68db2d0f526169ea3748248e8b"
+}

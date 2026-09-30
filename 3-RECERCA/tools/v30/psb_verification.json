@@ -1,0 +1,64 @@
+{
+  "original25_pixels_alpha_masks_compressed_channels_identical": true,
+  "original24_complete_records_identical": true,
+  "original03_only_visibility_changed": true,
+  "global_metadata_exact": true,
+  "new_layers": [
+    {
+      "name": "03 ACHF azimutal 8-128 · V30",
+      "pixels_and_mask_exact": true,
+      "visible": true,
+      "opacity": 38
+    },
+    {
+      "name": "07 ACHF azimutal suau r8 · V30",
+      "pixels_and_mask_exact": true,
+      "visible": false,
+      "opacity": 38
+    },
+    {
+      "name": "04 ACHF micro 1-16 · V30",
+      "pixels_and_mask_exact": true,
+      "visible": false,
+      "opacity": 36
+    },
+    {
+      "name": "05 ACHF fi 2-48 · V30",
+      "pixels_and_mask_exact": true,
+      "visible": false,
+      "opacity": 36
+    },
+    {
+      "name": "06 ACHF estructura 4-64 · V30",
+      "pixels_and_mask_exact": true,
+      "visible": false,
+      "opacity": 36
+    }
+  ],
+  "composite": {
+    "0": {
+      "merged_exact": true,
+      "max_reopened_layers_DN": 1.0,
+      "p99_DN": 0.0
+    },
+    "1": {
+      "merged_exact": true,
+      "max_reopened_layers_DN": 1.0,
+      "p99_DN": 0.0
+    },
+    "2": {
+      "merged_exact": true,
+      "max_reopened_layers_DN": 1.0,
+      "p99_DN": 0.0
+    }
+  },
+  "size": [
+    10551,
+    7506
+  ],
+  "depth": 16,
+  "layers": 30,
+  "sha256": "0d1f23fe5c56acf60bb35d3e24acea02fffaaf333d04d7a3aa17e0aac4f3f8c0",
+  "bytes": 6233044488,
+  "PASS": true
+}

@@ -1,0 +1,25 @@
+{
+  "tag": "P02_RHEF",
+  "parameters": {
+    "annulus_width_px": 1,
+    "NRGF_profile_evaluation": "linear interpolation between annulus centers; no post-filter correction",
+    "RHEF_rank": "average ranks for ties / population; upsilon=None",
+    "count_min": 2,
+    "count_max": 23444,
+    "paper": "Gilly & Cranmer 2025",
+    "vignette": null,
+    "coverage": "rank only actual observed pixels"
+  },
+  "physical_support_pixels": 70395270,
+  "float_sha256": "5ba058d963e9d03bc7757b18fb1c5682a68dfdad70e538d761d0708ce9b1866b",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": 0,
+    "white": 1,
+    "sample_percentiles": null,
+    "clipped_low_fraction": 0.0,
+    "clipped_high_fraction": 0.0,
+    "statistics_sample_stride_px": 4
+  },
+  "u16_sha256": "8ea0c514778c673a23dbfeabf53b641d905273157f31c9e81d6076e05537a18b"
+}

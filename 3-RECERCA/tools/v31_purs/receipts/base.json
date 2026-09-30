@@ -1,0 +1,26 @@
+{
+  "source": "corrected linear G radiance, one global inter-train gain; original physical blend weights",
+  "shape": [
+    7506,
+    10551
+  ],
+  "gain_sony_to_vixen": 0.3411462604999542,
+  "sun": [
+    5361.768111973117,
+    3775.747534140857,
+    440.60304883027544
+  ],
+  "observed_pixels": 70395270,
+  "nonpositive_observed": 49,
+  "source_files": {
+    "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/vixen_corrected_G.npy": "127d99a09d037b0e8e229c62702a4a0cae95b5263b5d627c1673a893f4034469",
+    "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/sony_corrected_G.npy": "14288499f0430af3cbd809eeb8be470f3e9b7387c00a41a61f0e77fa870980b6",
+    "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/offset_model.json": "7372bb5c46dd6d6a7359d195ec4d07ef95d20228d4c61e702989ba9ff08e728c",
+    "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/vixen_support.npy": "328c150b13049012d243f3468956e65d89e47fa4eb5712d8e3802b7dad976bb6",
+    "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/sony_support.npy": "81102f968e40de2b380abdb82736ad615f7b3a3b8791e0a96ead6dfeb12e3dc9"
+  },
+  "base_sha256": "42effc81c01d1c6796f6d14e92c4066cffb3b1a2538b520bc27592063dc347a1",
+  "support_sha256": "72f67465aa43a26931a96a016c5a72e67ecf0fa66599bdd3d97abd947cfd8e4a",
+  "FOV_resample_crop": "none",
+  "filter_input_channel": "G, monochrome; not asserted to be RGB luminance"
+}

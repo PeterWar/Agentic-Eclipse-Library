@@ -1,0 +1,46 @@
+{
+  "visibility": {
+    "3": true,
+    "4": true,
+    "5": true,
+    "7": true,
+    "8": true,
+    "9": true,
+    "10": true,
+    "11": true,
+    "12": true,
+    "13": true,
+    "16": true,
+    "17": true
+  },
+  "name_overrides": {
+    "3": "12_1-3200s_572A2956.CR3 · FONT_PROTEGIDA · FONAMENT V4 (base, màscara blanca)",
+    "4": "11_1-500s_572A2968.CR3 · FONAMENT V4 RE-DERIVAT · revelat normalitzat",
+    "5": "10_1-125s_572A2969.CR3 · FONAMENT V4 RE-DERIVAT · revelat normalitzat",
+    "7": "09_1-60s_572A2975_apilat2.dng · FONAMENT V4 RE-DERIVAT · revelat normalitzat",
+    "8": "08_1-30s_572A2970_apilat4.dng · ACCEPTADA V4 · rampa 0.99→1.29 R☉ · w=1.0 · revelat normalitzat",
+    "9": "07_1-15s_572A2976_apilat2.dng · ACCEPTADA V4 · rampa 0.99→1.29 R☉ · w=1.0 · revelat normalitzat",
+    "10": "06_1-8s_572A2971_apilat4.dng · ACCEPTADA V4 · rampa 1.03→1.33 R☉ · w=1.0 · revelat normalitzat",
+    "11": "05_1-4s_572A2977_apilat2.dng · ACCEPTADA V4 · rampa 1.11→1.41 R☉ · w=1.0 · revelat normalitzat",
+    "12": "04_1-2s_572A2972_apilat4.dng · ACCEPTADA V4 · rampa 1.21→1.51 R☉ · w=1.0 · revelat normalitzat",
+    "13": "03_1s_572A2978_apilat2.dng · ACCEPTADA V4 · rampa 1.33→1.63 R☉ · w=1.0 · revelat normalitzat",
+    "16": "02_2s_572A2979_apilat3.dng · ACCEPTADA V4 · rampa 1.47→1.77 R☉ · w=1.0 · revelat normalitzat",
+    "17": "01_10.3s_572A2982_apilat3.dng · ACCEPTADA V4 · rampa 2.01→2.31 R☉ · w=1.0 · revelat normalitzat"
+  },
+  "opacity_overrides": {
+    "17": 255
+  },
+  "masks": {
+    "4": {},
+    "5": {},
+    "7": {},
+    "8": {},
+    "9": {},
+    "10": {},
+    "11": {},
+    "12": {},
+    "13": {},
+    "16": {},
+    "17": {}
+  }
+}

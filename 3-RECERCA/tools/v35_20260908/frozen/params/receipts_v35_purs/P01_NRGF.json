@@ -1,0 +1,27 @@
+{
+  "tag": "P01_NRGF",
+  "parameters": {
+    "annulus_width_px": 1,
+    "r_edge_px": 3736,
+    "r_edge_R": 8.479287671563851,
+    "blend_px": 64.0,
+    "completeness_ref": 1.000012174620321,
+    "varP_edge": 1.0001828030781328,
+    "n_z_edge": 932165,
+    "count_min": 2,
+    "count_max": 23444,
+    "paper": "Morgan, Habbal & Woo 2006",
+    "V35_edge": "full-ring mean/std from azimuthal z-shape of last complete rings beyond first canvas edge; no smoothing"
+  },
+  "physical_support_pixels": 70395270,
+  "float_sha256": "4e0a9ac80da8b44663dd1df84544a8b0f815a500727a889964d0642ead960620",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": -2.3811454010009765,
+    "white": 3.09986613345147,
+    "sample_percentiles": null,
+    "clipped_low_fraction": 4.261649965970725e-07,
+    "clipped_high_fraction": 0.0009997972875166186
+  },
+  "u16_sha256": "8d7b9ad98aaebed72800791f939100a089a6acf85bf296e9ec0052e306691b17"
+}

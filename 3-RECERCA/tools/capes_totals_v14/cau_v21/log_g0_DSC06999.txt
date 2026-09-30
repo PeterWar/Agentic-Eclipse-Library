@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/Users/USUARI/Downloads/Eclipse 2026/research/tools/capes_totals_v14/v42_lluna_tren_g0.py", line 168, in <module>
+    main(sys.argv[1], sub, sys.argv[3], corr)
+  File "/Users/USUARI/Downloads/Eclipse 2026/research/tools/capes_totals_v14/v42_lluna_tren_g0.py", line 54, in main
+    geo15 = F15.Geo(padx=3387.0, pady=5109.0)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/USUARI/Downloads/Eclipse 2026/research/tools/capes_totals_v14/fes_v15.py", line 86, in __init__
+    Fv = json.load(open(os.path.join(RUN_VIXEN, "4-rebuts", "F1.2_sol_llenc.json")))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/017_VIXEN_CIENCIA_20260827T193426Z/4-rebuts/F1.2_sol_llenc.json'

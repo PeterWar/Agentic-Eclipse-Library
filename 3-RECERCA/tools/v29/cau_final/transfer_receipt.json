@@ -1,0 +1,479 @@
+{
+  "source_injection": [
+    {
+      "xy": [
+        4879,
+        2549
+      ],
+      "channel": 0,
+      "wavelength": 16,
+      "gain": 1.000000363070441,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4879,
+        2549
+      ],
+      "channel": 0,
+      "wavelength": 32,
+      "gain": 0.9999997146678684,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4879,
+        2549
+      ],
+      "channel": 0,
+      "wavelength": 64,
+      "gain": 0.9999993315161686,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4879,
+        2549
+      ],
+      "channel": 0,
+      "wavelength": 128,
+      "gain": 1.0000003583917851,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4879,
+        2549
+      ],
+      "channel": 1,
+      "wavelength": 16,
+      "gain": 1.0000005192158885,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4879,
+        2549
+      ],
+      "channel": 1,
+      "wavelength": 32,
+      "gain": 1.0000002752075077,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4879,
+        2549
+      ],
+      "channel": 1,
+      "wavelength": 64,
+      "gain": 0.9999999325409078,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4879,
+        2549
+      ],
+      "channel": 1,
+      "wavelength": 128,
+      "gain": 0.9999997628692366,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4879,
+        2549
+      ],
+      "channel": 2,
+      "wavelength": 16,
+      "gain": 1.0000002781580823,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4879,
+        2549
+      ],
+      "channel": 2,
+      "wavelength": 32,
+      "gain": 0.9999996917530835,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4879,
+        2549
+      ],
+      "channel": 2,
+      "wavelength": 64,
+      "gain": 1.0000008181798297,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4879,
+        2549
+      ],
+      "channel": 2,
+      "wavelength": 128,
+      "gain": 0.9999986248057078,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5982,
+        5188
+      ],
+      "channel": 0,
+      "wavelength": 16,
+      "gain": 0.9999996971955595,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5982,
+        5188
+      ],
+      "channel": 0,
+      "wavelength": 32,
+      "gain": 1.0000004901566821,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5982,
+        5188
+      ],
+      "channel": 0,
+      "wavelength": 64,
+      "gain": 0.9999994186650956,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5982,
+        5188
+      ],
+      "channel": 0,
+      "wavelength": 128,
+      "gain": 0.9999994988381619,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5982,
+        5188
+      ],
+      "channel": 1,
+      "wavelength": 16,
+      "gain": 0.9999996634006787,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5982,
+        5188
+      ],
+      "channel": 1,
+      "wavelength": 32,
+      "gain": 0.9999995935042437,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5982,
+        5188
+      ],
+      "channel": 1,
+      "wavelength": 64,
+      "gain": 0.9999994274371743,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5982,
+        5188
+      ],
+      "channel": 1,
+      "wavelength": 128,
+      "gain": 1.0000001833319165,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5982,
+        5188
+      ],
+      "channel": 2,
+      "wavelength": 16,
+      "gain": 0.9999990770807853,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5982,
+        5188
+      ],
+      "channel": 2,
+      "wavelength": 32,
+      "gain": 1.0000003696957607,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5982,
+        5188
+      ],
+      "channel": 2,
+      "wavelength": 64,
+      "gain": 0.9999997295076277,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5982,
+        5188
+      ],
+      "channel": 2,
+      "wavelength": 128,
+      "gain": 0.999999083204151,
+      "PASS": true
+    },
+    {
+      "xy": [
+        3498,
+        5473
+      ],
+      "channel": 0,
+      "wavelength": 16,
+      "gain": 0.999999769068472,
+      "PASS": true
+    },
+    {
+      "xy": [
+        3498,
+        5473
+      ],
+      "channel": 0,
+      "wavelength": 32,
+      "gain": 1.000000779094219,
+      "PASS": true
+    },
+    {
+      "xy": [
+        3498,
+        5473
+      ],
+      "channel": 0,
+      "wavelength": 64,
+      "gain": 0.9999999385712779,
+      "PASS": true
+    },
+    {
+      "xy": [
+        3498,
+        5473
+      ],
+      "channel": 0,
+      "wavelength": 128,
+      "gain": 1.0000000339435038,
+      "PASS": true
+    },
+    {
+      "xy": [
+        3498,
+        5473
+      ],
+      "channel": 1,
+      "wavelength": 16,
+      "gain": 0.9999999422264614,
+      "PASS": true
+    },
+    {
+      "xy": [
+        3498,
+        5473
+      ],
+      "channel": 1,
+      "wavelength": 32,
+      "gain": 0.999999908149543,
+      "PASS": true
+    },
+    {
+      "xy": [
+        3498,
+        5473
+      ],
+      "channel": 1,
+      "wavelength": 64,
+      "gain": 0.9999997825882441,
+      "PASS": true
+    },
+    {
+      "xy": [
+        3498,
+        5473
+      ],
+      "channel": 1,
+      "wavelength": 128,
+      "gain": 1.0000002335673264,
+      "PASS": true
+    },
+    {
+      "xy": [
+        3498,
+        5473
+      ],
+      "channel": 2,
+      "wavelength": 16,
+      "gain": 0.9999989322661839,
+      "PASS": true
+    },
+    {
+      "xy": [
+        3498,
+        5473
+      ],
+      "channel": 2,
+      "wavelength": 32,
+      "gain": 0.9999996851511753,
+      "PASS": true
+    },
+    {
+      "xy": [
+        3498,
+        5473
+      ],
+      "channel": 2,
+      "wavelength": 64,
+      "gain": 0.9999994871670542,
+      "PASS": true
+    },
+    {
+      "xy": [
+        3498,
+        5473
+      ],
+      "channel": 2,
+      "wavelength": 128,
+      "gain": 0.999999895336017,
+      "PASS": true
+    }
+  ],
+  "resolution_injection": [
+    {
+      "xy": [
+        4879,
+        2549
+      ],
+      "wavelength": 32,
+      "sigma_max": 1.9806840419769287,
+      "gain": 0.966242253780365,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4879,
+        2549
+      ],
+      "wavelength": 64,
+      "sigma_max": 1.9806840419769287,
+      "gain": 0.9913923740386963,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4879,
+        2549
+      ],
+      "wavelength": 128,
+      "sigma_max": 1.9806840419769287,
+      "gain": 0.9978375434875488,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4879,
+        2549
+      ],
+      "wavelength": 256,
+      "sigma_max": 1.9806840419769287,
+      "gain": 0.9994586110115051,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5982,
+        5188
+      ],
+      "wavelength": 32,
+      "sigma_max": 1.1689281463623047,
+      "gain": 0.9741802215576172,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5982,
+        5188
+      ],
+      "wavelength": 64,
+      "sigma_max": 1.1689281463623047,
+      "gain": 0.9934489727020264,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5982,
+        5188
+      ],
+      "wavelength": 128,
+      "sigma_max": 1.1689281463623047,
+      "gain": 0.9983562231063843,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5982,
+        5188
+      ],
+      "wavelength": 256,
+      "sigma_max": 1.1689281463623047,
+      "gain": 0.999588668346405,
+      "PASS": true
+    },
+    {
+      "xy": [
+        3498,
+        5473
+      ],
+      "wavelength": 128,
+      "sigma_max": 4.675712585449219,
+      "gain": 0.9806852340698242,
+      "PASS": true
+    },
+    {
+      "xy": [
+        3498,
+        5473
+      ],
+      "wavelength": 256,
+      "sigma_max": 4.675712585449219,
+      "gain": 0.9952108860015869,
+      "PASS": true
+    }
+  ],
+  "known_bad": {
+    "blur16_on_32px": {
+      "gain": 0.007158286403864622,
+      "expected_FAIL": true
+    },
+    "neutral_patch": {
+      "gain": 0,
+      "expected_FAIL": true
+    }
+  },
+  "grid": "existing PSB",
+  "operator": "saved full same-sky relative factor including local residual; a common paired multiplicative injection cancels exactly in B/A and leaves the fitted factor unchanged",
+  "PASS": true
+}

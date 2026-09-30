@@ -1,0 +1,327 @@
+{
+  "seed": 300507,
+  "amplitude_lnG": 0.0001,
+  "components": [
+    {
+      "radial_lambda_px": 96,
+      "angular_harmonic": 32,
+      "phases": [
+        6.181639674342016,
+        3.807279660669189
+      ]
+    },
+    {
+      "radial_lambda_px": 160,
+      "angular_harmonic": 64,
+      "phases": [
+        3.5581753030170535,
+        4.44358778148717
+      ]
+    },
+    {
+      "radial_lambda_px": 256,
+      "angular_harmonic": 128,
+      "phases": [
+        3.323141600278107,
+        2.9565616273253914
+      ]
+    }
+  ],
+  "scope": "same small multiplicative radiance injection in both trains; actual angular normalized convolution, polar/cartesian interpolation, radial regularization, tanh, S/N and refitted H1; fixed RAW support, weights, calibration and post-contrast profiles",
+  "transfer": {
+    "4.0": [
+      {
+        "radial_lambda_px": 96,
+        "angular_harmonic": 32,
+        "R": [
+          1.2,
+          2
+        ],
+        "linear_relative_gain": 0.9663045406341553,
+        "display_relative_gain": 0.9670250415802002,
+        "phase_coherence": 0.9999921917915344,
+        "PASS_relative_090_110": true
+      },
+      {
+        "radial_lambda_px": 96,
+        "angular_harmonic": 32,
+        "R": [
+          2,
+          3.5
+        ],
+        "linear_relative_gain": 0.9663404822349548,
+        "display_relative_gain": 0.9719588160514832,
+        "phase_coherence": 0.9999824166297913,
+        "PASS_relative_090_110": true
+      },
+      {
+        "radial_lambda_px": 96,
+        "angular_harmonic": 32,
+        "R": [
+          3.5,
+          5
+        ],
+        "linear_relative_gain": 0.9663291573524475,
+        "display_relative_gain": 0.9789151549339294,
+        "phase_coherence": 0.9999964833259583,
+        "PASS_relative_090_110": true
+      },
+      {
+        "radial_lambda_px": 96,
+        "angular_harmonic": 32,
+        "R": [
+          5,
+          7.5
+        ],
+        "linear_relative_gain": 0.9663276076316833,
+        "display_relative_gain": 0.9817418456077576,
+        "phase_coherence": 0.999997615814209,
+        "PASS_relative_090_110": true
+      },
+      {
+        "radial_lambda_px": 160,
+        "angular_harmonic": 64,
+        "R": [
+          1.2,
+          2
+        ],
+        "linear_relative_gain": 0.9877230525016785,
+        "display_relative_gain": 0.9885933995246887,
+        "phase_coherence": 0.9999953508377075,
+        "PASS_relative_090_110": true
+      },
+      {
+        "radial_lambda_px": 160,
+        "angular_harmonic": 64,
+        "R": [
+          2,
+          3.5
+        ],
+        "linear_relative_gain": 0.9877400398254395,
+        "display_relative_gain": 0.9946085810661316,
+        "phase_coherence": 0.9999915361404419,
+        "PASS_relative_090_110": true
+      },
+      {
+        "radial_lambda_px": 160,
+        "angular_harmonic": 64,
+        "R": [
+          3.5,
+          5
+        ],
+        "linear_relative_gain": 0.9877468943595886,
+        "display_relative_gain": 1.0006674528121948,
+        "phase_coherence": 0.9999979138374329,
+        "PASS_relative_090_110": true
+      },
+      {
+        "radial_lambda_px": 160,
+        "angular_harmonic": 64,
+        "R": [
+          5,
+          7.5
+        ],
+        "linear_relative_gain": 0.9877462983131409,
+        "display_relative_gain": 1.0032004117965698,
+        "phase_coherence": 0.9999991059303284,
+        "PASS_relative_090_110": true
+      },
+      {
+        "radial_lambda_px": 256,
+        "angular_harmonic": 128,
+        "R": [
+          1.2,
+          2
+        ],
+        "linear_relative_gain": 0.9950220584869385,
+        "display_relative_gain": 0.9959449172019958,
+        "phase_coherence": 0.9999939799308777,
+        "PASS_relative_090_110": true
+      },
+      {
+        "radial_lambda_px": 256,
+        "angular_harmonic": 128,
+        "R": [
+          2,
+          3.5
+        ],
+        "linear_relative_gain": 0.9951821565628052,
+        "display_relative_gain": 1.002009630203247,
+        "phase_coherence": 0.9999912977218628,
+        "PASS_relative_090_110": true
+      },
+      {
+        "radial_lambda_px": 256,
+        "angular_harmonic": 128,
+        "R": [
+          3.5,
+          5
+        ],
+        "linear_relative_gain": 0.9951947927474976,
+        "display_relative_gain": 1.0084238052368164,
+        "phase_coherence": 0.9999983906745911,
+        "PASS_relative_090_110": true
+      },
+      {
+        "radial_lambda_px": 256,
+        "angular_harmonic": 128,
+        "R": [
+          5,
+          7.5
+        ],
+        "linear_relative_gain": 0.9951950907707214,
+        "display_relative_gain": 1.010868787765503,
+        "phase_coherence": 0.9999993443489075,
+        "PASS_relative_090_110": true
+      }
+    ],
+    "8.0": [
+      {
+        "radial_lambda_px": 96,
+        "angular_harmonic": 32,
+        "R": [
+          1.2,
+          2
+        ],
+        "linear_relative_gain": 0.8718845248222351,
+        "display_relative_gain": 0.8730728030204773,
+        "phase_coherence": 0.9999775886535645,
+        "PASS_relative_090_110": false
+      },
+      {
+        "radial_lambda_px": 96,
+        "angular_harmonic": 32,
+        "R": [
+          2,
+          3.5
+        ],
+        "linear_relative_gain": 0.8720088005065918,
+        "display_relative_gain": 0.8793456554412842,
+        "phase_coherence": 0.9999532699584961,
+        "PASS_relative_090_110": false
+      },
+      {
+        "radial_lambda_px": 96,
+        "angular_harmonic": 32,
+        "R": [
+          3.5,
+          5
+        ],
+        "linear_relative_gain": 0.8719671964645386,
+        "display_relative_gain": 0.8875086307525635,
+        "phase_coherence": 0.9999902844429016,
+        "PASS_relative_090_110": false
+      },
+      {
+        "radial_lambda_px": 96,
+        "angular_harmonic": 32,
+        "R": [
+          5,
+          7.5
+        ],
+        "linear_relative_gain": 0.8719616532325745,
+        "display_relative_gain": 0.8905577063560486,
+        "phase_coherence": 0.9999932646751404,
+        "PASS_relative_090_110": false
+      },
+      {
+        "radial_lambda_px": 160,
+        "angular_harmonic": 64,
+        "R": [
+          1.2,
+          2
+        ],
+        "linear_relative_gain": 0.9518014788627625,
+        "display_relative_gain": 0.9544495940208435,
+        "phase_coherence": 0.9999823570251465,
+        "PASS_relative_090_110": true
+      },
+      {
+        "radial_lambda_px": 160,
+        "angular_harmonic": 64,
+        "R": [
+          2,
+          3.5
+        ],
+        "linear_relative_gain": 0.9518619179725647,
+        "display_relative_gain": 0.9605379104614258,
+        "phase_coherence": 0.9999817609786987,
+        "PASS_relative_090_110": true
+      },
+      {
+        "radial_lambda_px": 160,
+        "angular_harmonic": 64,
+        "R": [
+          3.5,
+          5
+        ],
+        "linear_relative_gain": 0.9518870711326599,
+        "display_relative_gain": 0.9688136577606201,
+        "phase_coherence": 0.9999955296516418,
+        "PASS_relative_090_110": true
+      },
+      {
+        "radial_lambda_px": 160,
+        "angular_harmonic": 64,
+        "R": [
+          5,
+          7.5
+        ],
+        "linear_relative_gain": 0.9518851637840271,
+        "display_relative_gain": 0.9719037413597107,
+        "phase_coherence": 0.9999982714653015,
+        "PASS_relative_090_110": true
+      },
+      {
+        "radial_lambda_px": 256,
+        "angular_harmonic": 128,
+        "R": [
+          1.2,
+          2
+        ],
+        "linear_relative_gain": 0.980242133140564,
+        "display_relative_gain": 0.9818750619888306,
+        "phase_coherence": 0.9999784231185913,
+        "PASS_relative_090_110": true
+      },
+      {
+        "radial_lambda_px": 256,
+        "angular_harmonic": 128,
+        "R": [
+          2,
+          3.5
+        ],
+        "linear_relative_gain": 0.980871856212616,
+        "display_relative_gain": 0.9899377822875977,
+        "phase_coherence": 0.9999813437461853,
+        "PASS_relative_090_110": true
+      },
+      {
+        "radial_lambda_px": 256,
+        "angular_harmonic": 128,
+        "R": [
+          3.5,
+          5
+        ],
+        "linear_relative_gain": 0.9809204339981079,
+        "display_relative_gain": 0.9985947608947754,
+        "phase_coherence": 0.999996542930603,
+        "PASS_relative_090_110": true
+      },
+      {
+        "radial_lambda_px": 256,
+        "angular_harmonic": 128,
+        "R": [
+          5,
+          7.5
+        ],
+        "linear_relative_gain": 0.9809223413467407,
+        "display_relative_gain": 1.0016475915908813,
+        "phase_coherence": 0.9999988675117493,
+        "PASS_relative_090_110": true
+      }
+    ]
+  },
+  "default_r4_PASS": true,
+  "soft_r8_PASS_lambda_ge160": true
+}

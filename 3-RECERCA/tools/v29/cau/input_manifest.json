@@ -1,0 +1,887 @@
+{
+  "created_utc": "2026-09-05T09:52:23Z",
+  "sources": {
+    "V28.psb": {
+      "original": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V28.psb",
+      "snapshot": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau/input_V28.psb",
+      "bytes": 3215328980,
+      "sha256": "3362c6a53a3fc7b7b46b59958668ed8c156bbc7508590330f18b95f0d50b26e4",
+      "inventory": {
+        "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau/input_V28.psb",
+        "size": [
+          10551,
+          7506
+        ],
+        "depth": 16,
+        "layers": [
+          {
+            "i": 0,
+            "name": "12 1/3200 perles",
+            "bbox": [
+              1420,
+              908,
+              9123,
+              6764
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x114808050>"
+            }
+          },
+          {
+            "i": 1,
+            "name": "11 1/500 limbe",
+            "bbox": [
+              886,
+              410,
+              9398,
+              7096
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x114808130>"
+            }
+          },
+          {
+            "i": 2,
+            "name": "10 1/125",
+            "bbox": [
+              886,
+              410,
+              9398,
+              7096
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x114808280>"
+            }
+          },
+          {
+            "i": 3,
+            "name": "09 1/60 x2",
+            "bbox": [
+              1423,
+              908,
+              9126,
+              6765
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x1148084b0>"
+            }
+          },
+          {
+            "i": 4,
+            "name": "08 1/30 x4 quar",
+            "bbox": [
+              1422,
+              909,
+              9126,
+              6766
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x114808590>"
+            }
+          },
+          {
+            "i": 5,
+            "name": "07 1/15 x2 quar",
+            "bbox": [
+              1423,
+              908,
+              9126,
+              6765
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x114808670>"
+            }
+          },
+          {
+            "i": 6,
+            "name": "06 1/8 x4 quar",
+            "bbox": [
+              1422,
+              909,
+              9126,
+              6766
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x1148087c0>"
+            }
+          },
+          {
+            "i": 7,
+            "name": "05 1/4 x2 quar",
+            "bbox": [
+              1423,
+              908,
+              9126,
+              6765
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x114808910>"
+            }
+          },
+          {
+            "i": 8,
+            "name": "04 1/2 x4 quar",
+            "bbox": [
+              1422,
+              909,
+              9126,
+              6766
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x1148089f0>"
+            }
+          },
+          {
+            "i": 9,
+            "name": "03 1s x2 quar",
+            "bbox": [
+              1423,
+              908,
+              9126,
+              6765
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x114808ad0>"
+            }
+          },
+          {
+            "i": 10,
+            "name": "02 2s x3 quar",
+            "bbox": [
+              1424,
+              907,
+              9127,
+              6763
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 255,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x114808bb0>"
+            }
+          },
+          {
+            "i": 11,
+            "name": "01 10.3s x3 quar",
+            "bbox": [
+              1423,
+              908,
+              9127,
+              6765
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10552,
+                7506
+              ],
+              "background_color": 255,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x114808c90>"
+            }
+          },
+          {
+            "i": 12,
+            "name": "13 Sony >1s",
+            "bbox": [
+              0,
+              0,
+              10551,
+              7506
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x114808d70>"
+            }
+          },
+          {
+            "i": 13,
+            "name": "Fons per raig",
+            "bbox": [
+              0,
+              0,
+              10551,
+              7506
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x114808e50>"
+            }
+          },
+          {
+            "i": 14,
+            "name": "Earthshine v2",
+            "bbox": [
+              4866,
+              3279,
+              5857,
+              4270
+            ],
+            "visible": false,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x114808f30>"
+            }
+          },
+          {
+            "i": 15,
+            "name": "Compara D87",
+            "bbox": [
+              4866,
+              3279,
+              5857,
+              4270
+            ],
+            "visible": false,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x1148090f0>"
+            }
+          },
+          {
+            "i": 16,
+            "name": "Compara LROC",
+            "bbox": [
+              4866,
+              3279,
+              5857,
+              4270
+            ],
+            "visible": false,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x1148092b0>"
+            }
+          },
+          {
+            "i": 17,
+            "name": "Earthshine V24e",
+            "bbox": [
+              4866,
+              3279,
+              5857,
+              4270
+            ],
+            "visible": false,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x114809400>"
+            }
+          },
+          {
+            "i": 18,
+            "name": "00 Base amb cel",
+            "bbox": [
+              0,
+              0,
+              10551,
+              7506
+            ],
+            "visible": false,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x114809a90>"
+            }
+          },
+          {
+            "i": 19,
+            "name": "00 Base (cel/4)",
+            "bbox": [
+              0,
+              0,
+              10551,
+              7506
+            ],
+            "visible": false,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x11480a0b0>"
+            }
+          },
+          {
+            "i": 20,
+            "name": "04 ACHF ample 9R",
+            "bbox": [
+              0,
+              0,
+              10551,
+              7506
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2
+            ],
+            "mask": null
+          },
+          {
+            "i": 21,
+            "name": "03 ACHF gran azimutal",
+            "bbox": [
+              0,
+              0,
+              10551,
+              7506
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2
+            ],
+            "mask": null
+          },
+          {
+            "i": 22,
+            "name": "01 ACHF fi 2-32",
+            "bbox": [
+              0,
+              0,
+              10551,
+              7506
+            ],
+            "visible": false,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2
+            ],
+            "mask": null
+          },
+          {
+            "i": 23,
+            "name": "02 Passa-alt 24",
+            "bbox": [
+              0,
+              0,
+              10551,
+              7506
+            ],
+            "visible": false,
+            "opacity": 102,
+            "blend": "BlendMode.OVERLAY",
+            "channels": [
+              -1,
+              0,
+              1,
+              2
+            ],
+            "mask": null
+          },
+          {
+            "i": 24,
+            "name": "Estrelles",
+            "bbox": [
+              0,
+              0,
+              10551,
+              7506
+            ],
+            "visible": false,
+            "opacity": 255,
+            "blend": "BlendMode.LINEAR_DODGE",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x11480a350>"
+            }
+          },
+          {
+            "i": 25,
+            "name": "Reflex",
+            "bbox": [
+              4862,
+              3279,
+              5853,
+              4270
+            ],
+            "visible": false,
+            "opacity": 255,
+            "blend": "BlendMode.LINEAR_DODGE",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x11480a430>"
+            }
+          }
+        ]
+      }
+    },
+    "V28_Artefactes.psb": {
+      "original": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V28_Artefactes.psb",
+      "snapshot": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau/input_V28_Artefactes.psb",
+      "bytes": 895781342,
+      "sha256": "abb2715555c058d54a78c34ce8e9f660ac85b5971396a2b7c1f7515da928089b",
+      "inventory": {
+        "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau/input_V28_Artefactes.psb",
+        "size": [
+          10551,
+          7506
+        ],
+        "depth": 16,
+        "layers": [
+          {
+            "i": 0,
+            "name": "00 Base (cel/4)",
+            "bbox": [
+              0,
+              0,
+              10551,
+              7506
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2,
+              -2
+            ],
+            "mask": {
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "background_color": 0,
+              "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x11480b700>"
+            }
+          },
+          {
+            "i": 1,
+            "name": "04 ACHF ample 9R",
+            "bbox": [
+              0,
+              0,
+              10551,
+              7506
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2
+            ],
+            "mask": null
+          },
+          {
+            "i": 2,
+            "name": "03 ACHF gran azimutal",
+            "bbox": [
+              0,
+              0,
+              10551,
+              7506
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2
+            ],
+            "mask": null
+          },
+          {
+            "i": 3,
+            "name": "01 ACHF fi 2-32",
+            "bbox": [
+              0,
+              0,
+              10551,
+              7506
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2
+            ],
+            "mask": null
+          },
+          {
+            "i": 4,
+            "name": "02 Passa-alt 24",
+            "bbox": [
+              0,
+              0,
+              10551,
+              7506
+            ],
+            "visible": true,
+            "opacity": 255,
+            "blend": "BlendMode.NORMAL",
+            "channels": [
+              -1,
+              0,
+              1,
+              2
+            ],
+            "mask": null
+          }
+        ]
+      }
+    }
+  }
+}

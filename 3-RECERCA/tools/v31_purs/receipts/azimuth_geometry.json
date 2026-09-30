@@ -1,0 +1,67 @@
+{
+  "PASS": true,
+  "radial_span_R": [
+    1.35,
+    2.5
+  ],
+  "angles": 1440,
+  "radii": 60,
+  "angular_highpass_sigma_samples": 20,
+  "reference": "common native G base, independently confirms no angular remapping",
+  "rows": [
+    {
+      "tag": "P01_NRGF",
+      "azimuth_shift_degrees": 0.0,
+      "correlation_at_peak": 0.9999863505363464,
+      "rotated180_null_correlation_at0": -0.0001333078689640388
+    },
+    {
+      "tag": "P02_RHEF",
+      "azimuth_shift_degrees": 0.0,
+      "correlation_at_peak": 0.6171512007713318,
+      "rotated180_null_correlation_at0": 0.014896225184202194
+    },
+    {
+      "tag": "P03_MGN",
+      "azimuth_shift_degrees": 0.0,
+      "correlation_at_peak": 0.2923182547092438,
+      "rotated180_null_correlation_at0": -0.001285415142774582
+    },
+    {
+      "tag": "P04_WOW",
+      "azimuth_shift_degrees": 0.0,
+      "correlation_at_peak": 0.38423702120780945,
+      "rotated180_null_correlation_at0": -0.003213868709281087
+    },
+    {
+      "tag": "P05_WOW_bilateral",
+      "azimuth_shift_degrees": 0.0,
+      "correlation_at_peak": 0.3511883318424225,
+      "rotated180_null_correlation_at0": -0.0008100558770820498
+    },
+    {
+      "tag": "P06_NAFE",
+      "azimuth_shift_degrees": 0.0,
+      "correlation_at_peak": 0.4081326127052307,
+      "rotated180_null_correlation_at0": 0.0009123248746618629
+    },
+    {
+      "tag": "P07_ACHF_precursor16",
+      "azimuth_shift_degrees": 0.0,
+      "correlation_at_peak": 0.49400594830513,
+      "rotated180_null_correlation_at0": 0.0009818498510867357
+    },
+    {
+      "tag": "P08_ACHF_precursor32",
+      "azimuth_shift_degrees": 0.0,
+      "correlation_at_peak": 0.6903757452964783,
+      "rotated180_null_correlation_at0": 0.008779133670032024
+    },
+    {
+      "tag": "P09_SWAP_pilot",
+      "azimuth_shift_degrees": 0.0,
+      "correlation_at_peak": 0.9380801320075989,
+      "rotated180_null_correlation_at0": 0.01059732772409916
+    }
+  ]
+}

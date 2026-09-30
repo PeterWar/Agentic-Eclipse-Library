@@ -1,0 +1,173 @@
+{
+ "v14": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/CapesTotalsV14.psd",
+ "desti": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/CapesTotalsV15.psb",
+ "llenc": [
+  14572,
+  14196
+ ],
+ "pad": [
+  3387,
+  5109
+ ],
+ "sol_v15": [
+  7410.56698490937,
+  7844.356301880476
+ ],
+ "fotogrames_8s": [
+  "DSC06987.ARW",
+  "DSC06993.ARW"
+ ],
+ "k_coherencia": {
+  "DSC06987.ARW": 0.995985595112283,
+  "DSC06993.ARW": 0.995985595112283
+ },
+ "correccio_raw_sony_px": [
+  0.0,
+  0.0
+ ],
+ "residual_v14_px": [
+  0.17627277421183862,
+  -0.16957399169427845
+ ],
+ "render": {
+  "gamut_acotat_pct": 0.0,
+  "valor_ancora_L": 214112.453125,
+  "pendent": 0.22,
+  "ancora": 0.74,
+  "terra": 0.045,
+  "sigma_croma_px": 24.0
+ },
+ "color_lineal": {
+  "3Rsol": {
+   "R/G": 1.252089023590088,
+   "B/G": 0.7618469595909119,
+   "n": 235252
+  },
+  "5Rsol": {
+   "R/G": 1.072329044342041,
+   "B/G": 0.8379989862442017,
+   "n": 393499
+  },
+  "8Rsol": {
+   "R/G": 1.0189257860183716,
+   "B/G": 0.8645422458648682,
+   "n": 627965
+  }
+ },
+ "rang_dada_Rsol": [
+  2.7676351070404053,
+  14.865745544433594
+ ],
+ "nom_capa": "13_8s_DSC06987+DSC06993_apilat2_SONY300 · LDIC run 016 · dada 2.77-14.87 R☉",
+ "capes_v14": [
+  {
+   "nom": "12_1-3200s_572A2956.CR3 · FONT_PROTEGIDA · PERLES-DIAMANT",
+   "bbox_v14": [
+    460,
+    463,
+    7420,
+    5103
+   ]
+  },
+  {
+   "nom": "11_1-500s_572A2968.CR3 · FONT_PROTEGIDA · LIMBE-PROTUBERÀNCIES",
+   "bbox_v14": [
+    0,
+    0,
+    7648,
+    5353
+   ]
+  },
+  {
+   "nom": "10_1-125s_572A2969.CR3 · FONT_HDR · CORONA INTERIOR",
+   "bbox_v14": [
+    0,
+    0,
+    7648,
+    5353
+   ]
+  },
+  {
+   "nom": "09_1-60s_572A2975+572A2993_apilat2.dng · FONT_HDR · CORONA INTERIOR-MITJANA",
+   "bbox_v14": [
+    459,
+    463,
+    7419,
+    5103
+   ]
+  },
+  {
+   "nom": "08_1-30s_572A2970_apilat4.dng · QUARANTENA OCULTA · REBUTJADA: COSTURA ID8 · RASTER I MÀSCARA RAW",
+   "bbox_v14": [
+    458,
+    464,
+    7418,
+    5104
+   ]
+  },
+  {
+   "nom": "07_1-15s_572A2976_apilat2.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "bbox_v14": [
+    459,
+    463,
+    7419,
+    5103
+   ]
+  },
+  {
+   "nom": "06_1-8s_572A2971_apilat4.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "bbox_v14": [
+    458,
+    464,
+    7418,
+    5104
+   ]
+  },
+  {
+   "nom": "05_1-4s_572A2977_apilat2.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "bbox_v14": [
+    459,
+    463,
+    7419,
+    5103
+   ]
+  },
+  {
+   "nom": "04_1-2s_572A2972_apilat4.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "bbox_v14": [
+    458,
+    464,
+    7418,
+    5104
+   ]
+  },
+  {
+   "nom": "03_1s_572A2978_apilat2.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "bbox_v14": [
+    459,
+    463,
+    7419,
+    5103
+   ]
+  },
+  {
+   "nom": "02_2s_572A2979_apilat3.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "bbox_v14": [
+    460,
+    462,
+    7420,
+    5102
+   ]
+  },
+  {
+   "nom": "01_10.3s_572A2982_apilat3.dng · QUARANTENA OCULTA · REBUTJADA: HALO-GRADIENT; CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "bbox_v14": [
+    458,
+    463,
+    7418,
+    5103
+   ]
+  }
+ ],
+ "bytes": 3238677928
+}

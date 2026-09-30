@@ -1,0 +1,1498 @@
+{
+  "source": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/cau/input_V30.psb",
+  "source_sha256": "0d1f23fe5c56acf60bb35d3e24acea02fffaaf333d04d7a3aa17e0aac4f3f8c0",
+  "original_layers": [
+    {
+      "name": "12 1/3200 perles",
+      "bbox": [
+        1420,
+        908,
+        9123,
+        6764
+      ],
+      "visible": true,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "6b198094ec94229af1b988eba52413e475cdb12b6336925d32d224a3286cce55",
+      "record_without_color_lengths_sha256": "8d6a25a99c1bc3f232e0b2b42244429b93fc604c679f6b70a45cf6b6ba3fc3e6",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215369,
+          "sha256": "fb0d90b2afcd2cf058135e3470597216036872ea3d0e071fb9bfba7446a261b9"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 37504417,
+          "sha256": "e5cec04f3e52fbd1336618b2bf23de6a6e2a15d7caaa7c61857a14038384c9d0"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 35357173,
+          "sha256": "f8ca62facce7df2e88abd6a386b5580bfcabe7b624bb98cae9b268b87e0b5822"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 35989504,
+          "sha256": "c1e856beb0176d3121732e29c655bcb9a453084964c8e2df0c7b718c31a4231f"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 286416,
+          "sha256": "f8741c8bfbe07f56206e0beb2caa2ff13db82d5d1efedb00cb7d97f83cc563b2"
+        }
+      }
+    },
+    {
+      "name": "11 1/500 limbe",
+      "bbox": [
+        886,
+        410,
+        9398,
+        7096
+      ],
+      "visible": true,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "83ebaca71ff416801c475946d63b5840c3266547dbc3668dc75aa15e3b7b5d47",
+      "record_without_color_lengths_sha256": "212279a22dbf113ddec0091bd1320d658a84fb167aef7dae395a40797132aef1",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 255849,
+          "sha256": "82b5efcac21eae41e31fec9d79f949b444f6f659620d324984b3e1c0dfe34409"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 36279912,
+          "sha256": "aa1b1c2eddfad3eaecc3cec4511d32829b941408f70d08424a915616c3bc0cc7"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 35289931,
+          "sha256": "f76decfa1c7291c28312fe882f4324a8aaa3bd8b2ec11fbf899bb34e979e253b"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 33953237,
+          "sha256": "205925a9858de7cc96c537b810cc19942039f9d330e66c2df70913c7cfea3587"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 4770661,
+          "sha256": "f3c7a7a8ffb22f8110288b103916364ba1f3eb946ed0c68fc2cb67f598f84657"
+        }
+      }
+    },
+    {
+      "name": "10 1/125",
+      "bbox": [
+        886,
+        410,
+        9398,
+        7096
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "1c4152800c0b5cef4a85d72aff04702b9d3a03c218ae778a3a13dab91886b088",
+      "record_without_color_lengths_sha256": "410b28c56bd77fae8bcb00c7b13befcb3d05880e307ede987092dd942c1e5181",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 255849,
+          "sha256": "82b5efcac21eae41e31fec9d79f949b444f6f659620d324984b3e1c0dfe34409"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 40224658,
+          "sha256": "19d4670e7fa82372e4db01d97e16d86069616870054fc1c3f4296360c8721582"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 40066450,
+          "sha256": "e534e760a8bf36e9f71e75de10d64e47c9bcd5e9607606ade8b496626f0e4b6c"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 38816956,
+          "sha256": "7e8eb131a6532085aad0cfe8495c418e93fe2d4edd7d2847d1dcd57fd3998a78"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 6842175,
+          "sha256": "e8232fc78b4c0d2429df5af7a81d796ee52dd5e3f0e9e63129102b927638e406"
+        }
+      }
+    },
+    {
+      "name": "09 1/60 x2",
+      "bbox": [
+        1423,
+        908,
+        9126,
+        6765
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "afce31ecf2ed3b546a502a2ce4dfd26657c52fc1084043c730ed1dce332e6466",
+      "record_without_color_lengths_sha256": "d0e7282ca9ee0a9d4bc6f70c5baf1c415d4f291b6aecd0444106cfcb7d6356a6",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215339,
+          "sha256": "51621ef37ea117a2ec9c87f55a076c0d0db5d6fa88da51c24ba35d3f68fdaeb0"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 46318915,
+          "sha256": "8f7f88615bbe3e7cb6be6eaf20566d0a125c3122d16e86b6758a542b7d87ba25"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 41476654,
+          "sha256": "bcaaea44ecee3382fa33c4421be9e6f3953a2f259f380c05cb1ccad331772446"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 41070517,
+          "sha256": "6259ba85e793103173dd04d6606b6a1fb2dda7b13c44d9a99eb2485deb876da0"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 5684449,
+          "sha256": "489d1082f5f3de7a1ad6b9d7433784581f77d0c79e519b71ac0cf94f60cb173a"
+        }
+      }
+    },
+    {
+      "name": "08 1/30 x4 quar",
+      "bbox": [
+        1422,
+        909,
+        9126,
+        6766
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "b23c2f5f1514adf74e1d7c66d85b24a913e687be5b640562e0d1a1c7cf437f1c",
+      "record_without_color_lengths_sha256": "d00be42cd5f1770583e642af264c2840ef633514b455b12ec78b485735586e21",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215039,
+          "sha256": "5c1495fdbac59e7a4eb889dc76fe92d034d26044a08b3660193cbebb2ffc310a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 48969057,
+          "sha256": "39a12564d9ef4ed74612218929b6ca4865dc819a1d0abb16c0abf2d32e3d1631"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 47330488,
+          "sha256": "3cee7493696d489b6d2bb07d33a76d49795f38b2fc151a2c48051eebfbbaaf6b"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 46908877,
+          "sha256": "ffffceea6cf682b32e7a19e2436488d4a7b9f67af26b998efa92c36c5199925d"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 10432061,
+          "sha256": "5aa131974e3549a63a470d9f2cf122dc3ed68385dbcea9d20c8c6db07a5e4c7a"
+        }
+      }
+    },
+    {
+      "name": "07 1/15 x2 quar",
+      "bbox": [
+        1423,
+        908,
+        9126,
+        6765
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "903e99867bf06659818051814222fab72c79bc69e8bc7f540c432fb20e9f6a22",
+      "record_without_color_lengths_sha256": "5c8b2e1abd8ab2e62f044105e9e7edc1b0965a755d0c0922291960432934bce6",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215339,
+          "sha256": "51621ef37ea117a2ec9c87f55a076c0d0db5d6fa88da51c24ba35d3f68fdaeb0"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 51635946,
+          "sha256": "d38af5a814f3a4e219cc38c8da2ce81e4d4d3f1bf3a879f0f9c2d3c69078b5b1"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 47330841,
+          "sha256": "83880640e1aa40097df4618b742065bcb749806a0a42bc3468e70987b18cac33"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 47513116,
+          "sha256": "57b454487390da66fe0c0838a73d6236cd0c45db6f509e3b24e9b26693ddcf50"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 6569401,
+          "sha256": "f4786d105e615b2777ebbf4eea35691c99ec388a2b7f2faf0d2a400f440d3ba9"
+        }
+      }
+    },
+    {
+      "name": "06 1/8 x4 quar",
+      "bbox": [
+        1422,
+        909,
+        9126,
+        6766
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "c3e9b42bbd22365b2a95963f10fbde868c0f0c804faca4a91673b0416d79d4ca",
+      "record_without_color_lengths_sha256": "e1106dc5f1e3fe40bce523e9855182ba8e4e8808599f4d3f035f55a53dcae8ed",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215039,
+          "sha256": "5c1495fdbac59e7a4eb889dc76fe92d034d26044a08b3660193cbebb2ffc310a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 51814342,
+          "sha256": "0acfa91b5b0c7f893cffd57dd9d7503f70723da5da1dead5dc7f23e5c4cce305"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 50735325,
+          "sha256": "d7f48269078918521413f15100dabc7b45bd80a6d082865e89304bd3cc59eb1d"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 50530806,
+          "sha256": "bd8c10274b12292178ea35d195e9bf33c7df8182937b808dfc336a1471ce5941"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 7275301,
+          "sha256": "6c331f34909e77c482637b6c150401b31857bd51473276f4c9b7a12c615b8521"
+        }
+      }
+    },
+    {
+      "name": "05 1/4 x2 quar",
+      "bbox": [
+        1423,
+        908,
+        9126,
+        6765
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "1475d9ce35fd984e617c35bdc6b945e2335521f9d4d8f028a027f3e97e5076d5",
+      "record_without_color_lengths_sha256": "b4b239c2c26d2f0b3f402f64ac7e71a33e5070824a661f1cbc8f9019a44d4144",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215339,
+          "sha256": "51621ef37ea117a2ec9c87f55a076c0d0db5d6fa88da51c24ba35d3f68fdaeb0"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 49725503,
+          "sha256": "3ec40cfb7a91c31d4495a2b47b204124e7a2cd1afadf06564289a29194319114"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 51167407,
+          "sha256": "fecc50a9c9bcbeb3b7ad97d8d4dd3e4a5e8db02ccba937574fb74365ac90b97b"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 50593697,
+          "sha256": "10fcd766851d8923e4f064f7210eb40ad46c2cd437a14d6be7c9fd35c4689312"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 14117109,
+          "sha256": "b23c81f2b32ef5cbf8e223b678935f06a2c1730215e7e054d35402bdfd2931f4"
+        }
+      }
+    },
+    {
+      "name": "04 1/2 x4 quar",
+      "bbox": [
+        1422,
+        909,
+        9126,
+        6766
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "5a5286a0c60240415af03524d07fc01dc54fe731ed3f9d6ab2225a1753b440dc",
+      "record_without_color_lengths_sha256": "75766c29f90bdec1967b161a7a5ee1f9459591eea2b4b6aec1897da2860b9cd7",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215039,
+          "sha256": "5c1495fdbac59e7a4eb889dc76fe92d034d26044a08b3660193cbebb2ffc310a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 55033264,
+          "sha256": "4be3a37c4ce6870456d42e691c22e36be2d95dbf7d35443922a340ce446d671c"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 51094954,
+          "sha256": "71111d41dfe907d96e09339680076601c385c8095d8488205ae2eabcfa2fb267"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 51053779,
+          "sha256": "a7038620073da4eaf5c153d0d7191819aec744dba1f7076f182fb1babc172dbc"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 10001410,
+          "sha256": "c4b7802805c56a9cc19b97765f5562b42d7e6758574de133a2ab843671e4729d"
+        }
+      }
+    },
+    {
+      "name": "03 1s x2 quar",
+      "bbox": [
+        1423,
+        908,
+        9126,
+        6765
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "8474ab090ad821a91f549000d3733a4f03f10f01e738a5181f8236b89cf23c86",
+      "record_without_color_lengths_sha256": "09fc8b0f266fac96e5cf98d5add3054301b71b3b61e29741060195c6b2db8fbb",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215339,
+          "sha256": "51621ef37ea117a2ec9c87f55a076c0d0db5d6fa88da51c24ba35d3f68fdaeb0"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 51470092,
+          "sha256": "d16586a0d12d4d2a368ce39ca1fa90ce070c784e94c4e04b6b450fac32d134dc"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 51747277,
+          "sha256": "b59eb9ea265502b11bb1629914c62d0a93b02742c2207f46058d25e671f021b9"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 51359576,
+          "sha256": "fe1457162ae526c41f26ed22006f26f98c5ddceff671de3511573d168b72ca86"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 14069410,
+          "sha256": "4426adfd6b54445df6f8300bd30286367409ccb1034fd38b4658481c69c1ec8c"
+        }
+      }
+    },
+    {
+      "name": "02 2s x3 quar",
+      "bbox": [
+        1424,
+        907,
+        9127,
+        6763
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "88ba2a00531e9abc46047ac4eadd0b023d10428c39b840ae1e2fa6cabbc92a0b",
+      "record_without_color_lengths_sha256": "5809cd265128f41b57d338036ec94d37d666ae0834654a3bcefbc68d900f7fd7",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215133,
+          "sha256": "f23c29aa265010357c626a8dca9869bc53aa5b390109a653eff3fad8c63d32dc"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 50331738,
+          "sha256": "0fec0182ccbaa1d1128466185001a294f832d148b85368a34ead40bc0cfb1e35"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 50749853,
+          "sha256": "1d17c8adddef8a240fbe8c3e8cb3da56b9c7ab7857143795d56df18263ab9d10"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 50465564,
+          "sha256": "d5fe5b1543c46eb781fb0a59ece2c0c33630d6d09e982de21a5cb238bd4d7c62"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 15180025,
+          "sha256": "73dda0afcaa6a87becef42285beb1979606427a1a6c71af93d36e369955efb79"
+        }
+      }
+    },
+    {
+      "name": "01 10.3s x3 quar",
+      "bbox": [
+        1423,
+        908,
+        9127,
+        6765
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "64930d74094992844ed455dda32b57f990b482ada2d1b892fd569dcb9dcb98c0",
+      "record_without_color_lengths_sha256": "3e8838a0188b06f832e0ae315461cdd366164833039d782fe81661e508b895ba",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215316,
+          "sha256": "16003ed43e987517a683eeae21dfdc9e225d37933cbe4bee770ee1a1edf9a893"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 44537083,
+          "sha256": "ad14ba230a0fe8eb48595c218d700f82757b171ce6e8c7ac2b2f03471780830d"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 45137040,
+          "sha256": "f3a4bee34f27e62239af567a78a15d32fcee64d14cdbb91eb64ec140165eb899"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 45801501,
+          "sha256": "a31e9933b210629f247d2b76f92bff108d30178a8c61213f6b4f839916690e62"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 11023983,
+          "sha256": "45042255b1d2aec1ff1c8ce9ab60f40eb86d776ab388f94505d12ab3893088fe"
+        }
+      }
+    },
+    {
+      "name": "13 Sony >1s",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "230c0bc64381372d118ebe53fff211991fb77ca66226b287466fb533cd86716d",
+      "record_without_color_lengths_sha256": "22d79c8e1887eb6131256589beb9d37b98c3132350fdf429bc432bba22ba181e",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 182954,
+          "sha256": "8f63547cec7f01165ba992e5da14762980d57e97b8222da78c19d1d7f0335f52"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 83725223,
+          "sha256": "b5d188398b35cbb2441fc2ceb1c3cdefe2618331e93846b00daf94ceb3bcd198"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 84836029,
+          "sha256": "7e0f18c7f26fbb656da4dae83e6b5b93d233339001e32a94c130a45ef26a0e35"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 85601549,
+          "sha256": "880b84f5e919989bc7c168f81b6ca51982d61c8f151fe4294b332e0c6392398f"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 10036270,
+          "sha256": "ab766929a62ade9b11534bf22b7ccd2ebc1982348fd35f99c92f4564011dd889"
+        }
+      }
+    },
+    {
+      "name": "Fons per raig",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "15ca686be3a604b369351683cd6685c1c548857013b6ec05a1d86c935e7c7ec1",
+      "record_without_color_lengths_sha256": "e5523e698a2406a5ae2654ae3b991595ac7c2bf32d866ab719bc37c7900a49f8",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 182954,
+          "sha256": "8f63547cec7f01165ba992e5da14762980d57e97b8222da78c19d1d7f0335f52"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 57487239,
+          "sha256": "ac91b3cd3e1c803ebbfb6aef84c1e56f6cbf7a1375ef494c52d7675fdd47b44a"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 55881869,
+          "sha256": "8b05020e2092d6ed88f92815f3895faff4bc8399813a82c753c38ca87c05b324"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 52707763,
+          "sha256": "94c2e87b8ac636d4cfb197ccadba563790f42c2fcfb6b923ddcb23bac7c5fc04"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 31120831,
+          "sha256": "a430ffabc7d15ae99a7fb41f4d99bff737f7d3fcc081f7609aa822cf3e3bc60a"
+        }
+      }
+    },
+    {
+      "name": "Earthshine v2",
+      "bbox": [
+        4866,
+        3279,
+        5857,
+        4270
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "a17eed469318c3761239ef849eca6abb28e627a9933f95ed22dc4e167552e4d2",
+      "record_without_color_lengths_sha256": "7ad4b208dd8b82dff6874bb8c7d31a4d82e264db959fd2cb1c6ae54b3e1bbf31",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 1116779,
+          "sha256": "829615230f915e131c5c10320cd9c5a4fc69f73220a4542f17e09fbaa352daf7"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 1116779,
+          "sha256": "829615230f915e131c5c10320cd9c5a4fc69f73220a4542f17e09fbaa352daf7"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 1116779,
+          "sha256": "829615230f915e131c5c10320cd9c5a4fc69f73220a4542f17e09fbaa352daf7"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 229163,
+          "sha256": "ed37374de3f707fa5874e8d0b75a5681851cd21b4b8d8806d7b22f57749873f2"
+        }
+      }
+    },
+    {
+      "name": "Compara D87",
+      "bbox": [
+        4866,
+        3279,
+        5857,
+        4270
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "ea3aec419699d042d95c9e207d889c3af48565a4df7ca94c73be3b1b840eff69",
+      "record_without_color_lengths_sha256": "b8a8906aa2d03f43bac91d01a06682dd351b0f7044a43ec55f26ae779751ab0c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 1082951,
+          "sha256": "bcbf880fadcc09d7fc22a5988e369633bd76f2145fca99ca2d41df5cfb83f15f"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 1082951,
+          "sha256": "bcbf880fadcc09d7fc22a5988e369633bd76f2145fca99ca2d41df5cfb83f15f"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 1082951,
+          "sha256": "bcbf880fadcc09d7fc22a5988e369633bd76f2145fca99ca2d41df5cfb83f15f"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 229163,
+          "sha256": "ed37374de3f707fa5874e8d0b75a5681851cd21b4b8d8806d7b22f57749873f2"
+        }
+      }
+    },
+    {
+      "name": "Compara LROC",
+      "bbox": [
+        4866,
+        3279,
+        5857,
+        4270
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "7d78cdea53a4d727236f480cf1d78928e08ccb92dbad51b5e450978939733196",
+      "record_without_color_lengths_sha256": "bb8b015ea3667857e571b81136914c48e2b0a23cd12c4253f1653cbc97857353",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 1043672,
+          "sha256": "295e77cd1a31e2fea3b26832b156c6d88e9dbf42b4c57a5a5cc68ba6c6a64a55"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 1043672,
+          "sha256": "295e77cd1a31e2fea3b26832b156c6d88e9dbf42b4c57a5a5cc68ba6c6a64a55"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 1043672,
+          "sha256": "295e77cd1a31e2fea3b26832b156c6d88e9dbf42b4c57a5a5cc68ba6c6a64a55"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 229163,
+          "sha256": "ed37374de3f707fa5874e8d0b75a5681851cd21b4b8d8806d7b22f57749873f2"
+        }
+      }
+    },
+    {
+      "name": "Earthshine V24e",
+      "bbox": [
+        4866,
+        3279,
+        5857,
+        4270
+      ],
+      "visible": true,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "2093639d81c54ab4b45148693ad3775e1128fb7bdf22c23d24f261b6504673dd",
+      "record_without_color_lengths_sha256": "6cd27d8288c73a045d2058224e0cfc50a6ae291c0ddd70fa4cfc0afc9fbbe172",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 1307418,
+          "sha256": "7d312e9522d7ad005248962762974963cbd3d49b588267a1f936919e4d2b62a6"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 1286355,
+          "sha256": "f8cb2b98a3071d52b228a534824cfd48adcfef130b4d2cb453bc825981d5eaa4"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 1267082,
+          "sha256": "52864fd437a6b81f00a1d98807b1beae08847463fb525530ecb354c32683e746"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 229398,
+          "sha256": "36a4175987f4f8a1dee7119fdd32cca430707a42962644731b92a71230a599fe"
+        }
+      }
+    },
+    {
+      "name": "00 Base amb cel",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "778fe413cf3917cfc7208ab2094a7caad25851c39914463ad03bef95823eb816",
+      "record_without_color_lengths_sha256": "6da63b3ed96cada60fd6356397dc194305c0bab61308b62953dbaa775f9f861f",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 51491600,
+          "sha256": "11548c82eb69b166bd63f941c103147713ec4bc40adc4799f06769a24f2175fb"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 45012418,
+          "sha256": "40f52a26733a344f6dd31dae109499378b5fe5eb3b0eeb13a366e2ae5aa00a52"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 34581420,
+          "sha256": "0dce0b668bdce631b5847e9c10c110c84cf8530c44a8d84e2636117504e02f5e"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 177721,
+          "sha256": "93b8a2ac576989618213fdd8e02dbd3aff6fae894578fe8abecb3e5030933499"
+        }
+      }
+    },
+    {
+      "name": "00 Base (cel/4)",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": true,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "61a12d7dcbc47e8d502137f7ed94214d6b1cb4e16602daef63d8eb73f52ed061",
+      "record_without_color_lengths_sha256": "d7007b66fa7a36705a4708558a8c3b56e5db3f682c9a09c23f973cf2de1dbfae",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 58198758,
+          "sha256": "095f6bb71536a3040ef3a71b389033dc28ab87b86dde932d8191a704f1b5dc75"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 52301775,
+          "sha256": "6d683b71f1b0f592a51ad8391f7e86f3b3037c9f91120d1341cd042069024c1a"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 40630341,
+          "sha256": "5739eee43e1b4400fde0949060cff0b89626387d440175fd644447d7ca097f35"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 177721,
+          "sha256": "93b8a2ac576989618213fdd8e02dbd3aff6fae894578fe8abecb3e5030933499"
+        }
+      }
+    },
+    {
+      "name": "03 ACHF azimutal 8-128 · V29",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 38,
+      "blend": "BlendMode.OVERLAY",
+      "record_sha256": "e72253218b534a7248c29e2c4af0c587941d160c455855e0e11793f7d14bfb8f",
+      "record_without_color_lengths_sha256": "def554954420cf8fdad459e5d3bebee3b7921e4cac919a598c42f799ad02a16c",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 133618820,
+          "sha256": "30e096b8fec6bd1f4ca31ae7f3c6bc5ce5d40d5062dee8edd0627a5fb8fb366b"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 133618820,
+          "sha256": "30e096b8fec6bd1f4ca31ae7f3c6bc5ce5d40d5062dee8edd0627a5fb8fb366b"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 133618820,
+          "sha256": "30e096b8fec6bd1f4ca31ae7f3c6bc5ce5d40d5062dee8edd0627a5fb8fb366b"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 1569105,
+          "sha256": "bf23f49136a6d82b7712e78fb2f74e5c03d08a1bd2fb9809718ced7f3e50869e"
+        }
+      }
+    },
+    {
+      "name": "03 ACHF azimutal 8-128 · V30",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": true,
+      "opacity": 38,
+      "blend": "BlendMode.OVERLAY",
+      "record_sha256": "aecd3a16a97a6fecece6f98a49111818a95da9671d6cbfa0e8c9ddf4cd856786",
+      "record_without_color_lengths_sha256": "ffd47091ed00d5bae6ddcab7bd23a9d5c71ee203fcaa9a8a0845beda2436a130",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 131915111,
+          "sha256": "47b0adc1bd0a4dd41dbc369c5076d58ef77552a8669a790e92e05d225cefd978"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 131915111,
+          "sha256": "47b0adc1bd0a4dd41dbc369c5076d58ef77552a8669a790e92e05d225cefd978"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 131915111,
+          "sha256": "47b0adc1bd0a4dd41dbc369c5076d58ef77552a8669a790e92e05d225cefd978"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 1569105,
+          "sha256": "bf23f49136a6d82b7712e78fb2f74e5c03d08a1bd2fb9809718ced7f3e50869e"
+        }
+      }
+    },
+    {
+      "name": "07 ACHF azimutal suau r8 · V30",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 38,
+      "blend": "BlendMode.OVERLAY",
+      "record_sha256": "976114dff0e0a0c9fd922b4e1ed4d8bb5fca31fcd129d4ebfed2433e246f464e",
+      "record_without_color_lengths_sha256": "d91ba925c9e35e5d6370e434bed840929ab5796f23fb25a608a168f2d6ed9219",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 129790142,
+          "sha256": "27ecde79bf26f47fe3e8ca40dac8df524882238ef81d39273f3bd335ac320b55"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 129790142,
+          "sha256": "27ecde79bf26f47fe3e8ca40dac8df524882238ef81d39273f3bd335ac320b55"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 129790142,
+          "sha256": "27ecde79bf26f47fe3e8ca40dac8df524882238ef81d39273f3bd335ac320b55"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 1569105,
+          "sha256": "bf23f49136a6d82b7712e78fb2f74e5c03d08a1bd2fb9809718ced7f3e50869e"
+        }
+      }
+    },
+    {
+      "name": "01 ACHF fi 2-32 · V29",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": true,
+      "opacity": 36,
+      "blend": "BlendMode.OVERLAY",
+      "record_sha256": "81e510b7aaba09ce6dc6c4b265974ec1cc43278ea44da840836dbf0508ee71e6",
+      "record_without_color_lengths_sha256": "17a0aa6eb91c00158fb2ef5b052b52efef2885d706f250c0cd0c7bf3878b1b0f",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 135732427,
+          "sha256": "509385cd2cab1ab194a85246b36818a5a3aeeb452651dbe23f2346792706dfe6"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 135732427,
+          "sha256": "509385cd2cab1ab194a85246b36818a5a3aeeb452651dbe23f2346792706dfe6"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 135732427,
+          "sha256": "509385cd2cab1ab194a85246b36818a5a3aeeb452651dbe23f2346792706dfe6"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 612415,
+          "sha256": "fec1beae7ea9463204dc68bd77f77b49e3a9064ca6d3d72d830a4c443444ebda"
+        }
+      }
+    },
+    {
+      "name": "02 Passa-alt 24 · V29",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": true,
+      "opacity": 20,
+      "blend": "BlendMode.OVERLAY",
+      "record_sha256": "b852812383418753e18c55aa65e05a9666b90b3980d4b2784fc793d8ed724f08",
+      "record_without_color_lengths_sha256": "4b311b7628f814f6d253cdf55d51b918ae43025da9384510c2552d79c1379760",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 136668971,
+          "sha256": "0c3bf81405fa35b5fff1610bc7106f956f91b9c00cb43d2797a9d002208c1717"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 136668971,
+          "sha256": "0c3bf81405fa35b5fff1610bc7106f956f91b9c00cb43d2797a9d002208c1717"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 136668971,
+          "sha256": "0c3bf81405fa35b5fff1610bc7106f956f91b9c00cb43d2797a9d002208c1717"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 506786,
+          "sha256": "8320d7de8d49d33f4a3ffcd1c54a5623bf52fbd3a98335c4b4a8c7e150e1a9bf"
+        }
+      }
+    },
+    {
+      "name": "04 ACHF micro 1-16 · V30",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 36,
+      "blend": "BlendMode.OVERLAY",
+      "record_sha256": "550df31a21fa8359046cacfb366925e85df4178fec35cfd4b03f7debc14152d8",
+      "record_without_color_lengths_sha256": "34f2f66bb17b67b271b28685f9787c2993cf213aa9835070e901816f0fa7e44d",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 134986028,
+          "sha256": "d810fba3c629a8d0fca50e607f80f586b734fc7a86d8b11791b133ab9e3e29c9"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 134986028,
+          "sha256": "d810fba3c629a8d0fca50e607f80f586b734fc7a86d8b11791b133ab9e3e29c9"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 134986028,
+          "sha256": "d810fba3c629a8d0fca50e607f80f586b734fc7a86d8b11791b133ab9e3e29c9"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 398177,
+          "sha256": "0849f207865c8b23c042c9f25089c2f19bc72f9dbce331c1b75e34491e86a0c3"
+        }
+      }
+    },
+    {
+      "name": "05 ACHF fi 2-48 · V30",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 36,
+      "blend": "BlendMode.OVERLAY",
+      "record_sha256": "0a10ffe44e4dc6a323aa1335b358c8d4b6199e0bdad45b757e86df1ddea49fb0",
+      "record_without_color_lengths_sha256": "5ae662af6e9193269476f884531bf4b106c7a981ca9824e055375fb247cf6bab",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 135843386,
+          "sha256": "9d0fc7d9150203d7ca30cc1f3709178620f11a96d515b6771173189369f595ef"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 135843386,
+          "sha256": "9d0fc7d9150203d7ca30cc1f3709178620f11a96d515b6771173189369f595ef"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 135843386,
+          "sha256": "9d0fc7d9150203d7ca30cc1f3709178620f11a96d515b6771173189369f595ef"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 816252,
+          "sha256": "2e42fbbd403a920f1917ac9e594cca60c4fcfbca2d0144fac27be38a2ed71def"
+        }
+      }
+    },
+    {
+      "name": "06 ACHF estructura 4-64 · V30",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 36,
+      "blend": "BlendMode.OVERLAY",
+      "record_sha256": "b8b1afb11cecf2e07ae342e7a409fbcc57e2aa7933168e736efcc9d5915bbbd7",
+      "record_without_color_lengths_sha256": "71064be7c7c9631e2bdbd34d0d656a5657e4bb29ac68bf4203d23ade3428310f",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 135861862,
+          "sha256": "6bc1ec6f5c61e8f83123dd563464ec1714032787006cc37f062070e5be5b9ec0"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 135861862,
+          "sha256": "6bc1ec6f5c61e8f83123dd563464ec1714032787006cc37f062070e5be5b9ec0"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 135861862,
+          "sha256": "6bc1ec6f5c61e8f83123dd563464ec1714032787006cc37f062070e5be5b9ec0"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 1011571,
+          "sha256": "ab6cdf860138e4ec29003977cd8e77b88e2eb61f130d7edb5cdfb77bdeb2b287"
+        }
+      }
+    },
+    {
+      "name": "Estrelles",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": true,
+      "opacity": 255,
+      "blend": "BlendMode.LINEAR_DODGE",
+      "record_sha256": "aad31ef98897b74af0fd827b9d8fcd27a842b5493f02d5c984186d72fc180198",
+      "record_without_color_lengths_sha256": "3c3de0ca7a533f6b9b8e465c3cb78310e89738878ef8b9f0a275a754ec5214bb",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 182954,
+          "sha256": "8f63547cec7f01165ba992e5da14762980d57e97b8222da78c19d1d7f0335f52"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 177678,
+          "sha256": "5b65b37d3c4c1d87d357ef8b19f5b427a30d67d85671510ac247c997e619a5bd"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 177816,
+          "sha256": "717965319ecfd057f1ab501aa40f64764bdcf8199205033ed6ae30d7c64cfdba"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 177772,
+          "sha256": "5593d5ac72514a05e46bd2f83960d74b3896736bcc182ab5018c0e5a092a0bb6"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 192847,
+          "sha256": "bcb6d7ac8cc1b1739b977d84f406e6b6cebb9dae1a21a9e61006a146396ca16f"
+        }
+      }
+    },
+    {
+      "name": "Reflex",
+      "bbox": [
+        4862,
+        3279,
+        5853,
+        4270
+      ],
+      "visible": true,
+      "opacity": 255,
+      "blend": "BlendMode.LINEAR_DODGE",
+      "record_sha256": "d0214eeeb63c61ff5efca2f8aa3617345595bd57a93e0d0e099bab73942a83d6",
+      "record_without_color_lengths_sha256": "7374acfb1dbd84dbaefe155add6be19552523532102a887653917fe9666dbab1",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 268358,
+          "sha256": "1b535676fa1aa41e8a0825327cb7276a8cdb2ccf07bb0c04d416d9d9732764db"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 254564,
+          "sha256": "67865a76606fee85b2b08ce85a6462995a96504e8d1711703fcdf31275f82c62"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 236339,
+          "sha256": "cce18f8a2a8fca7f91d6d096ff38b5ee6dc8043009e192afd2c2fc3f5de5fbff"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 164059,
+          "sha256": "ba98ae588e5d517e6cd89c180485bff18636f46384fd530abe62c447e5b52c29"
+        }
+      }
+    }
+  ],
+  "original_global": {
+    "header": "922364c883c7b37662b4fa4f3a4464f740aadbc8993074352c7e7905331d1dcb",
+    "color_mode": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+    "image_resources": "123a4954e2ff8ec04e301927c768f0b32b870cb60907fbc0c2fca8f9ced7a4ba",
+    "other_global_tagged_blocks": {}
+  },
+  "changed": [
+    {
+      "index": 23,
+      "tag": "01",
+      "sigma_px": 3,
+      "old_name": "01 ACHF fi 2-32 · V29",
+      "new_name": "01 ACHF fi 2-32 · V31",
+      "pilot_max_difference_DN16": 0,
+      "signature": {
+        "name": "01 ACHF fi 2-32 · V31",
+        "bbox": [
+          0,
+          0,
+          10551,
+          7506
+        ],
+        "visible": true,
+        "opacity": 36,
+        "blend": "BlendMode.OVERLAY",
+        "record_sha256": "032330dfe999032cfbed915006e67e5dce9b791f0eaa367a047b8c2c5bdd12d8",
+        "record_without_color_lengths_sha256": "80c1719fa0da77c86a2ffb6c20ed68a1735064f2766343602b1880ba8b7029b9",
+        "channels": {
+          "-1": {
+            "compression": 2,
+            "bytes": 153965,
+            "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+          },
+          "0": {
+            "compression": 2,
+            "bytes": 132230337,
+            "sha256": "74a6782073049a0456373c17962c9b277e890fb2be30c9ba40f873da7283f60e"
+          },
+          "1": {
+            "compression": 2,
+            "bytes": 132230337,
+            "sha256": "74a6782073049a0456373c17962c9b277e890fb2be30c9ba40f873da7283f60e"
+          },
+          "2": {
+            "compression": 2,
+            "bytes": 132230337,
+            "sha256": "74a6782073049a0456373c17962c9b277e890fb2be30c9ba40f873da7283f60e"
+          },
+          "-2": {
+            "compression": 3,
+            "bytes": 612415,
+            "sha256": "fec1beae7ea9463204dc68bd77f77b49e3a9064ca6d3d72d830a4c443444ebda"
+          }
+        }
+      }
+    },
+    {
+      "index": 24,
+      "tag": "02",
+      "sigma_px": 3,
+      "old_name": "02 Passa-alt 24 · V29",
+      "new_name": "02 Passa-alt 24 · V31",
+      "pilot_max_difference_DN16": 0,
+      "signature": {
+        "name": "02 Passa-alt 24 · V31",
+        "bbox": [
+          0,
+          0,
+          10551,
+          7506
+        ],
+        "visible": true,
+        "opacity": 20,
+        "blend": "BlendMode.OVERLAY",
+        "record_sha256": "16011ff686592974fca64c22152e5a90cfad281174c89fc99be31267656a5d94",
+        "record_without_color_lengths_sha256": "151936ba426f4b228d7c6e2ec25336bff104f70f6798a666a4da49382668dd42",
+        "channels": {
+          "-1": {
+            "compression": 2,
+            "bytes": 153965,
+            "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+          },
+          "0": {
+            "compression": 2,
+            "bytes": 134500846,
+            "sha256": "e98bdb5812a24fdcc4752d17b787669822c5f2b199240c538c206a9a78313efd"
+          },
+          "1": {
+            "compression": 2,
+            "bytes": 134500846,
+            "sha256": "e98bdb5812a24fdcc4752d17b787669822c5f2b199240c538c206a9a78313efd"
+          },
+          "2": {
+            "compression": 2,
+            "bytes": 134500846,
+            "sha256": "e98bdb5812a24fdcc4752d17b787669822c5f2b199240c538c206a9a78313efd"
+          },
+          "-2": {
+            "compression": 3,
+            "bytes": 506786,
+            "sha256": "8320d7de8d49d33f4a3ffcd1c54a5623bf52fbd3a98335c4b4a8c7e150e1a9bf"
+          }
+        }
+      }
+    },
+    {
+      "index": 25,
+      "tag": "04",
+      "sigma_px": 1.5,
+      "old_name": "04 ACHF micro 1-16 · V30",
+      "new_name": "04 ACHF micro 1-16 · V31",
+      "pilot_max_difference_DN16": 0,
+      "signature": {
+        "name": "04 ACHF micro 1-16 · V31",
+        "bbox": [
+          0,
+          0,
+          10551,
+          7506
+        ],
+        "visible": false,
+        "opacity": 36,
+        "blend": "BlendMode.OVERLAY",
+        "record_sha256": "0a76125fff321814a286192a34aa0dff3d65550f567a1fa394958cc044f2bfeb",
+        "record_without_color_lengths_sha256": "eca9a8b9fdb40f94a3adc5c0e4f30ae7fcd92e7ff5939ae8ea4fe7d1082b87aa",
+        "channels": {
+          "-1": {
+            "compression": 2,
+            "bytes": 153965,
+            "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+          },
+          "0": {
+            "compression": 2,
+            "bytes": 133440415,
+            "sha256": "d7f4cb96424bf396b80b078a0dcdfc04a8b3e47f479370610d2e61eb93342822"
+          },
+          "1": {
+            "compression": 2,
+            "bytes": 133440415,
+            "sha256": "d7f4cb96424bf396b80b078a0dcdfc04a8b3e47f479370610d2e61eb93342822"
+          },
+          "2": {
+            "compression": 2,
+            "bytes": 133440415,
+            "sha256": "d7f4cb96424bf396b80b078a0dcdfc04a8b3e47f479370610d2e61eb93342822"
+          },
+          "-2": {
+            "compression": 3,
+            "bytes": 398177,
+            "sha256": "0849f207865c8b23c042c9f25089c2f19bc72f9dbce331c1b75e34491e86a0c3"
+          }
+        }
+      }
+    },
+    {
+      "index": 26,
+      "tag": "05",
+      "sigma_px": 3,
+      "old_name": "05 ACHF fi 2-48 · V30",
+      "new_name": "05 ACHF fi 2-48 · V31",
+      "pilot_max_difference_DN16": 0,
+      "signature": {
+        "name": "05 ACHF fi 2-48 · V31",
+        "bbox": [
+          0,
+          0,
+          10551,
+          7506
+        ],
+        "visible": false,
+        "opacity": 36,
+        "blend": "BlendMode.OVERLAY",
+        "record_sha256": "3a57bbaca3022130f72bc130b0dc05dadf77d6e1f3a269d51072ae4f08540689",
+        "record_without_color_lengths_sha256": "b07ee14d2969ff67fa57c0e80d08390aeac224ce7cbe479988f01a4e272ea76d",
+        "channels": {
+          "-1": {
+            "compression": 2,
+            "bytes": 153965,
+            "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+          },
+          "0": {
+            "compression": 2,
+            "bytes": 132771068,
+            "sha256": "f02958547810db032e83466239a385078678c85fab0251c8573e57c440f27841"
+          },
+          "1": {
+            "compression": 2,
+            "bytes": 132771068,
+            "sha256": "f02958547810db032e83466239a385078678c85fab0251c8573e57c440f27841"
+          },
+          "2": {
+            "compression": 2,
+            "bytes": 132771068,
+            "sha256": "f02958547810db032e83466239a385078678c85fab0251c8573e57c440f27841"
+          },
+          "-2": {
+            "compression": 3,
+            "bytes": 816252,
+            "sha256": "2e42fbbd403a920f1917ac9e594cca60c4fcfbca2d0144fac27be38a2ed71def"
+          }
+        }
+      }
+    },
+    {
+      "index": 27,
+      "tag": "06",
+      "sigma_px": 3,
+      "old_name": "06 ACHF estructura 4-64 · V30",
+      "new_name": "06 ACHF estructura 4-64 · V31",
+      "pilot_max_difference_DN16": 0,
+      "signature": {
+        "name": "06 ACHF estructura 4-64 · V31",
+        "bbox": [
+          0,
+          0,
+          10551,
+          7506
+        ],
+        "visible": false,
+        "opacity": 36,
+        "blend": "BlendMode.OVERLAY",
+        "record_sha256": "f4763792d89d347c3ee11fb84a7c62f5b17e1f3276cc3ef882934e7d0a2d56b9",
+        "record_without_color_lengths_sha256": "f1b0cfd42387c7e31cc8c27e07dc5b244d2b088b12bc51c0ad50f0513fc49ac4",
+        "channels": {
+          "-1": {
+            "compression": 2,
+            "bytes": 153965,
+            "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+          },
+          "0": {
+            "compression": 2,
+            "bytes": 133088903,
+            "sha256": "001f9ed3708d03bdff74d4d9a40b70c7ad2c2a22014adb51bb1ba854877a58a8"
+          },
+          "1": {
+            "compression": 2,
+            "bytes": 133088903,
+            "sha256": "001f9ed3708d03bdff74d4d9a40b70c7ad2c2a22014adb51bb1ba854877a58a8"
+          },
+          "2": {
+            "compression": 2,
+            "bytes": 133088903,
+            "sha256": "001f9ed3708d03bdff74d4d9a40b70c7ad2c2a22014adb51bb1ba854877a58a8"
+          },
+          "-2": {
+            "compression": 3,
+            "bytes": 1011571,
+            "sha256": "ab6cdf860138e4ec29003977cd8e77b88e2eb61f130d7edb5cdfb77bdeb2b287"
+          }
+        }
+      }
+    }
+  ],
+  "outside_changed_visible_masks": {
+    "pixels": 8800536,
+    "max_DN16": [
+      0,
+      0,
+      0
+    ]
+  },
+  "expected_extra_merged_channels": []
+}

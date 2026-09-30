@@ -1,0 +1,36 @@
+{
+  "completed_utc": "2026-09-05T11:48:28.375793+00:00",
+  "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V29.psb",
+  "sha256": "67169f0345c8abdf3fb9c3fd940d5b9f13d260864954d776c5d9277e15630676",
+  "bytes": 4221719560,
+  "backup": {
+    "source": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V29.psb",
+    "backup": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/Documentacio i QA/V29_abans_correccio_03_20260905/V29.psb",
+    "sha256": "b5c2055b329305b7a8efe6f14159414b739da7a43077e8ba9b7b32288b4ac3ff",
+    "bytes": 4223401864,
+    "created_utc": "2026-09-05T11:30:10.242982+00:00"
+  },
+  "photoshop_gate": "OBRE 10551 px x 7506 px · 25 capes",
+  "all_other24_layers_identical": true,
+  "only_layer20_RGB_changed": true,
+  "mask_opacity_visibility_metadata_preserved": true,
+  "hashes": {
+    "apply_offsets.py": "e29c04708c096bee24e511d4e79a4e7c099ad9154cf4692573e8bf2e7638a63c",
+    "filter03.py": "f41af53a2d7aba72e7584ab360118fe50c3f4a24a6f767f069b2413ea6105ea0",
+    "finalize_delivery.py": "fde4b98be222aae547fc4f8c3322d3f55cccf45ec9a622e8779845fa3aeaeca2",
+    "fit_offsets.py": "0fb8905db0990550d30f8aefb0ecd8b39b0fea46333938a889fe9e8e39d12d83",
+    "local_previews.py": "34a543e8317ab4d47049cefcea5b5f4c93e1907d35fafa18e458b07f6f8aed8c",
+    "package_only03.py": "3941e4ea701b87a101f316f98408a342edd3004843d2350035f168f7af061dfd",
+    "photoshop_gate.py": "de674c4de7e2cb891167975d55f8ef648377aea17d1a29bab663b7e11a1a3bd9",
+    "qa_candidate.py": "a61e88942b9491ef1afee6d1bc3e9db0715e996aee2157155624e6122f4b7005",
+    "sample_frames.py": "1b7e980cccaae71fdd2d81e721207f6403ea70333788696048e4fbc4177b133e",
+    "verify_only03.py": "a5dd91f46edea49982aa61a1c1e0eff332e5501b09dee115989b81893ad966f4",
+    "offset_model.json": "7372bb5c46dd6d6a7359d195ec4d07ef95d20228d4c61e702989ba9ff08e728c",
+    "gran_u16.npy": "4dac48bd3748f87bb26cebfa9acd2c33f76b60cc1059c61a8d3f4493c8a2c6c9",
+    "composite.npy": "a528ab595da5156649fcde0d92369c821cfef9edb656c4d72f565d419eb23282",
+    "candidate_qa.json": "3f2b392623fbee81fa178572529020eb6f8a75a8c5afb4923de0020c719625a4",
+    "psb_verification.json": "8126fbdc644bce0eb0349523e70a1037a32a33cc92618581a8f2e97dffe7a678",
+    "independent_judge.json": "e9a78bf4e734f4e078dfeaa1cf6487d489d3345249e4000d0dbb8b1120aef2cb",
+    "local_preview_receipt.json": "4812b76addf8bbb295d27b85f43ff8ed1bfdec9c6bfd9e3076224712d34ad5ed"
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "psb": {
+    "published_utc": "2026-09-10T10:50:31.310898+00:00",
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V42.psb",
+    "sha256": "c33804adb3859e26e1a5b71d19d78d6929c2127d10c987e3efbd6e3ab89ee5c2",
+    "bytes": 8737945886,
+    "layers": 32
+  },
+  "photoshop": {
+    "result": "OBRE 10551 px x 7506 px · 32 capes",
+    "file": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v42_20260910/staging/V42.psb",
+    "sha256": "c33804adb3859e26e1a5b71d19d78d6929c2127d10c987e3efbd6e3ab89ee5c2"
+  },
+  "verification_sha256": "c33804adb3859e26e1a5b71d19d78d6929c2127d10c987e3efbd6e3ab89ee5c2",
+  "layers": [
+    {
+      "name": "12 1/3200 perles",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "11 1/500 limbe",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "10 1/125",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "09 1/60 x2",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "08 1/30 x4 quar",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "07 1/15 x2 quar",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "06 1/8 x4 quar",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "00 Base (cel/4) · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "00 Base corba (total) · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "Estrelles (llum mesurada) · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "P01 NRGF · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "P01b NRGF (μσ dels anells parcials extrapolats) · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "P02 RHEF · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "P02b RHEF υ 0,35 · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "P02c RHEF local 60° · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "P02d RHEF local 30° · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "03 ACHF azimutal 8-128 r0 · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "03 ACHF azimutal 8-128 r4 · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "07 ACHF azimutal suau r8 · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "01 ACHF fi 2-32 · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "04 ACHF micro 1-16 · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "05 ACHF fi 2-48 · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "06 ACHF estructura 4-64 · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "P03 MGN · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "P04 WOW · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "P05 WOW bilateral · V42",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "POWAAAH3 (HDR de Pere 16-08) · earthshine · V42",
+      "kind": "u16m",
+      "exact": true
+    },
+    {
+      "name": "Earthshine V42 lineal (corba) · mesurat, gra inclòs",
+      "kind": "u16m",
+      "exact": true
+    },
+    {
+      "name": "Earthshine V42 relleu 12 % · gra tal qual",
+      "kind": "u16m",
+      "exact": true
+    },
+    {
+      "name": "Earthshine V42 relleu 12 % · suau σ3",
+      "kind": "u16m",
+      "exact": true
+    },
+    {
+      "name": "Earthshine V42 relleu 24 % · suau σ3",
+      "kind": "u16m",
+      "exact": true
+    },
+    {
+      "name": "Compara LROC",
+      "kind": "copy",
+      "exact": true
+    }
+  ],
+  "report": "research/160"
+}

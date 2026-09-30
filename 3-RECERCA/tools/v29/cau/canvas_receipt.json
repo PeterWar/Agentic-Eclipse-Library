@@ -1,0 +1,17 @@
+{
+  "final_size": [
+    10551,
+    7506
+  ],
+  "sun_xy": [
+    5361.768111973117,
+    3775.747534140857
+  ],
+  "base_changes": "only temporal limb and marked ghost; V28 exterior base retained",
+  "opacities": {
+    "achf": 0.7,
+    "passalt24": 0.4,
+    "gran": 0.35
+  },
+  "omitted": "04 ACHF ample 9R; redundant broad azimuthal blur"
+}

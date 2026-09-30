@@ -1,0 +1,166 @@
+{
+  "psb": {
+    "published_utc": "2026-09-09T21:13:28.076635+00:00",
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V41.psb",
+    "sha256": "90c60bb20dfc60857e0ceb733c322880e96c561b37829dcfb7e47f990c024ae1",
+    "bytes": 7545447566,
+    "layers": 23
+  },
+  "photoshop": {
+    "result": "OBRE 10551 px x 7506 px · 23 capes",
+    "file": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v41_20260909/staging/V41.psb",
+    "sha256": "90c60bb20dfc60857e0ceb733c322880e96c561b37829dcfb7e47f990c024ae1"
+  },
+  "verification_sha256": "90c60bb20dfc60857e0ceb733c322880e96c561b37829dcfb7e47f990c024ae1",
+  "layers": [
+    {
+      "name": "12 1/3200 perles",
+      "font": "V39",
+      "exact": true
+    },
+    {
+      "name": "11 1/500 limbe",
+      "font": "V39",
+      "exact": true
+    },
+    {
+      "name": "10 1/125",
+      "font": "V39",
+      "exact": true
+    },
+    {
+      "name": "09 1/60 x2",
+      "font": "V39",
+      "exact": true
+    },
+    {
+      "name": "08 1/30 x4 quar",
+      "font": "V39",
+      "exact": true
+    },
+    {
+      "name": "07 1/15 x2 quar",
+      "font": "V39",
+      "exact": true
+    },
+    {
+      "name": "06 1/8 x4 quar",
+      "font": "V39",
+      "exact": true
+    },
+    {
+      "name": "00 Base (cel/4) · V39",
+      "font": "V39",
+      "exact": true
+    },
+    {
+      "name": "00 Base corba (total) · V39",
+      "font": "V39",
+      "exact": true
+    },
+    {
+      "name": "03 ACHF azimutal 8-128 r0 · V38",
+      "font": "V39",
+      "exact": true
+    },
+    {
+      "name": "03 ACHF azimutal 8-128 r4 · V38",
+      "font": "V39",
+      "exact": true
+    },
+    {
+      "name": "07 ACHF azimutal suau r8 · V38",
+      "font": "V39",
+      "exact": true
+    },
+    {
+      "name": "01 ACHF fi 2-32 · V38",
+      "font": "V38",
+      "exact": true
+    },
+    {
+      "name": "04 ACHF micro 1-16 · V38",
+      "font": "V38",
+      "exact": true
+    },
+    {
+      "name": "05 ACHF fi 2-48 · V38",
+      "font": "V38",
+      "exact": true
+    },
+    {
+      "name": "06 ACHF estructura 4-64 · V38",
+      "font": "V38",
+      "exact": true
+    },
+    {
+      "name": "P01 NRGF · V39",
+      "font": "V39",
+      "exact": true
+    },
+    {
+      "name": "P01b NRGF (μσ dels anells parcials extrapolats en ln r) · V39",
+      "font": "V39",
+      "exact": true
+    },
+    {
+      "name": "P02 RHEF · V39",
+      "font": "V39",
+      "exact": true
+    },
+    {
+      "name": "P02b RHEF υ 0,35 · V41",
+      "font": "u16",
+      "exact": true
+    },
+    {
+      "name": "P03 MGN · V38",
+      "font": "V38",
+      "exact": true
+    },
+    {
+      "name": "P04 WOW · V38",
+      "font": "V38",
+      "exact": true
+    },
+    {
+      "name": "P05 WOW bilateral · V38",
+      "font": "V38",
+      "exact": true
+    }
+  ],
+  "fonts": {
+    "V39.psb": "fcf3b386660d5bd07f94a3cd3cd2f9cab622fb7edede28cc53446416847c7570",
+    "V38.psb": "f74b25a72c65595ae74e56a41ec8f0d85b1db578ce1ca818fd9e8e6ffc87687f",
+    "V40.psb": "e23c1ce4428d42cce38f9d699b8b7bd484ce1a6fdd97c75e1c154282d4cfbbc4"
+  },
+  "rhef_upsilon": {
+    "upsilon": 0.35,
+    "mid": 0.5315622091293335,
+    "quantils_x": [
+      0.016202956438064575,
+      0.15115415751934053,
+      0.3124232292175293,
+      0.5223013162612915,
+      0.7678828090429306,
+      0.9254664182662964,
+      0.9990924596786499
+    ],
+    "quantils_y": [
+      0.1505526900291443,
+      0.3289482295513153,
+      0.4241218566894531,
+      0.5076950192451477,
+      0.6177670955657959,
+      0.7431652545928955,
+      0.9450985789299011
+    ],
+    "fora_suport": "valor u16 de la P02 V38 (idèntic)",
+    "font_float": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v38_20260908/purs/cau/P02_RHEF_float.npy",
+    "font_float_sha256": "cf3e9e948795f6dc68605bb55c4b0ccf18642f90139e2a780832e5d2a719ce98",
+    "referencia": "sunkit_image.utils.apply_upsilon (Gilly & Cranmer 2025), υ escalar → alpha = alpha_high = υ",
+    "u16": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v39_20260909/cau/P02b_RHEF_ups0.35_u16.npy",
+    "u16_sha256": "5b721713965c84c2f8f69a671905944094ae76c5a2eec72d1ac396e5e141dd2f"
+  },
+  "report": "research/159"
+}

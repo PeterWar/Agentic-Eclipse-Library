@@ -1,0 +1,58 @@
+{
+  "gain": 0.3411462604999542,
+  "fit_n": 40832,
+  "holdout_n": 43453,
+  "sampling": "121 radii2..3.5R x720angles, bilinear, alternating30deg sectors",
+  "ghost_excluded_from_fit_only": [
+    4878.66472396041,
+    2549.206007534177,
+    240
+  ],
+  "validation": [
+    {
+      "radii_R": [
+        2,
+        2.3
+      ],
+      "median_bias_pct": -0.706404447555542,
+      "median_absolute_error_pct": 1.1742115020751953,
+      "n": 9000
+    },
+    {
+      "radii_R": [
+        2.3,
+        2.65
+      ],
+      "median_bias_pct": -0.2646327018737793,
+      "median_absolute_error_pct": 1.110297441482544,
+      "n": 10440
+    },
+    {
+      "radii_R": [
+        2.65,
+        3
+      ],
+      "median_bias_pct": 0.017833709716796875,
+      "median_absolute_error_pct": 0.7724523544311523,
+      "n": 10373
+    },
+    {
+      "radii_R": [
+        3,
+        3.5
+      ],
+      "median_bias_pct": 0.4019498825073242,
+      "median_absolute_error_pct": 0.5888819694519043,
+      "n": 14717
+    },
+    {
+      "radii_R": [
+        2,
+        3.5
+      ],
+      "median_bias_pct": 0.039899349212646484,
+      "median_absolute_error_pct": 0.799250602722168,
+      "n": 43453
+    }
+  ]
+}

@@ -1,0 +1,182 @@
+[
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/epoch_vixen_7.npz",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/epoch_vixen_7.npz",
+    "sha256": "375b3b1a5ce52c23e4a381224950c6a76a06f1f271ad5330c6874275a7d41c0e"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/epoch_vixen_6.npz",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/epoch_vixen_6.npz",
+    "sha256": "ca1cd5c2ec6882202d080d3ec66a4cd9c6440cb236e0835529161827dc0df05e"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/epoch_vixen_4.npz",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/epoch_vixen_4.npz",
+    "sha256": "3237cfc5da575020dab155fe9e1821a99f6d352c286c9965ccfd0e117dfb1eab"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/epoch_vixen_5.npz",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/epoch_vixen_5.npz",
+    "sha256": "17fad584d1c1e14ad0f573a8b3ca785f8b6de8698b68f3dea47eed46a785a71a"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/epoch_vixen_1.npz",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/epoch_vixen_1.npz",
+    "sha256": "a844431bd8162d40b88a6d6af45bb0aa9e598341beae538b9dff9f8806853363"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/epoch_vixen_0.npz",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/epoch_vixen_0.npz",
+    "sha256": "5e4f4834125d17d0b36ecb848d454ebf3f8b75ee63c912fa3983d85dd1ae55a5"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/epoch_vixen_2.npz",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/epoch_vixen_2.npz",
+    "sha256": "26e4e759532b2010074597049e0a493ec0f555425133b0231427fb921918cfb4"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/epoch_vixen_3.npz",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/epoch_vixen_3.npz",
+    "sha256": "e8e128ff8f3974f057930ace755a27cb7683eaa098808184ab92f41c24555780"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/epoch_vixen_8.npz",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/epoch_vixen_8.npz",
+    "sha256": "a91971c7070c4fc00249d4a123f2ef2c543c4ee2df5dfd96dc89de8898ef0201"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/epoch_sony_A_0.npz",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/epoch_sony_A_0.npz",
+    "sha256": "c616c6b97bbcd7ba3ac3abe797b5f2142288781e02c25cdc9bdc2b0d4290705a"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/epoch_sony_A_1.npz",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/epoch_sony_A_1.npz",
+    "sha256": "ba327cc40eec49f3972a36fe9f90fa4fc559f3b1b856e6548fa8a532bae2345c"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/epoch_sony_B_4.npz",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/epoch_sony_B_4.npz",
+    "sha256": "617a2a202eb53ae8509ababe7c71ca66a5640984ff9d736d9e86ce223e5bfe49"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/epoch_sony_B_5.npz",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/epoch_sony_B_5.npz",
+    "sha256": "e344a879032d058178eae65005cc1be4e22b6ce926f31b5ddbf854ae4e5854d0"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/epoch_sony_B_2.npz",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/epoch_sony_B_2.npz",
+    "sha256": "117acd64adba64da88169c8df94122758cc3258d12cba96cb4e29d5e70f613ac"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/epoch_sony_B_3.npz",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/epoch_sony_B_3.npz",
+    "sha256": "a35640fc8100b88f7ebaa5aec572793ee037fbccb5777a56ec105515eaf63251"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/vixen_reference.npy",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/vixen_reference.npy",
+    "sha256": "fdad6c8177773c90b2d4344ce5fd2b615c3a928018069bc16e785bd4ed6a49aa"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/vixen_all.npy",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/vixen_all.npy",
+    "sha256": "4d2b44fec6dc98b64a2f69a681117fde95c52282b814f136adb732f1d31e9f6b"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/vixen_corrected.npy",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/vixen_corrected.npy",
+    "sha256": "81eec89c2b651490691f3ebdfa5452a4c473782e5b8d867c4656e616cbd5b501"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/vixen_epoch_ref_weights.npy",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/vixen_epoch_ref_weights.npy",
+    "sha256": "735b9d365dbfceac5f966724b3c4ebcec8f60d3a775c0a5f95da0f831f38e359"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/vixen_epoch_preference.npy",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/vixen_epoch_preference.npy",
+    "sha256": "2e6b422fc52dcd45d36004f3c2b4ea795f38f1200d94a18c234e2e9ace944aaf"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/vixen_quality_low.npy",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/vixen_quality_low.npy",
+    "sha256": "e25a01a3b03d5cc6b11313f3adcb3eb1f040287324b3254f50a67adf74f8911d"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/sony_reference.npy",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/sony_reference.npy",
+    "sha256": "7af8ed4e54577b9a2a1d2460e027c372e0c0faad1ee01f78ddcda11abe8afbb9"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/sony_all.npy",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/sony_all.npy",
+    "sha256": "a0c24b2ef18e561eb46f5f0d9cf4cea554fe9bfc53ff733245d12413e457a47a"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/sony_corrected.npy",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/sony_corrected.npy",
+    "sha256": "8503543f7d009d27c5878fc8571abfaa702111244eb1332d1fce727cb86c6b5b"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/sony_epoch_ref_weights.npy",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/sony_epoch_ref_weights.npy",
+    "sha256": "af6bd270985c0e41627f57994cee799b8c65e1fb2ff2d541fb5c92849051c650"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/sony_epoch_preference.npy",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/sony_epoch_preference.npy",
+    "sha256": "68b737da3c4ab15b9e94512504f648b1b05708fc67ae0de6d35b83996c6b2cf5"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/sony_quality_low.npy",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/sony_quality_low.npy",
+    "sha256": "5f0f07e10ab3de70f61b70c6320e24e03ca453ea4d416dad6aa2b546b42b32b4"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/combined_reference.npy",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/combined_reference.npy",
+    "sha256": "8aa075591fd6d84ff25bd2dacecf19f2692fa70b6c1eee3811e4fb4a11435791"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/combined_all.npy",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/combined_all.npy",
+    "sha256": "4b6febdae4dbcdde30063cba76b320493b89194cc80ab2d47c49401e1ec29333"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/combined_corrected.npy",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/combined_corrected.npy",
+    "sha256": "8197a9ba5826b3623536829eceeef3c830d06f86a471c5e2dadea9a6fed3c544"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/combined_epoch_ref_weights.npy",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/combined_epoch_ref_weights.npy",
+    "sha256": "605eb0a3070892fe8248b6205cd957bbbf1d326713209d70e9bcd25368b5c09e"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/combined_epoch_preference.npy",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/combined_epoch_preference.npy",
+    "sha256": "b9960fccbbdb9ac65ce7780ebc31363eb3b49529e1c2609bc3ad6f8ba6cda730"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/cau/combined_quality_low.npy",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/combined_quality_low.npy",
+    "sha256": "5b83006bf14f84885a39f820854cd2fdb86fadea14da9675de73148f275a96c6"
+  },
+  {
+    "source": "output/v45_earthshine_20260910/4-rebuts/F2_temporal.json",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/F2_temporal.json",
+    "sha256": "c0520b6f15a052c22e3ed01293633923961369c54baf14dfab72b1e8ab992a89"
+  },
+  {
+    "source": "output/v45_earthshine_20260910/4-rebuts/F6_reference_transfer.json",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/F6_reference_transfer.json",
+    "sha256": "78233ee9b3a4d15e3d42d345f520d013ea23f915aa35fa370df25e2fa87bbc2a"
+  },
+  {
+    "source": "research/tools/v45_earthshine_20260910/f2_temporal.py",
+    "snapshot": "research/tools/v45_earthshine_20260910/cau/pre_FPN/f2_temporal.py",
+    "sha256": "35a0a4dd4240bb32ce69a826b0ebeeca628b37e1e311537aab4d066566bfe8c5"
+  }
+]

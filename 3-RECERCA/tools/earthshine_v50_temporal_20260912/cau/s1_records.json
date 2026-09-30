@@ -1,0 +1,79 @@
+{
+ "base": {
+  "name": "00 Base corba (total) · V42",
+  "bbox": [
+   0,
+   0,
+   10551,
+   7506
+  ],
+  "blend": "BlendMode.NORMAL",
+  "opacity": 255,
+  "visible": true,
+  "mask": {
+   "box": [
+    0,
+    0,
+    10551,
+    7506
+   ],
+   "bg": 0,
+   "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x10753e0b0>"
+  },
+  "channels": [
+   -1,
+   0,
+   1,
+   2,
+   -2
+  ]
+ },
+ "l09": {
+  "name": "09 1/60 x2",
+  "bbox": [
+   1330,
+   817,
+   9232,
+   6878
+  ],
+  "blend": "BlendMode.LIGHTEN",
+  "opacity": 255,
+  "visible": true,
+  "mask": null,
+  "channels": [
+   -1,
+   0,
+   1,
+   2
+  ]
+ },
+ "lun": {
+  "name": "V49 · graella verda nativa · Camera Raw de Pere",
+  "bbox": [
+   4677,
+   3077,
+   6077,
+   4477
+  ],
+  "blend": "BlendMode.NORMAL",
+  "opacity": 255,
+  "visible": true,
+  "mask": {
+   "box": [
+    0,
+    0,
+    10551,
+    7506
+   ],
+   "bg": 0,
+   "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x1075f8830>"
+  },
+  "channels": [
+   -1,
+   0,
+   1,
+   2,
+   -2
+  ]
+ }
+}

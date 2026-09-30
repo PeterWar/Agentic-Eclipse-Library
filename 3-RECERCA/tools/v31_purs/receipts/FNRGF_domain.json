@@ -1,0 +1,38 @@
+{
+  "equations": "Druckmullerova et al.2011 equations2-7",
+  "segments": 50,
+  "annuli_px": 1,
+  "order": 10,
+  "attenuation_mean": [
+    1,
+    0.85,
+    0.7,
+    0.55,
+    0.4,
+    0.25,
+    0.1,
+    0,
+    0,
+    0,
+    0
+  ],
+  "attenuation_std": [
+    1,
+    0.9,
+    0.8,
+    0.7,
+    0.6,
+    0.5,
+    0.4,
+    0,
+    0,
+    0,
+    0
+  ],
+  "complete_annuli": 3278,
+  "defined_observed_pixels": 43208610,
+  "undefined_observed_pixels": 27186660,
+  "invalid_denominator_pixels": 0,
+  "disposition": "domain-only scientific NPY; not placed in PSB because a full-FOV pure result would require invented missing angular data or an extra circular boundary",
+  "source_preserved": true
+}

@@ -1,0 +1,15 @@
+{
+ "src": "/Users/USUARI/Desktop/Eclipse 2026/1-PHOTOSHOP/V75.psb",
+ "dst": "/Users/USUARI/Desktop/Eclipse 2026/1-PHOTOSHOP/V76.psb",
+ "rebut": "/private/tmp/claude-501/-Users-USUARI-Downloads-Eclipse-2026/e4f0fbff-bfdf-4da5-a1d0-1bbdf0423383/scratchpad/b13_escriptura_v76.json",
+ "capa": "/private/tmp/claude-501/-Users-USUARI-Downloads-Eclipse-2026/e4f0fbff-bfdf-4da5-a1d0-1bbdf0423383/scratchpad/capa223.npz",
+ "nom": "Correccions de Pere 17-09 · des de V75_Corretgit.tif (interpolació dels filtres a la franja del moviment lunar + Camera Raw al disc) · alfa on hi ha diferència",
+ "nom_curt": "Correccions de Pere 17-09",
+ "id": 223,
+ "roi": [
+  4377,
+  2777,
+  6377,
+  4777
+ ]
+}

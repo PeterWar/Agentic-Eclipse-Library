@@ -1,0 +1,35 @@
+{
+ "font": {
+  "path": "/Users/USUARI/Desktop/Eclipse 2026/1-PHOTOSHOP/V75.psb",
+  "sha256": "9fa85c8d2ce24b259be9d59963f21c7b008ce2d333b5af91c7d92e659345b96e",
+  "bytes": 6792010216
+ },
+ "nou": {
+  "path": "/Users/USUARI/Desktop/Eclipse 2026/1-PHOTOSHOP/V76.psb",
+  "sha256": "fc62412234c8718a2398e800cf912fa563d09ad1a8f7b82b64d74c00e640c8a7",
+  "bytes": 6809684904
+ },
+ "capa": {
+  "id": 223,
+  "nom": "Correccions de Pere 17-09 · des de V75_Corretgit.tif (interpolació dels filtres a la franja del moviment lunar + Camera Raw al disc) · alfa on hi ha diferència",
+  "bbox": [
+   4377,
+   2777,
+   6377,
+   4777
+  ],
+  "canals": {
+   "-1": 148078,
+   "0": 5989003,
+   "1": 5903559,
+   "2": 5633334
+  }
+ },
+ "roi": [
+  4377,
+  2777,
+  6377,
+  4777
+ ],
+ "quan": "2026-09-17T00:30:52"
+}

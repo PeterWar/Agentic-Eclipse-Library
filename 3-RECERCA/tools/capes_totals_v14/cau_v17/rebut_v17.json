@@ -1,0 +1,108 @@
+{
+ "v16": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/CapesTotalsV16.psb",
+ "desti": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/CapesTotalsV17.psb",
+ "llenc": [
+  12415,
+  12095
+ ],
+ "S_v15_a_v16": {
+  "theta_deg": 10.879999999999995,
+  "centre_rotacio_v15": [
+   7211.0,
+   7785.5
+  ],
+  "translacio": [
+   -948.96711843503,
+   -1048.1115734701557
+  ],
+  "resposta": 1.0426964059745982
+ },
+ "sol_v16": [
+  6469.195771284503,
+  6757.568625316097
+ ],
+ "fotogrames": [
+  "DSC06984.ARW",
+  "DSC06996.ARW",
+  "DSC06999.ARW",
+  "DSC06987.ARW",
+  "DSC06993.ARW"
+ ],
+ "k": {
+  "DSC06984.ARW": 0.9377814141044277,
+  "DSC06996.ARW": 1.0405422717630173,
+  "DSC06999.ARW": 1.0346735302530068,
+  "DSC06987.ARW": 0.995985595112283,
+  "DSC06993.ARW": 0.995985595112283
+ },
+ "residual_px": [
+  -0.09643619202211084,
+  0.0827774385113571
+ ],
+ "wb_guanys_lineals_RGB": [
+  1.0009820975143227,
+  1.0,
+  1.1882413533258138
+ ],
+ "ancora_factor": 0.009677985796171216,
+ "render": {
+  "gamut_acotat_pct": 0.6534874801767293,
+  "valor_ancora_L": 2072.1772801271254,
+  "pendent": 0.22,
+  "ancora": 0.74,
+  "terra": 0.045,
+  "sigma_croma_px": 24.0
+ },
+ "seam_seu_RGB": [
+  0.8664835691452026,
+  0.7510337829589844,
+  0.652826726436615
+ ],
+ "seam_meu_RGB": [
+  0.8666448593139648,
+  0.7511747479438782,
+  0.6530061960220337
+ ],
+ "color_lineal": {
+  "2Rsol": {
+   "R/G": 1.4677766323508599,
+   "B/G": 0.6930329811636229,
+   "n": 158797
+  },
+  "3Rsol": {
+   "R/G": 1.232255517039129,
+   "B/G": 0.9020417489805992,
+   "n": 236996
+  },
+  "5Rsol": {
+   "R/G": 1.0685252297148793,
+   "B/G": 0.9975503861210858,
+   "n": 393430
+  },
+  "8Rsol": {
+   "R/G": 1.0213603780143268,
+   "B/G": 1.0283803592845522,
+   "n": 628058
+  }
+ },
+ "rang_dada_Rsol": [
+  2.631851203098532,
+  14.838008679859591
+ ],
+ "nom_capa": "13_mes1s_2sx3+8sx2_SONY300 · LDIC run 016 · WB i nivell ajustats a la V16 · dada 2.63-14.84 R☉",
+ "mascara_blend": {
+  "rampa_Rsol": [
+   2.000647639956092,
+   2.650647639956092
+  ],
+  "forma": "smoothstep (0 exacte per dins de la vora de saturació)"
+ },
+ "lluna_09": {
+  "cx": 6480.133590377087,
+  "cy": 6756.00082151134,
+  "R": 452.39438657019747,
+  "rms": 0.7128365121927516
+ },
+ "px_mascara_09_canviats": 198458,
+ "bytes": 3671540512
+}

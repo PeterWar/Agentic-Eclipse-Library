@@ -1,0 +1,63 @@
+{
+  "PASS": true,
+  "WOW_reference": [
+    {
+      "pedestal": 2,
+      "bilateral": false,
+      "relative_RMS": 6.520140919419707e-07,
+      "correlation": 0.9999999999998699
+    },
+    {
+      "pedestal": 2,
+      "bilateral": true,
+      "relative_RMS": 4.623993978886922e-07,
+      "correlation": 0.9999999999998973
+    },
+    {
+      "pedestal": 1000,
+      "bilateral": false,
+      "relative_RMS": 0.0005215463567102321,
+      "correlation": 0.9999998986193726
+    },
+    {
+      "pedestal": 1000,
+      "bilateral": true,
+      "relative_RMS": 0.0010943261101418469,
+      "correlation": 0.9999994012479346
+    }
+  ],
+  "constant_with_missing_support": [
+    {
+      "value": 0.3,
+      "bilateral": false,
+      "max_abs": 0.0
+    },
+    {
+      "value": 0.3,
+      "bilateral": true,
+      "max_abs": 0.0
+    },
+    {
+      "value": 1.0,
+      "bilateral": false,
+      "max_abs": 0.0
+    },
+    {
+      "value": 1.0,
+      "bilateral": true,
+      "max_abs": 0.0
+    },
+    {
+      "value": 1000.0,
+      "bilateral": false,
+      "max_abs": 0.0
+    },
+    {
+      "value": 1000.0,
+      "bilateral": true,
+      "max_abs": 0.0
+    }
+  ],
+  "numerical_tolerances": "wave residual8eps32; coarse plane16eps32; constant response defined as0",
+  "scope": "algorithm reference and arithmetic, not a claim of artifact-free corona"
+}

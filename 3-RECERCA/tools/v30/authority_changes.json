@@ -1,0 +1,62 @@
+[
+  {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-05_V30.md",
+    "before": null,
+    "after": "53ea2973fbffcb6ba52706ee2c9a80316cb32f40c8ac4efb65be28593930f0f1"
+  },
+  {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/AGENTS.md",
+    "before": "fa2ab4a12cbd1658c9dfa456b9e7d5c7c9760dcce1424c49a6b573ba66595bf8",
+    "after": "7961db620826f9d9dd4256cdd4f3b5b297a2ed2f7d0f0ceb1123ca6b38bf54d5"
+  },
+  {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/CLAUDE.md",
+    "before": "5ac70619d3ab10ea0c9126fb4f023f41bdf6c2f07408ccf177e30ffe7654d3e7",
+    "after": "8be868e38811a83f68303387c03ec3b7380818bb48a926ece36392182529e37f"
+  },
+  {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/README.md",
+    "before": "ec6e91f3331ed60845c6be7c85bb7cf39b0ed040de315811c1893291feb513c2",
+    "after": "d91b2ef0f11ffaeb31f977c14df0656595be35f5ce7ede26d5ce476d805e360d"
+  },
+  {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/README.md",
+    "before": "dc92fb54226f0cacead2b8caa942a7e36c2120f369212630f7b23fcc84ddff8b",
+    "after": "20801bd3c61bcb36299688073f3c2419fa8c560476e6afced0cc83d7a68d8669"
+  },
+  {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/README.md",
+    "before": "b4ace54526ba1fd77a87418a03528a8988f8b9ce1b2bc6259136cf41ffd7db31",
+    "after": "06fbe344a42e85339aed00b4f76e665401d8909ea46d5c3ff85678ff32222877"
+  },
+  {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/ESTAT_ACTUAL.md",
+    "before": "e63b165a4dea395e878e3bba214d9007819f22a9af1940c93db1770b37a7d2ea",
+    "after": "f7abaff7ea75148e8c876980dccc82bba2a65659cc65ec20b769f3f6796d5674"
+  },
+  {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/MAPA_RUTES_I_OUTPUTS.md",
+    "before": "975c53ee71edd3908b427d2377f42612960a5dcaf448dffcd561be022dd38290",
+    "after": "554e7bfa672e33a6851d1240933e1790abeed0e5135cce0cbeb3d52e09a08dc2"
+  },
+  {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/HANDOFF_VIGENT.md",
+    "before": "d4606001c1bd593dde8bf7f5c4f01526e22c98d6ff36f32ce4bbddd7f80d1bc8",
+    "after": "7771df5da69bbd025b335b5449ae2356e5f5ac1c130dddf22f8c32568a749ac2"
+  },
+  {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/NORMES_I_AUTORITAT.md",
+    "before": "c47d72479dff0bddb393cddc102729e6a11bb4e98e6460ead9e87aa1eaf558cf",
+    "after": "2ee4fb05976d95a265c980fd867461bb62580bfaf85802ee63400fb46008c966"
+  },
+  {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/ACTIVE.json",
+    "before": "b8b056d1623f2d8aec7a85b754d91db2332e39b17fd0a68659c6ea11161513c7",
+    "after": "e5b209885054094d603b5dd57980e6adec3c59306c4847f7b31affcd6e05f332"
+  },
+  {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/CODEX_STATUS.md",
+    "before": "4183b78dac62c6686497e783ad59a7258f254891b177f3dbb641f1b8b7c05c96",
+    "after": "f7ce3c121e420d4d4f64003f77dd1df83d553fbec3c4aeda22d23ab6e6e4f26d"
+  }
+]

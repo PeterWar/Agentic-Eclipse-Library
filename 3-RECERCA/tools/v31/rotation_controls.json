@@ -1,0 +1,195 @@
+{
+  "layers": {
+    "01": {
+      "0": {
+        "valid_rings": 60,
+        "peak_angle_deg": 0.0,
+        "peak_pearson": 0.6363530158996582,
+        "at_zero_pearson": 0.6363530158996582,
+        "null_180_pearson": -0.024315204471349716,
+        "zero_minus_far_p99": 0.5863322019577026,
+        "PASS": true
+      },
+      "1": {
+        "valid_rings": 60,
+        "peak_angle_deg": 1.0,
+        "peak_pearson": 0.6363530158996582,
+        "at_zero_pearson": 0.5028204917907715,
+        "null_180_pearson": -0.019148293882608414,
+        "zero_minus_far_p99": 0.4527996778488159,
+        "PASS": false
+      },
+      "-1": {
+        "valid_rings": 60,
+        "peak_angle_deg": -1.0,
+        "peak_pearson": 0.6363530158996582,
+        "at_zero_pearson": 0.5003223419189453,
+        "null_180_pearson": -0.021732361987233162,
+        "zero_minus_far_p99": 0.45030152797698975,
+        "PASS": false
+      },
+      "180": {
+        "valid_rings": 60,
+        "peak_angle_deg": -180.0,
+        "peak_pearson": 0.6363530158996582,
+        "at_zero_pearson": -0.024315202608704567,
+        "null_180_pearson": 0.6363530158996582,
+        "zero_minus_far_p99": -0.3730832636356354,
+        "PASS": false
+      }
+    },
+    "02": {
+      "0": {
+        "valid_rings": 60,
+        "peak_angle_deg": 0.0,
+        "peak_pearson": 0.630376398563385,
+        "at_zero_pearson": 0.630376398563385,
+        "null_180_pearson": -0.023312142118811607,
+        "zero_minus_far_p99": 0.5831042528152466,
+        "PASS": true
+      },
+      "1": {
+        "valid_rings": 60,
+        "peak_angle_deg": 1.0,
+        "peak_pearson": 0.630376398563385,
+        "at_zero_pearson": 0.5072752833366394,
+        "null_180_pearson": -0.01689213328063488,
+        "zero_minus_far_p99": 0.460003137588501,
+        "PASS": false
+      },
+      "-1": {
+        "valid_rings": 60,
+        "peak_angle_deg": -1.0,
+        "peak_pearson": 0.6303764581680298,
+        "at_zero_pearson": 0.5025334358215332,
+        "null_180_pearson": -0.02196688950061798,
+        "zero_minus_far_p99": 0.4552612900733948,
+        "PASS": false
+      },
+      "180": {
+        "valid_rings": 60,
+        "peak_angle_deg": -180.0,
+        "peak_pearson": 0.630376398563385,
+        "at_zero_pearson": -0.02331213839352131,
+        "null_180_pearson": 0.630376398563385,
+        "zero_minus_far_p99": -0.3720913231372833,
+        "PASS": false
+      }
+    },
+    "04": {
+      "0": {
+        "valid_rings": 60,
+        "peak_angle_deg": 0.0,
+        "peak_pearson": 0.4626537263393402,
+        "at_zero_pearson": 0.4626537263393402,
+        "null_180_pearson": -0.0178779736161232,
+        "zero_minus_far_p99": 0.4328640103340149,
+        "PASS": true
+      },
+      "1": {
+        "valid_rings": 60,
+        "peak_angle_deg": 1.0,
+        "peak_pearson": 0.4626537263393402,
+        "at_zero_pearson": 0.3115334212779999,
+        "null_180_pearson": -0.013779758475720882,
+        "zero_minus_far_p99": 0.28174370527267456,
+        "PASS": false
+      },
+      "-1": {
+        "valid_rings": 60,
+        "peak_angle_deg": -1.0,
+        "peak_pearson": 0.4626537263393402,
+        "at_zero_pearson": 0.3109509348869324,
+        "null_180_pearson": -0.014358233660459518,
+        "zero_minus_far_p99": 0.28116121888160706,
+        "PASS": false
+      },
+      "180": {
+        "valid_rings": 60,
+        "peak_angle_deg": -180.0,
+        "peak_pearson": 0.4626537263393402,
+        "at_zero_pearson": -0.0178779698908329,
+        "null_180_pearson": 0.4626537263393402,
+        "zero_minus_far_p99": -0.20127826929092407,
+        "PASS": false
+      }
+    },
+    "05": {
+      "0": {
+        "valid_rings": 60,
+        "peak_angle_deg": 0.0,
+        "peak_pearson": 0.7228533625602722,
+        "at_zero_pearson": 0.7228533625602722,
+        "null_180_pearson": -0.029764600098133087,
+        "zero_minus_far_p99": 0.6578818559646606,
+        "PASS": true
+      },
+      "1": {
+        "valid_rings": 60,
+        "peak_angle_deg": 1.0,
+        "peak_pearson": 0.7228533029556274,
+        "at_zero_pearson": 0.6061979532241821,
+        "null_180_pearson": -0.023173589259386063,
+        "zero_minus_far_p99": 0.5412264466285706,
+        "PASS": false
+      },
+      "-1": {
+        "valid_rings": 60,
+        "peak_angle_deg": -1.0,
+        "peak_pearson": 0.7228533029556274,
+        "at_zero_pearson": 0.6017033457756042,
+        "null_180_pearson": -0.029101867228746414,
+        "zero_minus_far_p99": 0.5367318391799927,
+        "PASS": false
+      },
+      "180": {
+        "valid_rings": 60,
+        "peak_angle_deg": -180.0,
+        "peak_pearson": 0.7228533625602722,
+        "at_zero_pearson": -0.02976459451019764,
+        "null_180_pearson": 0.7228533625602722,
+        "zero_minus_far_p99": -0.4831405580043793,
+        "PASS": false
+      }
+    },
+    "06": {
+      "0": {
+        "valid_rings": 60,
+        "peak_angle_deg": 0.0,
+        "peak_pearson": 0.7649258375167847,
+        "at_zero_pearson": 0.7649258375167847,
+        "null_180_pearson": -0.035985905677080154,
+        "zero_minus_far_p99": 0.6868095993995667,
+        "PASS": true
+      },
+      "1": {
+        "valid_rings": 60,
+        "peak_angle_deg": 1.0,
+        "peak_pearson": 0.7649258375167847,
+        "at_zero_pearson": 0.6579248309135437,
+        "null_180_pearson": -0.028887487947940826,
+        "zero_minus_far_p99": 0.5778095722198486,
+        "PASS": false
+      },
+      "-1": {
+        "valid_rings": 60,
+        "peak_angle_deg": -1.0,
+        "peak_pearson": 0.7649258375167847,
+        "at_zero_pearson": 0.6516909599304199,
+        "null_180_pearson": -0.036140598356723785,
+        "zero_minus_far_p99": 0.5715757012367249,
+        "PASS": false
+      },
+      "180": {
+        "valid_rings": 60,
+        "peak_angle_deg": -180.0,
+        "peak_pearson": 0.7649258375167847,
+        "at_zero_pearson": -0.035985901951789856,
+        "null_180_pearson": 0.7649258375167847,
+        "zero_minus_far_p99": -0.5458773374557495,
+        "PASS": false
+      }
+    }
+  },
+  "PASS": true
+}

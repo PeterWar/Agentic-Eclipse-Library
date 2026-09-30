@@ -1,0 +1,124 @@
+{
+  "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V63.psb",
+  "sha256": "6950e0b232ff24cf1c33994e8bc7146c11a43b10782319b4fa1afc92f4ca8ab9",
+  "bytes": 7776995450,
+  "native_source": "/Users/USUARI/Downloads/Eclipse 2026/output/v63_encaix_contorn_20260913/V63_pilot.psb",
+  "time": "2026-09-13T20:30:23.141175+00:00",
+  "canvas": [
+    10551,
+    7506
+  ],
+  "depth": 16,
+  "profile": "Adobe RGB (1998)",
+  "report": "/Users/USUARI/Downloads/Eclipse 2026/output/v63_encaix_contorn_20260913/RESULTAT.md",
+  "handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-13_CODEX_CAPES_TOTALS_V63.md",
+  "manifest": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v63_encaix_contorn_20260913/delivery_manifest.json",
+  "qa": "/Users/USUARI/Downloads/Eclipse 2026/output/v63_encaix_contorn_20260913/D1_integrity.json",
+  "readback": {
+    "PASS": true,
+    "shape": [
+      7506,
+      10551,
+      3
+    ],
+    "max_DN16": 0,
+    "changed_channel_samples": 0,
+    "method": "Native published PSB reopen, full-layer duplicate, force recomposite by changing foreground visibility off and on, flattened native TIFF export; source document not modified.",
+    "outside_lunar_ROI_RGB_max_DN16": 0,
+    "outside_lunar_ROI_changed_channel_samples": 0,
+    "published_sha256_after_reopen": "6950e0b232ff24cf1c33994e8bc7146c11a43b10782319b4fa1afc92f4ca8ab9"
+  },
+  "open_document": "V63.psb | saved=true | 24 top-level items | interiors visible=true | interiors above Moon=true | annotations hidden=true | profile=Adobe RGB (1998)\nFINAL_OPEN_COMPLETE\n",
+  "UI_observation": {
+    "time": "2026-09-13T20:35:55.423898+00:00",
+    "verified": false,
+    "native_document_state_confirmed": true,
+    "native_evidence": "/Users/USUARI/Downloads/Eclipse 2026/output/v63_encaix_contorn_20260913/E2_final_open.log",
+    "native_full_canvas_readback": "/Users/USUARI/Downloads/Eclipse 2026/output/v63_encaix_contorn_20260913/E3_final_readback.json",
+    "CUA_result": "The Mac is locked and automatic unlock could not unlock it. Ask the user to unlock the Mac manually before continuing.",
+    "visual_QA": "All ten marked sectors, 360-degree limb and full canvas reviewed from native TIFF exports.",
+    "scope": "Auxiliary foreground-window screenshot unavailable; no successful screenshot claimed."
+  },
+  "artifact_free": false,
+  "status": "V63_COMPOSITING_AND_LUNAR_COVERAGE_DELIVERED_FINE_TRANSITION_AND_ABSOLUTE_REGISTRATION_NOT_FULLY_RESOLVED",
+  "top_level_items": 24,
+  "embedded_editable_original_interiors": 7,
+  "embedded_correction_layers": 1,
+  "source_V62": {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V62.psb",
+    "snapshot": "/Users/USUARI/Downloads/Eclipse 2026/output/v63_encaix_contorn_20260913/V62_input.psb",
+    "sha256": "6f6d1ae849f0524a5479857a8b1c212094d12469322e8f9c0c582c88592efdc3",
+    "bytes": 7936036716,
+    "authority": "V62 already saved in Photoshop; no unsaved user changes",
+    "Pere_accepted": "Diffuse red colour correction successful",
+    "pending": [
+      "Bailey beads alignment",
+      "Top prominence alignment",
+      "Whole lunar contour"
+    ]
+  },
+  "Pere_accepted_V62_colour_preserved_exact": true,
+  "original_RGB_exact": true,
+  "original_source_alpha_exact": true,
+  "source_transform_exact": [
+    905.1545006775716,
+    400.5652578211652,
+    9417.128639148827,
+    421.5477742709833,
+    9400.647306326518,
+    7107.527460574883,
+    888.6731678552641,
+    7086.544944125065
+  ],
+  "root_user_selection_exact": true,
+  "lunar_mask_restored_pixels": 347,
+  "remaining_Pere_lunar_mask_edits_preserved": 3286,
+  "base_mask_validity_pixels": 1895,
+  "foreground_above_Moon": true,
+  "foreground_validation": {
+    "PASS": true,
+    "foreground_maxRGB_at_least_point05_samples": 1411784,
+    "native_foreground_RGBA_max_DN16": 0,
+    "source_geometry_exact_claim": "To be checked in D1 audit",
+    "nonopaque_lunar_ROI_before": 1465,
+    "nonopaque_lunar_ROI_after": 0,
+    "rectangular_ROI": [
+      4377,
+      2777,
+      6377,
+      4777
+    ],
+    "background_white_black_equivalent": true,
+    "old_transformed_bright_outliers_in_dark_background": 18,
+    "outlier_original_source_7x7_max": 0.004699778744182498,
+    "outlier_receipt": "C1_invalid_background_outliers.json",
+    "judge": "Original photographic foreground >=0.05 plus 3-pixel interpolation footprint; unchanged protocol, not brightness of the known invalid transformed proxy",
+    "foreground_response": {
+      "selected_samples": 27281,
+      "old_attenuated_by_lunar_mask": 3850,
+      "old_min_transmission": 0.0,
+      "new_transmission": 1.0,
+      "scope": "The same supplied solar foreground is now composed above the lunar layer. No new solar signal or spatial registration inferred."
+    }
+  },
+  "external_originals": [
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V61.psb",
+      "sha256": "63d4c0dcab0e2b09dd7797c6c0854b21702cde35d1d8322fc0acb16840400221",
+      "exact": true
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes interiors/Earthshine_V56.psb",
+      "sha256": "edee45ad76f08f8450beed3e85ed0d226eb0b1e11347478d2e998d74281ce12e",
+      "exact": true
+    }
+  ],
+  "limits": [
+    "Fine limb transition remains visible in some sectors",
+    "No new absolute astronomical registration or new scale/rotation demonstrated",
+    "Photographic opacity/support correction is not a new physical radiance or resolution estimate",
+    "Native CUA window screenshot unavailable because Mac locked"
+  ],
+  "preview": "/Users/USUARI/Downloads/Eclipse 2026/output/v63_encaix_contorn_20260913/vistes/V63_full_canvas.png",
+  "visual_review": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v63_encaix_contorn_20260913/D2_VISUAL_REVIEW.md"
+}

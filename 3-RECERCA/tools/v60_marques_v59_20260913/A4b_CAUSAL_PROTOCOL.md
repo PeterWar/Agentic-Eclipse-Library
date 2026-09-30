@@ -1,0 +1,11 @@
+# Causes localitzades i prova congelada abans de corregir la Lluna
+
+La resposta de Pere defineix la marca lila com una cremallera fins al centre. La inspecció separada RGB/alfa/màscara mostra que la forma radial exacta és a la màscara lunar, no al RGB. La cerca inicial de la unió polar del RGB no l'explica; les vistes B0/B1 del RGB no permetien declarar-la localitzada. B3 mostra directament la fuita.
+
+L'origen documental és V44 `f5_render.py`: `photo=1-lin/outer`, `w=min(coverage,photo)` era un pes de suma additiva que es va reutilitzar com a màscara NORMAL a V45. S5 de V53 substituí només els últims 8–10 píxels pel contorn geomètric, conservant el pes interior. Per això la màscara té textura i una cremallera, encara que el contorn sigui correcte.
+
+Correcció proposada: interior lunar opac, conservant literalment la màscara existent als tres píxels del límit real de suport i tots els píxels exteriors. No ajustar radi ni moure/resamplejar cap imatge. Els píxels que canviïn han d'estar almenys 7 píxels endins; si falla, revisar l'explicació abans de continuar. RGB i alfa lunar idèntics. No es resta ni s'interpola textura.
+
+Prova causal: Lluna constant i fons constant diferent, després fons amb patró injectat. La màscara antiga ha de reproduir la marca i la nova ha de tenir fuga zero a l'interior corregit. No és una prova de nova resolució. Retenció del detall: el RGB nadiu és invariant; l'únic guany del senyal dins el disc és passar d'opacitat antiga a 1. FOV, alfa físic i contorn exactes. Sony i Vixen fixos es mantenen com a referències de retenció, no s'utilitzen per ajustar la màscara.
+
+Verd C0: la continuació del nivell del filtre usa mitjana normalitzada sigma16 només de píxels vàlids amb protecció 1. Es conserva el pes de protecció V58, però s'aplica al detall en RGB del filtre, separat del nivell mitjà. La màscara torna al suport físic de la base acceptada. Només varia on el pes V58 és menor que 1 i hi ha suport de base. Control constant: guany constant, sense vora induïda. Injeccions de detall a la regió amb protecció 1 han de conservar guany 0.90–1.10; fora de la petjada identitat exacta. No es reivindica detall nou dins la protecció, que ja estava exclòs.

@@ -1,0 +1,13 @@
+{
+ "pos": [
+  6257,
+  5969
+ ],
+ "pedestal": 0.42,
+ "compressio": "tanh \u00b12,5\u03c3",
+ "fosca_limbe_display": 0.22,
+ "sig_vis": 0.11,
+ "suau_px": 1.5,
+ "amplificacio_contrast": 66.35034969641933,
+ "contrast_real_pct": 0.3947300400119758
+}

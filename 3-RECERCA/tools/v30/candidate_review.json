@@ -1,0 +1,70 @@
+{
+  "reviewer": "independent read-only mask_geometry_review; root visually reviewed full canvas and native limb/cardinal marked sectors",
+  "grid": [
+    10551,
+    7506
+  ],
+  "support03_exact": 70395267,
+  "support01_variants_exact": 70395270,
+  "no_new_circular_cut": true,
+  "outside03_mask_all_five_composites_max_delta": 0,
+  "cases": [
+    {
+      "tag": "gran_r4",
+      "H1": 0.003517,
+      "H1b": 2.023308,
+      "H1b_warning": true,
+      "angle_peak": 0,
+      "pearson0": 0.807267,
+      "pearson180": -0.055544,
+      "controls_plus1_minus1_180_rejected": true
+    },
+    {
+      "tag": "gran_r8",
+      "H1": 0.005241,
+      "H1b": 1.88172,
+      "H1b_warning": false,
+      "angle_peak": 0,
+      "pearson0": 0.807514,
+      "pearson180": -0.055893,
+      "controls_plus1_minus1_180_rejected": true
+    },
+    {
+      "tag": "micro1_16",
+      "H1": 0.003319,
+      "H1b": 1.355328,
+      "H1b_warning": false,
+      "angle_peak": 0,
+      "pearson0": 0.443221,
+      "pearson180": -0.018432,
+      "controls_plus1_minus1_180_rejected": true
+    },
+    {
+      "tag": "fi2_48",
+      "H1": 0.005745,
+      "H1b": 2.179758,
+      "H1b_warning": true,
+      "angle_peak": 0,
+      "pearson0": 0.705285,
+      "pearson180": -0.029383,
+      "controls_plus1_minus1_180_rejected": true
+    },
+    {
+      "tag": "estructura4_64",
+      "H1": 0.003044,
+      "H1b": 2.720704,
+      "H1b_warning": true,
+      "angle_peak": 0,
+      "pearson0": 0.749245,
+      "pearson180": -0.035298,
+      "controls_plus1_minus1_180_rejected": true
+    }
+  ],
+  "method": "qa_rasters.h1 on uint16, all observed support in200 log rings including partial; audit_geometry.polar/correlate on60 radii1.12-2.5R,1440angles; f3.anells_de_calaix; controls rotate each candidate. Warnings retained, not treated as absence of all artifacts.",
+  "display_color_only": {
+    "region": "all angles1.2-1.8R, excludes display clipping, not RAW photometry",
+    "pixels": 1097806,
+    "R_G_median": 1.2752113342285156,
+    "B_G_median": 0.5257259607315063
+  }
+}

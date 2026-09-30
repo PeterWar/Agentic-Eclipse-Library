@@ -1,0 +1,8 @@
+var root='/Users/USUARI/Downloads/Eclipse 2026/output/v60_marques_v59_20260913/';var old=app.displayDialogs,own=[];
+function log(s){var f=new File(root+'A1_native.log');f.open('a');f.writeln(s);f.close();}
+function exp(d,n){var f=new File(root+n+'.tif');if(f.exists)throw new Error('no-clobber');var t=d.duplicate('V59_QA_'+n,true);own.push(t);var o=new TiffSaveOptions();o.imageCompression=TIFFEncoding.TIFFZIP;o.layers=false;o.alphaChannels=true;o.transparency=true;o.embedColorProfile=true;t.saveAs(f,o,true,Extension.LOWERCASE);t.close(SaveOptions.DONOTSAVECHANGES);own.pop();log('EXPORTED '+n);}
+try{app.displayDialogs=DialogModes.NO;var src;for(var i=0;i<app.documents.length;i++)if(app.documents[i].fullName.fsName==='/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V59.psb')src=app.documents[i];if(!src||!src.saved)throw new Error('Expected saved userV59');var d=src.duplicate('V59_DIAGNOSE_COPY',false);own.push(d);exp(d,'V59_marked_native');d.layers[0].visible=false;exp(d,'V59_clean_native');var n=d.layers.length,vis=[];for(var i=0;i<n;i++)vis.push(d.layers[i].visible);
+for(var k=11;k<=26;k++)d.layers[n-1-k].visible=false;exp(d,'V59_no_filters_native');
+for(var i=0;i<n;i++)d.layers[i].visible=vis[i];for(var k=13;k<=16;k++)d.layers[n-1-k].visible=false;exp(d,'V59_no_RHEF_native');
+for(var i=0;i<n;i++)d.layers[i].visible=vis[i];d.layers[n-1-29].visible=false;exp(d,'V59_no_moon_native');
+d.close(SaveOptions.DONOTSAVECHANGES);own.pop();app.activeDocument=src;log('COMPLETE source saved='+src.saved);}finally{while(own.length){try{own.pop().close(SaveOptions.DONOTSAVECHANGES);}catch(e){}}app.displayDialogs=old;}'V59_DIAGNOSTIC_EXPORTED';

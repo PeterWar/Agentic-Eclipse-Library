@@ -1,0 +1,4 @@
+interface:
+  display_name: "Postprocessat de la corona"
+  short_description: "Cadena determinista LDIC, filtres, PSB, earthshine i portes"
+  default_prompt: "Usa $postprocessat-corona per executar o auditar la cadena determinista (cadena.py), els filtres de detall, els PSB de Photoshop, l'earthshine i les estrelles, amb les normes de Pere i el jutge extern."

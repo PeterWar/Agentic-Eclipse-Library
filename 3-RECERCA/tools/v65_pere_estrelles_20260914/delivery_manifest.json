@@ -1,0 +1,229 @@
+{
+  "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V65.psb",
+  "sha256": "50c22118ef4562178bebf6985f800f0cc71c123c0de65929ff23cbaf5d736308",
+  "bytes": 7197376038,
+  "native_source": "/Users/USUARI/Downloads/Eclipse 2026/output/v65_pere_estrelles_20260914/V65_native.psb",
+  "time": "2026-09-14T01:38:12.519944+00:00",
+  "gate": "OBRE 10551 px x 7506 px · 31 capes",
+  "status": "V65_COMPLETE_PHOTOGRAPHIC_MANUAL_GEOMETRY_60_STARS",
+  "artifact_free": false,
+  "absolute_registration_resolved": false,
+  "geometry_change_promoted": false,
+  "manual_Pere_geometry_preserved_exact": true,
+  "canvas": [
+    10551,
+    7506
+  ],
+  "depth": 16,
+  "profile": "Adobe RGB (1998)",
+  "top_level_items": 31,
+  "report": "/Users/USUARI/Downloads/Eclipse 2026/output/v65_pere_estrelles_20260914/RESULTAT.md",
+  "handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-14_CODEX_CAPES_TOTALS_V65.md",
+  "manifest": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v65_pere_estrelles_20260914/delivery_manifest.json",
+  "assets": {
+    "folder": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V65_dades",
+    "files": [
+      {
+        "source": "/Users/USUARI/Downloads/Eclipse 2026/output/v65_pere_estrelles_20260914/V65_estrelles_marcades.png",
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V65_dades/V65_estrelles_marcades.png",
+        "sha256": "fd7f57b0ba7dbfb1fba2821f93eead3a52b53cfc1a008a816b7281aa3a04aa90",
+        "bytes": 61457727
+      },
+      {
+        "source": "/Users/USUARI/Downloads/Eclipse 2026/output/v65_pere_estrelles_20260914/V65_estrelles_anotacions.png",
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V65_dades/V65_estrelles_anotacions.png",
+        "sha256": "70bc85d77c0a53c6741e856f9625a037be45a15c555852b576ce8b1eb1917e13",
+        "bytes": 769875
+      },
+      {
+        "source": "/Users/USUARI/Downloads/Eclipse 2026/output/v65_pere_estrelles_20260914/V65_estrelles.csv",
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V65_dades/V65_estrelles.csv",
+        "sha256": "47793bfaf95d4907134e8552c747029017d0d4964e1889cb681fcf81fc527c09",
+        "bytes": 24183
+      },
+      {
+        "source": "/Users/USUARI/Downloads/Eclipse 2026/output/v65_pere_estrelles_20260914/S22_final_catalog.json",
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V65_dades/V65_cataleg_estrelles.json",
+        "sha256": "f82f5e451c2dc6b6cc16946a1f919f537f2ae2b61648380b8e6cee5cb799f15e",
+        "bytes": 93903
+      },
+      {
+        "source": "/Users/USUARI/Downloads/Eclipse 2026/output/v65_pere_estrelles_20260914/vistes/V65_previsualitzacio.png",
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V65_dades/V65_previsualitzacio.png",
+        "sha256": "39c56fcd97fd2bde893cb40e8d66fdd0790f1601277eca22984c5222045b6f89",
+        "bytes": 6827600
+      },
+      {
+        "source": "/Users/USUARI/Downloads/Eclipse 2026/output/v65_pere_estrelles_20260914/vistes/V65_estrelles_marcades_4220.png",
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V65_dades/V65_estrelles_marcades_4220.png",
+        "sha256": "e662ec254fd114e1f79038537b11ca75184cee3088a59420010857c2cfc5e0aa",
+        "bytes": 13540804
+      }
+    ]
+  },
+  "qa": "/Users/USUARI/Downloads/Eclipse 2026/output/v65_pere_estrelles_20260914/D14_integrity.json",
+  "readback": {
+    "PASS": true,
+    "max_DN16": 0,
+    "pixels_different": 0,
+    "source": "/Users/USUARI/Downloads/Eclipse 2026/output/v65_pere_estrelles_20260914/D11_candidate.tif",
+    "readback": "/Users/USUARI/Downloads/Eclipse 2026/output/v65_pere_estrelles_20260914/V65_final_readback.tif",
+    "forced_recomposition": true,
+    "full_canvas": true
+  },
+  "all_original_masks_exact": true,
+  "all_original_alpha_exact": true,
+  "Earthshine_RGB_exact": true,
+  "Pere_photo96_all_channels_exact": true,
+  "modified_RGB_layers": [
+    3,
+    76
+  ],
+  "normalization_pixels": 763,
+  "stars_distinct": 60,
+  "stellar_identifications": 62,
+  "unresolved_pairs": 2,
+  "star_PSF_sigma_final_px": 1.5,
+  "stars_are_photographic_point_regularization": true,
+  "external_originals": {
+    "selected_RAW": [
+      {
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/DSC06984.ARW",
+        "bytes": 85406720,
+        "mtime_ns": 1786559340000000000,
+        "sha256": "88c9046f6d88a17e9fedfc4c9c6060c54da5c9b26cd8fd8861db12f8d67aa906",
+        "exposure": 2.0
+      },
+      {
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/DSC06985.ARW",
+        "bytes": 85423104,
+        "mtime_ns": 1786559350000000000,
+        "sha256": "b37b0bb7dcef39ea5d8231efe29b45a040c065ae6d0d55fdb4423415e6ae4540",
+        "exposure": 1.0
+      },
+      {
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/DSC06987.ARW",
+        "bytes": 85353472,
+        "mtime_ns": 1786559358000000000,
+        "sha256": "316c174e6900834f277047811a6a2c3105c23f93873dbf7c6522f7870dfea0f7",
+        "exposure": 8.0
+      },
+      {
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/DSC06991.ARW",
+        "bytes": 85419008,
+        "mtime_ns": 1786559384000000000,
+        "sha256": "07b8b7cd7cb8933e59d537abeb797f04ce868c783a3c8c63f2e3a9714224d9bb",
+        "exposure": 1.0
+      },
+      {
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/DSC06993.ARW",
+        "bytes": 85357568,
+        "mtime_ns": 1786559392000000000,
+        "sha256": "e1a33f5bd201088a9b13c23bf583b51b6f940580b61a05832d4498b13ee67ab1",
+        "exposure": 8.0
+      },
+      {
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/DSC06996.ARW",
+        "bytes": 85410816,
+        "mtime_ns": 1786559404000000000,
+        "sha256": "6e5edcd1428445a7e9f3d5335c91bfb068cb2cfb53ca9ae16e46023495440031",
+        "exposure": 2.0
+      },
+      {
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/DSC06999.ARW",
+        "bytes": 85406720,
+        "mtime_ns": 1786559410000000000,
+        "sha256": "6fe0d589109bb87e5d500e84a434812fa446a02b2c161b56b7161f6a6f75f4d6",
+        "exposure": 2.0
+      },
+      {
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Vixen Fase totalitat/572A2978.CR3",
+        "bytes": 28117716,
+        "mtime_ns": 1786559343000000000,
+        "sha256": "45d22a71908d9d4f9309f4c90c7ef51fdfd669ad1eebeaff64e4cbf0aa09f94b",
+        "exposure": 1.0
+      },
+      {
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Vixen Fase totalitat/572A2979.CR3",
+        "bytes": 30671572,
+        "mtime_ns": 1786559346000000000,
+        "sha256": "1f93db0ea710a9543db9f4b35aa67d9bfbb9d6e2d35b8952dcfb3625a1500812",
+        "exposure": 2.0
+      },
+      {
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Vixen Fase totalitat/572A2980.CR3",
+        "bytes": 30540500,
+        "mtime_ns": 1786559349000000000,
+        "sha256": "ae174f9d5e9056252cada7b47e1326fc0d83bc32d066c58690d7bbf21e6b1b7d",
+        "exposure": 2.0
+      },
+      {
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Vixen Fase totalitat/572A2981.CR3",
+        "bytes": 30426836,
+        "mtime_ns": 1786559352000000000,
+        "sha256": "2cfb8eb67ccaf57a2497a3e1941e4909c6752eb9a4600d21eb388128408cdf99",
+        "exposure": 2.0
+      },
+      {
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Vixen Fase totalitat/572A2982.CR3",
+        "bytes": 35779284,
+        "mtime_ns": 1786559363000000000,
+        "sha256": "a887d8e3808e7ddfdfd5a9ceba5158d99ac15cc06e650a246e43eb770478b914",
+        "exposure": 10.3
+      },
+      {
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Vixen Fase totalitat/572A2983.CR3",
+        "bytes": 35587284,
+        "mtime_ns": 1786559376000000000,
+        "sha256": "0daefbd87bb2dfe2db87ff0d2cbe4d4ec751fdb58240259b374cd047d616eb47",
+        "exposure": 10.3
+      },
+      {
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Vixen Fase totalitat/572A2984.CR3",
+        "bytes": 35597524,
+        "mtime_ns": 1786559390000000000,
+        "sha256": "60824bca2a2907b90d6d69ba048cc877a8bad19e08c0a5f7ff792ad462633f00",
+        "exposure": 10.3
+      },
+      {
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Vixen Fase totalitat/572A2996.CR3",
+        "bytes": 27786452,
+        "mtime_ns": 1786559405000000000,
+        "sha256": "ae3a13fd087edc0618024e5e7195223d060de64fcbbd5d3bb5d6c708d3293401",
+        "exposure": 1.0
+      }
+    ],
+    "raw_count": 15,
+    "raw_metadata_exact": true,
+    "flat_hashes_exact": true,
+    "raw_total_exposure_seconds": 62.900000000000006,
+    "native_detection": {
+      "unique_catalogue_positions_tested": 1132,
+      "unique_reflected_control_positions_tested": 1219,
+      "accepted_reflected_controls": 0,
+      "completeness_proven": false
+    },
+    "source_layers_geometry_changed": false,
+    "Gaussian_output_sigma": 1.5,
+    "stellar_surface_resolution_claimed": false,
+    "photon_metrics_remain_separate_from_display_transfer": true
+  },
+  "source_V64_Pere_sha256": "4ead6376a09b12a71a3d0572b578549552bc622fdc8ba72ab4888714e2127fc1",
+  "source_V64_native_snapshot": "/Users/USUARI/Downloads/Eclipse 2026/output/v65_pere_estrelles_20260914/V64_Pere_input.psb",
+  "open_document": "FINAL_OPEN_COMPLETE id=6612 name=V65.psb saved=true layers=31 10551 pxx7506 px\nDOCUMENT id=5536 name=V64_Artefactes.psb saved=true layers=27\nDOCUMENT id=5818 name=V57.psb saved=true layers=30\nDOCUMENT id=6612 name=V65.psb saved=true layers=31\n",
+  "UI_observation": {
+    "time": "2026-09-14T01:42:41.735010+00:00",
+    "native_document_state_confirmed": true,
+    "native_evidence": "/Users/USUARI/Downloads/Eclipse 2026/output/v65_pere_estrelles_20260914/E2_final_open.log",
+    "CUA_result": "Mac locked; automatic unlock unavailable. No user interruption requested during explicitly unattended work. Native Photoshop open/save/layer state and forced full-canvas readback verified; exported image and crops reviewed.",
+    "UI_screenshot_available": false
+  },
+  "preview": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V65_dades/V65_previsualitzacio.png",
+  "limits": [
+    "Residual dark limb relief not identified as craters; no synthetic contour smoothing.",
+    "No claim of absolute all-layer subpixel astronomical alignment; manual geometry is authoritative and untouched.",
+    "Point-source Gaussian regularization does not recover stellar surfaces or prove new optical resolution.",
+    "Natural-source photometry has PSF and extinction systematics; universal10% accuracy not claimed.",
+    "No exhaustive catalogue completeness or universal absence of artifacts claimed."
+  ]
+}

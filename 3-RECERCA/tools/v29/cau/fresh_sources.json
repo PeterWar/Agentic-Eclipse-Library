@@ -1,0 +1,113 @@
+{
+  "sources": {
+    "vixen": {
+      "ldic": [
+        {
+          "file": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/019_VIXEN_CIENCIA_20260827T212404Z/2-ldic/LDIC_R.fits",
+          "sha256": "1d8548533bef5d373dd3c96cd8b078b8d32d3521896f738232d8df8b9e635673"
+        },
+        {
+          "file": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/019_VIXEN_CIENCIA_20260827T212404Z/2-ldic/LDIC_G.fits",
+          "sha256": "b254aae5866b907c2d5812f754d900194f075fb142f0b37e15626a1cd11f463b"
+        },
+        {
+          "file": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/019_VIXEN_CIENCIA_20260827T212404Z/2-ldic/LDIC_B.fits",
+          "sha256": "b3265adfdd4b8e6fa715cff6655f32d6c5c64700aadf4c716894521655f513c1"
+        }
+      ],
+      "matrix": [
+        [
+          1.5596375465393066,
+          -0.590289294719696,
+          0.030651796609163284
+        ],
+        [
+          -0.17702490091323853,
+          1.6854621171951294,
+          -0.5084372162818909
+        ],
+        [
+          -0.025022923946380615,
+          -0.4962601065635681,
+          1.5212830305099487
+        ]
+      ],
+      "gain": [
+        0.9302325581395349,
+        1.0,
+        1.1261261261261262
+      ],
+      "support_pixels": 31768239,
+      "inner_added_pixels": 11831,
+      "sky_interpolation": "normalized Gaussian sigma24 px only for missing near-limb sky; LDIC radiance never filled"
+    },
+    "sony": {
+      "ldic": [
+        {
+          "file": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/016_SONYTOT_CIENCIA_20260827T183356Z/2-ldic/LDIC_R.fits",
+          "sha256": "709365d0bf769d82e4ea3e9bb983ad9ea2be5d8b46d8d00d002114ee024a825d"
+        },
+        {
+          "file": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/016_SONYTOT_CIENCIA_20260827T183356Z/2-ldic/LDIC_G.fits",
+          "sha256": "95e5b276dd98842c60b64e00d17d1f60a088522820875cdd6e883f7992a423bd"
+        },
+        {
+          "file": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/016_SONYTOT_CIENCIA_20260827T183356Z/2-ldic/LDIC_B.fits",
+          "sha256": "c53b849d0ce02ba9a64b530badc81489a3e4f34f37935ec044aa7503af236d72"
+        }
+      ],
+      "matrix": [
+        [
+          1.7367215156555176,
+          -0.5613192319869995,
+          -0.17540225386619568
+        ],
+        [
+          -0.15307563543319702,
+          1.5584194660186768,
+          -0.4053438603878021
+        ],
+        [
+          0.019871830940246582,
+          -0.4040277600288391,
+          1.3841559886932373
+        ]
+      ],
+      "gain": [
+        0.9302325581395349,
+        1.0,
+        1.1261261261261262
+      ],
+      "support_pixels": 69657019,
+      "inner_added_pixels": 16658,
+      "sky_interpolation": "normalized Gaussian sigma24 px only for missing near-limb sky; LDIC radiance never filled"
+    }
+  },
+  "geometry": {
+    "common_shape": [
+      8960,
+      8096
+    ],
+    "common_sun_xy": [
+      4048.0,
+      4480.0
+    ],
+    "final_sun_xy": [
+      5361.768111973117,
+      3775.747534140857
+    ],
+    "M": [
+      [
+        0.6872474884120418,
+        -0.726423354299227,
+        5834.16690614171
+      ],
+      [
+        0.726423354299227,
+        0.6872474884120418,
+        -2243.6829521483614
+      ]
+    ],
+    "note": "M retained as intensity-fitted; corrected metadata only, no blind 0.5 pixel shift."
+  }
+}

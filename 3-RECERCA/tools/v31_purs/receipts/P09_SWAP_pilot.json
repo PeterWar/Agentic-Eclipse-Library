@@ -1,0 +1,31 @@
+{
+  "tag": "P09_SWAP_pilot",
+  "parameters": {
+    "paper": "Seaton et al.2023, off-limb recipe",
+    "angular_median_halfwidth_degrees": 15,
+    "polar_angle_nodes": 720,
+    "polar_dr_px": 1,
+    "filter_gaussian_sigma_px": 4,
+    "c0": 0.75,
+    "t0": 492.8470764160156,
+    "t0_definition": "median of F over actual observed support, intensity-unit aware",
+    "display": "global affine only, no optional fourth-root display",
+    "status": "EUV-to-white-light transfer pilot; author warns visible-light results can be poor",
+    "fill_missing_sectors": false
+  },
+  "physical_support_pixels": 70395270,
+  "float_sha256": "837d88e4b5e6ba16cf63f2d264006a0b30972874c8c9c716b9621672becb35b9",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": 2.457633385658264,
+    "white": 17.614231235504345,
+    "sample_percentiles": [
+      0.1,
+      99.9
+    ],
+    "clipped_low_fraction": 0.0009966152555420272,
+    "clipped_high_fraction": 0.0010014877420031203,
+    "statistics_sample_stride_px": 4
+  },
+  "u16_sha256": "c2b5c36be319b23c5da58fbf39ef988c652aa3e03694ccf5ba7be0aab30d4ddc"
+}

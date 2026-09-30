@@ -1,0 +1,10 @@
+{
+ "src": "/Users/USUARI/Desktop/Eclipse 2026/1-PHOTOSHOP/V71.psb",
+ "dst": "/Users/USUARI/Desktop/Eclipse 2026/1-PHOTOSHOP/V72.psb",
+ "rebut": "/private/tmp/claude-501/-Users-USUARI-Downloads-Eclipse-2026/6346f583-afd0-49da-9c17-95128c31820e/scratchpad/b11_escriptura_v72.json",
+ "compost": "/private/tmp/claude-501/-Users-USUARI-Downloads-Eclipse-2026/6346f583-afd0-49da-9c17-95128c31820e/scratchpad/roi72_compost.npz",
+ "canvis": {"3": ["c0","c1","c2"], "30": ["c0","c1","c2"], "55": ["c0","c1","c2"], "56": ["c0","c1","c2"], "76": ["c0","c1","c2"], "96": ["c0","c1","c2"], "204": ["c0","c1","c2"]},
+ "fonts": {"3": "/private/tmp/claude-501/-Users-USUARI-Downloads-Eclipse-2026/6346f583-afd0-49da-9c17-95128c31820e/scratchpad/roi72_L3.npz", "30": "/private/tmp/claude-501/-Users-USUARI-Downloads-Eclipse-2026/6346f583-afd0-49da-9c17-95128c31820e/scratchpad/roi72_L30.npz", "55": "/private/tmp/claude-501/-Users-USUARI-Downloads-Eclipse-2026/6346f583-afd0-49da-9c17-95128c31820e/scratchpad/roi72_L55.npz", "56": "/private/tmp/claude-501/-Users-USUARI-Downloads-Eclipse-2026/6346f583-afd0-49da-9c17-95128c31820e/scratchpad/roi72_L56.npz", "76": "/private/tmp/claude-501/-Users-USUARI-Downloads-Eclipse-2026/6346f583-afd0-49da-9c17-95128c31820e/scratchpad/roi72_L76.npz", "96": "/private/tmp/claude-501/-Users-USUARI-Downloads-Eclipse-2026/6346f583-afd0-49da-9c17-95128c31820e/scratchpad/roi72_L96.npz", "204": "/private/tmp/claude-501/-Users-USUARI-Downloads-Eclipse-2026/6346f583-afd0-49da-9c17-95128c31820e/scratchpad/roi72_L204.npz"},
+ "noms": {"3": "V72 color anivellat a la banda del forat", "30": "V72 vel 2D (dos nuclis + dipol) restat", "55": "V72 biaix de contorn i neutre dins del disc", "56": "V72 biaix de contorn i neutre dins del disc", "76": "V72 to i color igualats a la ploma", "96": "V72 to i color igualats a la ploma", "204": "V72 to i color igualats a la ploma"},
+ "ocultes": [219, 220]
+}

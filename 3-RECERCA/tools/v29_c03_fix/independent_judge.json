@@ -1,0 +1,34 @@
+{
+  "reviewer": "detail_review independent read-only agent",
+  "accepted_for_layer03": true,
+  "scope": "Correction of V29 visual detail layer03 only; not certification of the full radiometric chain",
+  "visual_review": "PASS at full-field and native100% NE,SE and exteriorSony: abrupt boundary disappears; no new visible ring; streamers and fine filaments retained",
+  "model_review": "Per-frame native offsets correctly projected as sum(w*b)/sum(w); k already applied in sample model and is not doubled",
+  "independent_holdout": "Alternate azimuth sectors excluded from fit; long-frame plateau biases largely below0.12%; ramp residuals up to1.84% for Vixen2984 and1.23% for Sony6993 remain declared",
+  "edge_proxy": {
+    "method": "Blue components from1800x1281 diagnostic preview, B-R>12 andB-G>4,8-connected; scale x*10551/1800,y*7506/1281 without0.5; for everybluepoint bilinear radial samples k=-100..100 step1; fit linear baseline on[-100,-70]and[70,100]; step=median residual[10,40]-median residual[-40,-10]; report median across allbluepixels of component; no tangential smoothing",
+    "display_component_ids": {"SE":12,"south":15,"outer_long":7},
+    "SE_xy": [6142,4081],
+    "SE_raw_before_after": [0.0444,0.00019],
+    "SE_display_before_after": [0.0217,0.00436],
+    "south_xy": [5148,4426],
+    "south_display_before_after": [0.0241,0.00262],
+    "outer_long_raw_reduction": 0.78,
+    "limitation": "Local-slope-removed radial-step proxy also contains real coronal gradients; not an absolute artifact-only measurement"
+  },
+  "retention_20_100px_arc": {
+    "method": "Polar samples r=arange(1.12*RS,3.8*RS,4) and4096angles; realFFT perradius; keep n>0 where20<=2*pi*r/n<=100; inverseFFT; noHann/radialweight/detrend; pool each half-open radialinterval; Pearson andstd(new)/std(old),ddof0",
+    "radius_ranges_R": [[1.12,2.0],[2.0,2.65],[2.65,3.8]],
+    "before_after_correlation": [0.997,0.991,0.978],
+    "after_before_RMS": [0.991,0.953,0.828],
+    "vixen_sony_correlation": [0.964,0.916,0.563]
+  },
+  "limitations": [
+    "Absolute additive zero is anchored to a2s frame, not physically identified",
+    "Some short exposures are disconnected and receive zero correction",
+    "Outer-band amplitude decreases17.2% after additive correction; this is not an opacity change",
+    "H1b3.21 is a warning; no new visible radial ring in independent inspection",
+    "Train agreement alone is not proof against shared-method artifacts"
+  ],
+  "limb_preservation_review": "Original valid source masks now applied before train weights, preserving Sony fallback for46 original valid limb pixels"
+}

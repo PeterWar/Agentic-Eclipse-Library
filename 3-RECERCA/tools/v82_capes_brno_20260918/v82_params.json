@@ -1,0 +1,12 @@
+{
+ "src": "/Users/USUARI/Desktop/Eclipse 2026/1-PHOTOSHOP/V81.psb",
+ "dst": "/Users/USUARI/Desktop/Eclipse 2026/1-PHOTOSHOP/V82.psb",
+ "rebut": "/private/tmp/claude-501/-Users-USUARI-Downloads-Eclipse-2026/49e1d801-8306-4d45-9cae-a03da6b42a8d/scratchpad/b14_escriptura_v82.json",
+ "plantilla": 225,
+ "capes": [
+  {"npz": "/private/tmp/claude-501/-Users-USUARI-Downloads-Eclipse-2026/49e1d801-8306-4d45-9cae-a03da6b42a8d/scratchpad/capa_TSE_2026_200mm_DHS.npz", "nom": "Brno 200 mm DHS alineada", "nom_curt": "Brno 200 mm DHS alineada", "id": 230},
+  {"npz": "/private/tmp/claude-501/-Users-USUARI-Downloads-Eclipse-2026/49e1d801-8306-4d45-9cae-a03da6b42a8d/scratchpad/capa_TSE_2026_400mm_DHS.npz", "nom": "Brno 400 mm DHS alineada", "nom_curt": "Brno 400 mm DHS alineada", "id": 231},
+  {"npz": "/private/tmp/claude-501/-Users-USUARI-Downloads-Eclipse-2026/49e1d801-8306-4d45-9cae-a03da6b42a8d/scratchpad/capa_TSE_2026_530mm_DHS.npz", "nom": "Brno 530 mm DHS alineada", "nom_curt": "Brno 530 mm DHS alineada", "id": 232},
+  {"npz": "/private/tmp/claude-501/-Users-USUARI-Downloads-Eclipse-2026/49e1d801-8306-4d45-9cae-a03da6b42a8d/scratchpad/capa_TSE2026_Trigaza_800mm.npz", "nom": "Brno 800 mm Trigaza alineada", "nom_curt": "Brno 800 mm Trigaza alineada", "id": 233}
+ ]
+}

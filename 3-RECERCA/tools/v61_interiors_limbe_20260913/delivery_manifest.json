@@ -1,0 +1,104 @@
+{
+  "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V61.psb",
+  "sha256": "c2aa7e0eb7317e5bbd34e1efbef79466f864b317b66b5ed4db51ba39f7fa8bb2",
+  "bytes": 11858931812,
+  "time": "2026-09-13T16:53:48.262344+00:00",
+  "source_files": {
+    "V60": {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V60.psb",
+      "sha256": "48a1f0b329b77454c112e490d5728fff585d7b29cf801f980cc4d55d54f1fc52",
+      "unchanged": true
+    },
+    "Vista": {
+      "path": "/Users/USUARI/Downloads/Vista_V57_correcte.psb",
+      "sha256": "39cf0987fb36f836b35a3eff69db2d83e25eeab27dfd149e7e9e86c4ddce147b",
+      "unchanged": true
+    },
+    "V57": {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/v58_correccions_20260913/V57_Pere_input.psb",
+      "sha256": "84d2998588d536a49a9ba42e0e989ef9fd776a17b96954202fe9f64ab7ce8783",
+      "unchanged": true
+    }
+  },
+  "alignment_status": "restored and common rigid transform validated",
+  "blue_limb_status": "not fully resolved; only compositing-alpha correction validated",
+  "canvas": [
+    10551,
+    7506
+  ],
+  "depth": 16,
+  "profile": "Adobe RGB (1998)",
+  "report": "/Users/USUARI/Downloads/Eclipse 2026/output/v61_interiors_limbe_20260913/RESULTAT.md",
+  "handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-13_CODEX_CAPES_TOTALS_V61.md",
+  "manifest": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v61_interiors_limbe_20260913/delivery_manifest.json",
+  "qa": "/Users/USUARI/Downloads/Eclipse 2026/output/v61_interiors_limbe_20260913/D5_final_integrity.json",
+  "readback": {
+    "shape": [
+      7506,
+      10551,
+      4
+    ],
+    "max_DN16": 0,
+    "p99_DN16": 0.0,
+    "PASS": true,
+    "scope": "saved native file compared with independently reopened published file, forced recomposition on an owned duplicate"
+  },
+  "open_document": "V61.psb | saved=true | 27 top-level items | embedded interiors editable | aligned object visible=false\nFINAL_OPEN_COMPLETE\n",
+  "artifact_free": false,
+  "status": "V61_ALIGNMENT_DELIVERED_BLUE_LIMB_PENDING",
+  "top_level_items": 27,
+  "restored_pixel_layers": 32,
+  "embedded_editable_interiors": 7,
+  "rigid_transform": {
+    "transform_output_dx_dy_deg": [
+      -0.15087452179526661,
+      -0.43907973751130386,
+      0.14123717735844263
+    ],
+    "scale": 1,
+    "centre": [
+      5361.768111973117,
+      3775.747534140857
+    ],
+    "fits": [
+      {
+        "name": "west_fit",
+        "points": 3529,
+        "reserved": false,
+        "before": 0.737947306956023,
+        "after": 0.7694030826257429
+      },
+      {
+        "name": "SE_fit",
+        "points": 964,
+        "reserved": false,
+        "before": 0.5174486781556984,
+        "after": 0.5419266832038063
+      },
+      {
+        "name": "top_reserved",
+        "points": 1461,
+        "reserved": true,
+        "before": 0.7882402950014548,
+        "after": 0.8603185443499147
+      },
+      {
+        "name": "west_lower_check",
+        "points": 3536,
+        "reserved": true,
+        "before": 0.820172553104478,
+        "after": 0.8228480315930315
+      }
+    ],
+    "status": "candidate not applied; external astronomical features tested, disk edge excluded"
+  },
+  "reference_native_match_outside_opaque_moon_DN16": 0,
+  "protected_components_retained": 10,
+  "presentation": "Aligned smart object and original reference group hidden, above filters and below Moon; no additional common blend mask applied",
+  "limits": [
+    "Blue limb not fully corrected",
+    "Common blend of interiors pending user choice",
+    "No new astronomical resolution or independent absolute limb recovery claim"
+  ],
+  "preview": "/Users/USUARI/Downloads/Eclipse 2026/output/v61_interiors_limbe_20260913/vistes/V61_default.png"
+}

@@ -1,0 +1,76 @@
+{
+  "tag": "P01_NRGF",
+  "parameters": {
+    "annulus_width_px": 1,
+    "r_edge_px": 3736,
+    "r_edge_R": 8.479287671563851,
+    "blend_px": 64.0,
+    "completeness_ref": 1.000012174620321,
+    "varP_edge": 0.9981904221845594,
+    "n_z_edge": 932165,
+    "count_min": 2,
+    "count_max": 23444,
+    "paper": "Morgan, Habbal & Woo 2006",
+    "V33_edge": "incomplete rings: full-ring mean/std estimated from the azimuthal z-shape of the last complete rings",
+    "V33_post": "snmap.sn_v33 (σ = max(mapa C0 λ_min/8, f3.suavitza_sn t=0.18), smax=32.0) sobre el float",
+    "perfil_sigma": [
+      {
+        "r": 1.5,
+        "sigma_p50": 0.699999988079071,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 2.0,
+        "sigma_p50": 1.7043970823287964,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 2.65,
+        "sigma_p50": 6.4783759117126465,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 3.0,
+        "sigma_p50": 7.967071533203125,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 4.0,
+        "sigma_p50": 13.522356033325195,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 5.0,
+        "sigma_p50": 18.49393653869629,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 6.0,
+        "sigma_p50": 22.478622436523438,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 8.0,
+        "sigma_p50": 30.184268951416016,
+        "frac_smax": 0.10757740108068958
+      },
+      {
+        "r": 10.0,
+        "sigma_p50": 28.789342880249023,
+        "frac_smax": 0.05675193739929038
+      }
+    ],
+    "display_from": "V32 receipt"
+  },
+  "physical_support_pixels": 70395270,
+  "float_sha256": "c8457250c6bf92a15429b7e1a0b622dfb68e0a1cae3b03331552a5f1b00bdf45",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": -2.3811454010009765,
+    "white": 3.09986613345147,
+    "sample_percentiles": null,
+    "clipped_low_fraction": 3.6934299705079616e-07,
+    "clipped_high_fraction": 0.000990066520094319
+  },
+  "u16_sha256": "6b9418d4c670c0b234ae715db15a01650c33ba1eec378385d9673c94be17e61c"
+}

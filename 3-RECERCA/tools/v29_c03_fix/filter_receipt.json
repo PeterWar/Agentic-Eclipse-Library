@@ -1,0 +1,17 @@
+{
+  "unchanged": [
+    "angular operator8/32/64/128",
+    "post-contrast profiles",
+    "tanh scale",
+    "resolution map",
+    "support",
+    "PSB layer mask",
+    "opacity38/255"
+  ],
+  "source_change": "global native-channel additive offsets through original weights",
+  "H1_history": [
+    0.09430281072854996,
+    0.011045376770198345
+  ],
+  "display_tanh_scale": 0.17668084303538004
+}

@@ -1,0 +1,228 @@
+{
+ "geometria": {
+  "rotacio_total_deg": -91.96856924358922,
+  "escala_total": 0.9998797180706093,
+  "rms_offset_px": 1.5885664729217548,
+  "mediana_offset_px": 1.4912793986747586,
+  "p90_offset_px": 2.5530453559712005,
+  "dist_sol_disc_px": 1.4764771041783316,
+  "nota": "afinat 2c: similitud ajustada a les finestres, robust (|d|<6, resposta>30), signe comprovat"
+ },
+ "ghost_sony_tapat": {
+  "centre_v23_xy": [
+   4911,
+   5014
+  ],
+  "r_Rsol": 2.9930153996259037,
+  "radi_px": 45,
+  "metode": "mediana anular 60-100 px, base i capes de detall"
+ },
+ "extensio_per_raig": {
+  "fraccio_llenc_estesa": 0.16257142455245674,
+  "ploma_px": 40
+ },
+ "mitja_lluna_omplerta": {
+  "metode": "extrapolació lineal cap endins per raig, 0,99-1,08 R☉ on la base no té dada",
+  "declarat": true
+ },
+ "perfil_radial_monoton": {
+  "pujades_mes_de_0.005": [],
+  "PASSA": true,
+  "perfil": [
+   [
+    1.2,
+    0.601104199886322
+   ],
+   [
+    1.7,
+    0.40954163670539856
+   ],
+   [
+    2.2,
+    0.3254142999649048
+   ],
+   [
+    2.7,
+    0.29547208547592163
+   ],
+   [
+    3.2,
+    0.2813926637172699
+   ],
+   [
+    3.7,
+    0.27078577876091003
+   ],
+   [
+    4.2,
+    0.2643245458602905
+   ],
+   [
+    4.7,
+    0.2599290907382965
+   ],
+   [
+    5.2,
+    0.25679317116737366
+   ],
+   [
+    5.7,
+    0.2544132173061371
+   ],
+   [
+    6.2,
+    0.252590537071228
+   ],
+   [
+    6.7,
+    0.251158207654953
+   ],
+   [
+    7.2,
+    0.25000202655792236
+   ],
+   [
+    7.7,
+    0.2490299940109253
+   ],
+   [
+    8.2,
+    0.24818408489227295
+   ],
+   [
+    8.7,
+    0.24708202481269836
+   ],
+   [
+    9.2,
+    0.24653449654579163
+   ],
+   [
+    9.7,
+    0.24584811925888062
+   ],
+   [
+    10.2,
+    0.24520808458328247
+   ],
+   [
+    10.7,
+    0.2445867657661438
+   ],
+   [
+    11.2,
+    0.243991881608963
+   ],
+   [
+    11.7,
+    0.24348022043704987
+   ]
+  ]
+ },
+ "perfil_limbe": [
+  [
+   0.99,
+   0.1739967167377472
+  ],
+  [
+   1.0,
+   0.2994512617588043
+  ],
+  [
+   1.01,
+   0.7985686659812927
+  ],
+  [
+   1.02,
+   0.7890810966491699
+  ],
+  [
+   1.03,
+   0.771938145160675
+  ],
+  [
+   1.04,
+   0.7632966637611389
+  ],
+  [
+   1.05,
+   0.7493267059326172
+  ],
+  [
+   1.06,
+   0.7339504361152649
+  ],
+  [
+   1.07,
+   0.7226324081420898
+  ],
+  [
+   1.08,
+   0.7123804092407227
+  ],
+  [
+   1.09,
+   0.7039820551872253
+  ],
+  [
+   1.1,
+   0.6959809064865112
+  ],
+  [
+   1.11,
+   0.6879236698150635
+  ],
+  [
+   1.12,
+   0.6800847053527832
+  ],
+  [
+   1.13,
+   0.6728910207748413
+  ],
+  [
+   1.14,
+   0.6659259796142578
+  ],
+  [
+   1.15,
+   0.6589319705963135
+  ]
+ ],
+ "fusionada_canals": 4,
+ "capes_v25": [
+  "12_1-3200s_572A2956.CR3 · FONT_PROTEGIDA · PERLES-DIAMANT",
+  "11_1-500s_572A2968.CR3 · FONT_PROTEGIDA · LIMBE-PROTUBERÀNCIES",
+  "10_1-125s_572A2969.CR3 · FONT_HDR · CORONA INTERIOR",
+  "09_1-60s_572A2975+572A2993_apilat2.dng · FONT_HDR · CORONA INTERIOR-MITJANA",
+  "08_1-30s_572A2970_apilat4.dng · QUARANTENA OCULTA · REBUTJADA: COSTURA ID8 · RASTER I MÀSCARA RAW",
+  "07_1-15s_572A2976_apilat2.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+  "06_1-8s_572A2971_apilat4.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+  "05_1-4s_572A2977_apilat2.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+  "04_1-2s_572A2972_apilat4.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+  "03_1s_572A2978_apilat2.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+  "02_2s_572A2979_apilat3.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+  "01_10.3s_572A2982_apilat3.dng · QUARANTENA OCULTA · REBUTJADA: HALO-GRADIENT; CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+  "13_mes1s_2sx3+8sx2_SONY300 · LDIC run 016 · WB i nivell ajustats a la V16 · IGUALADA EN BAIXA FREQ AL VIXEN (V18)",
+  "FONS_PER_RAIG · suavitzat en ln r (σ0,2) del compost, per raig · màscara = rampa de Pere 2,45-3,25 R☉ (V19)",
+  "EARTHSHINE natural v2 · 11 fot 2 trens (Sony 51%) · r=0.885 LROC · walking noise filtrat (Wiener mesurat) · realç ×12 i vel ×0,3 DECLARATS (V21)",
+  "COMPARA · DSC06987 SOL (Sony 8 s) · mateixa recepta de display que EARTHSHINE · r(LROC)=0,857 (V22)",
+  "COMPARA · MAPA LROC WAC (NASA SVS 4720) · orientació PREDITA per efemèride de421+IAU2009 · res ajustat (V22)",
+  "EARTHSHINE · interior apilat 11 fot · perímetre = flood REAL del DSC06993 (excés sobre baseline de l'apilat, corba tonal clonada del revelat de Pere, traspàs on la seva llum ARRIBA al nivell) · V24e",
+  "00 BASE LINEAL B · LDIC Vixen 019 + Sony 016 fusionats (ρ per canal), fons per raig 2,45-3,25, corba 0,22/0,74/0,045 sobre lluminància · V25",
+  "01 DETALL ACHF 2-32 px · NRGF davant · mediana de canals · S/N i H1 · Superposar 70 % (el dial de Claridad/Textura sense halos) · V25",
+  "02 DETALL passa-alt σ24 px · Superposar 40 % · apagada: dosa-la tu · V25",
+  "ESTRELLES · 85 del catàleg (puresa 96 % mesurada) · llum REAL de l'apilat, cap disc dibuixat · Linear Dodge (V21)",
+  "REFLEX flamarada · posició de Pere · garbellat al sector de la flamarada (|az|>130°): el glow real del D93 ja posa la llum del perímetre (V24e)"
+ ],
+ "fidelitat_capes_reposades": "3/3",
+ "porta_photoshop": "OBRE 10551 px x 7506 px · 23 capes",
+ "fitxer": {
+  "psb": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/CapesTotalsV25_lineal_B.psb",
+  "bytes": 3592314548
+ },
+ "opacitats": {
+  "achf": 70,
+  "passalt": 40
+ }
+}

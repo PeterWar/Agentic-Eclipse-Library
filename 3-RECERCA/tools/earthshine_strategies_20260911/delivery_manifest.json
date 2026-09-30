@@ -1,0 +1,309 @@
+{
+  "created_utc": "2026-09-11T13:31:09.119072+00:00",
+  "claim_id": "CODEX_EARTHSHINE_STRATEGIES_20260911",
+  "scope": "Strategy research and numerical pilots; no new PSB; full-limb recovery remains unresolved",
+  "user_psb_unchanged": {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes interiors/Earthshine_V46_Detall.psb",
+    "bytes": 1256809556,
+    "sha256": "0af484cb7f1919900a51267f053467974c57902414258e67f54fe98638d2eb3a"
+  },
+  "raws_currently_verified": [
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/VIXEN-R6III/totalitat/572A2970.CR3",
+      "bytes": 21177556,
+      "sha256": "128c09cf7c10c3611c128ca4e11fc9531519c19006ffd2522782cec59dcbebf1"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/VIXEN-R6III/totalitat/572A2976.CR3",
+      "bytes": 22050516,
+      "sha256": "aa6695d61b7febd764902d263c2a8e3a57e317440b83324be54333956ffebdd3"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/VIXEN-R6III/totalitat/572A2977.CR3",
+      "bytes": 24641236,
+      "sha256": "12000e966d89f934ad83b704e47e819ad6ad747d2d36268837f0294739565cb5"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/VIXEN-R6III/totalitat/572A2978.CR3",
+      "bytes": 28117716,
+      "sha256": "45d22a71908d9d4f9309f4c90c7ef51fdfd669ad1eebeaff64e4cbf0aa09f94b"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/VIXEN-R6III/totalitat/572A2979.CR3",
+      "bytes": 30671572,
+      "sha256": "1f93db0ea710a9543db9f4b35aa67d9bfbb9d6e2d35b8952dcfb3625a1500812"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/VIXEN-R6III/totalitat/572A2994.CR3",
+      "bytes": 21854932,
+      "sha256": "ac0739e6e4d5d69276eb3fe4c80a792daa8f7b961a99411db32e141fe3e27446"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/VIXEN-R6III/totalitat/572A2995.CR3",
+      "bytes": 24362196,
+      "sha256": "10ab725530b5d00d3e7ae55a85b68aaa6b35fbefd28f01055ec3d9632acc4cc0"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/VIXEN-R6III/totalitat/572A2996.CR3",
+      "bytes": 27786452,
+      "sha256": "ae3a13fd087edc0618024e5e7195223d060de64fcbbd5d3bb5d6c708d3293401"
+    }
+  ],
+  "inputs_key_not_exhaustive_transitive": [
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/019_VIXEN_CIENCIA_20260827T212404Z/2-ldic/LDIC_G.fits",
+      "bytes": 290165760,
+      "sha256": "b254aae5866b907c2d5812f754d900194f075fb142f0b37e15626a1cd11f463b"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/019_VIXEN_CIENCIA_20260827T212404Z/codi/f2.py",
+      "bytes": 22364,
+      "sha256": "2bdb0f2e301785b733f77c11eb76479d4d93d566f280dfd97aa252489458924a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/f2.py",
+      "bytes": 22364,
+      "sha256": "2bdb0f2e301785b733f77c11eb76479d4d93d566f280dfd97aa252489458924a"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/019_VIXEN_CIENCIA_20260827T212404Z/4-rebuts/F1.2_sol_llenc.json",
+      "bytes": 31173,
+      "sha256": "3f573d9076206fb073dc4cb114262650476058001b3c6c3061a6e59f71d4d5b3"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/019_VIXEN_CIENCIA_20260827T212404Z/4-rebuts/F1.3_registre.json",
+      "bytes": 21500,
+      "sha256": "5df60e194ce54416c9b053ae353604e008176091fc92f30452240f1ded192a4c"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/019_VIXEN_CIENCIA_20260827T212404Z/4-rebuts/F2.2_coherencia.json",
+      "bytes": 2669,
+      "sha256": "c5fbb57847d2b0534437b465b491c0814f8ebdc3c12f6a2685a29c197e3d1158"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v45_earthshine_20260910/comu45.py",
+      "bytes": 678,
+      "sha256": "57a8fa29cb962d820f0b4e7badd712ffeb6d559eba7886d8dc5f28ffd34cb215"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v45_earthshine_20260910/b1_native.py",
+      "bytes": 7846,
+      "sha256": "ac5cfce1d512e7beda5fbe944ac6886e322438813d8efd9b43ccd443b0092271"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v45_earthshine_20260910/f2_temporal.py",
+      "bytes": 8376,
+      "sha256": "246a8c5bd36f3795d3c168294de4649ce9a1e8cc616b132e63523bf1c0cc358e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v45_earthshine_20260910/delivery_manifest.json",
+      "bytes": 49214,
+      "sha256": "32806177211a45433303865fec83a199c2d4a37f16fd4f63006bc3f42e955081"
+    }
+  ],
+  "f2_refina_ast_identical_frozen_and_live": true,
+  "outputs_and_code": [
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_strategies_20260911/A0_phase_guard.json",
+      "bytes": 1824,
+      "sha256": "8cd4de79ac67aea62ee52676fb37505541d7714cb08f0e839f760145691781bc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_strategies_20260911/B0_patch_meta.json",
+      "bytes": 7852,
+      "sha256": "725fd44841741824779e2a95da106e92359931c1f4bd47779237de7ca5ac26a9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_strategies_20260911/B1_coronal_graph.json",
+      "bytes": 97875,
+      "sha256": "275dda7a01e62edebf724d085f8f6b850c75fc969da9672e89b8bb46b4580691"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_strategies_20260911/B2_joint_registration.json",
+      "bytes": 63876,
+      "sha256": "e1b42dcf30ce521a55040514fb0db4710f39b86f691a0226e3d610cb082af4b1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_strategies_20260911/C0_early_geometry.json",
+      "bytes": 784,
+      "sha256": "bb377552cafc313063fef7b64a0d15b13dac26a381ef9a987ee966f97c9f4c1d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_strategies_20260911/D0_edge_response.json",
+      "bytes": 11591,
+      "sha256": "2466d4b7218b29978f6419572f695d324491502fd902aaef3de70ac704afe516"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_strategies_20260911/D0_observed_profiles.npz",
+      "bytes": 408952,
+      "sha256": "3a49517022d8927200f1bfd2e9fead7b250a34b2b80ec713d53c172c2547a180"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_strategies_20260911/ESTRATEGIES_I_RESULTATS.md",
+      "bytes": 10823,
+      "sha256": "56b271da3879761ed7fafc3e81bb164622792cde791e3b8390d54b6def546581"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_strategies_20260911/coronal_patches.npz",
+      "bytes": 111098683,
+      "sha256": "763dbedf0375a490971eafe192b59de6a4eac6514bafe6e3e30a05cc21c0c25d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_strategies_20260911/geometry_pilot/A0_pilot.json",
+      "bytes": 3969,
+      "sha256": "936d89ca472f7ff91f2cedc3a6f11961e86571141074c62761d23c850edee6c4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_strategies_20260911/geometry_pilot/A0_pilot_arrays.npz",
+      "bytes": 3972431,
+      "sha256": "a46708bb8f1b1dc172c62cfe3e75626dc2e696d31976443f893d2048584523be"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_strategies_20260911/geometry_pilot/vistes/A0_pilot_profiles.png",
+      "bytes": 125856,
+      "sha256": "9c5070383366d585f1ee79c5dfa0a541c2437b7de540613d09c2657142f30340"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_strategies_20260911/vistes/B0_full_canvas_context.png",
+      "bytes": 141700,
+      "sha256": "ce2ce376ae7ebb3cd6b74f1df4c123b521b5242cde73f47e0345d9fd04df3341"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_strategies_20260911/vistes/D0_response_holdout.png",
+      "bytes": 119920,
+      "sha256": "d643ce4718a7e9c818bc394a6b5351f88147ccf533bd74027e81b21aaca7e674"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_strategies_20260911/vistes/RESUM_ESTRATEGIES.png",
+      "bytes": 90910,
+      "sha256": "73953060f8ceabef4ff31205f09f0080594051a08acd61b74b437f1829f0e7f1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_strategies_20260911/a0_phase_guard.py",
+      "bytes": 2687,
+      "sha256": "9611ff77ef2421c59b13bf5481beda445ab482a03168723948de68bbde936014"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_strategies_20260911/b0_coronal_graph.py",
+      "bytes": 7540,
+      "sha256": "6db0e9d3b43fd2463873f819b0f2f0a66be4c5ed20d5daba8fd1fbe5bec51c85"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_strategies_20260911/b2_joint_registration.py",
+      "bytes": 5413,
+      "sha256": "9ae9d4fc9312b2e2f302777c1bc82fabc87f1e27e888f2397f8671c9d676ec2c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_strategies_20260911/c0_geometry_pilot.py",
+      "bytes": 10036,
+      "sha256": "8a78c602a23625a1044b9eb8e03b53065da564615986abb7fc0f963bcdef0840"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_strategies_20260911/d0_edge_response.py",
+      "bytes": 8167,
+      "sha256": "7f66d0d66e2a8f52577f9f20c8281c13a200991bfb977660ab5e4b9c391340ef"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_strategies_20260911/docs_before/AGENTS.md",
+      "bytes": 17872,
+      "sha256": "c24d883beda80e64cee408d8c1d19619dddc177bc00a1a39b84b69ff8fcf3cc0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_strategies_20260911/docs_before/CLAUDE.md",
+      "bytes": 200996,
+      "sha256": "3d1441370e319e022a8830a9f58b5bd628a0c01c9fb7a49eda32a0a4b54d29c0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_strategies_20260911/docs_before/IA_ACTIVE.json",
+      "bytes": 23321,
+      "sha256": "4bca40cadf5469a92a644c55d2c40843b6a1d14ccc543679ac1f50eb304b1dfd"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_strategies_20260911/docs_before/IA_ESTAT_ACTUAL.md",
+      "bytes": 26272,
+      "sha256": "e1713883e5e48eb25d1972b86b3ef39ae0825a4dafe659c0d0e272252f8d26f1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_strategies_20260911/docs_before/IA_HANDOFF_VIGENT.md",
+      "bytes": 1146,
+      "sha256": "b06ad4fd4a3439049cb2f90400c95bd3e309afe0bb5558da7aa26c40db43d545"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_strategies_20260911/docs_before/IA_MAPA.md",
+      "bytes": 15743,
+      "sha256": "49624fac37ab29f8ccf732e4877427dadbe21fa14bf2d0c321d81e52ee16f758"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_strategies_20260911/docs_before/IA_README.md",
+      "bytes": 26149,
+      "sha256": "c565f3b949c36e78b1e7d5d1dedc9d48a27fd7e3290137fc7f1f028894c9bb92"
+    }
+  ],
+  "canonical_after": [
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/CLAUDE.md",
+      "bytes": 202125,
+      "sha256": "425e96f2f601833d25ee2450af63a00f55ec9000a63cd42539605264cabfbc06"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/AGENTS.md",
+      "bytes": 19174,
+      "sha256": "fcdbb14c882ae360c5ae1887198b4e8154c2d062e873c02af16da04be48adc9e"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/ACTIVE.json",
+      "bytes": 23800,
+      "sha256": "af77063da4a6eeeeb24362fca2afe3880c02efcfefeb5c8a9141f38f32209fe4"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/ESTAT_ACTUAL.md",
+      "bytes": 27369,
+      "sha256": "a5f34bb1018796b22a46884949bd3f98c4e9190eb9fc632f4337813cf780c9d1"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/README.md",
+      "bytes": 27246,
+      "sha256": "26b2ad59472a93158ec8f5df054f43e530abc51649d331b5f9a0827cde3f6cd1"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/MAPA_RUTES_I_OUTPUTS.md",
+      "bytes": 16197,
+      "sha256": "a66aace1a21be9ad2a450a1711837838e556b7372adae5148273daeb4fc167a9"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/HANDOFF_VIGENT.md",
+      "bytes": 2836,
+      "sha256": "24d05f65adc79252f74aeb42a57d24326410f99309501c50714f22c6eb8c2543"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-11_EARTHSHINE_STRATEGIES.md",
+      "bytes": 2836,
+      "sha256": "24d05f65adc79252f74aeb42a57d24326410f99309501c50714f22c6eb8c2543"
+    }
+  ],
+  "scientific_status": {
+    "early_coronal_relative_geometry": "PASSES_DECLARED_HALVES_AND_CYCLE_CONTROLS",
+    "whole_graph": "FAIL",
+    "upper_limb_HDR_pilot": "INSUFFICIENT_NOT_PROMOTED",
+    "response_model": "REJECTED_ON_HELD_OUT_1S",
+    "recovered_lunar_detail": "NOT_CLAIMED",
+    "PSB_publication": false,
+    "CameraRaw_source": "UNCHANGED_BY_HASH"
+  },
+  "sources": [
+    "https://cygnus.ta3.sk/caosp/Eedition/FullTexts/vol36no3/pp131-148.pdf",
+    "https://iacl.ece.jhu.edu/proceedings/cvpr2010/papers/1815.pdf",
+    "https://pubmed.ncbi.nlm.nih.gov/22203712/"
+  ],
+  "validation": {
+    "syntax_scripts": 5,
+    "figures_visually_inspected": [
+      "B0_full_canvas_context.png",
+      "RESUM_ESTRATEGIES.png",
+      "A0_pilot_profiles.png",
+      "D0_response_holdout.png"
+    ],
+    "invalid_control": "plain_same_weights is explicitly excluded; mixed geometry/support",
+    "automatic_retries": "B2 initial remap rejected float64 maps; explicit float32 maps fixed, numerical run completed."
+  }
+}

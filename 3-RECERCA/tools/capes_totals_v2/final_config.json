@@ -1,0 +1,28 @@
+{
+  "visibility": {
+    "3": true,
+    "4": true,
+    "5": true,
+    "7": true,
+    "8": false,
+    "9": false,
+    "10": false,
+    "11": false,
+    "12": false,
+    "13": false,
+    "16": false,
+    "17": false
+  },
+  "name_overrides": {
+    "8": "08_1-30s_572A2970_apilat4.dng · QUARANTENA OCULTA · REBUTJADA: COSTURA ID8 · RASTER I MÀSCARA RAW",
+    "9": "07_1-15s_572A2976_apilat2.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+    "10": "06_1-8s_572A2971_apilat4.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+    "11": "05_1-4s_572A2977_apilat2.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+    "12": "04_1-2s_572A2972_apilat4.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+    "13": "03_1s_572A2978_apilat2.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+    "16": "02_2s_572A2979_apilat3.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+    "17": "01_10.3s_572A2982_apilat3.dng · QUARANTENA OCULTA · REBUTJADA: HALO-GRADIENT; CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW"
+  },
+  "opacity_overrides": {},
+  "masks": {}
+}

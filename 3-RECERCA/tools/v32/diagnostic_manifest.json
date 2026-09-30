@@ -1,0 +1,34 @@
+{
+  "status": "EXPLORATORY_NOT_ACCEPTED_NO_V32_PSB",
+  "time_utc": "2026-09-05T19:43:24.117761+00:00",
+  "product_unchanged": "V31",
+  "pending_information": "Which residual shape Pere sees in V31: solar-centred arcs or local bullseyes",
+  "files": [
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v32/sn_pilots.py",
+      "sha256": "cf355906ed3c47ef8c16d7ecbdeff5f4be51a6e3166cde7e5bdc0b958eaba87a",
+      "bytes": 3623
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v32/source_denoise_pilot.py",
+      "sha256": "fcac2100194ed77a4eacab6940fcfbf19eda9a22a59e97ea27995bc56349a4bf",
+      "bytes": 2619
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v32/sn_pilots.json",
+      "sha256": "2bbfba5f42c366eb5c69b2a6c6bdaf2d16b666ce92182f7fbfa49cc1622a24f6",
+      "bytes": 65275
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v32/source_denoise_pilot.json",
+      "sha256": "f6e20134b22cacf61daa0b984ad98b2b7905d37e6e0adf3a32c45ac3e8f1c434",
+      "bytes": 1164
+    }
+  ],
+  "baseline_reproduces_exactly": {
+    "max_DN16": 0,
+    "p99_DN16": 0.0
+  },
+  "no_desktop_or_raw_writes": true,
+  "report": "/Users/USUARI/Downloads/Eclipse 2026/research/140_V32_minicercles_origen.md"
+}

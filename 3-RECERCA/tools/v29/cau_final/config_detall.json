@@ -1,0 +1,22 @@
+{
+  "accepted_for_packaging": false,
+  "candidate": "detall",
+  "layers": {
+    "achf": {
+      "strength": 0.3,
+      "opacity_u8": 178,
+      "outer_kernel_taper_px": 96
+    },
+    "passalt24": {
+      "strength": 0.3,
+      "opacity_u8": 102,
+      "outer_kernel_taper_px": 72
+    },
+    "gran": {
+      "strength": 0.4,
+      "opacity_u8": 128,
+      "outer_kernel_taper_px": 384
+    }
+  },
+  "support": "actual observed temporal lunar union; only physical outer footprint kernel tapers"
+}

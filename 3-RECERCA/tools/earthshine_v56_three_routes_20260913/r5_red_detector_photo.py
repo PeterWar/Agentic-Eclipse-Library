@@ -1,0 +1,14 @@
+"""Photographic transfer of repeated red detector contribution only.
+Saved V55 = beta(r)*Gclean + mu(r)*(Rclean-Gclean) + gamma(r)*Rdetector.
+Nine nonnegative degree2 Bernstein coefficients, original even-sector fit.
+Subtract only gamma times the source red detector; no extra red colour mix.
+"""
+from common import *
+from spectral import *
+from scipy.optimize import nnls
+claim();mod=json.loads((OLD/'A5_color_model.json').read_text());a=mod['slopes']['R'];off=mod['offsets']['R'];z=np.load(OUT/'arrays/R4_repeatable_red.npz');g=np.load(OLD/'arrays/B11_repeatable_all.npz')['source'];red=z['source']/a+off;det=z['correction']/a;old=np.load(OLD/'arrays/D10_candidate_rgb.npy').astype(np.int32);r,t=geometry();alpha=np.load(OLD54/'arrays/V53_lunar_alpha.npy');mask=np.load(OLD54/'arrays/V53_lunar_mask.npy');visible=(alpha>0)&(mask>0);domain=float(r[visible].max())
+save('R5_protocol.json',dict(method=__doc__,domain=domain,fit='even30degree sectors r60-435, angular16-64. NNLS9 coefficients: beta,mu,gamma each Bernstein degree2. No Sony, LROC, marked regions or clipped-pixel locations.',delta='-gamma(r)*red_detector_correction/old_red_scale, same integer delta RGB. Other layers/masks/alpha/hidden pixels exact.',qualification='Separate red source judge before/photo exact93 claims, no new clipping or limb regression, scene/detector injections, real Photoshop. No new resolution claim.'))
+S,V=polar(g);C,_=polar(red-g);D,_=polar(det);P,_=polar(old.mean(-1));A,B,E,Q=[angular_band(v,16,64) for v in [S,C,D,P]];u=(RR[:,None]/domain)**2;basis=np.broadcast_to(np.stack([(1-u)**2,2*u*(1-u),u*u],-1),(*A.shape,3));X=np.concatenate([A[...,None]*basis,B[...,None]*basis,E[...,None]*basis],-1);train=sector_mask(60,435,0)&V;hold=sector_mask(60,435,1)&V;cf,res=nnls(X[train],Q[train]);v=(r/domain)**2;bb=np.stack([(1-v)**2,2*v*(1-v),v*v],-1);gamma=bb@cf[6:];delta=-np.rint(gamma*det).astype(np.int32);delta[~visible]=0;new=old+delta[...,None];clip=(new.min(-1)<0)|(new.max(-1)>65535);rep=dict(coefficients=cf,heldout_r=corr((X*cf).sum(-1),Q,hold),heldout_residual_rms=float(np.std((Q-(X*cf).sum(-1))[hold])),condition=float(np.linalg.cond(X[train])),minmax=[int(new.min()),int(new.max())],clipped_pixels=int(clip.sum()),delta_percentiles=np.percentile(delta[visible],[0,1,10,50,90,99,100]),hidden_exact=bool(np.array_equal(new[~visible],old[~visible])))
+np.savez_compressed(OUT/'arrays/R5_photo_pilot_unclipped.npz',candidate=new,delta=delta,gamma=gamma);np.savez_compressed(OUT/'arrays/R5_sources.npz',red_baseline=z['raw_baseline']/a+off,red_repeatable=red,Gclean=g,GR_before=g+mod['weights']['R']/(mod['weights']['R']+mod['weights']['G'])*(z['raw_baseline']/a+off-g),GR_after=g+mod['weights']['R']/(mod['weights']['R']+mod['weights']['G'])*(red-g))
+if not clip.any():np.save(OUT/'arrays/R5_candidate_rgb.npy',new.astype(np.uint16));np.save(OUT/'arrays/R5_delta.npy',delta)
+save('R5_photo_response.json',rep);print('RED DETECTOR PHOTO',rep,flush=True)

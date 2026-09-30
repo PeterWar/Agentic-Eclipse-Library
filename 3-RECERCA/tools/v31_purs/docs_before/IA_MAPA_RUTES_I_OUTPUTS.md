@@ -1,0 +1,176 @@
+# Mapa vigent — V31 — 05-09-2026
+
+| Funció | Ruta |
+|---|---|
+| Codi canònic sense Git | `/Users/USUARI/Downloads/Eclipse 2026` |
+| Lliurable editable actual | `/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V31.psb` |
+| Manifest i scripts V31 | `/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31` |
+| Diagnòstic visible V31 | `/Users/USUARI/Desktop/Eclipse 2026/IA/output/v31_20260905` |
+| V29 immutable / fonts | `research/tools/v29/cau_final` |
+| Radiància corregida03 V29 | `research/tools/v29_c03_fix` |
+| RAW/runs immutables | `/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES` i `1-RUNS` |
+| Handoff | `/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-05_V31.md` |
+
+Els S6, pilots d'agost i autoritats descrits a continuació són HISTÒRICS.
+Les rutes originals continuen útils com a procedència; cap etiqueta «actual»,
+«acceptat» o «pausat» del mapa antic sobreescriu ACTIVE.json/V31.
+
+## Mapa conservat del22–25 d'agost
+
+# Mapa de rutes i outputs
+
+Última actualització: 22-08-2026, després dels màsters flat posteriors i de la
+retirada recuperable dels JPEG de flats.
+
+## Arrels
+
+| Funció | Ruta actual |
+|---|---|
+| Actius Vixen/Sony i Photoshop | `/Users/USUARI/Desktop/Eclipse 2026` |
+| Codi, Git, recerca, rebuts i output tècnic | `/Users/USUARI/Downloads/Eclipse 2026` |
+| Material separat del compost principal | `/Users/USUARI/Desktop/Altres` |
+| Backup anterior a la reorganització | `/Volumes/4TB/Eclipse 2026-22Agost/Eclipse 2026` |
+| Memòria i coordinació entre LLM | `/Users/USUARI/Desktop/Eclipse 2026/IA` |
+| JPEG/JPG nous d'IA | `/Users/USUARI/Desktop/Eclipse 2026/IA/output` |
+| Referència visual de Pere | `/Users/USUARI/Downloads/Maqueta de resultat esperat.tif` |
+
+La maqueta té 110.750.130 bytes i SHA-256
+`5d25d4cca0896c04147c75b5b9ad1c0b76a382a00a852fa596371de4c2b69e17`.
+És una guia estètica i d'enquadrament, no una autoritat científica ni una font
+de píxels per al compost.
+
+## Dades originals i calibradors
+
+| Família | Ruta canònica |
+|---|---|
+| Sony A7RIIIA, ARW | `300mm A7RIIIA/` |
+| Darks Sony | `300mm A7RIIIA/Darks A7RIIIA Eclipse/` |
+| Flats posteriors Sony, només ARW | `300mm A7RIIIA/Flats Sony A7RIIIA 300mm/` — 53 ARW, zero JPEG |
+| Vixen/R6 III, tots els CR3 | `Vixen R6III/` |
+| Vixen, totalitat | `Vixen R6III/Vixen Fase totalitat/` |
+| Màsters Vixen v2 | `Vixen R6III/Vixen Fase totalitat/Masters_v2/` |
+| Darks R6 III | `Vixen R6III/Darks Canon R6III Eclipse/` |
+| Flats posteriors Vixen, només CR3 útil | `Vixen R6III/Flats R6III/` — 125 CR3; 52 còpies ARW Sony no compten; zero JPEG |
+
+Les arrels canòniques de càmera contenen 572 ARW i 1.139 CR3. Hi ha sis còpies
+de CR3 sota `Derivats/Vixen/HDR4/` —tres a `revelat_v4/work` i tres a
+`apilats`—, de manera que un recompte indiscriminat de tot Desktop dona 1.145
+CR3; aquests sis no són originals addicionals.
+
+## Derivats reubicats
+
+| Família | Ruta canònica |
+|---|---|
+| HDR Vixen històric restaurat, no autoritat S6 | `Derivats/Vixen/Corona_HDR_Vixen/` |
+| Selecció HDR4 i revelat normalitzat | `Derivats/Vixen/HDR4/` |
+| Workspaces CapesTotals V2b/V3b/V3c | `Derivats/Vixen/CapesTotals_work/{v2b,v3b,v3c}/` |
+| Calibrats històrics de Claude | `Derivats/Vixen/Calibrated_Claude/` |
+| Apilats Sony v2 i v3 | `Derivats/Sony/Apilats/300mm_apilat_v2/` i `300mm_apilat_v3/` |
+| Astrometria viva | `Derivats/Astrometria/Estrelles/` |
+| Intermedis astromètrics mutables | `Derivats/Astrometria/Estrelles/_work/` |
+| Passada preservada del 17-08 | `Derivats/Astrometria/Estrelles/Work_2026-08-17/` |
+| Acceptació preservada del 17-08 | `Derivats/Astrometria/Estrelles/Resultats_acceptacio_2026-08-17/` |
+| Earthshine final històric | `Derivats/Earthshine/Earthshine_FINAL/` |
+| Earthshine Claude històric | `Derivats/Earthshine/Historic/` |
+| Gemini Druckmüller preservat, TIFF/JSX | `Derivats/Experimental/Gemini_Druckmuller_20260822/tiff_jsx/` — 39/39 còpies no-clobber |
+| APOD | `Publicacio/APOD/` |
+
+## Branca experimental Python Druckmüller
+
+| Funció | Ruta i estat |
+|---|---|
+| Workspace Gemini original | `/Users/USUARI/Downloads/Eclipse Antigravity/` — experimental, no autoritat |
+| Snapshot workspace | `/Users/USUARI/Downloads/Eclipse 2026/output/auditoria_kimi_gemini_20260822/antigravity_workspace_snapshot/` — 72/72 |
+| Entorn Python | `/Users/USUARI/Downloads/eclipse_venv/` — Python 3.9.6, `sunkit-image 0.5.1` |
+| TIFF/JSX congelats | `Derivats/Experimental/Gemini_Druckmuller_20260822/tiff_jsx/` — 38 TIFF + un JSX |
+| JPEG congelats | `IA/output/gemini_druckmuller_20260822/` — 12 JPEG |
+| Rebuts i manifests | `/Users/USUARI/Downloads/Eclipse 2026/output/auditoria_kimi_gemini_20260822/` |
+| Auditoria canònica | `IA/Coordinació/AUDITORIA_RECUPERACIO_KIMI_GEMINI_DRUCKMULLER_2026-08-22.md` |
+| Delta a Claude | `IA/Coordinació/DELTA_CODEX_a_CLAUDE_22-08-26_BRANCA_DRUCKMULLER_GEMINI_KIMI.md` |
+
+Pere declara que els resultats **«pinten molt, molt bé»**. La branca és
+`HIGH_PROMISE_BY_PERE_PENDING_CONTROLLED_S6_PILOT`, però els outputs actuals
+són `EXPERIMENTAL_NOT_CANONICAL`: provenen d'apilats històrics i no
+substitueixen les autoritats S6. Imports verificats: `mgn` a
+`sunkit_image.enhance`; `nrgf` i `fnrgf` a `sunkit_image.radial`.
+
+## Autoritat tècnica actual de processat
+
+Aquestes rutes són al worktree de `Downloads`. No se'n dupliquen els paquets
+de desenes de GiB dins `IA`.
+
+| Funció | Ruta i estat |
+|---|---|
+| Màsters lineals Vixen S6 | `/Users/USUARI/Downloads/Eclipse 2026/output/postprocessat_final_20260822/masters/vixen_s6_ACCEPTED/` — 319/319; píxels reutilitzables, contractes a resegelar |
+| Manifest Vixen consumible | `/Users/USUARI/Downloads/Eclipse 2026/output/postprocessat_final_20260822/manifests/vixen_natural_stable_v5.json` — vuit stacks `STABLE` |
+| Màsters i catàleg Sony S6 | `/Users/USUARI/Downloads/Eclipse 2026/output/postprocessat_final_20260822/masters/sony_s6_ACCEPTED/` — 335/335; paquet mixt |
+| Sony 8 s `DSC06987` | `.../sony_s6_ACCEPTED/products/segment_A/8s/` — íntegra, `QUARANTENA`, futura `CONTRIBUCIO_UNICA` |
+| Sony 8 s `DSC06993` | `.../sony_s6_ACCEPTED/products/segment_C/8s/` — íntegra, `QUARANTENA`, domini provisional des de 3 Rsol |
+| Capa que demostra els arcs | `/Users/USUARI/Downloads/Eclipse 2026/output/postprocessat_final_20260822/composites/sony_cross_train_c_v2/` — no reutilitzar tal qual; fronteres 1,2/1,5/2,0 Rsol; cap 8 s |
+| Control tècnic editable Codex | `/Users/USUARI/Downloads/Eclipse 2026/output/postprocessat_final_20260822/final/eclipse_natural_editable_v3/` — 6/6, no aprovat, sense 8 s i FOV pendent |
+| Màsters flat posteriors Vixen | `/Users/USUARI/Downloads/Eclipse 2026/output/flats_20260822/vixen_r6iii_posterior_v1/` — `FINE_SENSOR` validat, radial candidat, full/pols quarantena; no aplicat |
+| Màsters flat posteriors Sony | `/Users/USUARI/Downloads/Eclipse 2026/output/flats_20260822/sony_a7r3a_300mm_posterior_v1/` — radial validat, fine/full/pols quarantena; no aplicat |
+| Avaluació de transferència | `/Users/USUARI/Downloads/Eclipse 2026/output/flats_20260822/transfer_assessment_v1/` — rebut i veredictes decidibles |
+
+Els rebuts antics que indiquen `Desktop/Eclipse 2026/300mm/` conserven
+procedència històrica. La ruta RAW Sony viva és `300mm A7RIIIA/`; no reescriguis
+els rebuts antics, usa l'overlay d'aquest mapa i crea rebuts nous no-clobber.
+
+## Photoshop
+
+| Família | Ruta canònica |
+|---|---|
+| PSB totals | `Projecte photoshop/1-Unint Capes/Capes Totals/` |
+| QA/manifests totals | `Projecte photoshop/1-Unint Capes/Capes Totals/Documentacio i QA/V*/` |
+| PSB interiors | `Projecte photoshop/1-Unint Capes/Capes interiors/` |
+| QA interiors | `Projecte photoshop/1-Unint Capes/Capes interiors/Documentacio i QA/V*/` |
+| PSB exteriors | `Projecte photoshop/1-Unint Capes/Capes exteriors/` |
+| Base de filtres | `Projecte photoshop/2-Filtres/Recursos/Base/Aplicant_Filtres.tif` |
+| Capes SEMIFINAL3–10 | `Projecte photoshop/2-Filtres/Recursos/Capes_SEMIFINAL3_a_10/` |
+| Alineats 7648×5353 | `Projecte photoshop/2-Filtres/Recursos/Alineats/alineades_7648x5353/` |
+| Recursos Druckmüller | `Projecte photoshop/2-Filtres/Recursos/Druckmuller/Druckmuller_2026-08-18/` |
+
+El PSB manual/històric de referència d'auditoria és
+`Projecte photoshop/1-Unint Capes/Capes Totals/CapesTotalsV4b.psb`. No és un
+fonament acceptat per reprendre: G5.10 passa però G5.11 falla per cobertura
+insuficient. El control tècnic Codex tampoc no és un final aprovat.
+
+## Què s'ha retirat
+
+Els contenidors `Deprecat/` i `No se que fa això aquí/` ja no existeixen. El
+que era necessari figura a les taules anteriors. Els intermedis supersedits,
+proves declarades eliminables, una còpia PSB antiga, `.DS_Store` i dos symlinks
+trencats són al lot recuperable:
+
+`/Users/USUARI/.Trash/Eclipse2026_cleanup_20260822T151257Z/`
+
+No s'ha buidat la Paperera. El detall de cada moviment és a
+`/Users/USUARI/Downloads/Eclipse 2026/output/cleanup/20260822T151257Z_deprecat_noseque/moves.tsv`.
+
+Els 106 JPEG de les dues carpetes de flats són en un segon lot recuperable,
+que tampoc no s'ha buidat:
+
+`/Users/USUARI/.Trash/Flats_JPEG_Eclipse_2026_20260822T190159Z`
+
+Rebut: `/Users/USUARI/Downloads/Eclipse 2026/output/flats_20260822/JPEG_CLEANUP_RECEIPT.json`.
+
+## Rutes de codi
+
+Les eines vives afectades s'han actualitzat a aquestes rutes, incloses les
+skills d'apilatge/postprocessat, l'apilatge integral Sony, HDR4, astrometria,
+earthshine, Druckmüller, encaix Sony i les famílies de CapesTotals.
+
+No s'han reescrit:
+
+- `research/*.md` datats;
+- `research/tools/rescat_scratchpad_2026-08-17/`;
+- rebuts, manifests i outputs històrics;
+- literals de procedència que descriuen on era un fitxer quan es va crear.
+
+Excepció conscient: `research/tools/apila_hdr4_vixen.py` continua apuntant a
+`~/Desktop/HDR3`, una selecció manual de dotze CR3 que no té cap substitut 1:1
+segur. No s'ha redirigit automàticament al directori complet de totalitat.
+
+Deute anterior: cinc utilitats CapesTotals V1 encara apunten a un scratchpad
+`v5out/ct1` ja desaparegut. No formen part de les rutes reubicades i no tenen
+un target existent 1:1; cal regenerar o passar-ne les entrades explícitament.

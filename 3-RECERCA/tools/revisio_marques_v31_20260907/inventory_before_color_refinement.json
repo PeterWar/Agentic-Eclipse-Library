@@ -1,0 +1,3715 @@
+{
+  "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/revisio_marques_v31_20260907/input_anotat.psb",
+  "size": [
+    10551,
+    7506
+  ],
+  "depth": 16,
+  "layers": [
+    {
+      "index": 0,
+      "name": "00 Base (cel/4)",
+      "visible": true,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [],
+      "color_counts": {
+        "groc": 0,
+        "blau": 0,
+        "lila": 0,
+        "verd": 0
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L00_anotada_sencera.png"
+    },
+    {
+      "index": 1,
+      "name": "03 ACHF azimutal 8-128 · V29",
+      "visible": true,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [
+        {
+          "id": "L01-groc-01",
+          "color": "groc",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            7,
+            706,
+            1664,
+            2276
+          ],
+          "center_xy": [
+            834.2861276998764,
+            1490.211570334903
+          ],
+          "radius_R": 11.510731094149794,
+          "azimuth_image_deg": -153.2147197767787,
+          "paint_pixels": 152044,
+          "window_bbox": [
+            0,
+            666,
+            1704,
+            2316
+          ]
+        }
+      ],
+      "color_counts": {
+        "groc": 1,
+        "blau": 0,
+        "lila": 0,
+        "verd": 0
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L01_anotada_sencera.png"
+    },
+    {
+      "index": 2,
+      "name": "03 ACHF azimutal 8-128 · V30",
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [
+        {
+          "id": "L02-groc-01",
+          "color": "groc",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            19,
+            699,
+            1655,
+            2262
+          ],
+          "center_xy": [
+            836.1400691305504,
+            1479.633395373571
+          ],
+          "radius_R": 11.517817809651387,
+          "azimuth_image_deg": -153.09867103597165,
+          "paint_pixels": 150436,
+          "window_bbox": [
+            0,
+            659,
+            1695,
+            2302
+          ]
+        }
+      ],
+      "color_counts": {
+        "groc": 1,
+        "blau": 0,
+        "lila": 0,
+        "verd": 0
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L02_anotada_sencera.png"
+    },
+    {
+      "index": 3,
+      "name": "07 ACHF azimutal suau r8 · V30",
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [
+        {
+          "id": "L03-groc-01",
+          "color": "groc",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            2396,
+            0,
+            2456,
+            51
+          ],
+          "center_xy": [
+            2425.434123591139,
+            22.951029926156238
+          ],
+          "radius_R": 10.814797922827333,
+          "azimuth_image_deg": -128.0410089084128,
+          "paint_pixels": 2568,
+          "window_bbox": [
+            2356,
+            0,
+            2496,
+            91
+          ]
+        },
+        {
+          "id": "L03-groc-02",
+          "color": "groc",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            0,
+            534,
+            1793,
+            2272
+          ],
+          "center_xy": [
+            896.9367586782255,
+            1403.4561343054397
+          ],
+          "radius_R": 11.475035598175504,
+          "azimuth_image_deg": -152.01702544881442,
+          "paint_pixels": 165400,
+          "window_bbox": [
+            0,
+            494,
+            1833,
+            2312
+          ]
+        }
+      ],
+      "color_counts": {
+        "groc": 2,
+        "blau": 0,
+        "lila": 0,
+        "verd": 0
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L03_anotada_sencera.png"
+    },
+    {
+      "index": 4,
+      "name": "01 ACHF fi 2-32 · V31",
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [
+        {
+          "id": "L04-groc-01",
+          "color": "groc",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            58,
+            0,
+            2447,
+            2299
+          ],
+          "center_xy": [
+            1249.5332418689525,
+            1145.9753544244763
+          ],
+          "radius_R": 11.078467475195758,
+          "azimuth_image_deg": -147.40110493321,
+          "paint_pixels": 220846,
+          "window_bbox": [
+            18,
+            0,
+            2487,
+            2339
+          ]
+        }
+      ],
+      "color_counts": {
+        "groc": 1,
+        "blau": 0,
+        "lila": 0,
+        "verd": 0
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L04_anotada_sencera.png"
+    },
+    {
+      "index": 5,
+      "name": "02 Passa-alt 24 · V31",
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [
+        {
+          "id": "L05-groc-01",
+          "color": "groc",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            46,
+            0,
+            2447,
+            2267
+          ],
+          "center_xy": [
+            1244.6024509602712,
+            1129.691791973949
+          ],
+          "radius_R": 11.107834843607632,
+          "azimuth_image_deg": -147.27160418956097,
+          "paint_pixels": 219254,
+          "window_bbox": [
+            6,
+            0,
+            2487,
+            2307
+          ]
+        },
+        {
+          "id": "L05-blau-02",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5516,
+            1872,
+            6478,
+            2221
+          ],
+          "center_xy": [
+            6019.322760036548,
+            1984.4561933875534
+          ],
+          "radius_R": 4.3308084081473766,
+          "azimuth_image_deg": -69.842614492346,
+          "paint_pixels": 88628,
+          "window_bbox": [
+            5476,
+            1832,
+            6518,
+            2261
+          ]
+        },
+        {
+          "id": "L05-blau-03",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4356,
+            1882,
+            5078,
+            2155
+          ],
+          "center_xy": [
+            4711.159409870909,
+            1999.974416278561
+          ],
+          "radius_R": 4.292313587975908,
+          "azimuth_image_deg": -110.12185076362755,
+          "paint_pixels": 63976,
+          "window_bbox": [
+            4316,
+            1842,
+            5118,
+            2195
+          ]
+        },
+        {
+          "id": "L05-blau-04",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            6550,
+            2300,
+            6963,
+            3057
+          ],
+          "center_xy": [
+            6763.260774257008,
+            2674.285083959812
+          ],
+          "radius_R": 4.045652071011896,
+          "azimuth_image_deg": -38.16454723827421,
+          "paint_pixels": 71158,
+          "window_bbox": [
+            6510,
+            2260,
+            7003,
+            3097
+          ]
+        },
+        {
+          "id": "L05-blau-05",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            3553,
+            2637,
+            3933,
+            4375
+          ],
+          "center_xy": [
+            3683.9591695983395,
+            3490.840816481486
+          ],
+          "radius_R": 3.8624945320089243,
+          "azimuth_image_deg": -170.3626024494469,
+          "paint_pixels": 158012,
+          "window_bbox": [
+            3513,
+            2597,
+            3973,
+            4415
+          ]
+        },
+        {
+          "id": "L05-blau-06",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            6967,
+            3385,
+            7067,
+            3641
+          ],
+          "center_xy": [
+            7015.187886697602,
+            3513.210653518948
+          ],
+          "radius_R": 3.7996409280152754,
+          "azimuth_image_deg": -9.022340768655713,
+          "paint_pixels": 20668,
+          "window_bbox": [
+            6927,
+            3345,
+            7107,
+            3681
+          ]
+        },
+        {
+          "id": "L05-blau-07",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5150,
+            5183,
+            5876,
+            5299
+          ],
+          "center_xy": [
+            5512.984695769969,
+            5248.036913996355
+          ],
+          "radius_R": 3.3591111610909716,
+          "azimuth_image_deg": 84.13580122026049,
+          "paint_pixels": 61961,
+          "window_bbox": [
+            5110,
+            5143,
+            5916,
+            5339
+          ]
+        }
+      ],
+      "color_counts": {
+        "groc": 1,
+        "blau": 6,
+        "lila": 0,
+        "verd": 0
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L05_anotada_sencera.png"
+    },
+    {
+      "index": 6,
+      "name": "04 ACHF micro 1-16 · V31",
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [
+        {
+          "id": "L06-groc-01",
+          "color": "groc",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            443,
+            0,
+            2499,
+            1915
+          ],
+          "center_xy": [
+            1468.6960604893084,
+            953.4542584387508
+          ],
+          "radius_R": 10.913375281514089,
+          "azimuth_image_deg": -144.05966280586125,
+          "paint_pixels": 186871,
+          "window_bbox": [
+            403,
+            0,
+            2539,
+            1955
+          ]
+        },
+        {
+          "id": "L06-groc-02",
+          "color": "groc",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            31,
+            2195,
+            169,
+            2324
+          ],
+          "center_xy": [
+            102.10813226094727,
+            2262.6620990964157
+          ],
+          "radius_R": 12.421554012857303,
+          "azimuth_image_deg": -163.95066758464472,
+          "paint_pixels": 10071,
+          "window_bbox": [
+            0,
+            2155,
+            209,
+            2364
+          ]
+        },
+        {
+          "id": "L06-blau-03",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4796,
+            3050,
+            5221,
+            3232
+          ],
+          "center_xy": [
+            5007.593970070423,
+            3140.1532790492956
+          ],
+          "radius_R": 1.651400529483497,
+          "azimuth_image_deg": -119.12799804131438,
+          "paint_pixels": 9087,
+          "window_bbox": [
+            4756,
+            3010,
+            5261,
+            3272
+          ]
+        },
+        {
+          "id": "L06-blau-04",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5338,
+            3052,
+            6112,
+            3907
+          ],
+          "center_xy": [
+            5837.554744240531,
+            3384.223155017571
+          ],
+          "radius_R": 1.398467440833327,
+          "azimuth_image_deg": -39.450932705751775,
+          "paint_pixels": 25609,
+          "window_bbox": [
+            5298,
+            3012,
+            6152,
+            3947
+          ]
+        },
+        {
+          "id": "L06-blau-05",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5087,
+            4297,
+            5417,
+            4406
+          ],
+          "center_xy": [
+            5252.076214160327,
+            4350.856641310708
+          ],
+          "radius_R": 1.3288073188067884,
+          "azimuth_image_deg": 100.79845889202481,
+          "paint_pixels": 6835,
+          "window_bbox": [
+            5047,
+            4257,
+            5457,
+            4446
+          ]
+        },
+        {
+          "id": "L06-blau-06",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4957,
+            4359,
+            5256,
+            4444
+          ],
+          "center_xy": [
+            5105.922306176084,
+            4400.7733245729305
+          ],
+          "radius_R": 1.5328136292362309,
+          "azimuth_image_deg": 112.26107163877445,
+          "paint_pixels": 6088,
+          "window_bbox": [
+            4917,
+            4319,
+            5296,
+            4484
+          ]
+        }
+      ],
+      "color_counts": {
+        "groc": 2,
+        "blau": 4,
+        "lila": 0,
+        "verd": 0
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L06_anotada_sencera.png"
+    },
+    {
+      "index": 7,
+      "name": "05 ACHF fi 2-48 · V31",
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [
+        {
+          "id": "L07-groc-01",
+          "color": "groc",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5,
+            0,
+            2471,
+            2345
+          ],
+          "center_xy": [
+            1237.4501084694346,
+            1170.9328327277858
+          ],
+          "radius_R": 11.071230469070684,
+          "azimuth_image_deg": -147.72453167877728,
+          "paint_pixels": 226780,
+          "window_bbox": [
+            0,
+            0,
+            2511,
+            2385
+          ]
+        },
+        {
+          "id": "L07-blau-02",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            8229,
+            1930,
+            8522,
+            2246
+          ],
+          "center_xy": [
+            8373.936513854758,
+            2081.8491822726887
+          ],
+          "radius_R": 7.843307098423165,
+          "azimuth_image_deg": -29.351303241169266,
+          "paint_pixels": 58986,
+          "window_bbox": [
+            8189,
+            1890,
+            8562,
+            2286
+          ]
+        },
+        {
+          "id": "L07-blau-03",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            6709,
+            2473,
+            6904,
+            2970
+          ],
+          "center_xy": [
+            6799.071483548201,
+            2722.83997177859
+          ],
+          "radius_R": 4.043776193807954,
+          "azimuth_image_deg": -36.22492553932283,
+          "paint_pixels": 31179,
+          "window_bbox": [
+            6669,
+            2433,
+            6944,
+            3010
+          ]
+        },
+        {
+          "id": "L07-blau-04",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            3577,
+            2675,
+            3877,
+            4411
+          ],
+          "center_xy": [
+            3702.742772443127,
+            3547.7590449184763
+          ],
+          "radius_R": 3.8007397395427547,
+          "azimuth_image_deg": -172.17524497401777,
+          "paint_pixels": 155138,
+          "window_bbox": [
+            3537,
+            2635,
+            3917,
+            4451
+          ]
+        },
+        {
+          "id": "L07-blau-05",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            6982,
+            3170,
+            7045,
+            3310
+          ],
+          "center_xy": [
+            7012.525251223911,
+            3239.683973202783
+          ],
+          "radius_R": 3.9391831548857805,
+          "azimuth_image_deg": -17.99058283354193,
+          "paint_pixels": 7753,
+          "window_bbox": [
+            6942,
+            3130,
+            7085,
+            3350
+          ]
+        },
+        {
+          "id": "L07-blau-06",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            7011,
+            3499,
+            7073,
+            3672
+          ],
+          "center_xy": [
+            7041.45322054627,
+            3584.524969425194
+          ],
+          "radius_R": 3.836866019209343,
+          "azimuth_image_deg": -6.49483504919699,
+          "paint_pixels": 9806,
+          "window_bbox": [
+            6971,
+            3459,
+            7113,
+            3712
+          ]
+        },
+        {
+          "id": "L07-blau-07",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            7026,
+            3925,
+            7088,
+            4002
+          ],
+          "center_xy": [
+            7056.361320509488,
+            3963.2058747075644
+          ],
+          "radius_R": 3.8695377652786878,
+          "azimuth_image_deg": 6.312476305368654,
+          "paint_pixels": 3847,
+          "window_bbox": [
+            6986,
+            3885,
+            7128,
+            4042
+          ]
+        },
+        {
+          "id": "L07-blau-08",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            6798,
+            4213,
+            7018,
+            4501
+          ],
+          "center_xy": [
+            6909.539225967541,
+            4357.786267166042
+          ],
+          "radius_R": 3.753018508013028,
+          "azimuth_image_deg": 20.608751238435616,
+          "paint_pixels": 20025,
+          "window_bbox": [
+            6758,
+            4173,
+            7058,
+            4541
+          ]
+        },
+        {
+          "id": "L07-blau-09",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4414,
+            4882,
+            5883,
+            5218
+          ],
+          "center_xy": [
+            5131.012740487387,
+            5121.914375801624
+          ],
+          "radius_R": 3.0998453357826046,
+          "azimuth_image_deg": 99.72691339625163,
+          "paint_pixels": 93531,
+          "window_bbox": [
+            4374,
+            4842,
+            5923,
+            5258
+          ]
+        }
+      ],
+      "color_counts": {
+        "groc": 1,
+        "blau": 8,
+        "lila": 0,
+        "verd": 0
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L07_anotada_sencera.png"
+    },
+    {
+      "index": 8,
+      "name": "06 ACHF estructura 4-64 · V31",
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [
+        {
+          "id": "L08-groc-01",
+          "color": "groc",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            0,
+            0,
+            2443,
+            2328
+          ],
+          "center_xy": [
+            1220.769252018321,
+            1163.3921334497693
+          ],
+          "radius_R": 11.112380483859763,
+          "azimuth_image_deg": -147.75415966331772,
+          "paint_pixels": 224417,
+          "window_bbox": [
+            0,
+            0,
+            2483,
+            2368
+          ]
+        },
+        {
+          "id": "L08-blau-02",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4065,
+            1822,
+            5340,
+            2439
+          ],
+          "center_xy": [
+            4678.359657381679,
+            2074.37453785565
+          ],
+          "radius_R": 4.1613389297412695,
+          "azimuth_image_deg": -111.88436901103134,
+          "paint_pixels": 87092,
+          "window_bbox": [
+            4025,
+            1782,
+            5380,
+            2479
+          ]
+        },
+        {
+          "id": "L08-blau-03",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5545,
+            1841,
+            6267,
+            2052
+          ],
+          "center_xy": [
+            5910.627788063122,
+            1921.2136780393193
+          ],
+          "radius_R": 4.38954812004181,
+          "azimuth_image_deg": -73.51358543524768,
+          "paint_pixels": 45338,
+          "window_bbox": [
+            5505,
+            1801,
+            6307,
+            2092
+          ]
+        },
+        {
+          "id": "L08-blau-04",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            8251,
+            1970,
+            8526,
+            2258
+          ],
+          "center_xy": [
+            8388.774228418893,
+            2107.598248361976
+          ],
+          "radius_R": 7.844304638494157,
+          "azimuth_image_deg": -28.85866873975123,
+          "paint_pixels": 45319,
+          "window_bbox": [
+            8211,
+            1930,
+            8566,
+            2298
+          ]
+        },
+        {
+          "id": "L08-blau-05",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            6577,
+            2355,
+            7037,
+            3977
+          ],
+          "center_xy": [
+            6902.346978188428,
+            3136.408143365647
+          ],
+          "radius_R": 3.7856620709204294,
+          "azimuth_image_deg": -22.538423431335712,
+          "paint_pixels": 105592,
+          "window_bbox": [
+            6537,
+            2315,
+            7077,
+            4017
+          ]
+        },
+        {
+          "id": "L08-blau-06",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            3629,
+            2798,
+            3873,
+            4468
+          ],
+          "center_xy": [
+            3734.8954350074487,
+            3632.214035620416
+          ],
+          "radius_R": 3.7067200197603847,
+          "azimuth_image_deg": -174.95804134610646,
+          "paint_pixels": 105370,
+          "window_bbox": [
+            3589,
+            2758,
+            3913,
+            4508
+          ]
+        },
+        {
+          "id": "L08-blau-07",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            6355,
+            4197,
+            6979,
+            4792
+          ],
+          "center_xy": [
+            6690.947431556545,
+            4518.813059881977
+          ],
+          "radius_R": 3.456130596784233,
+          "azimuth_image_deg": 29.20697327117666,
+          "paint_pixels": 51681,
+          "window_bbox": [
+            6315,
+            4157,
+            7019,
+            4832
+          ]
+        },
+        {
+          "id": "L08-blau-08",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4932,
+            5100,
+            6030,
+            5295
+          ],
+          "center_xy": [
+            5481.768904800176,
+            5214.1742091035285
+          ],
+          "radius_R": 3.2760180273848967,
+          "azimuth_image_deg": 85.23114057950345,
+          "paint_pixels": 68419,
+          "window_bbox": [
+            4892,
+            5060,
+            6070,
+            5335
+          ]
+        }
+      ],
+      "color_counts": {
+        "groc": 1,
+        "blau": 7,
+        "lila": 0,
+        "verd": 0
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L08_anotada_sencera.png"
+    },
+    {
+      "index": 9,
+      "name": "P01 NRGF · V31",
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [
+        {
+          "id": "L09-groc-01",
+          "color": "groc",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            19,
+            6,
+            2393,
+            2240
+          ],
+          "center_xy": [
+            1203.9077031710194,
+            1123.8382993747155
+          ],
+          "radius_R": 11.192783125906425,
+          "azimuth_image_deg": -147.47001593685542,
+          "paint_pixels": 215262,
+          "window_bbox": [
+            0,
+            0,
+            2433,
+            2280
+          ]
+        },
+        {
+          "id": "L09-blau-02",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            2783,
+            149,
+            4140,
+            1023
+          ],
+          "center_xy": [
+            3435.8884974806656,
+            545.9763226505742
+          ],
+          "radius_R": 8.53461387011279,
+          "azimuth_image_deg": -120.8071925075274,
+          "paint_pixels": 136542,
+          "window_bbox": [
+            2743,
+            109,
+            4180,
+            1063
+          ]
+        },
+        {
+          "id": "L09-blau-03",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            8735,
+            382,
+            10422,
+            4711
+          ],
+          "center_xy": [
+            9751.469192405113,
+            2479.083054350174
+          ],
+          "radius_R": 10.388502681765637,
+          "azimuth_image_deg": -16.456501565510166,
+          "paint_pixels": 407407,
+          "window_bbox": [
+            8695,
+            342,
+            10462,
+            4751
+          ]
+        },
+        {
+          "id": "L09-blau-04",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            7363,
+            548,
+            9046,
+            2480
+          ],
+          "center_xy": [
+            8309.979737873866,
+            1414.6522504760837
+          ],
+          "radius_R": 8.572640515904958,
+          "azimuth_image_deg": -38.68972876681811,
+          "paint_pixels": 223175,
+          "window_bbox": [
+            7323,
+            508,
+            9086,
+            2520
+          ]
+        },
+        {
+          "id": "L09-blau-05",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            2195,
+            1395,
+            2404,
+            1656
+          ],
+          "center_xy": [
+            2296.279125020482,
+            1523.3827625757824
+          ],
+          "radius_R": 8.633607816968691,
+          "azimuth_image_deg": -143.6934541786094,
+          "paint_pixels": 24409,
+          "window_bbox": [
+            2155,
+            1355,
+            2444,
+            1696
+          ]
+        },
+        {
+          "id": "L09-blau-06",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            1625,
+            1769,
+            2792,
+            6522
+          ],
+          "center_xy": [
+            1982.7429050582036,
+            4222.459098430213
+          ],
+          "radius_R": 7.73581853846898,
+          "azimuth_image_deg": 172.46909319783714,
+          "paint_pixels": 446348,
+          "window_bbox": [
+            1585,
+            1729,
+            2832,
+            6562
+          ]
+        },
+        {
+          "id": "L09-blau-07",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5533,
+            1814,
+            6397,
+            2085
+          ],
+          "center_xy": [
+            5978.245456748244,
+            1905.2171674339713
+          ],
+          "radius_R": 4.47000872332103,
+          "azimuth_image_deg": -71.75914679223158,
+          "paint_pixels": 66014,
+          "window_bbox": [
+            5493,
+            1774,
+            6437,
+            2125
+          ]
+        },
+        {
+          "id": "L09-blau-08",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4464,
+            1881,
+            5257,
+            2109
+          ],
+          "center_xy": [
+            4857.408508188115,
+            1979.7227895476638
+          ],
+          "radius_R": 4.233965683945143,
+          "azimuth_image_deg": -105.68580214793387,
+          "paint_pixels": 59043,
+          "window_bbox": [
+            4424,
+            1841,
+            5297,
+            2149
+          ]
+        },
+        {
+          "id": "L09-blau-09",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            6513,
+            2209,
+            7018,
+            3858
+          ],
+          "center_xy": [
+            6852.979160196285,
+            3008.9948987514754
+          ],
+          "radius_R": 3.805667255406755,
+          "azimuth_image_deg": -27.211374124424115,
+          "paint_pixels": 128772,
+          "window_bbox": [
+            6473,
+            2169,
+            7058,
+            3898
+          ]
+        },
+        {
+          "id": "L09-blau-10",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            8390,
+            2520,
+            9080,
+            5942
+          ],
+          "center_xy": [
+            8895.000171986345,
+            4274.81497189808
+          ],
+          "radius_R": 8.098683208050032,
+          "azimuth_image_deg": 8.039815976411694,
+          "paint_pixels": 308050,
+          "window_bbox": [
+            8350,
+            2480,
+            9120,
+            5982
+          ]
+        },
+        {
+          "id": "L09-blau-11",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            3649,
+            2692,
+            3928,
+            4490
+          ],
+          "center_xy": [
+            3763.112885861804,
+            3592.149035116628
+          ],
+          "radius_R": 3.652184053522525,
+          "azimuth_image_deg": -173.44853544696988,
+          "paint_pixels": 136538,
+          "window_bbox": [
+            3609,
+            2652,
+            3968,
+            4530
+          ]
+        },
+        {
+          "id": "L09-blau-12",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            6322,
+            2866,
+            6560,
+            3750
+          ],
+          "center_xy": [
+            6467.613571108121,
+            3300.791834903544
+          ],
+          "radius_R": 2.731544739352959,
+          "azimuth_image_deg": -23.243307496459607,
+          "paint_pixels": 44580,
+          "window_bbox": [
+            6282,
+            2826,
+            6600,
+            3790
+          ]
+        },
+        {
+          "id": "L09-blau-13",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4785,
+            3042,
+            5207,
+            3217
+          ],
+          "center_xy": [
+            4991.516759776537,
+            3113.4224084419616
+          ],
+          "radius_R": 1.7221599558711371,
+          "azimuth_image_deg": -119.20595539037274,
+          "paint_pixels": 3222,
+          "window_bbox": [
+            4745,
+            3002,
+            5247,
+            3257
+          ]
+        },
+        {
+          "id": "L09-blau-14",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5389,
+            3063,
+            6096,
+            3775
+          ],
+          "center_xy": [
+            5828.1428392745465,
+            3331.935459662289
+          ],
+          "radius_R": 1.4611723084962582,
+          "azimuth_image_deg": -43.57998371234279,
+          "paint_pixels": 7995,
+          "window_bbox": [
+            5349,
+            3023,
+            6136,
+            3815
+          ]
+        },
+        {
+          "id": "L09-blau-15",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5413,
+            3209,
+            5940,
+            3651
+          ],
+          "center_xy": [
+            5716.016159338595,
+            3381.316798196167
+          ],
+          "radius_R": 1.2032549332182199,
+          "azimuth_image_deg": -48.072200845257385,
+          "paint_pixels": 5322,
+          "window_bbox": [
+            5373,
+            3169,
+            5980,
+            3691
+          ]
+        },
+        {
+          "id": "L09-blau-16",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4579,
+            3424,
+            4635,
+            4045
+          ],
+          "center_xy": [
+            4592.098657876148,
+            3742.2639510242525
+          ],
+          "radius_R": 1.7485068344835084,
+          "azimuth_image_deg": -177.50898379811812,
+          "paint_pixels": 4246,
+          "window_bbox": [
+            4539,
+            3384,
+            4675,
+            4085
+          ]
+        },
+        {
+          "id": "L09-blau-17",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5791,
+            3467,
+            5900,
+            3706
+          ],
+          "center_xy": [
+            5854.166224110462,
+            3581.7838555496546
+          ],
+          "radius_R": 1.20113508412912,
+          "azimuth_image_deg": -21.500292526265504,
+          "paint_pixels": 1883,
+          "window_bbox": [
+            5751,
+            3427,
+            5940,
+            3746
+          ]
+        },
+        {
+          "id": "L09-blau-18",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4453,
+            3516,
+            4510,
+            4085
+          ],
+          "center_xy": [
+            4469.299851924975,
+            3800.990375123396
+          ],
+          "radius_R": 2.0263708549148904,
+          "azimuth_image_deg": 178.37986086681715,
+          "paint_pixels": 4051,
+          "window_bbox": [
+            4413,
+            3476,
+            4550,
+            4125
+          ]
+        },
+        {
+          "id": "L09-blau-19",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4897,
+            3633,
+            4916,
+            3754
+          ],
+          "center_xy": [
+            4904.915384615385,
+            3694.7846153846153
+          ],
+          "radius_R": 1.0530370725694103,
+          "azimuth_image_deg": -169.95044762624622,
+          "paint_pixels": 780,
+          "window_bbox": [
+            4857,
+            3593,
+            4956,
+            3794
+          ]
+        },
+        {
+          "id": "L09-blau-20",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4899,
+            3837,
+            4927,
+            3923
+          ],
+          "center_xy": [
+            4910.952681388013,
+            3879.8958990536275
+          ],
+          "radius_R": 1.0501274355081294,
+          "azimuth_image_deg": 166.99162367156393,
+          "paint_pixels": 634,
+          "window_bbox": [
+            4859,
+            3797,
+            4967,
+            3963
+          ]
+        },
+        {
+          "id": "L09-blau-21",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            6061,
+            4010,
+            6513,
+            4752
+          ],
+          "center_xy": [
+            6320.528688236534,
+            4399.245109294098
+          ],
+          "radius_R": 2.595682510826791,
+          "azimuth_image_deg": 33.036603391859444,
+          "paint_pixels": 42683,
+          "window_bbox": [
+            6021,
+            3970,
+            6553,
+            4792
+          ]
+        },
+        {
+          "id": "L09-blau-22",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            6480,
+            4062,
+            6975,
+            4911
+          ],
+          "center_xy": [
+            6754.784183773765,
+            4499.006683703558
+          ],
+          "radius_R": 3.562356556363648,
+          "azimuth_image_deg": 27.43850797771749,
+          "paint_pixels": 71217,
+          "window_bbox": [
+            6440,
+            4022,
+            7015,
+            4951
+          ]
+        },
+        {
+          "id": "L09-blau-23",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5562,
+            4132,
+            5844,
+            4319
+          ],
+          "center_xy": [
+            5712.14877745545,
+            4238.992540406133
+          ],
+          "radius_R": 1.3182595770771297,
+          "azimuth_image_deg": 52.89754377430738,
+          "paint_pixels": 2413,
+          "window_bbox": [
+            5522,
+            4092,
+            5884,
+            4359
+          ]
+        },
+        {
+          "id": "L09-blau-24",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5067,
+            4187,
+            5432,
+            4334
+          ],
+          "center_xy": [
+            5245.9890710382515,
+            4260.267759562841
+          ],
+          "radius_R": 1.1306350591515328,
+          "azimuth_image_deg": 103.43916380351844,
+          "paint_pixels": 3111,
+          "window_bbox": [
+            5027,
+            4147,
+            5472,
+            4374
+          ]
+        },
+        {
+          "id": "L09-blau-25",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            2565,
+            4727,
+            8179,
+            5918
+          ],
+          "center_xy": [
+            5353.7291921830665,
+            5325.017866002077
+          ],
+          "radius_R": 3.5162970210451143,
+          "azimuth_image_deg": 90.29729610946403,
+          "paint_pixels": 515792,
+          "window_bbox": [
+            2525,
+            4687,
+            8219,
+            5958
+          ]
+        },
+        {
+          "id": "L09-blau-26",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            2775,
+            6502,
+            4715,
+            7506
+          ],
+          "center_xy": [
+            3700.045674757892,
+            7094.752322978242
+          ],
+          "radius_R": 8.42425747405174,
+          "azimuth_image_deg": 116.5957025451504,
+          "paint_pixels": 197536,
+          "window_bbox": [
+            2735,
+            6462,
+            4755,
+            7506
+          ]
+        }
+      ],
+      "color_counts": {
+        "groc": 1,
+        "blau": 25,
+        "lila": 0,
+        "verd": 0
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L09_anotada_sencera.png"
+    },
+    {
+      "index": 10,
+      "name": "P02 RHEF · comparacio amb anells · V31",
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [
+        {
+          "id": "L10-groc-01",
+          "color": "groc",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            0,
+            0,
+            2400,
+            2275
+          ],
+          "center_xy": [
+            1183.3009567869758,
+            1136.5527901651199
+          ],
+          "radius_R": 11.216806426144862,
+          "azimuth_image_deg": -147.7227593693331,
+          "paint_pixels": 215710,
+          "window_bbox": [
+            0,
+            0,
+            2440,
+            2315
+          ]
+        },
+        {
+          "id": "L10-blau-02",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            8179,
+            1902,
+            8519,
+            2302
+          ],
+          "center_xy": [
+            8349.273283807033,
+            2103.733104818811
+          ],
+          "radius_R": 7.770187328242442,
+          "azimuth_image_deg": -29.23439275157971,
+          "paint_pixels": 74944,
+          "window_bbox": [
+            8139,
+            1862,
+            8559,
+            2342
+          ]
+        },
+        {
+          "id": "L10-blau-03",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            1522,
+            2084,
+            3101,
+            6876
+          ],
+          "center_xy": [
+            1978.8004413017766,
+            4623.5644169178395
+          ],
+          "radius_R": 7.915485609380226,
+          "azimuth_image_deg": 165.9306857912393,
+          "paint_pixels": 471193,
+          "window_bbox": [
+            1482,
+            2044,
+            3141,
+            6916
+          ]
+        },
+        {
+          "id": "L10-blau-04",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            8159,
+            3163,
+            9121,
+            6399
+          ],
+          "center_xy": [
+            8834.731770686247,
+            4841.548173497018
+          ],
+          "radius_R": 8.245116883896168,
+          "azimuth_image_deg": 17.06046734179083,
+          "paint_pixels": 300793,
+          "window_bbox": [
+            8119,
+            3123,
+            9161,
+            6439
+          ]
+        },
+        {
+          "id": "L10-blau-05",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5808,
+            3647,
+            6381,
+            3695
+          ],
+          "center_xy": [
+            6093.986107252014,
+            3670.9632305269984
+          ],
+          "radius_R": 1.6787845564113995,
+          "azimuth_image_deg": -8.144037986235542,
+          "paint_pixels": 8891,
+          "window_bbox": [
+            5768,
+            3607,
+            6421,
+            3735
+          ]
+        },
+        {
+          "id": "L10-blau-06",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5812,
+            3679,
+            6379,
+            3708
+          ],
+          "center_xy": [
+            6097.640018066847,
+            3692.93315266486
+          ],
+          "radius_R": 1.6806900798107363,
+          "azimuth_image_deg": -6.421000481990912,
+          "paint_pixels": 4428,
+          "window_bbox": [
+            5772,
+            3639,
+            6419,
+            3748
+          ]
+        },
+        {
+          "id": "L10-blau-07",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5810,
+            3698,
+            6385,
+            3722
+          ],
+          "center_xy": [
+            6099.105051408136,
+            3709.6262852033974
+          ],
+          "radius_R": 1.6801875098099484,
+          "azimuth_image_deg": -5.124335596576481,
+          "paint_pixels": 4474,
+          "window_bbox": [
+            5770,
+            3658,
+            6425,
+            3762
+          ]
+        },
+        {
+          "id": "L10-blau-08",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5811,
+            3713,
+            6370,
+            3738
+          ],
+          "center_xy": [
+            6092.026279391424,
+            3724.9451360073767
+          ],
+          "radius_R": 1.6614118764258123,
+          "azimuth_image_deg": -3.9795253395591823,
+          "paint_pixels": 4338,
+          "window_bbox": [
+            5771,
+            3673,
+            6410,
+            3778
+          ]
+        },
+        {
+          "id": "L10-blau-09",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5813,
+            3732,
+            6348,
+            3755
+          ],
+          "center_xy": [
+            6082.266152362585,
+            3742.7128736740597
+          ],
+          "radius_R": 1.6369722368044923,
+          "azimuth_image_deg": -2.6251590926588766,
+          "paint_pixels": 4147,
+          "window_bbox": [
+            5773,
+            3692,
+            6388,
+            3795
+          ]
+        },
+        {
+          "id": "L10-blau-10",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4504,
+            3829,
+            4984,
+            4037
+          ],
+          "center_xy": [
+            4749.685212165362,
+            3871.8598615916953
+          ],
+          "radius_R": 1.4062158009274364,
+          "azimuth_image_deg": 171.07599907979275,
+          "paint_pixels": 10878,
+          "window_bbox": [
+            4464,
+            3789,
+            5024,
+            4077
+          ]
+        },
+        {
+          "id": "L10-blau-11",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4984,
+            4040,
+            5062,
+            4135
+          ],
+          "center_xy": [
+            5021.393476044852,
+            4089.0407747196737
+          ],
+          "radius_R": 1.0499462020125871,
+          "azimuth_image_deg": 137.372401729192,
+          "paint_pixels": 979,
+          "window_bbox": [
+            4944,
+            4000,
+            5102,
+            4175
+          ]
+        }
+      ],
+      "color_counts": {
+        "groc": 1,
+        "blau": 10,
+        "lila": 0,
+        "verd": 0
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L10_anotada_sencera.png"
+    },
+    {
+      "index": 11,
+      "name": "P03 MGN · V31",
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [
+        {
+          "id": "L11-groc-01",
+          "color": "groc",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            0,
+            0,
+            2414,
+            2284
+          ],
+          "center_xy": [
+            1205.4164397017457,
+            1137.6689779881235
+          ],
+          "radius_R": 11.173043368954794,
+          "azimuth_image_deg": -147.59628959798513,
+          "paint_pixels": 223010,
+          "window_bbox": [
+            0,
+            0,
+            2454,
+            2324
+          ]
+        },
+        {
+          "id": "L11-blau-02",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5606,
+            2949,
+            5714,
+            3024
+          ],
+          "center_xy": [
+            5659.356449375867,
+            2985.868932038835
+          ],
+          "radius_R": 1.9157325848977518,
+          "azimuth_image_deg": -69.35599955647429,
+          "paint_pixels": 2878,
+          "window_bbox": [
+            5566,
+            2909,
+            5754,
+            3064
+          ]
+        },
+        {
+          "id": "L11-blau-03",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5369,
+            3032,
+            6126,
+            4429
+          ],
+          "center_xy": [
+            5880.17441081805,
+            3660.6906767761866
+          ],
+          "radius_R": 1.2052138035576754,
+          "azimuth_image_deg": -12.513583340685292,
+          "paint_pixels": 92387,
+          "window_bbox": [
+            5329,
+            2992,
+            6166,
+            4469
+          ]
+        },
+        {
+          "id": "L11-blau-04",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4905,
+            3036,
+            5251,
+            3161
+          ],
+          "center_xy": [
+            5075.88736631016,
+            3091.3870320855617
+          ],
+          "radius_R": 1.6833106988038085,
+          "azimuth_image_deg": -112.67195930816375,
+          "paint_pixels": 8947,
+          "window_bbox": [
+            4865,
+            2996,
+            5291,
+            3201
+          ]
+        },
+        {
+          "id": "L11-blau-05",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5775,
+            3050,
+            6223,
+            3755
+          ],
+          "center_xy": [
+            6061.127504638219,
+            3364.2337662337663
+          ],
+          "radius_R": 1.841674862046747,
+          "azimuth_image_deg": -30.473206653583734,
+          "paint_pixels": 21509,
+          "window_bbox": [
+            5735,
+            3010,
+            6263,
+            3795
+          ]
+        },
+        {
+          "id": "L11-blau-06",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            6397,
+            3109,
+            6588,
+            3748
+          ],
+          "center_xy": [
+            6504.8925444462275,
+            3425.095418962535
+          ],
+          "radius_R": 2.7137728831881565,
+          "azimuth_image_deg": -17.053335327765986,
+          "paint_pixels": 55547,
+          "window_bbox": [
+            6357,
+            3069,
+            6628,
+            3788
+          ]
+        },
+        {
+          "id": "L11-blau-07",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4716,
+            3186,
+            4880,
+            3271
+          ],
+          "center_xy": [
+            4796.89431844751,
+            3227.7624503156417
+          ],
+          "radius_R": 1.7861897963931745,
+          "azimuth_image_deg": -135.86945212065052,
+          "paint_pixels": 4273,
+          "window_bbox": [
+            4676,
+            3146,
+            4920,
+            3311
+          ]
+        },
+        {
+          "id": "L11-blau-08",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5392,
+            3210,
+            5952,
+            3776
+          ],
+          "center_xy": [
+            5739.342447545809,
+            3430.204832431406
+          ],
+          "radius_R": 1.1616405527236315,
+          "azimuth_image_deg": -42.463649229010116,
+          "paint_pixels": 21056,
+          "window_bbox": [
+            5352,
+            3170,
+            5992,
+            3816
+          ]
+        },
+        {
+          "id": "L11-blau-09",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4595,
+            3342,
+            4658,
+            3501
+          ],
+          "center_xy": [
+            4629.710214375788,
+            3422.251702395965
+          ],
+          "radius_R": 1.8450574191268447,
+          "azimuth_image_deg": -154.22505071519578,
+          "paint_pixels": 3955,
+          "window_bbox": [
+            4555,
+            3302,
+            4698,
+            3541
+          ]
+        },
+        {
+          "id": "L11-blau-10",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4472,
+            3379,
+            4506,
+            3598
+          ],
+          "center_xy": [
+            4486.377253298643,
+            3488.1629808585762
+          ],
+          "radius_R": 2.091269173269687,
+          "azimuth_image_deg": -161.81354601920157,
+          "paint_pixels": 5314,
+          "window_bbox": [
+            4432,
+            3339,
+            4546,
+            3638
+          ]
+        },
+        {
+          "id": "L11-blau-11",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4566,
+            3533,
+            4600,
+            3862
+          ],
+          "center_xy": [
+            4581.038428271346,
+            3697.1837390337328
+          ],
+          "radius_R": 1.7809059983843314,
+          "azimuth_image_deg": -174.25374519134024,
+          "paint_pixels": 8043,
+          "window_bbox": [
+            4526,
+            3493,
+            4640,
+            3902
+          ]
+        },
+        {
+          "id": "L11-blau-12",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4475,
+            3643,
+            4497,
+            3666
+          ],
+          "center_xy": [
+            4485.528150134049,
+            3653.5120643431637
+          ],
+          "radius_R": 2.007986116918739,
+          "azimuth_image_deg": -172.05848903041496,
+          "paint_pixels": 369,
+          "window_bbox": [
+            4435,
+            3603,
+            4537,
+            3706
+          ]
+        },
+        {
+          "id": "L11-blau-13",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4478,
+            3706,
+            4504,
+            3744
+          ],
+          "center_xy": [
+            4490.452380952381,
+            3724.8020050125315
+          ],
+          "radius_R": 1.9809301054427764,
+          "azimuth_image_deg": -176.653745419113,
+          "paint_pixels": 795,
+          "window_bbox": [
+            4438,
+            3666,
+            4544,
+            3784
+          ]
+        },
+        {
+          "id": "L11-blau-14",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4480,
+            3824,
+            4506,
+            3858
+          ],
+          "center_xy": [
+            4492.092797783934,
+            3840.5595567867035
+          ],
+          "radius_R": 1.979303163726136,
+          "azimuth_image_deg": 175.73794562628493,
+          "paint_pixels": 717,
+          "window_bbox": [
+            4440,
+            3784,
+            4546,
+            3898
+          ]
+        },
+        {
+          "id": "L11-blau-15",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            6089,
+            3837,
+            6533,
+            4650
+          ],
+          "center_xy": [
+            6349.521021725621,
+            4262.529126028891
+          ],
+          "radius_R": 2.4992716100035453,
+          "azimuth_image_deg": 26.23486940900173,
+          "paint_pixels": 78299,
+          "window_bbox": [
+            6049,
+            3797,
+            6573,
+            4690
+          ]
+        },
+        {
+          "id": "L11-blau-16",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4736,
+            3846,
+            5570,
+            4405
+          ],
+          "center_xy": [
+            5136.664504231567,
+            4203.968880692857
+          ],
+          "radius_R": 1.0979999753923437,
+          "azimuth_image_deg": 117.72960975741526,
+          "paint_pixels": 30272,
+          "window_bbox": [
+            4696,
+            3806,
+            5610,
+            4445
+          ]
+        },
+        {
+          "id": "L11-blau-17",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4574,
+            3893,
+            4823,
+            4221
+          ],
+          "center_xy": [
+            4675.0225549658835,
+            4078.666887793783
+          ],
+          "radius_R": 1.7035428363971046,
+          "azimuth_image_deg": 156.19801133703976,
+          "paint_pixels": 10545,
+          "window_bbox": [
+            4534,
+            3853,
+            4863,
+            4261
+          ]
+        },
+        {
+          "id": "L11-blau-18",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5769,
+            3951,
+            5964,
+            4278
+          ],
+          "center_xy": [
+            5879.717723577236,
+            4122.404227642276
+          ],
+          "radius_R": 1.4145423800845909,
+          "azimuth_image_deg": 33.793861851396656,
+          "paint_pixels": 9223,
+          "window_bbox": [
+            5729,
+            3911,
+            6004,
+            4318
+          ]
+        },
+        {
+          "id": "L11-blau-19",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4496,
+            3981,
+            4579,
+            4331
+          ],
+          "center_xy": [
+            4541.706612040514,
+            4154.316945487652
+          ],
+          "radius_R": 2.049974796076511,
+          "azimuth_image_deg": 155.22028121547854,
+          "paint_pixels": 8727,
+          "window_bbox": [
+            4456,
+            3941,
+            4619,
+            4371
+          ]
+        },
+        {
+          "id": "L11-blau-20",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5480,
+            4016,
+            5893,
+            4350
+          ],
+          "center_xy": [
+            5719.270782800441,
+            4220.656155825064
+          ],
+          "radius_R": 1.2953762838969782,
+          "azimuth_image_deg": 51.216667732943556,
+          "paint_pixels": 13593,
+          "window_bbox": [
+            5440,
+            3976,
+            5933,
+            4390
+          ]
+        },
+        {
+          "id": "L11-blau-21",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4804,
+            4137,
+            5173,
+            4284
+          ],
+          "center_xy": [
+            4977.47099252072,
+            4233.5245603396
+          ],
+          "radius_R": 1.356547556408553,
+          "azimuth_image_deg": 130.01296729483096,
+          "paint_pixels": 9885,
+          "window_bbox": [
+            4764,
+            4097,
+            5213,
+            4324
+          ]
+        },
+        {
+          "id": "L11-blau-22",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4865,
+            4278,
+            5249,
+            4379
+          ],
+          "center_xy": [
+            5057.141868154577,
+            4325.523041950816
+          ],
+          "radius_R": 1.4265226660253878,
+          "azimuth_image_deg": 118.99048862823227,
+          "paint_pixels": 9644,
+          "window_bbox": [
+            4825,
+            4238,
+            5289,
+            4419
+          ]
+        },
+        {
+          "id": "L11-blau-23",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5270,
+            4349,
+            5533,
+            4452
+          ],
+          "center_xy": [
+            5401.1865704609045,
+            4400.300397585039
+          ],
+          "radius_R": 1.420316020513546,
+          "azimuth_image_deg": 86.38858504015639,
+          "paint_pixels": 6788,
+          "window_bbox": [
+            5230,
+            4309,
+            5573,
+            4492
+          ]
+        },
+        {
+          "id": "L11-blau-24",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4894,
+            4383,
+            5451,
+            4499
+          ],
+          "center_xy": [
+            5171.560042964555,
+            4441.799355531686
+          ],
+          "radius_R": 1.5721156706321042,
+          "azimuth_image_deg": 105.93804290739541,
+          "paint_pixels": 13910,
+          "window_bbox": [
+            4854,
+            4343,
+            5491,
+            4539
+          ]
+        }
+      ],
+      "color_counts": {
+        "groc": 1,
+        "blau": 23,
+        "lila": 0,
+        "verd": 0
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L11_anotada_sencera.png"
+    },
+    {
+      "index": 12,
+      "name": "P04 WOW sense denoise · V31",
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [
+        {
+          "id": "L12-groc-01",
+          "color": "groc",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            0,
+            0,
+            2422,
+            2292
+          ],
+          "center_xy": [
+            1201.9734455265411,
+            1143.7983465325342
+          ],
+          "radius_R": 11.172197453959818,
+          "azimuth_image_deg": -147.67799957670726,
+          "paint_pixels": 224203,
+          "window_bbox": [
+            0,
+            0,
+            2462,
+            2332
+          ]
+        },
+        {
+          "id": "L12-verd-02",
+          "color": "verd",
+          "certainty_by_Pere": "dubtos",
+          "bbox": [
+            4569,
+            3029,
+            6057,
+            4309
+          ],
+          "center_xy": [
+            5056.311555302675,
+            3584.328130024986
+          ],
+          "radius_R": 0.8181490861425481,
+          "azimuth_image_deg": -147.9260042513091,
+          "paint_pixels": 80805,
+          "window_bbox": [
+            4529,
+            2989,
+            6097,
+            4349
+          ]
+        },
+        {
+          "id": "L12-verd-03",
+          "color": "verd",
+          "certainty_by_Pere": "dubtos",
+          "bbox": [
+            5310,
+            3184,
+            5946,
+            3895
+          ],
+          "center_xy": [
+            5727.521266577729,
+            3454.117240838107
+          ],
+          "radius_R": 1.105425423586181,
+          "azimuth_image_deg": -41.32724619319488,
+          "paint_pixels": 25471,
+          "window_bbox": [
+            5270,
+            3144,
+            5986,
+            3935
+          ]
+        },
+        {
+          "id": "L12-verd-04",
+          "color": "verd",
+          "certainty_by_Pere": "dubtos",
+          "bbox": [
+            6064,
+            3518,
+            6100,
+            3811
+          ],
+          "center_xy": [
+            6079.262208219963,
+            3664.8321638264356
+          ],
+          "radius_R": 1.6477791721089914,
+          "azimuth_image_deg": -8.787632169848743,
+          "paint_pixels": 6981,
+          "window_bbox": [
+            6024,
+            3478,
+            6140,
+            3851
+          ]
+        },
+        {
+          "id": "L12-verd-05",
+          "color": "verd",
+          "certainty_by_Pere": "dubtos",
+          "bbox": [
+            6010,
+            3876,
+            6096,
+            4039
+          ],
+          "center_xy": [
+            6056.175824175824,
+            3958.760391782131
+          ],
+          "radius_R": 1.6298562020629632,
+          "azimuth_image_deg": 14.764703284628636,
+          "paint_pixels": 4186,
+          "window_bbox": [
+            5970,
+            3836,
+            6136,
+            4079
+          ]
+        },
+        {
+          "id": "L12-verd-06",
+          "color": "verd",
+          "certainty_by_Pere": "dubtos",
+          "bbox": [
+            4936,
+            3992,
+            5879,
+            4335
+          ],
+          "center_xy": [
+            5458.529511645934,
+            4229.9619061681005
+          ],
+          "radius_R": 1.0540248719272232,
+          "azimuth_image_deg": 77.97403555133447,
+          "paint_pixels": 27091,
+          "window_bbox": [
+            4896,
+            3952,
+            5919,
+            4375
+          ]
+        },
+        {
+          "id": "L12-verd-07",
+          "color": "verd",
+          "certainty_by_Pere": "dubtos",
+          "bbox": [
+            5728,
+            4122,
+            6010,
+            4412
+          ],
+          "center_xy": [
+            5884.82977193343,
+            4279.838298746661
+          ],
+          "radius_R": 1.6487183067397357,
+          "azimuth_image_deg": 43.94190127642856,
+          "paint_pixels": 9734,
+          "window_bbox": [
+            5688,
+            4082,
+            6050,
+            4452
+          ]
+        },
+        {
+          "id": "L12-verd-08",
+          "color": "verd",
+          "certainty_by_Pere": "dubtos",
+          "bbox": [
+            5295,
+            4318,
+            5589,
+            4416
+          ],
+          "center_xy": [
+            5440.681566068515,
+            4369.130831973899
+          ],
+          "radius_R": 1.358609778391771,
+          "azimuth_image_deg": 82.42474148702023,
+          "paint_pixels": 3065,
+          "window_bbox": [
+            5255,
+            4278,
+            5629,
+            4456
+          ]
+        },
+        {
+          "id": "L12-verd-09",
+          "color": "verd",
+          "certainty_by_Pere": "dubtos",
+          "bbox": [
+            5296,
+            4353,
+            5472,
+            4411
+          ],
+          "center_xy": [
+            5384.345185995624,
+            4380.429978118162
+          ],
+          "radius_R": 1.3733535883417083,
+          "azimuth_image_deg": 87.86173640992729,
+          "paint_pixels": 1828,
+          "window_bbox": [
+            5256,
+            4313,
+            5512,
+            4451
+          ]
+        },
+        {
+          "id": "L12-blau-10",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4509,
+            1784,
+            5232,
+            2082
+          ],
+          "center_xy": [
+            4860.045014123864,
+            1903.5358108313337
+          ],
+          "radius_R": 4.399136944455422,
+          "azimuth_image_deg": -105.00186960706729,
+          "paint_pixels": 65769,
+          "window_bbox": [
+            4469,
+            1744,
+            5272,
+            2122
+          ]
+        },
+        {
+          "id": "L12-blau-11",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5822,
+            1860,
+            6270,
+            2145
+          ],
+          "center_xy": [
+            6048.016815128853,
+            1995.466345924832
+          ],
+          "radius_R": 4.330353792512093,
+          "azimuth_image_deg": -68.91974131758082,
+          "paint_pixels": 41965,
+          "window_bbox": [
+            5782,
+            1820,
+            6310,
+            2185
+          ]
+        },
+        {
+          "id": "L12-blau-12",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4210,
+            2155,
+            4309,
+            2251
+          ],
+          "center_xy": [
+            4259.233412487778,
+            2202.643385947758
+          ],
+          "radius_R": 4.359932585716874,
+          "azimuth_image_deg": -125.0252949044081,
+          "paint_pixels": 7143,
+          "window_bbox": [
+            4170,
+            2115,
+            4349,
+            2291
+          ]
+        },
+        {
+          "id": "L12-blau-13",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            6491,
+            2258,
+            6919,
+            2883
+          ],
+          "center_xy": [
+            6711.549383608982,
+            2565.3740938971664
+          ],
+          "radius_R": 4.11478008648376,
+          "azimuth_image_deg": -41.883157200610796,
+          "paint_pixels": 62196,
+          "window_bbox": [
+            6451,
+            2218,
+            6959,
+            2923
+          ]
+        },
+        {
+          "id": "L12-blau-14",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            3549,
+            2669,
+            3867,
+            4234
+          ],
+          "center_xy": [
+            3678.049263169984,
+            3448.2601767243546
+          ],
+          "radius_R": 3.893009232139698,
+          "azimuth_image_deg": -168.99325953502944,
+          "paint_pixels": 139104,
+          "window_bbox": [
+            3509,
+            2629,
+            3907,
+            4274
+          ]
+        },
+        {
+          "id": "L12-blau-15",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4374,
+            3122,
+            4466,
+            4379
+          ],
+          "center_xy": [
+            4419.4382108638,
+            3750.5408986334783
+          ],
+          "radius_R": 2.1394926178055935,
+          "azimuth_image_deg": -178.4677451968911,
+          "paint_pixels": 107991,
+          "window_bbox": [
+            4334,
+            3082,
+            4506,
+            4419
+          ]
+        },
+        {
+          "id": "L12-blau-16",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            6249,
+            3227,
+            6353,
+            4149
+          ],
+          "center_xy": [
+            6301.24685576496,
+            3687.3132559172536
+          ],
+          "radius_R": 2.141682360244421,
+          "azimuth_image_deg": -5.377476144522141,
+          "paint_pixels": 78606,
+          "window_bbox": [
+            6209,
+            3187,
+            6393,
+            4189
+          ]
+        },
+        {
+          "id": "L12-blau-17",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5800,
+            5069,
+            6040,
+            5194
+          ],
+          "center_xy": [
+            5920.200917384949,
+            5134.023589898685
+          ],
+          "radius_R": 3.3331397052703253,
+          "azimuth_image_deg": 67.65079373320522,
+          "paint_pixels": 19798,
+          "window_bbox": [
+            5760,
+            5029,
+            6080,
+            5234
+          ]
+        },
+        {
+          "id": "L12-blau-18",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5049,
+            5139,
+            5534,
+            5275
+          ],
+          "center_xy": [
+            5289.148765762696,
+            5212.43670577925
+          ],
+          "radius_R": 3.264896429832922,
+          "azimuth_image_deg": 92.8936279680825,
+          "paint_pixels": 40985,
+          "window_bbox": [
+            5009,
+            5099,
+            5574,
+            5315
+          ]
+        }
+      ],
+      "color_counts": {
+        "groc": 1,
+        "blau": 9,
+        "lila": 0,
+        "verd": 8
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L12_anotada_sencera.png"
+    },
+    {
+      "index": 13,
+      "name": "P05 WOW bilateral sense denoise · V31",
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [
+        {
+          "id": "L13-groc-01",
+          "color": "groc",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            0,
+            0,
+            2407,
+            2293
+          ],
+          "center_xy": [
+            1193.1336557290815,
+            1140.7739663959899
+          ],
+          "radius_R": 11.192822972729232,
+          "azimuth_image_deg": -147.7032185311836,
+          "paint_pixels": 226099,
+          "window_bbox": [
+            0,
+            0,
+            2447,
+            2333
+          ]
+        },
+        {
+          "id": "L13-blau-02",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            3590,
+            1679,
+            6539,
+            4710
+          ],
+          "center_xy": [
+            4579.113975385091,
+            2722.3646282896207
+          ],
+          "radius_R": 2.9784453420818746,
+          "azimuth_image_deg": -126.61202080626818,
+          "paint_pixels": 1404594,
+          "window_bbox": [
+            3550,
+            1639,
+            6579,
+            4750
+          ]
+        },
+        {
+          "id": "L13-blau-03",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            6632,
+            2349,
+            7065,
+            4524
+          ],
+          "center_xy": [
+            6865.692379216165,
+            3440.6028147132893
+          ],
+          "radius_R": 3.4970588232145245,
+          "azimuth_image_deg": -12.562905162152784,
+          "paint_pixels": 598848,
+          "window_bbox": [
+            6592,
+            2309,
+            7105,
+            4564
+          ]
+        },
+        {
+          "id": "L13-blau-04",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5966,
+            2717,
+            6410,
+            3223
+          ],
+          "center_xy": [
+            6111.33425,
+            3042.713375
+          ],
+          "radius_R": 2.379515755983106,
+          "azimuth_image_deg": -44.36114044766774,
+          "paint_pixels": 7997,
+          "window_bbox": [
+            5926,
+            2677,
+            6450,
+            3263
+          ]
+        },
+        {
+          "id": "L13-blau-05",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4411,
+            2919,
+            4742,
+            3197
+          ],
+          "center_xy": [
+            4596.834496293066,
+            3083.832969908417
+          ],
+          "radius_R": 2.3409741606541323,
+          "azimuth_image_deg": -137.86933495767215,
+          "paint_pixels": 4585,
+          "window_bbox": [
+            4371,
+            2879,
+            4782,
+            3237
+          ]
+        },
+        {
+          "id": "L13-blau-06",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4914,
+            3308,
+            5179,
+            3520
+          ],
+          "center_xy": [
+            5008.791308741789,
+            3371.7604850934817
+          ],
+          "radius_R": 1.2175772028909695,
+          "azimuth_image_deg": -131.14478324182292,
+          "paint_pixels": 3958,
+          "window_bbox": [
+            4874,
+            3268,
+            5219,
+            3560
+          ]
+        },
+        {
+          "id": "L13-blau-07",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4574,
+            3318,
+            4822,
+            3843
+          ],
+          "center_xy": [
+            4631.837463126843,
+            3530.2210914454276
+          ],
+          "radius_R": 1.7478729796062116,
+          "azimuth_image_deg": -161.40862796973437,
+          "paint_pixels": 6768,
+          "window_bbox": [
+            4534,
+            3278,
+            4862,
+            3883
+          ]
+        },
+        {
+          "id": "L13-blau-08",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5732,
+            3345,
+            5809,
+            3511
+          ],
+          "center_xy": [
+            5773.355285002767,
+            3426.939125622579
+          ],
+          "radius_R": 1.224481420753893,
+          "azimuth_image_deg": -40.28032645918985,
+          "paint_pixels": 1807,
+          "window_bbox": [
+            5692,
+            3305,
+            5849,
+            3551
+          ]
+        },
+        {
+          "id": "L13-blau-09",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5795,
+            3419,
+            5809,
+            3629
+          ],
+          "center_xy": [
+            5802.334786821705,
+            3522.9631782945735
+          ],
+          "radius_R": 1.1528198628050887,
+          "azimuth_image_deg": -29.84595133631969,
+          "paint_pixels": 2063,
+          "window_bbox": [
+            5755,
+            3379,
+            5849,
+            3669
+          ]
+        },
+        {
+          "id": "L13-blau-10",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5939,
+            3422,
+            6123,
+            4082
+          ],
+          "center_xy": [
+            5993.730934130181,
+            3744.7308042094323
+          ],
+          "radius_R": 1.4360398014383193,
+          "azimuth_image_deg": -2.8098216759967785,
+          "paint_pixels": 7697,
+          "window_bbox": [
+            5899,
+            3382,
+            6163,
+            4122
+          ]
+        },
+        {
+          "id": "L13-blau-11",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4723,
+            3531,
+            4788,
+            3979
+          ],
+          "center_xy": [
+            4761.955834596233,
+            3754.761420220827
+          ],
+          "radius_R": 1.3621768975407287,
+          "azimuth_image_deg": -177.9961639381296,
+          "paint_pixels": 4619,
+          "window_bbox": [
+            4683,
+            3491,
+            4828,
+            4019
+          ]
+        },
+        {
+          "id": "L13-blau-12",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4913,
+            3903,
+            4945,
+            4036
+          ],
+          "center_xy": [
+            4925.86470143613,
+            3969.177626606198
+          ],
+          "radius_R": 1.0823643963763168,
+          "azimuth_image_deg": 156.07096991408554,
+          "paint_pixels": 1323,
+          "window_bbox": [
+            4873,
+            3863,
+            4985,
+            4076
+          ]
+        },
+        {
+          "id": "L13-blau-13",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5770,
+            3948,
+            5815,
+            4185
+          ],
+          "center_xy": [
+            5798.690340909091,
+            4067.9801136363635
+          ],
+          "radius_R": 1.193008844287418,
+          "azimuth_image_deg": 33.77632653108867,
+          "paint_pixels": 3870,
+          "window_bbox": [
+            5730,
+            3908,
+            5855,
+            4225
+          ]
+        },
+        {
+          "id": "L13-blau-14",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4937,
+            4039,
+            4996,
+            4193
+          ],
+          "center_xy": [
+            4956.79287031346,
+            4112.317762753534
+          ],
+          "radius_R": 1.1951303393634312,
+          "azimuth_image_deg": 140.270422473048,
+          "paint_pixels": 1627,
+          "window_bbox": [
+            4897,
+            3999,
+            5036,
+            4233
+          ]
+        },
+        {
+          "id": "L13-blau-15",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5435,
+            4200,
+            5521,
+            4318
+          ],
+          "center_xy": [
+            5465.968778280543,
+            4263.735746606335
+          ],
+          "radius_R": 1.1325142984800007,
+          "azimuth_image_deg": 77.94658661499832,
+          "paint_pixels": 2198,
+          "window_bbox": [
+            5395,
+            4160,
+            5561,
+            4358
+          ]
+        },
+        {
+          "id": "L13-blau-16",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5554,
+            4201,
+            5768,
+            4240
+          ],
+          "center_xy": [
+            5662.330738177624,
+            4226.059111880046
+          ],
+          "radius_R": 1.2287797610716387,
+          "azimuth_image_deg": 56.278681315555154,
+          "paint_pixels": 3468,
+          "window_bbox": [
+            5514,
+            4161,
+            5808,
+            4280
+          ]
+        },
+        {
+          "id": "L13-blau-17",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5098,
+            4333,
+            5694,
+            4477
+          ],
+          "center_xy": [
+            5402.218646616541,
+            4382.312631578948
+          ],
+          "radius_R": 1.3797280404358674,
+          "azimuth_image_deg": 86.18471565516231,
+          "paint_pixels": 6649,
+          "window_bbox": [
+            5058,
+            4293,
+            5734,
+            4517
+          ]
+        },
+        {
+          "id": "L13-blau-18",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5930,
+            4362,
+            6247,
+            4826
+          ],
+          "center_xy": [
+            6044.948167645272,
+            4565.063778092731
+          ],
+          "radius_R": 2.3692831257332516,
+          "azimuth_image_deg": 49.12269763684064,
+          "paint_pixels": 9875,
+          "window_bbox": [
+            5890,
+            4322,
+            6287,
+            4866
+          ]
+        }
+      ],
+      "color_counts": {
+        "groc": 1,
+        "blau": 17,
+        "lila": 0,
+        "verd": 0
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L13_anotada_sencera.png"
+    },
+    {
+      "index": 14,
+      "name": "P06 NAFE n65 · V31",
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [
+        {
+          "id": "L14-groc-01",
+          "color": "groc",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            14,
+            0,
+            2403,
+            2279
+          ],
+          "center_xy": [
+            1204.4517988919492,
+            1133.960393272356
+          ],
+          "radius_R": 11.17940395873533,
+          "azimuth_image_deg": -147.56588107791316,
+          "paint_pixels": 221531,
+          "window_bbox": [
+            0,
+            0,
+            2443,
+            2319
+          ]
+        },
+        {
+          "id": "L14-blau-02",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4897,
+            3521,
+            4973,
+            3752
+          ],
+          "center_xy": [
+            4927.357687420585,
+            3632.5317662007624
+          ],
+          "radius_R": 1.0381435122335503,
+          "azimuth_image_deg": -161.75372433343023,
+          "paint_pixels": 1563,
+          "window_bbox": [
+            4857,
+            3481,
+            5013,
+            3792
+          ]
+        },
+        {
+          "id": "L14-blau-03",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4884,
+            3640,
+            4897,
+            3749
+          ],
+          "center_xy": [
+            4890.475543478261,
+            3693.6997282608695
+          ],
+          "radius_R": 1.0857418129393994,
+          "azimuth_image_deg": -170.12429519556503,
+          "paint_pixels": 736,
+          "window_bbox": [
+            4844,
+            3600,
+            4937,
+            3789
+          ]
+        },
+        {
+          "id": "L14-blau-04",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            4884,
+            3802,
+            4941,
+            3965
+          ],
+          "center_xy": [
+            4910.108678021087,
+            3879.640713706407
+          ],
+          "radius_R": 1.0518639437868642,
+          "azimuth_image_deg": 167.04584876865883,
+          "paint_pixels": 1216,
+          "window_bbox": [
+            4844,
+            3762,
+            4981,
+            4005
+          ]
+        },
+        {
+          "id": "L14-blau-05",
+          "color": "blau",
+          "certainty_by_Pere": "confirmat",
+          "bbox": [
+            5780,
+            3919,
+            5809,
+            4024
+          ],
+          "center_xy": [
+            5799.1505376344085,
+            3972.260752688172
+          ],
+          "radius_R": 1.088282542455823,
+          "azimuth_image_deg": 24.194088666830236,
+          "paint_pixels": 743,
+          "window_bbox": [
+            5740,
+            3879,
+            5849,
+            4064
+          ]
+        }
+      ],
+      "color_counts": {
+        "groc": 1,
+        "blau": 4,
+        "lila": 0,
+        "verd": 0
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L14_anotada_sencera.png"
+    },
+    {
+      "index": 15,
+      "name": "P07 ACHF precursor sigma16 · V31",
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [],
+      "color_counts": {
+        "groc": 0,
+        "blau": 0,
+        "lila": 0,
+        "verd": 0
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L15_anotada_sencera.png"
+    },
+    {
+      "index": 16,
+      "name": "P08 ACHF precursor sigma32 · V31",
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [],
+      "color_counts": {
+        "groc": 0,
+        "blau": 0,
+        "lila": 0,
+        "verd": 0
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L16_anotada_sencera.png"
+    },
+    {
+      "index": 17,
+      "name": "P09 SWAP · pilot llum blanca · V31",
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [],
+      "color_counts": {
+        "groc": 0,
+        "blau": 0,
+        "lila": 0,
+        "verd": 0
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L17_anotada_sencera.png"
+    },
+    {
+      "index": 18,
+      "name": "C01 Passa-alt24 lineal · control · V31",
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "marks": [],
+      "color_counts": {
+        "groc": 0,
+        "blau": 0,
+        "lila": 0,
+        "verd": 0
+      },
+      "full_view": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v31_20260907/lliurables/vistes/L18_anotada_sencera.png"
+    }
+  ],
+  "source_sha256": "d2d400d61cc4cd3ba1042559dc0c59993880b12e8a6155b427c15730d2b21fae",
+  "source_original": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V31_FiltresPurs_Artefactes.psb",
+  "source_bytes": 6251281042,
+  "detection": "HSV color segmentation S>25,V>20 on monochrome filter layers; base excluded from color-only marking and reviewed separately; H yellow20..40,green40..95,blue95..125,purple125..175; 5px closing for index only; component>=80px, original paint>=60px; components are not necessarily separate defects"
+}

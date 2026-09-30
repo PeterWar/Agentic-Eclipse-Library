@@ -1,0 +1,8 @@
+{
+  "review_completed": true,
+  "reviewer": "Codex root, with independent read-only numerical reviews by detail_review and mask_geometry_review",
+  "viewed": ["V31_llenc_sencer.png", "QA_100_limbe_N.png", "QA_100_limbe_W.png", "QA_100_limbe_E.png", "QA_100_limbe_S.png", "QA_100_filaments.png", "QA_100_marca_N.png", "QA_100_marca_S.png", "QA_100_exterior.png", "COMPARA_01_100.png", "COMPARA_02_100.png", "COMPARA_04_100.png", "COMPARA_05_100.png", "COMPARA_06_100.png"],
+  "finding": "The fine circular/mottled texture is visibly softer in the non-azimuthal filters and default composite. Larger filaments retain shape; small-scale contrast is deliberately reduced. Sigma1.5 on04 is subtler than sigma3 on the other four.",
+  "residuals": "Residual mottled texture remains. The inherited brown lunar rim, contact highlights and outer-field texture remain visible; this edit does not certify removal of all artifacts.",
+  "decision": "Deliver the selected moderate smoothing for Pere's visual judgement; do not claim total artifact elimination. No new circular mask or crop."
+}

@@ -1,0 +1,100 @@
+{
+  "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V58.psb",
+  "sha256": "67bb653012fed649c6ec36ee3d593fcfeec2019960056ee99ad5f01becb15a9a",
+  "bytes": 9042714934,
+  "layers": 30,
+  "size": [
+    10551,
+    7506
+  ],
+  "depth": 16,
+  "profile": "Adobe RGB (1998)",
+  "published_utc": "2026-09-13T14:26:04.189455+00:00",
+  "PASS": true,
+  "Photoshop": "OBRE 10551 px x 7506 px · 30 capes",
+  "native_readback_max_DN16": 0,
+  "source_files_unchanged": [
+    {
+      "label": "V57 Pere",
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V57.psb",
+      "sha256": "84d2998588d536a49a9ba42e0e989ef9fd776a17b96954202fe9f64ab7ce8783",
+      "exact": true
+    },
+    {
+      "label": "Earthshine V56",
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes interiors/Earthshine_V56.psb",
+      "sha256": "edee45ad76f08f8450beed3e85ed0d226eb0b1e11347478d2e998d74281ce12e",
+      "exact": true
+    }
+  ],
+  "report": "/Users/USUARI/Downloads/Eclipse 2026/output/v58_correccions_20260913/RESULTAT.md",
+  "handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-13_CODEX_CAPES_TOTALS_V58.md",
+  "artifact_free": false,
+  "PASS_scope": "Layer registration with held-out regions; causal localRHEF ring correction and conditional injections; 52 corroborated stellar components excluded before16filters; mask11 repaired; native mask activation/protection, Photoshop and pixel readback. Pere visual review remains pending.",
+  "open_document": "ACTIVE /Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V58.psb | 30 layers | saved=true | 10551 px x 7506 px | selected=Earthshine V56 · detall i revelat de Pere | history=2 | last=Abrir",
+  "all_filter_masks_enabled": true,
+  "stellar_components_removed": 52,
+  "ambiguous_stellar_candidate": "TYC825-5-1 Vmag12.43 near(7783,6383), not suppressed",
+  "lunar_RGB_alpha_mask_geometry_exact": true,
+  "original_count": 30,
+  "output_count": 30,
+  "unchanged_layers": {
+    "0": {
+      "channels_exact": true,
+      "mask_exact": true,
+      "geometry_exact": true
+    },
+    "7": {
+      "channels_exact": true,
+      "mask_exact": true,
+      "geometry_exact": true
+    },
+    "8": {
+      "channels_exact": true,
+      "mask_exact": true,
+      "geometry_exact": true
+    },
+    "9": {
+      "channels_exact": true,
+      "mask_exact": true,
+      "geometry_exact": true
+    },
+    "29": {
+      "channels_exact": true,
+      "mask_exact": true,
+      "geometry_exact": true
+    }
+  },
+  "display_protection": "4px beyond actualV56feather;fullstrength12px;photometricprominence protection for4RHEF+2NRGF",
+  "alignment_receipt": "/Users/USUARI/Downloads/Eclipse 2026/output/v58_correccions_20260913/B10_alignment_readback.json",
+  "ring_receipt": "/Users/USUARI/Downloads/Eclipse 2026/output/v58_correccions_20260913/C5_real_period8.json",
+  "qa": "/Users/USUARI/Downloads/Eclipse 2026/output/v58_correccions_20260913/I4_final_QA.json",
+  "preview": "/Users/USUARI/Downloads/Eclipse 2026/output/v58_correccions_20260913/vistes/V58_luna_1a1.png",
+  "limits": [
+    "photographic bright limb line retained",
+    "no all-pixel zero-registration guarantee between different instants",
+    "ambiguous stellar candidate remains",
+    "no new lunar resolution or DHS equivalence",
+    "localRHEF absolute correlation with unfilteredSony lower; claim limited to causal rings and injection retention"
+  ],
+  "source_V57_Pere": {
+    "source": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V57.psb",
+    "snapshot": "/Users/USUARI/Downloads/Eclipse 2026/output/v58_correccions_20260913/V57_Pere_input.psb",
+    "sha256": "84d2998588d536a49a9ba42e0e989ef9fd776a17b96954202fe9f64ab7ce8783",
+    "bytes": 7918236948,
+    "previous_delivery_sha256": "ef4ee9fe93370e1d9c9bc453a788b6f67c1415061383887fa06ac2762b8f156a",
+    "native_documents_initial": "NONE",
+    "size": [
+      10551,
+      7506
+    ],
+    "depth": 16,
+    "roi": [
+      4377,
+      2777,
+      6377,
+      4777
+    ],
+    "created": "2026-09-13T12:52:34.743818+00:00"
+  }
+}

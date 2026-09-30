@@ -1,0 +1,63 @@
+{
+ "taula": [
+  [
+   1.6,
+   2.6,
+   "PSF floor: guany 0"
+  ],
+  [
+   2.6,
+   4.2,
+   "PSF floor: guany 0"
+  ],
+  [
+   4.2,
+   6.8,
+   "f2=1.00 | r1.2: th=0.57deg snr=37.4 g=3.1 r1.6: th=0.43deg snr=16.9 g=3.1 r2.3: th=0.30deg snr=4.8 g=3.2 r3.0: th=0.23deg snr=1.7 g=2.6 r3.5: th=0.20deg snr=1.1 g=1.8 r4.3: th=0.16deg snr=0.9 g=1.1 r5.2: th=0.13deg snr=0.0 g=0.0 r6.0: th=0.11deg snr=0.0 g=0.0 r7.0: th=0.10deg snr=0.0 g=0.0"
+  ],
+  [
+   6.8,
+   11.0,
+   "f2=1.00 | r1.2: th=0.93deg snr=93.0 g=4.6 r1.6: th=0.69deg snr=47.2 g=5.0 r2.3: th=0.48deg snr=13.7 g=6.0 r3.0: th=0.37deg snr=4.8 g=6.9 r3.5: th=0.32deg snr=3.1 g=6.4 r4.3: th=0.26deg snr=2.2 g=5.0 r5.2: th=0.21deg snr=0.0 g=0.0 r6.0: th=0.19deg snr=0.0 g=0.0 r7.0: th=0.16deg snr=0.0 g=0.0"
+  ],
+  [
+   11.0,
+   18.0,
+   "f2=1.00 | r1.2: th=1.51deg snr=221.1 g=5.4 r1.6: th=1.13deg snr=133.2 g=6.5 r2.3: th=0.79deg snr=40.1 g=8.9 r3.0: th=0.60deg snr=13.5 g=12.1 r3.5: th=0.52deg snr=7.7 g=13.5 r4.3: th=0.42deg snr=4.2 g=11.4 r5.2: th=0.35deg snr=0.0 g=0.0 r6.0: th=0.30deg snr=0.0 g=0.0 r7.0: th=0.26deg snr=0.0 g=0.0"
+  ],
+  [
+   18.0,
+   29.0,
+   "f2=1.00 | r1.2: th=2.45deg snr=141.4 g=5.0 r1.6: th=1.84deg snr=387.1 g=7.0 r2.3: th=1.28deg snr=119.9 g=10.9 r3.0: th=0.98deg snr=37.2 g=17.2 r3.5: th=0.84deg snr=17.9 g=21.7 r4.3: th=0.68deg snr=8.4 g=18.9 r5.2: th=0.56deg snr=0.0 g=0.0 r6.0: th=0.49deg snr=0.0 g=0.0 r7.0: th=0.42deg snr=0.0 g=0.0"
+  ],
+  [
+   29.0,
+   47.0,
+   "f2=1.00 | r1.2: th=3.95deg snr=145.9 g=4.1 r1.6: th=2.97deg snr=1178.4 g=6.3 r2.3: th=2.06deg snr=342.8 g=11.2 r3.0: th=1.58deg snr=87.5 g=21.4 r3.5: th=1.36deg snr=41.5 g=26.4 r4.3: th=1.10deg snr=17.0 g=24.9 r5.2: th=0.91deg snr=0.0 g=0.0 r6.0: th=0.79deg snr=0.0 g=0.0 r7.0: th=0.68deg snr=0.0 g=0.0"
+  ],
+  [
+   47.0,
+   76.0,
+   "f2=1.00 | r1.2: th=6.40deg snr=225.2 g=3.1 r1.6: th=4.80deg snr=1965.8 g=4.6 r2.3: th=3.34deg snr=970.2 g=9.5 r3.0: th=2.56deg snr=196.3 g=22.3 r3.5: th=2.19deg snr=92.4 g=26.3 r4.3: th=1.79deg snr=0.0 g=0.8 r5.2: th=1.48deg snr=0.0 g=0.0 r6.0: th=1.28deg snr=0.0 g=0.0 r7.0: th=1.10deg snr=0.0 g=0.0"
+  ],
+  [
+   76.0,
+   123.0,
+   "f2=1.00 | r1.2: th=10.35deg snr=462.3 g=1.8 r1.6: th=7.77deg snr=1433.6 g=2.8 r2.3: th=5.40deg snr=2498.0 g=6.5 r3.0: th=4.14deg snr=537.8 g=16.6 r3.5: th=3.55deg snr=23.5 g=20.9 r4.3: th=2.89deg snr=0.0 g=0.0 r5.2: th=2.39deg snr=0.0 g=0.0 r6.0: th=2.07deg snr=0.0 g=0.0 r7.0: th=1.77deg snr=0.0 g=0.0"
+  ],
+  [
+   123.0,
+   200.0,
+   "f2=1.00 | r1.2: th=16.80deg snr=964.9 g=0.9 r1.6: th=12.60deg snr=1507.2 g=1.5 r2.3: th=8.76deg snr=3317.5 g=3.6 r3.0: th=6.72deg snr=8.9 g=7.5 r3.5: th=5.76deg snr=0.0 g=0.9 r4.3: th=4.69deg snr=0.0 g=0.0 r5.2: th=3.88deg snr=0.0 g=0.0 r6.0: th=3.36deg snr=0.0 g=0.0 r7.0: th=2.88deg snr=0.0 g=0.0"
+  ],
+  [
+   200.0,
+   324.0,
+   "f2=1.00 | r1.2: th=27.26deg snr=702.5 g=0.3 r1.6: th=20.46deg snr=127.0 g=0.7 r2.3: th=14.22deg snr=8.4 g=1.5 r3.0: th=10.90deg snr=0.0 g=0.6 r3.5: th=9.34deg snr=0.0 g=0.0 r4.3: th=7.60deg snr=0.0 g=0.0 r5.2: th=6.29deg snr=0.0 g=0.0 r6.0: th=5.45deg snr=0.0 g=0.0 r7.0: th=4.67deg snr=0.0 g=0.0"
+  ]
+ ],
+ "G_MAX": 9.0,
+ "TH0": 1.7,
+ "GAMMA_R": 0.5,
+ "KAPPA": 2.5
+}

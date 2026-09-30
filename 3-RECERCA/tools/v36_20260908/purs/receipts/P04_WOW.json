@@ -1,0 +1,45 @@
+{
+  "tag": "P04_WOW",
+  "parameters": {
+    "paper": "Auchere et al. 2023 A&A670 A66 equations4-9,16-18",
+    "author_reference": "watroo",
+    "scales": 11,
+    "B3_kernel_1d": [
+      0.0625,
+      0.25,
+      0.375,
+      0.25,
+      0.0625
+    ],
+    "weights": "all1",
+    "h": 0,
+    "denoise": false,
+    "reason_no_denoise": "no validated full-canvas HDR noise sigma",
+    "bilateral": null,
+    "boundary": "input = base where supported, exp(azimuthal mean ln profile) elsewhere (lunar hole + outside support), used ONLY as operator input; output saved on physical support",
+    "farcit": {
+      "primer_anell_sencer_px": 461,
+      "primer_anell_sencer_R": 1.0462932592588157,
+      "pendent_ln_per_px_dins": -0.02277171763157757,
+      "ultim_anell_amb_dada_px": 6417,
+      "anells_incomplets_usats": "mitjana dels píxels presents",
+      "px_farcits": 8800536
+    },
+    "display": "V34 receipts LUT",
+    "ring_bias_limb": {
+      "V34": 4.393468311754157,
+      "V35": 2.9163451121261907
+    }
+  },
+  "physical_support_pixels": 70395270,
+  "float_sha256": "5e0ca4325cca3517d086bb08ef79642de95afc9f5dd719a435ce8d33abd04511",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": -12.069603023529053,
+    "white": 14.896832184791585,
+    "sample_percentiles": null,
+    "clipped_low_fraction": 0.001672811255642602,
+    "clipped_high_fraction": 8.622738431147434e-06
+  },
+  "u16_sha256": "c0a1d323ea493777f442a93c5b9620d8af5d3a68dce0f3aea26b88d71084bb78"
+}

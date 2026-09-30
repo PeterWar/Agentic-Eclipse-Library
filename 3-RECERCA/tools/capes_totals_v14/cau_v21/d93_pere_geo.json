@@ -1,0 +1,10 @@
+{
+ "psb": "/Users/USUARI/Downloads/DSC06993.psb",
+ "offset_raw_a_psb": [
+  0.75,
+  9.0
+ ],
+ "ncc": 0.30807863660588386,
+ "ncc_graella": 0.2957227996246956,
+ "nota": "psb = raw + offset; cadena canvas\u2192raw exacta de v21_lluna_tren (base, \u03b8=0)"
+}

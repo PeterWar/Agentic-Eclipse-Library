@@ -1,0 +1,78 @@
+{
+  "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V60.psb",
+  "sha256": "9a81583aa6cff63bd70d11b1a769ee3cf7c504a7755c514296789dbc23087fe6",
+  "bytes": 8133372062,
+  "time": "2026-09-13T15:49:41.518541+00:00",
+  "V59_unchanged": "84c2231052b12d5eb88b97717010905072ed78de70f4a11312b08b93300391c9",
+  "layers": 31,
+  "photoshop_gate": "OBRE 10551 px x 7506 px · 31 capes",
+  "native_readback_max_DN16": 0,
+  "canvas": [
+    10551,
+    7506
+  ],
+  "depth": 16,
+  "profile": "Adobe RGB (1998)",
+  "original_count": 31,
+  "output_count": 31,
+  "report": "/Users/USUARI/Downloads/Eclipse 2026/output/v60_marques_v59_20260913/RESULTAT.md",
+  "handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-13_CODEX_CAPES_TOTALS_V60.md",
+  "manifest": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v60_marques_v59_20260913/delivery_manifest.json",
+  "qa": "/Users/USUARI/Downloads/Eclipse 2026/output/v60_marques_v59_20260913/D6_final_QA.json",
+  "source_files_unchanged": [
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V59.psb",
+      "sha256": "84c2231052b12d5eb88b97717010905072ed78de70f4a11312b08b93300391c9",
+      "expected": "84c2231052b12d5eb88b97717010905072ed78de70f4a11312b08b93300391c9",
+      "exact": true
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V58.psb",
+      "sha256": "67bb653012fed649c6ec36ee3d593fcfeec2019960056ee99ad5f01becb15a9a",
+      "expected": "67bb653012fed649c6ec36ee3d593fcfeec2019960056ee99ad5f01becb15a9a",
+      "exact": true
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes interiors/Earthshine_V56.psb",
+      "sha256": "edee45ad76f08f8450beed3e85ed0d226eb0b1e11347478d2e998d74281ce12e",
+      "expected": "edee45ad76f08f8450beed3e85ed0d226eb0b1e11347478d2e998d74281ce12e",
+      "exact": true
+    }
+  ],
+  "source_V59_Pere": {
+    "source": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V59.psb",
+    "snapshot": "/Users/USUARI/Downloads/Eclipse 2026/output/v60_marques_v59_20260913/V59_Pere_input.psb",
+    "sha256": "84c2231052b12d5eb88b97717010905072ed78de70f4a11312b08b93300391c9",
+    "bytes": 7911834118,
+    "time": "2026-09-13T15:17:05.705814+00:00",
+    "size": [
+      10551,
+      7506
+    ],
+    "depth": 16,
+    "icc_sha256": "e5f6ffb83b6d3491301dd750975684cc5cc2a1951c994a14b08cfdaa0d75a041",
+    "native_source_saved": true,
+    "mark_bbox": [
+      4896,
+      3312,
+      5845,
+      4243
+    ]
+  },
+  "open_document": "V60.psb | 31 layers | saved=true | Adobe RGB (1998)",
+  "artifact_free": false,
+  "PASS_scope": "Photographic filter DC boundary correction and lunar opacity correction; 25 edited channels verified,128 compressed channels exact, native Photoshop/readback. Blue artifact not corrected. No new measured detail or resolution claim.",
+  "green": "C2 mean continuation through lunar protection, same prominence protection",
+  "lilac": "B4 opaque lunar interior; actual edge and original lunar RGB/alpha unchanged",
+  "blue": "Unchanged; no easy validated source correction identified",
+  "lunar_source_RGB_alpha_geometry_exact": true,
+  "lunar_mask_changed_pixels": 622471,
+  "minimum_mask_edit_distance_from_support_edge_px": 9.055385138137417,
+  "preview": "/Users/USUARI/Downloads/Eclipse 2026/output/v60_marques_v59_20260913/vistes/V60_luna_1a1.png",
+  "limits": [
+    "Blue artifact remains",
+    "Independent Earthshine_V56 retains old mask; correction only in general V60",
+    "Earlier ambiguous stellar candidate and absolute limb/detail limits remain",
+    "Pere visual review pending"
+  ]
+}

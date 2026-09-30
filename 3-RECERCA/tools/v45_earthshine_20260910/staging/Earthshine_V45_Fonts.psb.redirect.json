@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "id": "009",
+  "original": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v45_earthshine_20260910/staging/Earthshine_V45_Fonts.psb",
+  "keep": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes interiors/Earthshine_V45_Fonts.psb",
+  "sha256": "d8bfd4cfc39346b025dd8f071d8b9acd235ae879b62dd576cbf2a25c9199adbc",
+  "bytes": 1266007766,
+  "plan": "/Users/USUARI/Downloads/Eclipse 2026/output/auditoria_reproductibilitat_20260915/PLA_NETEJA.json",
+  "tool": "/Users/USUARI/Downloads/Eclipse 2026/output/auditoria_reproductibilitat_20260915/gestiona_fitxers.py",
+  "instruction": "Resoldre només lectura o materialitzar còpia independent abans d'executar scripts antics."
+}

@@ -1,0 +1,35 @@
+{
+  "tag": "P04_WOW",
+  "parameters": {
+    "paper": "Auchere et al. 2023 A&A670 A66 equations4-9,16-18",
+    "author_reference": "watroo",
+    "scales": 11,
+    "B3_kernel_1d": [
+      0.0625,
+      0.25,
+      0.375,
+      0.25,
+      0.0625
+    ],
+    "weights": "all1",
+    "h": 0,
+    "denoise": false,
+    "reason_no_denoise": "no validated full-canvas HDR noise sigma",
+    "bilateral": null,
+    "boundary": "mirror at rectangle; incomplete normalized convolution at actual missing support"
+  },
+  "physical_support_pixels": 70395270,
+  "float_sha256": "f4d07e6e6b7c659a17ff64504648727116b3e537fd4c1ae4fc4f28a06a7c2b9c",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": -12.070696866035462,
+    "white": 15.045299069404631,
+    "sample_percentiles": [
+      0.1,
+      99.9
+    ],
+    "clipped_low_fraction": 0.0009920552900784384,
+    "clipped_high_fraction": 0.0009945270470587016
+  },
+  "u16_sha256": "3d6d52ad3def3873ddd618a0442aa0321225d07d8d410735f24189fecdfcf246"
+}

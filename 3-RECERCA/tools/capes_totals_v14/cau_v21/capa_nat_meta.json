@@ -1,0 +1,23 @@
+{
+ "pos": [
+  6263,
+  5986
+ ],
+ "amplificacio_contrast": 12.0,
+ "mediana_render_RGB": [
+  0.5143858194351196,
+  0.5143858194351196,
+  0.5143858194351196
+ ],
+ "render": "estirament lineal de finestra (monocrom G); vel del model cientific (radial+poli del nucli) comprimit x0,30 (display, declarat); residu (mars, gra) 1:1",
+ "contrast_estructura_final_pct": 3.968106386011118,
+ "reancoratge": {
+  "centre_llenc": [
+   6481.8,
+   6758.8
+  ],
+  "radi_px": 453.5,
+  "escala": 0.9956052448334144,
+  "referencia": "limbe mesurat capes 11+12 de Pere (rms 0,8-1,1 px)"
+ }
+}

@@ -1,0 +1,10 @@
+# V64 · comprovació geomètrica abans de corregir
+
+Font: estat V63 marcat per Pere, 25 capes a Photoshop, inclosa còpia 12 i verds. Preservar l'estat obert i el PSB de disc per separat; no tancar ni aplicar l'objecte intern obert amb canvis pendents. Conservar el color V62 acceptat.
+
+1. Catalogar les marques verdes i comparar nativament amb/sense la còpia 12, interiors, màscares i filtres. Una marca localitza el símptoma, no determina la correcció.
+2. Mesurar amb el mateix detector la silueta de les fotografies 06–12, el contorn de l'earthshine i el de la base. Exportar distàncies signades per azimut i a cada marca, amb zones sense contrast indicades com a no mesurables. La posició d'un llindar RGB no és per si mateixa el radi físic lunar: mostrar la sensibilitat 25/50/75 % i l'amplada de transició.
+3. Mesurar independentment el registre de les estructures solars externes sense el forat lunar. Conservar les regions anteriors superior/NW com a controls i explorar múltiples arrencades; una única optimització prop de zero no certifica el màxim. Controls d'identitat, trasllat subpíxel imposat i rotació nul·la. Separar la transformació de la fotografia 12 afegida del conjunt 06–12.
+4. Cap nova transformació comuna promoguda si empitjora una regió reservada >0,1 px o si els residus locals fiables no són compatibles amb el model. Per declarar encaix d'un píxel cal residu ≤1 px als punts independents amb contrast suficient; els punts no mesurables romanen pendents. No usar una correlació elevada del contorn com a única prova, ni deformació local per forçar el resultat.
+5. Abans d'una cura de composició, atribuir el blanc i el buit superior a canals/màscares/fonts mesurades. No engrandir circularment la Lluna, retocar la marca, ni suprimir detall solar per maquillar el contacte. Qualsevol píxel substituït ha de tenir font fotogràfica documentada.
+6. Si es produeix V64: revisió de cada verd i tota la circumferència, font fotogràfica retinguda, originals/màscares no declarades exactes, canvi geomètric explícit, mateix FOV, Photoshop OBRE i readback forçat ≤4 DN16. Aquesta porta de fitxer mai no es presenta com a prova d'alineament.

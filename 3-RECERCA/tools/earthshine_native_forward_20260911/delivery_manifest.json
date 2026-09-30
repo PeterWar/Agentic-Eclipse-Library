@@ -1,0 +1,1113 @@
+{
+  "created": "2026-09-11T20:28:03.713317+00:00",
+  "status": "DIAGNOSTIC_PROGRESS; V49_PRESERVED; GLOBAL_GOAL_ACTIVE",
+  "publication": {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes interiors/Earthshine_V49.psb",
+    "bytes": 1272073130,
+    "sha256": "21896b1b40bfd2ba0c13aec07491bebbaf05f4f91dbe2698957e392b3928bc2d"
+  },
+  "files": [
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/REPRESA.md",
+      "bytes": 4576,
+      "sha256": "50a732616a4a0309dcd3e57c15fdf0ea4d06a18c8c5d0686031771f71c6692a4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/a0_operator_pilot.py",
+      "bytes": 3487,
+      "sha256": "e494544982c947bb6417c4e1705033c94375d41c73845d77afa53adcd8cf275c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/b0_build_matrices.py",
+      "bytes": 1884,
+      "sha256": "324b59ca5c07b56fb0e04d43b9ab239cdc68e004a6a83ecf1589ade760931edb"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/b1_fit_scenes.py",
+      "bytes": 7396,
+      "sha256": "d3ceab76392464d519ba8b7923f357dac9ff7843554ab562f60303ffe1505484"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/b2_static_refine.py",
+      "bytes": 1635,
+      "sha256": "511472f5a07874703ee49ef473993b451678d264dda8f481585d924bc6a9b2f2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/c0_native_pose_audit.py",
+      "bytes": 5914,
+      "sha256": "21ede49c1bcaa94a4b8dde92eded9dc6ea5c23192d59aa1b302ce66ebda69ddf"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/c1_pose_operators.py",
+      "bytes": 3997,
+      "sha256": "919c42747f587944ccffe228822b0f3b097563f83d959c14e024dd2b323cf276"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/c2_pose_fit.py",
+      "bytes": 5405,
+      "sha256": "685cd6321044a437ae959945ea5193f4d4e5abb8e4ecab9bad0fdb00e5687193"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/c3_shape_validation.py",
+      "bytes": 5736,
+      "sha256": "5c4b528155dfbce7b87795f8deef02dfb7bc0f81546f039c2fde15022b24537a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/d0_lunar_texture_pose.py",
+      "bytes": 5042,
+      "sha256": "9d05536368f97d3b20ac468c2bb8d9aedbec8d4a6af8fe7b85bb40b97cda6b8e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/docs_before/0_CLAUDE.md",
+      "bytes": 205321,
+      "sha256": "6c1794cf7234f5c8c92ac7a462c04cfa83b4b1de08b2dcc3a19984b331ccf9e2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/docs_before/1_AGENTS.md",
+      "bytes": 22576,
+      "sha256": "51121410b19ebcf9bf99651667e75e566a6138f772a9f3a98196d9aeb7cd8efd"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/docs_before/2_ACTIVE.json",
+      "bytes": 28913,
+      "sha256": "d82c95fac744ec85640eaf8b143fda5825e0e9e0b99f9216ad539d59cb4d5d34"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/docs_before/3_ESTAT_ACTUAL.md",
+      "bytes": 30565,
+      "sha256": "fd7e37554610eb33c4f8c0800d58cb9541445382cffabbd41a46ec2ba6800ab6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/docs_before/4_README.md",
+      "bytes": 30442,
+      "sha256": "327206611bb5fe0b57509eb2db2e6a3fa34c7a6264340489fe39cbb822213179"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/docs_before/5_MAPA_RUTES_I_OUTPUTS.md",
+      "bytes": 18946,
+      "sha256": "acffa16f30e23b50820fe0219b25768bd47909a6538f4454d0bae68f3d7eb022"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/docs_before/6_HANDOFF_VIGENT.md",
+      "bytes": 3508,
+      "sha256": "7e95b188638f9565a210afc504d2bb362021846ed9d9a0a3100c2dbf91d835c1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/docs_before/7_README.md",
+      "bytes": 86519,
+      "sha256": "b6449f3895c5d973cf98482230368e31f26c0524b00c26c64a59a6a35e376a08"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/e0_review.py",
+      "bytes": 4629,
+      "sha256": "b304b09a3ea08f894ec5f86d3500ac3c1c4a14040d9267ac6756b8d4dceceb0e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/fit_system.py",
+      "bytes": 2565,
+      "sha256": "8f1238635814fed546dd16891616d74a90a93a0db9d558b9723a8a57fa190717"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/native_forward_common.py",
+      "bytes": 519,
+      "sha256": "1a772fc0bcc308d855cc4e1d2f84c31f1d8a6862dbbbe68acc155a10991cc59c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/native_operator.py",
+      "bytes": 6350,
+      "sha256": "191f2472318307bc7a41930588b3930b6c865f271816fef622b5f6672123cbd6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/z0_preservation.py",
+      "bytes": 2588,
+      "sha256": "95644071505f718ddb90baf7843a34ef111e0e8c738b2860f5e64ecb08b7a531"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_forward_20260911/z1_handoff.py",
+      "bytes": 9573,
+      "sha256": "c70c31f306178ce6555f7b237412def8265ad3d0394d57bf5a63909fe25cf7ec"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/A0_2976_lunar.npz",
+      "bytes": 3766708,
+      "sha256": "735fcee67e168ecdd5790f59b5a73a216cfbe99335544477b07380f24b8a2a64"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/A0_2976_observations.npz",
+      "bytes": 136907,
+      "sha256": "64ad5b896cde4f484e222fc5fa6c54396e51b5f3bc7be7899909e120ba96fb47"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/A0_2976_solar.npz",
+      "bytes": 3742496,
+      "sha256": "8b5a11fbad71291719d1aa6eeaf7f7634c395899b0d23656f37240f0b88b1e5d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/A0_operator_pilot.json",
+      "bytes": 1455,
+      "sha256": "bf7b39946faffffc68c3d423d49ff9ca09adec7710dec24d5b3fc1641d80cb80"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/A0_operator_pilot.log",
+      "bytes": 555,
+      "sha256": "4af7e574e721cd0b4b1d47d48a9871b452a1573d91580d228b39d54ca45c8031"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/B0_build_matrices.log",
+      "bytes": 294,
+      "sha256": "e2e7cd07c9f81b96e88b29de348b078f626b50df9184c4d6cd0e1b3701d0c10e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/B0_matrices.json",
+      "bytes": 7196,
+      "sha256": "a76d3af85aa5430a7ef5b314e2a6770dc3adba17cd21c37567eedd05888bee13"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/B1_fit_scenes.log",
+      "bytes": 1733,
+      "sha256": "4c6369cdc188407b9e543d90abeff773d3e9b5f0cf6928ab613359a3e099561a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/B1_moving_scene.npz",
+      "bytes": 728855,
+      "sha256": "732fc5a136f1d6046a17d40e26272b52a7e053f18487136a317bd93819977530"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/B1_moving_unconstrained.npz",
+      "bytes": 240861,
+      "sha256": "8f2f780c90fa4167e1f64ccc8a3564aecba07d7e38e4f211ef508e4725021328"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/B1_native_scenes.json",
+      "bytes": 73483,
+      "sha256": "30bf976d9cec1bef937cd3cc83fd258dbdae0cc17cd36bed5375f744bf07820d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/B1_static_latest.npz",
+      "bytes": 198692,
+      "sha256": "fb6698f8c232d69bf2fe59d5c771c71d9d75a48d2a7439d555f9d6501855bbd4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/B1_static_scene.npz",
+      "bytes": 666317,
+      "sha256": "5b7e03f9ba0f5ba155f6c33e50ea6a9bf2894af9695c4ee6965e0ee82d8b46b6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/B1_static_unconstrained.npz",
+      "bytes": 198870,
+      "sha256": "77756a016b661f08b5d762043222198636a13b22425ca55c73661615515f9abc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/B2_static_refine.log",
+      "bytes": 913,
+      "sha256": "674386c32b654ba1e436a3e41f8a0345eabf489e20a2b67349c2d99a6554b49c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/B2_static_refined.json",
+      "bytes": 1001,
+      "sha256": "e5f5426ba632f49ae6b38814a2126e1d067e4f7a3f20948965ae03237f664eb2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/B2_static_refined.npz",
+      "bytes": 562318,
+      "sha256": "fc9335b869f6b1e0eba8fd4a6c1d981d89ce37e122978dffc73aa02369c3df95"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C0_native_pose_audit.json",
+      "bytes": 65093,
+      "sha256": "2cc3fab7c3d38988897e4000668963f22c59ff35a7141d4f810fff8a0ac2ffd3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C0_native_pose_audit.log",
+      "bytes": 7153,
+      "sha256": "f539ea90d9a5046511968b8e21641de37d08fa127b0b516df9c1042fe4545d6a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C0_native_pose_profiles.json",
+      "bytes": 179251,
+      "sha256": "5e2113d184c9d576f6d7fb465bf527a46919e2687a02dc68bb8e59518c2cddea"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C0_pose_plan.json",
+      "bytes": 1051,
+      "sha256": "581723b6c48ec0b387927ea0116ee5bfda5786f4716d9b39ff718fea1caaaa1d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C1_pose_operator_plan.json",
+      "bytes": 3859,
+      "sha256": "14bccb69b4b1d9ea88cf63ee58b47b448215971fc13c2b82c4f71bd1bdf32afb"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C1_pose_operators.json",
+      "bytes": 6089,
+      "sha256": "6297ab2abda07045a953d43d587e693b8e5ae7d6ba686b17f8e7f14ace5af55f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C1_pose_operators.log",
+      "bytes": 496,
+      "sha256": "5aad662e4f76d1169bb559c44af7a9962353a803b5f169b531c166abf1a0c0ac"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C1_pose_operators_run2.log",
+      "bytes": 2059,
+      "sha256": "b16de3075693c74a517797faa884f59d9d8a4539579a56239549b853d5ce491c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C2_baseline_scene.npz",
+      "bytes": 646818,
+      "sha256": "fee77e8a2db6d163e698945d577d0309a9c32df8334b90f389527cdc4b673685"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C2_pose_checkpoint.npz",
+      "bytes": 234938,
+      "sha256": "722de816a2da0d0e8e828d884e378e5450df2423764e48b3224da6a6cb26144c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C2_pose_core_checkpoint.npz",
+      "bytes": 241595,
+      "sha256": "219bfce024b3ce922f8ac610017c9a04df5169b857207a4194e4411dce1c75ab"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C2_pose_core_scene.npz",
+      "bytes": 659526,
+      "sha256": "bdee93a9b29e6146f7a4d216ecd36e7e9fc6a79dde7fcaf5dca53382db9bf8f7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C2_pose_fit.log",
+      "bytes": 981,
+      "sha256": "eb433b3c4dbf17291aa219969d3d77c18f75c029a4f0f1e875a5f5dbeb9dbadd"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C2_pose_fits.json",
+      "bytes": 52794,
+      "sha256": "bc0ce18990803a7bf2b081b3ea7123df33b7bf4d9b0cba23030f9b87ad174604"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C2_pose_scene.npz",
+      "bytes": 648907,
+      "sha256": "22f2729a51d7d1bcfa47eb838d000f6ba46efe380aeec6ec6b003c95df1ef57a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C3_interleaved_profiles.json",
+      "bytes": 178641,
+      "sha256": "f87635e5b4c84d9a54aab111d8adbba2d86e2174e8d5fefcde7a4a14bee71eb7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C3_shape_plan.json",
+      "bytes": 8157,
+      "sha256": "2c8a7d738b0f576841713988e13b7db70cfb0144f546fbe38d2484f342fa4afc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C3_shape_validation.json",
+      "bytes": 86028,
+      "sha256": "15f7c4b56c446b1b4fce409f94b620d16cc3edf10284dea5817349fbf4d8aad5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C3_shape_validation.log",
+      "bytes": 1000,
+      "sha256": "76aa419512f4cde39d2c571a0b803fee0af725182df50217bf32b26ba30bcf23"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/C3_shape_validation_run2.log",
+      "bytes": 1537,
+      "sha256": "452e795ea8189a927082816e24225cc2dcfe43d88b6d68eea048fb674153d7e7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/D0_lunar_texture_pose.json",
+      "bytes": 27806,
+      "sha256": "5ea56017010709882aaa7a0edb3f16152de691970420b4092b303461b4bac664"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/D0_lunar_texture_pose.log",
+      "bytes": 1842,
+      "sha256": "ea00d81ffc8ba37ace8ee22ad28e5b72b19d26899af5e2f6a5857f2b85e7be47"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/D0_texture_plan.json",
+      "bytes": 1335,
+      "sha256": "dfc333a00dfa47d8655d18cd62d0ef87ef7ebaf00eda93cf5933f4e925182a20"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/D0_texture_registration_partial.json",
+      "bytes": 26687,
+      "sha256": "4e6bc0505755e143dea3e3eefbd177ffde3025e759127af1900dc8ed2d1c198a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/E0_native_review.png",
+      "bytes": 344876,
+      "sha256": "e9abf869d0c31f10e80c5b1430355507a68efaf89f617fd6b97e612418e06e8f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/E0_review.json",
+      "bytes": 741,
+      "sha256": "683d0da1aaddf14abe4ea9ff65d71bb1cc4af64be4d9038f1ff84a9345a95a23"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/E0_review.log",
+      "bytes": 296,
+      "sha256": "85a4855334cc7dfe213c45e56205dbfc8c5ad1d5067e703caf3d4467f536ca0c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/PLAN.json",
+      "bytes": 1099,
+      "sha256": "21f0e5bde5ee7c9eec02ae68c2171e15f5501c24f0186c3d761e7f8735d4ddfc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/RESULTAT.md",
+      "bytes": 7185,
+      "sha256": "df4c735afffad1534a69627e7ce1314e6f5c3cf8b6029ec01553f818c4e5f3e0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/Z0_preservation.json",
+      "bytes": 12614,
+      "sha256": "0abca12ee5949e856ed4243d84727f18fc7c41abb7006bacb5a2bc23047c98be"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2973_lunar.npz",
+      "bytes": 3768279,
+      "sha256": "4482c3920fb0011add8d7d59049a4ae821965291992d52c780fee8c376bf45ad"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2973_observations.npz",
+      "bytes": 157112,
+      "sha256": "bf3e5c629105c6ff1889d46c88632cc3fb978659e34847699232ddc8ae8a5c08"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2973_solar_moving.npz",
+      "bytes": 3736887,
+      "sha256": "f5cd48d44cf0011c4f40bbe7dc030ffb4f6e5d88a45d0b9a89beb1d03abc60c6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2973_solar_static.npz",
+      "bytes": 3741005,
+      "sha256": "2177f0d35d584c41206046b410ae25580cec2a612ea209794171e5ab3a2f46af"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2974_lunar.npz",
+      "bytes": 3769865,
+      "sha256": "5d8eda36a61b7e45ad672f15165f8b094a9000be7f61ea79f4b78f9afbc91054"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2974_observations.npz",
+      "bytes": 159756,
+      "sha256": "affb17f0cea98a56a065a74074511d6d54ffaafff485cac4018578a49e4364d3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2974_solar_moving.npz",
+      "bytes": 3737372,
+      "sha256": "e487e0f98b27843056135db4cd363ec08908389c4b9b7f1aaea426e4f47f7e2c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2974_solar_static.npz",
+      "bytes": 3744229,
+      "sha256": "1f23fe5a19a3226c2a7ce3bce65e43ad3d3dd2d46caf78bdeea951d6df195948"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2975_lunar.npz",
+      "bytes": 3770156,
+      "sha256": "8bd3010d5d18fc84e8009109fe4b090522c357fc7479fbc226dfece50d9d9d93"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2975_observations.npz",
+      "bytes": 164841,
+      "sha256": "32422d161c719dea288248f069d0b277f982a7bbfb97eafa033ca35352b0d6ab"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2975_solar_moving.npz",
+      "bytes": 3742182,
+      "sha256": "15720a2795244b5e363e8e52e8a48f969141f5ef673be8d2781ad9c45a0a9ca7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2975_solar_static.npz",
+      "bytes": 3740128,
+      "sha256": "90a89cacbe98cdb503dde95b598f1072fab54c0a97df105b5a5c43d560c2e14a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2976_lunar.npz",
+      "bytes": 3766708,
+      "sha256": "735fcee67e168ecdd5790f59b5a73a216cfbe99335544477b07380f24b8a2a64"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2976_observations.npz",
+      "bytes": 173833,
+      "sha256": "e97113db9d11d188007a1b5591aa4ae1511c167f5d178c9d2c29c8c9113fbf25"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2976_solar_moving.npz",
+      "bytes": 3742496,
+      "sha256": "8b5a11fbad71291719d1aa6eeaf7f7634c395899b0d23656f37240f0b88b1e5d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2976_solar_static.npz",
+      "bytes": 3740231,
+      "sha256": "19045d256490c9e55667e60ba5c978d4009959efdaf09c8880f07ea2ee37ef43"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2977_lunar.npz",
+      "bytes": 3563950,
+      "sha256": "38fe4d8ef5018084ad3c73d10a6faa419b7cdd08a9f916c4e96036e45fe94c4c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2977_observations.npz",
+      "bytes": 76887,
+      "sha256": "3473c984d93d1cd3b7e614b7ecb10565da3ec968b787a50569c5f52faefd576a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2977_solar_moving.npz",
+      "bytes": 318869,
+      "sha256": "00773376eda2a4b11410b8802a6d8e24fc2166d0bdaaf56832e2539dbfbc8122"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2977_solar_static.npz",
+      "bytes": 320836,
+      "sha256": "0858e9c38c29a8dd604c10cb652d079b91515cadd9d9de22b28ab322103fc01e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2978_lunar.npz",
+      "bytes": 3540050,
+      "sha256": "ecd30f1f4de3111abfd1db4db45224695cc2e7d3823b0497ccadfc6c53b6acfb"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2978_observations.npz",
+      "bytes": 76912,
+      "sha256": "23cbacefc338092c7a1a5dff124b6ceac970ec06f731493743d1687b78562bd2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2978_solar_moving.npz",
+      "bytes": 209625,
+      "sha256": "3aa380b70db6f4922c53fbef9ec282caf629bb7ad0caee4a3e3da9dd5231240e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2978_solar_static.npz",
+      "bytes": 209650,
+      "sha256": "17bf455e3491217fe7a81d1a9badd79464ede43d396b8c13d9ede015ca03a476"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2991_lunar.npz",
+      "bytes": 3770626,
+      "sha256": "ccc3a542a29594b98ddb54f43554c9654345a5ed4a93279f2962d8716e6cdd4b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2991_observations.npz",
+      "bytes": 171662,
+      "sha256": "70ddcc82d344e94f7d971367cbb53fe602ae5bc6d42a85fe5166b89f7d88b22d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2991_solar_moving.npz",
+      "bytes": 3740971,
+      "sha256": "0c527fe9d26f9472802921f524a8092b2ba5efd5481c739d15634f461688971b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2991_solar_static.npz",
+      "bytes": 3741880,
+      "sha256": "8ff62e2aca8cc93d3e1ae715de9d548de67928d5c0c0f3cddc41e76a99977178"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2992_lunar.npz",
+      "bytes": 3767008,
+      "sha256": "c6a498288c8cbbd686e5d70a06b47aa871cf0773a4c37ea90109a4b5ec17c77c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2992_observations.npz",
+      "bytes": 173494,
+      "sha256": "9ed6e67a4c36e5f7d35c83a2b2396b4af7cdb408eac04c66f74d69ca440e390a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2992_solar_moving.npz",
+      "bytes": 3737741,
+      "sha256": "f61094d4cfc6f71bf4b98998d78d7f0a03ee6b24e3a3ad22bfbc87a96f8f2003"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2992_solar_static.npz",
+      "bytes": 3737649,
+      "sha256": "0ee7a15c524df50cc9d77b3b597df51780606c9a424e86c6e8748e61e583e22c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2993_lunar.npz",
+      "bytes": 3767350,
+      "sha256": "887701f9d236c39148e57e61f6e44e9661d238d3ee37b867fbaa8002928733a3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2993_observations.npz",
+      "bytes": 179248,
+      "sha256": "35617042687270b07671a8369c5e00ec9e9672fc1675be8636bbee6093286cd5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2993_solar_moving.npz",
+      "bytes": 3737452,
+      "sha256": "0a14b771929ffb379ac04a9fcbf3a1296c3ed8da1143dca92315817628c7624f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2993_solar_static.npz",
+      "bytes": 3738421,
+      "sha256": "02ff082d8278e7c69ca0c18e7357abaa166ab856c37c74f38ef20c2aaafe2a2f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2994_lunar.npz",
+      "bytes": 3705313,
+      "sha256": "076497941f74929d97ea506a9b3c8081416f192d465f4f7c99bd58d8c481cd91"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2994_observations.npz",
+      "bytes": 190074,
+      "sha256": "485d0dabdda6c503f8aa3ac45b39ef9b284348e01bdee71452774b99792eeef1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2994_solar_moving.npz",
+      "bytes": 3595355,
+      "sha256": "37e66f384127c448af4c91df4f1eceecbbfd774e7795645738d72e92f3291cb7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2994_solar_static.npz",
+      "bytes": 3599566,
+      "sha256": "a92296f807dc109e6cda8dc4dc078206e315bab3f6753e8ee662f2dcb7ede203"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2995_lunar.npz",
+      "bytes": 3519478,
+      "sha256": "397e796b1f48d61d31ee99d701022426e553ba292fa3153c1ea4c39d4aec2b7e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2995_observations.npz",
+      "bytes": 74123,
+      "sha256": "35db108cff3d837d6d78e69bb4562a4825e1db36bb1ee12d810eaab0e4225968"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2995_solar_moving.npz",
+      "bytes": 190326,
+      "sha256": "66926d29da2ced4a8b604438e58242a207e067c56220313bb8416d869cf23479"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2995_solar_static.npz",
+      "bytes": 190236,
+      "sha256": "ce84ed8bc485a91ba7283c5cb0e79e4ddf194e0f0cd1c025d45b0698d8669d5b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2996_lunar.npz",
+      "bytes": 3408902,
+      "sha256": "a2a9ce7e905c473da8b5184f4017915615bdb74938407bd3ed03b0b73e1ca750"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2996_observations.npz",
+      "bytes": 75286,
+      "sha256": "4e33c0736a25a1affab035f1f1cb0281241ab68eed15b7d8a37fdb3409ca238e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2996_solar_moving.npz",
+      "bytes": 111866,
+      "sha256": "45be319398beabb794dc1ee4b40833fa3b170fb4991963cb96f163bc22db3b8f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/matrices/572A2996_solar_static.npz",
+      "bytes": 112298,
+      "sha256": "16436bc500ecdcb66f358dd6c6fbef194fed41d80cfc77a6b5bd35e975b959ab"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2973_baseline_lunar.npz",
+      "bytes": 4089373,
+      "sha256": "49c9c4c609509710802cff09cea89316f0ec0e6978a9b77ab15e00f1416c4655"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2973_baseline_solar.npz",
+      "bytes": 4054280,
+      "sha256": "ccba66bdbc775c642c9842910183f25568aa73707257b31cf3a7901b38be806c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2973_pose_core_lunar.npz",
+      "bytes": 5285587,
+      "sha256": "6ab7e84b1248e482b5f781c52949842ff9c2cca4feee5d817ebff5b2d49a0adf"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2973_pose_core_solar.npz",
+      "bytes": 5302135,
+      "sha256": "eb41a0f4cae49aa1826bf9807f578b11c1d9a596a00ed1955a85b33a12b00574"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2973_pose_lunar.npz",
+      "bytes": 4063483,
+      "sha256": "3d5e3f295c6e4640589c5876df12d8c880d85176e89c7aed40c4a9db60324fbb"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2973_pose_solar.npz",
+      "bytes": 4080170,
+      "sha256": "c433ecc26231c0e7e5d655fa64f409e5b1e294e5813b7e761b3213ba89b1d070"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2974_baseline_lunar.npz",
+      "bytes": 4091566,
+      "sha256": "33749fa9e5661caf0e9617e82ee401c5748593e0d1fb126db18d7b7b40bea8a6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2974_baseline_solar.npz",
+      "bytes": 4064368,
+      "sha256": "02e6d943d4e9974c08ce1dbfe80f296065cd01514a9420ae3d3603cf566f7058"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2974_pose_core_lunar.npz",
+      "bytes": 5105686,
+      "sha256": "c653cd4d002f8f947dd26e558857772d7d32404d07fc36608f5761fe55f89548"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2974_pose_core_solar.npz",
+      "bytes": 5222906,
+      "sha256": "fc73b56caf7d0600224ed8f974f1c478bfb22a3fb5ba5dda97e8607ca0ef5121"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2974_pose_lunar.npz",
+      "bytes": 4031933,
+      "sha256": "9fdd6756232b35152c5327c6d3a626077132cdf46fab8d253facacf43ce0444e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2974_pose_solar.npz",
+      "bytes": 4122704,
+      "sha256": "773f81deef46fba96ad3d749cf3dad1bfeaf4ca1089fc6c31e6f3a659eec7e76"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2975_baseline_lunar.npz",
+      "bytes": 4091576,
+      "sha256": "60ca7c9317b3ad241007d3bcea080ec683bb7b005bccb999d8671b8224afdb26"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2975_baseline_solar.npz",
+      "bytes": 4060644,
+      "sha256": "2c672a067ea9877d526634192714e411caa6b2a72a1eb493c1286b9cc431c9f6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2975_pose_core_lunar.npz",
+      "bytes": 6033964,
+      "sha256": "8efcf4697015c61cb5b5ac34ee308de585936ee58318d4b12376bb46016ec1fe"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2975_pose_core_solar.npz",
+      "bytes": 6251726,
+      "sha256": "11d1d5e41e7758ab4629a8df4663b9673647b6c35b2b2c8d743e10b0a9d5bf19"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2975_pose_lunar.npz",
+      "bytes": 4007861,
+      "sha256": "bac489d917fe5272d11599dcf247b3bda4747ba684761a48db165885b5c7f23f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2975_pose_solar.npz",
+      "bytes": 4145180,
+      "sha256": "e07928f69846b7286205fe9693ce7dc4ac9e6dccd7cd100a154709e47b4222ee"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2976_baseline_lunar.npz",
+      "bytes": 4086576,
+      "sha256": "ef653103b82b3d86f99e382603949a4cd5603be782a2b18768a12b97a1fdd975"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2976_baseline_solar.npz",
+      "bytes": 4056815,
+      "sha256": "c973ad580f6c628f33f3b0f27039a64ad0f67e217ab0b1c812fb453d10ec6473"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2976_pose_core_lunar.npz",
+      "bytes": 5070003,
+      "sha256": "89969bf6ff255a37b57c9ac1460c3f2a66a38b13797fdd58620e7eb6a3b99e61"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2976_pose_core_solar.npz",
+      "bytes": 4912534,
+      "sha256": "a6e63fc53a9911a77a2d9d5fd72554128e00522f68b9339874a4550614b4b1ce"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2976_pose_lunar.npz",
+      "bytes": 4134587,
+      "sha256": "550ce372755cb9a71808cbe9257a8d354c85bf971445dab9ade9223d62a75e0d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2976_pose_solar.npz",
+      "bytes": 4008070,
+      "sha256": "a419d1f92f678000d768a46f0c0d7c689134012fbd0ab4218b64939c89263de0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2991_baseline_lunar.npz",
+      "bytes": 4092273,
+      "sha256": "41026b87f5cc1cffca4495ee1b88cba8d74a4419ec7bca10e72fad5ce5a4f774"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2991_baseline_solar.npz",
+      "bytes": 4060404,
+      "sha256": "6b34bf5b731b6269264179b2abb75b084e3350ae122ee7036fb2b13f5b0170de"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2991_pose_core_lunar.npz",
+      "bytes": 4552044,
+      "sha256": "96a95c47534ad0d0692be034184900659371241771734ac77ff589baee479349"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2991_pose_core_solar.npz",
+      "bytes": 4409480,
+      "sha256": "37490bc663124275eb6d72b481e936da4dc5f698eefb3b34b0936025373920f2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2991_pose_lunar.npz",
+      "bytes": 4141026,
+      "sha256": "9e32d7864136b3822ed144dec6b15ca6caf0b241f0b55ad9e7a2b7d75ad2fa42"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2991_pose_solar.npz",
+      "bytes": 4010823,
+      "sha256": "d0460da7d213ecbaadec94b9713abc1a6ea4fef18a66098923ea515bcc3e3655"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2992_baseline_lunar.npz",
+      "bytes": 4088697,
+      "sha256": "5ba2b205b558a50caa15a9044ed55b4b74d3dd45fb3005414effcb449bdc6daf"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2992_baseline_solar.npz",
+      "bytes": 4056387,
+      "sha256": "80333d786a7433ee1f9427ad32c2b125aa93593fa0b753a9ea82adf30b550a87"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2992_pose_core_lunar.npz",
+      "bytes": 5675872,
+      "sha256": "855085b7a2ea6b54cb7f2c369520894fd8eefbf197563c7e7e512d8359cea9b2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2992_pose_core_solar.npz",
+      "bytes": 5694653,
+      "sha256": "3758638a779074e4a51295d9bec65a589b3ffdccefc6c4c72f87b0f256e63ab8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2992_pose_lunar.npz",
+      "bytes": 4067150,
+      "sha256": "92356a34f852de0ad74a341308347fd97dbcdbe8e6732a133881a0da7ff5e257"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2992_pose_solar.npz",
+      "bytes": 4079170,
+      "sha256": "607c560de592a1171969df32876726f191b68c3c172aa10da8bc65e93e0eac88"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2993_baseline_lunar.npz",
+      "bytes": 4087642,
+      "sha256": "9c086ac431a7dd1cf9db395aba255461ca6d56c7b7c63f0f21891847489d0a26"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2993_baseline_solar.npz",
+      "bytes": 4052306,
+      "sha256": "fcdb4da7f025c80d8e1e71691d5fd56fb9b4846971fce049978ea4624d3ca0b6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2993_pose_core_lunar.npz",
+      "bytes": 5828245,
+      "sha256": "eb2f995e77ff84424fe45e5c1f8b2d6ae0087ae16ac721478f47f1ad007373a7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2993_pose_core_solar.npz",
+      "bytes": 5891671,
+      "sha256": "4474a104766d33f629998d4a6993e4e1a4cae3d3ce08fb4764b8f5fe9560405b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2993_pose_lunar.npz",
+      "bytes": 4050212,
+      "sha256": "8d7603d45b13e2566b6a428c7ba0d3f5360ebebae5adec6bd878bedad3ae928f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2993_pose_solar.npz",
+      "bytes": 4090402,
+      "sha256": "98709f9cd81cbb37abb6c79ebee41e5d158578e2f65c1bbb717272b3de7fb822"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2994_baseline_lunar.npz",
+      "bytes": 4019499,
+      "sha256": "f84be823f3e40a803590c0539c78ac97bbd4a2c2a1ff72d4792429d377b7cb1d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2994_baseline_solar.npz",
+      "bytes": 3904684,
+      "sha256": "82444d89149c35e4d1fba9212ffa8fd8a9deb20bc9009ae93e98bb04f35a77ed"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2994_pose_core_lunar.npz",
+      "bytes": 5692223,
+      "sha256": "ce3d237bba55712359e52a42f842ad3fd28c039ae2675436cf54031da695a3c7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2994_pose_core_solar.npz",
+      "bytes": 5665237,
+      "sha256": "3e96f7419a30c63ed54be8e3ee69557086e3dd3ec690b0b78371a434f03623aa"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2994_pose_lunar.npz",
+      "bytes": 3979291,
+      "sha256": "c48cdbc92de03e5f69c66646715b6e9e000e516e6ab9b322977783ddcfe1c87f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_forward_20260911/pose_matrices/572A2994_pose_solar.npz",
+      "bytes": 3947034,
+      "sha256": "c50ac33d29ca73a917b847b6475ee2e11c2cc3bc858fc5c1cac476506d7332a7"
+    }
+  ],
+  "canonical_before": [
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/CLAUDE.md",
+      "bytes": 205321,
+      "sha256": "6c1794cf7234f5c8c92ac7a462c04cfa83b4b1de08b2dcc3a19984b331ccf9e2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/AGENTS.md",
+      "bytes": 22576,
+      "sha256": "51121410b19ebcf9bf99651667e75e566a6138f772a9f3a98196d9aeb7cd8efd"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/ACTIVE.json",
+      "bytes": 28913,
+      "sha256": "d82c95fac744ec85640eaf8b143fda5825e0e9e0b99f9216ad539d59cb4d5d34"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/ESTAT_ACTUAL.md",
+      "bytes": 30565,
+      "sha256": "fd7e37554610eb33c4f8c0800d58cb9541445382cffabbd41a46ec2ba6800ab6"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/README.md",
+      "bytes": 30442,
+      "sha256": "327206611bb5fe0b57509eb2db2e6a3fa34c7a6264340489fe39cbb822213179"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/MAPA_RUTES_I_OUTPUTS.md",
+      "bytes": 18946,
+      "sha256": "acffa16f30e23b50820fe0219b25768bd47909a6538f4454d0bae68f3d7eb022"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/HANDOFF_VIGENT.md",
+      "bytes": 3508,
+      "sha256": "7e95b188638f9565a210afc504d2bb362021846ed9d9a0a3100c2dbf91d835c1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/README.md",
+      "bytes": 86519,
+      "sha256": "b6449f3895c5d973cf98482230368e31f26c0524b00c26c64a59a6a35e376a08"
+    }
+  ],
+  "canonical_after": [
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/CLAUDE.md",
+      "bytes": 205238,
+      "sha256": "c3a929b25cef48fcf63e7cb7119671e053f061497139e4d97341ab2075c9e322"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/AGENTS.md",
+      "bytes": 22493,
+      "sha256": "8aeff248aea03130ecdc91d8f65f9dcf85b46aa85eeaf16e1a2a59d9d3405ceb"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/ACTIVE.json",
+      "bytes": 30359,
+      "sha256": "ac2d5e8a10e3aed5d1b0e1744d6194a3b4162efa1729b2522b16f6f6ace9aa49"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/ESTAT_ACTUAL.md",
+      "bytes": 30482,
+      "sha256": "14b6f6e1aca5ddf99bb1e41b882c267a28a8397673866f87d43232e81a29c0a9"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/README.md",
+      "bytes": 30359,
+      "sha256": "8818452d683f023851912c856c54042927f6cc1bbe55cc479f4f19eb52e1b541"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/MAPA_RUTES_I_OUTPUTS.md",
+      "bytes": 18863,
+      "sha256": "7056b3807668f1cea10c93cdae9dc185fbc7ddd4751d757f0afda35b92a71a65"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/HANDOFF_VIGENT.md",
+      "bytes": 4420,
+      "sha256": "5de4eb6d2bcd92622f3bface50088f36d9f69d2d4f661c1a48afe86cfb06b673"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/README.md",
+      "bytes": 86436,
+      "sha256": "6b7cedc7bea994ac6ac52dd1b79c5c7adeee0796b29b5390674974f38889eff2"
+    }
+  ],
+  "handoff": {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-11_EARTHSHINE_MODEL_NATIU.md",
+    "bytes": 4420,
+    "sha256": "5de4eb6d2bcd92622f3bface50088f36d9f69d2d4f661c1a48afe86cfb06b673"
+  },
+  "prior_manifest": {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_native_psf_20260911/delivery_manifest.json",
+    "bytes": 108195,
+    "sha256": "b281bebfd3f9fe6282ad3dd45d739f75ebc8257a30be584eff0acec214c7296a"
+  },
+  "consumed_inputs": [
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_native_samples_572A2968.npz",
+      "bytes": 2823711,
+      "sha256": "6ae80923794e2899b50727fb00763c20783fde8ccd4be0c1d01fc872f44d4e86"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_native_samples_572A2969.npz",
+      "bytes": 2915479,
+      "sha256": "323ba86a52f42b6e9c8504f255cec15258a608d3e547183699d2e8bc9751f405"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_native_samples_572A2970.npz",
+      "bytes": 3048091,
+      "sha256": "217ad19895a24a36b199600a7f4fdf0cbb79f7e59093671021fa4a821f72755c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_native_samples_572A2973.npz",
+      "bytes": 2799921,
+      "sha256": "71cf86fead2379e432ec7401670def810d1a5155bc5ea97c38c0f92caeacc2f0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_native_samples_572A2974.npz",
+      "bytes": 2860162,
+      "sha256": "a077d03400180c231f987c7cfe67cee2480a8b582c2149a437fcb7b8782087c3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_native_samples_572A2975.npz",
+      "bytes": 2974212,
+      "sha256": "99b27c1e9477a17aa2e52fbbd7d71ca040ae299601c961a6c67d4ce00c8e439d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_native_samples_572A2976.npz",
+      "bytes": 3186110,
+      "sha256": "f5d3074821bbeeac615bc09dbf97e850f59a478fea81f931a7a2637649ff1ace"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_native_samples_572A2977.npz",
+      "bytes": 2620101,
+      "sha256": "dbbd799c44ced64e9ff34a6d9d2362eec93107a53d7e0189e536e38ac0dabb8b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_native_samples_572A2978.npz",
+      "bytes": 2140573,
+      "sha256": "618165e21aaf432fbc9226c00e033c9d7c8d6d05b6325cdbef1f8bdb35f2759d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_native_samples_572A2991.npz",
+      "bytes": 2805319,
+      "sha256": "b27ccf4a3fa79da2f0c2413589d0edd6a0286d90e695854cdf53a61061260e40"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_native_samples_572A2992.npz",
+      "bytes": 2868150,
+      "sha256": "d8283d4e420c31f0c2a78136b9e50691c5929679772dd8d2908d7f85667a4845"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_native_samples_572A2993.npz",
+      "bytes": 2980855,
+      "sha256": "9ed01e1b55b26cb30143b966213cd409350fe6c2473321a0626de6ee32e7e42b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_native_samples_572A2994.npz",
+      "bytes": 3218637,
+      "sha256": "965005127e380d0c774a98f68a3901b28b2be2bd47082e8afdd034a432bea9a2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_native_samples_572A2995.npz",
+      "bytes": 2674698,
+      "sha256": "50f5b548c2059a2969398930bb514beceaedc78929a0deacb26595901a966e6c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_native_samples_572A2996.npz",
+      "bytes": 2136700,
+      "sha256": "ab040ad317dccfb2feb8db48dc5ec6d6c8b2f9ab43303a638aad3ebe66a75cdf"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_quincunx_572A2968.npz",
+      "bytes": 14076183,
+      "sha256": "7bc9bc3f6a6b227710854751b96f249e3d37095f868eb05a8aee015c943d2380"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_quincunx_572A2969.npz",
+      "bytes": 14113812,
+      "sha256": "4ab4bbe73fe787d09291cc2facf94b441b31d4693f976bc07c1afe121c0ee7a1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_quincunx_572A2970.npz",
+      "bytes": 14187313,
+      "sha256": "42e3e897febc76ebfc8132cfd3a0d765a6b4fec1a825988119f48388f47b882a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_quincunx_572A2973.npz",
+      "bytes": 14010197,
+      "sha256": "8dd1838b5183bb55713d06d1a21cecd86dd01a8db307e97bf8677246e76cbaae"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_quincunx_572A2974.npz",
+      "bytes": 14083018,
+      "sha256": "da0ceec1ebcd8996bc95e2aeaed2e699faa0884557e29ea8d661a9adbb9b232e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_quincunx_572A2975.npz",
+      "bytes": 14167941,
+      "sha256": "d77ad136f9bc243ab6b2e5dabfec3411c1c98401fb8f4686cde0c04f05d21671"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_quincunx_572A2976.npz",
+      "bytes": 14306604,
+      "sha256": "7586f86575614fc533614b2b773567f4a21d3fa6570ac3b2359d3f880a43afda"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_quincunx_572A2977.npz",
+      "bytes": 13859709,
+      "sha256": "6015e568fdb543fe8ba7078a5564581e8f894ea55672e63160357adc476b8d99"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_quincunx_572A2978.npz",
+      "bytes": 11906048,
+      "sha256": "becc7c349eb30c36a8eec4f74f2b5227e1886227c7d9e3a4967943854a3f23c9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_quincunx_572A2983.npz",
+      "bytes": 5425174,
+      "sha256": "a145b5b555996a655465eb90e4e44e08c8df1dee6f6b568303574eecb60c5b36"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_quincunx_572A2991.npz",
+      "bytes": 14070049,
+      "sha256": "eb8c40acaa2b3637f8a5c82ec88679031be30d1d5439ca81249d1a937e0c4465"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_quincunx_572A2992.npz",
+      "bytes": 14099321,
+      "sha256": "6de2323023733709115d733c02bbc2fcedadb78480594624b181413855938724"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_quincunx_572A2993.npz",
+      "bytes": 14164297,
+      "sha256": "8145d31a71a7db33e037b0252be7b6ca5ab53f1bea10b013c7c2d69ab4e11ccc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_quincunx_572A2994.npz",
+      "bytes": 14335795,
+      "sha256": "647a94a932fd326b3a01ae86e98bb145ff50b862b95f4026a67d79db747b2923"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_quincunx_572A2995.npz",
+      "bytes": 13896608,
+      "sha256": "f292f37ddb2229777e7ba4080e65e84552daca3ac9cb5ad77746313c6a1e028a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_native_psf_20260911/A0_quincunx_572A2996.npz",
+      "bytes": 11992024,
+      "sha256": "27670965543488af2c7fbbc7b9592341fcf93cd50b9a9e1bb51c3f8e449a36f6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_detail_20260911/native/sony_DSC06987.npz",
+      "bytes": 17717834,
+      "sha256": "9b7c03230f902274d6f78c8b14a100d2ce20591ff7f51740e16fa475bc6193ad"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_detail_20260911/native/sony_DSC06984.npz",
+      "bytes": 21589037,
+      "sha256": "3f0524e29226e4711e7a5d32171612afc67b89c0749c0c21da069eeaf385623b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_detail_20260911/native/sony_DSC06985.npz",
+      "bytes": 28232875,
+      "sha256": "ac1570a92f2da1ab915c16f6f8cd4d8a47f4cfc635bbe36d5f3979e38bce0db2"
+    }
+  ],
+  "scope": "Native numerical operator and geometry diagnostics only; no new astronomical image, RAW stack, Photoshop change or all-limb recovery claim. Recorder output is returned directly, not a mutable manifest log."
+}

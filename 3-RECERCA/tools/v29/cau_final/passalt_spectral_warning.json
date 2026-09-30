@@ -1,0 +1,6 @@
+{
+  "diagnostic": "H1b spectral ratio, warning threshold2",
+  "before_final_H1": 2.158854919801635,
+  "after_final_H1": 2.9763781808494314,
+  "decision": "retain source response; flag residual spectral warning; no destructive global notch based on this diagnostic alone"
+}

@@ -1,0 +1,39 @@
+{
+  "status": "DIAGNOSTIC_ONLY",
+  "operator": "nonlocal-means on lnG before ACHF, fixed subsequent scales; no generative fill",
+  "noise_proxy": "wavelet estimate_sigma; not RAW variance and possibly biased for correlated noise",
+  "rois": {
+    "interior": {
+      "noise_lnG_proxy": 0.0004924597420723337,
+      "center": [
+        5810,
+        3260
+      ],
+      "note": "same unchanged H1 omitted from all displayed differences; G-only, not final medianRGB"
+    },
+    "marca_N": {
+      "noise_lnG_proxy": 0.0003956663095215011,
+      "center": [
+        5715,
+        2200
+      ],
+      "note": "same unchanged H1 omitted from all displayed differences; G-only, not final medianRGB"
+    },
+    "marca_S": {
+      "noise_lnG_proxy": 0.00039412255330882644,
+      "center": [
+        5130,
+        5160
+      ],
+      "note": "same unchanged H1 omitted from all displayed differences; G-only, not final medianRGB"
+    },
+    "exterior": {
+      "noise_lnG_proxy": 0.00038936162071297805,
+      "center": [
+        6500,
+        2520
+      ],
+      "note": "same unchanged H1 omitted from all displayed differences; G-only, not final medianRGB"
+    }
+  }
+}

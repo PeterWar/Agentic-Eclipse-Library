@@ -1,0 +1,9 @@
+from common60 import *
+from psd_tools import PSDImage
+import tifffile as tf
+claim();expected=tf.imread(O/'V60_native.tif');actual=tf.imread(O/'V60_ready_readback.tif');assert expected.shape==actual.shape==(7506,10551,4);diff=abs(actual.astype('int32')-expected.astype('int32'));mx=int(diff.max());assert mx<=3
+s=PSDImage.open(O/'V60_ready.psb');data=s._record.image_data.get_data(s._record.header);cached_alpha=np.frombuffer(data[3],dtype='>u2').reshape((7506,10551));assert np.array_equal(cached_alpha,actual[...,3]);errs=[]
+for c in range(3):
+ cached=np.frombuffer(data[c],dtype='>u2').reshape((7506,10551)).astype('int32');associated=cached+cached_alpha.astype('int32')-65535;error=int(abs(associated-actual[...,c].astype('int32')).max());assert error<=3;errs.append(error)
+gate=(O/'D5_photoshop_gate.txt').read_text().strip();reader=(O/'D5_independent_reader.txt').read_text().strip();assert 'OBRE 10551 px x 7506 px · 31 capes' in gate;assert '10551x7506' in reader and '16-bit' in reader
+channels=json.loads((O/'D2_final_channels.json').read_text());assert channels['sha256']==sha(O/'V60_ready.psb');source=sha(SRC);assert source==json.loads((O/'A0_freeze.json').read_text())['sha256'];rep={'PASS':True,'Photoshop':gate,'independent_reader':reader,'native_readback_max_DN16':mx,'white_matte_cache_readback_max_DN16':errs,'alpha_native_cache_exact':True,'edited_channels_verified':len(channels['changed_channels']),'unchanged_channels':channels['unchanged_channels'],'native_review':json.loads((O/'D4_native_review.json').read_text()),'V59_source_unchanged_sha256':source,'product_sha256':channels['sha256'],'blue_status':'Unchanged, no easy validated source correction identified','scope':'Two photographic compositing corrections. No new resolution, no claim all artifacts removed.'};save('D6_final_QA.json',rep);print('FINAL QA PASS',mx,flush=True)

@@ -1,0 +1,20 @@
+{
+  "accepted_for_packaging": true,
+  "candidate": "full_amplitude_layers_natural_opacities",
+  "layers": {
+    "achf": {
+      "strength": 1,
+      "opacity_u8": 36
+    },
+    "passalt24": {
+      "strength": 1,
+      "opacity_u8": 20
+    },
+    "gran": {
+      "strength": 1,
+      "opacity_u8": 38
+    }
+  },
+  "support": "actual observed temporal union; wideG uses positivefiniteG; physicalouterkernel taper only",
+  "visual_review": "fullcanvas and1:1limb; angularfinal only; earlierisotropicpilotsrejected"
+}

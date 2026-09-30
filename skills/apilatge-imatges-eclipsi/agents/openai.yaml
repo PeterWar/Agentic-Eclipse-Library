@@ -1,0 +1,4 @@
+interface:
+  display_name: "Apilatge d’imatges de l’eclipsi"
+  short_description: "Calibra i apila RAW amb QA de SNR"
+  default_prompt: "Usa $apilatge-imatges-eclipsi per crear o auditar un stack lineal Vixen o Sony amb SNR mesurat."

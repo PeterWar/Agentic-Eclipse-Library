@@ -1,0 +1,10 @@
+from comu45 import *
+claim45()
+savejson(REB45/'A1_causal_audits.json',{
+ 'evidence':'independent read-only subagent experiments reported to root, plus exact source-code ablation; values are not final V45 acceptance gates',
+ 'zipper':{'source':'V44 F3b local64 FFT, stride8; F5 isotropic+tangential overlap','radial_null_angular_rms_DN_410_420':1.895,'real_null_correlation_at419':.904,'translation_1_2_4px_rms_DN':[.190,.347,.483],'translation8px_difference':0.,'max_overlap_weight':1.69848,'max_overlap_radius':412.034,'conclusion':'V44 textureless radial source creates the marked zipper; physicalPhotoshopPASS did not prove scientific artifact absence'},
+ 'temporal_lila':{'sector_degrees':[-180,-165],'radius':[440,449],'frames':['572A2972','572A2990'],'G_medians':[1222.7,1043.6],'R_over_G':[4.659,1.667],'green_footprint_fraction_reaching85pct_r449_455':[.35,.16],'conclusion':'later Vixen has less red contamination and more saturation margin; newest frame is not always cleanest'},
+ 'rejected_PSF':{'native_green':True,'fit_radii':[420,440],'fit_pairs':['2972-2990','2978-2996'],'sigmas':[8,16,32],'kernel_truncation_px':40,'coefficients':[.0059642,0,.0100097],'held_out_lila_pairs':['2972-3002','2978-3008','2990-3008'],'rms_before':[324.64,390.97,29.79],'rms_after':[108.23,151.38,61.93],'decision':'REJECTED: late-late pair worsens2.08x; a shared absolute PSF correction is not justified'},
+ 'inventory_extra_nominal_contact_RAW':{'files':['572A2958.CR3','572A3026.CR3','572A3027.CR3','DSC07003.ARW','DSC07004.ARW'],'status':'F1.2 nominal contact times only; no lunarcache/F1.3 fine registration; Sony timestamp integer gives preC3 ambiguity. Weak-surface contribution not demonstrated; not counted among88registeredframes'},
+ 'limitations':['nativeG conditional variance excludes calibration systematic and Sony spatial covariance','shift-equivariance is estimator correctness, not physicalsubpixelregistration','common PSF component cannot be identified only from temporal differences','LROC remains fixed external judge; no pixels imported']
+})

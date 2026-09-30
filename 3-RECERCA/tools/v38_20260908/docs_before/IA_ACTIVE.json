@@ -1,0 +1,150 @@
+{
+  "schema_version": 4,
+  "updated": "2026-09-08T18:05:44.661169+00:00",
+  "phase": "post-eclipse-V37-lean-origin-cured",
+  "coordination_mode": "ALTERNATING_CODEX_CLAUDE_WITH_AUDITABLE_HANDOFFS",
+  "entrypoint": "/Users/USUARI/Desktop/Eclipse 2026/IA/README.md",
+  "asset_root": "/Users/USUARI/Desktop/Eclipse 2026",
+  "code_root": "/Users/USUARI/Downloads/Eclipse 2026",
+  "code_worktree": "/Users/USUARI/Downloads/Eclipse 2026",
+  "git_present": false,
+  "formal_worktree_handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-08_V37.md",
+  "handoff": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/HANDOFF_VIGENT.md",
+  "status": "/Users/USUARI/Desktop/Eclipse 2026/IA/ESTAT_ACTUAL.md",
+  "path_map": "/Users/USUARI/Desktop/Eclipse 2026/IA/MAPA_RUTES_I_OUTPUTS.md",
+  "paths": {
+    "sony_raw_root": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA",
+    "sony_calibrated": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/calibrated",
+    "sony_darks": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/Darks A7RIIIA Eclipse",
+    "vixen_all_raw_root": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III",
+    "vixen_totality_raw_root": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Vixen Fase totalitat",
+    "vixen_masters_v2": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Vixen Fase totalitat/Masters_v2",
+    "vixen_darks": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Darks Canon R6III Eclipse",
+    "vixen_posterior_flats_raw": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Flats R6III",
+    "sony_posterior_flats_raw": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/Flats Sony A7RIIIA 300mm",
+    "posterior_flat_output": "/Users/USUARI/Downloads/Eclipse 2026/output/flats_20260822",
+    "posterior_flat_assessment": "/Users/USUARI/Downloads/Eclipse 2026/output/flats_20260822/transfer_assessment_v1/TRANSFER_ASSESSMENT.json",
+    "derivatives_root": "/Users/USUARI/Desktop/Eclipse 2026/Derivats",
+    "vixen_hdr_master": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Vixen/Corona_HDR_Vixen",
+    "vixen_hdr4": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Vixen/HDR4",
+    "capestotals_work": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Vixen/CapesTotals_work",
+    "sony_stacks": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Sony/Apilats",
+    "current_technical_editable": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V37.psb",
+    "reference_mockup": "/Users/USUARI/Downloads/Maqueta de resultat esperat.tif",
+    "astrometry": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Astrometria/Estrelles",
+    "earthshine": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Earthshine",
+    "publication": "/Users/USUARI/Desktop/Eclipse 2026/Publicacio",
+    "photoshop_root": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop",
+    "photoshop_totals": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals",
+    "photoshop_interiors": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes interiors",
+    "photoshop_exteriors": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes exteriors",
+    "photoshop_filters_resources": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/2-Filtres/Recursos",
+    "current_delivery_manifest": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v37_20260908/delivery_manifest.json",
+    "current_visual_output": "/Users/USUARI/Desktop/Eclipse 2026/IA/output/v37_20260908"
+  },
+  "current_product": {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V37.psb",
+    "sha256": "9706226c1878c836038cbb1afecefb5b7a9d990ab010aecf3159749a3d6385ec",
+    "bytes": 4484412802,
+    "size": [
+      10551,
+      7506
+    ],
+    "depth": 16,
+    "layers": 11,
+    "published_utc": "2026-09-08T18:05:44.661169+00:00",
+    "PASS": true,
+    "PASS_scope": "container, gates (Vixen-edge step, A-edge step, limb ring bias, H1, azimuthal, Photoshop); visual acceptance by Pere pending",
+    "artifact_free": false,
+    "source": {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V36.psb",
+      "sha256": "fb3f3cefd9492eb8740315b1e567c447787f6af8b3504a6d2a36e5d11385d1bf",
+      "bytes": 4482062742,
+      "size": [
+        10551,
+        7506
+      ],
+      "depth": 16,
+      "layers": 11,
+      "published_utc": "2026-09-08T16:45:51.693248+00:00",
+      "PASS": true,
+      "PASS_scope": "container, gates (Vixen-edge step, A-edge step, limb ring bias, H1, azimuthal, Photoshop); visual acceptance by Pere pending",
+      "artifact_free": false,
+      "source": {
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V35.psb",
+        "sha256": "50c8e1cfb7144794db67c227324238fb33b9ccaf91502ff33fb6f954692aa6d4",
+        "bytes": 4481840046,
+        "size": [
+          10551,
+          7506
+        ],
+        "depth": 16,
+        "layers": 11,
+        "published_utc": "2026-09-07T23:51:43.185780+00:00",
+        "PASS": true,
+        "PASS_scope": "container, gates (Vixen-edge step, A-edge step, limb ring bias, H1, azimuthal, Photoshop); visual acceptance by Pere pending",
+        "artifact_free": false,
+        "source": {
+          "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V34.psb",
+          "sha256": "fa49221cad3352c4e4e7840018ee305e7ec360b3aad4e28c6c175ea3f0d50917",
+          "bytes": 4482115142,
+          "layers": 11,
+          "published_utc": "2026-09-07T19:21:47.583249+00:00",
+          "photoshop": "OBRE 10551 px x 7506 px · 11 capes",
+          "kind": "lean: linear base V34 + 10 filter layers (V32 recipe, no smoothing); other layers remain in V32.psb",
+          "PASS_scope": "container, gates, Photoshop; visual acceptance by Pere pending"
+        },
+        "photoshop": "OBRE 10551 px x 7506 px · 11 capes",
+        "cure": "filled-support distances (lunar-hole trap); Vixen conformed to Sony*rho (delta sigma256) beyond 2.65 R and tapered 720 px at its support edge; Sony-A tapered 480 px; train handover 1.9-3.5 R; P03/P04/P05 with declared boundary condition (azimuthal mean profile as operator input only)",
+        "limitations": [
+          "frame-entry grain steps remain (capture origin, 2027)",
+          "residual ring at 1.00-1.03 R (physical limb, partial rings)",
+          "Vixen blue-channel rings, NE spot, Sony long-frame registration: open debts"
+        ],
+        "manifest": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/delivery_manifest.json",
+        "report": "/Users/USUARI/Downloads/Eclipse 2026/research/151_V35_VORA_VIXEN_FORAT_I_LIMBE_20260908.md"
+      },
+      "photoshop": "OBRE 10551 px x 7506 px · 11 capes",
+      "cure": "V35 + Sony linearity LUT actually applied (V34/V35 erratum) + RHEF continuous-radius rank; the Sony 8 s entry (vignetting-shaped rounded square at 3.3-3.8 R, 14 % grain step) measured and declared (two cures tried and refused)",
+      "limitations": [
+        "frame-entry grain steps remain (capture origin, 2027)",
+        "thin residual at the west limb 1.04-1.06 (temporal-union strip) and a trous fine lines",
+        "Vixen blue-channel rings, NE spot, Sony long-frame registration: open debts"
+      ],
+      "manifest": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v36_20260908/delivery_manifest.json",
+      "report": "/Users/USUARI/Downloads/Eclipse 2026/research/153_V36_MARQUES_V35_VORA_8S_I_ANELLS_DISCRETS_20260908.md"
+    },
+    "photoshop": "OBRE 10551 px x 7506 px · 11 capes",
+    "cure": "V36 + lunar-hole boundary condition for the ACHF chain layers (they were tanh-saturated out to 1.08-1.16 R since V29) + fill variant B keeping partial-ring means for the isotropic operators; temporal-union strip kept pending Pere decision",
+    "limitations": [
+      "frame-entry grain steps remain (capture origin, 2027)",
+      "thin residual at the west limb 1.04-1.06 (temporal-union strip) and a trous fine lines",
+      "Vixen blue-channel rings, NE spot, Sony long-frame registration: open debts"
+    ],
+    "manifest": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v37_20260908/delivery_manifest.json",
+    "report": "/Users/USUARI/Downloads/Eclipse 2026/research/154_V37_LIMBE_CONDICIO_DE_CONTORN_I_FRANJA_20260908.md"
+  },
+  "processing_authority": {
+    "type": "independent-scientific-filter-comparison-plus-preserved-photo",
+    "runs": "Vixen019/Sony016, immutable; exact dependencies in manifest",
+    "source": "corrected linear G, global Sony-to-Vixen gain0.3411462604999542",
+    "fov_status": "same10551x7506",
+    "raw_calibration_reexecuted": false
+  },
+  "visual_task": {
+    "status": "DELIVERED_V37_PENDING_PERE_VISUAL_JUDGEMENT",
+    "target": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V37.psb",
+    "next_action": "No automatic task; Pere reviews the 10 layers and the V36|V37 views"
+  },
+  "history": {
+    "previous_active_snapshot": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v37_20260908/docs_before/IA_ACTIVE.json",
+    "previous_active_sha256": "034feade5f2737fc31307b38b03c97355a03cadaa84ba9d4b3666278b7743d4a",
+    "meaning": "V36 preserved; V37 published as a new file"
+  },
+  "jpeg_output": {
+    "status": "ACTIVE",
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/output",
+    "scope": "ALL_NEW_AI_GENERATED_JPEG",
+    "historical_files": "DO_NOT_MOVE"
+  }
+}

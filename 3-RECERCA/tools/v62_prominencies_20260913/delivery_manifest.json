@@ -1,0 +1,115 @@
+{
+  "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V62.psb",
+  "sha256": "6f6d1ae849f0524a5479857a8b1c212094d12469322e8f9c0c582c88592efdc3",
+  "bytes": 7936036716,
+  "staging": "/Users/USUARI/Downloads/Eclipse 2026/output/v62_prominencies_20260913/V62_preserved_work.psb",
+  "time": "2026-09-13T18:54:57.419755+00:00",
+  "source_V61_unchanged": "63d4c0dcab0e2b09dd7797c6c0854b21702cde35d1d8322fc0acb16840400221",
+  "independent_Earthshine_V56_unchanged": "edee45ad76f08f8450beed3e85ed0d226eb0b1e11347478d2e998d74281ce12e",
+  "canvas": [
+    10551,
+    7506
+  ],
+  "depth": 16,
+  "profile": "Adobe RGB (1998)",
+  "report": "/Users/USUARI/Downloads/Eclipse 2026/output/v62_prominencies_20260913/RESULTAT.md",
+  "handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-13_CODEX_CAPES_TOTALS_V62.md",
+  "manifest": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v62_prominencies_20260913/delivery_manifest.json",
+  "qa": "/Users/USUARI/Downloads/Eclipse 2026/output/v62_prominencies_20260913/E0_integrity.json",
+  "readback": {
+    "PASS": true,
+    "shape": [
+      7506,
+      10551,
+      4
+    ],
+    "max_DN16": 0,
+    "nonzero_channel_values": 0,
+    "mean_DN16": 0.0,
+    "scope": "All canvas RGBA: native candidate compared with reopened published PSB and forced recomposition in a disposable full-layer duplicate"
+  },
+  "open_document": "V62.psb | saved=true | 24 top-level items | interiors visible=true | annotations hidden=true | profile=Adobe RGB (1998)\nFINAL_OPEN_COMPLETE\n",
+  "UI_observation": {
+    "time": "2026-09-13T19:01:31.056114+00:00",
+    "verified": false,
+    "native_document_state_confirmed": true,
+    "native_evidence": "output/v62_prominencies_20260913/E2_final_open.log",
+    "native_full_canvas_readback": "output/v62_prominencies_20260913/E3_final_readback.json",
+    "visual_QA": "Full canvas and all marked limb sectors reviewed from native TIFF-derived previews",
+    "CUA_result": "The Mac is locked and automatic unlock could not unlock it. Ask the user to unlock the Mac manually before continuing.",
+    "user_unlock_requested": true,
+    "scope": "Auxiliary observation of actual foreground Photoshop window unavailable. No claim of a successful CUA screenshot."
+  },
+  "artifact_free": false,
+  "status": "V62_COLOUR_AND_PROMINENCE_COMPOSITING_DELIVERED_FINE_LIMB_NW_PENDING",
+  "top_level_items": 24,
+  "embedded_editable_original_interiors": 7,
+  "embedded_added_correction_layers": 1,
+  "source_Pere_V61": "63d4c0dcab0e2b09dd7797c6c0854b21702cde35d1d8322fc0acb16840400221",
+  "source_Pere_Moon_mask_exact": true,
+  "geometry_exact_to_Pere_V61": true,
+  "colour_external_validation": {
+    "source": "V42 q24 producer, own Vixen source at the measured regions; Sony reserved",
+    "sigma": 24,
+    "exclude_R_over_G": 2.5,
+    "excluded_from_estimator": 7154,
+    "core_RGB_exact": true,
+    "max_linear_display_luminance_error": 1.138448715209961e-05,
+    "pixels_changed": 321116,
+    "changed_bbox": [
+      4780,
+      3214,
+      5920,
+      4323
+    ],
+    "held_out_Sony": [
+      {
+        "name": "west",
+        "n": 11979,
+        "Sony_global_gain": [
+          0.8674112558364868,
+          1.0,
+          0.8563869595527649
+        ],
+        "median_abs_log_colour_error_before": [
+          0.30249935388565063,
+          0.0,
+          0.1478421539068222
+        ],
+        "median_abs_log_colour_error_after": [
+          0.031414054334163666,
+          0.0,
+          0.012387363240122795
+        ]
+      },
+      {
+        "name": "east",
+        "n": 2231,
+        "Sony_global_gain": [
+          0.8674112558364868,
+          1.0,
+          0.8563869595527649
+        ],
+        "median_abs_log_colour_error_before": [
+          0.2864283621311188,
+          0.0,
+          0.14306488633155823
+        ],
+        "median_abs_log_colour_error_after": [
+          0.023989880457520485,
+          0.0,
+          0.040603578090667725
+        ]
+      }
+    ],
+    "limits": "Photographic colour-estimator correction, not proof that all red atmospheric light is absent. No luminance filtering, no raw change."
+  },
+  "limits": [
+    "Fine blue contour not completely corrected",
+    "NW local alignment remains unvalidated",
+    "Photographic black-matte separation is not a new physical radiance estimate",
+    "No new astronomical resolution claim",
+    "CUA window observation unavailable because Mac was locked; native Photoshop readback verified"
+  ],
+  "preview": "/Users/USUARI/Downloads/Eclipse 2026/output/v62_prominencies_20260913/vistes/V62_full.png"
+}

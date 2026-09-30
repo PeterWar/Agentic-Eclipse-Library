@@ -1,0 +1,7 @@
+from pathlib import Path
+import numpy as np,json,tifffile as tf,hashlib,subprocess
+R=Path.cwd();O=R/'output/v65_pere_estrelles_20260914';a=tf.imread(O/'D11_candidate.tif');b=tf.imread(O/'V65_final_readback.tif');assert a.shape==b.shape==(7506,10551,4);d=np.abs(a.astype('int32')-b);r=dict(PASS=int(d.max())<=4,max_DN16=int(d.max()),pixels_different=int(np.count_nonzero(np.any(d,-1))),source=str(O/'D11_candidate.tif'),readback=str(O/'V65_final_readback.tif'),forced_recomposition=True,full_canvas=True);assert r['PASS'];(O/'E3_final_readback.json').write_text(json.dumps(r,indent=2));print(r,flush=True)
+pub=json.loads((O/'E0_publish.json').read_text());dest=Path(pub['path']).with_name('V65_dades');assert not dest.exists();dest.mkdir();files={'V65_estrelles_marcades.png':'V65_estrelles_marcades.png','V65_estrelles_anotacions.png':'V65_estrelles_anotacions.png','V65_estrelles.csv':'V65_estrelles.csv','S22_final_catalog.json':'V65_cataleg_estrelles.json','vistes/V65_previsualitzacio.png':'V65_previsualitzacio.png','vistes/V65_estrelles_marcades_4220.png':'V65_estrelles_marcades_4220.png'};copied=[]
+for a,b in files.items():
+ src=O/a;dst=dest/b;subprocess.run(['/bin/cp','-c',str(src),str(dst)],check=True);h=hashlib.file_digest(dst.open('rb'),'sha256').hexdigest();assert h==hashlib.file_digest(src.open('rb'),'sha256').hexdigest();copied.append(dict(source=str(src),path=str(dst),sha256=h,bytes=dst.stat().st_size))
+(O/'E3_assets.json').write_text(json.dumps(dict(folder=str(dest),files=copied),ensure_ascii=False,indent=2));print('ASSETS',dest,flush=True)

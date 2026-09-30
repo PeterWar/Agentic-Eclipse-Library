@@ -1,0 +1,86 @@
+{
+  "PASS": true,
+  "shape": [
+    7506,
+    10551
+  ],
+  "depth": 16,
+  "layers": 40,
+  "all30_original_layer_records_and_compressed_channels_exact": true,
+  "all_global_resources_exact": true,
+  "default_merged_bytes_exact": true,
+  "new_layers": [
+    {
+      "name": "P01 NRGF · V31",
+      "RGB_exact": true,
+      "alpha_opaque": true,
+      "physical_mask_exact": true,
+      "single_layer_recomposition": "Normal100% replaces underlying observed pixels exactly; outside unchanged"
+    },
+    {
+      "name": "P02 RHEF · comparacio amb anells · V31",
+      "RGB_exact": true,
+      "alpha_opaque": true,
+      "physical_mask_exact": true,
+      "single_layer_recomposition": "Normal100% replaces underlying observed pixels exactly; outside unchanged"
+    },
+    {
+      "name": "P03 MGN · V31",
+      "RGB_exact": true,
+      "alpha_opaque": true,
+      "physical_mask_exact": true,
+      "single_layer_recomposition": "Normal100% replaces underlying observed pixels exactly; outside unchanged"
+    },
+    {
+      "name": "P04 WOW sense denoise · V31",
+      "RGB_exact": true,
+      "alpha_opaque": true,
+      "physical_mask_exact": true,
+      "single_layer_recomposition": "Normal100% replaces underlying observed pixels exactly; outside unchanged"
+    },
+    {
+      "name": "P05 WOW bilateral sense denoise · V31",
+      "RGB_exact": true,
+      "alpha_opaque": true,
+      "physical_mask_exact": true,
+      "single_layer_recomposition": "Normal100% replaces underlying observed pixels exactly; outside unchanged"
+    },
+    {
+      "name": "P06 NAFE n65 · V31",
+      "RGB_exact": true,
+      "alpha_opaque": true,
+      "physical_mask_exact": true,
+      "single_layer_recomposition": "Normal100% replaces underlying observed pixels exactly; outside unchanged"
+    },
+    {
+      "name": "P07 ACHF precursor sigma16 · V31",
+      "RGB_exact": true,
+      "alpha_opaque": true,
+      "physical_mask_exact": true,
+      "single_layer_recomposition": "Normal100% replaces underlying observed pixels exactly; outside unchanged"
+    },
+    {
+      "name": "P08 ACHF precursor sigma32 · V31",
+      "RGB_exact": true,
+      "alpha_opaque": true,
+      "physical_mask_exact": true,
+      "single_layer_recomposition": "Normal100% replaces underlying observed pixels exactly; outside unchanged"
+    },
+    {
+      "name": "P09 SWAP · pilot llum blanca · V31",
+      "RGB_exact": true,
+      "alpha_opaque": true,
+      "physical_mask_exact": true,
+      "single_layer_recomposition": "Normal100% replaces underlying observed pixels exactly; outside unchanged"
+    },
+    {
+      "name": "C01 Passa-alt24 lineal · control · V31",
+      "RGB_exact": true,
+      "alpha_opaque": true,
+      "physical_mask_exact": true,
+      "single_layer_recomposition": "Normal100% replaces underlying observed pixels exactly; outside unchanged"
+    }
+  ],
+  "sha256": "89d509bcc53982307cf9e3d78b0a84ed7548f4045e8cbb95d9f8594e4e877dfd",
+  "bytes": 9593292748
+}

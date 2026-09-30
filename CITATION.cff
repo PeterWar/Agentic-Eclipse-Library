@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this work or publish an image made with it, a mention would be appreciated. This is a courtesy request, not a condition of the licence: Processed with Eclipse Corona Agents by Pere Guerra — https://github.com/PeterWar/Eclipse-Corona-Agents"
+title: "Eclipse Corona Agents: skills, research notes and code for processing the total solar eclipse of 12 August 2026"
+type: software
+authors:
+  - family-names: Guerra Serra
+    given-names: Pere
+date-released: 2026-09-30
+version: 2.0.0
+license: MIT
+repository-code: "https://github.com/PeterWar/Eclipse-Corona-Agents"
+keywords:
+  - solar eclipse
+  - solar corona
+  - astrophotography
+  - HDR
+  - image processing
+  - Agent Skills
+  - AI agents
+  - human-AI collaboration

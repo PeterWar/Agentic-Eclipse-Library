@@ -1,0 +1,411 @@
+{
+ "generat": "2026-09-08T02:26:38",
+ "grups": {
+  "A. runs de la cadena (immutables; MANIFEST amb el SHA de cada RAW)": [
+   {
+    "path": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/019_VIXEN_CIENCIA_20260827T212404Z/MANIFEST.json",
+    "bytes": 96198,
+    "sha256": "b2da16489e7dece64436e2da6839f2963cd1576408aa3f351bacc4ecbbc91454"
+   },
+   {
+    "path": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/016_SONYTOT_CIENCIA_20260827T183356Z/MANIFEST.json",
+    "bytes": 44388,
+    "sha256": "410fc161b6814d6eb5b58e9f5b419baaa8762661a2f26e14ed921c12bd968870"
+   },
+   {
+    "path": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/019_VIXEN_CIENCIA_20260827T212404Z/4-rebuts/F1.3_registre.json",
+    "bytes": 21500,
+    "sha256": "5df60e194ce54416c9b053ae353604e008176091fc92f30452240f1ded192a4c"
+   },
+   {
+    "path": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/016_SONYTOT_CIENCIA_20260827T183356Z/4-rebuts/F1.3_registre.json",
+    "bytes": 6997,
+    "sha256": "4daec86aedc9769a32fff05e286bbd1523ff4b2dadc88de9e49f5ffacdbed42b"
+   },
+   {
+    "path": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/019_VIXEN_CIENCIA_20260827T212404Z/4-rebuts/F2.2_coherencia.json",
+    "bytes": 2669,
+    "sha256": "c5fbb57847d2b0534437b465b491c0814f8ebdc3c12f6a2685a29c197e3d1158"
+   },
+   {
+    "path": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/016_SONYTOT_CIENCIA_20260827T183356Z/4-rebuts/F2.2_coherencia.json",
+    "bytes": 911,
+    "sha256": "6ea4a44ce69f3f82ea5083a6fd539e31cc2a8b60d0b5a84ff71663d73e60024a"
+   }
+  ],
+  "B. geometria a la graella de Pere i paràmetres congelats (còpia a frozen/params)": [
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v25_lineal/cau_v25/geometria_v27.json",
+    "bytes": 1632,
+    "sha256": "469cbcd18088d0ab0a8cab76ecce4eeeb8c5789f4c3ae19fe6e98c6ecb37225d"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/refined_detail_receipt.json",
+    "bytes": 26539,
+    "sha256": "bc58ab00042a45faee388093fe25cf2e23ac2ada25137f6a493427e6506305fa"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/coherent_resolution.json",
+    "bytes": 612072,
+    "sha256": "609ffb482db656df2210a28434bee73c4780c54af125f5c4dc862b67c8a8e587"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/pointing_merge_receipt.json",
+    "bytes": 2500,
+    "sha256": "f5e219ce62cd4e28a4b53a6af45e659d4eac68d7b4f7d55905fc4eddd96856a2"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/cau/fine_variants_receipt.json",
+    "bytes": 51018,
+    "sha256": "d2f7e2bf535a6d790dfdcbc71625e15bec2c3ac0091027b3fc7418c27c8b2eca"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/offset_model.json",
+    "bytes": 406756,
+    "sha256": "7372bb5c46dd6d6a7359d195ec4d07ef95d20228d4c61e702989ba9ff08e728c"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/output/revisio_marques_v33_20260907/4-rebuts/R33_linealitat_sensor.json",
+    "bytes": 3924,
+    "sha256": "7cc788ead7dc1e24768ab862bc264af16814afbb3d00e8aba80d79416f3f2302"
+   }
+  ],
+  "C. artefactes de la V29 a la graella final (suports, pesos, mapa de resolució)": [
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/vixen_support.npy",
+    "bytes": 79195934,
+    "sha256": "328c150b13049012d243f3468956e65d89e47fa4eb5712d8e3802b7dad976bb6"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/sony_support.npy",
+    "bytes": 79195934,
+    "sha256": "81102f968e40de2b380abdb82736ad615f7b3a3b8791e0a96ead6dfeb12e3dc9"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/fusion_support.npy",
+    "bytes": 79195934,
+    "sha256": "72f67465aa43a26931a96a016c5a72e67ecf0fa66599bdd3d97abd947cfd8e4a"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/vixen_weight_G.npy",
+    "bytes": 316783352,
+    "sha256": "ff000cb80ce886249df4ce65a3ea111d0a0edf4e5aaf0604ec626a1e50f439fe"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/sony_weight_G.npy",
+    "bytes": 316783352,
+    "sha256": "09db9f7aa8bb56dc4cc161b190d0c5c36f1e3f3f9ec9c66d7f3cb59198235533"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/sony_A_weights.npy",
+    "bytes": 950349800,
+    "sha256": "b879987a569f3ddedfe6e387bac987ce08c8dfc8541b370c9f057d02773f1f2f"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/sony_B_weights.npy",
+    "bytes": 950349800,
+    "sha256": "067bf8833e70e51cb6c930f4441ffcc64a2ec831c351dd26cf1d81020b8ec434"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/sony_A_blend_weight.npy",
+    "bytes": 316783352,
+    "sha256": "278432697f273ac3bfdb3ec433c5d040a01e852b4d0cfc3fe5ddfb07d465ec22"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/resolution_sigma.npy",
+    "bytes": 316783352,
+    "sha256": "b7a3c8ff2d54cea85276bfc079231d04ef0eade5c64cd6fc9e47e1311e47755f"
+   }
+  ],
+  "D. codi (cadena determinista, v29 common, v31_purs operadors, v32/v34/v35)": [
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/cadena.py",
+    "bytes": 19588,
+    "sha256": "51c835d18a453e15b9704760949fba94c7b0ce142583d0390e4a520b02b315d6"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/comu.py",
+    "bytes": 49983,
+    "sha256": "241f44b41389389a3ea0ac6277523b660362489f8cbdc5d9984af36b098fa04e"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/f0.py",
+    "bytes": 15723,
+    "sha256": "081c1063867000e8ce45028101cfc9db718920d9d0592b27d240c97e9d7dc16d"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/f1.py",
+    "bytes": 17534,
+    "sha256": "470a760e906a8a227cae331e45e1fa92ad7a393c0a65b83f775fd41f66320029"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/f2.py",
+    "bytes": 22364,
+    "sha256": "2bdb0f2e301785b733f77c11eb76479d4d93d566f280dfd97aa252489458924a"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/f3.py",
+    "bytes": 32882,
+    "sha256": "546355979034547a06c6bf7a71c17010a06fc6f3920854429ccd6858e73b3609"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/common.py",
+    "bytes": 3137,
+    "sha256": "1e3966401c811d9921c6af2bc07b6fb78bdb27d5dd6856e2d311d75600f6da6d"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/fuse_and_filter.py",
+    "bytes": 8428,
+    "sha256": "6877fbaa19d69f33223ec53122e51ed71379ffa38c08e1604c5b2ea82ea376b3"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/audit_geometry.py",
+    "bytes": 3702,
+    "sha256": "69aca09b9f50fa4a4e4e4b6290dfcf40e322b30c75ae60f2286970967cf824cd"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/qa_rasters.py",
+    "bytes": 2405,
+    "sha256": "be0b8fbf6df06f1e0d0685e935ba52a41700cdc88c4fc21f41a9118dabd8e9b3"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/inspect_inputs.py",
+    "bytes": 4220,
+    "sha256": "348b570b71e115d326a8912c063056e7463a27ebf902fc1df8d1ad3e4c6e24d9"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/encaix_sony/psb_utils.py",
+    "bytes": 5869,
+    "sha256": "f6464a170f48f1a5cebe2a6b3064337c1d95fdefe501af44ce351ed8b53cf037"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/common.py",
+    "bytes": 2589,
+    "sha256": "01c72adae8006fef22a752702456239dc309263539e9f2191b97cbf0556c5aa4"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/wow_filters.py",
+    "bytes": 3731,
+    "sha256": "41920085bbf75ebf9223f084a631564936cdcb1caaf6d77dab74c1185b2221b4"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/local_filters.py",
+    "bytes": 1581,
+    "sha256": "a3ab14320ab085c156636ada947eeb8ac0189fed3bbb358b153c056a2c7b6544"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/radial_filters.py",
+    "bytes": 1995,
+    "sha256": "bc666dfed3ae16aefd27ebc03542af8c3c8034c22a3c694de82ce986ef6a25b7"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/sparse_conv.cpp",
+    "bytes": 1101,
+    "sha256": "ddfb17f496df182dba3b4fb7a4f09f1b50466dafd060fb33598db0bfc8161579"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/sparse_conv.dylib",
+    "bytes": 36880,
+    "sha256": "8ed49f17f5e5580acbc11d7373bd04ec04c2d6cc888a0d4f9d7152c7a5011d49"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v32_arcs_20260907/comu32.py",
+    "bytes": 5104,
+    "sha256": "fe50ad4d4329dee3c5734ae4acd65d2970c9cc6c7064f79ed29d309f47364a32"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v34_20260907/comu34.py",
+    "bytes": 3878,
+    "sha256": "5ffbb518e74da2fa99044077bc00a23a35b0e048c3fa0f4052f51fd69c0492e3"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v34_20260907/a1_pesos_per_fotograma.py",
+    "bytes": 4911,
+    "sha256": "ae1d493e494ee44ff83aec2532d32904b9b5548cff42712f1660a10b6cfb1b44"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v34_20260907/b1_camps_per_fotograma.py",
+    "bytes": 7045,
+    "sha256": "be9abc3771199229a58ac00c478d1aef7bb82669977efc7767551866ee422a60"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v34_20260907/b2_recomposicio.py",
+    "bytes": 6194,
+    "sha256": "8d7f681a70aa98e47f0a29ca5c4173e54b1e46c9324b9a7b3be32bc8f2a8eac4"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/comu35.py",
+    "bytes": 3136,
+    "sha256": "78beac783217e302134e832160f3b70e181506b042898413aabc2168d556ac4b"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/b3_fusio.py",
+    "bytes": 14838,
+    "sha256": "f5ea144ac3980ba6a7ad8b44c9dfb373ce5b1996ce33492ac61aa842472e32ee"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/b4a_capes_cadena.py",
+    "bytes": 5282,
+    "sha256": "e8ce6fc8341b79f7a0d6830aff16d2ba13c3b18ab477723082ee0e5eb4ff8f91"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/b4c_purs.py",
+    "bytes": 7265,
+    "sha256": "6599ba58a09d7c05cf44f4de63e8e0fe7b487b4621313c4a8b54da1888a1d256"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/b4d_radial_vora.py",
+    "bytes": 4606,
+    "sha256": "57bddeed32f61da654ed1d7f537142c633e02283fdfd110f5d5f9767e8751e43"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/c4_psb.py",
+    "bytes": 10132,
+    "sha256": "9d9aefb493a33aac4680c3b155623760d9bdab612f52272e94ea6077681be9e6"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/capes_totals_v14/porta_photoshop.sh",
+    "bytes": 1221,
+    "sha256": "90cb498f1d9b1fc899b6c20d7fc3a847efa537779791e431ba0d5c19e50d16b1"
+   }
+  ],
+  "E. composició per grup (V34 a1/b1/b2)": [
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v34_20260907/cau/vixen_total_v34.npy",
+    "bytes": 950349800,
+    "sha256": "fdf00ba50c5a3f7879bc702afd52ba7d30bef01cab5251e10f97226192c4b2a1"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v34_20260907/cau/sony_A_total_v34.npy",
+    "bytes": 950349800,
+    "sha256": "1dc07a695be5393d12faa26ee2bab1a009027f2dac5b484ede949a405fecd763"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v34_20260907/cau/sony_B_total_v34.npy",
+    "bytes": 950349800,
+    "sha256": "87eaf8f4f9460fb6a9940c239d543f836f4a0b4fa3dac439f9ad11a1ad18e56b"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v34_20260907/cau/vixen_meta.json",
+    "bytes": 34099,
+    "sha256": "1ff5fed5a363f4ef5e257ae448e26eae7d8b5f369ae918e8acc93097ffaec14f"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v34_20260907/cau/sony_meta.json",
+    "bytes": 11685,
+    "sha256": "7a1c6d13fb00bca02cfa909e9776d70af15966af1de61ceae7f1ac135f3251de"
+   }
+  ],
+  "F. fusió i capes V35": [
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/cau/sony_corrected_total_v35.npy",
+    "bytes": 950349800,
+    "sha256": "96f441030ddb3d030d6638363b724600cfdac933becefcc7328e38814ab3816d"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/cau/fusion_total_v35.npy",
+    "bytes": 950349800,
+    "sha256": "9d1818feffed4ff571ba3f0ce61060135872ca27966cb459ec87ad9d174b7d47"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/cau/base_G_v35.npy",
+    "bytes": 316783352,
+    "sha256": "12c313caee7c5bd3b9c99e479cd40b4f2b8f270b65c44b260825b616ed01019f"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/cau/support_v35.npy",
+    "bytes": 79195934,
+    "sha256": "72f67465aa43a26931a96a016c5a72e67ecf0fa66599bdd3d97abd947cfd8e4a"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/cau/weight_vixen_v35.npy",
+    "bytes": 316783352,
+    "sha256": "36fd13578869632b9827735c1f949dfda0bf914f65012b6a6cbdbd140e0d9b80"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/cau/rho_v35.npy",
+    "bytes": 950349800,
+    "sha256": "3af624b424c0fdb739ac1286427be29f5c2085414037f18c7d064659dc1b9d91"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/cau/delta_v35.npy",
+    "bytes": 950349800,
+    "sha256": "332efb7b62303ff239c580c76bef5eb19a71cd6c05652d18c3ae20aa0be70855"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/cau/01_v35_u16.npy",
+    "bytes": 158391740,
+    "sha256": "0aa7263e3e143ccedeb91a4250643749d5cedf02532e2d04c197c2cf0a22ecf0"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/cau/02_v35_u16.npy",
+    "bytes": 158391740,
+    "sha256": "e4471e978e411b79093ae8809aa1eb5c932986a0d4626f2ccb87abcc52b45b53"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/cau/04_v35_u16.npy",
+    "bytes": 158391740,
+    "sha256": "77a8303e863350ea8c886c3d8968140c7c556deb4556d5af793ffb550ec757ef"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/cau/05_v35_u16.npy",
+    "bytes": 158391740,
+    "sha256": "2196e55d09f7df33fb44bac3a7f7bd0e5320cbd4f50063d0a0635a493d5c4d4f"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/cau/06_v35_u16.npy",
+    "bytes": 158391740,
+    "sha256": "b4df7e1e7fd9c958ba85780ba32c8d65a065c846c137555912fa833b60ae442c"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/purs/cau/P01_NRGF_u16.npy",
+    "bytes": 158391740,
+    "sha256": "8d7b9ad98aaebed72800791f939100a089a6acf85bf296e9ec0052e306691b17"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/purs/cau/P02_RHEF_u16.npy",
+    "bytes": 158391740,
+    "sha256": "5aa4c0a5b34eefed612702fcc12fcab5a7a9232126b5fdd7839a5ea139c4c22e"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/purs/cau/P03_MGN_u16.npy",
+    "bytes": 158391740,
+    "sha256": "100dd3b227422204f85bde22be8a3420329ea0571982c72ec2e634924eb13a37"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/purs/cau/P04_WOW_u16.npy",
+    "bytes": 158391740,
+    "sha256": "ecf75f532f9f15acb90833b7ee7e728f95a97008ef4f8322a79eb491a0154110"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/purs/cau/P05_WOW_bilateral_u16.npy",
+    "bytes": 158391740,
+    "sha256": "0eb6660ec24cbe7d5518276af4207a32f186505efe2b8ca820e3461f0db68a80"
+   }
+  ],
+  "G. modes i màscares de les capes (de V32.psb, congelats)": [
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/frozen/modes_mascares_v32.npz",
+    "bytes": 6378487,
+    "sha256": "0833bba78ee0b6f3ebf9269aadbfec032c5eafabf53a106164a19100d1fc808f"
+   },
+   {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v35_20260908/frozen/modes_mascares_v32.json",
+    "bytes": 5992,
+    "sha256": "6f83580e7992e1f7e3221dc65f7a41599aadac6569029d0a78433d02d620c9d6"
+   }
+  ],
+  "H. producte": [
+   {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V35.psb",
+    "bytes": 4481840046,
+    "sha256": "50c8e1cfb7144794db67c227324238fb33b9ccaf91502ff33fb6f954692aa6d4"
+   },
+   {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V35_REBUT.md",
+    "bytes": 8405,
+    "sha256": "392d4a6e66175fcaacba2313f1de30d26728075aca32ec153793a0dd15851661"
+   }
+  ]
+ }
+}

@@ -1,0 +1,80 @@
+{
+  "native_pixel_pilots": [
+    {
+      "name": "pentagon_NE",
+      "bbox": [
+        5942,
+        3382,
+        6454,
+        3894
+      ],
+      "display_sampling": "one source pixel per image pixel"
+    },
+    {
+      "name": "pentagon_SE",
+      "bbox": [
+        5886,
+        3825,
+        6398,
+        4337
+      ],
+      "display_sampling": "one source pixel per image pixel"
+    },
+    {
+      "name": "pentagon_exterior_Sony",
+      "bbox": [
+        6120,
+        4086,
+        6632,
+        4598
+      ],
+      "display_sampling": "one source pixel per image pixel"
+    },
+    {
+      "name": "limbe_W",
+      "bbox": [
+        4665,
+        3520,
+        5177,
+        4032
+      ],
+      "display_sampling": "one source pixel per image pixel"
+    },
+    {
+      "name": "limbe_N",
+      "bbox": [
+        5106,
+        3079,
+        5618,
+        3591
+      ],
+      "display_sampling": "one source pixel per image pixel"
+    },
+    {
+      "name": "limbe_S",
+      "bbox": [
+        5106,
+        3960,
+        5618,
+        4472
+      ],
+      "display_sampling": "one source pixel per image pixel"
+    },
+    {
+      "name": "limbe_E",
+      "bbox": [
+        5546,
+        3520,
+        6058,
+        4032
+      ],
+      "display_sampling": "one source pixel per image pixel"
+    }
+  ],
+  "full_support_mask_reused": true,
+  "outside03_mask": {
+    "pixels": 8800539,
+    "max_abs_composite_delta": 0.0,
+    "PASS": true
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "unaffected25_complete_records_and_channels_identical": true,
+  "changed5_only_RGB_and_version_name": true,
+  "all30_alpha_masks_opacities_visibility_order_preserved": true,
+  "azimuthal03_and07_identical": true,
+  "global_metadata_exact": true,
+  "composite": {
+    "0": {
+      "max_DN16": 0,
+      "p99_DN16": 0.0
+    },
+    "1": {
+      "max_DN16": 0,
+      "p99_DN16": 0.0
+    },
+    "2": {
+      "max_DN16": 0,
+      "p99_DN16": 0.0
+    }
+  },
+  "size": [
+    10551,
+    7506
+  ],
+  "depth": 16,
+  "layers": 30,
+  "sha256": "bbbb2b93a49a0e09226b89467754f6364d1c6b929bc147bd34387a1c66d7affe",
+  "bytes": 6193861172,
+  "PASS": true
+}

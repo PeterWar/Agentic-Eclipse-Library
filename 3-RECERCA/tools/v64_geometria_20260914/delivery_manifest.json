@@ -1,0 +1,93 @@
+{
+  "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V64.psb",
+  "sha256": "20bc6245aec3d937c1b18dec9b6b6513b2ad605d7b5f7fb8b8ba0bbd0f00d46d",
+  "bytes": 8039918030,
+  "native_source": "/Users/USUARI/Downloads/Eclipse 2026/output/v64_geometria_20260914/V64_native.psb",
+  "time": "2026-09-13T23:55:30.769211+00:00",
+  "status": "V64_REVIEWABLE_EXPOSURE_COVERAGE_ABSOLUTE_REGISTRATION_PENDING",
+  "artifact_free": false,
+  "absolute_registration_resolved": false,
+  "canvas": [
+    10551,
+    7506
+  ],
+  "depth": 16,
+  "profile": "Adobe RGB (1998)",
+  "top_level_items": 25,
+  "report": "/Users/USUARI/Downloads/Eclipse 2026/output/v64_geometria_20260914/RESULTAT.md",
+  "handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-14_CODEX_CAPES_TOTALS_V64.md",
+  "manifest": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v64_geometria_20260914/delivery_manifest.json",
+  "qa": "/Users/USUARI/Downloads/Eclipse 2026/output/v64_geometria_20260914/D6_integrity.json",
+  "readback": {
+    "PASS": true,
+    "shape": [
+      7506,
+      10551,
+      4
+    ],
+    "max_DN16": 0,
+    "changed_channel_samples": 0,
+    "method": "Native published PSB reopen, full-layer duplicate, force recomposite by changing foreground visibility off and on, flattened native TIFF export; source document not modified.",
+    "published_sha256_after_reopen": "20bc6245aec3d937c1b18dec9b6b6513b2ad605d7b5f7fb8b8ba0bbd0f00d46d"
+  },
+  "original_RGB_exact": true,
+  "original_source_alpha_exact": true,
+  "all_Pere_root_masks_exact": true,
+  "source_transform_exact": [
+    905.1545006775716,
+    400.5652578211652,
+    9417.128639148827,
+    421.5477742709833,
+    9400.647306326518,
+    7107.527460574883,
+    888.6731678552641,
+    7086.544944125065
+  ],
+  "geometry_change_promoted": false,
+  "embedded_editable_original_interiors": 7,
+  "embedded_correction_layers": 1,
+  "embedded_group_mask_changed_pixels": 40797,
+  "embedded_mask_expected_decreases": 0,
+  "native_mask_max_DN16": 1,
+  "copy12_original_exact": true,
+  "copy12_native_effect_DN16": 0,
+  "copy12_transform_promoted": false,
+  "source_V63_Pere_sha256": "f3dc9afbc8e7e90aefbd853f8436975b4442d105d51aef2389b80a9bab277e0c",
+  "source_V63_native_snapshot": "/Users/USUARI/Downloads/Eclipse 2026/output/v64_geometria_20260914/V63_Pere_input.psb",
+  "source_V63_disk_snapshot": "/Users/USUARI/Downloads/Eclipse 2026/output/v64_geometria_20260914/V63_disk_input.psb",
+  "accepted_V62_colour_exact": true,
+  "nonopaque_ROI_pixels_preserved": 11916,
+  "native_alpha_max_difference": 118,
+  "external_originals": [
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V63.psb",
+      "sha256": "f3dc9afbc8e7e90aefbd853f8436975b4442d105d51aef2389b80a9bab277e0c",
+      "expected": "f3dc9afbc8e7e90aefbd853f8436975b4442d105d51aef2389b80a9bab277e0c",
+      "exact": true
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes interiors/Earthshine_V56.psb",
+      "sha256": "edee45ad76f08f8450beed3e85ed0d226eb0b1e11347478d2e998d74281ce12e",
+      "expected": "edee45ad76f08f8450beed3e85ed0d226eb0b1e11347478d2e998d74281ce12e",
+      "exact": true
+    }
+  ],
+  "UI_observation": {
+    "time": "2026-09-14T00:02:39.910364+00:00",
+    "verified": true,
+    "native_document_state_confirmed": true,
+    "native_evidence": "/Users/USUARI/Downloads/Eclipse 2026/output/v64_geometria_20260914/E2_final_open.log",
+    "CUA_result": "Final AX and screenshot confirmed V64.psb at 100%, Interiors V64 selected, green annotation hidden; original V62, V63 and the unsaved Interiors document remain open.",
+    "first_attempt": "Computer Use server error -10005: timeoutReached; final retry succeeded after native work completed.",
+    "scope": "Actual Photoshop foreground window observed through CUA; native exports additionally reviewed at full canvas, three green marks and full contour."
+  },
+  "open_document": "V64.psb | saved=true | 25 top-level items | interiors visible=true | interiors above Moon=true | annotations hidden=true | profile=Adobe RGB (1998)\nFINAL_OPEN_COMPLETE\n",
+  "preview": "/Users/USUARI/Downloads/Eclipse 2026/output/v64_geometria_20260914/vistes/V64_full_canvas.png",
+  "limits": [
+    "All seven exposures are not proven registered within 1 pixel everywhere.",
+    "Exposure-dependent opacity correction is photographic compositing, not new physical radiance or resolution.",
+    "No new external astronomical judge PASS for the final temporal limb.",
+    "Fine bright bead structure retained; Pere visual review remains open.",
+    "The original unsaved Interiors_V63_validity document remains untouched."
+  ]
+}

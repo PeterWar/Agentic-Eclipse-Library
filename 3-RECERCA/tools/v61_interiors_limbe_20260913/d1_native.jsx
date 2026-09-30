@@ -1,0 +1,9 @@
+var root='/Users/USUARI/Downloads/Eclipse 2026/output/v61_interiors_limbe_20260913/';var old=app.displayDialogs,own=[];
+function log(s){var f=new File(root+'D1_native.log');f.open('a');f.writeln(s);f.close();}
+function exp(d,n,crop){var f=new File(root+n+'.tif');if(f.exists)throw new Error('no-clobber');var t=d.duplicate('V61_QA_'+n,true);own.push(t);if(crop)t.crop([UnitValue(4377,'px'),UnitValue(2777,'px'),UnitValue(6377,'px'),UnitValue(4777,'px')]);var o=new TiffSaveOptions();o.imageCompression=TIFFEncoding.TIFFZIP;o.layers=false;o.alphaChannels=true;o.transparency=true;o.embedColorProfile=true;t.saveAs(f,o,true,Extension.LOWERCASE);t.close(SaveOptions.DONOTSAVECHANGES);own.pop();log('EXPORTED '+n);}
+try{app.displayDialogs=DialogModes.NO;var d=app.open(new File(root+'V61_work.psb'));own.push(d);var g=d.layerSets.getByName('Interiors 06–12 · encaix original V57');var moon=null;for(var i=0;i<d.layers.length;i++)if(d.layers[i].name.indexOf('Earthshine V56')===0)moon=d.layers[i];if(!moon||g.layers.length!=7)throw new Error('Layer inventory');moon.visible=false;moon.visible=true;app.refresh();exp(d,'V61_default',false);
+moon.visible=false;exp(d,'V61_no_moon',true);g.visible=true;exp(d,'V61_interiors_over_base',true);
+for(var i=0;i<d.layers.length;i++)d.layers[i].visible=false;g.visible=true;exp(d,'V61_interiors_only',true);
+for(var i=0;i<d.layers.length;i++)d.layers[i].visible=false;var orig=[];for(var i=0;i<g.layers.length;i++){orig.push(g.layers[i].visible);g.layers[i].visible=false;}g.visible=true;
+for(var k=g.layers.length-1;k>=0;k--){if(k===0)continue;g.layers[k].visible=true;exp(d,'V61_stack_through_'+g.layers[k].name.slice(0,2),true);}
+d.close(SaveOptions.DONOTSAVECHANGES);own.pop();log('COMPLETE');}finally{while(own.length){try{own.pop().close(SaveOptions.DONOTSAVECHANGES);}catch(e){}}app.displayDialogs=old;}'V61_NATIVE_EXPORTED';

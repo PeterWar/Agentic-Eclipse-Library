@@ -1,0 +1,12 @@
+from pathlib import Path
+import json,hashlib,datetime,os,subprocess
+R=Path.cwd();O=R/'output/v65_pere_estrelles_20260914';lock=R/'.coordination/claim.lock';claim='CODEX_V65_PERE_GEOMETRY_STARS_20260914';assert json.loads((lock/'owner.json').read_text())['claim_id']==claim;pub=json.loads((O/'E0_publish.json').read_text());qa=json.loads((O/'D14_integrity.json').read_text());rb=json.loads((O/'E3_final_readback.json').read_text());assert qa['PASS'] and rb['PASS'];handoff=R/'.coordination/HANDOFF_2026-09-14_CODEX_CAPES_TOTALS_V65.md';assert handoff.exists() and (O/'E5_authorities.json').exists()
+def sha(p):
+ with open(p,'rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
+assert sha(pub['path'])==pub['sha256'];source=json.loads((O/'A0_source_freeze.json').read_text());assert sha(source['source_path'])==source['sha256'];clean=[]
+# Only two superseded, owned intermediate files, never the source clone/native final/user product.
+for name in ['D7_V65_artifacts_stage.psb','D1_artifact_pilot.psb']:
+ p=O/name;assert p.is_file() and p.parent==O;entry=dict(path=str(p),bytes=p.stat().st_size,sha256=sha(p),reason='Owned superseded intermediate; final native product and full readback verified, scripts/arrays and source clone retained.');p.unlink();clean.append(entry)
+now=datetime.datetime.now(datetime.timezone.utc).isoformat();manifest=R/'research/tools/v65_pere_estrelles_20260914/delivery_manifest.json';m=json.loads(manifest.read_text());assert m['sha256']==pub['sha256'];receipt=dict(time=now,status='RELEASED',claim_id=claim,product=pub['path'],product_sha256=pub['sha256'],handoff=str(handoff),cleanup=clean,own_background_workers_remaining=0,Photoshop_final_open_saved=True,original_Pere_documents_preserved=True,goal_production_complete=True);(O/'E6_release.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n')
+with (R/'.coordination/CODEX_STATUS.md').open('a') as f:f.write(f'\n## {now} · RELEASED {claim}\nV65 and star map/catalogue delivered; all production and native checks complete. Full forced readback0DN16, originals and manual geometry exact. No own background workers remain. Two owned superseded intermediates removed after verified final delivery; receipt {O/"E6_release.json"}. Handoff {handoff}.\n')
+assert json.loads((lock/'owner.json').read_text())['claim_id']==claim;(lock/'owner.json').unlink();lock.rmdir();print('RELEASED',pub['path'],'freed_bytes',sum(v['bytes'] for v in clean),flush=True)

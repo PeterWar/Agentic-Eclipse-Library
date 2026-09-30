@@ -1,0 +1,37 @@
+{
+  "reviewer": "detail_review, read-only independent computations",
+  "candidate": "final gran_azimuthal.py, per-train positive G before blend",
+  "method": "256x256 windows, same angular operator per train, plane removed before Pearson correlation",
+  "columns": ["mark", "Vixen_Sony", "gran_Vixen", "gran_Sony"],
+  "rows": [
+    ["2-1",0.350,0.378,0.975], ["2-2",0.393,0.403,0.987],
+    ["2-3",0.521,0.545,0.988], ["2-4",0.356,0.366,0.986],
+    ["2-5",0.993,0.884,0.877], ["2-6",0.994,0.850,0.860],
+    ["2-7",0.987,0.797,0.819], ["2-8",0.931,0.936,0.869],
+    ["2-9",0.936,0.912,0.844], ["2-10",0.940,0.898,0.837],
+    ["2-11",0.941,0.655,0.774], ["2-12",0.941,0.860,0.868],
+    ["2-13",0.805,0.759,0.961], ["2-14",0.639,0.639,0.984],
+    ["2-15",0.535,0.556,0.991], ["2-16",0.496,0.519,0.992],
+    ["3-1 location, gran only",0.378,0.388,0.987],
+    ["4-1 location, gran only",0.365,0.375,0.986],
+    ["exact ghost centre",0.365,0.376,0.986]
+  ],
+  "transition_test": {
+    "circles_per_boundary":161,
+    "radial_step_px":1,
+    "half_width_px":80,
+    "raw_angular_mean_max_at_2R":0.00000151,
+    "raw_angular_mean_max_at_2_65R":0.000000761,
+    "mean_as_fraction_of_angular_std_upper_bound":0.00006,
+    "final_std_at_2_65R_minus20_zero_plus20": [0.2502,0.2490,0.2519]
+  },
+  "all_marked_windows_full_support":true,
+  "neutral_fraction_upper_bound":0.00014,
+  "verdict":"PASS local angular review and transition test",
+  "limits":[
+    "Sony is a source; output-Sony correlation is fidelity, not independent corroboration.",
+    "Vixen-Sony correlation is the independent evidence; moderate at ghost, stronger elsewhere.",
+    "Not a certification of all fine texture or the entire field.",
+    "8-16px exterior evidence was negligible in prior independent Fourier tests; preserve explicit resolution/noise limits."
+  ]
+}

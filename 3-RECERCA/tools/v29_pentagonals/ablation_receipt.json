@@ -1,0 +1,10 @@
+{
+  "synthetic_radii_px": [
+    445,
+    1700
+  ],
+  "angular_constant_input": true,
+  "variable_operator_radial_std": 0.032256338745355606,
+  "fixed_operator_radial_std": 4.75267292188164e-09,
+  "scope": "diagnostic Vixen polar rings, no product or source edits"
+}

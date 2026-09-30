@@ -1,0 +1,1577 @@
+{
+  "PASS": true,
+  "published_utc": "2026-09-05T12:29:04.238555+00:00",
+  "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V30.psb",
+  "sha256": "0d1f23fe5c56acf60bb35d3e24acea02fffaaf333d04d7a3aa17e0aac4f3f8c0",
+  "bytes": 6233044488,
+  "size": [
+    10551,
+    7506
+  ],
+  "depth": 16,
+  "layers": 30,
+  "source": {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V29.psb",
+    "bytes": 4221719560,
+    "sha256": "67169f0345c8abdf3fb9c3fd940d5b9f13d260864954d776c5d9277e15630676"
+  },
+  "input_manifest": {
+    "sources": {
+      "V29": {
+        "source": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V29.psb",
+        "snapshot": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/cau/input_V29.psb",
+        "sha256": "67169f0345c8abdf3fb9c3fd940d5b9f13d260864954d776c5d9277e15630676",
+        "bytes": 4221719560,
+        "inventory": {
+          "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/cau/input_V29.psb",
+          "size": [
+            10551,
+            7506
+          ],
+          "depth": 16,
+          "layers": [
+            {
+              "i": 0,
+              "name": "12 1/3200 perles",
+              "bbox": [
+                1420,
+                908,
+                9123,
+                6764
+              ],
+              "visible": true,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c942f0>"
+              }
+            },
+            {
+              "i": 1,
+              "name": "11 1/500 limbe",
+              "bbox": [
+                886,
+                410,
+                9398,
+                7096
+              ],
+              "visible": true,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c943d0>"
+              }
+            },
+            {
+              "i": 2,
+              "name": "10 1/125",
+              "bbox": [
+                886,
+                410,
+                9398,
+                7096
+              ],
+              "visible": false,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c94520>"
+              }
+            },
+            {
+              "i": 3,
+              "name": "09 1/60 x2",
+              "bbox": [
+                1423,
+                908,
+                9126,
+                6765
+              ],
+              "visible": false,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c94750>"
+              }
+            },
+            {
+              "i": 4,
+              "name": "08 1/30 x4 quar",
+              "bbox": [
+                1422,
+                909,
+                9126,
+                6766
+              ],
+              "visible": false,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c94830>"
+              }
+            },
+            {
+              "i": 5,
+              "name": "07 1/15 x2 quar",
+              "bbox": [
+                1423,
+                908,
+                9126,
+                6765
+              ],
+              "visible": false,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c94910>"
+              }
+            },
+            {
+              "i": 6,
+              "name": "06 1/8 x4 quar",
+              "bbox": [
+                1422,
+                909,
+                9126,
+                6766
+              ],
+              "visible": false,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c94a60>"
+              }
+            },
+            {
+              "i": 7,
+              "name": "05 1/4 x2 quar",
+              "bbox": [
+                1423,
+                908,
+                9126,
+                6765
+              ],
+              "visible": false,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c94bb0>"
+              }
+            },
+            {
+              "i": 8,
+              "name": "04 1/2 x4 quar",
+              "bbox": [
+                1422,
+                909,
+                9126,
+                6766
+              ],
+              "visible": false,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c94c90>"
+              }
+            },
+            {
+              "i": 9,
+              "name": "03 1s x2 quar",
+              "bbox": [
+                1423,
+                908,
+                9126,
+                6765
+              ],
+              "visible": false,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c94d70>"
+              }
+            },
+            {
+              "i": 10,
+              "name": "02 2s x3 quar",
+              "bbox": [
+                1424,
+                907,
+                9127,
+                6763
+              ],
+              "visible": false,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 255,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c94e50>"
+              }
+            },
+            {
+              "i": 11,
+              "name": "01 10.3s x3 quar",
+              "bbox": [
+                1423,
+                908,
+                9127,
+                6765
+              ],
+              "visible": false,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10552,
+                  7506
+                ],
+                "background_color": 255,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c94f30>"
+              }
+            },
+            {
+              "i": 12,
+              "name": "13 Sony >1s",
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "visible": false,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c95010>"
+              }
+            },
+            {
+              "i": 13,
+              "name": "Fons per raig",
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "visible": false,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c950f0>"
+              }
+            },
+            {
+              "i": 14,
+              "name": "Earthshine v2",
+              "bbox": [
+                4866,
+                3279,
+                5857,
+                4270
+              ],
+              "visible": false,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c951d0>"
+              }
+            },
+            {
+              "i": 15,
+              "name": "Compara D87",
+              "bbox": [
+                4866,
+                3279,
+                5857,
+                4270
+              ],
+              "visible": false,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c95390>"
+              }
+            },
+            {
+              "i": 16,
+              "name": "Compara LROC",
+              "bbox": [
+                4866,
+                3279,
+                5857,
+                4270
+              ],
+              "visible": false,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c95550>"
+              }
+            },
+            {
+              "i": 17,
+              "name": "Earthshine V24e",
+              "bbox": [
+                4866,
+                3279,
+                5857,
+                4270
+              ],
+              "visible": true,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c956a0>"
+              }
+            },
+            {
+              "i": 18,
+              "name": "00 Base amb cel",
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "visible": false,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c95d30>"
+              }
+            },
+            {
+              "i": 19,
+              "name": "00 Base (cel/4)",
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "visible": true,
+              "opacity": 255,
+              "blend": "BlendMode.NORMAL",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c960b0>"
+              }
+            },
+            {
+              "i": 20,
+              "name": "03 ACHF azimutal 8-128 · V29",
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "visible": true,
+              "opacity": 38,
+              "blend": "BlendMode.OVERLAY",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c96190>"
+              }
+            },
+            {
+              "i": 21,
+              "name": "01 ACHF fi 2-32 · V29",
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "visible": true,
+              "opacity": 36,
+              "blend": "BlendMode.OVERLAY",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c96270>"
+              }
+            },
+            {
+              "i": 22,
+              "name": "02 Passa-alt 24 · V29",
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "visible": true,
+              "opacity": 20,
+              "blend": "BlendMode.OVERLAY",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c96350>"
+              }
+            },
+            {
+              "i": 23,
+              "name": "Estrelles",
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "visible": true,
+              "opacity": 255,
+              "blend": "BlendMode.LINEAR_DODGE",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c96430>"
+              }
+            },
+            {
+              "i": 24,
+              "name": "Reflex",
+              "bbox": [
+                4862,
+                3279,
+                5853,
+                4270
+              ],
+              "visible": true,
+              "opacity": 255,
+              "blend": "BlendMode.LINEAR_DODGE",
+              "channels": [
+                -1,
+                0,
+                1,
+                2,
+                -2
+              ],
+              "mask": {
+                "bbox": [
+                  0,
+                  0,
+                  10551,
+                  7506
+                ],
+                "background_color": 0,
+                "flags": "<psd_tools.psd.layer_and_mask.MaskFlags object at 0x110c967b0>"
+              }
+            }
+          ]
+        }
+      },
+      "marques": {
+        "source": "/Users/USUARI/Downloads/minicerclesConcentrics.psb",
+        "snapshot": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/cau/input_marques.psb",
+        "sha256": "69f391960f29ba4a7aabc43f6302c13bbbd6b4d2af7df5c27371c169943624a3",
+        "bytes": 1560469638,
+        "inventory": {
+          "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/cau/input_marques.psb",
+          "size": [
+            10551,
+            7506
+          ],
+          "depth": 16,
+          "layers": [
+            {
+              "i": 0,
+              "name": "03 ACHF azimutal 8-128 · V29",
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "visible": true,
+              "opacity": 255,
+              "blend": "BlendMode.OVERLAY",
+              "channels": [
+                -1,
+                0,
+                1,
+                2
+              ],
+              "mask": null
+            },
+            {
+              "i": 1,
+              "name": "01 ACHF fi 2-32 · V29",
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "visible": true,
+              "opacity": 255,
+              "blend": "BlendMode.OVERLAY",
+              "channels": [
+                -1,
+                0,
+                1,
+                2
+              ],
+              "mask": null
+            },
+            {
+              "i": 2,
+              "name": "02 Passa-alt 24 · V29",
+              "bbox": [
+                0,
+                0,
+                10551,
+                7506
+              ],
+              "visible": true,
+              "opacity": 255,
+              "blend": "BlendMode.OVERLAY",
+              "channels": [
+                -1,
+                0,
+                1,
+                2
+              ],
+              "mask": null
+            }
+          ]
+        }
+      }
+    },
+    "marks": [
+      {
+        "layer": "03 ACHF azimutal 8-128 · V29",
+        "i": 0,
+        "components": [
+          {
+            "component": 1,
+            "bbox": [
+              5553,
+              2062,
+              5939,
+              2160
+            ],
+            "pixels": 7689,
+            "xy": [
+              5747.513460788139,
+              2103.021979451164
+            ]
+          },
+          {
+            "component": 2,
+            "bbox": [
+              5535,
+              2123,
+              5901,
+              2223
+            ],
+            "pixels": 7410,
+            "xy": [
+              5719.924291497976,
+              2158.9295546558706
+            ]
+          },
+          {
+            "component": 3,
+            "bbox": [
+              5536,
+              2194,
+              5892,
+              2290
+            ],
+            "pixels": 7206,
+            "xy": [
+              5715.934637801832,
+              2227.258534554538
+            ]
+          },
+          {
+            "component": 4,
+            "bbox": [
+              5517,
+              2257,
+              5815,
+              2353
+            ],
+            "pixels": 6018,
+            "xy": [
+              5668.006480558325,
+              2296.9988368228646
+            ]
+          },
+          {
+            "component": 5,
+            "bbox": [
+              3504,
+              3112,
+              3565,
+              3539
+            ],
+            "pixels": 8463,
+            "xy": [
+              3522.3284887155855,
+              3323.4740635708376
+            ]
+          },
+          {
+            "component": 6,
+            "bbox": [
+              3619,
+              3113,
+              3674,
+              3464
+            ],
+            "pixels": 6869,
+            "xy": [
+              3639.313873926336,
+              3287.226670548843
+            ]
+          },
+          {
+            "component": 7,
+            "bbox": [
+              7159,
+              3434,
+              7187,
+              3682
+            ],
+            "pixels": 4831,
+            "xy": [
+              7174.478161871249,
+              3557.093976402401
+            ]
+          },
+          {
+            "component": 8,
+            "bbox": [
+              7214,
+              3473,
+              7246,
+              3673
+            ],
+            "pixels": 3868,
+            "xy": [
+              7231.855480868666,
+              3572.189245087901
+            ]
+          },
+          {
+            "component": 9,
+            "bbox": [
+              4852,
+              5057,
+              5387,
+              5143
+            ],
+            "pixels": 10541,
+            "xy": [
+              5116.795180722892,
+              5111.053031021725
+            ]
+          },
+          {
+            "component": 10,
+            "bbox": [
+              4852,
+              5079,
+              5376,
+              5175
+            ],
+            "pixels": 10339,
+            "xy": [
+              5110.004739336493,
+              5139.123996518038
+            ]
+          },
+          {
+            "component": 11,
+            "bbox": [
+              4834,
+              5130,
+              5362,
+              5246
+            ],
+            "pixels": 10533,
+            "xy": [
+              5095.102439950631,
+              5197.958416405582
+            ]
+          }
+        ]
+      },
+      {
+        "layer": "01 ACHF fi 2-32 · V29",
+        "i": 1,
+        "components": []
+      },
+      {
+        "layer": "02 Passa-alt 24 · V29",
+        "i": 2,
+        "components": []
+      }
+    ]
+  },
+  "dependencies": [
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V29.psb",
+      "bytes": 4221719560,
+      "sha256": "67169f0345c8abdf3fb9c3fd940d5b9f13d260864954d776c5d9277e15630676"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/cau/input_manifest.json",
+      "bytes": 23424,
+      "sha256": "3079a8278390988e9603aa909771da40b499f2d1a895d29523bf40deca808828"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/vixen_corrected_G.npy",
+      "bytes": 316783352,
+      "sha256": "127d99a09d037b0e8e229c62702a4a0cae95b5263b5d627c1673a893f4034469"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/sony_corrected_G.npy",
+      "bytes": 316783352,
+      "sha256": "14288499f0430af3cbd809eeb8be470f3e9b7387c00a41a61f0e77fa870980b6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/fusion_total.npy",
+      "bytes": 950349800,
+      "sha256": "caeaab94f9fc74036f934fb693893134c3429179dfef69af19d293ec4888c707"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/gran_azimuthal_receipt.json",
+      "bytes": 15882,
+      "sha256": "bcbeca8fba58fd8c9a4281aaf31bbbeb7e586d3bb86b6c748fcedd244583b6ed"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/gran_mask_final.npy",
+      "bytes": 316783352,
+      "sha256": "a9776008f249fc69ba8f091dabe79d8a2965900aac6f7efaef14fedc832c8cdb"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/achf_final.npy",
+      "bytes": 316783352,
+      "sha256": "f8a0f73db251f25a63cfcc39ad7162cdd176e6ff681e0c1f42846f5c16b88427"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/passalt24_final.npy",
+      "bytes": 316783352,
+      "sha256": "62df3fa3d3b1a7daf0e9d79436696e41368aeb8b2a5176e26fd7eaacc8d96378"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/delivery_manifest.json",
+      "bytes": 5072,
+      "sha256": "8d82a53745fde634e25d79f0928156eba2e0366b34c34cf4e7ab6f8f26bc744d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/resolution_sigma.npy",
+      "bytes": 316783352,
+      "sha256": "b7a3c8ff2d54cea85276bfc079231d04ef0eade5c64cd6fc9e47e1311e47755f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/refined_detail_receipt.json",
+      "bytes": 26539,
+      "sha256": "bc58ab00042a45faee388093fe25cf2e23ac2ada25137f6a493427e6506305fa"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/fusion_support.npy",
+      "bytes": 79195934,
+      "sha256": "72f67465aa43a26931a96a016c5a72e67ecf0fa66599bdd3d97abd947cfd8e4a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/gran_support.npy",
+      "bytes": 79195934,
+      "sha256": "9b27b4bdce6d1295c9a29878c20c6b06a06862afee72fb5cec841bff6e206cef"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/vixen_support.npy",
+      "bytes": 79195934,
+      "sha256": "328c150b13049012d243f3468956e65d89e47fa4eb5712d8e3802b7dad976bb6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/sony_support.npy",
+      "bytes": 79195934,
+      "sha256": "81102f968e40de2b380abdb82736ad615f7b3a3b8791e0a96ead6dfeb12e3dc9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/vixen_total.npy",
+      "bytes": 950349800,
+      "sha256": "6aed9e74122b42d4e5dadf4cea6110fcafd2a7877c64bbecb73849e2d74cb4e3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/sony_corrected_total.npy",
+      "bytes": 950349800,
+      "sha256": "ae816add880305ad06f021638c034bfe4092e1d2463b547cbadbfe01335e55c0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/sony_B_total.npy",
+      "bytes": 950349800,
+      "sha256": "179483a52342aa5b5a8a56c5c0946a93ddf7cd72a69fec398fe0114b4715ed0b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/composite_base.npy",
+      "bytes": 950349800,
+      "sha256": "3274b011356830cb33d5a7ad1ac8be46bb8af61cb18d305df9d0ab00b36ac88e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/foreground_add.npy",
+      "bytes": 950349800,
+      "sha256": "25bda3c7f6798b84ffa31342b282d64d343853eb76fe7ab2c671379a87801a14"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/achf_mask_final.npy",
+      "bytes": 316783352,
+      "sha256": "1775575a98be78c0343ee51e4f81b8798fa39bb4d27f5ec6adfb317bd9d16cd0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/passalt24_mask_final.npy",
+      "bytes": 316783352,
+      "sha256": "8a3cc720de936b2b5ce0eefcdbcbdbd2322e5ade91d45877b1b6a8322898ed97"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/delivery_manifest.json",
+      "bytes": 2503,
+      "sha256": "9cd38c074d72d31702e15c6c195d43b296a77fb5d71ccef7d97e21256749427d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/angular_vixen_raw.npy",
+      "bytes": 316783352,
+      "sha256": "10be3b041aa0469870312512f7fd80ed28958769d29cf21970d75ae0f346531b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/angular_sony_raw.npy",
+      "bytes": 316783352,
+      "sha256": "abeec7008d3d8da9cb2bb4beb20446abd2dbc99abcd76b2faa2a654bf9adc574"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/gran_raw.npy",
+      "bytes": 316783352,
+      "sha256": "a46f40fc893b9a26b8d8ca20e6382c45c42fe756c6a1e905ca40684058b7ff05"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/gran_u16.npy",
+      "bytes": 158391740,
+      "sha256": "4dac48bd3748f87bb26cebfa9acd2c33f76b60cc1059c61a8d3f4493c8a2c6c9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/composite.npy",
+      "bytes": 950349800,
+      "sha256": "a528ab595da5156649fcde0d92369c821cfef9edb656c4d72f565d419eb23282"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v25_lineal/cau_v25/geometria_v27.json",
+      "bytes": 1632,
+      "sha256": "469cbcd18088d0ab0a8cab76ecce4eeeb8c5789f4c3ae19fe6e98c6ecb37225d"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/019_VIXEN_CIENCIA_20260827T212404Z/4-rebuts/F1.2_sol_llenc.json",
+      "bytes": 31173,
+      "sha256": "3f573d9076206fb073dc4cb114262650476058001b3c6c3061a6e59f71d4d5b3"
+    }
+  ],
+  "new_rasters": [
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/cau/gran_r4_u16.npy",
+      "bytes": 158391740,
+      "sha256": "522ec699775626ae1fd0b4f7a8b39b79809fe0bb2545c1c029dd56a9b2a95d51"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/cau/gran_r8_u16.npy",
+      "bytes": 158391740,
+      "sha256": "46b673315a9c9750ade7fb32e212b12d05ca944060b539ce1de006a928625e01"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/cau/micro1_16_u16.npy",
+      "bytes": 158391740,
+      "sha256": "ea6e25914d2d004cdd48439b7dd7bdd76aad985a8f6d05da03e750264e54bc3b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/cau/fi2_48_u16.npy",
+      "bytes": 158391740,
+      "sha256": "bde769a2fd59e65704715d7c833e0caada2f59c888e8050ddfa209d985dd8f52"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/cau/estructura4_64_u16.npy",
+      "bytes": 158391740,
+      "sha256": "0401861a8f503e99bfe269a1f3e54bde90fcc33238dbddb000c3a8c19aab4f4f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/cau/micro1_16_mask_u16.npy",
+      "bytes": 158391740,
+      "sha256": "b406c865245319b8a0ec8bd5e356aef5fe6005632e8481bfef03165fa4ac8d4d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/cau/fi2_48_mask_u16.npy",
+      "bytes": 158391740,
+      "sha256": "53f83de02290ac25bcd2b2e89cce4ddeb72c51c91d226a2293a626a172e36099"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/cau/estructura4_64_mask_u16.npy",
+      "bytes": 158391740,
+      "sha256": "67a098d6d53dee07cc437cb2b89f708576705346b52ce409e83a6d6b6207f332"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/cau/composite_default_r4.npy",
+      "bytes": 950349800,
+      "sha256": "6826a1db17dbe113f0d4474024ce5c1adc45bf522bacdaa6bad8247da25ff278"
+    }
+  ],
+  "code": [
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/ajust.py",
+      "bytes": 2287,
+      "sha256": "407bbc699e575b1f6aff28c7e95ca8811da20e86e92ef8b1747deddd4e0a8e34"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/anells.py",
+      "bytes": 4322,
+      "sha256": "86109fbfa4a34e81799ba9cd43d52374f5257f5aa14a5e941a21b5e69ea689e8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/cadena.py",
+      "bytes": 19588,
+      "sha256": "51c835d18a453e15b9704760949fba94c7b0ce142583d0390e4a520b02b315d6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/comparativa_modes.py",
+      "bytes": 4160,
+      "sha256": "1258d70a92a78aac5e96a39f4ff5eaf4726fbc24830973ce888ba4037d469cc7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/comu.py",
+      "bytes": 49983,
+      "sha256": "241f44b41389389a3ea0ac6277523b660362489f8cbdc5d9984af36b098fa04e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/f0.py",
+      "bytes": 15723,
+      "sha256": "081c1063867000e8ce45028101cfc9db718920d9d0592b27d240c97e9d7dc16d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/f1.py",
+      "bytes": 17534,
+      "sha256": "470a760e906a8a227cae331e45e1fa92ad7a393c0a65b83f775fd41f66320029"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/f2.py",
+      "bytes": 22364,
+      "sha256": "2bdb0f2e301785b733f77c11eb76479d4d93d566f280dfd97aa252489458924a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/f3.py",
+      "bytes": 32882,
+      "sha256": "546355979034547a06c6bf7a71c17010a06fc6f3920854429ccd6858e73b3609"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/f4.py",
+      "bytes": 26895,
+      "sha256": "05f32ae3abd8ea2b130609f8ac131a03f46329c3380647242da49c650acba469"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/mapa_carpetes.py",
+      "bytes": 8104,
+      "sha256": "1489f7a61b380be12cd2cbe4a072d1272301ac6b3bc83d3592bc85952941c225"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/vista_c2_vs_c2c3.py",
+      "bytes": 2453,
+      "sha256": "0cb3696555b742a2dc3c1f5e02a422f77b60bd4ff658b1106b97be49e99daa20"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/vistes.py",
+      "bytes": 8593,
+      "sha256": "4bdd56b9febc7d264c3e8126b0d7bb42987cf2bc8e18caba7c1a9f9d723ca4bb"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/vistes_filtres.py",
+      "bytes": 2766,
+      "sha256": "ce6f7b3c7fde69d2e1486a036ac03b9fb7441abe3cebdd9fc2aa280a23283d65"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/encaix_sony/psb_utils.py",
+      "bytes": 5869,
+      "sha256": "f6464a170f48f1a5cebe2a6b3064337c1d95fdefe501af44ce351ed8b53cf037"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/audit_geometry.py",
+      "bytes": 3702,
+      "sha256": "69aca09b9f50fa4a4e4e4b6290dfcf40e322b30c75ae60f2286970967cf824cd"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/build_canvas.py",
+      "bytes": 5576,
+      "sha256": "afe0255b4fd2f0b1ae4b1d054fdc73f81719e0e16342ff9eb2518f56a30cf663"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/coherent_resolution.py",
+      "bytes": 3436,
+      "sha256": "7e98a1f11dc83a017bba1cfc484f0ecbc380af4e8ae8526bb1e67c364cfe7ff6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/common.py",
+      "bytes": 3137,
+      "sha256": "1e3966401c811d9921c6af2bc07b6fb78bdb27d5dd6856e2d311d75600f6da6d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/finish_receipt.py",
+      "bytes": 10764,
+      "sha256": "8472c9c73100d513c63d91df94e7df7eb4997f84c1afb086834aa449fdba52b6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/fuse_and_filter.py",
+      "bytes": 8428,
+      "sha256": "6877fbaa19d69f33223ec53122e51ed71379ffa38c08e1604c5b2ea82ea376b3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/ghost_roi.py",
+      "bytes": 3081,
+      "sha256": "abec314e6b7ef6a56539e18b2b6fcabf3f3a90611105123163d00eb31de1e267"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/gran_azimuthal.py",
+      "bytes": 3191,
+      "sha256": "30ea175714f5a0c4509e45bc5fd965a5a0e24c978e9c42fe9bead3d3893044d5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/gran_independent.py",
+      "bytes": 1906,
+      "sha256": "d7285c4f72f54ca8f737090ca24ee20b53a77e19416fdcb25f911e37cc98fdb9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/inspect_inputs.py",
+      "bytes": 4220,
+      "sha256": "348b570b71e115d326a8912c063056e7463a27ebf902fc1df8d1ad3e4c6e24d9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/limb_receipt.py",
+      "bytes": 3228,
+      "sha256": "e998f4bc0909b7b5af02378b957803a12f260e5e0ef19b7515c37b1cdc406401"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/make_delivery.py",
+      "bytes": 1860,
+      "sha256": "1f7c7574c85ff0582b1cbda20f24688d9193e8e2379859c1053759f54fce5250"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/merge_pointings.py",
+      "bytes": 4416,
+      "sha256": "ff665df8d7561d7cf63a58a5d2c4cefccb66919ceae83a8ef61c272c3913562c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/package_psb.py",
+      "bytes": 3760,
+      "sha256": "56d06955530d5058e72257ff98b68357ab70c44d7d51e8d28599e3f7157f87bf"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/prepare_final_grid.py",
+      "bytes": 3702,
+      "sha256": "3303c59f80526c8b29ace15305c3970164626bcad9f4f3467dfb225ffc4fb43f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/prepare_sources.py",
+      "bytes": 2848,
+      "sha256": "638af170580fe4782133bc38cc0a5f5056e3052ba057b6febb6609b172c1dac8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/preview_cached.py",
+      "bytes": 1325,
+      "sha256": "f66d9ec3653ee525d00f8481aec99f3e3ad995804a39522732df75610d092870"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/qa_angular_controls.py",
+      "bytes": 2026,
+      "sha256": "23c50498acc2f41a30869b3d17212fd4d05e0dd502733dd6038e40b4cfa158c5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/qa_rasters.py",
+      "bytes": 2405,
+      "sha256": "be0b8fbf6df06f1e0d0685e935ba52a41700cdc88c4fc21f41a9118dabd8e9b3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/qa_transfer.py",
+      "bytes": 3215,
+      "sha256": "847d72f7dd7e48e1680acaea2ba2a216d636713c431498e7e5768d973f92f1ef"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/refine_detail.py",
+      "bytes": 2377,
+      "sha256": "0478718b463016e8f78470c9fafd03b94b153431d1427e9f60eb989aa89f717a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/select_delivery.py",
+      "bytes": 3510,
+      "sha256": "91f1cc0263faae3614453d3bd439de9b3858bb8be078703635a1f5fad9a1666b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/sony_pointings.py",
+      "bytes": 2051,
+      "sha256": "4f90388c58671649d17a03f0c5f42d98f927fb36f213d9274073bad469317a5e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/verify_psb.py",
+      "bytes": 2977,
+      "sha256": "38d2e46b7378e0814d4657c4b386f62c66b2dd8d325ae24756d859e4cbb9720b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/apply_offsets.py",
+      "bytes": 4239,
+      "sha256": "e29c04708c096bee24e511d4e79a4e7c099ad9154cf4692573e8bf2e7638a63c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/filter03.py",
+      "bytes": 3999,
+      "sha256": "f41af53a2d7aba72e7584ab360118fe50c3f4a24a6f767f069b2413ea6105ea0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/finalize_delivery.py",
+      "bytes": 8726,
+      "sha256": "fde4b98be222aae547fc4f8c3322d3f55cccf45ec9a622e8779845fa3aeaeca2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/fit_offsets.py",
+      "bytes": 4846,
+      "sha256": "0fb8905db0990550d30f8aefb0ecd8b39b0fea46333938a889fe9e8e39d12d83"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/local_previews.py",
+      "bytes": 2270,
+      "sha256": "34a543e8317ab4d47049cefcea5b5f4c93e1907d35fafa18e458b07f6f8aed8c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/package_only03.py",
+      "bytes": 4092,
+      "sha256": "3941e4ea701b87a101f316f98408a342edd3004843d2350035f168f7af061dfd"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/photoshop_gate.py",
+      "bytes": 1556,
+      "sha256": "de674c4de7e2cb891167975d55f8ef648377aea17d1a29bab663b7e11a1a3bd9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/qa_candidate.py",
+      "bytes": 3283,
+      "sha256": "a61e88942b9491ef1afee6d1bc3e9db0715e996aee2157155624e6122f4b7005"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/sample_frames.py",
+      "bytes": 2299,
+      "sha256": "1b7e980cccaae71fdd2d81e721207f6403ea70333788696048e4fbc4177b133e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/verify_only03.py",
+      "bytes": 2817,
+      "sha256": "a5dd91f46edea49982aa61a1c1e0eff332e5501b09dee115989b81893ad966f4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/ablate_h1.py",
+      "bytes": 3723,
+      "sha256": "87254f6418046e2dbc62a27b42a2d777ece5ab218a2f1c525ad70f3b52bc8e2f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/angular_pilots.py",
+      "bytes": 5687,
+      "sha256": "d9186c8783bcceee60f1c3ccaef695c3133c89fe8509257deafce2c30c08191a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/build_previews.py",
+      "bytes": 3431,
+      "sha256": "e53d0e10c7746cc491a18121902b07b9fe142e31b768f30a119c3ee2464bc26a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/compare_brno.py",
+      "bytes": 5242,
+      "sha256": "2a32a2edc6e4b944bba01466369785b99681a909ddbcd0a0f08455e83987c411"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/finalize_delivery.py",
+      "bytes": 13287,
+      "sha256": "68412583619fc2a3b6d269a00b1d277f83b36bb31b1e40ed5014855519bc8ae7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/fine_variants.py",
+      "bytes": 3368,
+      "sha256": "a32f208e503bf0b5d006d0747880ce70a6b91fb2a37d078f1e7fefbd4062c396"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/inject_angular.py",
+      "bytes": 3891,
+      "sha256": "501c483249e646551719e09a00b6389798230c3d27fe5b89ce474710f8d365d4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/inspect_marks.py",
+      "bytes": 2127,
+      "sha256": "0fa4de1f8123f7447ceaa51ccae941d901ae4fa8fbeb50ffabdeeabba2ea193a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/package_v30.py",
+      "bytes": 3895,
+      "sha256": "f4315c9036340371b52e5426704ff8bd595f5b4bd6c7e7d5032acba87984cdb3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/photoshop_gate.py",
+      "bytes": 1552,
+      "sha256": "61888ebcddfda1a0ad37ca513bdf740a939102c84217da3236ecc796493eaa80"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/update_authority.py",
+      "bytes": 14778,
+      "sha256": "e98f6842cbd1137e381bae69dc064cd494b77afd29834ccf1ba3cd74367f1090"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/verify_v30.py",
+      "bytes": 2944,
+      "sha256": "aadfe4a154f75911ed4bd88d20b9309a06ed198e797287b5a7fadda712bcb81b"
+    }
+  ],
+  "verification": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/psb_verification.json",
+  "photoshop": "OBRE 10551 px x 7506 px · 30 capes",
+  "photoshop_dialog_mode_restored": true,
+  "judges": [
+    "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/candidate_review.json",
+    "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/cau/brno_comparison.json",
+    "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/cau/injection_receipt.json"
+  ],
+  "visual_acceptance": "delivered for Pere; not yet judged by Pere",
+  "preservation": "all25 original pixel/mask/alpha channels exact; only old03 visibility false; original01/02 unchanged",
+  "microcircle_reduction": "default radial4 RMS4-32px 0.476-0.550 in four marked sectors; not universal elimination",
+  "limitations": [
+    "r8 attenuates injected96px to0.873-0.891; hidden optional alternative",
+    "H1b warnings retained for r4,fi2_48,estructura4_64",
+    "outer detail beyond5R not corroborated by Brno benchmark; no claim superiority to V27 at all radii",
+    "photo derivative, no RAW recalibration or absolute photometric validation"
+  ],
+  "runtime": {
+    "python": "3.12.13 (main, Mar  3 2026, 12:39:30) [Clang 21.0.0 (clang-2100.0.123.102)]",
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "libraries": {
+      "numpy": "2.5.1",
+      "scipy": "1.18.0",
+      "opencv-python": "5.0.0.93",
+      "psd-tools": "1.18.0",
+      "Pillow": "12.3.0",
+      "astropy": "8.0.1"
+    }
+  },
+  "dependency_scope": "Direct V30 reconstruction dependencies plus immutable predecessor manifests for upstream calibration provenance; no RAW recalibration in this round."
+}

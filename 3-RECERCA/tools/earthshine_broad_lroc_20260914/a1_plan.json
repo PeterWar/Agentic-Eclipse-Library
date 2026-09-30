@@ -1,0 +1,21 @@
+{
+  "claim": "CODEX_EARTHSHINE_BROAD_LROC_20260914",
+  "purpose": "Separate broad lunar signal from processing and comparison defects; do not fit a photographic patch to LROC",
+  "fixed_geometry": {"Moon_layer_origin": [4678,3077], "historical_native_array_origin": [4677,3077], "array_center": [699.568111973117,699.6475341408573], "mark_array_bbox": [550,902,723,1048]},
+  "no_image_transform": true,
+  "hypotheses": [
+    "LROC aesthetic texture has incompatible photometry, not a literal Earthshine target",
+    "S8 sector medians sampled with a half-sector origin error; exact algorithmic correction may or may not improve photograph",
+    "S8 nonlinear broad estimator changes lunar terrain gain depending on position",
+    "Inherited global photographic response exaggerates a source-supported dark feature",
+    "Source-specific additive straylight produces apparent lunar feature"
+  ],
+  "diagnostics": {
+    "radially_matched": "Remove azimuthal median at each radius, fixed 4px bins and 8px smoothing. Compare held-out broad angular structure, not rectangular controls at different limb distances.",
+    "forward_source": "Vixen producer, Sony judge. Fit only outside orange+50px guard. Source=global polynomial in photographic brightness plus smooth radial and low-angular nuisance. Compare held-out sectors and mark. Broad smoothing sigma8, no LROC pixels used in correction.",
+    "injections": "S8 signed broad Gaussian perturbations at mark and other lunar positions, measure differential gain and out-of-support leakage; distinguish frozen-operator from refitted-operator tests.",
+    "registration": "All diagnostics on same saved arrays; no transforms to project. Previous reference-only residual about 1px does not explain 150px feature."
+  },
+  "promotion": "Require a causal defect and improvement with independent Sony held-out broad controls, no loss of supported detail or accepted contour, no clipping or new mask/radius, and native Photoshop checks. If none qualifies, preserve image and state evidence and limit. Do not lower criteria after seeing results.",
+  "created_utc": "2026-09-14"
+}

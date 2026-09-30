@@ -1,0 +1,477 @@
+{
+  "source_injection": [
+    {
+      "xy": [
+        2825,
+        3988
+      ],
+      "channel": 0,
+      "wavelength": 16,
+      "gain": 1.0000000893817886,
+      "PASS": true
+    },
+    {
+      "xy": [
+        2825,
+        3988
+      ],
+      "channel": 0,
+      "wavelength": 32,
+      "gain": 1.0000000291170807,
+      "PASS": true
+    },
+    {
+      "xy": [
+        2825,
+        3988
+      ],
+      "channel": 0,
+      "wavelength": 64,
+      "gain": 0.9999999555936294,
+      "PASS": true
+    },
+    {
+      "xy": [
+        2825,
+        3988
+      ],
+      "channel": 0,
+      "wavelength": 128,
+      "gain": 1.0000000087711207,
+      "PASS": true
+    },
+    {
+      "xy": [
+        2825,
+        3988
+      ],
+      "channel": 1,
+      "wavelength": 16,
+      "gain": 0.9999999400535557,
+      "PASS": true
+    },
+    {
+      "xy": [
+        2825,
+        3988
+      ],
+      "channel": 1,
+      "wavelength": 32,
+      "gain": 1.000000078460532,
+      "PASS": true
+    },
+    {
+      "xy": [
+        2825,
+        3988
+      ],
+      "channel": 1,
+      "wavelength": 64,
+      "gain": 0.9999999575519978,
+      "PASS": true
+    },
+    {
+      "xy": [
+        2825,
+        3988
+      ],
+      "channel": 1,
+      "wavelength": 128,
+      "gain": 1.0000000563596851,
+      "PASS": true
+    },
+    {
+      "xy": [
+        2825,
+        3988
+      ],
+      "channel": 2,
+      "wavelength": 16,
+      "gain": 1.0000000469561883,
+      "PASS": true
+    },
+    {
+      "xy": [
+        2825,
+        3988
+      ],
+      "channel": 2,
+      "wavelength": 32,
+      "gain": 0.999999924130512,
+      "PASS": true
+    },
+    {
+      "xy": [
+        2825,
+        3988
+      ],
+      "channel": 2,
+      "wavelength": 64,
+      "gain": 1.0000001667578908,
+      "PASS": true
+    },
+    {
+      "xy": [
+        2825,
+        3988
+      ],
+      "channel": 2,
+      "wavelength": 128,
+      "gain": 0.9999999476787278,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5500,
+        5000
+      ],
+      "channel": 0,
+      "wavelength": 16,
+      "gain": 0.9999999578036782,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5500,
+        5000
+      ],
+      "channel": 0,
+      "wavelength": 32,
+      "gain": 1.000000005661255,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5500,
+        5000
+      ],
+      "channel": 0,
+      "wavelength": 64,
+      "gain": 1.0000000129332505,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5500,
+        5000
+      ],
+      "channel": 0,
+      "wavelength": 128,
+      "gain": 1.0000000219372853,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5500,
+        5000
+      ],
+      "channel": 1,
+      "wavelength": 16,
+      "gain": 0.9999999755792072,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5500,
+        5000
+      ],
+      "channel": 1,
+      "wavelength": 32,
+      "gain": 1.0000000720435314,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5500,
+        5000
+      ],
+      "channel": 1,
+      "wavelength": 64,
+      "gain": 1.0000000091002688,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5500,
+        5000
+      ],
+      "channel": 1,
+      "wavelength": 128,
+      "gain": 1.0000000126267476,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5500,
+        5000
+      ],
+      "channel": 2,
+      "wavelength": 16,
+      "gain": 0.9999998823554332,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5500,
+        5000
+      ],
+      "channel": 2,
+      "wavelength": 32,
+      "gain": 1.0000000282048134,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5500,
+        5000
+      ],
+      "channel": 2,
+      "wavelength": 64,
+      "gain": 1.0000000272813394,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5500,
+        5000
+      ],
+      "channel": 2,
+      "wavelength": 128,
+      "gain": 1.0000000274141907,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4000,
+        7000
+      ],
+      "channel": 0,
+      "wavelength": 16,
+      "gain": 0.9999999955538099,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4000,
+        7000
+      ],
+      "channel": 0,
+      "wavelength": 32,
+      "gain": 1.0000000554691661,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4000,
+        7000
+      ],
+      "channel": 0,
+      "wavelength": 64,
+      "gain": 0.9999999342435625,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4000,
+        7000
+      ],
+      "channel": 0,
+      "wavelength": 128,
+      "gain": 1.0000000722807334,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4000,
+        7000
+      ],
+      "channel": 1,
+      "wavelength": 16,
+      "gain": 1.0000000879085018,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4000,
+        7000
+      ],
+      "channel": 1,
+      "wavelength": 32,
+      "gain": 0.9999999641078887,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4000,
+        7000
+      ],
+      "channel": 1,
+      "wavelength": 64,
+      "gain": 1.0000000007778298,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4000,
+        7000
+      ],
+      "channel": 1,
+      "wavelength": 128,
+      "gain": 1.0000000114935894,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4000,
+        7000
+      ],
+      "channel": 2,
+      "wavelength": 16,
+      "gain": 0.999999976852953,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4000,
+        7000
+      ],
+      "channel": 2,
+      "wavelength": 32,
+      "gain": 0.9999999118780546,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4000,
+        7000
+      ],
+      "channel": 2,
+      "wavelength": 64,
+      "gain": 0.9999999597393378,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4000,
+        7000
+      ],
+      "channel": 2,
+      "wavelength": 128,
+      "gain": 0.9999999463166029,
+      "PASS": true
+    }
+  ],
+  "resolution_injection": [
+    {
+      "xy": [
+        2825,
+        3988
+      ],
+      "wavelength": 32,
+      "sigma_max": 1.3470971584320068,
+      "gain": 0.9819151163101196,
+      "PASS": true
+    },
+    {
+      "xy": [
+        2825,
+        3988
+      ],
+      "wavelength": 64,
+      "sigma_max": 1.3470971584320068,
+      "gain": 0.9954654574394226,
+      "PASS": true
+    },
+    {
+      "xy": [
+        2825,
+        3988
+      ],
+      "wavelength": 128,
+      "sigma_max": 1.3470971584320068,
+      "gain": 0.9988566040992737,
+      "PASS": true
+    },
+    {
+      "xy": [
+        2825,
+        3988
+      ],
+      "wavelength": 256,
+      "sigma_max": 1.3470971584320068,
+      "gain": 0.9997198581695557,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5500,
+        5000
+      ],
+      "wavelength": 32,
+      "sigma_max": 1.1689281463623047,
+      "gain": 0.9741802215576172,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5500,
+        5000
+      ],
+      "wavelength": 64,
+      "sigma_max": 1.1689281463623047,
+      "gain": 0.9934489727020264,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5500,
+        5000
+      ],
+      "wavelength": 128,
+      "sigma_max": 1.1689281463623047,
+      "gain": 0.9983562231063843,
+      "PASS": true
+    },
+    {
+      "xy": [
+        5500,
+        5000
+      ],
+      "wavelength": 256,
+      "sigma_max": 1.1689281463623047,
+      "gain": 0.999588668346405,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4000,
+        7000
+      ],
+      "wavelength": 128,
+      "sigma_max": 4.675712585449219,
+      "gain": 0.9815301299095154,
+      "PASS": true
+    },
+    {
+      "xy": [
+        4000,
+        7000
+      ],
+      "wavelength": 256,
+      "sigma_max": 4.675712585449219,
+      "gain": 0.9952848553657532,
+      "PASS": true
+    }
+  ],
+  "known_bad": {
+    "blur16_on_32px": {
+      "gain": 0.007158286403864622,
+      "expected_FAIL": true
+    },
+    "neutral_patch": {
+      "gain": 0,
+      "expected_FAIL": true
+    }
+  },
+  "PASS": true
+}

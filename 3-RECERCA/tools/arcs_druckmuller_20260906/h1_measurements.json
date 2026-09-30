@@ -1,0 +1,102 @@
+{
+  "status": "DIAGNOSTIC_ONLY",
+  "solar_geometry": [
+    5361.768111973117,
+    3775.747534140857,
+    440.60304883027544
+  ],
+  "sampling": "1 radial pixel,1440 angles,eight45deg sectors; float64 bilinear samples;1.5-5.5R;all physical support valid",
+  "bandpass": "Butterworth order4, zero-phase sosfiltfilt along radius; evaluation2.5-4.5R avoids boundaries",
+  "definitions": "F=u16/65535-.5;S=smoothed beforeH1;C=F-S including clipping/quantization;Cmedian=median over angles;sector residual=meanF over45deg;common=mean over all angles",
+  "layers": {
+    "01": {
+      "2.5-3.5R_4-32px": {
+        "H1_median_RMS": 3.330264318650984e-05,
+        "sector_RMS_median": 0.007751695830061307,
+        "H1_to_sector_RMS_median": 0.004310621384130469,
+        "common_preH1_RMS": 0.0025968147158371637,
+        "common_postH1_RMS": 0.002602112362506217
+      },
+      "3.5-4.5R_4-32px": {
+        "H1_median_RMS": 7.445254524368019e-06,
+        "sector_RMS_median": 0.005276818926205981,
+        "H1_to_sector_RMS_median": 0.0014115090138088792,
+        "common_preH1_RMS": 0.002215347536738231,
+        "common_postH1_RMS": 0.00221607472305793
+      },
+      "2.5-4.5R_4-32px": {
+        "H1_median_RMS": 2.4142222461142877e-05,
+        "sector_RMS_median": 0.006766841357368424,
+        "H1_to_sector_RMS_median": 0.003586696729652286,
+        "common_preH1_RMS": 0.0024138449630601044,
+        "common_postH1_RMS": 0.002417031977890988
+      },
+      "2.5-3.5R_32-128px": {
+        "H1_median_RMS": 0.0009277716133064872,
+        "sector_RMS_median": 0.003909524334246874,
+        "H1_to_sector_RMS_median": 0.23733902034374216,
+        "common_preH1_RMS": 0.0013469537793992783,
+        "common_postH1_RMS": 0.0011561479877832887
+      },
+      "3.5-4.5R_32-128px": {
+        "H1_median_RMS": 0.000532364251612993,
+        "sector_RMS_median": 0.003750801618788327,
+        "H1_to_sector_RMS_median": 0.14194835949174678,
+        "common_preH1_RMS": 0.0017361187086794626,
+        "common_postH1_RMS": 0.0015667503110370065
+      },
+      "2.5-4.5R_32-128px": {
+        "H1_median_RMS": 0.0007565801993057169,
+        "sector_RMS_median": 0.003953341811215675,
+        "H1_to_sector_RMS_median": 0.191395005499277,
+        "common_preH1_RMS": 0.0015535492856774116,
+        "common_postH1_RMS": 0.0013766109948175102
+      }
+    },
+    "02": {
+      "2.5-3.5R_4-32px": {
+        "H1_median_RMS": 5.690990584505044e-05,
+        "sector_RMS_median": 0.007971988622149307,
+        "H1_to_sector_RMS_median": 0.0071497709654307585,
+        "common_preH1_RMS": 0.002636157807585937,
+        "common_postH1_RMS": 0.0026460631853220725
+      },
+      "3.5-4.5R_4-32px": {
+        "H1_median_RMS": 1.4023043895324578e-05,
+        "sector_RMS_median": 0.005721107469370145,
+        "H1_to_sector_RMS_median": 0.0024514960337206756,
+        "common_preH1_RMS": 0.002319452699225832,
+        "common_postH1_RMS": 0.0023206581848030997
+      },
+      "2.5-4.5R_4-32px": {
+        "H1_median_RMS": 4.146586633497447e-05,
+        "sector_RMS_median": 0.006863022118358928,
+        "H1_to_sector_RMS_median": 0.00604418010699664,
+        "common_preH1_RMS": 0.002483039495403441,
+        "common_postH1_RMS": 0.002488869150144197
+      },
+      "2.5-3.5R_32-128px": {
+        "H1_median_RMS": 0.0015541436915129214,
+        "sector_RMS_median": 0.005832684779207774,
+        "H1_to_sector_RMS_median": 0.2666561354064251,
+        "common_preH1_RMS": 0.0022470888071341464,
+        "common_postH1_RMS": 0.0018086762549556355
+      },
+      "3.5-4.5R_32-128px": {
+        "H1_median_RMS": 0.0009838221230276825,
+        "sector_RMS_median": 0.005343323385241716,
+        "H1_to_sector_RMS_median": 0.18414445995649079,
+        "common_preH1_RMS": 0.0026646623154306993,
+        "common_postH1_RMS": 0.0022931382206705293
+      },
+      "2.5-4.5R_32-128px": {
+        "H1_median_RMS": 0.0013009441866798567,
+        "sector_RMS_median": 0.005845848431054378,
+        "H1_to_sector_RMS_median": 0.22342398021090515,
+        "common_preH1_RMS": 0.002464498458777902,
+        "common_postH1_RMS": 0.002064889477218362
+      }
+    }
+  },
+  "script_sha256": "327636930f2afb4cf7a85957296401d26f5d9b99b7e6ea172eb7335a5f4e7d11"
+}

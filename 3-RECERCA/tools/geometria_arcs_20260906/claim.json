@@ -1,0 +1,15 @@
+{
+  "claim_id": "CODEX_GEOMETRIA_ARCS_20260906",
+  "owner": "Codex /root",
+  "task": "Ajust geometric independent dels arcs reals: centre lliure, cercles/el.lipses i controls",
+  "created_utc": "2026-09-06T21:41:54.786235+00:00",
+  "scope": [
+    "research/tools/geometria_arcs_20260906",
+    "output/geometria_arcs_20260906",
+    "research/144_*",
+    "research/README.md",
+    ".coordination/CODEX_STATUS.md",
+    ".coordination/HANDOFF_2026-09-06_GEOMETRIA_ARCS.md"
+  ],
+  "writer": "root only; reviewers read-only"
+}

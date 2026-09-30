@@ -1,0 +1,71 @@
+{
+ "M_llenc_a_v23": [
+  [
+   0.6872474884120418,
+   -0.726423354299227,
+   5834.16690614171
+  ],
+  [
+   0.726423354299227,
+   0.6872474884120418,
+   -2243.6829521483614
+  ]
+ ],
+ "rotacio_total_deg": 46.58738327026368,
+ "escala_total": 0.9999999999999998,
+ "centre_llenc": [
+  4047.5,
+  4479.5
+ ],
+ "centre_disc_v23": [
+  5361.877,
+  3774.741
+ ],
+ "sol_v23": [
+  5361.787699906061,
+  3775.040698719501
+ ],
+ "angle_gros_azimutal": 46.583412170410156,
+ "finestres": 5,
+ "mediana_offset_px": 0.1532581632749508,
+ "p90_offset_px": 4.491942216148808,
+ "pic_mediana": 0.059636892149591524,
+ "control_nul_pic_mediana": 0.011498589803571893,
+ "control_nul_pic_p90": 0.03192351580634052,
+ "validacio_azimutal": {
+  "retard_radial_final": {
+   "dx": -0.625785142064408,
+   "dy": 0.35784743723356505,
+   "c": -1.628795551378447,
+   "residu_px": 1.0840941379939095,
+   "n": 36,
+   "corr_mediana": 0.9874371588230133,
+   "r_mig": 704.9648
+  },
+  "control_nul_retard": {
+   "dx": 5.334802886483913,
+   "dy": 1.0876768098325105,
+   "c": -1.4907620300751885,
+   "residu_px": 2.0204687970093222,
+   "n": 36,
+   "corr_mediana": 0.9552835822105408,
+   "r_mig": 704.9648
+  },
+  "10_1-125s_572A2969.CR3 \u00b7 FON": {
+   "angle_residual_deg": 0.238,
+   "pic": 1.0,
+   "a_0": 1.0
+  },
+  "09_1-60s_572A2975+572A2993_a": {
+   "angle_residual_deg": -0.018,
+   "pic": 1.0,
+   "a_0": 1.0
+  },
+  "13_mes1s_2sx3+8sx2_SONY300 \u00b7": {
+   "angle_residual_deg": -0.498,
+   "pic": 1.0,
+   "a_0": 1.0
+  }
+ },
+ "nota": "rotaci\u00f3 en la convenci\u00f3 d'OpenCV (positiu = antihorari a pantalla); la V25/V26 duien \u221291,969\u00b0 i estaven girades 138,5\u00b0"
+}

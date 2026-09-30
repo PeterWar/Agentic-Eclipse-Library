@@ -1,0 +1,23 @@
+{
+  "controller_version": "0.2.4-candidate",
+  "created_utc": "2026-07-27T02:38:42.333442Z",
+  "deadline_spin_guard_ns": 12000000,
+  "delay_ms": 20.0,
+  "hybrid": {
+    "maximum_ms": 0.022375,
+    "median_ms": 0.000334,
+    "minimum_ms": 0.000208,
+    "p95_ms": 0.000708,
+    "p99_ms": 0.006459,
+    "samples": 200
+  },
+  "naive": {
+    "maximum_ms": 12.077791,
+    "median_ms": 9.413979,
+    "minimum_ms": 0.120125,
+    "p95_ms": 10.049042,
+    "p99_ms": 10.076333,
+    "samples": 200
+  },
+  "offline": true
+}

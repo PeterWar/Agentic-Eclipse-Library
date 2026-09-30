@@ -1,0 +1,14 @@
+"""Aperture diffraction prediction with hardware and measured angular scale.
+No coefficient, radius, wavelength or seeing value is fitted to a lunar halo.
+"""
+from diffraction_common import *
+from scipy.special import j0,j1
+receipt_path=Path('/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/019_VIXEN_CIENCIA_20260827T212404Z/4-rebuts/F1.2_sol_llenc.json');receipt=json.loads(receipt_path.read_text());assert abs(receipt['llenc']['escala_sensor_arcsec_px']-SCALE)<1e-12
+p=json.loads((NATIVE/'E0_physical_cascade.json').read_text());p4=p['p4'];p12=p['p12_frozen'];radii=np.array([1,2,4,6,8,12,24,64,128,256],float);rows=[]
+for lam in WAVELENGTHS_NM:
+    x=np.pi*APERTURE_M*(radii*SCALE*np.pi/(180*3600))/(lam*1e-9);tail=j0(x)**2+j1(x)**2;rows.append(dict(wavelength_nm=lam,radii_world_px=radii.tolist(),energy_outside=tail.tolist(),otf_at_native_corner=float(airy_otf(.5,lam)),first_minimum_world_px=float(3.8317059702075125/(np.pi*APERTURE_M*SCALE*np.pi/(180*3600)/(lam*1e-9)))))
+mixture=(1-p12)*p4*np.exp(-radii**2/32)+p12*(1-p4)*np.exp(-radii**2/288)+p12*p4*np.exp(-radii**2/320)
+save('PLAN.json',dict(method=__doc__,aperture_m=APERTURE_M,angular_scale_arcsec_native_pixel=SCALE,nominal_wavelength_nm=550,wavelength_sensitivity_nm=WAVELENGTHS_NM,fit_parameters=[],core='Unknown seeing/other narrow blur is retained; no measured seeing correction is assumed',hardware_source='https://www.vixen.co.jp/product/26131_4/',local_identity='CLAUDE.md: Vixen VSD90SS with R6 Mark III',plate_scale_receipt=str(receipt_path),plate_scale_sha256=hashlib.sha256(receipt_path.read_bytes()).hexdigest(),spectral_limit='500/550/600nm are a declared sensitivity bracket, not a measured Canon green spectral response. Do not select wavelength by best halo score.',next='First qualify sampling and inverse numerically. Full inverse and a predeclared sigma2 regularized correction have distinct targets; do not claim the regularized target restores the full narrow-core image.',prior_status='Two-Gaussian component remains unqualified in2of6epochs; this independent pupil hypothesis does not turn that FAIL intoPASS. No new PSB or image source yet.'))
+save('A0_diffraction_prediction.json',dict(method=__doc__,pupil_rows=rows,previous_cascade_energy_outside=dict(radii_world_px=radii.tolist(),energy=mixture.tolist(),p4=p4,p12=p12),limits=['Unobstructed ideal pupil model, not a measured full Vixen PSF','Nominal aperture is manufacturer specification; effective pupil and green spectral weighting may differ','Encircled-energy agreement cannot establish recovered lunar texture or missing-light completion']))
+for row in rows:print(row['wavelength_nm'],'nm','rfirst',row['first_minimum_world_px'],'tails4,12',row['energy_outside'][2],row['energy_outside'][5],'max inverse',1/row['otf_at_native_corner'],flush=True)
+print('prior cascade tails4,12',mixture[2],mixture[5],flush=True)

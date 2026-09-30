@@ -1,0 +1,11 @@
+{
+  "schema": 3,
+  "id": "069",
+  "original": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/revisio_marques_v31_20260907/input_anotat.psb",
+  "archive": "/Users/USUARI/Downloads/Eclipse 2026/output/reconstruccio_compactacio_20260915/psb_archive",
+  "snapshot_id": "F071",
+  "sha256": "d2d400d61cc4cd3ba1042559dc0c59993880b12e8a6155b427c15730d2b21fae",
+  "bytes": 6251281042,
+  "registry": "/Users/USUARI/Downloads/Eclipse 2026/output/reconstruccio_compactacio_20260915/psb_retirement/PLAN.json",
+  "requires_materialize": true
+}

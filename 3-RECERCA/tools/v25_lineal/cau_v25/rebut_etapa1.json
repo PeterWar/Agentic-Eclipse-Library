@@ -1,0 +1,346 @@
+{
+ "corba": {
+  "pend": 0.22,
+  "anc": 0.74,
+  "terra": 0.045
+ },
+ "finestra_rho_Rsol": [
+  2.0,
+  3.5
+ ],
+ "mascara_fusio_Rsol": [
+  2.0,
+  2.65
+ ],
+ "rampa_fons_Rsol": [
+  2.45,
+  3.25
+ ],
+ "sigma_lnr": 0.2,
+ "runs": {
+  "vixen": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/019_VIXEN_CIENCIA_20260827T212404Z",
+  "sony": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/016_SONYTOT_CIENCIA_20260827T183356Z"
+ },
+ "rho": {
+  "R": {
+   "radial_min_max": [
+    0.30646820663033925,
+    0.31195238767704214
+   ],
+   "az_coef": [
+    0.9991789584358531,
+    -0.009758321269769724,
+    -0.011953298073170004,
+    -0.004263203761673814,
+    -0.005358772042919291
+   ],
+   "residu_mediana_abans": 0.6904224157333374,
+   "residu_mediana_despres": 0.00727081298828125
+  },
+  "G": {
+   "radial_min_max": [
+    0.32212927668655605,
+    0.33599497232599673
+   ],
+   "az_coef": [
+    0.99998730338282,
+    -0.003724068515891305,
+    0.0006676396351300393,
+    -0.0025137723163090866,
+    -0.0010082075994309666
+   ],
+   "residu_mediana_abans": 0.6685227155685425,
+   "residu_mediana_despres": 0.008438348770141602
+  },
+  "B": {
+   "radial_min_max": [
+    0.3064959125439602,
+    0.32424169314916684
+   ],
+   "az_coef": [
+    1.0009232569071982,
+    -0.012077929516160824,
+    -0.015050938326622923,
+    -0.002862745597795568,
+    0.0024388432499083336
+   ],
+   "residu_mediana_abans": 0.678485631942749,
+   "residu_mediana_despres": 0.009351611137390137
+  }
+ },
+ "fons_per_raig": {
+  "total_R": {
+   "px_estrelles_reinjectats": 10231,
+   "r0_Rsol": 1.9,
+   "r1_Rsol": 13.753806591609907,
+   "nt": 4080,
+   "nr": 1200
+  },
+  "total_G": {
+   "px_estrelles_reinjectats": 7273,
+   "r0_Rsol": 1.9,
+   "r1_Rsol": 13.753806591609907,
+   "nt": 4080,
+   "nr": 1200
+  },
+  "total_B": {
+   "px_estrelles_reinjectats": 11460,
+   "r0_Rsol": 1.9,
+   "r1_Rsol": 13.753806591609907,
+   "nt": 4080,
+   "nr": 1200
+  }
+ },
+ "ghosts_inpaint": [
+  {
+   "x": 2825,
+   "y": 3988,
+   "radi": 50,
+   "dx": 52,
+   "dy": -130,
+   "bol": true,
+   "font": "ghost Sony 3,0 R☉ (research/116)",
+   "bol_corona": [
+    [
+     41.5,
+     1.0207
+    ],
+    [
+     44.5,
+     1.0207
+    ],
+    [
+     47.5,
+     1.0212
+    ],
+    [
+     50.5,
+     1.0221
+    ],
+    [
+     53.5,
+     1.023
+    ],
+    [
+     56.5,
+     1.0233
+    ],
+    [
+     59.5,
+     1.0231
+    ],
+    [
+     62.5,
+     1.0227
+    ],
+    [
+     65.5,
+     1.0226
+    ],
+    [
+     68.5,
+     1.0232
+    ],
+    [
+     71.5,
+     1.0242
+    ],
+    [
+     74.5,
+     1.0253
+    ],
+    [
+     77.5,
+     1.0255
+    ],
+    [
+     80.5,
+     1.025
+    ],
+    [
+     83.5,
+     1.0239
+    ],
+    [
+     86.5,
+     1.0227
+    ],
+    [
+     89.5,
+     1.0217
+    ],
+    [
+     92.5,
+     1.0207
+    ],
+    [
+     95.5,
+     1.0197
+    ],
+    [
+     98.5,
+     1.0182
+    ],
+    [
+     101.5,
+     1.0166
+    ],
+    [
+     104.5,
+     1.0154
+    ],
+    [
+     107.5,
+     1.0145
+    ],
+    [
+     110.5,
+     1.0135
+    ],
+    [
+     113.5,
+     1.0121
+    ],
+    [
+     116.5,
+     1.0106
+    ],
+    [
+     119.5,
+     1.0093
+    ],
+    [
+     122.5,
+     1.008
+    ],
+    [
+     125.5,
+     1.0067
+    ],
+    [
+     128.5,
+     1.0055
+    ]
+   ],
+   "textura": "clonada del veí tangencial (dx, dy)"
+  },
+  {
+   "x": 6156,
+   "y": 7471,
+   "radi": 217,
+   "dx": -272,
+   "dy": 191,
+   "bol": false,
+   "font": "marca groga de Pere (V26 8277,1565) → llenç",
+   "bol_corona": null,
+   "textura": "clonada del veí tangencial (dx, dy)"
+  },
+  {
+   "x": 4301,
+   "y": 8134,
+   "radi": 218,
+   "dx": -333,
+   "dy": 23,
+   "bol": false,
+   "font": "marca groga de Pere (V26 9003,3396) → llenç",
+   "bol_corona": null,
+   "textura": "clonada del veí tangencial (dx, dy)"
+  },
+  {
+   "x": 7254,
+   "y": 5938,
+   "radi": 218,
+   "dx": -138,
+   "dy": 304,
+   "bol": false,
+   "font": "marca groga de Pere (V26 6707,521) → llenç",
+   "bol_corona": null,
+   "textura": "clonada del veí tangencial (dx, dy)"
+  },
+  {
+   "x": 7326,
+   "y": 3121,
+   "radi": 174,
+   "dx": 107,
+   "dy": 259,
+   "bol": false,
+   "font": "marca groga de Pere (V26 3890,546) → llenç",
+   "bol_corona": null,
+   "textura": "clonada del veí tangencial (dx, dy)"
+  },
+  {
+   "x": 1445,
+   "y": 1998,
+   "radi": 136,
+   "dx": 162,
+   "dy": -170,
+   "bol": false,
+   "font": "marca groga de Pere (V26 2970,6461) → llenç",
+   "bol_corona": null,
+   "textura": "clonada del veí tangencial (dx, dy)"
+  },
+  {
+   "x": 718,
+   "y": 6198,
+   "radi": 123,
+   "dx": -101,
+   "dy": -195,
+   "bol": false,
+   "font": "marca groga de Pere (V26 7192,7043) → llenç",
+   "bol_corona": null,
+   "textura": "clonada del veí tangencial (dx, dy)"
+  }
+ ],
+ "base": {
+  "ancora_va": 70736.46875,
+  "color_base_per_anell": {
+   "1.1Rsol": {
+    "R/G": 1.3127431670471512,
+    "B/G": 0.49820900311167376,
+    "n": 82656
+   },
+   "2Rsol": {
+    "R/G": 1.21852172396104,
+    "B/G": 0.6299167417462155,
+    "n": 148528
+   },
+   "3Rsol": {
+    "R/G": 1.0903027801624847,
+    "B/G": 0.8010812040417827,
+    "n": 221768
+   },
+   "5Rsol": {
+    "R/G": 0.9755970714135468,
+    "B/G": 0.8872904722118747,
+    "n": 368148
+   }
+  },
+  "nivell_G_mediana": {
+   "1.1": 0.7326828837394714,
+   "1.5": 0.5139771699905396,
+   "2.5": 0.31523531675338745,
+   "4.0": 0.27481508255004883,
+   "6.0": 0.2622697949409485
+  }
+ },
+ "capes_detall": {
+  "ACHF_2-32px_mediana": {
+   "escala_tanh": 0.22271335124969482,
+   "H1_max_abs_nivell_menys_0.5": 0.0006879568099975586,
+   "H1_radi_pitjor_Rsol": 1.1595842900186735,
+   "PASSA_H1": true
+  },
+  "PASSA_ALT_24px": {
+   "escala_tanh": 0.9064032236735026,
+   "H1_max_abs_nivell_menys_0.5": 0.003204047679901123,
+   "H1_radi_pitjor_Rsol": 8.080798709131649,
+   "PASSA_H1": true
+  }
+ },
+ "llenc": {
+  "W": 8096,
+  "H": 8960,
+  "R_sol_px": 440.60304883027544
+ },
+ "segons": 267.64406180381775
+}

@@ -1,0 +1,29 @@
+{
+  "PASS": true,
+  "reference_sha256": "3715cfb5d21b17c51532082b10ee3cdcea8795ffb857a148f32ce009d8b354de",
+  "max_tolerance": 2e-06,
+  "rows": [
+    {
+      "input_scale": 1,
+      "n": 65,
+      "max_abs_error": 4.013628063237462e-08
+    },
+    {
+      "input_scale": 10,
+      "n": 65,
+      "max_abs_error": 5.6253419644658464e-08
+    },
+    {
+      "input_scale": 100,
+      "n": 65,
+      "max_abs_error": 4.133776648762577e-08
+    },
+    {
+      "input_scale": 10000,
+      "n": 65,
+      "max_abs_error": 7.240066346447804e-08
+    }
+  ],
+  "constant_max_error": 1.1102230246251565e-16,
+  "samples": 402
+}

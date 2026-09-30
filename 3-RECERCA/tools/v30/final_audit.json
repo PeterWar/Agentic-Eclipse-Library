@@ -1,0 +1,30 @@
+{
+  "PASS": true,
+  "checks": {
+    "PSB_delivered_verified": true,
+    "active_matches": true,
+    "same_canvas": true,
+    "accepted_originals_preserved": true,
+    "new_layers_verified": true,
+    "composite_max1DN": true,
+    "photoshop_real": true,
+    "injection_pass_and_soft_loss_declared": true,
+    "all_live_routes_V30": true,
+    "reports_present": true,
+    "receipt_exact_report": true,
+    "all_new_scripts_ast": true,
+    "manifest_code_hashes_current": true,
+    "prechange_document_snapshots_verified": true,
+    "old_active_snapshot_hash_verified": true,
+    "skills_identical": true,
+    "predecessor_manifests_included": true
+  },
+  "artifact": {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V30.psb",
+    "sha256": "0d1f23fe5c56acf60bb35d3e24acea02fffaaf333d04d7a3aa17e0aac4f3f8c0",
+    "bytes": 6233044488
+  },
+  "scope": "V30 delivery and current routing; not entire historical pipeline qualification",
+  "claim_released_utc": "2026-09-05T12:32:44.944366+00:00",
+  "zero_owned_workers": true
+}

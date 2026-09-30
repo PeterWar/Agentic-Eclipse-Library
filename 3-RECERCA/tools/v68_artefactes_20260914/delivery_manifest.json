@@ -1,0 +1,65 @@
+{
+  "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V68.psb",
+  "sha256": "8d5fbf033fa3b61b58a2f07526071b7402f4b3b2527bd0f5e436da842eea7f0a",
+  "bytes": 7415782970,
+  "source": "/Users/USUARI/Downloads/Eclipse 2026/output/v68_artefactes_20260914/V68_native.psb",
+  "status": "V68_DELIVERED_MARKED_ARTIFACTS_REDUCED",
+  "time": "2026-09-14T18:03:46.597507+00:00",
+  "source_V67_sha256": "6d31fc44531040de4582bbd854553b5c1736f6c8745e054ef4e22b049a4c1e15",
+  "source_snapshot": "/Users/USUARI/Downloads/Eclipse 2026/output/v68_artefactes_20260914/V67_Pere_input.psb",
+  "canvas": [
+    10551,
+    7506
+  ],
+  "depth": 16,
+  "profile": "Adobe RGB (1998)",
+  "top_level_items": 31,
+  "report": "/Users/USUARI/Downloads/Eclipse 2026/output/v68_artefactes_20260914/RESULTAT.md",
+  "handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-14_CODEX_CAPES_TOTALS_V68.md",
+  "manifest": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v68_artefactes_20260914/delivery_manifest.json",
+  "assets": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V68_dades",
+  "preview": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V68_dades/V68_previsualitzacio.png",
+  "qa": "/Users/USUARI/Downloads/Eclipse 2026/output/v68_artefactes_20260914/D6_integrity.json",
+  "readback": {
+    "PASS": true,
+    "max_DN16": 0,
+    "pixels_different": 0,
+    "full_canvas": true,
+    "forced_recomposition": true,
+    "source": "/Users/USUARI/Downloads/Eclipse 2026/output/v68_artefactes_20260914/D5_full_native.tif",
+    "readback": "/Users/USUARI/Downloads/Eclipse 2026/output/v68_artefactes_20260914/E3_final_readback.tif"
+  },
+  "modified_RGB_layers": [
+    3,
+    30
+  ],
+  "blend_change": {
+    "layer": 30,
+    "from": "HARD_LIGHT",
+    "to": "NORMAL"
+  },
+  "manual_Pere_geometry_preserved_exact": true,
+  "all_original_masks_exact": true,
+  "all_original_alpha_exact": true,
+  "Pere_photo96_all_channels_exact": true,
+  "stars_all_channels_exact": true,
+  "Earthshine_RGB_exact": false,
+  "independent_Earthshine_V56_unchanged": true,
+  "artifact_free": false,
+  "absolute_registration_resolved": false,
+  "limits": [
+    "Fine exterior bright transition at upper limb remains.",
+    "Fine detector-pattern reduction is partial; broad corroborated lunar forms preserved.",
+    "No new optical resolution or universal absence of artifacts claimed.",
+    "No clean RAW-to-PSB end-to-end reproducibility claim."
+  ],
+  "open_document": "DOC 59 name=V67.psb saved=false layers=31\nDOC 822 name=V68.psb saved=true layers=31\nFINAL_OPEN_COMPLETE\n",
+  "UI_observation": "Native Photoshop states and complete exports verified; direct GUI capture unavailable.",
+  "orange_mark_review": {
+    "status": "BROAD_TONAL_DISCREPANCY_REOPENED_NOT_CORRECTED",
+    "report": "/Users/USUARI/Downloads/Eclipse 2026/output/v68_lroc_revisio_20260914/RESULTAT.md",
+    "handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-14_V68_TACA_LROC_REOBERTA.md",
+    "source_of_previous_overstatement": "Fine-band retention and old LROC cache did not validate the broad tonal appearance of the marked region.",
+    "new_photographic_correction": false
+  }
+}

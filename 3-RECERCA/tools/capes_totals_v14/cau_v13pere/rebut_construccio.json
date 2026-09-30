@@ -1,0 +1,377 @@
+{
+ "origen": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/CapesTotalsV13_Pere.psd",
+ "desti": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/CapesTotalsV14.psd",
+ "moviments": {
+  "12": [
+   3,
+   0
+  ],
+  "11": [
+   0,
+   0
+  ],
+  "10": [
+   0,
+   0
+  ],
+  "09": [
+   2,
+   0
+  ],
+  "08": [
+   1,
+   1
+  ],
+  "07": [
+   2,
+   0
+  ],
+  "06": [
+   1,
+   1
+  ],
+  "05": [
+   2,
+   0
+  ],
+  "04": [
+   1,
+   1
+  ],
+  "03": [
+   2,
+   0
+  ],
+  "02": [
+   3,
+   -1
+  ],
+  "01": [
+   1,
+   0
+  ]
+ },
+ "P_mesurat": {
+  "12": [
+   -2.86,
+   0.38
+  ],
+  "11": [
+   0.0,
+   -0.04
+  ],
+  "10": [
+   0.0,
+   0.0
+  ],
+  "09": [
+   -1.87,
+   -0.13
+  ],
+  "08": [
+   -1.04,
+   -0.9
+  ],
+  "07": [
+   -1.87,
+   -0.06
+  ],
+  "06": [
+   -1.06,
+   -0.92
+  ],
+  "05": [
+   -1.87,
+   -0.04
+  ],
+  "04": [
+   -1.02,
+   -0.93
+  ],
+  "03": [
+   -1.9,
+   -0.07
+  ],
+  "02": [
+   -2.85,
+   0.97
+  ],
+  "01": [
+   -1.03,
+   -0.01
+  ]
+ },
+ "rampa_px": [
+  0.5,
+  3.5
+ ],
+ "discos": {
+  "C2": {
+   "centre": [
+    4039.112512677383,
+    2740.0350034211574
+   ],
+   "R_px": 453.52306768071713
+  },
+  "11": {
+   "centre": [
+    4036.3320341109174,
+    2738.6245389469063
+   ],
+   "R_px": 453.69898877404006
+  },
+  "10": {
+   "centre": [
+    4036.713541962412,
+    2738.461392205895
+   ],
+   "R_px": 453.29137083166705
+  },
+  "09": {
+   "centre": [
+    4034.8345028436333,
+    2737.063961233839
+   ],
+   "R_px": 455.5
+  },
+  "08": {
+   "centre": [
+    4035.926768805531,
+    2737.9611574661535
+   ],
+   "R_px": 455.5
+  },
+  "07": {
+   "centre": [
+    4034.6024985126364,
+    2737.0113214612143
+   ],
+   "R_px": 455.5
+  },
+  "06": {
+   "centre": [
+    4035.667210763743,
+    2737.8145407051625
+   ],
+   "R_px": 455.5
+  },
+  "05": {
+   "centre": [
+    4034.34184826146,
+    2736.893535768119
+   ],
+   "R_px": 455.5
+  },
+  "04": {
+   "centre": [
+    4035.410776473253,
+    2737.6478581854767
+   ],
+   "R_px": 455.5
+  },
+  "03": {
+   "centre": [
+    4033.937438481046,
+    2736.665607881481
+   ],
+   "R_px": 455.5
+  },
+  "02": {
+   "centre": [
+    4033.3981882776866,
+    2736.394091761033
+   ],
+   "R_px": 455.5
+  },
+  "01": {
+   "centre": [
+    4030.0359171392297,
+    2734.731417495098
+   ],
+   "R_px": 455.5
+  }
+ },
+ "capes": [
+  {
+   "num": "12",
+   "nom": "12_1-3200s_572A2956.CR3 · FONT_PROTEGIDA · PERLES-DIAMANT",
+   "moviment_px": [
+    3,
+    0
+   ],
+   "P_mesurat_px": [
+    -2.86,
+    0.38
+   ],
+   "px_mascara_canviats": 0,
+   "mascara_mitjana_abans": 0.7888275980949402,
+   "mascara_mitjana_despres": 0.7888275980949402
+  },
+  {
+   "num": "11",
+   "nom": "11_1-500s_572A2968.CR3 · FONT_PROTEGIDA · LIMBE-PROTUBERÀNCIES",
+   "moviment_px": [
+    0,
+    0
+   ],
+   "P_mesurat_px": [
+    0.0,
+    -0.04
+   ],
+   "px_mascara_canviats": 16949,
+   "mascara_mitjana_abans": 0.06948529928922653,
+   "mascara_mitjana_despres": 0.06930627673864365
+  },
+  {
+   "num": "10",
+   "nom": "10_1-125s_572A2969.CR3 · FONT_HDR · CORONA INTERIOR",
+   "moviment_px": [
+    0,
+    0
+   ],
+   "P_mesurat_px": [
+    0.0,
+    0.0
+   ],
+   "px_mascara_canviats": 302611,
+   "mascara_mitjana_abans": 0.0196736641228199,
+   "mascara_mitjana_despres": 0.01925535686314106
+  },
+  {
+   "num": "09",
+   "nom": "09_1-60s_572A2975+572A2993_apilat2.dng · FONT_HDR · CORONA INTERIOR-MITJANA",
+   "moviment_px": [
+    2,
+    0
+   ],
+   "P_mesurat_px": [
+    -1.87,
+    -0.13
+   ],
+   "px_mascara_canviats": 403228,
+   "mascara_mitjana_abans": 0.05253006890416145,
+   "mascara_mitjana_despres": 0.052009496837854385
+  },
+  {
+   "num": "08",
+   "nom": "08_1-30s_572A2970_apilat4.dng · QUARANTENA OCULTA · REBUTJADA: COSTURA ID8 · RASTER I MÀSCARA RAW",
+   "moviment_px": [
+    1,
+    1
+   ],
+   "P_mesurat_px": [
+    -1.04,
+    -0.9
+   ],
+   "px_mascara_canviats": 278525,
+   "mascara_mitjana_abans": 0.08913961797952652,
+   "mascara_mitjana_despres": 0.08906903862953186
+  },
+  {
+   "num": "07",
+   "nom": "07_1-15s_572A2976_apilat2.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "moviment_px": [
+    2,
+    0
+   ],
+   "P_mesurat_px": [
+    -1.87,
+    -0.06
+   ],
+   "px_mascara_canviats": 313264,
+   "mascara_mitjana_abans": 0.08594188094139099,
+   "mascara_mitjana_despres": 0.08582530915737152
+  },
+  {
+   "num": "06",
+   "nom": "06_1-8s_572A2971_apilat4.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "moviment_px": [
+    1,
+    1
+   ],
+   "P_mesurat_px": [
+    -1.06,
+    -0.92
+   ],
+   "px_mascara_canviats": 297093,
+   "mascara_mitjana_abans": 0.040306176990270615,
+   "mascara_mitjana_despres": 0.04023955762386322
+  },
+  {
+   "num": "05",
+   "nom": "05_1-4s_572A2977_apilat2.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "moviment_px": [
+    2,
+    0
+   ],
+   "P_mesurat_px": [
+    -1.87,
+    -0.04
+   ],
+   "px_mascara_canviats": 309769,
+   "mascara_mitjana_abans": 0.22847548127174377,
+   "mascara_mitjana_despres": 0.2283802330493927
+  },
+  {
+   "num": "04",
+   "nom": "04_1-2s_572A2972_apilat4.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "moviment_px": [
+    1,
+    1
+   ],
+   "P_mesurat_px": [
+    -1.02,
+    -0.93
+   ],
+   "px_mascara_canviats": 127127,
+   "mascara_mitjana_abans": 0.7068510055541992,
+   "mascara_mitjana_despres": 0.7068488001823425
+  },
+  {
+   "num": "03",
+   "nom": "03_1s_572A2978_apilat2.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "moviment_px": [
+    2,
+    0
+   ],
+   "P_mesurat_px": [
+    -1.9,
+    -0.07
+   ],
+   "px_mascara_canviats": 1406,
+   "mascara_mitjana_abans": 0.6576705574989319,
+   "mascara_mitjana_despres": 0.6576703786849976
+  },
+  {
+   "num": "02",
+   "nom": "02_2s_572A2979_apilat3.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "moviment_px": [
+    3,
+    -1
+   ],
+   "P_mesurat_px": [
+    -2.85,
+    0.97
+   ],
+   "px_mascara_canviats": 0,
+   "mascara_mitjana_abans": 0.6340494155883789,
+   "mascara_mitjana_despres": 0.6340494155883789
+  },
+  {
+   "num": "01",
+   "nom": "01_10.3s_572A2982_apilat3.dng · QUARANTENA OCULTA · REBUTJADA: HALO-GRADIENT; CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "moviment_px": [
+    1,
+    0
+   ],
+   "P_mesurat_px": [
+    -1.03,
+    -0.01
+   ],
+   "px_mascara_canviats": 668844,
+   "mascara_mitjana_abans": 0.5778911113739014,
+   "mascara_mitjana_despres": 0.5767454504966736
+  }
+ ],
+ "bytes": 1513376564
+}

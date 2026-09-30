@@ -1,0 +1,17 @@
+{
+ "tau": 1.0,
+ "mode": "wg",
+ "k": 3.0,
+ "se_factor": 6.0,
+ "se_min": 24.0,
+ "motiu": "V40 pilot (09-09, acordat amb Codex xhigh): el llindar tou k=2 de la V39 deixava el 58 % de l'amplitud del soroll pur (mesurat 0,61 al P03 a 5,5 R☉): l'ull veu presència de gra, no amplitud. Regla nova per banda g = max(Wiener regional 1 − N/E, garrote 1 − (3σ)²/w²): residu de soroll pur ≈ 0,06; el compacte fort passa (5 σ 0,64, 7 σ 0,82, 10 σ 0,91); dins de la corona (E ≫ N) no canvia res. El terme creuat deixa de ser guany: dibuixava el rectangle de la Vixen (dins del camp els dos trens confirmen, fora no).",
+ "soroll": "cau/soroll_escales_1q.npz + cau/soroll_bilateral_1q.npz",
+ "creuat": true,
+ "creuat_sigma_factor": 6.0,
+ "creuat_sigma_min": 24.0,
+ "creuat_z": 1.0,
+ "motiu_creuat": "V40 pilot 2: el creuat és el MODEL DE SOROLL (potència total − creuada entre sensors, per tren, calibrat per anell fora del solapament), no un guany: així els patrons fixos i tot el que l'altre telescopi no confirma compten com a soroll i la vora de la Vixen no es dibuixa. Pilot 1 (meitats soles + wg) va fallar la porta de vores (×4–6).",
+ "creuat_mode": "soroll",
+ "soroll_ref": "sony",
+ "motiu_soroll_ref": "El guany es calcula amb el soroll total de la SONY allà on la Sony hi és (tot l'exterior; continu a través del rectangle de la Vixen: cap contorn de tren) i amb el de la Vixen només a l'interior on la Sony no arriba; el coeficient fusionat conserva l'avantatge de S/N del segon tren. Refusats amb número (09-09): 'fusio' (w_V²N_V + w_S²N_S: g 0,05→0,28 a 16 px dins/fora) i 'pitjor' (max: clot a 0,00 a la franja d'entrada de la Vixen)."
+}

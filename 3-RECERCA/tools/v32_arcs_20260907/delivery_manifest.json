@@ -1,0 +1,189 @@
+{
+  "version": "V32",
+  "published": {
+    "published_utc": "2026-09-06T23:46:54.891404+00:00",
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V32.psb",
+    "sha256": "dcfc8f531e286bfdf529d20880c9772785a38a4e6d0c09094883a7c8f7743c7d",
+    "bytes": 9574799408,
+    "preserved_source": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V31_FiltresPurs.psb",
+    "preserved_source_sha256": "89d509bcc53982307cf9e3d78b0a84ed7548f4045e8cbb95d9f8594e4e877dfd"
+  },
+  "verification": {
+    "PASS": true,
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v32_arcs_20260907/staging/V32.psb",
+    "sha256": "dcfc8f531e286bfdf529d20880c9772785a38a4e6d0c09094883a7c8f7743c7d",
+    "bytes": 9574799408,
+    "layers": 40,
+    "size": [
+      10551,
+      7506
+    ],
+    "depth": 16,
+    "replaced_layers": [
+      {
+        "index": 20,
+        "name": "03 ACHF azimutal 8-128 · V32",
+        "RGB_exact": true
+      },
+      {
+        "index": 21,
+        "name": "03 ACHF azimutal 8-128 · V32",
+        "RGB_exact": true
+      },
+      {
+        "index": 22,
+        "name": "07 ACHF azimutal suau r8 · V32",
+        "RGB_exact": true
+      },
+      {
+        "index": 23,
+        "name": "01 ACHF fi 2-32 · V32",
+        "RGB_exact": true
+      },
+      {
+        "index": 24,
+        "name": "02 Passa-alt 24 · V32",
+        "RGB_exact": true
+      },
+      {
+        "index": 25,
+        "name": "04 ACHF micro 1-16 · V32",
+        "RGB_exact": true
+      },
+      {
+        "index": 26,
+        "name": "05 ACHF fi 2-48 · V32",
+        "RGB_exact": true
+      },
+      {
+        "index": 27,
+        "name": "06 ACHF estructura 4-64 · V32",
+        "RGB_exact": true
+      },
+      {
+        "index": 30,
+        "name": "P01 NRGF · V32",
+        "RGB_exact": true
+      },
+      {
+        "index": 31,
+        "name": "P02 RHEF · comparacio amb anells · V32",
+        "RGB_exact": true
+      },
+      {
+        "index": 32,
+        "name": "P03 MGN · V32",
+        "RGB_exact": true
+      },
+      {
+        "index": 33,
+        "name": "P04 WOW sense denoise · V32",
+        "RGB_exact": true
+      },
+      {
+        "index": 34,
+        "name": "P05 WOW bilateral sense denoise · V32",
+        "RGB_exact": true
+      },
+      {
+        "index": 35,
+        "name": "P06 NAFE n65 · V32",
+        "RGB_exact": true
+      },
+      {
+        "index": 36,
+        "name": "P07 ACHF precursor sigma16 · V32",
+        "RGB_exact": true
+      },
+      {
+        "index": 37,
+        "name": "P08 ACHF precursor sigma32 · V32",
+        "RGB_exact": true
+      },
+      {
+        "index": 38,
+        "name": "P09 SWAP · pilot llum blanca · V32",
+        "RGB_exact": true
+      },
+      {
+        "index": 39,
+        "name": "C01 Passa-alt24 lineal · control · V32",
+        "RGB_exact": true
+      }
+    ],
+    "others_byte_identical": true,
+    "merged_max_err_DN16": [
+      0,
+      0,
+      0
+    ]
+  },
+  "gate": {
+    "result": "OBRE 10551 px x 7506 px · 40 capes",
+    "original_dialog_mode": "DialogModes.NO",
+    "restored": true,
+    "file": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v32_arcs_20260907/staging/V32.psb",
+    "sha256": "dcfc8f531e286bfdf529d20880c9772785a38a4e6d0c09094883a7c8f7743c7d"
+  },
+  "code_sha256": {
+    "a1_pesos_per_fotograma.py": "7221fc09c230993b1ef65880eec2f217d99c0ac57e156d312c884a8c074b913f",
+    "a1b_pesos_RB.py": "93832e65a23ac6fd06bbbf297723cfddf11de704a204dae353aa6d92ade44b52",
+    "a2_diagnosi_marques.py": "1ba64de3f831205734d32cc9f5dc93c575859926f852cc5692c851214d4ca180",
+    "a3_mapa_fronteres.py": "7e9455d8d53268b5610f763d5914d236a02b60bd32444850dedd084ea107f85c",
+    "a4_anisotropia_per_font.py": "da30ccc015517c8e27b74acb3d557314ed1efec0756f3b3267dccf9d254e1d96",
+    "a5_graons_a_les_fronteres.py": "c7efc89a5bd96c59d469822507666a8a8141489150e0a5f17e923469704d51d1",
+    "b1_camps_per_fotograma.py": "a6059692f8ead125574ffdcf8645c62ed5d34531762e334811aa9ddc84e427d0",
+    "b2_recomposicio.py": "22b0c60ed92f4daf821b3520fd0666a969c4ab1157b58d7736d3a3644ddd93e3",
+    "b3_fusio.py": "36beffc30562421aeda1b0227f3e721ba07a8ddf39704bf7438e59737568af8a",
+    "b4a_capes_cadena.py": "e07fe6e04fa768e4b192f19598a22b796192e7286aa1bd8889e62c20cd44156c",
+    "b4b_capes_azimutals.py": "cb2e6ed4ce58e40b4f0b3910989bd1d1134b43296ae8ada9aafe37db06bfd8b8",
+    "b4c_capes_pures.py": "f3adde8fb0fefd49848275e0bd7cbf22231e679d45ab7ecac4701747e02ae316",
+    "b5_jutge_i_injeccio.py": "d7fffaaf53dd076ed2127f5e6151a994cbe51ab89392a66386405009020effb8",
+    "b5_montatges.py": "6d01d22d1bb11da42e405b6e82b0cfc650bb8329e8abada1613805d24294bb16",
+    "b6_psb.py": "2d2d2ea1d0a2e2775efd97f93475b2df9c98e34ffc132e9195c7a132073292f8",
+    "b7_rebut.py": "89806cb191cd9764fc05b7a873e5f315a2364a443fe74607296c2db5492da88b",
+    "b8_autoritat.py": "09ae5831f8e2b8aca759cfc55694dc43032ccbdd680496d98d7228620c952b0d",
+    "comu32.py": "fe50ad4d4329dee3c5734ae4acd65d2970c9cc6c7064f79ed29d309f47364a32"
+  },
+  "receipts_sha256": {
+    "A2_marques.json": "744e2c1351e871c49987cff1dd853cb12d0a5aff8b3ffdb77293e80d8a5b0da6",
+    "A2v32_marques.json": "ae56b4ffaa22a9f2869d65e0975b8372ab070507a4ca8232b3e5a051093b1082",
+    "A3_fronteres.json": "67897e074d3952235bbb017d37d6ca7db134051711a223ec2af998a0bca7c956",
+    "A4_anisotropia.json": "430d7f18a119e6455dfe6b6ce0c6f0186440107eaf4ea2f35de3fa9cac303b7b",
+    "A4b_fotogrames_sols.json": "35a5fff4b38f75eb7e416cd85e240c79af3ee9868eedb3782d1494f2a22ecd9c",
+    "A4v32_anisotropia.json": "22deeab26560bf32c50fad0b20fbaadb9eaa3ee95da54c7aa46d0d0d6907a7e8",
+    "A5_graons.json": "deba2f7c5b1494aa1122f35306a83df8a32764635ee33c17c0dbb9dfd700c739",
+    "A5v32_graons.json": "32c8d3e222006ece279884280f702f9486c11713c109afbd8b3b2fa88bfebb83",
+    "A6_flat_ondulacio.json": "0edde31fb58ced5ffdf32b1376636c137678e9ba8a7d94eadfc3af1720e36204",
+    "A6b_anisotropia_abans_despres.json": "f5cf6b9c66909466d877b03bfc5eb0351570d2f72ae2b45f7ab561731c65d1cb",
+    "B1_camps_sony_A.json": "e6f47e4dd485da0dce9689c10e67bb9801d8e36637d0b15f5245ab8fdf3cf933",
+    "B1_camps_sony_B.json": "d397e2af8c7858634c8e42ddceb166113ef1eb31eb94fb251b6331e8fbf6dfa1",
+    "B1_camps_vixen.json": "5c60246ea4ce6de2846b01a441635f9accdea65aa73332dd7b3c6d70333f8215",
+    "B2_recomposicio.json": "1c99c53854a7c3fdeb5e0f13f84c55417ca79411825679d2625226341a9d3391",
+    "B3_fusio.json": "ca5b37a71f7effd462e3c42a2e17252252667586265c2b867d2ffeab83e260b7",
+    "B4a_capes_cadena.json": "50efe77d8b7a59d8f9dbb04560b6090dd8c41a8fc7abcab72c56b7d358b4f81d",
+    "B4b_capes_azimutals.json": "33fc622cd7a3f100fe02a15c05bdd783b0d051bc002e6124ebb3a3e879f215a7",
+    "B5_jutge_abans_despres.json": "42a692e62c4db321cc7654ca77707c69cbaf20890a76db38ddd250e7cc1696e6",
+    "B5_montatges.json": "694c1286ef2e569e9776a6ca49afd521039a9893df2d6de725beec371a2e5c1b",
+    "B6_packaging.json": "3e1da6700afa7ad34c63adab82e3a21b5c3e4814c826a758b3c19871338372d3",
+    "B6_photoshop_gate.json": "ad5ee270243042dbf1f285ba6d75aba9dbb360b4cbe54777adcf04d102c6d597",
+    "B6_psb_verification.json": "f254304093df39dd74e29082612a49c29714207ad45a57a9b18f4c4714c7342d",
+    "B6_publish.json": "32b8605eff2d04a02a5b4d89ccf21a7998c2000627db19b05352b6c6cdc1968c"
+  },
+  "purs_receipts_sha256": {
+    "C01_Passa_alt24_lineal.json": "77a72f5726384aa1b39b3dbd0da374de35955be5364ae916b5a514fd2b18afb5",
+    "NAFE_reference_validation.json": "0f1478c4a0cf654586364cbdf47df7ca020df76209bf7b63a5ab79866cd1b386",
+    "P01_NRGF.json": "ae75bc2aefedf12ca11127556a06b5c7c02a5a6267c9e7f34047306327d1260b",
+    "P02_RHEF.json": "311573c92e25b8574b5afc15f3ded89c5ec5d16788152416a5a6e562e724fdb2",
+    "P03_MGN.json": "8c2fc77ef663c780dd48611a5480d795c31c258cf002ce7b351740f92228c02b",
+    "P04_WOW.json": "774931effea4d6626cd525c63f8f5d081e84946ddb1a39d7939ed2d2ca8e86d9",
+    "P05_WOW_bilateral.json": "761ef1d323d45175020dcfb513caab33f8b75f6a802981175c0267df2adf7b5e",
+    "P06_NAFE.json": "aa87ff5041c9785250c8e28498a9b2d307e346f1efa949c75f031e8e308410d6",
+    "P07_ACHF_precursor16.json": "adfd566019baaba11fec8324b983e1961a7209705f5ed201dcff3971db6cd8da",
+    "P08_ACHF_precursor32.json": "555f17d4b708ff363cb9beb98566a6393825fb51c0c7a1b67d109f66bf76088b",
+    "P09_SWAP_pilot.json": "ec4fd0fa7f9b6d034304c4e33f2ecd8184f957e2b7fded131e2d7257ca30e12a",
+    "SWAP_domain.json": "ccf2d6878df228c45124b80d5c971667264dc65d23203f1918caad6d7bf095bd",
+    "external_judge.json": "fdb49f6c3f8b524f098e40702fcb67c355611498e75e7b110e5f4c379e26d06c",
+    "injection.json": "9f1752c35f23905b6554ca176e5839e457705bd6147da9c2be6da521fc097b06"
+  }
+}

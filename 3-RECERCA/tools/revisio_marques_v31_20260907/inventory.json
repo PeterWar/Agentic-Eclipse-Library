@@ -1,0 +1,390 @@
+{
+  "path": "research/tools/revisio_marques_v31_20260907/input_anotat.psb",
+  "size": [
+    10551,
+    7506
+  ],
+  "depth": 16,
+  "layers": [
+    {
+      "i": 0,
+      "name": "00 Base (cel/4)",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": true,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    },
+    {
+      "i": 1,
+      "name": "03 ACHF azimutal 8-128 · V29",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": true,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    },
+    {
+      "i": 2,
+      "name": "03 ACHF azimutal 8-128 · V30",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    },
+    {
+      "i": 3,
+      "name": "07 ACHF azimutal suau r8 · V30",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    },
+    {
+      "i": 4,
+      "name": "01 ACHF fi 2-32 · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    },
+    {
+      "i": 5,
+      "name": "02 Passa-alt 24 · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    },
+    {
+      "i": 6,
+      "name": "04 ACHF micro 1-16 · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    },
+    {
+      "i": 7,
+      "name": "05 ACHF fi 2-48 · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    },
+    {
+      "i": 8,
+      "name": "06 ACHF estructura 4-64 · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    },
+    {
+      "i": 9,
+      "name": "P01 NRGF · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    },
+    {
+      "i": 10,
+      "name": "P02 RHEF · comparacio amb anells · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    },
+    {
+      "i": 11,
+      "name": "P03 MGN · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    },
+    {
+      "i": 12,
+      "name": "P04 WOW sense denoise · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    },
+    {
+      "i": 13,
+      "name": "P05 WOW bilateral sense denoise · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    },
+    {
+      "i": 14,
+      "name": "P06 NAFE n65 · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    },
+    {
+      "i": 15,
+      "name": "P07 ACHF precursor sigma16 · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    },
+    {
+      "i": 16,
+      "name": "P08 ACHF precursor sigma32 · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    },
+    {
+      "i": 17,
+      "name": "P09 SWAP · pilot llum blanca · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    },
+    {
+      "i": 18,
+      "name": "C01 Passa-alt24 lineal · control · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "channels": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mask": null
+    }
+  ]
+}

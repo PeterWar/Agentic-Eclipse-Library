@@ -1,0 +1,47 @@
+{
+  "tag": "P04_WOW",
+  "parameters": {
+    "paper": "Auchere et al. 2023 A&A670 A66 equations4-9,16-18",
+    "author_reference": "watroo",
+    "scales": 11,
+    "B3_kernel_1d": [
+      0.0625,
+      0.25,
+      0.375,
+      0.25,
+      0.0625
+    ],
+    "weights": "all1",
+    "h": 0,
+    "denoise": false,
+    "reason_no_denoise": "no validated full-canvas HDR noise sigma",
+    "bilateral": null,
+    "boundary": "V37 variant B: input = base where supported; elsewhere exp(azimuthal mean ln profile with PARTIAL-ring means kept, local-slope inward continuation decaying over 60 px, rise <= 5 ln); used ONLY as operator input; output saved on physical support",
+    "farcit": {
+      "primer_anell_amb_dada_px": 461,
+      "primer_anell_sencer_px": 463,
+      "pendent_local_ln_per_px": -0.02417662903642613,
+      "L_px": 60.0,
+      "pujada_max_ln": 5.0,
+      "ultim_anell_amb_dada_px": 6417,
+      "px_farcits": 8836655,
+      "variant": "B (A11)"
+    },
+    "display": "V34 receipts LUT",
+    "ring_bias_limb": {
+      "V36": 0.23944456567580996,
+      "V37": 1.0726528329359706
+    }
+  },
+  "physical_support_pixels": 70359151,
+  "float_sha256": "2fa6b646275881685243e64b496f73b5e2c4464c416902e69c99371f70039059",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": -12.069603023529053,
+    "white": 14.896832184791585,
+    "sample_percentiles": null,
+    "clipped_low_fraction": 0.0016078789808023693,
+    "clipped_high_fraction": 1.0773296568061204e-05
+  },
+  "u16_sha256": "b0cc19a894b12cfadae1d0e13f0101ccb7232e41eba7bd8c018ee37b60f47214"
+}

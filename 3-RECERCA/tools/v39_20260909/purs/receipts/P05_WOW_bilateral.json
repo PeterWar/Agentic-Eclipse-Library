@@ -1,0 +1,42 @@
+{
+  "tag": "P05_WOW_bilateral",
+  "parameters": {
+    "paper": "Auchere et al. 2023 A&A670 A66 equations4-9,16-18",
+    "author_reference": "watroo",
+    "scales": 11,
+    "B3_kernel_1d": [
+      0.0625,
+      0.25,
+      0.375,
+      0.25,
+      0.0625
+    ],
+    "weights": "all1",
+    "h": 0,
+    "denoise": false,
+    "reason_no_denoise": "no validated full-canvas HDR noise sigma",
+    "bilateral": 1,
+    "boundary": "V35 fill A (azimuthal mean profile extrapolated from the first complete ring): variant B worsens the bilateral (A12)",
+    "farcit": {
+      "primer_anell_sencer_px": 461,
+      "pendent_ln_per_px": -0.02291389812369821,
+      "variant": "A (V35)"
+    },
+    "display": "V34 receipts LUT",
+    "ring_bias_limb": {
+      "V36": 2.2375147620990576,
+      "V37": 2.4753746415875035
+    }
+  },
+  "physical_support_pixels": 70395270,
+  "float_sha256": "67693927e2b9a333509fdf5aa95ac2a8005f81512609f23b8ff7da766996df43",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": -16.15320372390747,
+    "white": 26.98664971542377,
+    "sample_percentiles": null,
+    "clipped_low_fraction": 7.358448941242785e-06,
+    "clipped_high_fraction": 0.0
+  },
+  "u16_sha256": "2a000588c4ae6dda1b0c4c527a7c881795149414e24d75de525d2fe2b9512f15"
+}

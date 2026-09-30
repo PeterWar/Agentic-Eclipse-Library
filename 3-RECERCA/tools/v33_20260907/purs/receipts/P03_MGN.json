@@ -1,0 +1,77 @@
+{
+  "tag": "P03_MGN",
+  "parameters": {
+    "paper": "Morgan & Druckmuller 2014",
+    "sigma_px": [
+      1.25,
+      2.5,
+      5,
+      10,
+      20,
+      40
+    ],
+    "k": 0.7,
+    "h": 0.7,
+    "gamma": 3.2,
+    "V33_post": "snmap.sn_v33 (σ = max(mapa C0 λ_min/8, f3.suavitza_sn t=0.18), smax=32.0) sobre el float",
+    "perfil_sigma": [
+      {
+        "r": 1.5,
+        "sigma_p50": 2.376812696456909,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 2.0,
+        "sigma_p50": 2.8912410736083984,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 2.65,
+        "sigma_p50": 6.4783759117126465,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 3.0,
+        "sigma_p50": 7.967071533203125,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 4.0,
+        "sigma_p50": 13.522356033325195,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 5.0,
+        "sigma_p50": 18.49393653869629,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 6.0,
+        "sigma_p50": 22.478622436523438,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 8.0,
+        "sigma_p50": 30.184268951416016,
+        "frac_smax": 0.10757740108068958
+      },
+      {
+        "r": 10.0,
+        "sigma_p50": 28.789342880249023,
+        "frac_smax": 0.05675193739929038
+      }
+    ],
+    "display_from": "V32 receipt"
+  },
+  "physical_support_pixels": 70395270,
+  "float_sha256": "11c37f3e2634f495efeb08da614386479abfff1d24db4a5827a9e0726770fd0b",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": -0.2755948627591133,
+    "white": 0.34889269697666314,
+    "sample_percentiles": null,
+    "clipped_low_fraction": 0.0,
+    "clipped_high_fraction": 0.00019617795343351905
+  },
+  "u16_sha256": "2f0ed55e949cb988fd3b4aaa080848bad274c765132dd4d9889c5af5c954eb62"
+}

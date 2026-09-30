@@ -1,0 +1,1495 @@
+{
+  "tren": "vixen",
+  "run": "/Users/USUARI/Desktop/Eclipse determinista/1-RUNS/019_VIXEN_CIENCIA_20260827T212404Z",
+  "Q": 4,
+  "shape": [
+    1876,
+    2637
+  ],
+  "canal": "G (subplans 1 i 3, mitjana ponderada pel pes)",
+  "pes": "finestra V34 (sostre gradual 0,35→0,85 sat) x t_exp x validesa x màscara lunar; sense k",
+  "canvis_v34": {
+    "v35": {
+      "composicio_per_grup": "V34 (finestra gradual 0,35→0,85 sat; linealitat Sony; camps B1)",
+      "v34": {
+        "finestra": "terra 12→48 DN igual; sostre smoothstep 0,35·sat → 0,85·sat (V32: lineal 0,70 → 0,85)",
+        "linealitat_sony": {
+          "x": [
+            0.32499999999999996,
+            0.375,
+            0.42499999999999993,
+            0.475,
+            0.5249999999999999,
+            0.575,
+            0.6249999999999999,
+            0.6749999999999999,
+            0.7249999999999999,
+            0.7749999999999999,
+            0.8249999999999998,
+            0.8749999999999999,
+            0.9249999999999998,
+            0.9749999999999999
+          ],
+          "ln_L": [
+            0.0,
+            0.0,
+            0.0,
+            -0.0007884010556153953,
+            -0.0013408624508883804,
+            -0.002568402444012463,
+            -0.004181534692179412,
+            -0.005310029198881239,
+            -0.005615968315396458,
+            -0.0044558143126778305,
+            -0.0051228710799477994,
+            -0.009202939865645021,
+            -0.011979032249655575,
+            -0.016620212176349014
+          ],
+          "aplicacio": "(raw − dark)/L(x) abans del flat; x = (raw − ped)/(sat − ped)"
+        },
+        "vixen_linealitat": "sense correcció (±0,13 % fins al sostre)"
+      },
+      "fusio": {
+        "distancies": "suports plens (forat lunar tapat per a la distància)",
+        "taper_vixen_px": 720.0,
+        "taper_A_px": 480.0,
+        "relleu_R": [
+          1.9,
+          3.5
+        ],
+        "conformacio_vixen": "V·exp(−δ), δ = ⟨ln(V/(S·ρ))⟩ σ256 al solapament, entrada smoothstep (2.0, 2.65)"
+      },
+      "filtres_purs": "P03/P04/P05: entrada = base amb forat lunar i fora del suport omplerts pel perfil azimutal mitjà (ln) de la pròpia imatge; sortida al suport físic; LUT de pantalla de la V34"
+    },
+    "vora_8s_sony": {
+      "fotogrames": [
+        "DSC06987.ARW",
+        "DSC06993.ARW"
+      ],
+      "estat": "RESIDU DECLARAT: dues cures provades i refusades (finestra quadràtica 0,10→0,85: +14 % de gra a tot el camp on els 8 s són al 10–50 % de saturació; esvaïment espacial smoothstep(d,0,900)^3 des del contorn de mig pes: bony de gra fins a +30 % en una banda de 1200 px). Pesos dels 8 s com la V35 (finestra V34).",
+      "motiu": "vora dels 8 s = quadrat arrodonit (vinyetatge del 300 mm sobre el cel) a 3,3–3,8 R☉; graó de gra del 14 % (base) en ~200 px; origen de captura (salt ×4 d'exposició)"
+    },
+    "condicio_contorn_purs": {
+      "radial": "ln B continuat cap endins amb pendent que decau exp(−d/L), L 100 px",
+      "azimutal": "modulació ln B − ⟨ln B⟩ mesurada a (1.05, 1.15) R☉, suavitzada 3.0°",
+      "normalitzacio": "variància (MGN) i potència (WOW) només sobre el suport real"
+    },
+    "radials": {
+      "anells_interiors_incomplets": "estimació de l'anell sencer per la forma azimutal de les primeres corones senceres (com a la vora del llenç)",
+      "rhef": "rang en radi continu: interpolació entre les CDF dels dos anells veïns"
+    }
+  },
+  "valor": "comu.calibra_pla: per segon, balanç de dia; sense k ni offset c03",
+  "frames": [
+    {
+      "i": 0,
+      "name": "572A2959.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 15.029999999998836,
+      "k": 0.9061205923220826,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3737.1196004089643,
+        2381.7544722129333
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 20877
+    },
+    {
+      "i": 1,
+      "name": "572A2960.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 15.680000000007567,
+      "k": 0.9079960964823867,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3737.2505127857453,
+        2381.629243460957
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 21075
+    },
+    {
+      "i": 2,
+      "name": "572A2961.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 16.330000000001746,
+      "k": 0.89697679076119,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3737.3812806418755,
+        2381.503979230486
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 21228
+    },
+    {
+      "i": 3,
+      "name": "572A2962.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 16.979999999995925,
+      "k": 0.8995034317794427,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3737.511903977357,
+        2381.378679521518
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 20924
+    },
+    {
+      "i": 4,
+      "name": "572A2963.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 17.610000000000582,
+      "k": 0.9112541921611214,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3737.6383702144108,
+        2381.2572013303857
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 20981
+    },
+    {
+      "i": 5,
+      "name": "572A2964.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 18.270000000004075,
+      "k": 0.9117990424120229,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3737.7707130379863,
+        2381.129902716276
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 21218
+    },
+    {
+      "i": 6,
+      "name": "572A2965.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 18.919999999998254,
+      "k": 0.8958815255155622,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3737.900905034918,
+        2381.004497117639
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 20799
+    },
+    {
+      "i": 7,
+      "name": "572A2966.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 19.570000000006985,
+      "k": 0.9038925307252555,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3738.0309525112043,
+        2380.8790560405023
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 20821
+    },
+    {
+      "i": 8,
+      "name": "572A2967.CR3",
+      "group": "vixen",
+      "exp": 0.0005,
+      "t": 20.470000000001164,
+      "k": 0.9526590395699414,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3738.210779660255,
+        2380.705309824229
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0010000000474974513,
+      "coverage_cells": 28767
+    },
+    {
+      "i": 9,
+      "name": "572A2968.CR3",
+      "group": "vixen",
+      "exp": 0.002,
+      "t": 21.369999999995343,
+      "k": 0.9968275242534492,
+      "offset_G": 781.1304326487455,
+      "offset_RGB": [
+        1929.4674529295016,
+        781.1304326487455,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3738.3903297401334,
+        2380.531495590009
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.004000000189989805,
+      "coverage_cells": 67562
+    },
+    {
+      "i": 10,
+      "name": "572A2969.CR3",
+      "group": "vixen",
+      "exp": 0.008,
+      "t": 22.270000000004075,
+      "k": 1.0125441538978468,
+      "offset_G": 192.90738996311418,
+      "offset_RGB": [
+        808.2673474926623,
+        192.90738996311418,
+        68.54673491627764
+      ],
+      "sol_xy_sensor": [
+        3738.56698490937,
+        2380.3563018804757
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.01600000075995922,
+      "coverage_cells": 339173
+    },
+    {
+      "i": 11,
+      "name": "572A2970.CR3",
+      "group": "vixen",
+      "exp": 0.03333333333,
+      "t": 23.19000000000233,
+      "k": 1.0610734809946367,
+      "offset_G": -15.490656248815448,
+      "offset_RGB": [
+        151.75387156620573,
+        -15.490656248815448,
+        -27.289651536776283
+      ],
+      "sol_xy_sensor": [
+        3738.75066137404,
+        2380.181079864991
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.06666667014360428,
+      "coverage_cells": 1975780
+    },
+    {
+      "i": 12,
+      "name": "572A2971.CR3",
+      "group": "vixen",
+      "exp": 0.125,
+      "t": 24.119999999995343,
+      "k": 0.9917996545470753,
+      "offset_G": -53.88000729108234,
+      "offset_RGB": [
+        -17.779083530168073,
+        -53.88000729108234,
+        -64.28099653907444
+      ],
+      "sol_xy_sensor": [
+        3738.935523421013,
+        2380.000043260185
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.25,
+      "coverage_cells": 1974279
+    },
+    {
+      "i": 13,
+      "name": "572A2972.CR3",
+      "group": "vixen",
+      "exp": 0.5,
+      "t": 25.139999999999418,
+      "k": 0.9945939597432847,
+      "offset_G": -47.30902075718878,
+      "offset_RGB": [
+        -37.982189029860756,
+        -47.30902075718878,
+        -50.7548841780931
+      ],
+      "sol_xy_sensor": [
+        3739.132847418808,
+        2379.823487001287
+      ],
+      "font_registre": "correlacio",
+      "w_max": 1.0,
+      "coverage_cells": 1961162
+    },
+    {
+      "i": 14,
+      "name": "572A2973.CR3",
+      "group": "vixen",
+      "exp": 0.001,
+      "t": 26.54000000000815,
+      "k": 0.9817637008901478,
+      "offset_G": 2089.5953875329815,
+      "offset_RGB": [
+        0.0,
+        2089.5953875329815,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3739.416377941568,
+        2379.531711765261
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0020000000949949026,
+      "coverage_cells": 43412
+    },
+    {
+      "i": 15,
+      "name": "572A2974.CR3",
+      "group": "vixen",
+      "exp": 0.004,
+      "t": 27.44000000000233,
+      "k": 1.0121442961388158,
+      "offset_G": 403.21023598705966,
+      "offset_RGB": [
+        845.221553243516,
+        403.21023598705966,
+        -129.69773230133688
+      ],
+      "sol_xy_sensor": [
+        3739.6029870447287,
+        2379.361047979266
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.00800000037997961,
+      "coverage_cells": 109444
+    },
+    {
+      "i": 16,
+      "name": "572A2975.CR3",
+      "group": "vixen",
+      "exp": 0.01666666667,
+      "t": 28.339999999996508,
+      "k": 1.0685406252412195,
+      "offset_G": 42.60519339797229,
+      "offset_RGB": [
+        257.7957828092818,
+        42.60519339797229,
+        -2.4230286286046727
+      ],
+      "sol_xy_sensor": [
+        3739.769648124224,
+        2379.1803923191746
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.03333333507180214,
+      "coverage_cells": 1311984
+    },
+    {
+      "i": 17,
+      "name": "572A2976.CR3",
+      "group": "vixen",
+      "exp": 0.06666666667,
+      "t": 29.25999999999476,
+      "k": 1.0741826571743531,
+      "offset_G": -19.639272581416503,
+      "offset_RGB": [
+        16.678198630875553,
+        -19.639272581416503,
+        -33.774897651047695
+      ],
+      "sol_xy_sensor": [
+        3739.950085067285,
+        2379.0045839238674
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.13333334028720856,
+      "coverage_cells": 1975652
+    },
+    {
+      "i": 18,
+      "name": "572A2977.CR3",
+      "group": "vixen",
+      "exp": 0.25,
+      "t": 30.229999999995925,
+      "k": 1.0095479721617835,
+      "offset_G": -14.508240471090348,
+      "offset_RGB": [
+        -9.990251412418672,
+        -14.508240471090348,
+        -16.9470126940229
+      ],
+      "sol_xy_sensor": [
+        3740.137143648519,
+        2378.8166947323953
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.5,
+      "coverage_cells": 1969459
+    },
+    {
+      "i": 19,
+      "name": "572A2978.CR3",
+      "group": "vixen",
+      "exp": 1.0,
+      "t": 31.380000000004657,
+      "k": 1.0096142544437816,
+      "offset_G": -5.284448290921422,
+      "offset_RGB": [
+        -1.3542893006998131,
+        -5.284448290921422,
+        -7.153918109897933
+      ],
+      "sol_xy_sensor": [
+        3740.3398016268184,
+        2378.577465400316
+      ],
+      "font_registre": "correlacio",
+      "w_max": 2.0,
+      "coverage_cells": 1950135
+    },
+    {
+      "i": 20,
+      "name": "572A2979.CR3",
+      "group": "vixen",
+      "exp": 2.0,
+      "t": 33.279999999998836,
+      "k": 1.0194646548094068,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3740.5609511381635,
+        2378.1949863747386
+      ],
+      "font_registre": "correlacio",
+      "w_max": 4.0,
+      "coverage_cells": 1935761
+    },
+    {
+      "i": 21,
+      "name": "572A2980.CR3",
+      "group": "vixen",
+      "exp": 2.0,
+      "t": 36.18000000000757,
+      "k": 1.0272551725026777,
+      "offset_G": 11.581101881633224,
+      "offset_RGB": [
+        8.784807381754064,
+        11.581101881633224,
+        12.567328104108132
+      ],
+      "sol_xy_sensor": [
+        3741.181174839217,
+        2377.636084047772
+      ],
+      "font_registre": "correlacio",
+      "w_max": 4.0,
+      "coverage_cells": 1935889
+    },
+    {
+      "i": 22,
+      "name": "572A2981.CR3",
+      "group": "vixen",
+      "exp": 2.0,
+      "t": 39.08999999999651,
+      "k": 1.031718097049895,
+      "offset_G": 22.66730809217951,
+      "offset_RGB": [
+        17.63245336746797,
+        22.66730809217951,
+        24.28298694373489
+      ],
+      "sol_xy_sensor": [
+        3742.0368241325073,
+        2377.12245676901
+      ],
+      "font_registre": "correlacio",
+      "w_max": 4.0,
+      "coverage_cells": 1935965
+    },
+    {
+      "i": 23,
+      "name": "572A2982.CR3",
+      "group": "vixen",
+      "exp": 10.0,
+      "t": 42.24000000000524,
+      "k": 1.037343434751555,
+      "offset_G": 37.68471568960203,
+      "offset_RGB": [
+        23.81500570947157,
+        37.68471568960203,
+        38.25558073975638
+      ],
+      "sol_xy_sensor": [
+        3742.476190679006,
+        2376.4818605343535
+      ],
+      "font_registre": "model (correlacio refusada)",
+      "w_max": 20.0,
+      "coverage_cells": 1873152
+    },
+    {
+      "i": 24,
+      "name": "572A2983.CR3",
+      "group": "vixen",
+      "exp": 10.0,
+      "t": 55.30999999999767,
+      "k": 1.037343434751555,
+      "offset_G": 62.141413133477926,
+      "offset_RGB": [
+        44.634277066700456,
+        62.141413133477926,
+        64.05268167020417
+      ],
+      "sol_xy_sensor": [
+        3744.9591245594565,
+        2373.9271200640533
+      ],
+      "font_registre": "model (correlacio refusada)",
+      "w_max": 20.0,
+      "coverage_cells": 1874822
+    },
+    {
+      "i": 25,
+      "name": "572A2984.CR3",
+      "group": "vixen",
+      "exp": 10.0,
+      "t": 68.7100000000064,
+      "k": 1.037343434751555,
+      "offset_G": 61.985415667188214,
+      "offset_RGB": [
+        43.52845118279261,
+        61.985415667188214,
+        65.87836687471861
+      ],
+      "sol_xy_sensor": [
+        3747.4440850717533,
+        2371.292983329945
+      ],
+      "font_registre": "model (correlacio refusada)",
+      "w_max": 20.0,
+      "coverage_cells": 1875287
+    },
+    {
+      "i": 26,
+      "name": "572A2985.CR3",
+      "group": "vixen",
+      "exp": 0.0005,
+      "t": 82.11000000000058,
+      "k": 0.9944294906480284,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3749.8676251636984,
+        2368.643768444451
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0010000000474974513,
+      "coverage_cells": 27189
+    },
+    {
+      "i": 27,
+      "name": "572A2986.CR3",
+      "group": "vixen",
+      "exp": 0.002,
+      "t": 83.15000000000873,
+      "k": 1.0440684894939025,
+      "offset_G": 400.4845345869118,
+      "offset_RGB": [
+        898.4552727194178,
+        400.4845345869118,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3750.0531523471986,
+        2368.437527202149
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.004000000189989805,
+      "coverage_cells": 61732
+    },
+    {
+      "i": 28,
+      "name": "572A2987.CR3",
+      "group": "vixen",
+      "exp": 0.008,
+      "t": 83.97999999999593,
+      "k": 1.0698699807103962,
+      "offset_G": 46.603816623396405,
+      "offset_RGB": [
+        -61.75485567575975,
+        46.603816623396405,
+        -44.34475974094674
+      ],
+      "sol_xy_sensor": [
+        3750.2108549122736,
+        2368.267499547811
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.01600000075995922,
+      "coverage_cells": 205754
+    },
+    {
+      "i": 29,
+      "name": "572A2988.CR3",
+      "group": "vixen",
+      "exp": 0.03333333333,
+      "t": 84.88000000000466,
+      "k": 1.1295809185565961,
+      "offset_G": 4.19894253744185,
+      "offset_RGB": [
+        -98.20513950015976,
+        4.19894253744185,
+        8.4950838847794
+      ],
+      "sol_xy_sensor": [
+        3750.361126657151,
+        2368.0939496878364
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.06666667014360428,
+      "coverage_cells": 1949848
+    },
+    {
+      "i": 30,
+      "name": "572A2989.CR3",
+      "group": "vixen",
+      "exp": 0.125,
+      "t": 85.82000000000698,
+      "k": 1.0606305273862098,
+      "offset_G": 39.36143650189687,
+      "offset_RGB": [
+        -2.7058480695256875,
+        39.36143650189687,
+        47.54890759785141
+      ],
+      "sol_xy_sensor": [
+        3750.5246390926595,
+        2367.9080722913104
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.25,
+      "coverage_cells": 1974727
+    },
+    {
+      "i": 31,
+      "name": "572A2990.CR3",
+      "group": "vixen",
+      "exp": 0.5,
+      "t": 86.85000000000582,
+      "k": 1.064941967240428,
+      "offset_G": 32.56908383896956,
+      "offset_RGB": [
+        12.910769829771668,
+        32.56908383896956,
+        44.35702917107607
+      ],
+      "sol_xy_sensor": [
+        3750.6860715049684,
+        2367.733737359068
+      ],
+      "font_registre": "correlacio",
+      "w_max": 1.0,
+      "coverage_cells": 1961840
+    },
+    {
+      "i": 32,
+      "name": "572A2991.CR3",
+      "group": "vixen",
+      "exp": 0.001,
+      "t": 88.25,
+      "k": 1.0245195444385728,
+      "offset_G": 1624.7888193462227,
+      "offset_RGB": [
+        0.0,
+        1624.7888193462227,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3750.957593467959,
+        2367.4248371176022
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0020000000949949026,
+      "coverage_cells": 42055
+    },
+    {
+      "i": 33,
+      "name": "572A2992.CR3",
+      "group": "vixen",
+      "exp": 0.004,
+      "t": 89.15000000000873,
+      "k": 1.0648298067371216,
+      "offset_G": 414.71418080827146,
+      "offset_RGB": [
+        358.6208934217571,
+        414.71418080827146,
+        184.7803179837039
+      ],
+      "sol_xy_sensor": [
+        3751.13277978624,
+        2367.2538763951566
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.00800000037997961,
+      "coverage_cells": 97951
+    },
+    {
+      "i": 34,
+      "name": "572A2993.CR3",
+      "group": "vixen",
+      "exp": 0.01666666667,
+      "t": 90.05000000000291,
+      "k": 1.1295984784148867,
+      "offset_G": 16.66677992789325,
+      "offset_RGB": [
+        -112.27093837883126,
+        16.66677992789325,
+        17.578214912583586
+      ],
+      "sol_xy_sensor": [
+        3751.2734241042863,
+        2367.0667859661103
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.03333333507180214,
+      "coverage_cells": 933985
+    },
+    {
+      "i": 35,
+      "name": "572A2994.CR3",
+      "group": "vixen",
+      "exp": 0.06666666667,
+      "t": 90.97000000000116,
+      "k": 1.132329407361984,
+      "offset_G": 14.71803726852635,
+      "offset_RGB": [
+        -40.13437346763999,
+        14.71803726852635,
+        35.47029217859552
+      ],
+      "sol_xy_sensor": [
+        3751.4366270764785,
+        2366.885492944012
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.13333334028720856,
+      "coverage_cells": 1975817
+    },
+    {
+      "i": 36,
+      "name": "572A2995.CR3",
+      "group": "vixen",
+      "exp": 0.25,
+      "t": 91.94000000000233,
+      "k": 1.061854647366617,
+      "offset_G": 18.168552987915426,
+      "offset_RGB": [
+        -0.9975007921268457,
+        18.168552987915426,
+        30.779138090626297
+      ],
+      "sol_xy_sensor": [
+        3751.607389334783,
+        2366.691870552568
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.5,
+      "coverage_cells": 1969846
+    },
+    {
+      "i": 37,
+      "name": "572A2996.CR3",
+      "group": "vixen",
+      "exp": 1.0,
+      "t": 93.08999999999651,
+      "k": 1.0639127369548504,
+      "offset_G": 8.953906462456894,
+      "offset_RGB": [
+        -7.177405189219888,
+        8.953906462456894,
+        22.39219349966247
+      ],
+      "sol_xy_sensor": [
+        3751.8078522839123,
+        2366.4789132845904
+      ],
+      "font_registre": "correlacio",
+      "w_max": 2.0,
+      "coverage_cells": 1951018
+    },
+    {
+      "i": 38,
+      "name": "572A2997.CR3",
+      "group": "vixen",
+      "exp": 0.0005,
+      "t": 94.99000000000524,
+      "k": 0.9971742696242001,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3752.1392259827226,
+        2366.0831470916505
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0010000000474974513,
+      "coverage_cells": 27161
+    },
+    {
+      "i": 39,
+      "name": "572A2998.CR3",
+      "group": "vixen",
+      "exp": 0.002,
+      "t": 95.88999999999942,
+      "k": 1.0515787914203685,
+      "offset_G": 814.7453190442401,
+      "offset_RGB": [
+        1017.1913128434758,
+        814.7453190442401,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3752.2958347351787,
+        2365.90370097139
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.004000000189989805,
+      "coverage_cells": 62016
+    },
+    {
+      "i": 40,
+      "name": "572A2999.CR3",
+      "group": "vixen",
+      "exp": 0.008,
+      "t": 96.79000000000815,
+      "k": 1.0751104854613514,
+      "offset_G": 189.2886960274781,
+      "offset_RGB": [
+        122.06690071839672,
+        189.2886960274781,
+        85.67269414713876
+      ],
+      "sol_xy_sensor": [
+        3752.4541246846557,
+        2365.7238356400794
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.01600000075995922,
+      "coverage_cells": 234288
+    },
+    {
+      "i": 41,
+      "name": "572A3000.CR3",
+      "group": "vixen",
+      "exp": 0.03333333333,
+      "t": 97.69999999999709,
+      "k": 1.1331324617263407,
+      "offset_G": 11.293882630570144,
+      "offset_RGB": [
+        -57.777271889685466,
+        11.293882630570144,
+        47.49602666288506
+      ],
+      "sol_xy_sensor": [
+        3752.6087543367867,
+        2365.5433648897288
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.06666667014360428,
+      "coverage_cells": 1973104
+    },
+    {
+      "i": 42,
+      "name": "572A3001.CR3",
+      "group": "vixen",
+      "exp": 0.125,
+      "t": 98.63000000000466,
+      "k": 1.060045610979772,
+      "offset_G": -11.586880576579327,
+      "offset_RGB": [
+        -32.7956854730063,
+        -11.586880576579327,
+        10.393319236744476
+      ],
+      "sol_xy_sensor": [
+        3752.7715468404053,
+        2365.3563834819015
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.25,
+      "coverage_cells": 1974705
+    },
+    {
+      "i": 43,
+      "name": "572A3002.CR3",
+      "group": "vixen",
+      "exp": 0.5,
+      "t": 99.65000000000873,
+      "k": 1.0633530473870836,
+      "offset_G": -24.504889707403017,
+      "offset_RGB": [
+        -41.36513807374911,
+        -24.504889707403017,
+        -7.23819727378533
+      ],
+      "sol_xy_sensor": [
+        3752.939599719807,
+        2365.1727916089276
+      ],
+      "font_registre": "correlacio",
+      "w_max": 1.0,
+      "coverage_cells": 1961952
+    },
+    {
+      "i": 44,
+      "name": "572A3003.CR3",
+      "group": "vixen",
+      "exp": 0.0005,
+      "t": 101.05000000000291,
+      "k": 1.0028337377546503,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3753.18837686521,
+        2364.873563651022
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0010000000474974513,
+      "coverage_cells": 26945
+    },
+    {
+      "i": 45,
+      "name": "572A3004.CR3",
+      "group": "vixen",
+      "exp": 0.002,
+      "t": 101.94999999999709,
+      "k": 1.0564928312002886,
+      "offset_G": 840.6473330844797,
+      "offset_RGB": [
+        750.3838717109728,
+        840.6473330844797,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3753.3431200185764,
+        2364.6936595432494
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.004000000189989805,
+      "coverage_cells": 62497
+    },
+    {
+      "i": 46,
+      "name": "572A3005.CR3",
+      "group": "vixen",
+      "exp": 0.008,
+      "t": 102.85000000000582,
+      "k": 1.0804927056883697,
+      "offset_G": 157.13722060974467,
+      "offset_RGB": [
+        127.46643253860056,
+        157.13722060974467,
+        170.47142109443442
+      ],
+      "sol_xy_sensor": [
+        3753.505056239081,
+        2364.5126461736872
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.01600000075995922,
+      "coverage_cells": 262415
+    },
+    {
+      "i": 47,
+      "name": "572A3006.CR3",
+      "group": "vixen",
+      "exp": 0.03333333333,
+      "t": 103.77000000000407,
+      "k": 1.1286519773208328,
+      "offset_G": -4.565889744620466,
+      "offset_RGB": [
+        -35.85846412982055,
+        -4.565889744620466,
+        35.66833796241357
+      ],
+      "sol_xy_sensor": [
+        3753.653714153247,
+        2364.330755411231
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.06666667014360428,
+      "coverage_cells": 1975541
+    },
+    {
+      "i": 48,
+      "name": "572A3007.CR3",
+      "group": "vixen",
+      "exp": 0.125,
+      "t": 104.69999999999709,
+      "k": 1.0587439555687437,
+      "offset_G": -52.73153097753985,
+      "offset_RGB": [
+        -58.0212002282819,
+        -52.73153097753985,
+        -27.93636481802784
+      ],
+      "sol_xy_sensor": [
+        3753.8148360098594,
+        2364.1438354457023
+      ],
+      "font_registre": "correlacio",
+      "w_max": 0.25,
+      "coverage_cells": 1974679
+    },
+    {
+      "i": 49,
+      "name": "572A3008.CR3",
+      "group": "vixen",
+      "exp": 0.5,
+      "t": 105.72000000000116,
+      "k": 1.056679311948895,
+      "offset_G": -66.7115546915663,
+      "offset_RGB": [
+        -81.5043542648164,
+        -66.7115546915663,
+        -45.816484271173884
+      ],
+      "sol_xy_sensor": [
+        3753.9738127502646,
+        2363.9651869354097
+      ],
+      "font_registre": "correlacio",
+      "w_max": 1.0,
+      "coverage_cells": 1961931
+    },
+    {
+      "i": 50,
+      "name": "572A3009.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 107.11999999999534,
+      "k": 0.9358305122789294,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3754.22666620882,
+        2363.6588927782104
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 20079
+    },
+    {
+      "i": 51,
+      "name": "572A3010.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 107.77000000000407,
+      "k": 0.9452919988817119,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3754.3371033448375,
+        2363.528637541912
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 19872
+    },
+    {
+      "i": 52,
+      "name": "572A3011.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 108.41999999999825,
+      "k": 0.9371103415280685,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3754.447395960204,
+        2363.3983468271185
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 19948
+    },
+    {
+      "i": 53,
+      "name": "572A3012.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 109.07000000000698,
+      "k": 0.9467411200040884,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3754.557544054925,
+        2363.2680206338255
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 19826
+    },
+    {
+      "i": 54,
+      "name": "572A3013.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 109.72000000000116,
+      "k": 0.9412458118164597,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3754.667547628995,
+        2363.1376589620377
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 19901
+    },
+    {
+      "i": 55,
+      "name": "572A3014.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 110.36999999999534,
+      "k": 0.9442041532945168,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3754.777406682417,
+        2363.007261811753
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 19940
+    },
+    {
+      "i": 56,
+      "name": "572A3015.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 111.02000000000407,
+      "k": 0.9401996399774611,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3754.8871212151935,
+        2362.876829182968
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 20012
+    },
+    {
+      "i": 57,
+      "name": "572A3016.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 111.68000000000757,
+      "k": 0.9435815821215335,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3754.9983757910145,
+        2362.744353596926
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 19965
+    },
+    {
+      "i": 58,
+      "name": "572A3017.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 112.33000000000175,
+      "k": 0.9422276799490423,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3755.107799059097,
+        2362.613849465327
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 19704
+    },
+    {
+      "i": 59,
+      "name": "572A3018.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 112.97999999999593,
+      "k": 0.9398353347484198,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3755.2170778065315,
+        2362.48330985523
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 19850
+    },
+    {
+      "i": 60,
+      "name": "572A3019.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 113.63000000000466,
+      "k": 0.9509125138053909,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3755.32621203332,
+        2362.352734766633
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 19719
+    },
+    {
+      "i": 61,
+      "name": "572A3020.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 114.27999999999884,
+      "k": 0.937309683017958,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3755.435201739458,
+        2362.2221241995417
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 20001
+    },
+    {
+      "i": 62,
+      "name": "572A3021.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 114.93000000000757,
+      "k": 0.9424639342396341,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3755.54404692495,
+        2362.0914781539504
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 19943
+    },
+    {
+      "i": 63,
+      "name": "572A3022.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 115.58000000000175,
+      "k": 0.9384808142710592,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3755.652747589792,
+        2361.960796629865
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 19959
+    },
+    {
+      "i": 64,
+      "name": "572A3023.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 116.22999999999593,
+      "k": 0.946395982225998,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3755.761303733985,
+        2361.830079627282
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 20130
+    },
+    {
+      "i": 65,
+      "name": "572A3024.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 116.86000000000058,
+      "k": 0.9541050073374839,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3755.8663817702513,
+        2361.703350828492
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 19744
+    },
+    {
+      "i": 66,
+      "name": "572A3025.CR3",
+      "group": "vixen",
+      "exp": 0.0003125,
+      "t": 117.50999999999476,
+      "k": 0.9378850156989204,
+      "offset_G": 0.0,
+      "offset_RGB": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sol_xy_sensor": [
+        3755.9746533199373,
+        2361.572563960561
+      ],
+      "font_registre": "model (banda insuficient)",
+      "w_max": 0.0006249999860301614,
+      "coverage_cells": 20099
+    }
+  ],
+  "sensor_k_llenc": 1.0,
+  "pa_north_deg": 57.194988546068025
+}

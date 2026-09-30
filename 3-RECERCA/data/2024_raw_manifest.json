@@ -1,0 +1,15 @@
+{
+  "source": "/Users/USUARI/Library/CloudStorage/Dropbox/Pere Guerra/Astrofotografia/Eclipse Solar 2024/Eclipse (short)",
+  "raw_count": 260,
+  "systems": [
+    "Canon 6D Nikon 300mm AFS-II 300mm f2.8",
+    "Sony A7III AP130GTS QUADTCC 590mm f4.5",
+    "Sony A7S Questar 3.5 1280mm f14"
+  ],
+  "hashes_included": true,
+  "outputs": [
+    "2024_raw_timeline.csv",
+    "2024_exposure_runs.csv",
+    "2024_raw_summary.csv"
+  ]
+}

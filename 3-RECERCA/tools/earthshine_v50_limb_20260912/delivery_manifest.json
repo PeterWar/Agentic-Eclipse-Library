@@ -1,0 +1,978 @@
+{
+  "created": "2026-09-12T01:29:24.532454+00:00",
+  "status": "DIAGNOSTIC_ONLY_NOT_QUALIFIED",
+  "source": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes interiors/Earthshine_V49.psb",
+  "source_sha256": "fc22af4660c7ac7aeb10a1433f1c159a91968fed70646c4b9200bb5bf7748366",
+  "new_PSB": false,
+  "report": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/RESULTAT_V50_NO_VALIDADA.md",
+  "handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-12_V50_NO_VALIDADA.md",
+  "artifacts": [
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/c0_stack_solar_forward.py",
+      "bytes": 2244,
+      "sha256": "9be2c16676f2487613f8be65bf76fd75d0c07106a9fd4d0bbbee5dd5c3072394"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/a1_scatter_model.py",
+      "bytes": 8499,
+      "sha256": "f8b0d902545d757847f4ef24cd11d471a9454ff0b0c67fa900b997f0693337f4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/optical_matte.py",
+      "bytes": 2767,
+      "sha256": "b6ae99fc5114be526a15d3f67d5c450569789e3c31f462b6af7050e894911bc4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/e0_photographic_probes.py",
+      "bytes": 4447,
+      "sha256": "afae7e46f8fb014458c4ff0cf7a1bd7882fea548ce5fe97b26cfb54166ef8d25"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/b3_joint_convergence.py",
+      "bytes": 1493,
+      "sha256": "4cf22f0d026438a40745706fcde43218e7870ad80f3bce51dbbece36995cf24e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/z0_close_diagnostic.py",
+      "bytes": 10854,
+      "sha256": "abf6edaa686b4988fbdd6f3e310ec53e0fbe465fd3048898697067d42926dfa4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/REPRESA.md",
+      "bytes": 189,
+      "sha256": "d8f5277c010fce1b09ed94548df47aeeb96690df89da9b15ff85ccc453bbebab"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/e3_counterfactual_probe.py",
+      "bytes": 2347,
+      "sha256": "f3baa2190ec710eb545da3d22b62e3eeb9c56eed37aaa660b107ffb38d6ca01c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/d0_pupil_solar_forward.py",
+      "bytes": 1965,
+      "sha256": "9899a50acc00a5f72cd5bfcc75e442a5259635eb43f66a87817776198854cf83"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/common50.py",
+      "bytes": 736,
+      "sha256": "fe79a29c35616f85122e7b4ca749712dc207a39ffe538b0a624dc9e7eb8d8e47"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/e2_appearance_compare.py",
+      "bytes": 2702,
+      "sha256": "67b49dc7c8bdc4627c818772805174c5c8a5459019107888850a505b5512a93a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/b2_joint_components.py",
+      "bytes": 4826,
+      "sha256": "0e7506e6c96546f8850436ac56b407febe3b6e7a125a5bba82e1ca16ca0639bc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/a2_reserved_check.py",
+      "bytes": 5496,
+      "sha256": "2a79f17ca8281170245e5107305f65cc9bc9ef8938cb18747a22f40647603c79"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/b0_native_star_psf.py",
+      "bytes": 4004,
+      "sha256": "018810d03a26f0764ca492c3f0553e6348cb21b72bebe2bdd34d59825892314b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/c1_temporal_solar_fit.py",
+      "bytes": 2995,
+      "sha256": "0bc6fa516d126e54cdb0333fc2ed61972b618c299db9e63ff3f86ed7dbcd6a89"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/b1_matte_pilot.py",
+      "bytes": 2021,
+      "sha256": "7fcf971da60ce737b1d3ef96a9150c430718b43029cf4a68b104ae2330fec5ce"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/docs_before/4_README.md",
+      "bytes": 30512,
+      "sha256": "ee90d67f6eaa3d8c1ee1c0e35aa956d1203d2ca0345ca4385360615279fca439"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/docs_before/3_ESTAT_ACTUAL.md",
+      "bytes": 30635,
+      "sha256": "e84215b95767387ce78412378dcbe5b3818b9ea7f452dc8cbcf2c62badc407e4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/docs_before/5_MAPA_RUTES_I_OUTPUTS.md",
+      "bytes": 19016,
+      "sha256": "3d45545cae729353b2c7a1e7f0957cfd1fd4fff89e039c37ea540f68b61e41ca"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/docs_before/1_AGENTS.md",
+      "bytes": 22646,
+      "sha256": "149f9c6cd8e32581053a5eab7c3db757e168eb839f25afa20d0eeab94d8483b1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/docs_before/6_HANDOFF_VIGENT.md",
+      "bytes": 5684,
+      "sha256": "4cb141fbe9a5b9123467f486c1d034fbb449ad24409bac2bf224f0bfa168383e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/docs_before/7_README.md",
+      "bytes": 86589,
+      "sha256": "dbf53f3f3a5a35c5954e2902269fe36d59287ed764da8d6db305b4a14937d6cd"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/docs_before/0_CLAUDE.md",
+      "bytes": 205391,
+      "sha256": "4d19b0a77d7ae6496d9cbb6b94fca20020fe583a939c6460b0fc8bb2c22c24ca"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_limb_20260912/docs_before/2_ACTIVE.json",
+      "bytes": 38378,
+      "sha256": "112488c9a637c3d0dc0b31f685cc0777a50b333dc7ea5d2ea803e3ed39e4e475"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_reserved_572A3020.npz",
+      "bytes": 1618754,
+      "sha256": "897e8640931ab953f480e2e73ba32a04c95816516ce7422e61f9a9b956a3c1bf"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A2992.npz",
+      "bytes": 540868,
+      "sha256": "9e851b2b6a3b7e5a4bf58574be27138b23e770d409dca2d775b1b4bfe8ed8899"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A2986.npz",
+      "bytes": 544343,
+      "sha256": "0ba092a79de00bda7bb72de1a6766bcdd40b8fbc483f3099df4e4a1f8f667912"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/C1_temporal_early.npz",
+      "bytes": 28863986,
+      "sha256": "5ac9ae2b9d9c5b1346fbb71dc400c5e797bd665b8cd9077cb397409d1c1f83d3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A2968.npz",
+      "bytes": 1639112,
+      "sha256": "87a9184bb1b743e712a31f23b57d728d26881328c1694638f77b9e8aa94af471"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/C1_temporal_early.png",
+      "bytes": 1278746,
+      "sha256": "b62789e1b3abef6ed939aa8bc2128fbf4c826897fa0968a88fb3523d3ace3607"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/C0_stack_early.json",
+      "bytes": 3821,
+      "sha256": "c5ae57f0da192d0abdd49620ba65d1e06c416f0bad74ce0fe258a6bd181a16ed"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A2969.npz",
+      "bytes": 1640476,
+      "sha256": "2dfe666928634de4b90deea6086fa88df928e8c7d3d084682788586d2a12c3b2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A2987.npz",
+      "bytes": 540672,
+      "sha256": "c92c1d6d7bd17c349407760b556c5b67e5bdee04238226252e446c30d01160e8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A2993.npz",
+      "bytes": 538612,
+      "sha256": "f9f1e1e6235fb828c852886fba046a684056fe793fe59349434830fb56031030"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B2_joint_result.npz",
+      "bytes": 200878163,
+      "sha256": "f1ed83489c73de59cc600fb4984b56ee94d8b7708c31f1a7a17c6c01706d805e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/COMPARACIO_LLENC_PROVES_REFUSADES.jpg",
+      "bytes": 100360,
+      "sha256": "afe2fdcdade7fa0ca42b1e503fa97c2e1387062481f2df794d3db95358ef4d1a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/D0_pupil_all.npz",
+      "bytes": 57638829,
+      "sha256": "62fcf159b0ff4218a040f4fd7660511464fe53de918b341235a9c7e0da294d9f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/D0_pupil_all.png",
+      "bytes": 1278042,
+      "sha256": "fd808febe2b14008e8a4860a02896367c3c4428911f09b43ce7e83871cd42be1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/C0_plan.json",
+      "bytes": 743,
+      "sha256": "c9f9c935d7d1958407b46d9c7dcf27ed075e4203a319de5c73048d165370cefe"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A2991.npz",
+      "bytes": 543209,
+      "sha256": "c2401b5c5fdee6624cc705039bba6090c15d9bec5f53bce3145b271facdc1f24"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E2_physical_delta_composite.npy",
+      "bytes": 11760128,
+      "sha256": "d81ddb1c4c3c54fcc8eadfd8622b9b9f5680e3a6f56fb8873442218308eace42"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E2_pupil_direct_composite.npy",
+      "bytes": 11760128,
+      "sha256": "56ac2031b262f9ab8aaf38e3ff63511bde91f295211ebd862c6cab6c5a8d7a11"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E1_physical_CR.psd",
+      "bytes": 1262773024,
+      "sha256": "124d0daabd39acfda2a4c737e0ffe637452806b093f19f326589cde70938a8cd"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_plan.json",
+      "bytes": 2368,
+      "sha256": "133a19ac880f08c077ed80bb5d56dcdd5cc7190b95958b820451e5d6dd880f31"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E3_support_composite.npy",
+      "bytes": 11760128,
+      "sha256": "836a4d51a845f274a4d9be0cca3575af6f66da05fa2553113515ae132f2eccfb"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B1_matte_572A2992.npz",
+      "bytes": 58595998,
+      "sha256": "0d24a0155eb565e88d0eed349e6af34225b2361c178a9513fac1c6672b17faea"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E1_pupil_RGB16.npy",
+      "bytes": 11760128,
+      "sha256": "82caa714d812354e7b90f47e34634a949e527f0314fe1d8a8595ec4605a26344"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E2_physical_delta_RGB16.npy",
+      "bytes": 11760128,
+      "sha256": "7b29dc33c1587e93690f2a99c93149ac34baa76bb1726caa94dfbe2131852f3c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A2991.npz",
+      "bytes": 1648122,
+      "sha256": "d6c771e41a544acbde9e40b06985ff0f6aa77df5b0a099b368e9425fd24eda2c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B2_joint_checkpoint.npz",
+      "bytes": 45247602,
+      "sha256": "a176d5b2ad4800f1551a6509d30df67f6d46921201b2fbac2f6d9526ea43059e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E2_physical_delta_moon.png",
+      "bytes": 673377,
+      "sha256": "8edffc8eef7b86b55b593eb7ac30308ed4965ec0bcbb60d1359d47c5f83ccb67"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B0_native_star_psf.json",
+      "bytes": 14512,
+      "sha256": "23a31c9f4b60ad52860aa36d3e8cc9ab7720bfc131e66a48478263e4c6a47e09"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_reserved_epochs.png",
+      "bytes": 65608,
+      "sha256": "965dd245eaf059d3a6fbdc9c0f7292ee6ceb18f797549f883a0858e1580bcb73"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A2968.npz",
+      "bytes": 541690,
+      "sha256": "755d707dcc729e032d8686370aaafa06b1f390b92fb0c5e597aa02b8f2586a9f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A2986.npz",
+      "bytes": 1648858,
+      "sha256": "58396d2b851e80a90dfdcc706adbf136aad890e61f7f6231a20aa12a1c2e915c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A2992.npz",
+      "bytes": 1634150,
+      "sha256": "9dddba2227856bf5bda9345572e04d45a77ce9ffee759940c32c3ede31363409"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B2_joint_inputs.npz",
+      "bytes": 209169634,
+      "sha256": "ba9ff83c8db82d9664f53e0a46003b0af6e1617e98c896241002432a5627d0ca"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E2_pupil_direct_moon.png",
+      "bytes": 730399,
+      "sha256": "13d528026be5b529a410dffbf5fce3ca6ae95c706092970b794f7df3403db8bf"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A2993.npz",
+      "bytes": 1640562,
+      "sha256": "33f997626538abefb3a1db315f6de25c0d8ab326f188ed242ce8f2e1c9bea321"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A2987.npz",
+      "bytes": 1641973,
+      "sha256": "5ebcc00db4d94fd38abf05240f6108f3767d98a68179f87cbe3b8a42e4864506"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A2969.npz",
+      "bytes": 538815,
+      "sha256": "01a73621716217b1a947d6e652f13996552d66121c139c8684c164d1e787a546"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_reserved_572A3024.npz",
+      "bytes": 1618275,
+      "sha256": "c44c3076719e3c5a032155e5bc712870db5ff308d4f14709d8609054dab66590"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E0_pupil_preCR.npy",
+      "bytes": 11760128,
+      "sha256": "1f43d7dc0d4709ff4b3a1e6e124d8055f45aac560dcbcd483ff0cac96a8eda4b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B3_joint_result.npz",
+      "bytes": 196722537,
+      "sha256": "0d84ac65c1938fd8ca0ccc6a7712bff8637c082d1f41e5dadeaf5ff566432660"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E0_pupil_input.psd",
+      "bytes": 1267983742,
+      "sha256": "9d7bc25b137694b4a29dd634425f21284e032e45ffa6ac7ed0e0ff232dad4c8c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/D0_pupil_early.json",
+      "bytes": 548,
+      "sha256": "75d1af5d63f005936a691865a90dc534b22af50e99d1dda08ab536df58d26cdc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E2_pupil_delta_RGB16.npy",
+      "bytes": 11760128,
+      "sha256": "134bb43ebbd473ce72a9f389b9c52213ae974c94fd48dfba6fc7215fb9cde711"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E2_physical_direct_moon.png",
+      "bytes": 670609,
+      "sha256": "dcbecf0a9251dbf391eb64dbea70955636f3e97b6e39db9a73aa7e771e47bd51"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_reserved_572A2969.npz",
+      "bytes": 1618631,
+      "sha256": "d163561124af5e6c64e58528cb168a1f36cec059e822795f3830f087f992c0c0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E1_physical_RGB16.npy",
+      "bytes": 11760128,
+      "sha256": "d5492fa5c4db9915f2b263d35417ce2de4d1f781b99f676d8ae2c56dc809f77d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A3024.npz",
+      "bytes": 549520,
+      "sha256": "e0b39f1f05d21203f91ad8ce1cf1ebbddb95422e6cefec59d404448f3679b33e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/C1_temporal_late.npz",
+      "bytes": 28844410,
+      "sha256": "3f1e85fe6950a06c5de0f2d937474299bad4069cbc3c5eb5b018c6fa70ba1d91"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_fitted_model.npz",
+      "bytes": 147672,
+      "sha256": "c6eb6f73ac3eadd2b706e7311ceb2dff8d481898c0491e4f0d8283f4f1649242"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E3_support_moon.png",
+      "bytes": 806738,
+      "sha256": "702402db08aef827c6935c71b820c71e2a608bc202a95e3d2ec70cd7c9df8455"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_reserved_572A2968.npz",
+      "bytes": 1618389,
+      "sha256": "032cf21b652e2b9674b6173b43b544a041372419731c92d05f09922360eae6a5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/C1_temporal_late.png",
+      "bytes": 1347508,
+      "sha256": "c952e48e02a1084faad8ce6f2bd0d88ba78d0edf459bed651b75ca18e7f40db1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/D1_edge_all.npy",
+      "bytes": 11648,
+      "sha256": "64370f50096a01b48191d03fc2f258d5b9ffc80c5acdfd75edcaacd81f00c7e9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A3020.npz",
+      "bytes": 1608162,
+      "sha256": "3bcae42e61cb67bc9fdf9de902b15a5f62da7422478cf897e27f6e042e011543"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E2_pupil_delta_composite.npy",
+      "bytes": 11760128,
+      "sha256": "9059f795d0e3f74e5d76f6ae24164e52a5c0aa85fa191ff36a7d46504237ece9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A3024.npz",
+      "bytes": 1606067,
+      "sha256": "ca1d93fd4e8429eb2f8368f63c18baeeb1c60ec481be8fd4b1e32f9400da83d4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_reserved_572A2987.npz",
+      "bytes": 1619066,
+      "sha256": "89448e6cb7421fdc9e412206e601321c887d38042c83dbd6d143a57a1100080e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B2_joint_result.json",
+      "bytes": 2208,
+      "sha256": "2d6e5a7d1ced70aca51fafaf1f9fe9dc1d552f1acc43ed4b520e18c6e259c819"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A3020.npz",
+      "bytes": 549684,
+      "sha256": "f3cfe3dd25e832fce4c347488b4ed5a2f626e841b04f43bd45dd6c63dbb71a36"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_reserved_572A2986.npz",
+      "bytes": 1619111,
+      "sha256": "22cb175910189eb3f8cc7e12cc71be74b7470dd2e9fdee0167f76eef6b128462"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/D0_plan.json",
+      "bytes": 519,
+      "sha256": "2fef3386c6ffce5ce03fc9216f4599aa7d19a8427b7dfc798e894b8c8c166a61"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E2_physical_direct_RGB16.npy",
+      "bytes": 11760128,
+      "sha256": "6c0b0c0a65fb29c41f194967dee5d58df54078a8ee8dbba324d373714e4fcce3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E3_support_mask_roi.npy",
+      "bytes": 3920128,
+      "sha256": "8f55fdb5f7993689b644327c015716be7c002a819653fd40b10525db160fa76c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/C0_stack_all.json",
+      "bytes": 3812,
+      "sha256": "bc8fc0337e954001a8ff29815f1eb9c713555b9e0bb6d0396ae0eb6218e69635"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/D1_edge_early.npy",
+      "bytes": 11648,
+      "sha256": "7fb461c1507c8efad0366a3ab60188af626a6da1fde02cc9df2f985143e47aa5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/D0_pupil_all.json",
+      "bytes": 548,
+      "sha256": "8d5ecd9d5424011c4e48d1116e50fc827e141e8d4f52867c8a4fe6a7013051c6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A3012.npz",
+      "bytes": 549821,
+      "sha256": "e9da8fa206f10e0f6468bfa3ccd893f86e88ded9eb2030ab01352e8d29bd23d9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/D0_pupil_early.png",
+      "bytes": 1316221,
+      "sha256": "3f4bc0814de2035eb927d707d31e962e76378b8a6d3890b7760fe30ae06d6140"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/C0_stack_late.npz",
+      "bytes": 58392080,
+      "sha256": "27a93185d58fe94e889a80737cd4f194424f26c6c4e7d390d527d7ca0bb01f0a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_reserved_572A2962.npz",
+      "bytes": 1618599,
+      "sha256": "51d5a1f466eeb9bdcb9b9113871cbae45adc49bd97afd6714eb4159f21eeefc4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B3_checkpoint_100.npz",
+      "bytes": 34618941,
+      "sha256": "f602cc5499ac28d2d79dba326c02b60e8f78ca3a74d5b535a075f8205994047f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/C0_stack_late.png",
+      "bytes": 1371129,
+      "sha256": "6a3658e2cc1aa1b65f12502b9fc6256ed3e183ef674af21d5ca789e69b863b18"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/D0_pupil_early.npz",
+      "bytes": 58022138,
+      "sha256": "8c75b93568a63954f968cb25666dd7bb65a25a60054fcf9c50e44b433524b6ca"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/D0_pupil_late.png",
+      "bytes": 1384306,
+      "sha256": "3f85f9159ca716c226d80644372ca3d9d644e928411d394944556946b6a38277"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E2_pupil_direct_RGB16.npy",
+      "bytes": 11760128,
+      "sha256": "b57a325b513e904b9ca2613d14e78bdc147c59e5cee4d15452a43792de09f2a1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A3016.npz",
+      "bytes": 1603439,
+      "sha256": "bae37d5691c3b8776c15f3e9109645eae522364cf57eb02745bdca248c08ba12"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/C1_temporal_result.json",
+      "bytes": 1278,
+      "sha256": "6b0fc4c6b5efb4e5e5307a56edde513b7826966eb762b753cff98f6fd0a2ea9b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/D0_pupil_late.npz",
+      "bytes": 58194846,
+      "sha256": "9c62cf4d654b4b27fe93ed1e16ce819f09368e016515e02cf8a611178508fca8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B0_star_plan.json",
+      "bytes": 1057,
+      "sha256": "6215042516f345b319104a8939bdd3924110f3aaa43989aa9407fa8820a53117"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_fit_progress.json",
+      "bytes": 3869,
+      "sha256": "c3d28a059c2a00a76dc115bc439824652f2380b8a81dd14ec51cf3925475e24f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_reserved_572A2960.npz",
+      "bytes": 1618530,
+      "sha256": "a2c516c5f67dcf5acfd6ba034f4c66e5e031ab0b8334e5037b8c5c152c2a1c49"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/C0_stack_early.npz",
+      "bytes": 58221011,
+      "sha256": "56047b088e060a4ad7458a24e69de66d1fd450bc85b82ecb9e2daa841157f665"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/C0_stack_early.png",
+      "bytes": 1300474,
+      "sha256": "3caa677695fa2de36cd85e2d242dfd5e238c77dcacf25b16e87108f47746ce90"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B3_checkpoint_300.npz",
+      "bytes": 34611506,
+      "sha256": "0819d6de9551307245422280279e2f924cc5018cf0593ca9169519ccf0294c68"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A3005.npz",
+      "bytes": 539700,
+      "sha256": "dacaa9609166de1e218f98062c4527d8e94cc5e0b0965eb7304a63f316a129d6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A3004.npz",
+      "bytes": 542012,
+      "sha256": "4efbd8dcde7d59473a0af2d7949f6288b8498e0035bc41605e48ddddf7f76fbb"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A3005.npz",
+      "bytes": 1639505,
+      "sha256": "ec0758f5364b72d339b1aa44be76e024a04c64a53b1adc62382e745451388705"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E3_counterfactual_RGB16.npy",
+      "bytes": 11760128,
+      "sha256": "d5cf2af337e1eb7eb620371b57f631842030a0d67ae185d9c7cdaa540539790d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E3_probe.json",
+      "bytes": 5914,
+      "sha256": "9053b3dedab9f5eefa06969ec97c9f4a04eb541a36637bc297278808c4f241fd"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E3_inherited_moon.png",
+      "bytes": 816724,
+      "sha256": "bf4379620effc2c2578f57ff88f4aba8ce6a79fa9981b2a59ea18a347a1a6dbb"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E0_native_before.json",
+      "bytes": 18,
+      "sha256": "3fe5025a179eee2441a69b5d56983ad294490134a77a6d561b3fd96010deb66e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B4_source_diagnostic.png",
+      "bytes": 1142275,
+      "sha256": "3495b25078cc78f10207d002dc9e0b6f7a3a9d5a51236f98c5f8fb16049f8099"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_reserved_572A2964.npz",
+      "bytes": 1619180,
+      "sha256": "0f7bd1274502328b19d1f142f281d9bb8a6803a9b2ccf19199f4d8c90f00348b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B3_checkpoint_700.npz",
+      "bytes": 34603136,
+      "sha256": "71445523b161e038ccfaf345046cc95b90fa2e481cb952a526b95126c8a002d0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E2_appearance.json",
+      "bytes": 7899,
+      "sha256": "56866600593de2074df42d0785a3fdeaec0ec9e84bf9188400878ca8770b76f7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A3004.npz",
+      "bytes": 1639856,
+      "sha256": "8d693bb9b9b469ca3fd3ff6231362dacb0c87ee8097051612fd8a77451cdbb56"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A3012.npz",
+      "bytes": 1604384,
+      "sha256": "b7913d0df92530fc7d3277672c1e023af0b67d64e3643f88ea1ba166da34c9c4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/D1_edge_late.npy",
+      "bytes": 11648,
+      "sha256": "63aa0181f70fd4018046ceba856d90f75da0bd52aea40ac5689fe2a72cd196cc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B3_checkpoint_500.npz",
+      "bytes": 34607590,
+      "sha256": "c28ee7bdf95715f347319db364e5cb9408609df1f0075ab439c536bee493e5e7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_fit.json",
+      "bytes": 5442,
+      "sha256": "6a0a0708d33a0b5372be4bef326dd4e1ed203cd3f9f294fc4b61f451410b84c6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_reserved_572A2999.npz",
+      "bytes": 1619203,
+      "sha256": "b0fe3abfee1909a02614ab2237abcb62bd5a1f43ad7f7d780ea1b01c6ad5d915"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_reserved_572A2966.npz",
+      "bytes": 1618279,
+      "sha256": "2e85a65bf31f822136ded971a2a1728bdad721b76d293c7cb6feb8009a84c265"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A3016.npz",
+      "bytes": 549935,
+      "sha256": "5f694f4b79fa9e55f58bf38d85bdceb9b033d3731461db49661e3ef5706ae150"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/D1_edge_check.json",
+      "bytes": 606,
+      "sha256": "c06c86d7e540f1ea279936188e58a99bbd25b2018a0d27341bae558a4830f4ff"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E0_physical_preCR.npy",
+      "bytes": 11760128,
+      "sha256": "bf268ca442f33d1efc25ddc5f2e6fc5c951e577a5a2ba357d64cdc291df9ea8c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_reserved_572A2998.npz",
+      "bytes": 1618778,
+      "sha256": "b637d3bf319c8b1f6d85b9daa5b0a430b02d58963d107456fba62540d5847e14"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E0_physical_input.psd",
+      "bytes": 1265119142,
+      "sha256": "d1b3ed551c8e354dbd5813a4ce5fa21431ff245504d6dc4948e4f4473196e574"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B2_joint_progress.json",
+      "bytes": 1453,
+      "sha256": "b95cd023dcc9f6b61cea38611f2197b2c3c80a0e6723687689414281660ecc89"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B3_checkpoint_200.npz",
+      "bytes": 34615034,
+      "sha256": "924ea9a0994d2cff06f06391e1a3340742ad2b3d0896387f89b7049c96002d5f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_templates.npz",
+      "bytes": 298712,
+      "sha256": "433eae021a0a01e033941988b3254b678b25a0f8b84486b8c822abff5423697b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A2964.npz",
+      "bytes": 549841,
+      "sha256": "17080a6447826216a97f331bbf123d887594d986fe443dda55a68eeb1536aed5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E2_physical_direct_composite.npy",
+      "bytes": 11760128,
+      "sha256": "518ac267b4be31777c203f3a201051518ed50c316340efa74f983365c68ce861"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A2974.npz",
+      "bytes": 1633994,
+      "sha256": "5f2ce13ea5e475451dff0bcda12849664a6d46a050a285ccd7dfc1723c395867"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A2960.npz",
+      "bytes": 1599053,
+      "sha256": "3cdcfb6eb05258ce641cf5c8f35a96ce5ad3976fe897319d2629e378d759d397"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E0_plan.json",
+      "bytes": 1786,
+      "sha256": "35e194048414a75470338e7aef3ad1cb4b9260c957e75cae70e013b854746480"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E2_pupil_delta_moon.png",
+      "bytes": 731010,
+      "sha256": "d456a38a887887815ce193f8c925fddae0995f6838da43ce36526f43f77d83ef"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/D0_pupil_late.json",
+      "bytes": 548,
+      "sha256": "518350920c4eff82c2f924b46bb314c467c00ade374cead5c521e4b8971fa7be"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_reserved_572A3016.npz",
+      "bytes": 1618648,
+      "sha256": "a7e68ff268bdd10bd4dead58e8ddf555dee4473569ef698ea7763fe036b63335"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E1_native_after.json",
+      "bytes": 70,
+      "sha256": "9a8dee00ebd092f30310dedc16dce7ff304e1596b72b43887873e33e51d94ede"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A2973.npz",
+      "bytes": 541610,
+      "sha256": "e625ae5e986f1a7aeff3d7fd73d8cfa381e77f22067b163baf75e7153b30a417"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A2998.npz",
+      "bytes": 542437,
+      "sha256": "4e5d8c77367456be68b0723ae0e0083af09a73876f86efd1d0eb2931032483b2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_reserved_result.json",
+      "bytes": 45495,
+      "sha256": "3f59db6de14c9540747728dd024c2d948cd243962d13ce69d213986635d07568"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A2962.npz",
+      "bytes": 1597090,
+      "sha256": "10deece3d04374656747f05b18732151a6fa07f1723779fe5c9f408c3021b569"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/C0_stack_late.json",
+      "bytes": 3810,
+      "sha256": "1a44bf8bc0ca36b5f9e392815bc77f2d59667ff541809bb1d529f878395c35be"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B3_checkpoint_000.npz",
+      "bytes": 34622299,
+      "sha256": "01813793208f8d96b85ebf67e9ba2e354255419205b72229b7ba370aff0f2a80"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A2999.npz",
+      "bytes": 539985,
+      "sha256": "e74ce87c0ff19a8c2d027e338b6b80cf1b6f8850064de11dfc646aa5269e3461"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B3_checkpoint_799.npz",
+      "bytes": 34602336,
+      "sha256": "e3995eee9c732641d350cd7260f95622d5e174227c470412f211bc6acbf57870"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A2966.npz",
+      "bytes": 549748,
+      "sha256": "72d979cbab0c0928e90fb39dce708d114181aeebc4006c74f57a490f8d71cacf"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/RESULTAT_V50_NO_VALIDADA.md",
+      "bytes": 6258,
+      "sha256": "d48a8b50a5297db0690dfc6ffea173aea0031f27ff5fab2939cdb118567f6876"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B1_matte_572A2974.npz",
+      "bytes": 59107280,
+      "sha256": "02b0a260f30664741e82354496c489a6b66f281125ce2138f3f381762d1c9330"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A2962.npz",
+      "bytes": 549634,
+      "sha256": "13e108452adda0ae3e871d455cd32de268eef066a35e68c61ad5ac43c91265b4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B2_mean_spill.npy",
+      "bytes": 15680128,
+      "sha256": "45f1cd605132caa368f707b18095bdea0735b5ecae0c27abb9757a8ff09d1487"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A2998.npz",
+      "bytes": 1641912,
+      "sha256": "af5cf61e6eb0230b6034a6766f7ccb21dad8eff79289a7344fdb16dee0f2d963"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B2_joint_plan.json",
+      "bytes": 1407,
+      "sha256": "9fca0fe1f34398e98c2e8002c5e4331ab81463c910da81967d37fa60b154ae98"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A2973.npz",
+      "bytes": 1630136,
+      "sha256": "849c577919d1e9541ec8c7141805524ff0fdb746136499a737bd43846cffac94"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B3_convergence.json",
+      "bytes": 1179,
+      "sha256": "355772126218a5c43987af9c8a4a74734490f00ccaac3cbc82d7636728499275"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B3_checkpoint_400.npz",
+      "bytes": 34609959,
+      "sha256": "d0b70150d0ac0f79f3951ca3c8cd9c2623684e596727a8021758c1fefb39afbc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A2966.npz",
+      "bytes": 1598474,
+      "sha256": "9d9ad68359ad5de81b9e8292da5c506c9a6daf7f3593494253387e0ea755c744"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A2999.npz",
+      "bytes": 1640741,
+      "sha256": "96e84e6c8e896ddc3017d29812ed485c499e65d07f829cad3a6e3176cc8cd02a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_reserved_572A3012.npz",
+      "bytes": 1619165,
+      "sha256": "ee428f97580c08c55ef45ea6d196f2b2b4867d4708b11df7da7fa9f21a8f9244"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_reserved_572A3004.npz",
+      "bytes": 1618083,
+      "sha256": "279ab45cd28e38374bd2466e0318dabf59cdcd547dad8218e99c92d4ecb7bc44"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/Z0_preservation.json",
+      "bytes": 834,
+      "sha256": "77b5f68d6ba55436ed65826d40f960d45cb0a36ac195735f0e690aed0df05fa5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/C1_temporal_all.npz",
+      "bytes": 28806929,
+      "sha256": "b416695f2741e114a0e38db4b3910884a025c9e1766f9dfa91e4dc0a8a6e8a70"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_observations_572A2964.npz",
+      "bytes": 1597098,
+      "sha256": "a3251a65b1b025ac2d53dd9d29c7bf6d41c98a670f1bd71c88addb022d4565b4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A0_start.json",
+      "bytes": 2201,
+      "sha256": "4bbb2b3a9fae4929d2b69d9aceb62d4b68dec58b0144a95daf04fc4aa5469811"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/C1_temporal_all.png",
+      "bytes": 1240625,
+      "sha256": "d88d0a5ed2a050a568e6d431d24027df17fdffe628e31d46c1fc737c61b95b7e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/C0_stack_all.npz",
+      "bytes": 57829261,
+      "sha256": "9f7ad8858b60bac53428b24e3ab756b0928796cfe37fca9d0f05d528e53657cc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E3_inherited_composite.npy",
+      "bytes": 11760128,
+      "sha256": "df1e36be4356188417416dba28c7d729f9e4b266ed60a28cb60f022bb814bf89"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B3_checkpoint_600.npz",
+      "bytes": 34606338,
+      "sha256": "0529c7d66ddfaa97abce00ffe673e688cb24aa0b580c332e857fdbc5b1e9b522"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/C0_stack_all.png",
+      "bytes": 1263855,
+      "sha256": "b5fc34055c9fc2026dd4c2486923e52c7dd663d56043f5c88f3978338e42a104"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/B1_matte_pilot.json",
+      "bytes": 4112,
+      "sha256": "ac01d64a96e8741605e840f5d8f70f51d8db96f7cfb2f95049a57d4214d78506"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E1_pupil_CR.psd",
+      "bytes": 1266174412,
+      "sha256": "300d5acf38e6c1f1326c917fe06bd29e1f5366dfa1840b3aca79388bdb970a88"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A2960.npz",
+      "bytes": 549667,
+      "sha256": "d30792205d952174edf61b46c82696a4e76a5fdc8ef4db4a0bb3334154d9ba24"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A1_corrected_cells_572A2974.npz",
+      "bytes": 540467,
+      "sha256": "7b6aeb422e5d127241c0eca4183977d949c86c36ab9efd8d95c9d68a66a29134"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/A2_reserved_572A3005.npz",
+      "bytes": 1618573,
+      "sha256": "33de1649b21bff549c9287c7d5adf6a4284c11449362855dfbfbd19fca685854"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E0_preferences_before/SaveOptions.xmp",
+      "bytes": 1702,
+      "sha256": "8eb6ff3f47c0d6510902a2b81d9deb88c51a03d8eb11b81a2f1eb298d6604ca6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E0_preferences_before/Clipboard.xmp",
+      "bytes": 5614,
+      "sha256": "ec501c8189fac3139363270a6b8f8ef6ced9f527152c3af3d1f0431c3f64a626"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E0_preferences_before/RawDefaults.xmp",
+      "bytes": 458,
+      "sha256": "399635ad3e2d6b2b3c00447ecb70f6f2e5dbda550eba89e912460543275c06d8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E0_preferences_before/Previous.xmp",
+      "bytes": 4796,
+      "sha256": "2e313af6aef0271d932cf98c5022030d6fa5b8188f26499e7abb37f96fd2632a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_limb_20260912/E0_preferences_before/Preferences.xmp",
+      "bytes": 711,
+      "sha256": "f399be4127b4efe61ca49af6f7f266f5592e84e55b6bb2a45f96888e41caf987"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-12_V50_NO_VALIDADA.md",
+      "bytes": 6258,
+      "sha256": "d48a8b50a5297db0690dfc6ffea173aea0031f27ff5fab2939cdb118567f6876"
+    }
+  ],
+  "authorities": [
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/CLAUDE.md",
+      "bytes": 206148,
+      "sha256": "9b4e80cc5c540d18df44cb6e501e85d00473a9b4e9d2a6fb18c7e2f62c0c5ce8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/AGENTS.md",
+      "bytes": 23403,
+      "sha256": "11cd82fb8cedbf0ac2c9062cc60c0d0e7cd0d153086adf01119f945817382e1b"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/ACTIVE.json",
+      "bytes": 38901,
+      "sha256": "57b4b821578aaa6b3aa9eccf04a83b2359ebb401cd0ca08f473fe3e9373392fa"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/ESTAT_ACTUAL.md",
+      "bytes": 31392,
+      "sha256": "77891b8515793464fde6b789c91a7c5bdd3391396d00075589a68fe48f7862d7"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/README.md",
+      "bytes": 31269,
+      "sha256": "a3be42685e60724c4b382fb8c99350dbbcf72b650d926da63c0efbf926837afc"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/MAPA_RUTES_I_OUTPUTS.md",
+      "bytes": 19773,
+      "sha256": "8276fe3037dbceec9049076a947b1c4b052536ecd67e4df3beb4f1a70364e693"
+    },
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/HANDOFF_VIGENT.md",
+      "bytes": 6441,
+      "sha256": "d4cb1a8397081a002064a7c74fded83dab8da0e77b0efe29d4dc2bf9850de870"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/README.md",
+      "bytes": 87346,
+      "sha256": "01aacf70614464e2a95f72f1dc92f2860d6716debeba3d0052bf2aa315cdf745"
+    }
+  ]
+}

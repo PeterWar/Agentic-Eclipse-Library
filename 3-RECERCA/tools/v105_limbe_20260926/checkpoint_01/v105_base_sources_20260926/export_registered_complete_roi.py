@@ -1,0 +1,9 @@
+from pathlib import Path
+p=Path('/private/tmp/v105_base_sources_20260926/icc_compare_sources.py');ns={};exec(p.read_text().split('ox,oy=')[0],ns);globals().update(ns)
+q=np.load(O/'572A2975.npz');by,ey,bx,ex=map(int,q['box']);yy,xx=np.mgrid[by:ey,bx:ex];out=[]
+for target,name in [('E2975','original09_direct_to_E2975_registration.json'),('current303','original09_siftseed_to_current303_registration.json')]:
+ r=json.loads((O/name).read_text());H=np.array(r['target_canvas_to_source_local']);H[:2,2]+=[2764,1475];sx=H[0,0]*xx+H[0,1]*yy+H[0,2];sy=H[1,0]*xx+H[1,1]*yy+H[1,2];x0,y0=int(np.floor(sx.min()))-2,int(np.floor(sy.min()))-2;x1,y1=int(np.ceil(sx.max()))+3,int(np.ceil(sy.max()))+3
+ for key,source in [('original','09_original_CapesInteriors_RGB.npy'),('V5','09_CapesInteriorsV5_RGB.npy')]:
+  src=np.load(O/source,mmap_mode='r');crop=src[y0:y1,x0:x1];converted=convert(crop,key,'V104');rgb=np.stack([map_coordinates(converted[...,c].astype(float)/65535,[sy-y0,sx-x0],order=1,mode='constant',cval=np.nan,prefilter=False) for c in range(3)],-1).astype('float32');support=np.isfinite(rgb).all(-1)
+  old=np.load(O/f'09_{key}_AdobeRGB1998_registered_to_{target}.npz');dct={k:old[k] for k in old.files if k not in ['RGB','support_sampled','metadata_json']};metadata=json.loads(str(old['metadata_json']));old.close();metadata['source_read_bbox_xyxy']=[x0,y0,x1,y1];metadata['target_canvas_to_original_native']=H.tolist();metadata['support_note']='entire output ROI observed; source slice enlarged only to cover rotated corners, no extension or invention';np.savez_compressed(O/f'09_{key}_AdobeRGB1998_registered_to_{target}.npz',RGB=rgb,support_sampled=support,metadata_json=json.dumps(metadata),**dct);out.append({'source':key,'target':target,'shape':list(rgb.shape),'supported_fraction':float(support.mean()),'bbox':[x0,y0,x1,y1]})
+(O/'REGISTERED_ROI_QA.json').write_text(json.dumps(out,indent=2));print(json.dumps(out))

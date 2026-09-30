@@ -1,0 +1,27 @@
+{
+  "vixen": {
+    "deltaG_p1_p50_p99": [
+      -22.19083610534668,
+      40.478492736816406,
+      40.53754806518555
+    ],
+    "nonpositive_in_original_good": 0
+  },
+  "sony_A": {
+    "deltaG_p1_p50_p99": [
+      -1.4469146728515625,
+      129.88677978515625,
+      130.1465301513672
+    ],
+    "nonpositive_in_original_good": 0
+  },
+  "sony_B": {
+    "deltaG_p1_p50_p99": [
+      -52.49629211425781,
+      120.29270935058594,
+      120.61913299560547
+    ],
+    "nonpositive_in_original_good": 0
+  },
+  "pointing_match": "same observed sky; original B-primary weights; updated low-frequency ratio at physical overlap; no patch or radial crop"
+}

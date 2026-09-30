@@ -1,0 +1,45 @@
+{
+  "tag": "P03_MGN",
+  "parameters": {
+    "paper": "Morgan & Druckmuller 2014, equations1-5",
+    "sigma_px": [
+      1.25,
+      2.5,
+      5,
+      10,
+      20,
+      40
+    ],
+    "k": 0.7,
+    "h": 0.7,
+    "gamma": 3.2,
+    "weights": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "input_limits": [
+      0.0,
+      6715021.0
+    ],
+    "nonpositive_input": "49 native limb pixels clipped to0 as allowed in paper; base itself unchanged",
+    "boundary": "normalized observed support, truncate3 Gaussian; no radial normalizer, H1, or external high-pass"
+  },
+  "physical_support_pixels": 70395270,
+  "float_sha256": "8f82e0ba6845ff9dd677a25f2b17a1e0b20a69aafa5c21bf2027fe5626f1a15d",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": -0.2755948627591133,
+    "white": 0.34889269697666314,
+    "sample_percentiles": [
+      0.1,
+      99.9
+    ],
+    "clipped_low_fraction": 0.0010052095829734015,
+    "clipped_high_fraction": 0.0009859895416268736
+  },
+  "u16_sha256": "2cf0dea6c219ef3913e231201437d97e27bff837fec1d2af28f9a02da2e98a89"
+}

@@ -1,0 +1,319 @@
+{
+  "schema_version": 3,
+  "updated": "2026-08-25",
+  "phase": "post-eclipse-vixen-pilot-blocked-upstream-gates",
+  "coordination_mode": "ALTERNATING_CODEX_CLAUDE_WITH_AUDITABLE_HANDOFFS",
+  "next_handoff_recipient": "Codex",
+  "entrypoint": "/Users/USUARI/Desktop/Eclipse 2026/IA/README.md",
+  "asset_root": "/Users/USUARI/Desktop/Eclipse 2026",
+  "code_worktree": "/Users/USUARI/Downloads/Eclipse 2026",
+  "formal_worktree_handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-08-25_CODEX_COSTURES_I_SOSTRE.md",
+  "formal_worktree_handoff_previous": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-08-23_CODEX_PILOT_VIXEN.md",
+  "backup_before_restructure": "/Volumes/4TB/Eclipse 2026-22Agost/Eclipse 2026",
+  "other_assets_root": "/Users/USUARI/Desktop/Altres",
+  "paths": {
+    "sony_raw_root": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA",
+    "sony_calibrated": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/calibrated",
+    "sony_darks": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/Darks A7RIIIA Eclipse",
+    "vixen_all_raw_root": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III",
+    "vixen_totality_raw_root": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Vixen Fase totalitat",
+    "vixen_masters_v2": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Vixen Fase totalitat/Masters_v2",
+    "vixen_s6_authority": "/Users/USUARI/Downloads/Eclipse 2026/output/postprocessat_final_20260822/masters/vixen_s6_ACCEPTED",
+    "vixen_stable_manifest": "/Users/USUARI/Downloads/Eclipse 2026/output/postprocessat_final_20260822/manifests/vixen_natural_stable_v5.json",
+    "vixen_darks": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Darks Canon R6III Eclipse",
+    "vixen_posterior_flats_raw": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Flats R6III",
+    "sony_posterior_flats_raw": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/Flats Sony A7RIIIA 300mm",
+    "posterior_flat_output": "/Users/USUARI/Downloads/Eclipse 2026/output/flats_20260822",
+    "posterior_flat_assessment": "/Users/USUARI/Downloads/Eclipse 2026/output/flats_20260822/transfer_assessment_v1/TRANSFER_ASSESSMENT.json",
+    "vixen_ldic_preflight": "/Users/USUARI/Downloads/Eclipse 2026/output/pilot_vixen_ldic_20260823/20260823T140401Z_preflight_canonical_v4",
+    "vixen_ldic_report": "/Users/USUARI/Downloads/Eclipse 2026/research/98_PILOT_VIXEN_PREFLIGHT_FAIL_CLOSED_2026-08-23.md",
+    "vixen_ldic_handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-08-23_CODEX_PILOT_VIXEN.md",
+    "derivatives_root": "/Users/USUARI/Desktop/Eclipse 2026/Derivats",
+    "vixen_hdr_master": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Vixen/Corona_HDR_Vixen",
+    "vixen_hdr4": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Vixen/HDR4",
+    "capestotals_work": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Vixen/CapesTotals_work",
+    "sony_stacks": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Sony/Apilats",
+    "sony_s6_authority": "/Users/USUARI/Downloads/Eclipse 2026/output/postprocessat_final_20260822/masters/sony_s6_ACCEPTED",
+    "sony_cross_train_v2_artifact_evidence": "/Users/USUARI/Downloads/Eclipse 2026/output/postprocessat_final_20260822/composites/sony_cross_train_c_v2",
+    "current_technical_editable": "/Users/USUARI/Downloads/Eclipse 2026/output/postprocessat_final_20260822/final/eclipse_natural_editable_v3",
+    "reference_mockup": "/Users/USUARI/Downloads/Maqueta de resultat esperat.tif",
+    "astrometry": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Astrometria/Estrelles",
+    "earthshine": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Earthshine",
+    "publication": "/Users/USUARI/Desktop/Eclipse 2026/Publicacio",
+    "photoshop_root": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop",
+    "photoshop_totals": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals",
+    "photoshop_interiors": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes interiors",
+    "photoshop_exteriors": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes exteriors",
+    "photoshop_filters_resources": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/2-Filtres/Recursos",
+    "gemini_antigravity_workspace": "/Users/USUARI/Downloads/Eclipse Antigravity",
+    "gemini_antigravity_snapshot": "/Users/USUARI/Downloads/Eclipse 2026/output/auditoria_kimi_gemini_20260822/antigravity_workspace_snapshot",
+    "gemini_druckmuller_tiff_jsx_snapshot": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Experimental/Gemini_Druckmuller_20260822/tiff_jsx",
+    "gemini_druckmuller_jpeg_snapshot": "/Users/USUARI/Desktop/Eclipse 2026/IA/output/gemini_druckmuller_20260822",
+    "gemini_druckmuller_receipts": "/Users/USUARI/Downloads/Eclipse 2026/output/auditoria_kimi_gemini_20260822",
+    "gemini_druckmuller_venv": "/Users/USUARI/Downloads/eclipse_venv"
+  },
+  "removed_provisional_roots": [
+    "/Users/USUARI/Desktop/Eclipse 2026/Deprecat",
+    "/Users/USUARI/Desktop/Eclipse 2026/No se que fa això aquí"
+  ],
+  "cleanup": {
+    "status": "PASS_REVERSIBLE",
+    "trash_batch": "/Users/USUARI/.Trash/Eclipse2026_cleanup_20260822T151257Z",
+    "regular_files_in_trash": 1014,
+    "broken_symlinks_in_trash": 2,
+    "logical_bytes_in_trash": 21809186154,
+    "restored_tiffs": 6,
+    "raw_camera_counts": {"arw": 572, "cr3": 1139},
+    "raw_fingerprint": "8d1927d8e2bc5247cbccb5f40a97efa0f67620ff6b50efa6c7b52b89718ba843",
+    "receipt": "/Users/USUARI/Downloads/Eclipse 2026/output/cleanup/20260822T151257Z_deprecat_noseque/operation_receipt.json",
+    "capestotals_work_receipt": "/Users/USUARI/Downloads/Eclipse 2026/output/cleanup/20260822T151257Z_deprecat_noseque/capestotals_work_relocation.json"
+  },
+  "flat_jpeg_cleanup": {
+    "status": "PASS_RECOVERABLE",
+    "trash_batch": "/Users/USUARI/.Trash/Flats_JPEG_Eclipse_2026_20260822T190159Z",
+    "jpeg_count": 106,
+    "logical_bytes": 83361792,
+    "source_jpeg_remaining": 0,
+    "raw_paths_guarded": 230,
+    "raw_pre_post_fingerprint": "162e4573554dc6add4726b69d8df1a94fbce7f66cc8d2aa729fa88d03eeef4e3",
+    "receipt": "/Users/USUARI/Downloads/Eclipse 2026/output/flats_20260822/JPEG_CLEANUP_RECEIPT.json"
+  },
+  "status": "/Users/USUARI/Desktop/Eclipse 2026/IA/ESTAT_ACTUAL.md",
+  "decisions": "/Users/USUARI/Desktop/Eclipse 2026/IA/DECISIONS.md",
+  "path_map": "/Users/USUARI/Desktop/Eclipse 2026/IA/MAPA_RUTES_I_OUTPUTS.md",
+  "audits": {
+    "manual_restructure": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/AUDITORIA_REESTRUCTURACIO_2026-08-22.md",
+    "cleanup": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/AUDITORIA_NETEJA_DEPRECAT_NOSE_2026-08-22.md",
+    "processing_resume": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/AUDITORIA_REPRESA_VIXEN_SONY_2026-08-22.md",
+    "posterior_flats": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/AUDITORIA_FLATS_POSTERIORS_2026-08-22.md",
+    "chronology": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/CRONOLOGIA_POSTECLIPSI_2026-08-22.md",
+    "codex_to_claude": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/DELTA_CODEX_a_CLAUDE_22-08-26_ECLIPSE_POSTPROCESSAT.md",
+    "kimi_gemini_druckmuller": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/AUDITORIA_RECUPERACIO_KIMI_GEMINI_DRUCKMULLER_2026-08-22.md",
+    "druckmuller_delta": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/DELTA_CODEX_a_CLAUDE_22-08-26_BRANCA_DRUCKMULLER_GEMINI_KIMI.md",
+    "druckmuller_final_validation": "/Users/USUARI/Downloads/Eclipse 2026/output/auditoria_kimi_gemini_20260822/FINAL_VALIDATION_2026-08-22.md"
+  },
+  "handoff": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/HANDOFF_VIGENT.md",
+  "coordination_handoff": {
+    "hash_semantics": "SNAPSHOT_AT_TIMESTAMP",
+    "delta_id": "8384B473-B855-4093-AEAA-0C4B11437EE1",
+    "timestamp_utc": "2026-08-22T16:14:43Z",
+    "status": "PENDING_CLAUDE_ACK",
+    "delivery": "PERSISTED_IN_IA_NO_PONT_USED",
+    "processing_audit_sha256": "1812c3fea698cf97ca2ed71185467290b69f9de3eceda85c518e496cb25e9a0d",
+    "chronology_sha256": "63ca078ef4c40286b8201881106ea0526bef38a674524630b6317b8ea9b5171f",
+    "codex_to_claude_delta_sha256": "f3bc7115518474112dca63a5df366eaa301abb81e445487926d2a4eda966045b",
+    "current_handoff_sha256": "09b1708cc74efa5486521845d2df7d957d0334d9b7164e72563798fb0c1bb03b",
+    "formal_worktree_handoff_sha256": "6f9d46d4ddd85c9796613d3c5a59ba8205bbbefa6adffc52fdf5fcb589e2018c"
+  },
+  "posterior_flats_handoff": {
+    "hash_semantics": "SNAPSHOT_AT_TIMESTAMP",
+    "delta_id": "042DA4EE-6598-49DE-B4CD-60AB75E6EF8D",
+    "timestamp_utc": "2026-08-22T19:21:23Z",
+    "status": "PENDING_CLAUDE_ACK",
+    "delivery": "PERSISTED_IN_IA_NO_PONT_USED",
+    "audit_sha256": "e4dd442a331c7cf4c6b8c5871b7fd21a267fd8b9eeccfa231509393d1b9acebe",
+    "delta_sha256": "2aa95dd2e90fb2bb483beab6d1f171bfb225791093dd51208fce7b68a3310f15",
+    "status_document_sha256": "76a5e40bf13a91c9179182cc0dc046249f6bf45da640a3aa8b8171cf20c6527f",
+    "path_map_sha256": "952c558ed42a9575e8553db41a6fa60199c8b3c7467f2899913c63f5812bd597",
+    "current_handoff_sha256": "8b795ab0eeb4455de45dc0d108469a5d9f1ab5d0d8f8012403e46d26bcae2207",
+    "formal_worktree_handoff_sha256": "93b4a33a431a00e1e7f87e711eadf5fef4f16dbf5a972ec22f2de9a27a4a4afa"
+  },
+  "druckmuller_handoff": {
+    "delta_id": "8AF0A726-1B0F-49AF-9B15-D7438E271322",
+    "timestamp_utc": "2026-08-22T19:31:28Z",
+    "status": "PENDING_CLAUDE_ACK",
+    "delivery": "PERSISTED_IN_IA_NO_PONT_USED",
+    "code_gate_tests": "17/17 PASS",
+    "code_ast": "7/7 PASS",
+    "final_validation_sha256": "574fff158c2a4602299e119b08ba2b6d5cd57dcd703f1a25bc09d15a80cf8358",
+    "audit_sha256": "67e081bd0586ac4478ea135e78a193a3ce353eece5f9cb0031d456315bcfd533",
+    "delta_sha256": "a0f90a12adef65e1ea0b491e5ae9ab8590b3e9f3a982a6378c33f817812e2a16",
+    "status_document_sha256": "008080942660e117a4155185d54ba2cf66016a07bbddb337e5b29e76147e6686",
+    "path_map_sha256": "975c53ee71edd3908b427d2377f42612960a5dcaf448dffcd561be022dd38290",
+    "current_handoff_sha256": "af8d7dab11ed2c07d5adaac9ca6d17c1be5077e7c836483e338b2f907c5ec948",
+    "formal_worktree_handoff_sha256": "c2bded7475ceb8c3c438379c88662fd9e23f809bd3d99c6c9a435e76240ef910"
+  },
+  "experimental_branches": {
+    "druckmuller_python": {
+      "status": "HIGH_PROMISE_BY_PERE_PENDING_CONTROLLED_S6_PILOT",
+      "pere_visual_assessment": "LES_PROVES_PINTEN_MOLT_MOLT_BE",
+      "authority": "VISUAL_PREFERENCE_EVIDENCE_NOT_S6",
+      "workspace": "/Users/USUARI/Downloads/Eclipse Antigravity",
+      "workspace_snapshot_verified": "72/72",
+      "downloads_outputs_snapshot_verified": "51/51",
+      "downloads_outputs_composition": {"tiff": 38, "jpeg": 12, "jsx": 1},
+      "downloads_outputs_bytes": 4521150878,
+      "venv": "/Users/USUARI/Downloads/eclipse_venv",
+      "python": "3.9.6",
+      "sunkit_image": "0.5.1",
+      "mgn": "sunkit_image.enhance.mgn",
+      "nrgf": "sunkit_image.radial.nrgf",
+      "fnrgf": "sunkit_image.radial.fnrgf",
+      "canonical_input_boundary": "ACCEPTED_S6_ONLY",
+      "gemini_outputs": "EXPERIMENTAL_NOT_CANONICAL",
+      "mgn_role": "DETAIL_CANDIDATE",
+      "nrgf_fnrgf_role": "DIAGNOSTIC_VISUALIZATION_CONTROLS",
+      "filters_hdr_role": "NEVER_HDR_SOURCE",
+      "fov_status": "PENDING_PERE_DECISION",
+      "visual_pause": "STILL_ACTIVE"
+    }
+  },
+  "jpeg_output": {
+    "status": "ACTIVE",
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/output",
+    "scope": "ALL_NEW_AI_GENERATED_JPEG",
+    "historical_files": "DO_NOT_MOVE"
+  },
+  "vixen_ldic_preflight": {
+    "status": "BLOCKED_UPSTREAM_GATES",
+    "terminal": true,
+    "phase2_ldic_executed": false,
+    "canonical_output": "/Users/USUARI/Downloads/Eclipse 2026/output/pilot_vixen_ldic_20260823/20260823T140401Z_preflight_canonical_v4",
+    "status_sha256": "9e849564dabdb5968c6b2cdfe93b02eec1aed343fb485b136a67612da49861ed",
+    "payload_sha256sums_sha256": "f0c27142dee12ef965a21d6e648cf9ad8c1943dc24feb4c943ea749386397649",
+    "payload_validation": "7/7 PASS",
+    "terminal_rehash": {
+      "unique_files": 519,
+      "logical_bytes": 13823377138,
+      "aggregate_sha256": "f92ef40f4a3cd7d0520bc394c377024206d43c103039c2c77f2d94f1f9d0ab4f"
+    },
+    "inputs": {
+      "live_root_cr3": 124,
+      "handoff_claimed_root_cr3": 129,
+      "effective_manifest": "68/68 UNIQUE PASS",
+      "exposure_levels": 15,
+      "physical_long_exposure_s": 10.079368399159
+    },
+    "f0": {
+      "status": "BLOCKED",
+      "sony_evidence_not_transferable": "+1.019/R2=0.981",
+      "vixen_radial_leverage_percent": 0.1149,
+      "optical_axis": "NOT_INDEPENDENTLY_IDENTIFIED_SINGLE_ORIENTATION"
+    },
+    "f1": {
+      "status": "BLOCKED",
+      "threshold_rms_px": 0.3,
+      "plate_rms_px": 0.424193,
+      "historical_geometry_vector_rms_px": 0.487192,
+      "partial_five_pair_drift_rms_px": 0.138859,
+      "partial_control_scope": "INSUFFICIENT_FOR_68_FRAMES_ROTATION_AND_FULL_PLATE"
+    },
+    "diagnostic_canvas": {
+      "size_px": [7697, 8613],
+      "status": "NOT_PRODUCTION_FULL_RADIAL_PLATE_INVERSION_AND_PER_FRAME_APPARENT_EPOCH_MISSING"
+    },
+    "qa": {
+      "adversarial_tests": "37/37 PASS",
+      "independent_reviews": "2 CLEAN",
+      "no_clobber_rerun": "EXIT_2_FINGERPRINT_INVARIANT"
+    },
+    "next_gate": "VIXEN_SPECIFIC_F0_EVIDENCE_OR_EXPLICIT_SCIENTIFIC_CONTRACT_REFORMULATION_THEN_HELD_OUT_PER_FRAME_F1_ORACLE",
+    "report": "/Users/USUARI/Downloads/Eclipse 2026/research/98_PILOT_VIXEN_PREFLIGHT_FAIL_CLOSED_2026-08-23.md",
+    "report_sha256": "c1c6f9374ae35e237c073e7c92a7707b118a40dc1c4e1ff348e1755a1e90a0c0",
+    "formal_handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-08-23_CODEX_PILOT_VIXEN.md",
+    "formal_handoff_sha256": "b78b10cdd69db06da5974942dd9370b9b031bdf681d976697dc9c556dfaa8b11",
+    "desktop_status_sha256": "e63b165a4dea395e878e3bba214d9007819f22a9af1940c93db1770b37a7d2ea",
+    "desktop_handoff_sha256": "05227242bf80f740aef17fa8d591235515ccd1f8fff53c707a3189a4e8a53215",
+    "safety": "ZERO_HARDWARE_AND_ZERO_RAW_DARK_FLAT_S6_PSB_TIFF_MUTATIONS"
+  },
+  "processing_authority": {
+    "vixen": {
+      "status": "PIXELS_REUSABLE_RECEIPTS_RESEAL_REQUIRED",
+      "manifest_entries_verified": "319/319",
+      "sha256sums_sha256": "b140cc7b4a730c88ddb4ccadd42ebe12b2f26c8d7082525d2d290c7ef9ec5bd6",
+      "consumable_subset": "8 STABLE stacks in vixen_natural_stable_v5.json"
+    },
+    "sony": {
+      "status": "MIXED_CATALOG_DO_NOT_TREAT_DIRECTORY_NAME_AS_GLOBAL_ACCEPTANCE",
+      "manifest_entries_verified": "335/335",
+      "sha256sums_sha256": "3cec9ea01fac9c71bf34e933527b16ca2838f7fdd79d384fc3f05dc4df8b9f7a"
+    },
+    "sony_8s": {
+      "DSC06987": "INTACT_QUARANTINE_NEEDS_CONTRIBUCIO_UNICA_CORONA_SOLAR_DOMAIN",
+      "DSC06993": "INTACT_QUARANTINE_NEEDS_CONTRIBUCIO_UNICA_CORONA_SOLAR_DOMAIN",
+      "DSC06990": "REJECTED_MOVIMENT_DURANT_EXPOSICIO_8S"
+    },
+    "known_artifact": {
+      "source": "sony_cross_train_c_v2",
+      "radial_contribution_boundaries_rsun": [1.2, 1.5, 2.0],
+      "eight_second_consumed": false,
+      "reuse_unchanged": false
+    },
+    "posterior_flats": {
+      "status": "BUILT_VALIDATED_COMPONENTS_NOT_APPLIED_TO_S6",
+      "vixen_fine_sensor": "VALIDATED_COMPONENT_NOT_APPLIED",
+      "vixen_optical_radial": "PILOT_BLOCKED_F0_CONTRACT_MISMATCH_INSUFFICIENT_LEVERAGE_AXIS_UNIDENTIFIED",
+      "vixen_full_2d_dust": "QUARANTINE",
+      "sony_optical_radial": "VALIDATED_COMPONENT_NOT_APPLIED",
+      "sony_fine_sensor": "QUARANTINE_SPLIT_R_BELOW_0.8",
+      "sony_full_2d_dust": "QUARANTINE",
+      "transfer_assessment_sha256": "09b561965c3e18e3c4b5b0747f8d274841f0d720497251128794489cd4ae06cf"
+    },
+    "fov_status": "PENDING_PERE_DECISION"
+  },
+  "visual_task": {
+    "status": "PAUSED_BY_PERE",
+    "target": "natural editable Vixen plus Sony corona without circular artifacts",
+    "reference_mockup_sha256": "5d25d4cca0896c04147c75b5b9ad1c0b76a382a00a852fa596371de4c2b69e17",
+    "reference_mockup_bytes": 110750130,
+    "reference_mockup_role": "AESTHETIC_AND_FRAMING_REFERENCE_NOT_SCIENTIFIC_AUTHORITY",
+    "required_sony_8s": ["DSC06987.ARW", "DSC06993.ARW"],
+    "excluded_sony_8s": ["DSC06990.ARW"],
+    "earthshine": "OUT_OF_SCOPE",
+    "current_technical_final": "CONTROL_ONLY_NOT_APPROVED_NO_8S_FOV_UNRESOLVED",
+    "next_action_requires": "EXPLICIT_PERE_RESUME"
+  },
+  "claude_to_codex_handoff_20260825": {
+    "timestamp_utc": "2026-08-25T00:00:00Z",
+    "status": "ACKED_BY_CODEX_NAMING_CORRECTION_APPLIED",
+    "delivery": "PERSISTED_IN_IA_NO_PONT_USED",
+    "released_claim_id": "claude-arcs3-20260824T220532Z",
+    "hash_semantics": "SNAPSHOT_AT_TIMESTAMP",
+    "worktree_handoff_sha256": "1a22a6ea0c059d027e3fd5ffe191aa2b27538c9fc37749e6523fe86f9f4040a9",
+    "delta_sha256": "67f2fd2705852c74f400bd445c85bbd4ea0262231ecf1e185741590e5fc87f36",
+    "worktree_handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-08-25_CODEX_COSTURES_I_SOSTRE.md",
+    "delta": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/DELTA_CLAUDE_a_CODEX_25-08-26_TRASPAS_ARCS_I_SOSTRE.md",
+    "delta_brainstorming_request": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/DELTA_CLAUDE_a_CODEX_25-08-26_COSTURES_DE_FUSIO.md",
+    "subject": "arcs concentrics i costures de fusio als dos trens",
+    "cured": {
+      "rings_H1_vixen": "27.5% -> 0.441%",
+      "rings_H1_sony": "34.9% -> 0.462%",
+      "seams_by_level_vixen": "88.6% -> 4.6%",
+      "seams_by_level_sony": "92.6% -> 5.4%"
+    },
+    "pending_decision": {
+      "parameter": "PILOT_SOSTRE",
+      "parameter_note": "hard saturation cut as a fraction of the useful well; NOT RAMPA_SOSTRE, which is the weight-taper width and is already 0.80",
+      "naming_error_caught_by": "Codex 2026-08-25",
+      "current": 0.85,
+      "recommended": 0.80,
+      "apply_only_after": "the flat=no test, because PILOT_SOSTRE discards high pixels: a cure if the level-dependence is well non-linearity, a palliative if it is the flat",
+      "seam_mean": "0.0531% -> 0.0288%",
+      "judge_cost_dz": -0.0062,
+      "scan_outputs": "/Users/USUARI/Downloads/Eclipse 2026/output/pilot_vixen_claude_20260825_e0{80,75,65,60}"
+    },
+    "open_problems": [
+      "level-dependence not attributable: flat error and sensor non-linearity are degenerate",
+      "sony regression at r=1.263/1.266 R_sun introduced by the two subtraction passes"
+    ],
+    "next_single_parameter_test": "compose with flat=no and measure how much of the level curve disappears",
+    "tests": "66/66 research/tools/pilot_vixen_claude/test_portes.py"
+  },
+  "claude_to_codex_nit_20260825": {
+    "timestamp_utc": "2026-08-25T05:15:00Z",
+    "status": "PENDING_CODEX_ACK",
+    "hash_semantics": "SNAPSHOT_AT_TIMESTAMP",
+    "released_claim_id": "claude-nit-20260825T031500Z",
+    "delta": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/DELTA_CLAUDE_a_CODEX_25-08-26_SONY_SENSE_COHERENCIA.md",
+    "delta_sha256": "a5acfe6b5da7f94d3607e60e349684ad4a2be1148971458b25b88bdb9e8526ca",
+    "canonical_report": "/Users/USUARI/Downloads/Eclipse 2026/research/101_LA_SONY_SENSE_COHERENCIA_I_ELS_FILTRES_2026-08-25.md",
+    "canonical_report_sha256": "7ffcbf3a3502ec67c938fe0d45e04f0c04e70f57009844195673e6c7c1c0c0fa",
+    "headline": "sony phase 3 had NEVER used the coherent composite; seams 92.59% -> 7.98%",
+    "flat_ruled_out": "flat=no leaves inter-step disagreement unchanged (r=0.984, mean 0.123% -> 0.122%)",
+    "well_nonlinearity_ruled_out": "the level effect alternates sign across adjacent pairs",
+    "decision": "PILOT_SOSTRE stays at 0.85; the per-step delta correction is refused (0 -> 2 of 12 seams)",
+    "new_open_item": "periodic mesh in the detail: 114.5 px at +63.4 deg (Vixen), 90.5 px at -135.0 deg (Sony); hypothesis is the ACHF noise gate at the largest sigma",
+    "deliverable": "/Users/USUARI/Downloads/Eclipse 2026/output/pilot_vixen_claude_20260825_final/photoshop",
+    "tests": "96/96"
+  }
+}

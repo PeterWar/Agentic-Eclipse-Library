@@ -1,0 +1,6 @@
+# V65 native star reconstruction controls (before final renderer)
+Existing image geometry is frozen. Native star centroids are transported through the existing Sony C plate and the existing V42 projection; no registration is fitted to the HDR/coronal image. Vixen contributes independent detection and flux, with catalogue plate residuals rather than a new HDR plate.
+
+Catalogue acceptance stays S15/S17. Merge unresolved pairs (<2 final pixels) as one photon source, never sum duplicate fits. Keep only valid current composite coverage. Native PSF references retain their original one-third holdout. Estimate a per-frame flux calibration from non-reserved stars by an aperture of radius 8 native pixels after fitting the background outside radius 8. Report held-out aperture agreement, do not redefine acceptance as a global astronomy PASS.
+
+Inject pixel-integrated Gaussian and trailed Gaussian sources into rotated-null RAW/CFA patches with frozen backgrounds/models. Use fixed SNR 10, 30, 100; test linear flux recovery and quadrature convergence. Report mismatched-PSF trials separately. A circular output Gaussian has sigma >=1.5 final pixels, not a claim of newly resolved stellar structure. The native trail model and the output PSF remain documented separately.

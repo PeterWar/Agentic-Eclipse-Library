@@ -1,0 +1,37 @@
+{
+ "r_lroc": 0.8846185142754419,
+ "nul_mitjana": -0.061326442758643136,
+ "nul_sd": 0.08941027371485784,
+ "declaracio": "r_fit assistit pel mapa: millora de producte; deteccio canonica = research/126 (7,0σ)",
+ "maxim_orientacio_deg": 0,
+ "destripat_held_out": true,
+ "injeccio_transferencia": 0.95737624168396,
+ "pesos": {
+  "vixen10": 0.33860810350788406,
+  "vixen2": 0.14828996433842523,
+  "ap1": 0.5120688267648729,
+  "ap2": 0.0010331053888178266
+ },
+ "pes_intra_component": "proporcional a t_exp (model fotonic)",
+ "snr_proxy": 2.328293587367409,
+ "nivell_disc": 1545.22998046875,
+ "amplitud_rms": 4.716643810272217,
+ "amplitud_pct": 0.305238952770086,
+ "r_fit": 0.85,
+ "wiener": "FFT, bandes netes en lambda: <4 g=0,06 · 4-8 0,71 · 8-16 0,96 · 16-32 0,995 · >=32 1,0",
+ "vora": "sense model azimutal; ciencia valida r<0,85",
+ "mota_sensor_r6": {
+  "marc_lunar": [
+   330,
+   528
+  ],
+  "sensor": [
+   3579,
+   2374
+  ],
+  "radi_px": 22,
+  "vixen": 33.4,
+  "sony": 5.0,
+  "al_flat_2208": "NO (r=0,00)"
+ }
+}

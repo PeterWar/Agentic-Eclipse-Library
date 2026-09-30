@@ -1,0 +1,23 @@
+[
+  {
+    "shape": [
+      1,
+      4
+    ],
+    "exact_against_original_and_library": true
+  },
+  {
+    "shape": [
+      33,
+      97
+    ],
+    "exact_against_original_and_library": true
+  },
+  {
+    "shape": [
+      7,
+      10551
+    ],
+    "exact_against_original_and_library": true
+  }
+]

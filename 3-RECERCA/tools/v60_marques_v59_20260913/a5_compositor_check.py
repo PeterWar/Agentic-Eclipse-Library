@@ -1,0 +1,2 @@
+from composite60 import *
+claim();a=render();b=np.load(O/'arrays/V59_clean_native_RGB_roi.npy').astype('float64')/65535;d=np.abs(a-b)*65535;save('A5_compositor_check.json',dict(max_DN16=float(d.max()),quantiles=np.percentile(d,[50,90,95,99,99.9,100]),note='Floating standard blend simulation, native Photoshop is delivery authority'));np.save(O/'arrays/composite_model.npy',a.astype('float32'));print('MODEL',d.max(),np.percentile(d,[50,99,99.9]),flush=True)

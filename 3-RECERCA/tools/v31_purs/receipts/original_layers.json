@@ -1,0 +1,392 @@
+[
+  {
+    "index": 0,
+    "name": "12 1/3200 perles",
+    "visible": true,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      1420,
+      908,
+      9123,
+      6764
+    ]
+  },
+  {
+    "index": 1,
+    "name": "11 1/500 limbe",
+    "visible": true,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      886,
+      410,
+      9398,
+      7096
+    ]
+  },
+  {
+    "index": 2,
+    "name": "10 1/125",
+    "visible": false,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      886,
+      410,
+      9398,
+      7096
+    ]
+  },
+  {
+    "index": 3,
+    "name": "09 1/60 x2",
+    "visible": false,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      1423,
+      908,
+      9126,
+      6765
+    ]
+  },
+  {
+    "index": 4,
+    "name": "08 1/30 x4 quar",
+    "visible": false,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      1422,
+      909,
+      9126,
+      6766
+    ]
+  },
+  {
+    "index": 5,
+    "name": "07 1/15 x2 quar",
+    "visible": false,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      1423,
+      908,
+      9126,
+      6765
+    ]
+  },
+  {
+    "index": 6,
+    "name": "06 1/8 x4 quar",
+    "visible": false,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      1422,
+      909,
+      9126,
+      6766
+    ]
+  },
+  {
+    "index": 7,
+    "name": "05 1/4 x2 quar",
+    "visible": false,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      1423,
+      908,
+      9126,
+      6765
+    ]
+  },
+  {
+    "index": 8,
+    "name": "04 1/2 x4 quar",
+    "visible": false,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      1422,
+      909,
+      9126,
+      6766
+    ]
+  },
+  {
+    "index": 9,
+    "name": "03 1s x2 quar",
+    "visible": false,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      1423,
+      908,
+      9126,
+      6765
+    ]
+  },
+  {
+    "index": 10,
+    "name": "02 2s x3 quar",
+    "visible": false,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      1424,
+      907,
+      9127,
+      6763
+    ]
+  },
+  {
+    "index": 11,
+    "name": "01 10.3s x3 quar",
+    "visible": false,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      1423,
+      908,
+      9127,
+      6765
+    ]
+  },
+  {
+    "index": 12,
+    "name": "13 Sony >1s",
+    "visible": false,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      0,
+      0,
+      10551,
+      7506
+    ]
+  },
+  {
+    "index": 13,
+    "name": "Fons per raig",
+    "visible": false,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      0,
+      0,
+      10551,
+      7506
+    ]
+  },
+  {
+    "index": 14,
+    "name": "Earthshine v2",
+    "visible": false,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      4866,
+      3279,
+      5857,
+      4270
+    ]
+  },
+  {
+    "index": 15,
+    "name": "Compara D87",
+    "visible": false,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      4866,
+      3279,
+      5857,
+      4270
+    ]
+  },
+  {
+    "index": 16,
+    "name": "Compara LROC",
+    "visible": false,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      4866,
+      3279,
+      5857,
+      4270
+    ]
+  },
+  {
+    "index": 17,
+    "name": "Earthshine V24e",
+    "visible": true,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      4866,
+      3279,
+      5857,
+      4270
+    ]
+  },
+  {
+    "index": 18,
+    "name": "00 Base amb cel",
+    "visible": false,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      0,
+      0,
+      10551,
+      7506
+    ]
+  },
+  {
+    "index": 19,
+    "name": "00 Base (cel/4)",
+    "visible": true,
+    "opacity": 255,
+    "blend": "BlendMode.NORMAL",
+    "bbox": [
+      0,
+      0,
+      10551,
+      7506
+    ]
+  },
+  {
+    "index": 20,
+    "name": "03 ACHF azimutal 8-128 · V29",
+    "visible": false,
+    "opacity": 38,
+    "blend": "BlendMode.OVERLAY",
+    "bbox": [
+      0,
+      0,
+      10551,
+      7506
+    ]
+  },
+  {
+    "index": 21,
+    "name": "03 ACHF azimutal 8-128 · V30",
+    "visible": true,
+    "opacity": 38,
+    "blend": "BlendMode.OVERLAY",
+    "bbox": [
+      0,
+      0,
+      10551,
+      7506
+    ]
+  },
+  {
+    "index": 22,
+    "name": "07 ACHF azimutal suau r8 · V30",
+    "visible": false,
+    "opacity": 38,
+    "blend": "BlendMode.OVERLAY",
+    "bbox": [
+      0,
+      0,
+      10551,
+      7506
+    ]
+  },
+  {
+    "index": 23,
+    "name": "01 ACHF fi 2-32 · V31",
+    "visible": true,
+    "opacity": 36,
+    "blend": "BlendMode.OVERLAY",
+    "bbox": [
+      0,
+      0,
+      10551,
+      7506
+    ]
+  },
+  {
+    "index": 24,
+    "name": "02 Passa-alt 24 · V31",
+    "visible": true,
+    "opacity": 20,
+    "blend": "BlendMode.OVERLAY",
+    "bbox": [
+      0,
+      0,
+      10551,
+      7506
+    ]
+  },
+  {
+    "index": 25,
+    "name": "04 ACHF micro 1-16 · V31",
+    "visible": false,
+    "opacity": 36,
+    "blend": "BlendMode.OVERLAY",
+    "bbox": [
+      0,
+      0,
+      10551,
+      7506
+    ]
+  },
+  {
+    "index": 26,
+    "name": "05 ACHF fi 2-48 · V31",
+    "visible": false,
+    "opacity": 36,
+    "blend": "BlendMode.OVERLAY",
+    "bbox": [
+      0,
+      0,
+      10551,
+      7506
+    ]
+  },
+  {
+    "index": 27,
+    "name": "06 ACHF estructura 4-64 · V31",
+    "visible": false,
+    "opacity": 36,
+    "blend": "BlendMode.OVERLAY",
+    "bbox": [
+      0,
+      0,
+      10551,
+      7506
+    ]
+  },
+  {
+    "index": 28,
+    "name": "Estrelles",
+    "visible": true,
+    "opacity": 255,
+    "blend": "BlendMode.LINEAR_DODGE",
+    "bbox": [
+      0,
+      0,
+      10551,
+      7506
+    ]
+  },
+  {
+    "index": 29,
+    "name": "Reflex",
+    "visible": true,
+    "opacity": 255,
+    "blend": "BlendMode.LINEAR_DODGE",
+    "bbox": [
+      4862,
+      3279,
+      5853,
+      4270
+    ]
+  }
+]

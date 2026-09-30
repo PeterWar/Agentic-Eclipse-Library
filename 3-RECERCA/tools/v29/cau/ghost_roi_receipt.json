@@ -1,0 +1,295 @@
+{
+  "roi_y0_y1_x0_x1": [
+    3476,
+    4500,
+    2313,
+    3337
+  ],
+  "pointings": {
+    "A": [
+      {
+        "name": "DSC06979.ARW",
+        "exposure": 0.00125,
+        "k": 0.922234989733947,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/descentrats/DSC06979.ARW"
+      },
+      {
+        "name": "DSC06980.ARW",
+        "exposure": 0.00015625,
+        "k": 0.905527675600086,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/descentrats/DSC06980.ARW"
+      },
+      {
+        "name": "DSC06981.ARW",
+        "exposure": 0.01,
+        "k": 0.9206220920616749,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/descentrats/DSC06981.ARW"
+      },
+      {
+        "name": "DSC06982.ARW",
+        "exposure": 0.25,
+        "k": 0.9354566663092871,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/descentrats/DSC06982.ARW"
+      },
+      {
+        "name": "DSC06983.ARW",
+        "exposure": 0.03333333333,
+        "k": 0.9954188933131919,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/descentrats/DSC06983.ARW"
+      },
+      {
+        "name": "DSC06984.ARW",
+        "exposure": 2.0,
+        "k": 0.9377814141044277,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/descentrats/DSC06984.ARW"
+      },
+      {
+        "name": "DSC06985.ARW",
+        "exposure": 1.0,
+        "k": 0.9684036142110717,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/descentrats/DSC06985.ARW"
+      },
+      {
+        "name": "DSC06986.ARW",
+        "exposure": 0.125,
+        "k": 0.964776152789359,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/descentrats/DSC06986.ARW"
+      },
+      {
+        "name": "DSC06987.ARW",
+        "exposure": 8.0,
+        "k": 0.995985595112283,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/descentrats/DSC06987.ARW"
+      }
+    ],
+    "B": [
+      {
+        "name": "DSC06991.ARW",
+        "exposure": 1.0,
+        "k": 1.0352462873195931,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/totalitat/DSC06991.ARW"
+      },
+      {
+        "name": "DSC06992.ARW",
+        "exposure": 0.125,
+        "k": 1.0125453269422953,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/totalitat/DSC06992.ARW"
+      },
+      {
+        "name": "DSC06993.ARW",
+        "exposure": 8.0,
+        "k": 0.995985595112283,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/totalitat/DSC06993.ARW"
+      },
+      {
+        "name": "DSC06994.ARW",
+        "exposure": 0.25,
+        "k": 1.019428266392351,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/totalitat/DSC06994.ARW"
+      },
+      {
+        "name": "DSC06995.ARW",
+        "exposure": 0.03333333333,
+        "k": 1.077721614182339,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/totalitat/DSC06995.ARW"
+      },
+      {
+        "name": "DSC06996.ARW",
+        "exposure": 2.0,
+        "k": 1.0405422717630173,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/totalitat/DSC06996.ARW"
+      },
+      {
+        "name": "DSC06997.ARW",
+        "exposure": 0.25,
+        "k": 1.017317471382034,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/totalitat/DSC06997.ARW"
+      },
+      {
+        "name": "DSC06998.ARW",
+        "exposure": 0.03333333333,
+        "k": 1.0767517028065214,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/totalitat/DSC06998.ARW"
+      },
+      {
+        "name": "DSC06999.ARW",
+        "exposure": 2.0,
+        "k": 1.0346735302530068,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/totalitat/DSC06999.ARW"
+      },
+      {
+        "name": "DSC07000.ARW",
+        "exposure": 0.00125,
+        "k": 1.0,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/totalitat/DSC07000.ARW"
+      },
+      {
+        "name": "DSC07001.ARW",
+        "exposure": 0.00015625,
+        "k": 0.9657154910008633,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/totalitat/DSC07001.ARW"
+      },
+      {
+        "name": "DSC07002.ARW",
+        "exposure": 0.01,
+        "k": 1.0029579388059415,
+        "path": "/Users/USUARI/Desktop/Eclipse determinista/0-ENTRADES/SONY-A7RIIIA/totalitat/DSC07002.ARW"
+      }
+    ]
+  },
+  "held_out_Vixen": [
+    {
+      "channel": 0,
+      "A_scale": 0.3037082552909851,
+      "B_scale": 0.31114184856414795,
+      "A_core_relative_median": -0.02995753288269043,
+      "B_core_relative_median": 0.001197218894958496,
+      "A_detail": [
+        {
+          "sigma": 3,
+          "pearson": -0.001092239657725459,
+          "gain_ls": -0.0004338267899584025
+        },
+        {
+          "sigma": 8,
+          "pearson": 0.033168186819288834,
+          "gain_ls": 0.007904493249952793
+        },
+        {
+          "sigma": 24,
+          "pearson": 0.12748171398038108,
+          "gain_ls": 0.023394333198666573
+        },
+        {
+          "sigma": 64,
+          "pearson": 0.36364887244374905,
+          "gain_ls": 0.14332392811775208
+        }
+      ],
+      "B_detail": [
+        {
+          "sigma": 3,
+          "pearson": 0.01828461217282871,
+          "gain_ls": 0.023784564808011055
+        },
+        {
+          "sigma": 8,
+          "pearson": 0.0770073421271943,
+          "gain_ls": 0.09157587587833405
+        },
+        {
+          "sigma": 24,
+          "pearson": 0.5963653441951794,
+          "gain_ls": 0.6790085434913635
+        },
+        {
+          "sigma": 64,
+          "pearson": 0.9600249947402612,
+          "gain_ls": 1.083888292312622
+        }
+      ]
+    },
+    {
+      "channel": 1,
+      "A_scale": 0.32248252630233765,
+      "B_scale": 0.33250629901885986,
+      "A_core_relative_median": 0.011750578880310059,
+      "B_core_relative_median": 0.0037802457809448242,
+      "A_detail": [
+        {
+          "sigma": 3,
+          "pearson": -0.00437295802812433,
+          "gain_ls": -0.0010136720957234502
+        },
+        {
+          "sigma": 8,
+          "pearson": 0.01985307488096795,
+          "gain_ls": 0.002795434556901455
+        },
+        {
+          "sigma": 24,
+          "pearson": 0.08539678446906991,
+          "gain_ls": 0.009902648627758026
+        },
+        {
+          "sigma": 64,
+          "pearson": 0.21675923333542468,
+          "gain_ls": 0.058201830834150314
+        }
+      ],
+      "B_detail": [
+        {
+          "sigma": 3,
+          "pearson": 0.013337866301946855,
+          "gain_ls": 0.014668205752968788
+        },
+        {
+          "sigma": 8,
+          "pearson": 0.07907569260811147,
+          "gain_ls": 0.07920096069574356
+        },
+        {
+          "sigma": 24,
+          "pearson": 0.6213764986228864,
+          "gain_ls": 0.5300685167312622
+        },
+        {
+          "sigma": 64,
+          "pearson": 0.9612809540199712,
+          "gain_ls": 0.708377480506897
+        }
+      ]
+    },
+    {
+      "channel": 2,
+      "A_scale": 0.3139808773994446,
+      "B_scale": 0.3354925811290741,
+      "A_core_relative_median": -0.02219712734222412,
+      "B_core_relative_median": -0.003352344036102295,
+      "A_detail": [
+        {
+          "sigma": 3,
+          "pearson": 0.0038602859009583923,
+          "gain_ls": 0.0018824730068445206
+        },
+        {
+          "sigma": 8,
+          "pearson": 0.007732356536501795,
+          "gain_ls": 0.0022614470217376947
+        },
+        {
+          "sigma": 24,
+          "pearson": 0.019680728512223685,
+          "gain_ls": 0.0031251711770892143
+        },
+        {
+          "sigma": 64,
+          "pearson": 0.07157399476877656,
+          "gain_ls": 0.009888460859656334
+        }
+      ],
+      "B_detail": [
+        {
+          "sigma": 3,
+          "pearson": -0.00985287908790018,
+          "gain_ls": -0.016897011548280716
+        },
+        {
+          "sigma": 8,
+          "pearson": -0.01967970185696772,
+          "gain_ls": -0.03041222132742405
+        },
+        {
+          "sigma": 24,
+          "pearson": 0.005422770277137739,
+          "gain_ls": 0.008196364156901836
+        },
+        {
+          "sigma": 64,
+          "pearson": 0.1850471370029387,
+          "gain_ls": 0.3051221966743469
+        }
+      ]
+    }
+  ]
+}

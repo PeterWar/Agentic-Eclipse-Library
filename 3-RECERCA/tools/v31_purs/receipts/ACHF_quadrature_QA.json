@@ -1,0 +1,231 @@
+{
+  "PASS": true,
+  "tolerance_relative_blurred_mean": 0.003,
+  "rows": [
+    {
+      "tag": "P07_ACHF_precursor16",
+      "xy": [
+        5663,
+        2948
+      ],
+      "direct_means_steps_1_half_quarter": [
+        1373.4954235713556,
+        1373.4665000374218,
+        1373.4518732544
+      ],
+      "production_mean": 1373.43896484375,
+      "relative_error_to_quarter": 9.398516905717169e-06
+    },
+    {
+      "tag": "P07_ACHF_precursor16",
+      "xy": [
+        5814,
+        2534
+      ],
+      "direct_means_steps_1_half_quarter": [
+        688.5600907872749,
+        688.5608973748473,
+        688.5611675216574
+      ],
+      "production_mean": 688.561279296875,
+      "relative_error_to_quarter": 1.623315733143214e-07
+    },
+    {
+      "tag": "P07_ACHF_precursor16",
+      "xy": [
+        5965,
+        2120
+      ],
+      "direct_means_steps_1_half_quarter": [
+        571.884448872275,
+        571.8840092488518,
+        571.883677952319
+      ],
+      "production_mean": 571.8834228515625,
+      "relative_error_to_quarter": 4.460710565994449e-07
+    },
+    {
+      "tag": "P07_ACHF_precursor16",
+      "xy": [
+        5132,
+        5077
+      ],
+      "direct_means_steps_1_half_quarter": [
+        585.2963921707777,
+        585.2957940746143,
+        585.2953943814398
+      ],
+      "production_mean": 585.294921875,
+      "relative_error_to_quarter": 8.07295673821332e-07
+    },
+    {
+      "tag": "P07_ACHF_precursor16",
+      "xy": [
+        5056,
+        5511
+      ],
+      "direct_means_steps_1_half_quarter": [
+        508.96487400726954,
+        508.9648832211699,
+        508.96486455699835
+      ],
+      "production_mean": 508.96490478515625,
+      "relative_error_to_quarter": 7.903916498236251e-08
+    },
+    {
+      "tag": "P07_ACHF_precursor16",
+      "xy": [
+        5362,
+        3200
+      ],
+      "direct_means_steps_1_half_quarter": [
+        14751.009994238366,
+        14749.14176040946,
+        14748.152681986616
+      ],
+      "production_mean": 14747.3017578125,
+      "relative_error_to_quarter": 5.769700059825849e-05
+    },
+    {
+      "tag": "P07_ACHF_precursor16",
+      "xy": [
+        6000,
+        3776
+      ],
+      "direct_means_steps_1_half_quarter": [
+        8756.657880953238,
+        8754.949431777693,
+        8754.07901390518
+      ],
+      "production_mean": 8753.26953125,
+      "relative_error_to_quarter": 9.246919680468323e-05
+    },
+    {
+      "tag": "P07_ACHF_precursor16",
+      "xy": [
+        4700,
+        3776
+      ],
+      "direct_means_steps_1_half_quarter": [
+        11182.48891372915,
+        11182.73477133055,
+        11182.856575465437
+      ],
+      "production_mean": 11183.0078125,
+      "relative_error_to_quarter": 1.3524007353761527e-05
+    },
+    {
+      "tag": "P08_ACHF_precursor32",
+      "xy": [
+        5663,
+        2948
+      ],
+      "direct_means_steps_1_half_quarter": [
+        1387.0377964492727,
+        1386.9683448327628,
+        1386.9334990641767
+      ],
+      "production_mean": 1386.900146484375,
+      "relative_error_to_quarter": 2.40477137686576e-05
+    },
+    {
+      "tag": "P08_ACHF_precursor32",
+      "xy": [
+        5814,
+        2534
+      ],
+      "direct_means_steps_1_half_quarter": [
+        688.7150186231277,
+        688.7132101735775,
+        688.712220899612
+      ],
+      "production_mean": 688.711181640625,
+      "relative_error_to_quarter": 1.5089887408462506e-06
+    },
+    {
+      "tag": "P08_ACHF_precursor32",
+      "xy": [
+        5965,
+        2120
+      ],
+      "direct_means_steps_1_half_quarter": [
+        571.9926794052418,
+        571.9922509549298,
+        571.9920410730629
+      ],
+      "production_mean": 571.9918212890625,
+      "relative_error_to_quarter": 3.8424310931369056e-07
+    },
+    {
+      "tag": "P08_ACHF_precursor32",
+      "xy": [
+        5132,
+        5077
+      ],
+      "direct_means_steps_1_half_quarter": [
+        585.6887274656079,
+        585.6870242656279,
+        585.6861285178206
+      ],
+      "production_mean": 585.6851806640625,
+      "relative_error_to_quarter": 1.6183647042028285e-06
+    },
+    {
+      "tag": "P08_ACHF_precursor32",
+      "xy": [
+        5056,
+        5511
+      ],
+      "direct_means_steps_1_half_quarter": [
+        508.9594884922178,
+        508.95894035510787,
+        508.95867102233535
+      ],
+      "production_mean": 508.9583740234375,
+      "relative_error_to_quarter": 5.835422692681261e-07
+    },
+    {
+      "tag": "P08_ACHF_precursor32",
+      "xy": [
+        5362,
+        3200
+      ],
+      "direct_means_steps_1_half_quarter": [
+        15656.178112198873,
+        15650.741188882475,
+        15647.990153752024
+      ],
+      "production_mean": 15645.41015625,
+      "relative_error_to_quarter": 0.00016487724472430044
+    },
+    {
+      "tag": "P08_ACHF_precursor32",
+      "xy": [
+        6000,
+        3776
+      ],
+      "direct_means_steps_1_half_quarter": [
+        9413.828889669361,
+        9411.087048335365,
+        9409.70763129042
+      ],
+      "production_mean": 9408.39453125,
+      "relative_error_to_quarter": 0.00013954737935243197
+    },
+    {
+      "tag": "P08_ACHF_precursor32",
+      "xy": [
+        4700,
+        3776
+      ],
+      "direct_means_steps_1_half_quarter": [
+        11453.971798783286,
+        11451.438958831257,
+        11450.17291289145
+      ],
+      "production_mean": 11448.947265625,
+      "relative_error_to_quarter": 0.00010704181288567261
+    }
+  ],
+  "scope": "integration fidelity at fixed points; radial envelope response is not suppressed"
+}

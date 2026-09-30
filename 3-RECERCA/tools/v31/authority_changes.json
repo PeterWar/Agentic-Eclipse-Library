@@ -1,0 +1,52 @@
+[
+  {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-05_V31.md",
+    "before": null,
+    "after": "46ec5f9faf0a3ec96804c95e3ce8aebda9195935ebd89c916f240594b4852d12"
+  },
+  {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/AGENTS.md",
+    "before": "7961db620826f9d9dd4256cdd4f3b5b297a2ed2f7d0f0ceb1123ca6b38bf54d5",
+    "after": "1fb763890a2c79f9d647a53873fc125c43be3a26dca33fc08ebf66787586fdce"
+  },
+  {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/CLAUDE.md",
+    "before": "8be868e38811a83f68303387c03ec3b7380818bb48a926ece36392182529e37f",
+    "after": "ed03349b5f31dfe27a78c50109f946980d42856e8d5841e18e55b0b4f97913f7"
+  },
+  {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/README.md",
+    "before": "d91b2ef0f11ffaeb31f977c14df0656595be35f5ce7ede26d5ce476d805e360d",
+    "after": "9c8f06ba09888ed05ff3e2c864eed16a518fb66892aabb1711147fa04b416e18"
+  },
+  {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/README.md",
+    "before": "20801bd3c61bcb36299688073f3c2419fa8c560476e6afced0cc83d7a68d8669",
+    "after": "000762e02119cc07fe32825f02fda89abf752a17a5f8b6c8b6ed3f40355cdc4c"
+  },
+  {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/README.md",
+    "before": "06fbe344a42e85339aed00b4f76e665401d8909ea46d5c3ff85678ff32222877",
+    "after": "5e5a3791c6259e77e7a29cd82d70f53c27447ed55b618c16ad2f11d0b2211ccc"
+  },
+  {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/ESTAT_ACTUAL.md",
+    "before": "f7abaff7ea75148e8c876980dccc82bba2a65659cc65ec20b769f3f6796d5674",
+    "after": "85d6ffb9178b9497adbbda17db8605e30d26128802ad60dbed6c92bbc75f6458"
+  },
+  {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/MAPA_RUTES_I_OUTPUTS.md",
+    "before": "554e7bfa672e33a6851d1240933e1790abeed0e5135cce0cbeb3d52e09a08dc2",
+    "after": "110d66c46c5f72cb0f8a3673a7588d8553f0a343ed97c0d6df348e741211bd4d"
+  },
+  {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/HANDOFF_VIGENT.md",
+    "before": "7771df5da69bbd025b335b5449ae2356e5f5ac1c130dddf22f8c32568a749ac2",
+    "after": "8e850345732214d615d33e0f8909916d1899978959ed06fd4c773916eb32fd8a"
+  },
+  {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/ACTIVE.json",
+    "before": "e5b209885054094d603b5dd57980e6adec3c59306c4847f7b31affcd6e05f332",
+    "after": "3d339d5696368d8e1487258f23c55e289eed9ba582e0b6fbdd1375efa99ab30b"
+  }
+]

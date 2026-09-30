@@ -1,0 +1,242 @@
+{
+  "psb": {
+    "published_utc": "2026-09-08T21:00:08.531827+00:00",
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V38.psb",
+    "sha256": "f74b25a72c65595ae74e56a41ec8f0d85b1db578ce1ca818fd9e8e6ffc87687f",
+    "bytes": 10435812802,
+    "layers": 42
+  },
+  "photoshop": {
+    "result": "OBRE 10551 px x 7506 px · 42 capes",
+    "file": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v38_20260908/staging/V38.psb",
+    "sha256": "f74b25a72c65595ae74e56a41ec8f0d85b1db578ce1ca818fd9e8e6ffc87687f"
+  },
+  "verification_sha256": "f74b25a72c65595ae74e56a41ec8f0d85b1db578ce1ca818fd9e8e6ffc87687f",
+  "layers": [
+    {
+      "name": "12 1/3200 perles",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "11 1/500 limbe",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "10 1/125",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "09 1/60 x2",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "08 1/30 x4 quar",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "07 1/15 x2 quar",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "06 1/8 x4 quar",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "05 1/4 x2 quar",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "04 1/2 x4 quar",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "03 1s x2 quar",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "02 2s x3 quar",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "01 10.3s x3 quar",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "13 Sony >1s",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "Fons per raig",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "Earthshine v2",
+      "kind": "moon",
+      "exact": true
+    },
+    {
+      "name": "Compara D87",
+      "kind": "moon",
+      "exact": true
+    },
+    {
+      "name": "Compara LROC",
+      "kind": "moon",
+      "exact": true
+    },
+    {
+      "name": "Earthshine V24e",
+      "kind": "moon",
+      "exact": true
+    },
+    {
+      "name": "00 Base amb cel · V32",
+      "kind": "copy_newmask",
+      "exact": true
+    },
+    {
+      "name": "00 Base (cel/4) · V32",
+      "kind": "copy_newmask",
+      "exact": true
+    },
+    {
+      "name": "00 Base lineal · V38",
+      "kind": "base",
+      "exact": true
+    },
+    {
+      "name": "03 ACHF azimutal 8-128 r0 · V38",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "03 ACHF azimutal 8-128 r4 · V38",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "07 ACHF azimutal suau r8 · V38",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "01 ACHF fi 2-32 · V38",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "02 Passa-alt 24 · V38",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "04 ACHF micro 1-16 · V38",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "05 ACHF fi 2-48 · V38",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "06 ACHF estructura 4-64 · V38",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "Estrelles",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "Reflex",
+      "kind": "moon",
+      "exact": true
+    },
+    {
+      "name": "P01 NRGF · V38",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "P01b NRGF (μσ dels anells parcials extrapolats) · V38",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "P02 RHEF · V38",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "P03 MGN · V38",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "P04 WOW · V38",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "P05 WOW bilateral · V38",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "P06 NAFE n65 · V32",
+      "kind": "copy_newmask",
+      "exact": true
+    },
+    {
+      "name": "P07 ACHF precursor sigma16 · V32",
+      "kind": "copy_newmask",
+      "exact": true
+    },
+    {
+      "name": "P08 ACHF precursor sigma32 · V32",
+      "kind": "copy_newmask",
+      "exact": true
+    },
+    {
+      "name": "P09 SWAP · pilot llum blanca · V32",
+      "kind": "copy_newmask",
+      "exact": true
+    },
+    {
+      "name": "C01 Passa-alt24 lineal · control · V32",
+      "kind": "copy_newmask",
+      "exact": true
+    }
+  ],
+  "lluna_inici": {
+    "desplacament_px": [
+      15,
+      1
+    ],
+    "centre_mesurat": [
+      14.8,
+      0.9
+    ],
+    "RL_px": 455.5018,
+    "guarda_px": 2.0,
+    "t_s": 15.0
+  },
+  "base": "fusion_total_v38 (Vixen amb correcció de la vora lunar per fotograma; Sony V36)",
+  "report": "research/155"
+}

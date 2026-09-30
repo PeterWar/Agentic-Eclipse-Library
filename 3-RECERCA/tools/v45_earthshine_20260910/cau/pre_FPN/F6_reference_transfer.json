@@ -1,0 +1,152 @@
+{
+  "B1_sha256": "618053ea60e41ce235b824527d43b26130cc22b86a5878debae80aae39f84fe1",
+  "F2_receipt_sha256": "c0520b6f15a052c22e3ed01293633923961369c54baf14dfab72b1e8ab992a89",
+  "scope": "source perturbation after registered CFA/variance; temporal means,CDF,preferences recalculated; no RAW injection or optical resolution claim",
+  "rows": [
+    {
+      "region": "cyan_nord",
+      "radius": 414,
+      "angle_degrees": -90.0,
+      "wavelength": 16.0,
+      "direction": "radial",
+      "amplitude": 0.05,
+      "envelope_sigma": 20,
+      "coherent_gain": 1.0000266595787732,
+      "relative_error": 9.646526385709025e-05,
+      "passes": true
+    },
+    {
+      "region": "cyan_nord",
+      "radius": 414,
+      "angle_degrees": -90.0,
+      "wavelength": 16.0,
+      "direction": "tangent",
+      "amplitude": 0.05,
+      "envelope_sigma": 20,
+      "coherent_gain": 1.0000276036899491,
+      "relative_error": 4.758443385770948e-05,
+      "passes": true
+    },
+    {
+      "region": "cyan_nord",
+      "radius": 414,
+      "angle_degrees": -90.0,
+      "wavelength": 24.0,
+      "direction": "radial",
+      "amplitude": 0.05,
+      "envelope_sigma": 20,
+      "coherent_gain": 1.0004023006704839,
+      "relative_error": 0.0005553538702653332,
+      "passes": true
+    },
+    {
+      "region": "cyan_nord",
+      "radius": 414,
+      "angle_degrees": -90.0,
+      "wavelength": 24.0,
+      "direction": "tangent",
+      "amplitude": 0.05,
+      "envelope_sigma": 20,
+      "coherent_gain": 1.000349415064986,
+      "relative_error": 0.000499226841744747,
+      "passes": true
+    },
+    {
+      "region": "lila",
+      "radius": 440,
+      "angle_degrees": 185.0,
+      "wavelength": 16.0,
+      "direction": "radial",
+      "amplitude": 0.05,
+      "envelope_sigma": 20,
+      "coherent_gain": 1.0008404556053638,
+      "relative_error": 0.03965041048981357,
+      "passes": true
+    },
+    {
+      "region": "lila",
+      "radius": 440,
+      "angle_degrees": 185.0,
+      "wavelength": 16.0,
+      "direction": "tangent",
+      "amplitude": 0.05,
+      "envelope_sigma": 20,
+      "coherent_gain": 0.999807234490251,
+      "relative_error": 0.008758727710332485,
+      "passes": true
+    },
+    {
+      "region": "lila",
+      "radius": 440,
+      "angle_degrees": 185.0,
+      "wavelength": 24.0,
+      "direction": "radial",
+      "amplitude": 0.05,
+      "envelope_sigma": 20,
+      "coherent_gain": 1.0020907966662556,
+      "relative_error": 0.04932928313880917,
+      "passes": true
+    },
+    {
+      "region": "lila",
+      "radius": 440,
+      "angle_degrees": 185.0,
+      "wavelength": 24.0,
+      "direction": "tangent",
+      "amplitude": 0.05,
+      "envelope_sigma": 20,
+      "coherent_gain": 1.0010034755898451,
+      "relative_error": 0.026551983136593182,
+      "passes": true
+    },
+    {
+      "region": "last_nord",
+      "radius": 451,
+      "angle_degrees": -90.0,
+      "wavelength": 16.0,
+      "direction": "radial",
+      "amplitude": 0.05,
+      "envelope_sigma": 20,
+      "coherent_gain": 1.000209250705198,
+      "relative_error": 0.002581444801808065,
+      "passes": true
+    },
+    {
+      "region": "last_nord",
+      "radius": 451,
+      "angle_degrees": -90.0,
+      "wavelength": 16.0,
+      "direction": "tangent",
+      "amplitude": 0.05,
+      "envelope_sigma": 20,
+      "coherent_gain": 0.9999798290772581,
+      "relative_error": 0.00030040264393786767,
+      "passes": true
+    },
+    {
+      "region": "last_nord",
+      "radius": 451,
+      "angle_degrees": -90.0,
+      "wavelength": 24.0,
+      "direction": "radial",
+      "amplitude": 0.05,
+      "envelope_sigma": 20,
+      "coherent_gain": 1.0002380496095864,
+      "relative_error": 0.00348307583063205,
+      "passes": true
+    },
+    {
+      "region": "last_nord",
+      "radius": 451,
+      "angle_degrees": -90.0,
+      "wavelength": 24.0,
+      "direction": "tangent",
+      "amplitude": 0.05,
+      "envelope_sigma": 20,
+      "coherent_gain": 0.9998066288755199,
+      "relative_error": 0.003052232459473614,
+      "passes": true
+    }
+  ],
+  "complete": true
+}

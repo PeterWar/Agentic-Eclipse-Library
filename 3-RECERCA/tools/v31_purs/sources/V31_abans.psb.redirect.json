@@ -1,0 +1,11 @@
+{
+  "schema": 3,
+  "id": "072",
+  "original": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/sources/V31_abans.psb",
+  "archive": "/Users/USUARI/Downloads/Eclipse 2026/output/reconstruccio_compactacio_20260915/psb_archive",
+  "snapshot_id": "F074",
+  "sha256": "bbbb2b93a49a0e09226b89467754f6364d1c6b929bc147bd34387a1c66d7affe",
+  "bytes": 6193861172,
+  "registry": "/Users/USUARI/Downloads/Eclipse 2026/output/reconstruccio_compactacio_20260915/psb_retirement/PLAN.json",
+  "requires_materialize": true
+}

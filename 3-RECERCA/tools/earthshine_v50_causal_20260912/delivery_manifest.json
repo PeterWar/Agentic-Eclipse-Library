@@ -1,0 +1,3099 @@
+{
+  "time": "2026-09-12T11:50:35.831436+00:00",
+  "status": "NOT_ACHIEVED",
+  "source": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes interiors/Earthshine_V49.psb",
+  "source_sha256": "fc22af4660c7ac7aeb10a1433f1c159a91968fed70646c4b9200bb5bf7748366",
+  "report": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/RESULTAT_V50_ENCARA_NO_VALIDADA.md",
+  "handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-12_V50_CAUSES_I_PROVES_REFUSADES.md",
+  "files": [
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/A0_authorities.json",
+      "bytes": 1312,
+      "sha256": "83e8b65bc7f7e597650a29584894da1eb4c310ade5405033a4193f2118ed8ba7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/A0_start.json",
+      "bytes": 357,
+      "sha256": "fe39fa7d745b1c9eabfad9701b9193728ccc662d896a2c98d54a95b7006ae4c0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/A1_A2_AUDIT.md",
+      "bytes": 1256,
+      "sha256": "7a0c51019e689205cd8933ff2fb88b46dbab0d552b587e10ea938de13b8879af"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/A2_Pere_actual_RGB16.png",
+      "bytes": 728277,
+      "sha256": "62497d22af98a2660fa1e76cc36be4bbca7ea7010fb475928af81bc9b49ae1df"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/A2_sense_font_lunar_RGB16.png",
+      "bytes": 496013,
+      "sha256": "15837bc9a9dff9e70f258b97ae10abba2d81f4ac14412666c196de22f5054c8e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/B0_response.json",
+      "bytes": 10380,
+      "sha256": "5c1290e9fd1a2f4f50ee5499a13527c709d4adfdb813cb8903de2f17db25df8e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0.log",
+      "bytes": 6443,
+      "sha256": "0e07c1c45cce404746a5718147bbe0dc59e6421c514d0b6b7d6d8be3470b4985"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0_572A2973_0_p1.npz",
+      "bytes": 13700,
+      "sha256": "12870cd9262e0263588ac8c4f56239eef2c8bd04387abe732d7896cb64552693"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0_572A2973_0_p1.png",
+      "bytes": 54927,
+      "sha256": "5c3b526b49e62350e39b6ac61ed5119325d65cd96614a4e4a848d2d60ac03447"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0_572A2973_0_p3.npz",
+      "bytes": 13677,
+      "sha256": "f86f52aa60e6a1122af1584c444a9894ac051c31c1fe017d006acc06a5f71333"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0_572A2973_0_p3.png",
+      "bytes": 55265,
+      "sha256": "ae01a4d981feef80bc1b6b018450ce8a61da9b852ce8ea364fa3c5896508e419"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0_572A2973_270_p1.npz",
+      "bytes": 13773,
+      "sha256": "4a38f95a56361d60769bfa84e65b498649dbd989c41262bdbe03890254b3a153"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0_572A2973_270_p1.png",
+      "bytes": 79929,
+      "sha256": "de8dfca854bfab158a4bea0df5cd299a62cd5f21d7cfa758c6338809bb913c33"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0_572A2973_270_p3.npz",
+      "bytes": 13781,
+      "sha256": "293f8864d26058cfb52ceedfdb7d9a252741e34eae2d4eb4c52873f79bbbb54c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0_572A2973_270_p3.png",
+      "bytes": 80108,
+      "sha256": "f78698433180cb96d4389e285b2a249de68fad020e9d4251e82ae3cc596924b1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0_572A2991_0_p1.npz",
+      "bytes": 14424,
+      "sha256": "76568884e5c8f268834136f85ab80ae3847d34bec33c76ca761d80de6040fd30"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0_572A2991_0_p1.png",
+      "bytes": 63064,
+      "sha256": "4707371f53681749546f33ba2b97715ca9119986913a9ef14725b151e6faa422"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0_572A2991_0_p3.npz",
+      "bytes": 14451,
+      "sha256": "43c09c5da6fd5eb0508d7d10334a6a30bda55d4c1d19a951b6304c470e98340f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0_572A2991_0_p3.png",
+      "bytes": 62762,
+      "sha256": "fe386472e2dbabf1f74feb9909ba694a0edb486eeb1459ceb52c40d1446e5644"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0_572A2991_270_p1.npz",
+      "bytes": 13815,
+      "sha256": "e02bf78189f2d41f8def8446cc8088fe27e9ac8a082f9b89601a4bfb4c1f490a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0_572A2991_270_p1.png",
+      "bytes": 83504,
+      "sha256": "9fb2c8a117f79cdfdd92226ea3b78f1a2e37e8c2755e3c05ac9a2c21dbc11d07"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0_572A2991_270_p3.npz",
+      "bytes": 13807,
+      "sha256": "0021f28f892d1c23053b48148584c8193ceaca0872866c6169e499553c6330da"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0_572A2991_270_p3.png",
+      "bytes": 83211,
+      "sha256": "a8f33fecb9107a57c6db9858a583ba553e4be54b015197e5d3f46fb724582ead"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0_plan.json",
+      "bytes": 2321,
+      "sha256": "c3263fcffe83bac27107b60101be253605f1fee54f98055b8214695ec4e4caf2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C0_results.json",
+      "bytes": 11764,
+      "sha256": "ecf0ed51c53329a8d27cf175a4942207a329512d9c05bf88bb4ee121ade88349"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1.log",
+      "bytes": 6448,
+      "sha256": "7f91e6d9610acf4067ba487474365cdca391dbb9d8273a07df7256ec070b594c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1_572A2973_0_p1.npz",
+      "bytes": 13694,
+      "sha256": "7964bb6469a4a2d10f14b02033a65aaefbcb07966c941a64b489fd999efa2015"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1_572A2973_0_p1.png",
+      "bytes": 54828,
+      "sha256": "bac56256ae646bc47605a953f0957676296c4597b140b90686c9e2e15ecb1f00"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1_572A2973_0_p3.npz",
+      "bytes": 13690,
+      "sha256": "faaa1c8b6dba5d4082c2a1806a95cb2bb18231940847421c155d3ddfc6e617ba"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1_572A2973_0_p3.png",
+      "bytes": 55246,
+      "sha256": "39b68b0896b6b2127432abb0ef3fcad4740a61b578d660b7485b524112ba91e3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1_572A2973_270_p1.npz",
+      "bytes": 13774,
+      "sha256": "a1601a777fda1e6c38bc5de39793c8673ba822920c32fb593b4322ecd1ee7676"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1_572A2973_270_p1.png",
+      "bytes": 79822,
+      "sha256": "b9f4649969f417f4ed4e74a9c5069430d94f4b60c6fa5122a84d0b8296fc811c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1_572A2973_270_p3.npz",
+      "bytes": 13781,
+      "sha256": "3a039799f57f6c7b55b402d70eb727fd57904c31c6dcb2b45cdff3deec550d25"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1_572A2973_270_p3.png",
+      "bytes": 80092,
+      "sha256": "2593bf78c69aaca5a83a383dfe62df117901792ede0bc9c633fb1741a03d3163"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1_572A2991_0_p1.npz",
+      "bytes": 14434,
+      "sha256": "da103eb0e3b8505f39b7882766c005a78bb189da3c5600452ae057232f8d90db"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1_572A2991_0_p1.png",
+      "bytes": 63085,
+      "sha256": "f3b7f57360bc9a126998560172e8d97792a206da435faf117dd5f52bcf22e008"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1_572A2991_0_p3.npz",
+      "bytes": 14452,
+      "sha256": "ab04ec3efc3528c6259ce69129c0f89b6c1d18b9a4b74bafbc219085094087d8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1_572A2991_0_p3.png",
+      "bytes": 62736,
+      "sha256": "5dff7bbe62b08502bd22154b56e7d4d94dcc0a922a403a9510a57388f5988ed1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1_572A2991_270_p1.npz",
+      "bytes": 13805,
+      "sha256": "7ba3fa25767cfaaf33c5adbcd80b2c6a70eb650fb050ad3d7e3791eb6fff32d7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1_572A2991_270_p1.png",
+      "bytes": 83450,
+      "sha256": "009c3ce74e87af34481301a3fa093616fab5b9d799165d3b96712433e0e333c1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1_572A2991_270_p3.npz",
+      "bytes": 13803,
+      "sha256": "7fb1322bc5961290d5f2b64e4ed58e4530a230d8835e41009cd833a3603bcf27"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1_572A2991_270_p3.png",
+      "bytes": 83529,
+      "sha256": "f4991cbcb4010ce0558b7e77e646109cd0df64c8e594318bc643ed99b4c7fc67"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1_plan.json",
+      "bytes": 2403,
+      "sha256": "97493e8e25ac347ad83e3714fc49ba5397e7e93fb37417ac33a4ee252e95ddbf"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/C1_results.json",
+      "bytes": 11854,
+      "sha256": "512c68447d5f934f1edce819712599de3a7fc0ce4bba58886bf954e7d7388555"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/CAUSES_CONFIRMADES_I_LIMITS.md",
+      "bytes": 11015,
+      "sha256": "b938c008b329c1e3b111c2333cfe11c9df8afa46ab260aa02e17775dbfda414b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0.log",
+      "bytes": 372,
+      "sha256": "f8bee2892392a622626e99a7ae81c1bb4a818670cfcf77f4bf2aa7a3a90382a2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_raw_572A2978.json",
+      "bytes": 229,
+      "sha256": "5660cf12d89f0e89bd44010222c55ba1ef3a3cc81cae33825e2f813adaccc9d2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_raw_572A2979.json",
+      "bytes": 229,
+      "sha256": "4483660d3c3f7e528a0c65cdb653566b724491292b017abf91a208033512bafe"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_raw_572A2980.json",
+      "bytes": 229,
+      "sha256": "b42d26dbcd2076542b4edfabe1d6c74a6525c1e5c1f85b4a817c9ce359380d4c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_raw_572A2981.json",
+      "bytes": 229,
+      "sha256": "dff9da4e6fc8ee6c6fff270c9fac834603e10b49b5001b63c163b10c9fbaf847"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_raw_572A2982.json",
+      "bytes": 229,
+      "sha256": "4d36b5ae49afe1004fa3cb3b2fe311ce7ce6a3f8024dbec359163c7802e13110"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_raw_572A2983.json",
+      "bytes": 229,
+      "sha256": "9f771fcd077130a530026cc7932d3602fbde86c21c547a5528fc9bcda6a99475"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_raw_572A2984.json",
+      "bytes": 229,
+      "sha256": "5a33703786ea5e92ac79dd76b4abe94003a0a5fc7beb3ab25e5967ce029e8ea9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_raw_572A2996.json",
+      "bytes": 229,
+      "sha256": "57b8d4d203c33a14e674803c60e7ce0137e070a553f3297846044e5e3f5b1e1b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2978_0.npz",
+      "bytes": 4374,
+      "sha256": "c62cc2c9615143fd61b587a56340b9b42b239e68033b17aff8cd091dc77a103b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2978_1.npz",
+      "bytes": 4374,
+      "sha256": "ac2e6dd573b7dbc5ba21e7526021ca0aab743158710ba2b701ff590f7306db13"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2978_2.npz",
+      "bytes": 4350,
+      "sha256": "1031a98796390346a118d33eab17ab74efcf1250e8b2751f38dd8271769e1afe"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2978_3.npz",
+      "bytes": 4357,
+      "sha256": "dd492e30c0578848c970e81225c28f01f6b20a72db105e178829c65f5397b0c8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2978_4.npz",
+      "bytes": 4488,
+      "sha256": "87c3b4c69eb83d1984861c94871d8626a5d09a12e0ced5da4dc11a42c00abcb0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2978_5.npz",
+      "bytes": 4350,
+      "sha256": "4d9904052385c7ef6c7b8f3c0fc784a166490c0cb9dc5b998cf8f642d23fe487"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2978_6.npz",
+      "bytes": 4416,
+      "sha256": "1d87b22d5bd72ba0766cd6dd9d1db883bed9d75dc78a604ce251a9173fd235d5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2978_7.npz",
+      "bytes": 4351,
+      "sha256": "560dd1fad081893327f98d8d0cf464d28462443c32c84beaad1aebda46c9a3a0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2979_0.npz",
+      "bytes": 4546,
+      "sha256": "1bcee1c1b845ae7af6599c3d3aea5c94b97006aebbd3d3a576aa1213c7f49819"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2979_1.npz",
+      "bytes": 4583,
+      "sha256": "ad66e1683e84fab60adc3412fc712f840f6fed656e0b132361fbd5c9deff6e34"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2979_2.npz",
+      "bytes": 4551,
+      "sha256": "38247e19c5ef7786f24ff4010d00df8706dab6be3c2efd677dcdc09390e86d9e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2979_3.npz",
+      "bytes": 4528,
+      "sha256": "00c836fd087739db48a1e4192a6c7408082d2bab36cc9f2e6cb245556d048dfe"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2979_4.npz",
+      "bytes": 4655,
+      "sha256": "8eef690e3482508c447a51e2a863c09ac3ae92405853e45c800c85df49a40e61"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2979_5.npz",
+      "bytes": 4515,
+      "sha256": "a4a316114c58f89941dd435fc754a522518da56deb6fb5de0d34580fa660ea37"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2979_6.npz",
+      "bytes": 4668,
+      "sha256": "76b36afdc7a0e31436501711016400923a425b33fb73cef4fedce742da349c82"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2979_7.npz",
+      "bytes": 4499,
+      "sha256": "086bcdc7507d0875635ae161842f13a0bffdd49e834136cf037dc4393fe12392"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2980_0.npz",
+      "bytes": 4514,
+      "sha256": "96e6e9fb4a462f5279604e174cdaa4b27f698babaa39d6f0768f3736f8ecb63a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2980_1.npz",
+      "bytes": 4571,
+      "sha256": "e5c5d0c8791ba40786ab9bd49ec8db1af2fc0333eb763423b690bdc6230d80a1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2980_2.npz",
+      "bytes": 4624,
+      "sha256": "da51b5eb0a2902324868843ddaa9c925273afa804fcc8d5f2e384f73da2fb570"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2980_3.npz",
+      "bytes": 4517,
+      "sha256": "510d90f36631b33396fe79cecdc6f0bc70ac6c23c52ef33820e38174e39a7adb"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2980_4.npz",
+      "bytes": 4603,
+      "sha256": "b34af14930be9573640ac40ccb7135becada2f159bd62e736b925dc4bebc3730"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2980_5.npz",
+      "bytes": 4567,
+      "sha256": "7c0e06d28e94cfe90a45b39fa5b27b8dbf1c9c5680a2e9abed64bd7a7fd84ed9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2980_6.npz",
+      "bytes": 4656,
+      "sha256": "775e677d1c267dc57aca8c505ab8a4952fa2b3adf02be2bfd29900d8251de0c2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2980_7.npz",
+      "bytes": 4499,
+      "sha256": "215648faa63bdde8030f96d9ffc8842dc46af47b18a433b0fcf6313c98253bcd"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2981_0.npz",
+      "bytes": 4516,
+      "sha256": "8365075d3d6b50d2ed2cbb76ca5fffb84c361e6015f3c1e3c8cca5ff3fb376c2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2981_1.npz",
+      "bytes": 4549,
+      "sha256": "1717ab67995e08a46a4b7d19db4695b8750ad668b72b681d625757f30b2aee2e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2981_2.npz",
+      "bytes": 4640,
+      "sha256": "c59274b0b96890b6c226c7e1e80e456dd753224f1e40d4826a228f24e3bcd368"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2981_3.npz",
+      "bytes": 4542,
+      "sha256": "5fd156b08627e00907d60c27cb4782e563b1db31170ab25308a8c6f7189f59d6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2981_4.npz",
+      "bytes": 4585,
+      "sha256": "7215f7ed6c204d7dc1bb50d7b01514ddc663a73eabb69ba37ffcc229909b8756"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2981_5.npz",
+      "bytes": 4597,
+      "sha256": "835b970a2d8095264aa52b74198f9178ad214866405cf11b2c52af9828a4d216"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2981_6.npz",
+      "bytes": 4630,
+      "sha256": "e6d4f250400753f86576c49b14d5b89cc6eaf6350d327a2b1bfb09523fea39fb"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2981_7.npz",
+      "bytes": 4522,
+      "sha256": "00c3ebe4447e846ec21a0d17ee8cbaa32d640db28fbca62a5190e2dc9563b940"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2982_0.npz",
+      "bytes": 5006,
+      "sha256": "d7a304aeb59d80e3d16419ca49ae3b999edb5adce718ecdd5e132872515036b0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2982_1.npz",
+      "bytes": 4998,
+      "sha256": "57c14892bdab8c2f66379bfa4902174598c1c54cffbe88afafea3763a368c521"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2982_2.npz",
+      "bytes": 4991,
+      "sha256": "085c126fa8bbb71c6db0ff4cb237d33f482ffb58dbef4620509170e518f2fbd0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2982_3.npz",
+      "bytes": 5021,
+      "sha256": "2ee75c95ee812e7bb6e4901e15854ce34ba7e0a498d77b107543fe7b785f5eae"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2982_4.npz",
+      "bytes": 5027,
+      "sha256": "7211202d304df05bbed722e31ec7dc80fda9c5b4becdd72085bfcef7782d7141"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2982_5.npz",
+      "bytes": 4987,
+      "sha256": "fdc19970000e50435dbbffb4fe9bce23cd5ce672c11cd392401e61457b688d85"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2982_6.npz",
+      "bytes": 5112,
+      "sha256": "877e1a6beeb1eadcf87f971af99d78a38fb08d90f32a3f0a2596c9b5ab4ac2bc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2982_7.npz",
+      "bytes": 5057,
+      "sha256": "48dd9a041808cf5c0936c920c6a49a89ef4ed7dfb5118abdefdcdf9b5a30a171"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2983_0.npz",
+      "bytes": 4947,
+      "sha256": "9d3bd72a9ca0a128aefe6b72bb2d4228de87f892c4f1989eace12f2060d0c4d5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2983_1.npz",
+      "bytes": 4979,
+      "sha256": "8b113371ee08505d0fdc7f9b0f733a75a22fc83d9e8e2823fb3de058d58f78ed"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2983_2.npz",
+      "bytes": 4958,
+      "sha256": "ca615cfb3c067cf473d0344bf014e22f8c3be905ca0d0f68c6ceca9e3f177ccf"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2983_3.npz",
+      "bytes": 4940,
+      "sha256": "4d97a1d814cc0c26eef497980857e50116fd89b7618dc9c8ccec0c01506fce61"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2983_4.npz",
+      "bytes": 4991,
+      "sha256": "b01a0f60e2c5fdb6cc53d016709527759b146eaf21fd428eec215f439d5b8881"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2983_5.npz",
+      "bytes": 4951,
+      "sha256": "2e5813bdf4b39fb0cd005c02cc893b33fe2950431eccaffb6bcb2d3645a11828"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2983_6.npz",
+      "bytes": 5089,
+      "sha256": "9f1bcfcad88bcc774f1cda44f31e6de7fa1af084591d2eb2d4ad6eda22c2cc51"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2983_7.npz",
+      "bytes": 4936,
+      "sha256": "29e2a6de8d522809c284ed5b052ca08e9bdc79098e04e70a8f66eb8e4191d63e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2984_0.npz",
+      "bytes": 4973,
+      "sha256": "33ab675569bd51d83a72967ae900f7bff26b67bae23f10ce419be81817d6e11b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2984_1.npz",
+      "bytes": 4972,
+      "sha256": "2135be219c6e21bc819cfe72e2a5a1f17a62295609fea50f2b7dce6043920f89"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2984_2.npz",
+      "bytes": 5005,
+      "sha256": "c089838267f36e755b39047e71b2f4631068b93c96c3993a02f5aad1e07fcf2a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2984_3.npz",
+      "bytes": 4925,
+      "sha256": "ebb91b2244d82a07d57b1d2903c18541d7811305af4cf47b6dc8722a011fe839"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2984_4.npz",
+      "bytes": 4998,
+      "sha256": "b5088e379caeb6e56d9d0f8d6e9273394e2f0bfb4688d6e3d1da1554585dff55"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2984_5.npz",
+      "bytes": 4992,
+      "sha256": "96ea7ff421628ea671aaac3babfdce93464bc69723b938238feb28118098fd5a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2984_6.npz",
+      "bytes": 5090,
+      "sha256": "872a9dd65526680793978aa520ad8f4a9e25e33f6beb8f1f5488a7a4914199ac"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2984_7.npz",
+      "bytes": 4944,
+      "sha256": "fb5abad3208ecb1ff9a30c401141c88498ae180bbd65b261134dd7d627373521"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2996_0.npz",
+      "bytes": 4354,
+      "sha256": "eb32b808951d4a9b6e00956b3c4c88cbdfda15cb7a0ef3ec40d7762d509632e3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2996_1.npz",
+      "bytes": 4374,
+      "sha256": "ca3a0df23132b3a362010b1f7241a0c6954016df113d9b981f7c25042cdc3f0f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2996_2.npz",
+      "bytes": 4299,
+      "sha256": "376836613bfa89ee590c93371214b3a4983af555815d92346b265362d279926e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2996_3.npz",
+      "bytes": 4343,
+      "sha256": "772857d3be9e18ca408991a180ec205f2f9565bd34c77eaecc8ecc7f138d26a0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2996_4.npz",
+      "bytes": 4402,
+      "sha256": "ca6a99cac4cbd178bfec7c5f80c7a815335dc5878aec1b43fc03317d1c275387"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2996_5.npz",
+      "bytes": 4256,
+      "sha256": "f1c44fa2eedc15ae24bc8d5b84668a64e971019e6e206c4f8b66cc48bc49e08c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2996_6.npz",
+      "bytes": 4436,
+      "sha256": "3383bfb4e51b5f9139d028ab6281295533543944259682c032e889aea5425118"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_572A2996_7.npz",
+      "bytes": 4323,
+      "sha256": "0ad7c0e8993a605814d3b57ac0c3c84f5780711f26485eaff872c02290ff7e26"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_inputs.json",
+      "bytes": 24319,
+      "sha256": "67260bb79abb15ce9af9b9943228d4aaf54457dd1249fd07a5fe0a053ec60987"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D0_star_plan.json",
+      "bytes": 996,
+      "sha256": "07f3deee3bc0b89c77052db4765f7f09e5958c89e4c934a2166735fd40dc774d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/D1_optimistic_noise.json",
+      "bytes": 2391,
+      "sha256": "9f08f3b393ed624c825a717d6cd89389f373aec28cddf3a450afa062bce80e1e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0.log",
+      "bytes": 3768,
+      "sha256": "b30e27e087be037bea003d9973d57d97fdb519eb7ff042a324b8af215b55b117"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A2960.npz",
+      "bytes": 5260522,
+      "sha256": "ef2a5d8c2f2926e0c01a41d4b303656b67663457c4c205b8ae315567d162da8c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A2962.npz",
+      "bytes": 5511442,
+      "sha256": "96cd080e39fb9281333c5d10df06b722f630435d5db51343c87700c659a9c2f9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A2964.npz",
+      "bytes": 5254657,
+      "sha256": "f760d0a68eedd20f78dceeb7afc413e1f30e32b8814b290d11e846361c895aff"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A2966.npz",
+      "bytes": 5255759,
+      "sha256": "26e2f1995a065466716f1a524f5b0eb567262c58bc78cfbad6968e6aab3ccc4e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A2968.npz",
+      "bytes": 5304775,
+      "sha256": "96c619ba50377be465fe8dbc97ee4743470e5db7234adfb5ddb3feb950314e04"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A2969.npz",
+      "bytes": 5557279,
+      "sha256": "6024072019b02c6886d73f18b879bf9ed06b541d9a923897ea5c2dc14b105f34"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A2973.npz",
+      "bytes": 5288128,
+      "sha256": "56fb542f218dede20eeb4967f17ba00f184056275862442791a498370e4deeef"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A2974.npz",
+      "bytes": 5553338,
+      "sha256": "237ad40e6f42bb5d3d01fbe01e16bff12f5f596a0c6a713c51124fd25beea243"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A2986.npz",
+      "bytes": 5306779,
+      "sha256": "6b8fe28f0b7e8a0307262029ef92e8a1f28457d0fb0e2b02e61a8b6cc1d62a3d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A2987.npz",
+      "bytes": 5296865,
+      "sha256": "3e1be660b93ecec3439f7c640ac1e7956c2389cfeee10953457a7c0fa04c9281"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A2991.npz",
+      "bytes": 5310014,
+      "sha256": "825ae0de0c139fe23849d28474a03bc3312ef433816260c61fad89e97063b015"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A2992.npz",
+      "bytes": 5297383,
+      "sha256": "056e3ee4b425ea2a3b1e118cdbb9db0e29f61f86ed6e8cea2ba7722da97b9e73"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A2993.npz",
+      "bytes": 5557737,
+      "sha256": "e883fb48b15e50540f5353705cf26ac2c8f2b6eb953fa2a46fea6af558170a9a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A2998.npz",
+      "bytes": 5306370,
+      "sha256": "8e57889d3a6bb981f74554c2603841b61b0d4ae0e5e32789fcea77a2d7e6039f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A2999.npz",
+      "bytes": 5304625,
+      "sha256": "dbb0c718b3399a2c050b32de22e903ab8217c618adb15023fd97e865ac190efe"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A3004.npz",
+      "bytes": 5297740,
+      "sha256": "89fbaa7dca922e3fc23542938493c514a44cc18f18f372c209523e1e6f14319c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A3005.npz",
+      "bytes": 5295364,
+      "sha256": "5e4920ee092b93545fac760fbd67e92a8de53d9312d6b089d24b5872d7d2c962"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A3012.npz",
+      "bytes": 5260459,
+      "sha256": "cd5bf274a2d40ad72b65a244db8bd5a01cb7c492c44a61ffebc0739adde17a2f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A3016.npz",
+      "bytes": 5263915,
+      "sha256": "c833e53afb7370bdcd06b3aee487d92023be230560b919610ea30c4b4eb3147c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A3020.npz",
+      "bytes": 5269066,
+      "sha256": "ffc04ceb382e95250f0ab0d9bf14a4a94a9da8ad96c1d94faf558127777e0278"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_features_572A3024.npz",
+      "bytes": 5260066,
+      "sha256": "6d6231970ef81446d7b4c6fe0de16b0c83b24beb82222e73b7f8aa19206b89d0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_inputs.json",
+      "bytes": 7291,
+      "sha256": "affea0c9749edab665607514a6af6a272b3b829d6e5e4e56c3bce5530ca2406e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E0_plan.json",
+      "bytes": 1628,
+      "sha256": "f482a82f6a7f451898a9a5eb1ae55a15e5b17f67290b8bf4ba8d37a28649159a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_fit.json",
+      "bytes": 6960,
+      "sha256": "04d76ca24e1d2af338f4e4c78729276df3519aa45d95678425011400753c90d4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A2960.npz",
+      "bytes": 549104,
+      "sha256": "5c18ca949a578b36e75c525ec0a25d8c153463ff6819a88aa1ebb72ea398ac8d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A2962.npz",
+      "bytes": 549089,
+      "sha256": "d961e587293d2e033ec060a37831ffe181bc868ab57691d4f823a42699279779"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A2964.npz",
+      "bytes": 549401,
+      "sha256": "209ea7534df975e652cb0308c6f1716c9e98a8ba743dc8f889be4ff86fab33a8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A2966.npz",
+      "bytes": 549248,
+      "sha256": "89ea8f8b5a34410c4fa5ab2bc1ef162c24ab33fcc0552584ae46bdb8a78da662"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A2968.npz",
+      "bytes": 546361,
+      "sha256": "d648e3012466ce57b02d2e7ef7a4ed0510aff728e25174faac77b8d6369ba420"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A2969.npz",
+      "bytes": 545187,
+      "sha256": "ee24d749b20d0ca601979f460b613a45f4e4066fe0523d703be13704e8c8cb23"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A2973.npz",
+      "bytes": 545913,
+      "sha256": "a38c2dd8a207e00566538fb12b830e349c736ccfd78aed504a1be063fe213144"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A2974.npz",
+      "bytes": 546129,
+      "sha256": "97e3cce40befd0c93b38d30e50320d270ad3842808d4d1a23b08e1cdd0e9eb60"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A2986.npz",
+      "bytes": 548177,
+      "sha256": "867e7c84f579e5fccf7b0c0f482ed60a7258e0544638c986c0cc949ace72831d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A2987.npz",
+      "bytes": 546120,
+      "sha256": "927a2ea1b3c4fd392c1e10580df82772bddb0eebb8f88ed6a583fd49cfd02256"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A2991.npz",
+      "bytes": 547046,
+      "sha256": "d8ae2df594b6c50c7e784f3f85ada42f759d75545b044d1f72d29fd1c8c2fcfc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A2992.npz",
+      "bytes": 546139,
+      "sha256": "95740ed4b443c80326468c7b3fc5b27360cd6a23fc97df4b1ebce9f3442b3832"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A2993.npz",
+      "bytes": 545307,
+      "sha256": "c7301e4d28bb7c8127ce5f79ac4afb5950cdb7a0dd34e516a008c1296f95bdc6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A2998.npz",
+      "bytes": 546877,
+      "sha256": "1967e58fc1aae871282990485a279e53ea62d6bda2d4f0a5525d7c917e923a77"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A2999.npz",
+      "bytes": 545761,
+      "sha256": "57e36d8488b3cbf3f8e4b6552228f3cb550cdc4a12b964629626b8413ce66a83"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A3004.npz",
+      "bytes": 546573,
+      "sha256": "14df99ee2c3dd6132207a699a19f1c82b4847adea4106233366bb4fb835454e3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A3005.npz",
+      "bytes": 545415,
+      "sha256": "6f7764c1028051c21440ecf3cf4acc1c98f20498d42754f50caf6f63a3873284"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A3012.npz",
+      "bytes": 549040,
+      "sha256": "719487656bafeb42f7772136ca8a9bf582f26d24b76206ca23337e2f551b88bc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A3016.npz",
+      "bytes": 549117,
+      "sha256": "c1b0db0d01bbe92587f462119d36bc265f490eb3489c99392133bf7aa5d4157c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A3020.npz",
+      "bytes": 548940,
+      "sha256": "64bcc6a02ef7843492fa47968db00aebeb145259bfa10cf8ba214e33b088fa98"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_real_572A3024.npz",
+      "bytes": 548763,
+      "sha256": "f84b61bb856cca254f40a458c874512a430bca6d33872907939404d12768414c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A2960.npz",
+      "bytes": 503508,
+      "sha256": "138d0006699b412531ab4cae6c654e0188bde83f2c0c4dfc067f750ba250136e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A2962.npz",
+      "bytes": 500600,
+      "sha256": "48f7d175aa0f7992227a9cecbe5d6b4df6c1635df56fa88dadd95bc81245d05a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A2964.npz",
+      "bytes": 502316,
+      "sha256": "1d027d487a13dc653afb6bc00d115a512fe2ebbcbd978c0abf7fc7ab0c426073"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A2966.npz",
+      "bytes": 502301,
+      "sha256": "4ce072ee17456d71ecc8a144f297bbc0a31f213902f30140243ea54d7fb87598"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A2968.npz",
+      "bytes": 517813,
+      "sha256": "7b1217117c7c2e9bc6f3021df1898ec02fc6068721c984b903351bbcc287b236"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A2969.npz",
+      "bytes": 517897,
+      "sha256": "b63c86b231ba61040ac31de345bbd8442a77eed860e50df8c7214b113065e740"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A2973.npz",
+      "bytes": 514222,
+      "sha256": "75ab2f6fb6a41aee768792456c5ea7a53cf12428b58ba9254a734815ccc72914"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A2974.npz",
+      "bytes": 518602,
+      "sha256": "a87d756cbea53c1742aed20129822c4a5f4992793e3abbb03b3b67296985676f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A2986.npz",
+      "bytes": 522997,
+      "sha256": "d875610bb92e8bd709c87c18b7ecdc95a6f86732be7d1f05c6b60df6d56b41b7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A2987.npz",
+      "bytes": 522224,
+      "sha256": "4cf7477b3a1a114112e0bfdca3ef7367eb9efae5d0c9acd13ada5cdd2e664239"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A2991.npz",
+      "bytes": 518467,
+      "sha256": "862b61e36392e06c07ca6f53df0c61990a3a9a3aac67836d74fa5506b28b0ea3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A2992.npz",
+      "bytes": 517791,
+      "sha256": "2575da76be8252de8280bea42239c7108501e98f18d56b9c3395ea386cc76edd"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A2993.npz",
+      "bytes": 517102,
+      "sha256": "f3285630297e4531c2858ec55fa8696d617388c90d55182a0e5e4a6cad259ed3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A2998.npz",
+      "bytes": 517009,
+      "sha256": "f821a78d78fcc7f5bb7b990ab35c030d268921ed3e51fccb26948ad93c723a11"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A2999.npz",
+      "bytes": 517839,
+      "sha256": "a79dde6122bb9414b5c39b20055a44762551c64cd8627e60d2446520fec6bb90"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A3004.npz",
+      "bytes": 515878,
+      "sha256": "00c730603842a3f0577e52424a124abb72f26dfa0fba4acfdf0e4744b18b4d80"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A3005.npz",
+      "bytes": 518264,
+      "sha256": "42558de4c3ebe5c6e5e09099f79b58631e0e5ce26a4f005d3eb7930a62a0497d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A3012.npz",
+      "bytes": 501858,
+      "sha256": "77dfc356a1e6f8510922bb57ad357a6ea8d30f597c50fb8fd26030ac92604326"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A3016.npz",
+      "bytes": 501525,
+      "sha256": "2160177ddf7094ece3ecf78411e283b7cd52bbe7279cbdccaf59dbc7af4fbe10"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A3020.npz",
+      "bytes": 501603,
+      "sha256": "de7024856b49e42ad27a999b9aded84af34361e9ea10cf1ac7221b57ca046d55"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E1_rotated_572A3024.npz",
+      "bytes": 502168,
+      "sha256": "01e85abcd5c8397b2e27d5f0a19f2085e945ee35bd94121a3216b5daec4a1432"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2.log",
+      "bytes": 9867,
+      "sha256": "3e46d045cbc27a128007b37d19b47eb3e6cfb29fd7e40657eba7ad05c033cc3a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2_reserved_572A2960.npz",
+      "bytes": 1893438,
+      "sha256": "990cf5650663940074a63441e8d41955dbf91d38ad8f3d0aa83a54607454dc6b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2_reserved_572A2962.npz",
+      "bytes": 1893598,
+      "sha256": "a840c61072d0ee3b69210f18fbf2f213cc747644665933a02e3c15223e0ec764"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2_reserved_572A2964.npz",
+      "bytes": 1894167,
+      "sha256": "874b6cdd4e2c24b341438d1d7743521995a4b615a66ad86436549d8367e0a0a6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2_reserved_572A2966.npz",
+      "bytes": 1893372,
+      "sha256": "cdd4b94c8868e8801f41dfbaa47443177320a4d00cc1b15166c3c23f24fb673b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2_reserved_572A2968.npz",
+      "bytes": 1892413,
+      "sha256": "8a82e29079832fc95ec18f7843693ac9357c4db0c457bd631716fbfb2985f828"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2_reserved_572A2969.npz",
+      "bytes": 1891825,
+      "sha256": "cdfcd3f79ee9cbf3cb828afa82e5cd90a4e9eaf88e3e29254e905f61ccda9294"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2_reserved_572A2986.npz",
+      "bytes": 1893406,
+      "sha256": "f1b70428deb038887e2e75d7d6450977ff813835291bb5f6545390e0d9d8c51b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2_reserved_572A2987.npz",
+      "bytes": 1892698,
+      "sha256": "5224b66a974f940cb34083523821e9f62d4c3625f5f6562b2de7ca9a015630c1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2_reserved_572A2998.npz",
+      "bytes": 1892670,
+      "sha256": "ad02b32e876e52b41fdaf918b0fa358c1101321bf2224c7eca0803868e3c3bdf"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2_reserved_572A2999.npz",
+      "bytes": 1892453,
+      "sha256": "2c34f19f6f5351bc966537e6eb0124639d9a065a6270c40fb8626b8677ebb80e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2_reserved_572A3004.npz",
+      "bytes": 1892140,
+      "sha256": "694002c0ac18729a14a243e9016f0551c2beba241bdd28ab012e042da89415b5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2_reserved_572A3005.npz",
+      "bytes": 1891861,
+      "sha256": "d3ecf676d87770358cfad97008db58726401a9af4907681943959f43266b4676"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2_reserved_572A3012.npz",
+      "bytes": 1893954,
+      "sha256": "9c0b7e1060ad6041053219f48a4eea79f96c664e73ebb48199e4ceb818a44622"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2_reserved_572A3016.npz",
+      "bytes": 1893689,
+      "sha256": "11fe2903d27792c63ce236665c367df74671f8fc5ec3bcc6e53f75689d96d5fb"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2_reserved_572A3020.npz",
+      "bytes": 1893679,
+      "sha256": "ab7daee2f1c319a6ef8c958fc804f581b7abd9c049a3c4237b742b5d4415687e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2_reserved_572A3024.npz",
+      "bytes": 1893210,
+      "sha256": "117853defe35d3c1ed62f5b6d41c2ef25bcfc7a326d7640c793a38bcaf9012ea"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2_templates.npz",
+      "bytes": 436035,
+      "sha256": "492a412ac483ad23d7141057fdb76f51dff42b2ddb6a16b3568931c52eb899c9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/E2_validation.json",
+      "bytes": 370664,
+      "sha256": "8384fcb128391829f3530b4cd0821d4d72e3816788fa78602caa2bc656aa0d1f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0.log",
+      "bytes": 3828,
+      "sha256": "ae348c951fa3cb218023fb3605385940a9d206e81d74b9ddce21b6635b9315b8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A2960.npz",
+      "bytes": 5269852,
+      "sha256": "5ad854b4942fa0ebc7ec6212afe7a1f0b2523b998fe6ba5c4f2036917ad2c206"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A2962.npz",
+      "bytes": 5510969,
+      "sha256": "5f1736a37b7f6d4388cb24561407ddcae2d5d15eaae1c3dbfe40acf00a80172e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A2964.npz",
+      "bytes": 5261882,
+      "sha256": "0d42fe158b2a32e48f53e94f1e35d644ea17b72265f5f44efb25d54396e29621"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A2966.npz",
+      "bytes": 5262044,
+      "sha256": "d8cce929c13beec265ecc52205163bc2eb1aed9f6bf752deb0ee705a73bd2811"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A2968.npz",
+      "bytes": 5309345,
+      "sha256": "1638743975fbbbf5ec2e5ca8b154b8acba088ff8f6b6e334eda0b7d5f469ddd7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A2969.npz",
+      "bytes": 5557159,
+      "sha256": "040524a1018f368e833018f6d81a66a953137bea4f38462bb1c8821abd1e683c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A2973.npz",
+      "bytes": 5292404,
+      "sha256": "d769d08e2dc4622eb4335de981317f545ab62f85cc15659bf6cc0477ce3b61db"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A2974.npz",
+      "bytes": 5551897,
+      "sha256": "c02cb11ed654f1bc08d7612496b8e09d2b1cd3a8b77e2e60de5993b99ade5553"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A2986.npz",
+      "bytes": 5311774,
+      "sha256": "e07d907ea3c9f31e75163dc1156ec68266a0dfb12fc4764fa4923a4b803e7962"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A2987.npz",
+      "bytes": 5302230,
+      "sha256": "17416437d1fbc857dad004ca379f1f88a42ff5ec9cbfb21e4e2ff585de00b1d7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A2991.npz",
+      "bytes": 5315725,
+      "sha256": "af38f9d4122940fce3415beb4fea8a5ef10db2d65fc10ec739dc7ce46bd66ade"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A2992.npz",
+      "bytes": 5303333,
+      "sha256": "cecdd1be5a302caad4151702f2adb27e02d0bc181b7d5c499f82883a91dbb162"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A2993.npz",
+      "bytes": 5555809,
+      "sha256": "2ccb51e7a1f3b0f5721dae9cf75187d91dac9c9e8a2483397a7a800a271a552c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A2998.npz",
+      "bytes": 5312141,
+      "sha256": "5aa7f54329361df9914a51a106bec2ba22432f109aa49a568620a017af185771"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A2999.npz",
+      "bytes": 5310871,
+      "sha256": "5ccecfc3f5950670f0b5aad802dd7d351f7a7bbdc874a389fa0cd74c5c829284"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A3004.npz",
+      "bytes": 5303454,
+      "sha256": "530b966035f9f0d3d05035adf28aa5f33790c430209b58f1087fa734c9ba4a74"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A3005.npz",
+      "bytes": 5301894,
+      "sha256": "a6aa5a6d894eddeecfbc4b280e5b62133fb12a2b8e768449066309ee49000ec6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A3012.npz",
+      "bytes": 5267133,
+      "sha256": "2fe7a7a7ae79ec307bf567155f076d00133a6778aa26a30c355fd3f3f9acc783"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A3016.npz",
+      "bytes": 5271285,
+      "sha256": "ecb6ea00a9095801d0d69b7efea666d4154126542394d05db0c89ea045ae3e90"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A3020.npz",
+      "bytes": 5276929,
+      "sha256": "1cbfd999a7329f84fd779b9af4cdfa8080d0c5b38d62ed4cc79404227f0c3c70"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_features_572A3024.npz",
+      "bytes": 5272318,
+      "sha256": "438729c6c48f14fc5631f3cc9add2a1d75835830247c579f28495b515037373f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_inputs.json",
+      "bytes": 7354,
+      "sha256": "2d7edf2e39cf64549565a7d311cf5ef019e8815dc035bf3743c8535d89fafb21"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F0_plan.json",
+      "bytes": 1693,
+      "sha256": "065a8dabf65528886e48bd31d77c10117ba906eb4678eaceaaf3aee6891791c8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_fit.json",
+      "bytes": 7085,
+      "sha256": "8712ad8622dd2a977f1331767142a53fc970522b19b834b41ee2d2d978ca4951"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A2960.npz",
+      "bytes": 548344,
+      "sha256": "9553246f0c825d7f19670ecf28992ab543d3a36c9477868f96951496e56a0022"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A2962.npz",
+      "bytes": 548308,
+      "sha256": "52f912034cd4475a27ddd8496fea40d53d0f8d8607a420b2f6e9d90ef4323c98"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A2964.npz",
+      "bytes": 548526,
+      "sha256": "0a3357072685bc795759e2299fb5e0ef3fd8e35d4bac45080b48f70e43380aeb"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A2966.npz",
+      "bytes": 548301,
+      "sha256": "329dc385bd5c49244aadf260f3916eee67d25d0d4fb3a07d2795633a52132785"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A2968.npz",
+      "bytes": 545054,
+      "sha256": "dc653b426dea8fd8709c93503406e1d37c376e6c579563ecb681e739b4760529"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A2969.npz",
+      "bytes": 543686,
+      "sha256": "a9b7495a55809153f446e45fb79a142512564eba95ce64bb582ced1d5dab8388"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A2973.npz",
+      "bytes": 544565,
+      "sha256": "bbedc786393248b70ae5516925877ca91bbbdd22f35b4832680c74ebf95a4717"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A2974.npz",
+      "bytes": 544723,
+      "sha256": "cbbeb202146bb97e3d86b278694912f4013c1f5876af7de9425acc94106c5843"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A2986.npz",
+      "bytes": 546978,
+      "sha256": "83db9ff2f81fcc3b78a67cfef6b4bb295b86fc4570347a502381afbccb16f713"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A2987.npz",
+      "bytes": 544655,
+      "sha256": "499b9ee11953da097bae170156041d9928955217a879248b160543b1ac01fad3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A2991.npz",
+      "bytes": 545793,
+      "sha256": "81169eb9f6a327726ef77ae80426e89f6bda354117ee9228e25539455f0a70c8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A2992.npz",
+      "bytes": 544647,
+      "sha256": "c4357412c355f67e57b7c2b8cf1b3b1c9ae465bf0edcd39d0c092df7ca75a67e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A2993.npz",
+      "bytes": 543686,
+      "sha256": "f03dc9a3433b71f335143da35bf7a5c171dfa5de5f84da5de4ac66fd8a6d5293"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A2998.npz",
+      "bytes": 545464,
+      "sha256": "9ab2a1ab5416f412d5ed5ee142edb7d8ad610b7767ad19a20e738d8058209097"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A2999.npz",
+      "bytes": 544251,
+      "sha256": "a2b116b2a8b32def928208edb9eb0a7b1f78d505129e2a8098a2588669e98c0f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A3004.npz",
+      "bytes": 545195,
+      "sha256": "cb1e5bbcf3e9594cf5df6189ffd38d281ff1cc87fcd58cde0ba39f7706026521"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A3005.npz",
+      "bytes": 543981,
+      "sha256": "400a7fab5c63a122a53cb350bf201c88273251301b2c30ae0fcb42ac431a9707"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A3012.npz",
+      "bytes": 548232,
+      "sha256": "6327e0397e86067408b47049bcaa07543ab020e3944caba6ef5cbaf67bc2dbc2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A3016.npz",
+      "bytes": 548346,
+      "sha256": "d15817024c9518824e46e8869eb8b9e049735117a3c1c3b9cfb9458a6cb8f052"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A3020.npz",
+      "bytes": 548249,
+      "sha256": "f64b59d18cdb945fe51849ab4bb861481c5d46ace5e18205b326c5a64630212d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_real_572A3024.npz",
+      "bytes": 548146,
+      "sha256": "4e83cf920f64cebea562162f99a6ffd1c24ee28ec719369b9341e122e61e190a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A2960.npz",
+      "bytes": 501261,
+      "sha256": "8665b57f6e490413a00ba394c3a810f2fe3633209ba7023222283115957c5dca"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A2962.npz",
+      "bytes": 497703,
+      "sha256": "47d094adcf56fe9dc8b1ca6747a8a406da7bc6ce3ae0f046302ddf1d52591e51"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A2964.npz",
+      "bytes": 499287,
+      "sha256": "d4409d76fa732ef576827418e0e8f5d5a81fe54040e47835f3450c7cc4779585"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A2966.npz",
+      "bytes": 499037,
+      "sha256": "d8b9623195e58b7b7612cf22c0bb0d3e30febbddb3ccbd87093a722e219334a9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A2968.npz",
+      "bytes": 513936,
+      "sha256": "aedf4f7b358d4fc5301d1fd3f2f50aff2817941ebf868b9b8783ea1c72499fec"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A2969.npz",
+      "bytes": 513359,
+      "sha256": "d2822307731314386d64aa357318ff2a893069945ae5577c9bedebeba948aeed"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A2973.npz",
+      "bytes": 510677,
+      "sha256": "c3cc5b2061b159efe472a834649e2928792815ab55458958c14b17015ded0ffe"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A2974.npz",
+      "bytes": 514034,
+      "sha256": "10ed9c0f3dad71b8e99e8957d18128d91f60f521b4edec5b0591c484fd5099db"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A2986.npz",
+      "bytes": 519230,
+      "sha256": "0f983fd71bd0033e0c84f51727eb5ddb639dae40d4c948e68d321562aa1857b2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A2987.npz",
+      "bytes": 518360,
+      "sha256": "fb6d170f25adb226e30a87fb0165998450e4896649f82a172ac8653b6b27163a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A2991.npz",
+      "bytes": 515244,
+      "sha256": "1edb7df13a0a17d06a86ef45f52476649971f724b7f11c598240bfa95550f4f7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A2992.npz",
+      "bytes": 513496,
+      "sha256": "73f1a2d0ec24f9ccac9ed2e3fbb52f6caf924be30eeb129325689a471746d55d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A2993.npz",
+      "bytes": 512464,
+      "sha256": "93e1247b7b99475dc0969ba59df59c6327e7163f582ca2bd43859f7e013d5c09"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A2998.npz",
+      "bytes": 513348,
+      "sha256": "ac52b306dfd5c453624f98774d6662c21d6792774c27e1156991e595503d239d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A2999.npz",
+      "bytes": 513523,
+      "sha256": "4d56964c63c9ccd0fcf95da63a32a6aacb85ef04bf91e0b7106902da5c9ec731"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A3004.npz",
+      "bytes": 512141,
+      "sha256": "2e465a2b859490217ca86bc85380c1a3ace92f39211b2f6b13efa4c5c137cb89"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A3005.npz",
+      "bytes": 513928,
+      "sha256": "d8a23c39858d74a137ef9f58eebc5d8e4fa719300064fb18f57dc803281e5f65"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A3012.npz",
+      "bytes": 498884,
+      "sha256": "e4314bdc275aa59ab782664ca7e5cecc82ea65656ffec7a694d3b98ecc0089e8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A3016.npz",
+      "bytes": 498737,
+      "sha256": "d797b05b0c75a73fdc73972353d45909247a878034bc1c0acdffc0605232c783"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A3020.npz",
+      "bytes": 499481,
+      "sha256": "20acee19fc4de3f6cce6f4d27a66864c547b932f644408dbce2ff8794afc84af"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F1_rotated_572A3024.npz",
+      "bytes": 500752,
+      "sha256": "19b1e6c2b17fed8fed2ebb35b17a122e11b14148c3af609c1b13e24f635ae05e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2.log",
+      "bytes": 9851,
+      "sha256": "676f66f52553479e218faf1577e94752e4294ed47e9dd670bfb63b34844bfacc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2_reserved_572A2960.npz",
+      "bytes": 1893294,
+      "sha256": "ad837f7e9c4b796f9ba43fe32eb1df97b2fa3368d3e4e12f20bcd3f1e912be10"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2_reserved_572A2962.npz",
+      "bytes": 1893344,
+      "sha256": "01af57cc29f428db8797e1170fe9777b6701eed0a83725600f9662bfac8ed424"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2_reserved_572A2964.npz",
+      "bytes": 1893879,
+      "sha256": "6d434c9385e72c2d462fd1639bdcbb8c47f05e20a40ff822867dcd1646c2f20b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2_reserved_572A2966.npz",
+      "bytes": 1893012,
+      "sha256": "41c60fca3b88f7e58acdfe9b6abdb527bcddbe1fb9cfb4f6be0809a689895a30"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2_reserved_572A2968.npz",
+      "bytes": 1892032,
+      "sha256": "b611ba9b7682e9a44b1569e1a4eb4f242658a4bd23d97b917f565f659e730277"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2_reserved_572A2969.npz",
+      "bytes": 1891468,
+      "sha256": "1b9a1a7f6cffc604071f279d81fc0c4d033cb332bb24256283488afa2da188f2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2_reserved_572A2986.npz",
+      "bytes": 1893087,
+      "sha256": "26378a0b1f5dbd13a77bf260d615f3b673c90695efd3c3723b6932ed202be077"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2_reserved_572A2987.npz",
+      "bytes": 1892353,
+      "sha256": "5ec6609164ca0a29baa5de1e480590c4a35091879b855265cb9b5503e7e26d65"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2_reserved_572A2998.npz",
+      "bytes": 1892456,
+      "sha256": "814f38757f99e363687ce037efdf37d4124742406ea2b69b000311c732f2a3a1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2_reserved_572A2999.npz",
+      "bytes": 1892185,
+      "sha256": "10c2c6b50c3a445951e94196e8f9bb9325951e5f938ded72a4033a47ef88e3ce"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2_reserved_572A3004.npz",
+      "bytes": 1891747,
+      "sha256": "da4b324c30c03d8d6addbc075a87d0421d2f3c56d39f5f0930ad8b06f50bf8d8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2_reserved_572A3005.npz",
+      "bytes": 1891649,
+      "sha256": "f995f321bed4bb6359dd08f9a5819b23706c68b78f5777652bc207e934d85683"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2_reserved_572A3012.npz",
+      "bytes": 1893828,
+      "sha256": "6dc6a5e5d47b8c290c7f6fe4cfd88215e7477557b2b60c5008ad3581373e0dc6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2_reserved_572A3016.npz",
+      "bytes": 1893427,
+      "sha256": "afa85b009f886e0b5c240a9fac23be285c194cf434f05dcc604d6b24f269368c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2_reserved_572A3020.npz",
+      "bytes": 1893421,
+      "sha256": "a38298d578f662e7cd9bb318b1c9b7e54c23fe81c630bc0111511b5b447448cb"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2_reserved_572A3024.npz",
+      "bytes": 1893074,
+      "sha256": "1f463bf3eaa7290069795006408e26dbc6995e00511c00236a72c2010b3ec78b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2_templates.npz",
+      "bytes": 431759,
+      "sha256": "f797f1df8c402f6fec51c796d5c0ad00ecd9a7961c708abe6e24ccefdc790756"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/F2_validation.json",
+      "bytes": 370365,
+      "sha256": "91c9aacf2eeaf9efb00ba90edeccbbf259d7673309f57d0c9f4f32574aeedf96"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0.log",
+      "bytes": 3803,
+      "sha256": "091baa9d26c12dcec7250defedf3de76beb0b406dbce4e6505911bee5595dc08"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A2960.npz",
+      "bytes": 3938832,
+      "sha256": "16b64e177702ad39bb91ec688aa5f6f9edad6b4b134cdc8e018aaf4dea506792"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A2962.npz",
+      "bytes": 3936955,
+      "sha256": "5017debc55a30384640659da7f15e589d0c8c0f862a221e976311738ac2b928c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A2964.npz",
+      "bytes": 3937949,
+      "sha256": "5910e1dbbbef543a455800745ba53c7f9a189c2f96f76b6fbd2653bc559fa5b2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A2966.npz",
+      "bytes": 3938606,
+      "sha256": "bae98d1262116c3cd093cc99fa25fe688a18cdafe3ded306f8e28e8eaae30848"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A2968.npz",
+      "bytes": 3979066,
+      "sha256": "a1be95482bf9a23ef2f8031477845fa896b31ec86545d3ea512edb6499dfac47"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A2969.npz",
+      "bytes": 3979749,
+      "sha256": "0f85619145d2bc55fb5e9763f4ff6bc59e756413b26de51cd965d0fac2c9164c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A2973.npz",
+      "bytes": 3969180,
+      "sha256": "074d6158670d8584028f2eb0ba49254e31eed003376a08fda84d6b9aca6d08d1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A2974.npz",
+      "bytes": 3974941,
+      "sha256": "fb113c06ce90095f1c14d2fb01cc8c0bde2d8f6ea360c88a808ab20d36ab6129"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A2986.npz",
+      "bytes": 3987905,
+      "sha256": "c23b2677bfc404040b54f9f06d8f54b2d13ca25931cee46739d786e29f583626"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A2987.npz",
+      "bytes": 3979665,
+      "sha256": "4cb3951bc389bce5b57bf11705b29975918bedfb4a617ff50e2144dcab6b2d36"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A2991.npz",
+      "bytes": 3987552,
+      "sha256": "c77fea846dd7b9185bd1b77ef1bf4cecfe5f9add6e64c8f7031feafc580dc00c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A2992.npz",
+      "bytes": 3972853,
+      "sha256": "3af27024e39b5b17abd931cae54c33f57636cb1b15b10a3c08536f08f9f7aea8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A2993.npz",
+      "bytes": 3980358,
+      "sha256": "2ca10d6dda59aff2e048b070eabf07ee1995cd60dd153006b2d57c0f95f4c0b6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A2998.npz",
+      "bytes": 3981671,
+      "sha256": "248761d8f7464c9723ea8df225ae1add9f58a0a49402656060803bc500b96762"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A2999.npz",
+      "bytes": 3980644,
+      "sha256": "42b458c9b9e6ccd4f3b187b965931e8093382519f37a980edba4d163454b1411"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A3004.npz",
+      "bytes": 3979242,
+      "sha256": "68de967979e3a67a23e437f54ecaba7feb3cbedcb486bba0eec06087272c23d5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A3005.npz",
+      "bytes": 3978558,
+      "sha256": "e15fec8f79c70598155d08ebbc30102f21a00139c65fa080154e4afc610bab28"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A3012.npz",
+      "bytes": 3945592,
+      "sha256": "005c197db386059c786667bfdaf5691213c3ca3959c62023bc67a5f9c9c26885"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A3016.npz",
+      "bytes": 3944381,
+      "sha256": "f9154a24c0867e90945d6df0e059ac980fd1cdeb38780ffc71385f996a404e7a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A3020.npz",
+      "bytes": 3949073,
+      "sha256": "1740fd3aa78889bd8cc451d688a317c88fb6d95abf8ce1f7639b0722893c5907"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_features_572A3024.npz",
+      "bytes": 3946055,
+      "sha256": "461c1ae37d3d8e4f70bf35b7d041ac1701d32a416c929d3fd506623a3e275b20"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_inputs.json",
+      "bytes": 7395,
+      "sha256": "61570e8a6d4fe194004ab919fdb8186e71108242cec85e5fc423285752a1f05b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G0_plan.json",
+      "bytes": 1731,
+      "sha256": "e9e82113016e011a8772d69bf0beb51bf51ebc1489b3b357c262625732d9e4f8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_fit.json",
+      "bytes": 7099,
+      "sha256": "51560e076b9d58216eb06e54795d738fc782585c14e75e654427af6cd5e5ffb0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A2960.npz",
+      "bytes": 549604,
+      "sha256": "da60e0601ea953871e9fa0cf01d4da0840e3bc25c31a07f8fe072d4e7b2d267c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A2962.npz",
+      "bytes": 549586,
+      "sha256": "b4444dfb33ddb84204496ae93ad49e844f26767d1d8653aeba3e5edd652644b7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A2964.npz",
+      "bytes": 549766,
+      "sha256": "ec6adc2cb65bcd845702be5122537789d5500e17c26c362e4f6595d5d0035cc4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A2966.npz",
+      "bytes": 549672,
+      "sha256": "e4ba42bf0bfba2f9735d76ae9cda51c1fd2b044ce7d3e6e7d639950a8c8afb9d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A2968.npz",
+      "bytes": 547138,
+      "sha256": "d61be49b87c79c8aed3734c60e76665a9781a257becab14f66ab647369ab5f35"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A2969.npz",
+      "bytes": 546359,
+      "sha256": "a08e915c00856382e09c0d31b50557f4c9750a0c90f772baa948c654fea3ffcc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A2973.npz",
+      "bytes": 546491,
+      "sha256": "c4027e662a44082bd84d627ef99ab1a64859f921edbe50804688f69a0a59b9a9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A2974.npz",
+      "bytes": 546982,
+      "sha256": "f6700c01074001b22d6887432ecd260316a79a2d83934554ba28195a873b1701"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A2986.npz",
+      "bytes": 548967,
+      "sha256": "72f9d3d6e2aa9ffc8cdfee9788331de9d89ac77133c2eefe2a21382ce0d16499"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A2987.npz",
+      "bytes": 547421,
+      "sha256": "b54fd7cc064d7e4ed4fdc6c7cd2e8031033c709db5beb8c4cb0eeb85800aba97"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A2991.npz",
+      "bytes": 547734,
+      "sha256": "b91a3acd51f983244f71ecabf4ae672643c9831babc5a780b245de0037b5b03c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A2992.npz",
+      "bytes": 546953,
+      "sha256": "4f145d481ec8ac9102d7cac09fefc7d8487fed5b1116c6f0d06b273010dc6762"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A2993.npz",
+      "bytes": 546396,
+      "sha256": "518e35bdb50a3cd6f164da3179015a81bd339bb6f9ea9cbacbb014bea3615abd"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A2998.npz",
+      "bytes": 547402,
+      "sha256": "79f597c8b67d9f3e820f05d37b0a883ac495c2390d8a9e312ad0ab03476bc984"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A2999.npz",
+      "bytes": 546921,
+      "sha256": "752650ea9c0d112a241e606cf98274298ee50b94e2473c56a06d0adf8a205688"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A3004.npz",
+      "bytes": 547219,
+      "sha256": "986f2820769bbe123237be8b3eb1133a14291d2a57049be8be09a2dcbc6cddd7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A3005.npz",
+      "bytes": 546653,
+      "sha256": "eeb923a851c1c010b503995845b1a55634b8bd0ba9210b322e50bd56f5ee3f25"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A3012.npz",
+      "bytes": 549450,
+      "sha256": "024d3f25489b6d7cc2af1102b68769433cd407482f8a3ac97b3bb90cd41c64a6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A3016.npz",
+      "bytes": 549596,
+      "sha256": "84d15cd572bde704f78ce755f125b440be933e95eaa730f4e1e1be18fc28fc8f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A3020.npz",
+      "bytes": 549359,
+      "sha256": "40895d074a61288bf83b2f66721c924c518c5dd5265c9323c27840c84daf991d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_real_572A3024.npz",
+      "bytes": 549190,
+      "sha256": "ea463ddda89114449f2986534503f271a0743874e522aa649e24579ea7771de9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A2960.npz",
+      "bytes": 323587,
+      "sha256": "cfaceb4be9cc981a91cbed1ce5dc5789e523479007fc9f4ad6559685a9eb0ff8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A2962.npz",
+      "bytes": 321433,
+      "sha256": "0cb74bdea1d16a7092c7c8357aea247d4c4b79ad127cde87109f62b612154cfb"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A2964.npz",
+      "bytes": 322014,
+      "sha256": "97db8a1089f37498cfe60ca42670638d58c0d41f68e256275171ebd2b0526aac"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A2966.npz",
+      "bytes": 322636,
+      "sha256": "34e1e175ab0a151944f1e8d8bc241efc6a9fdb724bf1c277eec9936d48879536"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A2968.npz",
+      "bytes": 344969,
+      "sha256": "468c04fc6a5ccb123fc22bae3bd485821882aa5ce271a909d6237713d90dc82b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A2969.npz",
+      "bytes": 338969,
+      "sha256": "9404ec8c978e3a64487f3301967f41140ccf507472e07d7f896043c69b187c33"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A2973.npz",
+      "bytes": 340647,
+      "sha256": "152c9e4140159fda2e974558d60f2503f4a436b649f08ef6ac44a4501c377c4b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A2974.npz",
+      "bytes": 337906,
+      "sha256": "44e5e5912d82a0f89e9394a8d27bcfbbe8ab430b3876732848b7f9f239c1ad3d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A2986.npz",
+      "bytes": 348104,
+      "sha256": "b019b1dd8c9aa9acc1cff71c7145e0f050e6ea7d7ad6bfbde8da5735b4691b94"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A2987.npz",
+      "bytes": 341551,
+      "sha256": "cf33ff4537ab9f213205792b699a2527fccac64cb17bb11bf9fe4c0e7d3e96cb"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A2991.npz",
+      "bytes": 348025,
+      "sha256": "6161ef803036708add1a35360cbedb043b04e5561e163324e7feef348e9e3c33"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A2992.npz",
+      "bytes": 336487,
+      "sha256": "80445373208be245fd92797a428c797a040e064c4bb3394eef39dbf5da9786e8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A2993.npz",
+      "bytes": 337494,
+      "sha256": "bf7f0b8143345632d5860468ca61d1ba4c34a9520f12d16dfedbdb931fa195b2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A2998.npz",
+      "bytes": 341699,
+      "sha256": "c001abc210152e5d11eec85e9b38b13e6f4fcdd7e0e82a956838d2ee4d122f49"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A2999.npz",
+      "bytes": 338126,
+      "sha256": "bbccf490d77aaa53dd123d9308c7f881624bec801a6d6df397bae0cc15a798ea"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A3004.npz",
+      "bytes": 340200,
+      "sha256": "16b3bb0402b530af7b370a96bfc661f42cb53dcc1cf761c66c9b07e4103250f8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A3005.npz",
+      "bytes": 337413,
+      "sha256": "4c3950c59e76f76aed1f35917cb331cdaeb07293f236cf2fac182cce4bfcec89"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A3012.npz",
+      "bytes": 322981,
+      "sha256": "d50ab5fee0cb0c5875ec49f32936700fbc76cd9e23f2c729111c4dd8663dd098"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A3016.npz",
+      "bytes": 322603,
+      "sha256": "5e860982d2d03aec9941c301aebc524d59e3e55f5dba475342d7ae4b01821eec"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A3020.npz",
+      "bytes": 322044,
+      "sha256": "57870b8c1bfb99402cbc621cf35668403484bf99c3dec9a0f9a9eb274cf31810"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G1_rotated_572A3024.npz",
+      "bytes": 323095,
+      "sha256": "1fbc50631d1754b0046395407b7120bb9b1f1a423ad7cf7b4eb0f792f04bd61d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2.log",
+      "bytes": 9886,
+      "sha256": "28d1856c642d70ac6cf4c5f90e880db3fef354cde5758b2640dc57fdcab94254"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2_reserved_572A2960.npz",
+      "bytes": 1893672,
+      "sha256": "e4a549d7989db166cb11e35dc1b26cba8a864ba0013c8b21533ec86e095aec91"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2_reserved_572A2962.npz",
+      "bytes": 1893829,
+      "sha256": "bfef3d281a58024bfa769d18dbb3824a2cc30bb055bb6e614587530f29a826ff"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2_reserved_572A2964.npz",
+      "bytes": 1894480,
+      "sha256": "a5ce74799c76a6e96f2ba60c7541b75d42dee515bc5446c7501957d1d1ef9718"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2_reserved_572A2966.npz",
+      "bytes": 1893523,
+      "sha256": "cde1994f39f2def51d76beb449a9f92cbc6a3d673dda99970566369e52545aa6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2_reserved_572A2968.npz",
+      "bytes": 1892709,
+      "sha256": "f95723bd7d2383a92b8f61858a33188837d511038e8d5d51e6af14f0852d31e7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2_reserved_572A2969.npz",
+      "bytes": 1892173,
+      "sha256": "4443ed3ed210c731d0918e446628e9b4fba7568d2e6e8b6384add849f4273919"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2_reserved_572A2986.npz",
+      "bytes": 1893365,
+      "sha256": "153830271587f64efbe24c010ad508312aba8db8be10321344ffe84014b7e202"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2_reserved_572A2987.npz",
+      "bytes": 1892600,
+      "sha256": "bdf82d1ec0fd5ac4e8041698df24c49e96da78c872b620fbca8058d4aff7102d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2_reserved_572A2998.npz",
+      "bytes": 1892611,
+      "sha256": "1694c26fcc9420a8f76e45f9a5311400b9916ebc40a75559ffa0ef9b2ba1f5a0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2_reserved_572A2999.npz",
+      "bytes": 1892453,
+      "sha256": "5e731c268c61325f959d752cf256cbe8d399ffa560f4881df97c923a121e76c5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2_reserved_572A3004.npz",
+      "bytes": 1892233,
+      "sha256": "67e433f282140b82a52277196c7027bedf3bf4dfabad6da5063e650c4ece0340"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2_reserved_572A3005.npz",
+      "bytes": 1892215,
+      "sha256": "0c5e39bb64aa88d555af48e098c121d1c516e26a7c68647f0c2666b1f0a6138d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2_reserved_572A3012.npz",
+      "bytes": 1894124,
+      "sha256": "64e3a0204f2b50099911746220b66d7c793909d13cc21a951c356d483246af04"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2_reserved_572A3016.npz",
+      "bytes": 1893744,
+      "sha256": "6c5209acdf8c74e57c4494356c2a335ec37ead35834d9f5b6646f67e40c44691"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2_reserved_572A3020.npz",
+      "bytes": 1893713,
+      "sha256": "79f056f721e571e1f432eeb81652358fb63c0b87f23de38e0a5e1e05f7f6ae3c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2_reserved_572A3024.npz",
+      "bytes": 1893292,
+      "sha256": "a4349d9be85821c2b369a56293e2cf26ca0712e10dc52a66dbdf8519af80ca22"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2_templates.npz",
+      "bytes": 436485,
+      "sha256": "d5074323bb46b6ffbd4dd6a5086f50d1159b24a341e8aec1c5f9c302d88276e9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/G2_validation.json",
+      "bytes": 370779,
+      "sha256": "a8c57287988bc07e025359c398c790ba08446385e0cfcd98d94bed1322b0785f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/H0.log",
+      "bytes": 161,
+      "sha256": "15b858bf924f2b881e7a292fc524842aaf4730d230df2749c9e32e0d70a141ff"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/H0_G_without_coronal_offset.npy",
+      "bytes": 525280128,
+      "sha256": "8387295e7cae7ed52c7ebe290ceb9e914fb818631bf40b6e7beb9a8447dc2614"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/H0_coronal_offset_ablation.json",
+      "bytes": 128569,
+      "sha256": "7a006c9e6c376431fcfbb8026b256633989d14dc3ae64a46592f4792ac1c51d0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/H0_weighted_coronal_offset.npy",
+      "bytes": 15680128,
+      "sha256": "a6c2129fc226cd4176aea402b2b4676a45561bc20256fccd9f0548327d88cbe2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/H1.log",
+      "bytes": 3437,
+      "sha256": "eb6abfc7c68a161d0b9fe7f4c8c69f9ced0bec5b3ea0b7a7c81501bf5d21ca3e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/H1_no_offset_all.npz",
+      "bytes": 115355884,
+      "sha256": "75a5df10c47e58593376ed4be115078956990ca526b4f5e08b6c6a13b237867d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/H1_no_offset_early.npz",
+      "bytes": 115123181,
+      "sha256": "3a20cd89b58d3b4a845c343866bae0ccfdfd957acd221cc6d2b38cd11aa8f9f5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/H1_no_offset_late.npz",
+      "bytes": 115432489,
+      "sha256": "0615090a62e2bfd661fc0453e20dd12300897150dfbd7e94cc577c3840e4a225"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/H1_recomposition.json",
+      "bytes": 6571,
+      "sha256": "99fc4b590d8ffb5cb8384ac69abdd04f802530b1d927bf98ef6aafb178c345b9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I0.log",
+      "bytes": 1109,
+      "sha256": "956d2d06f4c7e105107b1a57b7b4e3b04075fff7ca52de5c14d464347a47234a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I0_retry.log",
+      "bytes": 3413,
+      "sha256": "b147def0fa4231830a9232230fed634f5a054cc9a69176fc3a6c61bbe751824d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_fit.json",
+      "bytes": 7143,
+      "sha256": "e4f4409dce20a626984b7718d10dc6496677a50f76620ed9d078af95819896e6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A2960.npz",
+      "bytes": 547772,
+      "sha256": "77a3f571e24340cb21c7629065d71b2182be662dda310496640a4007c45dfd89"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A2962.npz",
+      "bytes": 547700,
+      "sha256": "8afaace582b3e4bd722ae20725b3b8b865b486c56eca08c811c951155dbd4ab1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A2964.npz",
+      "bytes": 548018,
+      "sha256": "1ff3ab77c8d75950fc5a01018782609c3bfc2e0a92ac4780fd0ac6aad46ab676"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A2966.npz",
+      "bytes": 547867,
+      "sha256": "3090bf5129b085fa9fc6c68b428eaf243b9ac64347c7f8c6029e31bfa29b4b70"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A2968.npz",
+      "bytes": 544009,
+      "sha256": "73d47d3e5874438d6b752cfae55c96ecb3572ceb944797c782ecfeea5c385c4c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A2969.npz",
+      "bytes": 542504,
+      "sha256": "62fd1e73e998738ec7ad5b3ccb5fc4ffa7075e3043da54376c9aeea03256cbe8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A2973.npz",
+      "bytes": 543980,
+      "sha256": "93ea7cf279a1cc61980bc8b428efc4098b4061e8e48aff9feb203b03f7f3c022"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A2974.npz",
+      "bytes": 543687,
+      "sha256": "493815a3a1e5b297dd24203ea24196549cab6a557ae619e02348be679b3a8cdf"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A2986.npz",
+      "bytes": 545939,
+      "sha256": "7f1fe3bc481d2a5ff902598805c9ecd77ca856830b6fdf677526b04d2c8aaeff"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A2987.npz",
+      "bytes": 543607,
+      "sha256": "ab0a8109641ccdfe5e0f7400ec9338b7cc47b3d1066c85cd33338cc38a0d5814"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A2991.npz",
+      "bytes": 545110,
+      "sha256": "7c77dd78cfcbb8491bb4b7f1da1b6420f1c6ceac3169d0b09187eb37d44b79f4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A2992.npz",
+      "bytes": 543647,
+      "sha256": "923fad98e4d816422ba316025364bd8fa1858975da8cb92314de6cd8a8cc1ccd"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A2993.npz",
+      "bytes": 542776,
+      "sha256": "8b38b54d5884df6fe3da9cdb2eb797d8d9005ff69511816737ab0c16b7360aeb"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A2998.npz",
+      "bytes": 544554,
+      "sha256": "7202a08497a0c27c1cdfe5480381270dee57cd06e6db13481764980ebb83620e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A2999.npz",
+      "bytes": 543217,
+      "sha256": "20f9453116990d1fcb55365b4e049cc5243b20f79425086b99416dc08c3f68fd"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A3004.npz",
+      "bytes": 544364,
+      "sha256": "37980f6a9c300976b9230d59b9733ed88ed989cfdcd07045b09861f24bcf1774"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A3005.npz",
+      "bytes": 542941,
+      "sha256": "16ff23c1ac4d76e16a8966ed23c59c7a8c10b5e1acabafd76c5bdd0bb1517000"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A3012.npz",
+      "bytes": 547706,
+      "sha256": "27303e5c646723511ea291a215138c501f001dc87da6c69114e10a0f77b62823"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A3016.npz",
+      "bytes": 547792,
+      "sha256": "de0cbb64c0b5bc0db561aa8ecf1aa04c466080550d283136c2d689a780030699"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A3020.npz",
+      "bytes": 547687,
+      "sha256": "4af89711d7099f507150d52003701f634c420c5d02ef4ee067a121dece29d731"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_real_572A3024.npz",
+      "bytes": 547586,
+      "sha256": "fdd3c63e01f88c6aa0bf5813768da8661a2be2174dbfe5942973ee54b7c624f6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A2960.npz",
+      "bytes": 446530,
+      "sha256": "53c21ba0da62b5d5fca4852d6e3eec9107696cdd51103e68fabab7bbfcc73c67"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A2962.npz",
+      "bytes": 445094,
+      "sha256": "3a9a2ab9869af5a5d196b90d2a7e6de9e4193f3a0daa78e6626f97dbf516b6a4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A2964.npz",
+      "bytes": 445294,
+      "sha256": "41f17e490099b94260087dd1f5946da858b2d045459cdfa1bd0fbc4391a166cc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A2966.npz",
+      "bytes": 445490,
+      "sha256": "3d393989b4080feaa5ac4395eced53416158cf8b5e3d8f324286c42e7d15ba5e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A2968.npz",
+      "bytes": 456190,
+      "sha256": "858dd060d085268e63b14441b4c2f640dbe06fa88e2dabb764590364f9f2b9e7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A2969.npz",
+      "bytes": 453310,
+      "sha256": "d64de40f2aa37fbb57c37e88e8103fa6bc1b23e1d5a85dfeace96f5c44beea36"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A2973.npz",
+      "bytes": 453503,
+      "sha256": "a7b920916fd67807127c28404250699624ab0e9a786b760b9c6d8129277af122"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A2974.npz",
+      "bytes": 453161,
+      "sha256": "2040971be5b7c788a61defc926f826dc6b746988210ddbf989025b6185a79b6b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A2986.npz",
+      "bytes": 459097,
+      "sha256": "77a742d2d9c7c7442d2cbac2ea5798adf9bd770656912855f1fe0a2aef8f312e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A2987.npz",
+      "bytes": 455485,
+      "sha256": "d9b360c1b4a35c6cb77996a4bcd871029c02d66e44fc6cdf5f4e12d3680b96d7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A2991.npz",
+      "bytes": 457852,
+      "sha256": "d029258c9bb743fb4611648ed1210899bf95ce23faca7b18fd70a9037009095f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A2992.npz",
+      "bytes": 452473,
+      "sha256": "271f52a721cf9706bc1881f77ebc1449f6d94bb6f3e33ee8b0f0627947289bbc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A2993.npz",
+      "bytes": 453204,
+      "sha256": "befd5c4176a89f269ea26368ed1aaebeb3712382f7897f3651e7dd41dcefc880"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A2998.npz",
+      "bytes": 455214,
+      "sha256": "37c6e0c4a3c73e50d4f4cdfbacbd56f3bc5871b272636996c0bf70c887231581"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A2999.npz",
+      "bytes": 453540,
+      "sha256": "e0bd3f4364523242491d27f90cf8c4098a5041ece727b8703b369d1e5dba93f6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A3004.npz",
+      "bytes": 454499,
+      "sha256": "f4086cf7531423d131e9c911d6a9c359fa72038de60aa0b568e06ade60fbbb34"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A3005.npz",
+      "bytes": 453235,
+      "sha256": "6b3b44ec7bd6c7bcf7b12766392c95973fec8bbbc008621e14b232e276cda293"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A3012.npz",
+      "bytes": 446193,
+      "sha256": "4f215b9ecf7840ddd962453ea191e10363ee0a495b7b57e91b1a1fda20859e26"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A3016.npz",
+      "bytes": 445687,
+      "sha256": "548edfb76cfaa97bb9903ccb901e54373cded7883d279a687681efa8124146af"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A3020.npz",
+      "bytes": 445528,
+      "sha256": "e7802053f9b3592506a75c0a90fb12a36d6d8b00b886ac5e4fbc3df214f7d186"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I1_rotated_572A3024.npz",
+      "bytes": 446218,
+      "sha256": "01065064426ddfee8d7ed8aa2acb2aab296b33b403e343ee42a27a553bb1cd06"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2.log",
+      "bytes": 9878,
+      "sha256": "3cb639971ce90ed4778e3f6f98e9d8404ec674d5ceb5ce35ba03e97a58c17daa"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2_reserved_572A2960.npz",
+      "bytes": 1893195,
+      "sha256": "b93ef7aac8c3986dbe2fb389b1d27cabffd68562515ad44170b7bb9add9ab383"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2_reserved_572A2962.npz",
+      "bytes": 1893228,
+      "sha256": "740f5a02365464e10993cecfe1bc55fb5fc1e0631ff7ddfb99f257b2bc81adc2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2_reserved_572A2964.npz",
+      "bytes": 1893925,
+      "sha256": "fff203d4821ef32e9a37ff29c2438d94029d88dee039b01188d5bde5c7808547"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2_reserved_572A2966.npz",
+      "bytes": 1892954,
+      "sha256": "e483b06f0cc4f0b0ef33e7b7096d5f85777a29e3ac4406de1bb647c5c7e049f0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2_reserved_572A2968.npz",
+      "bytes": 1891965,
+      "sha256": "f02e91bf4951a214c919d1fa8a36cd090ae7fb732c8d924b5940ab4553b2edfc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2_reserved_572A2969.npz",
+      "bytes": 1891624,
+      "sha256": "e9b2d33f2a689b58703c9794540f428eaea28d877ca17017a853b4f8d2ddd316"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2_reserved_572A2986.npz",
+      "bytes": 1893019,
+      "sha256": "8ef1dbc8515c473aa7600d37b142bf581801c6cb3dc32b1e76d641ce6e2b2ef1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2_reserved_572A2987.npz",
+      "bytes": 1892417,
+      "sha256": "0c0157f1ff8ab88ce0e57aaeeab8cc1ea46db8c27630506ee74b6294e57c0b6f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2_reserved_572A2998.npz",
+      "bytes": 1892469,
+      "sha256": "17e07443e52c6bacb5cbc919c09cf66fca0f819931cc4b034edfa5fd2dce823c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2_reserved_572A2999.npz",
+      "bytes": 1892161,
+      "sha256": "85a05cd9fcdec3fa0c35aff11eb99235abd9918df3daded64363a903805b92a5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2_reserved_572A3004.npz",
+      "bytes": 1891908,
+      "sha256": "38395fc11fe4cf1e9df1c5fcda84d900d42c0d61c49cbd88961f59ab854c1bd4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2_reserved_572A3005.npz",
+      "bytes": 1891632,
+      "sha256": "8394c77e2a35a2bd14b31aaf506b2e0325657249b6afb08c397412e8041bf084"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2_reserved_572A3012.npz",
+      "bytes": 1893754,
+      "sha256": "27e9437f01036d8570108670f4b6de77a15478e4c00c086a1002a82d58fe5cc8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2_reserved_572A3016.npz",
+      "bytes": 1893385,
+      "sha256": "a0edc7efb40b451994c213077f20b27f6e3ce5e48ecca043adac70846dd72a75"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2_reserved_572A3020.npz",
+      "bytes": 1893415,
+      "sha256": "3d2342f7fdfcc8f9f1eaa18264f11db9109a24ecb6d70876cd0dd7f366721a02"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2_reserved_572A3024.npz",
+      "bytes": 1893028,
+      "sha256": "0aac9a4863134b699864fe706474a779f46679c0bbef8f0010fbd42920034514"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2_templates.npz",
+      "bytes": 431326,
+      "sha256": "50a516e4cd0eb84e54901af9a339e643d4d4c84d2a662a9f819273b262bf8877"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I2_validation.json",
+      "bytes": 370973,
+      "sha256": "d94cf1c0650cdda5c35d9846404bc0e256241e93a2fdbd0f457e43e2adf7d0a7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3.log",
+      "bytes": 9877,
+      "sha256": "c71e91204da5d84fec33c9ef28095e622e60660448581fdfccb0934686dd2d6d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3_reserved_572A2960.npz",
+      "bytes": 1882304,
+      "sha256": "7fa5f7d9235e1c7ffe8f597473913e4f6b63f449cf4b77fe9593e1ff2db0ca4c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3_reserved_572A2962.npz",
+      "bytes": 1882425,
+      "sha256": "523f24cfbb670eb98b0161286b75b9a4eedb0aa10c5d9abc1033d91ffcfa7e51"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3_reserved_572A2964.npz",
+      "bytes": 1883111,
+      "sha256": "e7d97e835ed040b714fb6076187caca45f490896759ef3ae502230d7af5fa8e7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3_reserved_572A2966.npz",
+      "bytes": 1882183,
+      "sha256": "002a7a2ad7577d7aa50bbdaaaee4ce95e5c50cf9f68d208dc6f4c74f29c8c6bf"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3_reserved_572A2968.npz",
+      "bytes": 1881368,
+      "sha256": "9b4f1e43d3a062a519e0519bb64f7d04a05e6b0f8d1cb94ea34ff563ef4cd213"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3_reserved_572A2969.npz",
+      "bytes": 1880788,
+      "sha256": "d0e46b8f8d07aced5589d43b515d31a109e597d5e865a9df5c18548dd2c57116"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3_reserved_572A2986.npz",
+      "bytes": 1882667,
+      "sha256": "10b388c09b0fb13656a081f16f97ec9813c3df7c5bdf7081ef88b9b3c069d01e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3_reserved_572A2987.npz",
+      "bytes": 1882123,
+      "sha256": "090fc845835f3d972e5917d67ca5d9050f7752de223e8dd1dabf589ac1678a62"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3_reserved_572A2998.npz",
+      "bytes": 1882305,
+      "sha256": "37b1fbad194568362d90c20edb4424cb71b310325f6d4ef96615b38f33975d63"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3_reserved_572A2999.npz",
+      "bytes": 1881837,
+      "sha256": "72919c7aa4504ae0007b67ba2bf4fd6df8f72473a107095cc34a5f1b69a06ece"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3_reserved_572A3004.npz",
+      "bytes": 1881306,
+      "sha256": "384e2ab3cf7d60539c3b13a3119496cc183763bf3939ffcc772a082ee1123741"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3_reserved_572A3005.npz",
+      "bytes": 1881092,
+      "sha256": "e075773a39cf328ea16722959266d6d7ad4e327d596af2ac228fe2af961e10db"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3_reserved_572A3012.npz",
+      "bytes": 1883012,
+      "sha256": "b2ac5aaafcee3d6cfba9bb5ae6f728d0e7f2ff67d38aa0ba3157519b12e7a0a6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3_reserved_572A3016.npz",
+      "bytes": 1882831,
+      "sha256": "e415192d13897097b69bbb53fa87ecbc49bd4f331558819606215a8fde18d6c6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3_reserved_572A3020.npz",
+      "bytes": 1882777,
+      "sha256": "4f7dc1e0fd488a3d196f2e544d143020bc3bb6cc96d99fb9901aea6f27bea986"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3_reserved_572A3024.npz",
+      "bytes": 1882450,
+      "sha256": "5a9895308db1de646455195e62e8cd28f6c0b93131c415e8233a967d0ba16c40"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3_templates.npz",
+      "bytes": 403948,
+      "sha256": "5df998edbc5f9be1eff1968fa49ff3016b764b89ecdab7f14fd15d6f1f61a8f9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I3_validation.json",
+      "bytes": 370846,
+      "sha256": "659caf5e7575c3586042891ad9dfd731103acbebdfd330361fe454aadb2dcaae"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4.log",
+      "bytes": 398,
+      "sha256": "ddba1af5f5b94a964763d5f04a1c8670136cb3519e075b3619811972a54baa38"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_bottom.png",
+      "bytes": 189064,
+      "sha256": "7511816f411fe3c626e4e8004be48dc7ba8f13b6968a94d1d7986ee27a1c509f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_native_preview.json",
+      "bytes": 9561,
+      "sha256": "29e30b52fac2f6c963b711b01d9a67886fed763aa10698b301d327f0e94068c3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A2960.npz",
+      "bytes": 7318327,
+      "sha256": "1a66a75deec7b6f08fe0f384b6cbec3c28d30c1b82ac9b44b114c583a866702c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A2962.npz",
+      "bytes": 7318488,
+      "sha256": "e013cae8b4300a0b4a5715f58bf4c48748a90a066e8a562e51782b64ec2df30d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A2964.npz",
+      "bytes": 7318280,
+      "sha256": "d0dedd167ca159d990f5d9f805a01d8f6d4e4e04f39d8f16cc66a65e97dd6efa"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A2966.npz",
+      "bytes": 7318255,
+      "sha256": "e0120c6ce027292f98748d7c602d8c65778bbf1bfc1f5447b008e30d8dd2e877"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A2968.npz",
+      "bytes": 7273525,
+      "sha256": "bccd69ffd5d10a02690622bee12a5c6d6d6974e0114e738facb34b13e74e288e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A2969.npz",
+      "bytes": 7264456,
+      "sha256": "11496ae5862494320bd3435a9b0285838480dd3faaf3a8dac7d032a6b435ffbf"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A2973.npz",
+      "bytes": 7289329,
+      "sha256": "2ba66eef3a1bfb8956525b5caac8892526ecdaf715697f722ea47aa708354288"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A2974.npz",
+      "bytes": 7262258,
+      "sha256": "50ae94484af70e7c6b9b798e86981800ba70ad011cf9bef6ffefce96f724c8cc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A2986.npz",
+      "bytes": 7270253,
+      "sha256": "07000eec42778b806422951de441e4846231d62b432b09dd8802b079edd88880"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A2987.npz",
+      "bytes": 7252313,
+      "sha256": "ecf3e2bc6e7e87f160be635629c79ff54fe1710986b48757153e809075ce1f51"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A2991.npz",
+      "bytes": 7285550,
+      "sha256": "9849ca9b5b22a8028f5dcd217dbad9a611d4fd7627efa9b4985488bf4e7c3c11"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A2992.npz",
+      "bytes": 7259879,
+      "sha256": "e6404cf18bbe7f1bb89347d130c291e775c05f8079240413d0121bc995ab02f8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A2993.npz",
+      "bytes": 7250149,
+      "sha256": "348392cf29e17d2de0cb1844603656cbed03d9d0dc992698831fc37125699437"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A2998.npz",
+      "bytes": 7268115,
+      "sha256": "6335c12e8fb3bb491e1c7215d53d38425b7f06cc953827e7a78930d3ad78be3d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A2999.npz",
+      "bytes": 7257169,
+      "sha256": "0632a8d41612e330c6b0afc821bce62f713fbf0008972219e6d47f76144d4f5a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A3004.npz",
+      "bytes": 7268800,
+      "sha256": "56923b3c6621cbda59fd59471e1d5bf941c983e859062954fdd7d79c34dc6511"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A3005.npz",
+      "bytes": 7258295,
+      "sha256": "9c174b16188e447c8427c251551a5be99c1d438902f14a3bc050b5110b96f25b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A3012.npz",
+      "bytes": 7322539,
+      "sha256": "f3ff0539c23282a34dcac5921c08d3be31c2c033d3f968882f110e15def878a1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A3016.npz",
+      "bytes": 7318253,
+      "sha256": "f1d55f2e38193f60ba5181f9d4d906d6125cbbbf5dd48f87cd6e917b599888b9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A3020.npz",
+      "bytes": 7320789,
+      "sha256": "87d04dd0e6a105cbdace9b48f855add26d77178d3d3c6ecea85c593065c8117d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_registered_572A3024.npz",
+      "bytes": 7320752,
+      "sha256": "62ed4cff83648784719072dbf1840ac61e9ec821171aa324564bdfeb8c5143ca"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_right.png",
+      "bytes": 160600,
+      "sha256": "008e0b4f3f4a5fc0ce7697722bf899ea8b6aee51fbcba2ce7b15a18cc45d6f73"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_short_source.npz",
+      "bytes": 54455012,
+      "sha256": "c2992f1b81286f706b485ba34592b9c0f09f8099e3de41e1e794c532c86629fe"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_source_comparison.png",
+      "bytes": 947371,
+      "sha256": "4c3a9a680b2fe605fa7aef0e6416ef9def8c0779e5a2138832f05baccd3df089"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/I4_top.png",
+      "bytes": 154627,
+      "sha256": "b0d2340d444220c52032f129d8220f95caa08c244ebffd3a3ee15c4cc68d4866"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/K0.log",
+      "bytes": 1816,
+      "sha256": "f9bae00da1b3198bfa21dc894d653886d76d22f5559562420c9647c10b08efe8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/K0_after.png",
+      "bytes": 727372,
+      "sha256": "cb0edbf5971c70da8610df0892ca7e74e5b79f234833187a18f3b214a0307ec0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/K0_before.png",
+      "bytes": 731396,
+      "sha256": "67cdc809e59909570dc15ed4628fbc98508f8048f6132a21cbdb634568dfd8a5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/K0_bottom.png",
+      "bytes": 72328,
+      "sha256": "82f4051f75d3eae8da640c476d5e3eb15237cfe2d2314dbaadb0781a96571837"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/K0_composite_RGB16.npy",
+      "bytes": 11760128,
+      "sha256": "541fa9397667ba5dc925164fe43e64f569b45295725ceca606fad60231c4be64"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/K0_geometric_coverage.json",
+      "bytes": 3477,
+      "sha256": "8cfeaa280306b97b99c663b1114bb5c77f38f5933dd0a1ca26f372c49868043a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/K0_geometric_mask_u16.npy",
+      "bytes": 3920128,
+      "sha256": "a2e61aa39c3d4028199f813b4ff8c6de4c1c8e226b18974ec57bcefb406a565e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/K0_left.png",
+      "bytes": 69604,
+      "sha256": "4eaee3b2ab4e95c86c5373486c952d102aa824e3f2228f2e5c4e136d36b38984"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/K0_right.png",
+      "bytes": 55057,
+      "sha256": "f79ac379c8f165b231f9a510b6a31b755871ada35e20d52c22196bbb45662f87"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/K0_top.png",
+      "bytes": 75082,
+      "sha256": "8d0e07ba41e7753452bf3b927bce7b44b9d58900cc5c1bd3cb987d34f142af40"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L0_09_RGB16.npy",
+      "bytes": 11760128,
+      "sha256": "77a302ef0448f7c77a867c4ecedc1a947cb53e834f15183da47b496736f475e9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L0_09_alpha16.npy",
+      "bytes": 3920128,
+      "sha256": "c02009e94f38035cef750943ed4e1dc56aec1b2b9250ab0840a5a4746e696c18"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L1_current09_G16.npy",
+      "bytes": 13520128,
+      "sha256": "63916528f4c1ac836bc530309fc29df592663f785d410096a3ee256fb1e21885"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L1_current09_geometry.json",
+      "bytes": 225,
+      "sha256": "21823828abb56b78913f52686ce3504cc204da22610b450fbec0fa49d52d888a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L2.log",
+      "bytes": 2850,
+      "sha256": "ca0b2aa53caa11f652971a62bdc2cce3b787e82f8ad767dc18ae080bfd77f6e0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L2_solar_raster_alignment.json",
+      "bytes": 2850,
+      "sha256": "ca0b2aa53caa11f652971a62bdc2cce3b787e82f8ad767dc18ae080bfd77f6e0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L3.log",
+      "bytes": 3969,
+      "sha256": "2cfbfff970deaabe587e9d959b02d9b6b71ad6c22a16f5944076dce5f0430d74"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L3_bottom.png",
+      "bytes": 160275,
+      "sha256": "15c99987ba482ddc61b713474a8f134876a8580b60e38519f578108e020f076f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L3_full.png",
+      "bytes": 2103754,
+      "sha256": "c1209e5ced899c52c8642bdc2a14905f731712ca76d229e09dcc7825b6bd1a2d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L3_left.png",
+      "bytes": 170586,
+      "sha256": "dca329b8aee6ac7b49958ee2519954889da3390e837fdac0c3d2903985db2613"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L3_native_Pere09_registered_RGB16.npy",
+      "bytes": 11760128,
+      "sha256": "6977ce52f9682698ea2748459fcd02975181e43dbff1375f0b949c868325c431"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L3_predicted09_RGB16.npy",
+      "bytes": 11760128,
+      "sha256": "fd28bb5127305ac6ef46cbc0a80c879f0b86d4a647889e0e3ae865cc8540af45"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L3_right.png",
+      "bytes": 129098,
+      "sha256": "08fab46995b1e75404d749a28cb2e13f60ff0971382c16a0c204e502d8e93fee"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L3_solar_transfer.json",
+      "bytes": 27179,
+      "sha256": "7ae769eb6bba84a8ad604415510cae50c65c7ff65f50dd8f23f41bcc3a77f37d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L3_top.png",
+      "bytes": 181604,
+      "sha256": "d768232a901046e11a5260e51a196c5510687abcbea821a4ae469b636ca4d8ab"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L4.log",
+      "bytes": 1040,
+      "sha256": "1568c84aa816e7cf452150e7e48ef37d5c902a2fd54b550c3bf7bb8b779dd1e1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L4_original_09.npz",
+      "bytes": 11549797,
+      "sha256": "91d1a1f7cf7913f8b814677f8f186f643187c435d02c38349bfb0be49c400f4f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L4_original_10.npz",
+      "bytes": 11046857,
+      "sha256": "4473159bf1b73e900d637621832e2bbc4fbd0618927791b43985ef325081c270"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L4_original_11.npz",
+      "bytes": 7779063,
+      "sha256": "b6878710bc9f1a245887f0e614d72b8adbdb0f2e9e2156ce21f415cc93d1bfbc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L4_original_12.npz",
+      "bytes": 6112183,
+      "sha256": "bd440aee7a9b6f7d0bb10a817e9fa012efdc4b6fd51707efc100ed01dfa1231c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L4_original_solar_layers.json",
+      "bytes": 1598,
+      "sha256": "e0aaf0802d60e38c918cb6c908d4989675cbedb3d305b5f26a35205f87df7df5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L5.log",
+      "bytes": 4696,
+      "sha256": "adad9c0dc6b2d7561a97e722ccdb4efd9fe52037e01b2feb095dd12c4cd6dbec"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L5_best_composite.npy",
+      "bytes": 11760128,
+      "sha256": "9b9be1617e299dc0d81db33a8e747c1cf440107f2cbed2177e4bf38bb0c841f1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L5_composite_identification.json",
+      "bytes": 7450,
+      "sha256": "1fd87acb1f1ba19e12d6ed6cd310c17f08b40f99545bc6e256ae85d6ee1a01b6"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L5_full.png",
+      "bytes": 2593407,
+      "sha256": "b88da125853a4f93f051887e6134919d691f2e63ddf1f557ad7333e5d830ba1d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L5_right.png",
+      "bytes": 157687,
+      "sha256": "407d9ab7b006f5553923df2817d6bfa76c1170819024abf905e692feac9dbd2f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L5_top.png",
+      "bytes": 220899,
+      "sha256": "819f9f336211f94d0514ccbd25f7821ebeb7697c6cdba1b279e73ba01417c540"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L6.log",
+      "bytes": 1254,
+      "sha256": "a1493a8c0cc6a0201236fd69f6c6a151dd8882cf1c637232496f6f64b00d293d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L6_inner_identity.json",
+      "bytes": 2679,
+      "sha256": "d8cf2e6db74742443818c5ed5d503753bf0dee8ce709835a990d66254635d010"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L6_left.png",
+      "bytes": 72254,
+      "sha256": "58cc567645b37aefb0f833ff3b3a0a5ca719b2b855fd5479914e5d8aa62c0499"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L6_reconstructed09.npy",
+      "bytes": 11760128,
+      "sha256": "43e11b0eb40e6699d4b7233dd573fe9dc031d787926ac753d33b2f1c78c2d5d7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L6_right.png",
+      "bytes": 46278,
+      "sha256": "f7237fef05cac687c62a6e18b4d07afb9b3e751f850afbb839457fb5c880a925"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/L6_top.png",
+      "bytes": 65014,
+      "sha256": "e6e6148e8eb06e4e7ba82808ef09951d6561a61e8f9dbc89e2cd1920c7ff849f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/M0.log",
+      "bytes": 1270,
+      "sha256": "da964a26817c459ab572404bdb9fcc6d63d735a74894d87ac4124bc9134a6d77"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/M0_camera_572A2975.npz",
+      "bytes": 42802818,
+      "sha256": "05f2310138d180796862652988cfbcfbb8ec96885c650cf47117a09a3583445a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/M0_camera_572A2978.npz",
+      "bytes": 36747735,
+      "sha256": "75710e0afc73105e5a97b2f8d7f4c096b5309b2f66a985643192441932bb5f3f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/M0_camera_572A2993.npz",
+      "bytes": 42848043,
+      "sha256": "3ec69d7560959896e056ac0e467a97092efd104b6670ad9f2b02e119f594be8c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/M0_camera_572A2996.npz",
+      "bytes": 37005768,
+      "sha256": "5983b9a5cec7c99843506271a2f78a952c58c343d09f516104bda2f3c2d5b9a1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/M0_camera_inputs.json",
+      "bytes": 2280,
+      "sha256": "0a5dece8b8698a56153be6108965b574962066552ca966ed65d267c60f28b3e9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/M1.log",
+      "bytes": 1901,
+      "sha256": "cfa58f76096deee412f4bbf97dcaa2fbb29c101e7c70e8568e3f917d1012303e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/M1_spectral_falsifier.json",
+      "bytes": 21933,
+      "sha256": "5cf7da19987af67ea343e5cec0d0c7e586146e8d7d36a13bfaa82fe138120e21"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/N0.log",
+      "bytes": 4774,
+      "sha256": "cc6ccf6fa50beb456e97cc3bd2cf567fd54a556db5888b008b16d455173a2645"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/N0_solar_edge_geometry.json",
+      "bytes": 5509,
+      "sha256": "81b2c2d4e9a86b43f65927f65bfe63bdede8bc6ff2395a83285d4cdb3a105f9c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/N1_bottom.png",
+      "bytes": 134160,
+      "sha256": "205ab4baeff73f2deca538ecd929bb7958667d2bb82b27fccfac26ffaa5527ee"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/N1_full.png",
+      "bytes": 1799251,
+      "sha256": "4d82ff80006ac3d333021c546f0b5eb49d805b52bbd381cc4bfc1cf7f4011319"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/N1_left.png",
+      "bytes": 145081,
+      "sha256": "481ae7817f732cf9b46616775ee29d08295810932ead6efee8895d9465a2c82f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/N1_plain_RGB16.npy",
+      "bytes": 11760128,
+      "sha256": "b2cd5f237fcc76afdc9b799197d2143fcf96b9c39c2cff634de140ec21a2876e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/N1_residual_retained_RGB16.npy",
+      "bytes": 11760128,
+      "sha256": "ae05204b951b9a584b46894cceeeedd79e14aa5f4b089dad2ce070d4167ea754"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/N1_right.png",
+      "bytes": 103640,
+      "sha256": "d25a3566af16d30c6c8659d21aa14d7f66e46311958662b3ba63dc9925a085e8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/N1_top.png",
+      "bytes": 147379,
+      "sha256": "0a363c74bf2c7018f1f1c898e25dfce1a58f168e82018a6980bd13c06d18a420"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/N1_unmasked_solar_falsifier.json",
+      "bytes": 564,
+      "sha256": "74649e0317b502f6a056ca5373493e54c77c65390f532f8702216ea0ed06b114"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/N2_background_RGB16.npy",
+      "bytes": 11760128,
+      "sha256": "926d86e3081de70cc77ead8cd57054ff18db6ac7b98db8ebf6613107e130afb4"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/N2_bottom.png",
+      "bytes": 72542,
+      "sha256": "2bcf563b6762baeaae8ecd56c899b4475454f916a2c88d1bc73d960a6242b444"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/N2_composite_RGB16.npy",
+      "bytes": 11760128,
+      "sha256": "753801e418d6dc7f97019a62040c45bdce89b576a3ad1c174da55104364a18dc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/N2_context_restore.json",
+      "bytes": 541,
+      "sha256": "1ffa5cb9fa5fdd6fc1bf278c6ed1d344ba8e0c0967e8a9cca0dc8fef4a5f3a98"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/N2_full.png",
+      "bytes": 916906,
+      "sha256": "01ae4f42118aeafdbcbab8acaaaa759c47328660c2ce15ea6f70efb56fca106b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/N2_left.png",
+      "bytes": 70596,
+      "sha256": "db5082283fd2f038389674cc350cd3ea6449258717689e128842dda4753db375"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/N2_right.png",
+      "bytes": 56554,
+      "sha256": "536aeb1fca4eccec750bbe2405a2c53c369cba697e6b5e077aff3264cdac09ff"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/N2_top.png",
+      "bytes": 76011,
+      "sha256": "1cc36f2060eb71207c617101505bb7394dbe273835dcdc72a170c69e7eb1dc81"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/RESULTAT_V50_ENCARA_NO_VALIDADA.md",
+      "bytes": 4445,
+      "sha256": "23ba928328da869af8b6be023b14b7cd4d134f7b42285cbe831acd217e986a6f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/Z0_authorities_before/00_CLAUDE.md",
+      "bytes": 206148,
+      "sha256": "9b4e80cc5c540d18df44cb6e501e85d00473a9b4e9d2a6fb18c7e2f62c0c5ce8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/Z0_authorities_before/01_AGENTS.md",
+      "bytes": 23403,
+      "sha256": "11cd82fb8cedbf0ac2c9062cc60c0d0e7cd0d153086adf01119f945817382e1b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/Z0_authorities_before/02_ACTIVE.json",
+      "bytes": 38901,
+      "sha256": "57b4b821578aaa6b3aa9eccf04a83b2359ebb401cd0ca08f473fe3e9373392fa"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/Z0_authorities_before/03_ESTAT_ACTUAL.md",
+      "bytes": 31392,
+      "sha256": "77891b8515793464fde6b789c91a7c5bdd3391396d00075589a68fe48f7862d7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/Z0_authorities_before/04_README.md",
+      "bytes": 31269,
+      "sha256": "a3be42685e60724c4b382fb8c99350dbbcf72b650d926da63c0efbf926837afc"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/Z0_authorities_before/05_MAPA_RUTES_I_OUTPUTS.md",
+      "bytes": 19773,
+      "sha256": "8276fe3037dbceec9049076a947b1c4b052536ecd67e4df3beb4f1a70364e693"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/Z0_authorities_before/06_HANDOFF_VIGENT.md",
+      "bytes": 6441,
+      "sha256": "d4cb1a8397081a002064a7c74fded83dab8da0e77b0efe29d4dc2bf9850de870"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/Z0_authorities_before/07_README.md",
+      "bytes": 87346,
+      "sha256": "01aacf70614464e2a95f72f1dc92f2860d6716debeba3d0052bf2aa315cdf745"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/Z0_preservation.json",
+      "bytes": 3172,
+      "sha256": "2ea06df322e648be141b287a8b100efe970ceb0d02f6c04775c3c9eaf508dc6c"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/authorities_before/ACTIVE.json",
+      "bytes": 38901,
+      "sha256": "57b4b821578aaa6b3aa9eccf04a83b2359ebb401cd0ca08f473fe3e9373392fa"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/authorities_before/AGENTS.md",
+      "bytes": 23403,
+      "sha256": "11cd82fb8cedbf0ac2c9062cc60c0d0e7cd0d153086adf01119f945817382e1b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/authorities_before/CLAUDE.md",
+      "bytes": 206148,
+      "sha256": "9b4e80cc5c540d18df44cb6e501e85d00473a9b4e9d2a6fb18c7e2f62c0c5ce8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/authorities_before/ESTAT_ACTUAL.md",
+      "bytes": 31392,
+      "sha256": "77891b8515793464fde6b789c91a7c5bdd3391396d00075589a68fe48f7862d7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/authorities_before/HANDOFF_VIGENT.md",
+      "bytes": 6441,
+      "sha256": "d4cb1a8397081a002064a7c74fded83dab8da0e77b0efe29d4dc2bf9850de870"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/authorities_before/MAPA_RUTES_I_OUTPUTS.md",
+      "bytes": 19773,
+      "sha256": "8276fe3037dbceec9049076a947b1c4b052536ecd67e4df3beb4f1a70364e693"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/authorities_before/README.md",
+      "bytes": 87346,
+      "sha256": "01aacf70614464e2a95f72f1dc92f2860d6716debeba3d0052bf2aa315cdf745"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/b0_response_probe.py",
+      "bytes": 7046,
+      "sha256": "54edf0c53e4b26414744257e2d96c6798bb65bb61dbc6fb882d324e31775a532"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/c0_edge_identifiability.py",
+      "bytes": 6429,
+      "sha256": "1b29f37a4b0e6f06e28ce8f66eef5f95cc498af74d73907b32714facf93678b5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/c1_edge_wrapfree.py",
+      "bytes": 6460,
+      "sha256": "0f64ac6e21fa62f68436d7dfee4fe2420cbb78c86426d80048eaab2a2c5ee1a5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/common50.py",
+      "bytes": 790,
+      "sha256": "2548fd10d48b7634bdcddf9cef8729eeb7fa60b581732313622a7bc66b4cd816"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/d0_stellar_inputs.py",
+      "bytes": 2509,
+      "sha256": "1c9e6e1f93026fc1c941563379c4053309c22919d7c1db0ef1d84e83b9baba98"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/e0_exterior_witness.py",
+      "bytes": 7141,
+      "sha256": "63c431435537a7240c95a999e97991e4faf3314a78069d89cb4f9b8ea48fdf75"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/e2_exterior_validation.py",
+      "bytes": 3974,
+      "sha256": "1003c50ff5a097a979323bd4fb7644cec3420051b94b5833386047e9e206ed8f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/f0_exterior_cutoff_sensitivity.py",
+      "bytes": 7205,
+      "sha256": "757996a7e8a496714e056f48f60b50f70414d524d2ca371ac9e4b47330d40d06"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/f2_exterior_validation.py",
+      "bytes": 3970,
+      "sha256": "c1b6bf4a6c4056106dfdb81382627b8e02f1e7f5b6e58d5a69aa8250f6e74bd3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/g0_positive_exterior.py",
+      "bytes": 7367,
+      "sha256": "83fd2cc69b25c4b5afd4256d548dd25c3aab3ccc924bc3509e903433a880b077"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/g2_positive_validation.py",
+      "bytes": 4041,
+      "sha256": "48cb3c89a25d6972aed84a723002ec2eecb43725a0f0312fb0a4cb14abfac187"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/h0_coronal_offset_ablation.py",
+      "bytes": 2794,
+      "sha256": "e08ea13abbf11d03ba6299f84af8c99f7d6d4c61c42139007768d7628459f098"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/h1_offset_compositor.py",
+      "bytes": 3173,
+      "sha256": "86497ae9e494e74739779ff2f78bcdea5d3c73a44694534bbf51351d4a762bd3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/i0_boundary_transfer.py",
+      "bytes": 3216,
+      "sha256": "3406b7e77998a84234505c854a4f4154f6a6c5be6a023806a089d7c14fa05aed"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/i2_boundary_validation.py",
+      "bytes": 4041,
+      "sha256": "ab487e6490e765cfe83e13acb5ad331635df8ef3489e35a0a066a2b0048bdd7f"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/i3_strict_template_validation.py",
+      "bytes": 4247,
+      "sha256": "0a23ba777ccdb79149ea7b1c6e60dea598a40481ce978f7b2b45560f57d5dd38"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/i4_native_source_preview.py",
+      "bytes": 4802,
+      "sha256": "91c816b06f130ff432ed0e9ec1f672550e5c5dcfb4a0ddce7bd80cef2fcee6a0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/k0_geometric_coverage.py",
+      "bytes": 2994,
+      "sha256": "498df9963f0c399fa9fcf12bc151035fd1eea662550005a62171159725e452db"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/l2_match_solar_raster.py",
+      "bytes": 3075,
+      "sha256": "c67dcd9eb3aea59aad7487dd04a1181eb5fd3d117bbe468ebc8059831c6d482d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/l3_solar_transfer.py",
+      "bytes": 2753,
+      "sha256": "397b8bdf1c1f9bed6b9de4917210df1ea352d4badfcc34bc6e26ae1da4a41eed"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/l4_original_solar_layers.py",
+      "bytes": 1365,
+      "sha256": "02897434d070bcd96864658d6e35b2741aa27c765572e13a4d5dad9b610f5eee"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/l5_identify_composite.py",
+      "bytes": 2745,
+      "sha256": "4571abe61a24bc6960590c2481e92ef29894afca03b72f47aa3bf9d327bf2d2b"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/l6_inner_identity.py",
+      "bytes": 2113,
+      "sha256": "be8fbec78ecb5085bdaac7c0d7c6e46082d13475264f2f759dd049c1141b9a88"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/m0_rgb_native.py",
+      "bytes": 3637,
+      "sha256": "de3b53f4039de0c9e7e9c614029abd768f61c499ff55412667f93bcc1635e874"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/m1_spectral_falsifier.py",
+      "bytes": 2707,
+      "sha256": "91a92880c85d464ec931f23a35c90ec1a49af9d51b8312df8c9ac3778ac442ec"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/n0_solar_edge_geometry.py",
+      "bytes": 1502,
+      "sha256": "a1ccd7b05af6a41961e73e95c6d5f1e9ddea249ee7a59109831e7f37eeee4c68"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/n1_unmasked_solar_falsifier.py",
+      "bytes": 1918,
+      "sha256": "7a4afaa0ef2c706fd20edecab847d8c9f068d765fd18fd5f3f762169d04359c8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/n2_context_restore.py",
+      "bytes": 1623,
+      "sha256": "bbfcb5d895fd48d959401f7bf7410e754807d93dc51df460e6dc329f22407530"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_v50_causal_20260912/z0_record_outcome.py",
+      "bytes": 10050,
+      "sha256": "30a8f5804e0c028f8d5c446ffc41c9995f388027759fa1be8ae0a8df8b65d560"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/Z1_release.json",
+      "bytes": 600,
+      "sha256": "1fa141ba31434208cbd4de313c995736ad028fef26ae447824d2455677a8e1d2"
+    }
+  ],
+  "new_PSB": false,
+  "release": {
+    "time": "2026-09-12T11:51:36.589763+00:00",
+    "claim_id": "CODEX_EARTHSHINE_V50_CAUSAL_20260912",
+    "status": "RELEASED",
+    "task_result": "NOT_ACHIEVED",
+    "new_V50": false,
+    "own_workers_running": 0,
+    "auxiliary_agents": "completed; read-only",
+    "Photoshop_documents_created_or_modified": 0,
+    "report": "/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v50_causal_20260912/RESULTAT_V50_ENCARA_NO_VALIDADA.md",
+    "handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-12_V50_CAUSES_I_PROVES_REFUSADES.md",
+    "autonomous_authorization_continues": true
+  }
+}

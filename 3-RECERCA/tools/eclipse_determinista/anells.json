@@ -1,0 +1,99 @@
+{
+ "PASSA_ALT": {
+  "amplitud_mediana_azimutal": 0.38923537731170654,
+  "dispersio_tipica": 0.23954687090367077,
+  "quocient_anell_senyal": 1.6248819107648882,
+  "r_cobertura_plena": 9.187408055270469,
+  "anells": [
+   {
+    "r_Rsol": 1.241124951443889,
+    "salt": -0.0628765827428146,
+    "salt_sobre_dispersio": -0.1479757857634952
+   },
+   {
+    "r_Rsol": 1.2681019592839358,
+    "salt": -0.043847447530565464,
+    "salt_sobre_dispersio": -0.108591746363034
+   },
+   {
+    "r_Rsol": 1.2887188284280091,
+    "salt": -0.03563542931292085,
+    "salt_sobre_dispersio": -0.08765181130958877
+   },
+   {
+    "r_Rsol": 1.4980587361705227,
+    "salt": 0.020915885618532803,
+    "salt_sobre_dispersio": 0.06333914371289923
+   }
+  ]
+ },
+ "RADIAL": {
+  "amplitud_mediana_azimutal": 0.06289204955101013,
+  "dispersio_tipica": 0.2807169021204114,
+  "quocient_anell_senyal": 0.22404083642969622,
+  "r_cobertura_plena": 9.187408055270469,
+  "anells": [
+   {
+    "r_Rsol": 1.3026492900286084,
+    "salt": 0.02186207868040657,
+    "salt_sobre_dispersio": 0.06326077233231052
+   },
+   {
+    "r_Rsol": 1.4273051775500532,
+    "salt": -0.015136427521324047,
+    "salt_sobre_dispersio": -0.046165864205322024
+   },
+   {
+    "r_Rsol": 1.6064954832271867,
+    "salt": 0.012838256117738922,
+    "salt_sobre_dispersio": 0.04259858285445944
+   },
+   {
+    "r_Rsol": 1.2478149179377713,
+    "salt": -0.012617998943052378,
+    "salt_sobre_dispersio": -0.0386194514634465
+   },
+   {
+    "r_Rsol": 1.3238278315145824,
+    "salt": 0.01132997497791599,
+    "salt_sobre_dispersio": 0.03156142474474548
+   },
+   {
+    "r_Rsol": 1.659157097144655,
+    "salt": -0.00988538034443831,
+    "salt_sobre_dispersio": -0.03076198459912658
+   }
+  ]
+ },
+ "NRGF": {
+  "amplitud_mediana_azimutal": 0.416781485080719,
+  "dispersio_tipica": 0.377430065998435,
+  "quocient_anell_senyal": 1.104261484781785,
+  "r_cobertura_plena": 9.187408055270469,
+  "anells": [
+   {
+    "r_Rsol": 1.2887188284280091,
+    "salt": -0.028025617313615803,
+    "salt_sobre_dispersio": -0.07888242568679268
+   },
+   {
+    "r_Rsol": 1.3026492900286084,
+    "salt": -0.027981797639226147,
+    "salt_sobre_dispersio": -0.08013863649437525
+   }
+  ]
+ },
+ "MGN": {
+  "amplitud_mediana_azimutal": 0.460791751742363,
+  "dispersio_tipica": 0.5183372220039368,
+  "quocient_anell_senyal": 0.888980633034421,
+  "r_cobertura_plena": 9.187408055270469,
+  "anells": [
+   {
+    "r_Rsol": 1.1888804156968948,
+    "salt": 0.07047832706437351,
+    "salt_sobre_dispersio": 0.2009375428571075
+   }
+  ]
+ }
+}

@@ -1,0 +1,1519 @@
+{
+  "fixed_judge": "original uncorrected Vixen G total, no adjustment to outputs",
+  "ROIs": "core256; centers3.5/4R, beyond Vixen-to-Sony blend; Sony source independent of Vixen",
+  "rows": [
+    {
+      "tag": "P01_NRGF_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.018862365148203383,
+      "base_correlation_fixed_Vixen": 0.022693790138431938,
+      "output_RMS": 0.03126584365963936
+    },
+    {
+      "tag": "P01_NRGF_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.42093146905421436,
+      "base_correlation_fixed_Vixen": 0.4259317972881739,
+      "output_RMS": 0.01791590079665184
+    },
+    {
+      "tag": "P01_NRGF_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.8343932364388307,
+      "base_correlation_fixed_Vixen": 0.8535307907293285,
+      "output_RMS": 0.009113605134189129
+    },
+    {
+      "tag": "P01_NRGF_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.021726232227776178,
+      "base_correlation_fixed_Vixen": 0.021191220372783887,
+      "output_RMS": 0.02831515483558178
+    },
+    {
+      "tag": "P01_NRGF_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.12761234964326554,
+      "base_correlation_fixed_Vixen": 0.1357096569801971,
+      "output_RMS": 0.011352239176630974
+    },
+    {
+      "tag": "P01_NRGF_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.2743728172197589,
+      "base_correlation_fixed_Vixen": 0.34099473837376454,
+      "output_RMS": 0.0045065367594361305
+    },
+    {
+      "tag": "P01_NRGF_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.01113861862435034,
+      "base_correlation_fixed_Vixen": 0.013596590941027772,
+      "output_RMS": 0.036881133913993835
+    },
+    {
+      "tag": "P01_NRGF_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.12540453426300946,
+      "base_correlation_fixed_Vixen": 0.14778392488144035,
+      "output_RMS": 0.015194152481853962
+    },
+    {
+      "tag": "P01_NRGF_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.6543751236202262,
+      "base_correlation_fixed_Vixen": 0.7576204630684973,
+      "output_RMS": 0.006668907590210438
+    },
+    {
+      "tag": "P01_NRGF_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": -0.003415016213163409,
+      "base_correlation_fixed_Vixen": -0.0028218729849770097,
+      "output_RMS": 0.03347219154238701
+    },
+    {
+      "tag": "P01_NRGF_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.21369434127904072,
+      "base_correlation_fixed_Vixen": 0.2172908063931106,
+      "output_RMS": 0.012772959657013416
+    },
+    {
+      "tag": "P01_NRGF_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.827378886101392,
+      "base_correlation_fixed_Vixen": 0.8570042315483958,
+      "output_RMS": 0.005338556133210659
+    },
+    {
+      "tag": "P02_RHEF_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.00969067463321583,
+      "base_correlation_fixed_Vixen": 0.022693790138431938,
+      "output_RMS": 0.023577706888318062
+    },
+    {
+      "tag": "P02_RHEF_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.41693783542550533,
+      "base_correlation_fixed_Vixen": 0.4259317972881739,
+      "output_RMS": 0.01337655633687973
+    },
+    {
+      "tag": "P02_RHEF_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.841396238307418,
+      "base_correlation_fixed_Vixen": 0.8535307907293285,
+      "output_RMS": 0.006509931292384863
+    },
+    {
+      "tag": "P02_RHEF_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.017905750547615146,
+      "base_correlation_fixed_Vixen": 0.021191220372783887,
+      "output_RMS": 0.013405632227659225
+    },
+    {
+      "tag": "P02_RHEF_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.1272684320286602,
+      "base_correlation_fixed_Vixen": 0.1357096569801971,
+      "output_RMS": 0.0054373834282159805
+    },
+    {
+      "tag": "P02_RHEF_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.3329743265743279,
+      "base_correlation_fixed_Vixen": 0.34099473837376454,
+      "output_RMS": 0.0017706212820485234
+    },
+    {
+      "tag": "P02_RHEF_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.011614894724597797,
+      "base_correlation_fixed_Vixen": 0.013596590941027772,
+      "output_RMS": 0.031792934983968735
+    },
+    {
+      "tag": "P02_RHEF_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.10846661867382296,
+      "base_correlation_fixed_Vixen": 0.14778392488144035,
+      "output_RMS": 0.013345418497920036
+    },
+    {
+      "tag": "P02_RHEF_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.6712649656497817,
+      "base_correlation_fixed_Vixen": 0.7576204630684973,
+      "output_RMS": 0.005319565534591675
+    },
+    {
+      "tag": "P02_RHEF_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": -0.00028059201811769487,
+      "base_correlation_fixed_Vixen": -0.0028218729849770097,
+      "output_RMS": 0.012386052869260311
+    },
+    {
+      "tag": "P02_RHEF_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.21988740400158008,
+      "base_correlation_fixed_Vixen": 0.2172908063931106,
+      "output_RMS": 0.004654301796108484
+    },
+    {
+      "tag": "P02_RHEF_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.798971238773771,
+      "base_correlation_fixed_Vixen": 0.8570042315483958,
+      "output_RMS": 0.0017126677557826042
+    },
+    {
+      "tag": "P03_MGN_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.013479672974691864,
+      "base_correlation_fixed_Vixen": 0.022693790138431938,
+      "output_RMS": 0.06405500322580338
+    },
+    {
+      "tag": "P03_MGN_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.29009973373883746,
+      "base_correlation_fixed_Vixen": 0.4259317972881739,
+      "output_RMS": 0.018192023038864136
+    },
+    {
+      "tag": "P03_MGN_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.40646553890850334,
+      "base_correlation_fixed_Vixen": 0.8535307907293285,
+      "output_RMS": 0.00251323776319623
+    },
+    {
+      "tag": "P03_MGN_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.017964347234005317,
+      "base_correlation_fixed_Vixen": 0.021191220372783887,
+      "output_RMS": 0.0646626278758049
+    },
+    {
+      "tag": "P03_MGN_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.08169560988843567,
+      "base_correlation_fixed_Vixen": 0.1357096569801971,
+      "output_RMS": 0.014428428374230862
+    },
+    {
+      "tag": "P03_MGN_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": -0.040011926931330946,
+      "base_correlation_fixed_Vixen": 0.34099473837376454,
+      "output_RMS": 0.0017011529998853803
+    },
+    {
+      "tag": "P03_MGN_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.017372934373375355,
+      "base_correlation_fixed_Vixen": 0.013596590941027772,
+      "output_RMS": 0.06563811749219894
+    },
+    {
+      "tag": "P03_MGN_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.03131489952176277,
+      "base_correlation_fixed_Vixen": 0.14778392488144035,
+      "output_RMS": 0.01479900348931551
+    },
+    {
+      "tag": "P03_MGN_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.43950468940226395,
+      "base_correlation_fixed_Vixen": 0.7576204630684973,
+      "output_RMS": 0.0014986939495429397
+    },
+    {
+      "tag": "P03_MGN_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": -0.00545625643520475,
+      "base_correlation_fixed_Vixen": -0.0028218729849770097,
+      "output_RMS": 0.06521738320589066
+    },
+    {
+      "tag": "P03_MGN_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.17276805446795818,
+      "base_correlation_fixed_Vixen": 0.2172908063931106,
+      "output_RMS": 0.014021730050444603
+    },
+    {
+      "tag": "P03_MGN_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.5068549407632583,
+      "base_correlation_fixed_Vixen": 0.8570042315483958,
+      "output_RMS": 0.0014677306171506643
+    },
+    {
+      "tag": "P04_WOW_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.021609589993681778,
+      "base_correlation_fixed_Vixen": 0.022693790138431938,
+      "output_RMS": 1.6372427940368652
+    },
+    {
+      "tag": "P04_WOW_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.3797649250249148,
+      "base_correlation_fixed_Vixen": 0.4259317972881739,
+      "output_RMS": 1.3553986549377441
+    },
+    {
+      "tag": "P04_WOW_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.5022540474102509,
+      "base_correlation_fixed_Vixen": 0.8535307907293285,
+      "output_RMS": 0.32509148120880127
+    },
+    {
+      "tag": "P04_WOW_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.026777932363346902,
+      "base_correlation_fixed_Vixen": 0.021191220372783887,
+      "output_RMS": 1.672055721282959
+    },
+    {
+      "tag": "P04_WOW_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.12736288756817543,
+      "base_correlation_fixed_Vixen": 0.1357096569801971,
+      "output_RMS": 1.1834330558776855
+    },
+    {
+      "tag": "P04_WOW_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.13005549126804483,
+      "base_correlation_fixed_Vixen": 0.34099473837376454,
+      "output_RMS": 0.3869897127151489
+    },
+    {
+      "tag": "P04_WOW_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.01657368264225375,
+      "base_correlation_fixed_Vixen": 0.013596590941027772,
+      "output_RMS": 1.7002755403518677
+    },
+    {
+      "tag": "P04_WOW_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.11278299992927494,
+      "base_correlation_fixed_Vixen": 0.14778392488144035,
+      "output_RMS": 1.232434630393982
+    },
+    {
+      "tag": "P04_WOW_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.48079334148218006,
+      "base_correlation_fixed_Vixen": 0.7576204630684973,
+      "output_RMS": 0.3257671594619751
+    },
+    {
+      "tag": "P04_WOW_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.001358591425942732,
+      "base_correlation_fixed_Vixen": -0.0028218729849770097,
+      "output_RMS": 1.6955145597457886
+    },
+    {
+      "tag": "P04_WOW_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.1923832697988465,
+      "base_correlation_fixed_Vixen": 0.2172908063931106,
+      "output_RMS": 1.1910501718521118
+    },
+    {
+      "tag": "P04_WOW_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.5960654278873937,
+      "base_correlation_fixed_Vixen": 0.8570042315483958,
+      "output_RMS": 0.31440314650535583
+    },
+    {
+      "tag": "P05_WOW_bilateral_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.020101810352881673,
+      "base_correlation_fixed_Vixen": 0.022693790138431938,
+      "output_RMS": 2.0690577030181885
+    },
+    {
+      "tag": "P05_WOW_bilateral_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.4100435415944857,
+      "base_correlation_fixed_Vixen": 0.4259317972881739,
+      "output_RMS": 1.0687428712844849
+    },
+    {
+      "tag": "P05_WOW_bilateral_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.5551419127659544,
+      "base_correlation_fixed_Vixen": 0.8535307907293285,
+      "output_RMS": 0.20599764585494995
+    },
+    {
+      "tag": "P05_WOW_bilateral_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.025499926909331606,
+      "base_correlation_fixed_Vixen": 0.021191220372783887,
+      "output_RMS": 2.262214422225952
+    },
+    {
+      "tag": "P05_WOW_bilateral_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.11187995161853474,
+      "base_correlation_fixed_Vixen": 0.1357096569801971,
+      "output_RMS": 0.9268474578857422
+    },
+    {
+      "tag": "P05_WOW_bilateral_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": -0.155792034502731,
+      "base_correlation_fixed_Vixen": 0.34099473837376454,
+      "output_RMS": 0.1887206882238388
+    },
+    {
+      "tag": "P05_WOW_bilateral_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.010668569461409925,
+      "base_correlation_fixed_Vixen": 0.013596590941027772,
+      "output_RMS": 2.3142526149749756
+    },
+    {
+      "tag": "P05_WOW_bilateral_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.10613292764572886,
+      "base_correlation_fixed_Vixen": 0.14778392488144035,
+      "output_RMS": 0.9584475159645081
+    },
+    {
+      "tag": "P05_WOW_bilateral_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.4966057250019026,
+      "base_correlation_fixed_Vixen": 0.7576204630684973,
+      "output_RMS": 0.2134072333574295
+    },
+    {
+      "tag": "P05_WOW_bilateral_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.00018570495471741496,
+      "base_correlation_fixed_Vixen": -0.0028218729849770097,
+      "output_RMS": 2.44297456741333
+    },
+    {
+      "tag": "P05_WOW_bilateral_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.20129269460709845,
+      "base_correlation_fixed_Vixen": 0.2172908063931106,
+      "output_RMS": 1.0482916831970215
+    },
+    {
+      "tag": "P05_WOW_bilateral_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.42722643538932875,
+      "base_correlation_fixed_Vixen": 0.8570042315483958,
+      "output_RMS": 0.18954767286777496
+    },
+    {
+      "tag": "P06_NAFE_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.01848080960800239,
+      "base_correlation_fixed_Vixen": 0.022693790138431938,
+      "output_RMS": 0.04269150272011757
+    },
+    {
+      "tag": "P06_NAFE_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.2721662867459198,
+      "base_correlation_fixed_Vixen": 0.4259317972881739,
+      "output_RMS": 0.01594039425253868
+    },
+    {
+      "tag": "P06_NAFE_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.34143365287009353,
+      "base_correlation_fixed_Vixen": 0.8535307907293285,
+      "output_RMS": 0.0014603238087147474
+    },
+    {
+      "tag": "P06_NAFE_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.020120560184633155,
+      "base_correlation_fixed_Vixen": 0.021191220372783887,
+      "output_RMS": 0.04408082738518715
+    },
+    {
+      "tag": "P06_NAFE_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.10184583180634114,
+      "base_correlation_fixed_Vixen": 0.1357096569801971,
+      "output_RMS": 0.013555499725043774
+    },
+    {
+      "tag": "P06_NAFE_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.08823999005799663,
+      "base_correlation_fixed_Vixen": 0.34099473837376454,
+      "output_RMS": 0.0009049501386471093
+    },
+    {
+      "tag": "P06_NAFE_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.013608386021316336,
+      "base_correlation_fixed_Vixen": 0.013596590941027772,
+      "output_RMS": 0.04832781106233597
+    },
+    {
+      "tag": "P06_NAFE_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.01093915852415185,
+      "base_correlation_fixed_Vixen": 0.14778392488144035,
+      "output_RMS": 0.014756494201719761
+    },
+    {
+      "tag": "P06_NAFE_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.40915833830646997,
+      "base_correlation_fixed_Vixen": 0.7576204630684973,
+      "output_RMS": 0.0009796684607863426
+    },
+    {
+      "tag": "P06_NAFE_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": -0.003298618211333302,
+      "base_correlation_fixed_Vixen": -0.0028218729849770097,
+      "output_RMS": 0.04630700871348381
+    },
+    {
+      "tag": "P06_NAFE_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.17494580286929284,
+      "base_correlation_fixed_Vixen": 0.2172908063931106,
+      "output_RMS": 0.013721803203225136
+    },
+    {
+      "tag": "P06_NAFE_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.3742507374150965,
+      "base_correlation_fixed_Vixen": 0.8570042315483958,
+      "output_RMS": 0.0008358554914593697
+    },
+    {
+      "tag": "P07_ACHF_precursor16_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.020751686739329225,
+      "base_correlation_fixed_Vixen": 0.022693790138431938,
+      "output_RMS": 0.9615222811698914
+    },
+    {
+      "tag": "P07_ACHF_precursor16_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.24676661410277684,
+      "base_correlation_fixed_Vixen": 0.4259317972881739,
+      "output_RMS": 0.35318946838378906
+    },
+    {
+      "tag": "P07_ACHF_precursor16_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.3005221450317618,
+      "base_correlation_fixed_Vixen": 0.8535307907293285,
+      "output_RMS": 0.028481876477599144
+    },
+    {
+      "tag": "P07_ACHF_precursor16_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.0204266033785564,
+      "base_correlation_fixed_Vixen": 0.021191220372783887,
+      "output_RMS": 0.8912420868873596
+    },
+    {
+      "tag": "P07_ACHF_precursor16_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.09777053620328272,
+      "base_correlation_fixed_Vixen": 0.1357096569801971,
+      "output_RMS": 0.2673598527908325
+    },
+    {
+      "tag": "P07_ACHF_precursor16_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.07186930886625979,
+      "base_correlation_fixed_Vixen": 0.34099473837376454,
+      "output_RMS": 0.015474126674234867
+    },
+    {
+      "tag": "P07_ACHF_precursor16_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.013317395751685869,
+      "base_correlation_fixed_Vixen": 0.013596590941027772,
+      "output_RMS": 0.9456319808959961
+    },
+    {
+      "tag": "P07_ACHF_precursor16_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.0077911489090262695,
+      "base_correlation_fixed_Vixen": 0.14778392488144035,
+      "output_RMS": 0.27609214186668396
+    },
+    {
+      "tag": "P07_ACHF_precursor16_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.43248718304190686,
+      "base_correlation_fixed_Vixen": 0.7576204630684973,
+      "output_RMS": 0.01574099436402321
+    },
+    {
+      "tag": "P07_ACHF_precursor16_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": -0.003524139557678111,
+      "base_correlation_fixed_Vixen": -0.0028218729849770097,
+      "output_RMS": 0.8670135140419006
+    },
+    {
+      "tag": "P07_ACHF_precursor16_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.16824374627221064,
+      "base_correlation_fixed_Vixen": 0.2172908063931106,
+      "output_RMS": 0.24663405120372772
+    },
+    {
+      "tag": "P07_ACHF_precursor16_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.3835518489160799,
+      "base_correlation_fixed_Vixen": 0.8570042315483958,
+      "output_RMS": 0.012977018021047115
+    },
+    {
+      "tag": "P08_ACHF_precursor32_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.02254746637572327,
+      "base_correlation_fixed_Vixen": 0.022693790138431938,
+      "output_RMS": 0.9692642092704773
+    },
+    {
+      "tag": "P08_ACHF_precursor32_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.35887712325657406,
+      "base_correlation_fixed_Vixen": 0.4259317972881739,
+      "output_RMS": 0.5206936597824097
+    },
+    {
+      "tag": "P08_ACHF_precursor32_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.37799873083981433,
+      "base_correlation_fixed_Vixen": 0.8535307907293285,
+      "output_RMS": 0.08281027525663376
+    },
+    {
+      "tag": "P08_ACHF_precursor32_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.021219937745862175,
+      "base_correlation_fixed_Vixen": 0.021191220372783887,
+      "output_RMS": 0.8949344158172607
+    },
+    {
+      "tag": "P08_ACHF_precursor32_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.1230318013795947,
+      "base_correlation_fixed_Vixen": 0.1357096569801971,
+      "output_RMS": 0.3368220925331116
+    },
+    {
+      "tag": "P08_ACHF_precursor32_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.08776753858746054,
+      "base_correlation_fixed_Vixen": 0.34099473837376454,
+      "output_RMS": 0.04965599626302719
+    },
+    {
+      "tag": "P08_ACHF_precursor32_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.013406285270765136,
+      "base_correlation_fixed_Vixen": 0.013596590941027772,
+      "output_RMS": 0.9500711560249329
+    },
+    {
+      "tag": "P08_ACHF_precursor32_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.06935491419130216,
+      "base_correlation_fixed_Vixen": 0.14778392488144035,
+      "output_RMS": 0.36831292510032654
+    },
+    {
+      "tag": "P08_ACHF_precursor32_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.4862135770158193,
+      "base_correlation_fixed_Vixen": 0.7576204630684973,
+      "output_RMS": 0.04742441326379776
+    },
+    {
+      "tag": "P08_ACHF_precursor32_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": -0.0027398726441557725,
+      "base_correlation_fixed_Vixen": -0.0028218729849770097,
+      "output_RMS": 0.8709666728973389
+    },
+    {
+      "tag": "P08_ACHF_precursor32_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.1889014190919095,
+      "base_correlation_fixed_Vixen": 0.2172908063931106,
+      "output_RMS": 0.3148938715457916
+    },
+    {
+      "tag": "P08_ACHF_precursor32_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.46763293419512825,
+      "base_correlation_fixed_Vixen": 0.8570042315483958,
+      "output_RMS": 0.03969576954841614
+    },
+    {
+      "tag": "P09_SWAP_pilot_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.024468314425728305,
+      "base_correlation_fixed_Vixen": 0.022693790138431938,
+      "output_RMS": 0.005059969145804644
+    },
+    {
+      "tag": "P09_SWAP_pilot_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.4112368359394539,
+      "base_correlation_fixed_Vixen": 0.4259317972881739,
+      "output_RMS": 0.002932400442659855
+    },
+    {
+      "tag": "P09_SWAP_pilot_float",
+      "xy": [
+        5890,
+        2326
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.9158361905873922,
+      "base_correlation_fixed_Vixen": 0.8535307907293285,
+      "output_RMS": 0.0014540168922394514
+    },
+    {
+      "tag": "P09_SWAP_pilot_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.021709162098862346,
+      "base_correlation_fixed_Vixen": 0.021191220372783887,
+      "output_RMS": 0.004865045193582773
+    },
+    {
+      "tag": "P09_SWAP_pilot_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.13656725938524025,
+      "base_correlation_fixed_Vixen": 0.1357096569801971,
+      "output_RMS": 0.001955208834260702
+    },
+    {
+      "tag": "P09_SWAP_pilot_float",
+      "xy": [
+        5089,
+        5294
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.28796325132148815,
+      "base_correlation_fixed_Vixen": 0.34099473837376454,
+      "output_RMS": 0.0007469529518857598
+    },
+    {
+      "tag": "P09_SWAP_pilot_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": 0.01337924022434186,
+      "base_correlation_fixed_Vixen": 0.013596590941027772,
+      "output_RMS": 0.005107342265546322
+    },
+    {
+      "tag": "P09_SWAP_pilot_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.1411533233962082,
+      "base_correlation_fixed_Vixen": 0.14778392488144035,
+      "output_RMS": 0.002111858455464244
+    },
+    {
+      "tag": "P09_SWAP_pilot_float",
+      "xy": [
+        5965,
+        2120
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.8226726991685713,
+      "base_correlation_fixed_Vixen": 0.7576204630684973,
+      "output_RMS": 0.0008984049782156944
+    },
+    {
+      "tag": "P09_SWAP_pilot_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        2,
+        8
+      ],
+      "correlation_fixed_Vixen": -0.0009550307091993811,
+      "base_correlation_fixed_Vixen": -0.0028218729849770097,
+      "output_RMS": 0.0048475107178092
+    },
+    {
+      "tag": "P09_SWAP_pilot_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        8,
+        32
+      ],
+      "correlation_fixed_Vixen": 0.2168464051598733,
+      "base_correlation_fixed_Vixen": 0.2172908063931106,
+      "output_RMS": 0.0018548894440755248
+    },
+    {
+      "tag": "P09_SWAP_pilot_float",
+      "xy": [
+        5056,
+        5511
+      ],
+      "band_sigma_px": [
+        32,
+        64
+      ],
+      "correlation_fixed_Vixen": 0.8482452944883376,
+      "base_correlation_fixed_Vixen": 0.8570042315483958,
+      "output_RMS": 0.0008587556658312678
+    }
+  ],
+  "conclusion": "correlation reported, no assertion that all outer detail is coronal; no artifact-free PASS from H1"
+}

@@ -1,0 +1,267 @@
+{
+  "radial_null": [
+    {
+      "R": 1.01,
+      "max_abs": 6.359590045735002e-15,
+      "PASS": true
+    },
+    {
+      "R": 1.05,
+      "max_abs": 6.374795489021654e-15,
+      "PASS": true
+    },
+    {
+      "R": 2,
+      "max_abs": 6.122259557458866e-15,
+      "PASS": true
+    },
+    {
+      "R": 2.65,
+      "max_abs": 5.969046750514965e-15,
+      "PASS": true
+    },
+    {
+      "R": 4,
+      "max_abs": 5.958574714865999e-15,
+      "PASS": true
+    },
+    {
+      "R": 8,
+      "max_abs": 4.0377426713335184e-15,
+      "PASS": true
+    },
+    {
+      "R": 12,
+      "max_abs": 4.894360616013851e-15,
+      "PASS": true
+    }
+  ],
+  "angular_transfer": [
+    {
+      "R": 1.01,
+      "nominal_wavelength": 32,
+      "measured": 0.29432567466099124,
+      "analytic": 0.2943256746609912,
+      "ratio": 1.0000000000000002,
+      "PASS": true
+    },
+    {
+      "R": 1.01,
+      "nominal_wavelength": 64,
+      "measured": 0.7291354737170381,
+      "analytic": 0.7291354737170381,
+      "ratio": 1.0,
+      "PASS": true
+    },
+    {
+      "R": 1.01,
+      "nominal_wavelength": 128,
+      "measured": 0.8271639728725566,
+      "analytic": 0.8271639728725565,
+      "ratio": 1.0000000000000002,
+      "PASS": true
+    },
+    {
+      "R": 1.01,
+      "nominal_wavelength": 256,
+      "measured": 0.6392408080799967,
+      "analytic": 0.6392408080799967,
+      "ratio": 1.0,
+      "PASS": true
+    },
+    {
+      "R": 1.05,
+      "nominal_wavelength": 32,
+      "measured": 0.2899317221320861,
+      "analytic": 0.28993172213208596,
+      "ratio": 1.0000000000000007,
+      "PASS": true
+    },
+    {
+      "R": 1.05,
+      "nominal_wavelength": 64,
+      "measured": 0.7361502211000812,
+      "analytic": 0.7361502211000811,
+      "ratio": 1.0000000000000002,
+      "PASS": true
+    },
+    {
+      "R": 1.05,
+      "nominal_wavelength": 128,
+      "measured": 0.8278082837720521,
+      "analytic": 0.8278082837720521,
+      "ratio": 1.0,
+      "PASS": true
+    },
+    {
+      "R": 1.05,
+      "nominal_wavelength": 256,
+      "measured": 0.6245439905235324,
+      "analytic": 0.6245439905235322,
+      "ratio": 1.0000000000000004,
+      "PASS": true
+    },
+    {
+      "R": 2,
+      "nominal_wavelength": 32,
+      "measured": 0.2913143242149653,
+      "analytic": 0.2913143242149651,
+      "ratio": 1.0000000000000007,
+      "PASS": true
+    },
+    {
+      "R": 2,
+      "nominal_wavelength": 64,
+      "measured": 0.7297780264956796,
+      "analytic": 0.7297780264956796,
+      "ratio": 1.0,
+      "PASS": true
+    },
+    {
+      "R": 2,
+      "nominal_wavelength": 128,
+      "measured": 0.8255983050755777,
+      "analytic": 0.8255983050755776,
+      "ratio": 1.0000000000000002,
+      "PASS": true
+    },
+    {
+      "R": 2,
+      "nominal_wavelength": 256,
+      "measured": 0.642966365173846,
+      "analytic": 0.642966365173846,
+      "ratio": 1.0,
+      "PASS": true
+    },
+    {
+      "R": 2.65,
+      "nominal_wavelength": 32,
+      "measured": 0.2920201734773912,
+      "analytic": 0.2920201734773911,
+      "ratio": 1.0000000000000002,
+      "PASS": true
+    },
+    {
+      "R": 2.65,
+      "nominal_wavelength": 64,
+      "measured": 0.7308123990813791,
+      "analytic": 0.7308123990813788,
+      "ratio": 1.0000000000000002,
+      "PASS": true
+    },
+    {
+      "R": 2.65,
+      "nominal_wavelength": 128,
+      "measured": 0.8256525308065339,
+      "analytic": 0.825652530806534,
+      "ratio": 0.9999999999999999,
+      "PASS": true
+    },
+    {
+      "R": 2.65,
+      "nominal_wavelength": 256,
+      "measured": 0.6410367730673294,
+      "analytic": 0.6410367730673292,
+      "ratio": 1.0000000000000004,
+      "PASS": true
+    },
+    {
+      "R": 4,
+      "nominal_wavelength": 32,
+      "measured": 0.2913143242149653,
+      "analytic": 0.2913143242149651,
+      "ratio": 1.0000000000000007,
+      "PASS": true
+    },
+    {
+      "R": 4,
+      "nominal_wavelength": 64,
+      "measured": 0.7322662420755989,
+      "analytic": 0.7322662420755989,
+      "ratio": 1.0,
+      "PASS": true
+    },
+    {
+      "R": 4,
+      "nominal_wavelength": 128,
+      "measured": 0.8269912706464497,
+      "analytic": 0.8269912706464495,
+      "ratio": 1.0000000000000002,
+      "PASS": true
+    },
+    {
+      "R": 4,
+      "nominal_wavelength": 256,
+      "measured": 0.6343340742389976,
+      "analytic": 0.6343340742389975,
+      "ratio": 1.0000000000000002,
+      "PASS": true
+    },
+    {
+      "R": 8,
+      "nominal_wavelength": 32,
+      "measured": 0.2913143242149653,
+      "analytic": 0.2913143242149651,
+      "ratio": 1.0000000000000007,
+      "PASS": true
+    },
+    {
+      "R": 8,
+      "nominal_wavelength": 64,
+      "measured": 0.732266242075599,
+      "analytic": 0.7322662420755989,
+      "ratio": 1.0000000000000002,
+      "PASS": true
+    },
+    {
+      "R": 8,
+      "nominal_wavelength": 128,
+      "measured": 0.826306182971232,
+      "analytic": 0.8263061829712322,
+      "ratio": 0.9999999999999999,
+      "PASS": true
+    },
+    {
+      "R": 8,
+      "nominal_wavelength": 256,
+      "measured": 0.6386858892667502,
+      "analytic": 0.6386858892667502,
+      "ratio": 1.0,
+      "PASS": true
+    },
+    {
+      "R": 12,
+      "nominal_wavelength": 32,
+      "measured": 0.29131432421496534,
+      "analytic": 0.2913143242149653,
+      "ratio": 1.0000000000000002,
+      "PASS": true
+    },
+    {
+      "R": 12,
+      "nominal_wavelength": 64,
+      "measured": 0.7322662420755991,
+      "analytic": 0.7322662420755989,
+      "ratio": 1.0000000000000002,
+      "PASS": true
+    },
+    {
+      "R": 12,
+      "nominal_wavelength": 128,
+      "measured": 0.82653706490546,
+      "analytic": 0.8265370649054599,
+      "ratio": 1.0000000000000002,
+      "PASS": true
+    },
+    {
+      "R": 12,
+      "nominal_wavelength": 256,
+      "measured": 0.6372432903868314,
+      "analytic": 0.6372432903868313,
+      "ratio": 1.0000000000000002,
+      "PASS": true
+    }
+  ],
+  "scope": "exact periodic normalized Gaussian core; interpolation inspected separately",
+  "PASS": true
+}

@@ -1,0 +1,35 @@
+{
+  "tag": "P06_NAFE",
+  "parameters": {
+    "paper": "Druckmuller2013; public implementation ebuchlin/medocimage",
+    "n": 65,
+    "ngauss": 12,
+    "local_histogram_bins": 500,
+    "sigma_intensity": 5.0,
+    "sigma_meaning": "declared additive-noise suppression parameter in base G units; not claimed calibrated sensor sigma",
+    "a": [
+      0,
+      6602665.0
+    ],
+    "gamma": 2.4,
+    "gamma_weight": 0.2,
+    "detail_weight": 0.8,
+    "boundary": "only actual observed neighbors contribute; no zero-valued missing sky",
+    "native_reference_tolerance": 2e-06
+  },
+  "physical_support_pixels": 70395270,
+  "float_sha256": "8014cbeb71e6a2b1fb35fcfeeaff88e4a8fc072a8a0135408e4f01ef257a1b73",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": 0.12079525911808014,
+    "white": 0.6890864212512982,
+    "sample_percentiles": [
+      0.1,
+      99.9
+    ],
+    "clipped_low_fraction": 0.0009876657906134887,
+    "clipped_high_fraction": 0.0010226681423339949,
+    "statistics_sample_stride_px": 4
+  },
+  "u16_sha256": "7be94342d3b35791d8f2cb2b5984e5cfea012c76bddb8eaa79563d8c92db1799"
+}

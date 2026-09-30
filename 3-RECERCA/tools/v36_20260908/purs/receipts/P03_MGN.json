@@ -1,0 +1,55 @@
+{
+  "tag": "P03_MGN",
+  "parameters": {
+    "paper": "Morgan & Druckmuller 2014, equations1-5",
+    "sigma_px": [
+      1.25,
+      2.5,
+      5,
+      10,
+      20,
+      40
+    ],
+    "k": 0.7,
+    "h": 0.7,
+    "gamma": 3.2,
+    "weights": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "input_limits": [
+      0.0,
+      6760620.0
+    ],
+    "nonpositive_input": "native limb pixels clipped to 0 as allowed in paper; base itself unchanged",
+    "boundary": "input = base where supported, exp(azimuthal mean ln profile) elsewhere (lunar hole + outside support), used ONLY as operator input; output saved on physical support",
+    "farcit": {
+      "primer_anell_sencer_px": 461,
+      "primer_anell_sencer_R": 1.0462932592588157,
+      "pendent_ln_per_px_dins": -0.02277171763157757,
+      "ultim_anell_amb_dada_px": 6417,
+      "anells_incomplets_usats": "mitjana dels píxels presents",
+      "px_farcits": 8800536
+    },
+    "display": "V34 receipts LUT",
+    "ring_bias_limb": {
+      "V34": 4.27363491063736,
+      "V35": 4.437952969966438
+    }
+  },
+  "physical_support_pixels": 70395270,
+  "float_sha256": "4f8484aa497c467007562d4811ccdaf725222fbef7ee1c1e47fdbcc4680f1884",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": -0.27781726863980294,
+    "white": 0.35017163938283985,
+    "sample_percentiles": null,
+    "clipped_low_fraction": 0.0009260565376054385,
+    "clipped_high_fraction": 0.0008077815455498643
+  },
+  "u16_sha256": "31cfdf94e77b8d24b9cd3813e4bf061f4d13ea16640cbb859732e44572e88741"
+}

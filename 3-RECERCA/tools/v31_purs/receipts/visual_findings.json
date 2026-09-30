@@ -1,0 +1,15 @@
+{
+  "status": "VERIFIED_COMPARISON_WITH_VISIBLE_LIMITATIONS",
+  "artifact_free": false,
+  "full_canvas_and_native100_reviewed": true,
+  "findings": {
+    "NRGF_RHEF": "broad outer Sun-centered arcs and NW coverage-parallel band visible; RHEF has independently demonstrated 1px-bin banding",
+    "MGN_WOW_NAFE": "enhance noise in outer field; no calibrated full-canvas noise model, no claim that all texture is coronal",
+    "ACHF_precursor": "strong bright/dark limb response to steep linear radiance profile; global LUT gives little outer contrast; not the complete nonlinear Corona algorithm",
+    "SWAP": "conditional EUV-to-visible transfer pilot",
+    "geometry": "all9 methods peak at0deg;180deg null rejected",
+    "mask": "only exact inherited physical support, no extra circular crop/fade"
+  },
+  "default": "all new views OFF; previous30 layers and appearance preserved",
+  "acceptance": "implementation and container QA; not certification of elimination of solar arcs"
+}

@@ -1,0 +1,7 @@
+var root='/Users/USUARI/Downloads/Eclipse 2026/output/v58_correccions_20260913/';var oldDialogs=app.displayDialogs;var owned=[];
+function log(s){var f=new File(root+'H6_native.log');f.open('a');f.writeln(s);f.close();}
+function exportVisible(d,name,crop){var f=new File(root+name+'.tif');if(f.exists)throw new Error('No-clobber '+name);var t=d.duplicate('V58_QA_'+name,true);owned.push(t);if(crop)t.crop([UnitValue(4777,'px'),UnitValue(3177,'px'),UnitValue(5977,'px'),UnitValue(4377,'px')]);var o=new TiffSaveOptions();o.imageCompression=TIFFEncoding.TIFFZIP;o.layers=false;o.alphaChannels=true;o.transparency=true;o.embedColorProfile=true;t.saveAs(f,o,true,Extension.LOWERCASE);t.close(SaveOptions.DONOTSAVECHANGES);owned.pop();log('EXPORTED '+name);}
+try{app.displayDialogs=DialogModes.NO;var d=app.open(new File(root+'V58_enabled_work.psb'));owned.push(d);var n=d.layers.length;d.layers[0].visible=false;d.layers[0].visible=true;app.refresh();exportVisible(d,'V58E_default_native',false);
+for(var fidx=11;fidx<=26;fidx++){for(var kk=11;kk<=26;kk++)d.layers[n-1-kk].visible=false;var fl=d.layers[n-1-fidx];var oo=fl.opacity;fl.opacity=100;fl.visible=true;app.refresh();exportVisible(d,'V58E_filter_'+fidx+'_native',true);fl.opacity=oo;}
+for(var kk=11;kk<=26;kk++)d.layers[n-1-kk].visible=false;app.refresh();exportVisible(d,'V58E_base_native',true);
+d.close(SaveOptions.DONOTSAVECHANGES);owned.pop();log('COMPLETE');}finally{while(owned.length){try{owned.pop().close(SaveOptions.DONOTSAVECHANGES);}catch(e){}}app.displayDialogs=oldDialogs;}'ENABLED V58 RENDERED';

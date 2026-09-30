@@ -1,0 +1,969 @@
+{
+  "gains": {
+    "vixen": 1.0,
+    "sony_A": 0.324143,
+    "sony_B": 0.3372
+  },
+  "epochs": {
+    "vixen_3": {
+      "epoch_sha256": "e8e128ff8f3974f057930ace755a27cb7683eaa098808184ab92f41c24555780",
+      "B1_inputs_sha256": "618053ea60e41ce235b824527d43b26130cc22b86a5878debae80aae39f84fe1",
+      "frames": [
+        "572A2982",
+        "572A2983",
+        "572A2984",
+        "572A2979",
+        "572A2980",
+        "572A2981"
+      ],
+      "times": [
+        33.274692201724974,
+        46.34469220171741,
+        59.74469220172614,
+        20.31469220171857,
+        23.214692201727303,
+        26.124692201716243
+      ],
+      "weights": [
+        {
+          "stem": "572A2982",
+          "weight_inner": 142530.9756228173,
+          "weight_ring": 20448.26073358317,
+          "weight_last": 1.165677448558017
+        },
+        {
+          "stem": "572A2983",
+          "weight_inner": 149778.2672941586,
+          "weight_ring": 21711.142521827045,
+          "weight_last": 4.736883280207492
+        },
+        {
+          "stem": "572A2984",
+          "weight_inner": 149512.07040839622,
+          "weight_ring": 21789.890403301775,
+          "weight_last": 20.438419948322508
+        },
+        {
+          "stem": "572A2979",
+          "weight_inner": 26603.188994084485,
+          "weight_ring": 4403.807639820276,
+          "weight_last": 72.62331662024569
+        },
+        {
+          "stem": "572A2980",
+          "weight_inner": 27019.5185077426,
+          "weight_ring": 4443.351602054554,
+          "weight_last": 80.0253242676213
+        },
+        {
+          "stem": "572A2981",
+          "weight_inner": 27499.30118279692,
+          "weight_ring": 4465.272939285351,
+          "weight_last": 80.37878650892237
+        }
+      ]
+    },
+    "sony_A_1": {
+      "epoch_sha256": "ba327cc40eec49f3972a36fe9f90fa4fc559f3b1b856e6548fa8a532bae2345c",
+      "B1_inputs_sha256": "618053ea60e41ce235b824527d43b26130cc22b86a5878debae80aae39f84fe1",
+      "frames": [
+        "DSC06987",
+        "DSC06985",
+        "DSC06986"
+      ],
+      "times": [
+        37.86469220172148,
+        25.364692201721482,
+        25.927192201721482
+      ],
+      "weights": [
+        {
+          "stem": "DSC06987",
+          "weight_inner": 71417.31914487877,
+          "weight_ring": 1395.1863138781898,
+          "weight_last": 0.0
+        },
+        {
+          "stem": "DSC06985",
+          "weight_inner": 28468.021983915132,
+          "weight_ring": 4521.680876754284,
+          "weight_last": 20.916147680412763
+        },
+        {
+          "stem": "DSC06986",
+          "weight_inner": 3430.860898585521,
+          "weight_ring": 514.4161295566153,
+          "weight_last": 4.740813242855973
+        }
+      ]
+    },
+    "sony_B_2": {
+      "epoch_sha256": "117acd64adba64da88169c8df94122758cc3258d12cba96cb4e29d5e70f613ac",
+      "B1_inputs_sha256": "618053ea60e41ce235b824527d43b26130cc22b86a5878debae80aae39f84fe1",
+      "frames": [
+        "DSC06993",
+        "DSC06991",
+        "DSC06992"
+      ],
+      "times": [
+        70.86469220172148,
+        59.36469220172148,
+        58.92719220172148
+      ],
+      "weights": [
+        {
+          "stem": "DSC06993",
+          "weight_inner": 47734.71028632364,
+          "weight_ring": 653.0872855952158,
+          "weight_last": 0.0
+        },
+        {
+          "stem": "DSC06991",
+          "weight_inner": 22710.115453724527,
+          "weight_ring": 4047.069417231405,
+          "weight_last": 8.026522055881985
+        },
+        {
+          "stem": "DSC06992",
+          "weight_inner": 2819.549504018703,
+          "weight_ring": 533.1249304085788,
+          "weight_last": 5.358199306124092
+        }
+      ]
+    },
+    "sony_A_0": {
+      "epoch_sha256": "c616c6b97bbcd7ba3ac3abe797b5f2142288781e02c25cdc9bdc2b0d4290705a",
+      "B1_inputs_sha256": "618053ea60e41ce235b824527d43b26130cc22b86a5878debae80aae39f84fe1",
+      "frames": [
+        "DSC06984",
+        "DSC06982",
+        "DSC06983",
+        "DSC06981",
+        "DSC06979",
+        "DSC06980"
+      ],
+      "times": [
+        15.864692201721482,
+        12.989692201721482,
+        12.881358868386481,
+        2.869692201721482,
+        2.8653172017214823,
+        2.864770326721482
+      ],
+      "weights": [
+        {
+          "stem": "DSC06984",
+          "weight_inner": 53877.32791726546,
+          "weight_ring": 8901.709043505403,
+          "weight_last": 65.3292263346563
+        },
+        {
+          "stem": "DSC06982",
+          "weight_inner": 6456.513477444403,
+          "weight_ring": 1058.5196264922247,
+          "weight_last": 13.86902575800425
+        },
+        {
+          "stem": "DSC06983",
+          "weight_inner": 696.1760247142621,
+          "weight_ring": 110.24668668319816,
+          "weight_last": 0.8020581385593972
+        },
+        {
+          "stem": "DSC06981",
+          "weight_inner": 149.5550211076978,
+          "weight_ring": 25.250327547373757,
+          "weight_last": 0.2219024969915899
+        },
+        {
+          "stem": "DSC06979",
+          "weight_inner": 5.437260287294963,
+          "weight_ring": 1.0914508135491348,
+          "weight_last": 0.021979116016376078
+        },
+        {
+          "stem": "DSC06980",
+          "weight_inner": 0.1002336819363694,
+          "weight_ring": 0.023867854654019093,
+          "weight_last": 0.0018097365032979647
+        }
+      ]
+    },
+    "sony_B_3": {
+      "epoch_sha256": "a35640fc8100b88f7ebaa5aec572793ee037fbccb5777a56ec105515eaf63251",
+      "B1_inputs_sha256": "618053ea60e41ce235b824527d43b26130cc22b86a5878debae80aae39f84fe1",
+      "frames": [
+        "DSC06996",
+        "DSC06994",
+        "DSC06995"
+      ],
+      "times": [
+        79.86469220172148,
+        76.98969220172148,
+        76.88135886838649
+      ],
+      "weights": [
+        {
+          "stem": "DSC06996",
+          "weight_inner": 41031.696997932195,
+          "weight_ring": 8364.636026388016,
+          "weight_last": 19.558347066799264
+        },
+        {
+          "stem": "DSC06994",
+          "weight_inner": 5264.71969445558,
+          "weight_ring": 1053.5248638559342,
+          "weight_last": 12.158493700566902
+        },
+        {
+          "stem": "DSC06995",
+          "weight_inner": 563.1823448372847,
+          "weight_ring": 109.0506312852651,
+          "weight_last": 0.7507457580953303
+        }
+      ]
+    },
+    "sony_B_4": {
+      "epoch_sha256": "617a2a202eb53ae8509ababe7c71ca66a5640984ff9d736d9e86ce223e5bfe49",
+      "B1_inputs_sha256": "618053ea60e41ce235b824527d43b26130cc22b86a5878debae80aae39f84fe1",
+      "frames": [
+        "DSC06999",
+        "DSC06997",
+        "DSC06998"
+      ],
+      "times": [
+        85.86469220172148,
+        81.98969220172148,
+        82.88135886838649
+      ],
+      "weights": [
+        {
+          "stem": "DSC06999",
+          "weight_inner": 39267.50208372884,
+          "weight_ring": 8078.053716349826,
+          "weight_last": 38.604875741678335
+        },
+        {
+          "stem": "DSC06997",
+          "weight_inner": 5029.683086860059,
+          "weight_ring": 1016.5551736845243,
+          "weight_last": 12.871227836628284
+        },
+        {
+          "stem": "DSC06998",
+          "weight_inner": 541.7115401116981,
+          "weight_ring": 104.42287778386651,
+          "weight_last": 0.7792769445234291
+        }
+      ]
+    },
+    "vixen_2": {
+      "epoch_sha256": "26e4e759532b2010074597049e0a493ec0f555425133b0231427fb921918cfb4",
+      "B1_inputs_sha256": "618053ea60e41ce235b824527d43b26130cc22b86a5878debae80aae39f84fe1",
+      "frames": [
+        "572A2978",
+        "572A2977",
+        "572A2976",
+        "572A2975",
+        "572A2974",
+        "572A2973"
+      ],
+      "times": [
+        17.914692201724392,
+        16.38969220171566,
+        15.328025535049498,
+        14.383025535051242,
+        13.476692201722063,
+        12.575192201727884
+      ],
+      "weights": [
+        {
+          "stem": "572A2978",
+          "weight_inner": 13128.179235736734,
+          "weight_ring": 2165.187604845206,
+          "weight_last": 48.151696736605
+        },
+        {
+          "stem": "572A2977",
+          "weight_inner": 2123.2030240700233,
+          "weight_ring": 374.18876693572224,
+          "weight_last": 7.020933149881525
+        },
+        {
+          "stem": "572A2976",
+          "weight_inner": 257.33085021981026,
+          "weight_ring": 49.18590793389821,
+          "weight_last": 0.6755636842170657
+        },
+        {
+          "stem": "572A2975",
+          "weight_inner": 21.261086545976767,
+          "weight_ring": 4.603872011278425,
+          "weight_last": 0.13901457986599974
+        },
+        {
+          "stem": "572A2974",
+          "weight_inner": 1.4693874974567582,
+          "weight_ring": 0.35051571108838997,
+          "weight_last": 0.024533817309739234
+        },
+        {
+          "stem": "572A2973",
+          "weight_inner": 0.09892624072280727,
+          "weight_ring": 0.024827916385767757,
+          "weight_last": 0.0030618512427182634
+        }
+      ]
+    },
+    "vixen_5": {
+      "epoch_sha256": "17fad584d1c1e14ad0f573a8b3ca785f8b6de8698b68f3dea47eed46a785a71a",
+      "B1_inputs_sha256": "618053ea60e41ce235b824527d43b26130cc22b86a5878debae80aae39f84fe1",
+      "frames": [
+        "572A2996",
+        "572A2995",
+        "572A2994",
+        "572A2993",
+        "572A2992",
+        "572A2991"
+      ],
+      "times": [
+        79.62469220171624,
+        78.09969220172206,
+        77.0380255350559,
+        76.09302553505765,
+        75.18669220172846,
+        74.28519220171974
+      ],
+      "weights": [
+        {
+          "stem": "572A2996",
+          "weight_inner": 12797.418358395658,
+          "weight_ring": 2073.3626640941516,
+          "weight_last": 41.50405465724047
+        },
+        {
+          "stem": "572A2995",
+          "weight_inner": 2062.940706766002,
+          "weight_ring": 357.30323667673395,
+          "weight_last": 6.101633129227884
+        },
+        {
+          "stem": "572A2994",
+          "weight_inner": 241.20621383815364,
+          "weight_ring": 45.59500105962354,
+          "weight_last": 0.6214304837586885
+        },
+        {
+          "stem": "572A2993",
+          "weight_inner": 19.319567854502807,
+          "weight_ring": 4.161726241088933,
+          "weight_last": 0.12610740152001196
+        },
+        {
+          "stem": "572A2992",
+          "weight_inner": 1.3323676060690903,
+          "weight_ring": 0.3157576158155777,
+          "weight_last": 0.021734987457408685
+        },
+        {
+          "stem": "572A2991",
+          "weight_inner": 0.0909294494293105,
+          "weight_ring": 0.02278780008061177,
+          "weight_last": 0.0027574431881442667
+        }
+      ]
+    },
+    "vixen_1": {
+      "epoch_sha256": "a844431bd8162d40b88a6d6af45bb0aa9e598341beae538b9dff9f8806853363",
+      "B1_inputs_sha256": "618053ea60e41ce235b824527d43b26130cc22b86a5878debae80aae39f84fe1",
+      "frames": [
+        "572A2972",
+        "572A2971",
+        "572A2970",
+        "572A2969",
+        "572A2968",
+        "572A2967"
+      ],
+      "times": [
+        11.424692201719154,
+        10.21719220171508,
+        9.241358868387064,
+        8.308692201723812,
+        7.40569220171508,
+        6.504942201720901
+      ],
+      "weights": [
+        {
+          "stem": "572A2972",
+          "weight_inner": 5005.741938311389,
+          "weight_ring": 876.037769777464,
+          "weight_last": 18.649330810527466
+        },
+        {
+          "stem": "572A2971",
+          "weight_inner": 776.1284565957832,
+          "weight_ring": 140.83150155471822,
+          "weight_last": 2.1338970175882235
+        },
+        {
+          "stem": "572A2970",
+          "weight_inner": 76.81019588746967,
+          "weight_ring": 15.608376706691304,
+          "weight_last": 0.2882459572671926
+        },
+        {
+          "stem": "572A2969",
+          "weight_inner": 5.70802417799325,
+          "weight_ring": 1.297666290504981,
+          "weight_last": 0.05718451124864658
+        },
+        {
+          "stem": "572A2968",
+          "weight_inner": 0.3817272878710455,
+          "weight_ring": 0.09372066791797201,
+          "weight_last": 0.008775819762031853
+        },
+        {
+          "stem": "572A2967",
+          "weight_inner": 0.026309686430036144,
+          "weight_ring": 0.006660766983638659,
+          "weight_last": 0.0009208635174513778
+        }
+      ]
+    },
+    "vixen_4": {
+      "epoch_sha256": "3237cfc5da575020dab155fe9e1821a99f6d352c286c9965ccfd0e117dfb1eab",
+      "B1_inputs_sha256": "618053ea60e41ce235b824527d43b26130cc22b86a5878debae80aae39f84fe1",
+      "frames": [
+        "572A2990",
+        "572A2989",
+        "572A2988",
+        "572A2987",
+        "572A2986",
+        "572A2985"
+      ],
+      "times": [
+        73.13469220172556,
+        71.91719220172672,
+        70.9313588683894,
+        70.01869220171567,
+        69.18569220172847,
+        68.14494220172031
+      ],
+      "weights": [
+        {
+          "stem": "572A2990",
+          "weight_inner": 5198.684069634357,
+          "weight_ring": 873.9761396715187,
+          "weight_last": 16.887634716518136
+        },
+        {
+          "stem": "572A2989",
+          "weight_inner": 764.0267090795551,
+          "weight_ring": 136.59327117405962,
+          "weight_last": 1.7710853533934308
+        },
+        {
+          "stem": "572A2988",
+          "weight_inner": 71.31329393945109,
+          "weight_ring": 14.572908320100996,
+          "weight_last": 0.2962294982391278
+        },
+        {
+          "stem": "572A2987",
+          "weight_inner": 5.192919122710617,
+          "weight_ring": 1.1786517428471865,
+          "weight_last": 0.05658463846371634
+        },
+        {
+          "stem": "572A2986",
+          "weight_inner": 0.34910325787887464,
+          "weight_ring": 0.08543378671203374,
+          "weight_last": 0.008189610473448104
+        },
+        {
+          "stem": "572A2985",
+          "weight_inner": 0.024168091624763334,
+          "weight_ring": 0.0060895527024438295,
+          "weight_last": 0.0008415336383107374
+        }
+      ]
+    },
+    "vixen_6": {
+      "epoch_sha256": "ca1cd5c2ec6882202d080d3ec66a4cd9c6440cb236e0835529161827dc0df05e",
+      "B1_inputs_sha256": "618053ea60e41ce235b824527d43b26130cc22b86a5878debae80aae39f84fe1",
+      "frames": [
+        "572A3002",
+        "572A3001",
+        "572A3000",
+        "572A2999",
+        "572A2998",
+        "572A2997"
+      ],
+      "times": [
+        85.93469220172847,
+        84.72719220172439,
+        83.75135886838183,
+        82.82869220172789,
+        81.92569220171916,
+        81.02494220172497
+      ],
+      "weights": [
+        {
+          "stem": "572A3002",
+          "weight_inner": 4776.7648424317795,
+          "weight_ring": 815.3573763004418,
+          "weight_last": 14.70372342111697
+        },
+        {
+          "stem": "572A3001",
+          "weight_inner": 728.7271406276105,
+          "weight_ring": 130.67944926181463,
+          "weight_last": 1.7407218365249983
+        },
+        {
+          "stem": "572A3000",
+          "weight_inner": 69.64264675355932,
+          "weight_ring": 14.037614064004249,
+          "weight_last": 0.25818795153470164
+        },
+        {
+          "stem": "572A2999",
+          "weight_inner": 5.119221072570699,
+          "weight_ring": 1.1587534409467803,
+          "weight_last": 0.054485081684871546
+        },
+        {
+          "stem": "572A2998",
+          "weight_inner": 0.3439706576391862,
+          "weight_ring": 0.08430013977387743,
+          "weight_last": 0.008100001921394415
+        },
+        {
+          "stem": "572A2997",
+          "weight_inner": 0.02403502502335105,
+          "weight_ring": 0.006020222956403545,
+          "weight_last": 0.0008304517227483598
+        }
+      ]
+    },
+    "vixen_7": {
+      "epoch_sha256": "375b3b1a5ce52c23e4a381224950c6a76a06f1f271ad5330c6874275a7d41c0e",
+      "B1_inputs_sha256": "618053ea60e41ce235b824527d43b26130cc22b86a5878debae80aae39f84fe1",
+      "frames": [
+        "572A3008",
+        "572A3007",
+        "572A3006",
+        "572A3005",
+        "572A3004",
+        "572A3003"
+      ],
+      "times": [
+        92.0046922017209,
+        90.79719220171683,
+        89.82135886838881,
+        88.88869220172556,
+        87.98569220171683,
+        87.08494220172264
+      ],
+      "weights": [
+        {
+          "stem": "572A3008",
+          "weight_inner": 4531.0696822944055,
+          "weight_ring": 786.4262069259753,
+          "weight_last": 15.273187524931089
+        },
+        {
+          "stem": "572A3007",
+          "weight_inner": 703.6369178752213,
+          "weight_ring": 126.71016874595537,
+          "weight_last": 1.6724957078015124
+        },
+        {
+          "stem": "572A3006",
+          "weight_inner": 69.27407659778899,
+          "weight_ring": 14.002541621891023,
+          "weight_last": 0.29334371843681895
+        },
+        {
+          "stem": "572A3005",
+          "weight_inner": 5.049466954636741,
+          "weight_ring": 1.1347701237997776,
+          "weight_last": 0.052674878063469335
+        },
+        {
+          "stem": "572A3004",
+          "weight_inner": 0.34050014884496715,
+          "weight_ring": 0.08303161238983539,
+          "weight_last": 0.007884508953990472
+        },
+        {
+          "stem": "572A3003",
+          "weight_inner": 0.023764049468437187,
+          "weight_ring": 0.005962040985219869,
+          "weight_last": 0.0008194758892794624
+        }
+      ]
+    },
+    "sony_B_5": {
+      "epoch_sha256": "e344a879032d058178eae65005cc1be4e22b6ce926f31b5ddbf854ae4e5854d0",
+      "B1_inputs_sha256": "618053ea60e41ce235b824527d43b26130cc22b86a5878debae80aae39f84fe1",
+      "frames": [
+        "DSC07002",
+        "DSC07000",
+        "DSC07001"
+      ],
+      "times": [
+        100.86969220172148,
+        100.86531720172148,
+        100.86477032672148
+      ],
+      "weights": [
+        {
+          "stem": "DSC07002",
+          "weight_inner": 103.1187452676725,
+          "weight_ring": 20.9051269776508,
+          "weight_last": 0.17332399237091367
+        },
+        {
+          "stem": "DSC07000",
+          "weight_inner": 4.095238689896528,
+          "weight_ring": 0.9855729668687535,
+          "weight_last": 0.022130612334142923
+        },
+        {
+          "stem": "DSC07001",
+          "weight_inner": 0.07965102204376598,
+          "weight_ring": 0.02273523925668248,
+          "weight_last": 0.0015972480003926418
+        }
+      ]
+    },
+    "vixen_0": {
+      "epoch_sha256": "5e4f4834125d17d0b36ecb848d454ebf3f8b75ee63c912fa3983d85dd1ae55a5",
+      "B1_inputs_sha256": "618053ea60e41ce235b824527d43b26130cc22b86a5878debae80aae39f84fe1",
+      "frames": [
+        "572A2959",
+        "572A2960",
+        "572A2961",
+        "572A2962",
+        "572A2963",
+        "572A2964",
+        "572A2965",
+        "572A2966"
+      ],
+      "times": [
+        1.0648484517185715,
+        1.7148484517273026,
+        2.364848451721482,
+        3.014848451715661,
+        3.6448484517203177,
+        4.30484845172381,
+        4.954848451717989,
+        5.6048484517267205
+      ],
+      "weights": [
+        {
+          "stem": "572A2959",
+          "weight_inner": 0.011371114907982502,
+          "weight_ring": 0.0028772355426890596,
+          "weight_last": 0.0004042941915582242
+        },
+        {
+          "stem": "572A2960",
+          "weight_inner": 0.011323036009760479,
+          "weight_ring": 0.0028666688852889833,
+          "weight_last": 0.0004081397603298234
+        },
+        {
+          "stem": "572A2961",
+          "weight_inner": 0.011601282325736536,
+          "weight_ring": 0.0029437605599823367,
+          "weight_last": 0.00042429996870476256
+        },
+        {
+          "stem": "572A2962",
+          "weight_inner": 0.011538865331364341,
+          "weight_ring": 0.002930631744639693,
+          "weight_last": 0.000425368105550087
+        },
+        {
+          "stem": "572A2963",
+          "weight_inner": 0.011244757259431332,
+          "weight_ring": 0.002854493918731834,
+          "weight_last": 0.0004151372847046572
+        },
+        {
+          "stem": "572A2964",
+          "weight_inner": 0.011230483224604935,
+          "weight_ring": 0.0028516358694607212,
+          "weight_last": 0.00041514868306265695
+        },
+        {
+          "stem": "572A2965",
+          "weight_inner": 0.011633894178438796,
+          "weight_ring": 0.002955909467369364,
+          "weight_last": 0.00043528694024340804
+        },
+        {
+          "stem": "572A2966",
+          "weight_inner": 0.011426594069456465,
+          "weight_ring": 0.0029042702855720175,
+          "weight_last": 0.00042732092968174545
+        }
+      ]
+    },
+    "vixen_8": {
+      "epoch_sha256": "a91971c7070c4fc00249d4a123f2ef2c543c4ee2df5dfd96dc89de8898ef0201",
+      "B1_inputs_sha256": "618053ea60e41ce235b824527d43b26130cc22b86a5878debae80aae39f84fe1",
+      "frames": [
+        "572A3009",
+        "572A3010",
+        "572A3011",
+        "572A3012",
+        "572A3013",
+        "572A3014",
+        "572A3015",
+        "572A3016",
+        "572A3017",
+        "572A3018",
+        "572A3019",
+        "572A3020",
+        "572A3021",
+        "572A3022",
+        "572A3023",
+        "572A3024",
+        "572A3025"
+      ],
+      "times": [
+        93.15484845171508,
+        93.80484845172381,
+        94.454848451718,
+        95.10484845172672,
+        95.7548484517209,
+        96.40484845171508,
+        97.05484845172381,
+        97.7148484517273,
+        98.36484845172149,
+        99.01484845171566,
+        99.6648484517244,
+        100.31484845171858,
+        100.9648484517273,
+        101.61484845172149,
+        102.26484845171566,
+        102.89484845172032,
+        103.5448484517145
+      ],
+      "weights": [
+        {
+          "stem": "572A3009",
+          "weight_inner": 0.010663799251568825,
+          "weight_ring": 0.00267639973851161,
+          "weight_last": 0.0003959155479878126
+        },
+        {
+          "stem": "572A3010",
+          "weight_inner": 0.010446740850159895,
+          "weight_ring": 0.002617259343420753,
+          "weight_last": 0.0003805279810587635
+        },
+        {
+          "stem": "572A3011",
+          "weight_inner": 0.010635000145354293,
+          "weight_ring": 0.0026659087321796874,
+          "weight_last": 0.00038919548463141925
+        },
+        {
+          "stem": "572A3012",
+          "weight_inner": 0.010418105479588526,
+          "weight_ring": 0.0025897047736772477,
+          "weight_last": 0.0003744408283806816
+        },
+        {
+          "stem": "572A3013",
+          "weight_inner": 0.010543209076047517,
+          "weight_ring": 0.002633192992741079,
+          "weight_last": 0.00038274628596284466
+        },
+        {
+          "stem": "572A3014",
+          "weight_inner": 0.010474657895264796,
+          "weight_ring": 0.0026093439840479404,
+          "weight_last": 0.0003767048588940563
+        },
+        {
+          "stem": "572A3015",
+          "weight_inner": 0.010561836400447357,
+          "weight_ring": 0.0026277481683523894,
+          "weight_last": 0.0003794678308740396
+        },
+        {
+          "stem": "572A3016",
+          "weight_inner": 0.010488470255635362,
+          "weight_ring": 0.0026230814019298676,
+          "weight_last": 0.0003757774978866428
+        },
+        {
+          "stem": "572A3017",
+          "weight_inner": 0.010517776548448246,
+          "weight_ring": 0.0026292066979621454,
+          "weight_last": 0.000376349227963976
+        },
+        {
+          "stem": "572A3018",
+          "weight_inner": 0.01057096978924298,
+          "weight_ring": 0.0026457713675826747,
+          "weight_last": 0.0003769456233341659
+        },
+        {
+          "stem": "572A3019",
+          "weight_inner": 0.010326864154743313,
+          "weight_ring": 0.0025544179183250816,
+          "weight_last": 0.0003590233232451695
+        },
+        {
+          "stem": "572A3020",
+          "weight_inner": 0.010626185438462044,
+          "weight_ring": 0.0026618922840643214,
+          "weight_last": 0.0003731034432238354
+        },
+        {
+          "stem": "572A3021",
+          "weight_inner": 0.010508286816679866,
+          "weight_ring": 0.00261136084144305,
+          "weight_last": 0.0003627348329408301
+        },
+        {
+          "stem": "572A3022",
+          "weight_inner": 0.010598881298921514,
+          "weight_ring": 0.002638601546239484,
+          "weight_last": 0.00036656877016992084
+        },
+        {
+          "stem": "572A3023",
+          "weight_inner": 0.01042357004389951,
+          "weight_ring": 0.0025502608903916636,
+          "weight_last": 0.00035465801371721757
+        },
+        {
+          "stem": "572A3024",
+          "weight_inner": 0.010253014342129923,
+          "weight_ring": 0.00250012686037514,
+          "weight_last": 0.000342403691066973
+        },
+        {
+          "stem": "572A3025",
+          "weight_inner": 0.010610396190888337,
+          "weight_ring": 0.0026011304952614544,
+          "weight_last": 0.0003559167341085004
+        }
+      ]
+    }
+  },
+  "groups": {
+    "vixen": {
+      "epochs": 9,
+      "reference_status": "CANDIDATE convex observed data",
+      "differential_status": "REJECTED negative/overshoot diagnostic",
+      "reference_missing": 0,
+      "reference_nonpositive": 0,
+      "reference_median_G": 529.7187691078827,
+      "differential_nonpositive": 1237,
+      "method": "smooth logisticCDF inverseuncertaintyweighted20th percentile of8pxCartesian means, continuousrelativecoveragepower4, softexcessweighting2%gaugefloor; native conditional inversevariance; common signal differentialGaussian sigma4.0",
+      "epoch_reference_fraction_lila": [
+        0.8774549635303119,
+        3.1882956055028675e-09,
+        3.4802371854008736e-05,
+        9.293699190767284e-10,
+        0.1225100115674604,
+        1.5272358121437123e-07,
+        6.513507911347813e-08,
+        1.8762718246399995e-15,
+        5.540458844532921e-10
+      ],
+      "keys": [
+        "vixen_3",
+        "vixen_2",
+        "vixen_5",
+        "vixen_1",
+        "vixen_4",
+        "vixen_6",
+        "vixen_7",
+        "vixen_0",
+        "vixen_8"
+      ]
+    },
+    "sony": {
+      "epochs": 6,
+      "reference_status": "CANDIDATE convex observed data",
+      "differential_status": "REJECTED negative/overshoot diagnostic",
+      "reference_missing": 0,
+      "reference_nonpositive": 0,
+      "reference_median_G": 527.5583843697905,
+      "differential_nonpositive": 2300,
+      "method": "smooth logisticCDF inverseuncertaintyweighted20th percentile of8pxCartesian means, continuousrelativecoveragepower4, softexcessweighting2%gaugefloor; native conditional inversevariance; common signal differentialGaussian sigma4.0",
+      "epoch_reference_fraction_lila": [
+        0.15328575527912225,
+        0.8432701996511848,
+        3.6723599195116933e-10,
+        3.3036197186917356e-06,
+        0.0034407408817291162,
+        2.0100918274252255e-10
+      ],
+      "keys": [
+        "sony_A_1",
+        "sony_B_2",
+        "sony_A_0",
+        "sony_B_3",
+        "sony_B_4",
+        "sony_B_5"
+      ]
+    },
+    "combined": {
+      "epochs": 15,
+      "reference_status": "CANDIDATE convex observed data",
+      "differential_status": "REJECTED negative/overshoot diagnostic",
+      "reference_missing": 0,
+      "reference_nonpositive": 0,
+      "reference_median_G": 528.5297828690683,
+      "differential_nonpositive": 6329,
+      "method": "smooth logisticCDF inverseuncertaintyweighted20th percentile of8pxCartesian means, continuousrelativecoveragepower4, softexcessweighting2%gaugefloor; native conditional inversevariance; common signal differentialGaussian sigma4.0",
+      "epoch_reference_fraction_lila": [
+        0.8435099550078275,
+        0.006070578030060649,
+        0.1445159778719107,
+        6.335220795400997e-11,
+        5.491479055098268e-07,
+        0.00035014790963616314,
+        1.2211584771179991e-09,
+        1.4889920958573797e-06,
+        9.113900369872702e-11,
+        0.005551218212649136,
+        5.541563643032996e-08,
+        2.7456847216392162e-08,
+        3.264294648973894e-11,
+        1.794622377264722e-15,
+        5.471363463731327e-10
+      ],
+      "keys": [
+        "vixen_3",
+        "sony_A_1",
+        "sony_B_2",
+        "sony_A_0",
+        "sony_B_3",
+        "sony_B_4",
+        "vixen_2",
+        "vixen_5",
+        "vixen_1",
+        "vixen_4",
+        "vixen_6",
+        "vixen_7",
+        "sony_B_5",
+        "vixen_0",
+        "vixen_8"
+      ]
+    }
+  },
+  "B1_inputs_sha256": "618053ea60e41ce235b824527d43b26130cc22b86a5878debae80aae39f84fe1",
+  "variance_limit": "conditional photon/read only; Sony covariance and calibration systematic not represented"
+}

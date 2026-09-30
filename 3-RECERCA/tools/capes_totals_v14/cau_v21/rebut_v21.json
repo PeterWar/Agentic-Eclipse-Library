@@ -1,0 +1,83 @@
+{
+ "src": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/CapesTotalsV19.psb",
+ "desti": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/CapesTotalsV21.psb",
+ "n_estrelles": 1263,
+ "elongacio_mediana": {
+  "capa12_abans": 1.9724181552879345,
+  "apilat_ara": 1.478762263335998
+ },
+ "earthshine": {
+  "bbox": [
+   5969,
+   6237,
+   6960,
+   7267
+  ],
+  "lluna_canvas": [
+   6465.398680355321,
+   6752.632845814709
+  ],
+  "rl_canvas": 455.5018189723177,
+  "mediana_rgb": [
+   49093.0,
+   45554.0,
+   46842.0
+  ]
+ },
+ "fits": {
+  "DSC06984.ARW": [
+   0.13105352526735917,
+   [
+    -0.6786389393952386,
+    -6.635099411009899
+   ]
+  ],
+  "DSC06996.ARW": [
+   -2.7072491731065698e-05,
+   [
+    1.399305384209356,
+    3.4250032828593078
+   ]
+  ],
+  "DSC06999.ARW": [
+   0.00023583517213639124,
+   [
+    2.1019285849843072,
+    4.176731851525801
+   ]
+  ],
+  "DSC06987.ARW": [
+   0.13096102737704204,
+   [
+    0.9432661956398078,
+    -4.939791125442014
+   ]
+  ],
+  "DSC06993.ARW": [
+   0.0,
+   [
+    0.0,
+    0.0
+   ]
+  ]
+ },
+ "capes": [
+  "12_1-3200s_572A2956.CR3 · FONT_PROTEGIDA · PERLES-DIAMANT",
+  "11_1-500s_572A2968.CR3 · FONT_PROTEGIDA · LIMBE-PROTUBERÀNCIES",
+  "10_1-125s_572A2969.CR3 · FONT_HDR · CORONA INTERIOR",
+  "09_1-60s_572A2975+572A2993_apilat2.dng · FONT_HDR · CORONA INTERIOR-MITJANA",
+  "08_1-30s_572A2970_apilat4.dng · QUARANTENA OCULTA · REBUTJADA: COSTURA ID8 · RASTER I MÀSCARA RAW",
+  "07_1-15s_572A2976_apilat2.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+  "06_1-8s_572A2971_apilat4.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+  "05_1-4s_572A2977_apilat2.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+  "04_1-2s_572A2972_apilat4.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+  "03_1s_572A2978_apilat2.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+  "02_2s_572A2979_apilat3.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+  "01_10.3s_572A2982_apilat3.dng · QUARANTENA OCULTA · REBUTJADA: HALO-GRADIENT; CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+  "13_mes1s_2sx3+8sx2_SONY300 · LDIC run 016 · WB i nivell ajustats a la V16 · IGUALADA EN BAIXA FREQ AL VIXEN (V18)",
+  "FONS_PER_RAIG · suavitzat en ln r (σ0,2) del compost, per raig · màscara = rampa de Pere 2,45-3,25 R☉ (V19)",
+  "EARTHSHINE · apilat 5f registrat a la LLUNA (base DSC06993, rotació de camp compensada) (V21)",
+  "ESTRELLES · 1263 fonts de l'apilat registrat a les estrelles (plate-solve, base DSC06993) · Linear Dodge (V21)"
+ ],
+ "bytes": 3229434306
+}

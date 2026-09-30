@@ -1,0 +1,283 @@
+{
+ "W": 7648,
+ "H": 5353,
+ "fitxer": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/CapesTotalsV13_Pere.psd",
+ "capes": [
+  {
+   "num": "12",
+   "i": 0,
+   "nom": "12_1-3200s_572A2956.CR3 · FONT_PROTEGIDA · PERLES-DIAMANT",
+   "bbox": [
+    457,
+    463,
+    7417,
+    5103
+   ],
+   "visible": true,
+   "opacitat": 255,
+   "fusio": "BlendMode.NORMAL",
+   "mask_bbox": [
+    0,
+    0,
+    7648,
+    5353
+   ],
+   "mask_fons": 0,
+   "mask_mitjana": 0.7888275998990125,
+   "rgb_mitjana": 0.0005503600505281977
+  },
+  {
+   "num": "11",
+   "i": 1,
+   "nom": "11_1-500s_572A2968.CR3 · FONT_PROTEGIDA · LIMBE-PROTUBERÀNCIES",
+   "bbox": [
+    0,
+    0,
+    7648,
+    5353
+   ],
+   "visible": true,
+   "opacitat": 255,
+   "fusio": "BlendMode.NORMAL",
+   "mask_bbox": [
+    0,
+    0,
+    7648,
+    5353
+   ],
+   "mask_fons": 0,
+   "mask_mitjana": 0.06937166887770188,
+   "rgb_mitjana": 0.2122732365116954
+  },
+  {
+   "num": "10",
+   "i": 2,
+   "nom": "10_1-125s_572A2969.CR3 · FONT_HDR · CORONA INTERIOR",
+   "bbox": [
+    0,
+    0,
+    7648,
+    5353
+   ],
+   "visible": true,
+   "opacitat": 255,
+   "fusio": "BlendMode.NORMAL",
+   "mask_bbox": [
+    0,
+    0,
+    7648,
+    5353
+   ],
+   "mask_fons": 0,
+   "mask_mitjana": 0.018677341423302213,
+   "rgb_mitjana": 0.214677470788921
+  },
+  {
+   "num": "09",
+   "i": 3,
+   "nom": "09_1-60s_572A2975+572A2993_apilat2.dng · FONT_HDR · CORONA INTERIOR-MITJANA",
+   "bbox": [
+    457,
+    463,
+    7417,
+    5103
+   ],
+   "visible": true,
+   "opacitat": 255,
+   "fusio": "BlendMode.NORMAL",
+   "mask_bbox": [
+    0,
+    0,
+    7648,
+    5353
+   ],
+   "mask_fons": 0,
+   "mask_mitjana": 0.05114746533966852,
+   "rgb_mitjana": 0.00930548527502371
+  },
+  {
+   "num": "08",
+   "i": 4,
+   "nom": "08_1-30s_572A2970_apilat4.dng · QUARANTENA OCULTA · REBUTJADA: COSTURA ID8 · RASTER I MÀSCARA RAW",
+   "bbox": [
+    457,
+    463,
+    7417,
+    5103
+   ],
+   "visible": true,
+   "opacitat": 255,
+   "fusio": "BlendMode.NORMAL",
+   "mask_bbox": [
+    0,
+    0,
+    7648,
+    5353
+   ],
+   "mask_fons": 0,
+   "mask_mitjana": 0.08785406248390269,
+   "rgb_mitjana": 0.015525573008250849
+  },
+  {
+   "num": "07",
+   "i": 5,
+   "nom": "07_1-15s_572A2976_apilat2.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "bbox": [
+    457,
+    463,
+    7417,
+    5103
+   ],
+   "visible": true,
+   "opacitat": 255,
+   "fusio": "BlendMode.NORMAL",
+   "mask_bbox": [
+    0,
+    0,
+    7648,
+    5353
+   ],
+   "mask_fons": 0,
+   "mask_mitjana": 0.08462977064776075,
+   "rgb_mitjana": 0.02756129607065041
+  },
+  {
+   "num": "06",
+   "i": 6,
+   "nom": "06_1-8s_572A2971_apilat4.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "bbox": [
+    457,
+    463,
+    7417,
+    5103
+   ],
+   "visible": true,
+   "opacitat": 255,
+   "fusio": "BlendMode.NORMAL",
+   "mask_bbox": [
+    0,
+    0,
+    7648,
+    5353
+   ],
+   "mask_fons": 0,
+   "mask_mitjana": 0.03885548507007532,
+   "rgb_mitjana": 0.05014619217042506
+  },
+  {
+   "num": "05",
+   "i": 7,
+   "nom": "05_1-4s_572A2977_apilat2.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "bbox": [
+    457,
+    463,
+    7417,
+    5103
+   ],
+   "visible": true,
+   "opacitat": 255,
+   "fusio": "BlendMode.NORMAL",
+   "mask_bbox": [
+    0,
+    0,
+    7648,
+    5353
+   ],
+   "mask_fons": 0,
+   "mask_mitjana": 0.22780672301147334,
+   "rgb_mitjana": 0.09336453387639444
+  },
+  {
+   "num": "04",
+   "i": 8,
+   "nom": "04_1-2s_572A2972_apilat4.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "bbox": [
+    457,
+    463,
+    7417,
+    5103
+   ],
+   "visible": true,
+   "opacitat": 255,
+   "fusio": "BlendMode.NORMAL",
+   "mask_bbox": [
+    0,
+    0,
+    7648,
+    5353
+   ],
+   "mask_fons": 0,
+   "mask_mitjana": 0.7086450937624377,
+   "rgb_mitjana": 0.164647797752381
+  },
+  {
+   "num": "03",
+   "i": 9,
+   "nom": "03_1s_572A2978_apilat2.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "bbox": [
+    457,
+    463,
+    7417,
+    5103
+   ],
+   "visible": true,
+   "opacitat": 255,
+   "fusio": "BlendMode.NORMAL",
+   "mask_bbox": [
+    0,
+    0,
+    7648,
+    5353
+   ],
+   "mask_fons": 0,
+   "mask_mitjana": 0.6591477161377156,
+   "rgb_mitjana": 0.3047201008680264
+  },
+  {
+   "num": "02",
+   "i": 10,
+   "nom": "02_2s_572A2979_apilat3.dng · QUARANTENA OCULTA · NO AVALUADA: CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "bbox": [
+    457,
+    463,
+    7417,
+    5103
+   ],
+   "visible": true,
+   "opacitat": 255,
+   "fusio": "BlendMode.NORMAL",
+   "mask_bbox": [
+    0,
+    0,
+    7648,
+    5353
+   ],
+   "mask_fons": 255,
+   "mask_mitjana": 0.6347416008057416,
+   "rgb_mitjana": 0.4819472146801863
+  },
+  {
+   "num": "01",
+   "i": 11,
+   "nom": "01_10.3s_572A2982_apilat3.dng · QUARANTENA OCULTA · REBUTJADA: HALO-GRADIENT; CADENA ATURADA A ID8 · RASTER I MÀSCARA RAW",
+   "bbox": [
+    457,
+    463,
+    7417,
+    5103
+   ],
+   "visible": true,
+   "opacitat": 255,
+   "fusio": "BlendMode.NORMAL",
+   "mask_bbox": [
+    -1,
+    0,
+    7648,
+    5354
+   ],
+   "mask_fons": 255,
+   "mask_mitjana": 0.5781943709616691,
+   "rgb_mitjana": 0.4640805452072627
+  }
+ ]
+}

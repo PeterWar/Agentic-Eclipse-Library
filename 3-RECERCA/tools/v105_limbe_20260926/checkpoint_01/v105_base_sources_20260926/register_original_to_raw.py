@@ -1,0 +1,10 @@
+from pathlib import Path
+p=Path('/private/tmp/v105_base_sources_20260926/register_sources.py');ns={};exec(p.read_text().split('raw=q[\'E\']')[0],ns);globals().update(ns)
+src=np.load(O/'09_original_CapesInteriors_RGB.npy',mmap_mode='r');ox,oy=2764,1475;crop=src[oy:oy+1600,ox:ox+1600].astype(np.float32)/65535
+chain=np.load(O/'original09_siftseed_registered_to_E2975.npz');meta=json.loads(str(chain['metadata_json']));H=np.array(meta['target_canvas_to_source_crop']);A=H[:2,:2];offset=A@np.array([cx,cy])+H[:2,2]-np.array([3563.8912793889317-ox,2274.660453669-oy]);p0=[*offset,np.degrees(np.arctan2(A[1,0],A[0,0])),np.sqrt(np.linalg.det(A))]
+raw=q['E'];valid=q['valid_rgb']&(q['dreal']>20)&(d>20)&(d<150)&(ref[...,1]>.02)&(ref[...,1]<.90)
+r,sx,sy=fit_sim(raw[...,1],crop[...,1],valid,[3563.8912793889317-ox,2274.660453669-oy],[cx,cy],p0,[(p0[0]-2,p0[0]+2),(p0[1]-2,p0[1]+2),(p0[2]-.3,p0[2]+.3),(p0[3]-.003,p0[3]+.003)],'original09_direct_to_E2975')
+reg=np.stack([map_coordinates(crop[...,c],[sy,sx],order=1,mode='constant',cval=np.nan,prefilter=False) for c in range(3)],-1).astype(np.float32);support=np.isfinite(reg).all(-1)
+H=np.array(r['target_canvas_to_source_local']);H[:2,2]+=[ox,oy];r['target_canvas_to_source_full_original']=H.tolist();r['source_full_original_to_target_canvas']=np.linalg.inv(H).tolist();r['source_crop_xy']=[ox,oy];r['kind']='display-referred observed original09, not calibrated radiance';r['source']='09_original_CapesInteriors_RGB.npy';r['interpolation']='bilinear one direct sampling of original source';r['no_moon_alignment']=True;r['physical_support_note']='support_sampled means observed inbounds source pixels only; dreal2975/valid_RGB2975 are modern raw diagnostics, not original stack physical alpha.'
+(O/'original09_direct_to_E2975_registration.json').write_text(json.dumps(r,indent=2))
+np.savez_compressed(O/'original09_direct_registered_to_E2975.npz',RGB=reg,support_sampled=support,dreal2975=q['dreal'],valid_RGB2975=q['valid_rgb'],box=box,metadata_json=json.dumps(r))

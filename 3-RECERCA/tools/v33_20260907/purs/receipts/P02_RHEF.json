@@ -1,0 +1,76 @@
+{
+  "tag": "P02_RHEF",
+  "parameters": {
+    "annulus_width_px": 1,
+    "r_edge_px": 3736,
+    "r_edge_R": 8.479287671563851,
+    "blend_px": 64.0,
+    "completeness_ref": 1.000012174620321,
+    "varP_edge": 0.9981904221845594,
+    "n_z_edge": 932165,
+    "count_min": 2,
+    "count_max": 23444,
+    "paper": "Gilly & Cranmer 2025",
+    "V33_edge": "empirical rank inside; F_edge(z) (empirical CDF of the last complete rings) beyond first canvas edge",
+    "V33_post": "snmap.sn_v33 (σ = max(mapa C0 λ_min/8, f3.suavitza_sn t=0.18), smax=32.0) sobre el float",
+    "perfil_sigma": [
+      {
+        "r": 1.5,
+        "sigma_p50": 1.0283373594284058,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 2.0,
+        "sigma_p50": 1.827910304069519,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 2.65,
+        "sigma_p50": 6.4783759117126465,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 3.0,
+        "sigma_p50": 7.967071533203125,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 4.0,
+        "sigma_p50": 13.522356033325195,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 5.0,
+        "sigma_p50": 18.49393653869629,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 6.0,
+        "sigma_p50": 22.478622436523438,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 8.0,
+        "sigma_p50": 30.184268951416016,
+        "frac_smax": 0.10757740108068958
+      },
+      {
+        "r": 10.0,
+        "sigma_p50": 28.789342880249023,
+        "frac_smax": 0.05675193739929038
+      }
+    ],
+    "display_from": "V32 receipt"
+  },
+  "physical_support_pixels": 70395270,
+  "float_sha256": "7f6c3dfc767c6947f9d96f5e513de8d7a0ad9e09b91737b90132efa531494c35",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": 0,
+    "white": 1,
+    "sample_percentiles": null,
+    "clipped_low_fraction": 0.0,
+    "clipped_high_fraction": 0.0
+  },
+  "u16_sha256": "8c10c3671010569896ce32d49f4d818d7eda41706e9dd872db52eb51ce6f388c"
+}

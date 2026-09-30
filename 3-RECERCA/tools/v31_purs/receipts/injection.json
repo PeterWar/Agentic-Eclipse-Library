@@ -1,0 +1,132 @@
+{
+  "PASS_positive_matched_response": true,
+  "seed": 982471,
+  "source_native_roi_origin_xy": [
+    5634,
+    2070
+  ],
+  "amplitude_base_units": 6.0934686279296875,
+  "rows": [
+    {
+      "method": "MGN",
+      "injection_sigma_px": 2,
+      "center_xy": [
+        319,
+        137
+      ],
+      "matched_response": 0.057190846651792526,
+      "strongest_positive_response_shift_px": 1.0
+    },
+    {
+      "method": "MGN",
+      "injection_sigma_px": 8,
+      "center_xy": [
+        272,
+        151
+      ],
+      "matched_response": 0.024297289550304413,
+      "strongest_positive_response_shift_px": 2.23606797749979
+    },
+    {
+      "method": "MGN",
+      "injection_sigma_px": 24,
+      "center_xy": [
+        278,
+        229
+      ],
+      "matched_response": 0.011113104410469532,
+      "strongest_positive_response_shift_px": 71.56814934033156
+    },
+    {
+      "method": "WOW",
+      "injection_sigma_px": 2,
+      "center_xy": [
+        319,
+        137
+      ],
+      "matched_response": 1.303086280822754,
+      "strongest_positive_response_shift_px": 1.0
+    },
+    {
+      "method": "WOW",
+      "injection_sigma_px": 8,
+      "center_xy": [
+        272,
+        151
+      ],
+      "matched_response": 0.9452707767486572,
+      "strongest_positive_response_shift_px": 2.23606797749979
+    },
+    {
+      "method": "WOW",
+      "injection_sigma_px": 24,
+      "center_xy": [
+        278,
+        229
+      ],
+      "matched_response": 0.8198865056037903,
+      "strongest_positive_response_shift_px": 4.123105625617661
+    },
+    {
+      "method": "WOW bilateral",
+      "injection_sigma_px": 2,
+      "center_xy": [
+        319,
+        137
+      ],
+      "matched_response": 1.7620548009872437,
+      "strongest_positive_response_shift_px": 0.0
+    },
+    {
+      "method": "WOW bilateral",
+      "injection_sigma_px": 8,
+      "center_xy": [
+        272,
+        151
+      ],
+      "matched_response": 0.9336428046226501,
+      "strongest_positive_response_shift_px": 1.0
+    },
+    {
+      "method": "WOW bilateral",
+      "injection_sigma_px": 24,
+      "center_xy": [
+        278,
+        229
+      ],
+      "matched_response": 0.24446089565753937,
+      "strongest_positive_response_shift_px": 71.17583859709698
+    },
+    {
+      "method": "NAFE",
+      "injection_sigma_px": 2,
+      "center_xy": [
+        319,
+        137
+      ],
+      "matched_response": 0.04614003375172615,
+      "strongest_positive_response_shift_px": 0.0
+    },
+    {
+      "method": "NAFE",
+      "injection_sigma_px": 8,
+      "center_xy": [
+        272,
+        151
+      ],
+      "matched_response": 0.027977896854281425,
+      "strongest_positive_response_shift_px": 1.4142135623730951
+    },
+    {
+      "method": "NAFE",
+      "injection_sigma_px": 24,
+      "center_xy": [
+        278,
+        229
+      ],
+      "matched_response": 0.00743035227060318,
+      "strongest_positive_response_shift_px": 71.11258679024411
+    }
+  ],
+  "scope": "fixed unfitted synthetic probes survive each local operator; does not certify every real outer feature or all PSF/noise scales"
+}

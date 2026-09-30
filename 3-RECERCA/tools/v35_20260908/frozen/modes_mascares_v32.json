@@ -1,0 +1,278 @@
+{
+ "font": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V32.psb",
+ "font_sha256": "dcfc8f531e286bfdf529d20880c9772785a38a4e6d0c09094883a7c8f7743c7d",
+ "capes": [
+  {
+   "name": "01 ACHF fi 2-32 · V32",
+   "key": "01",
+   "blend": "OVERLAY",
+   "opacity": 36,
+   "visible": true,
+   "alpha_sha256": "bab611862945d51be54e59d2633a709d20cbd452976e92e0b4800db9efa80c55",
+   "alpha_min_max_mean": [
+    65535,
+    65535,
+    65535.0
+   ],
+   "mask_box_ltrb": [
+    0,
+    0,
+    10551,
+    7506
+   ],
+   "mask_background": 0,
+   "mask_sha256": "ad96e2e67cada21b4a86ca27820f2655129c068ee2012a8cbdd1777eaa37e3f8",
+   "mask_min_max_mean": [
+    0,
+    65535,
+    57896.578678888625
+   ],
+   "mask_frac_65535": 0.8779131182780058
+  },
+  {
+   "name": "02 Passa-alt 24 · V32",
+   "key": "02",
+   "blend": "OVERLAY",
+   "opacity": 20,
+   "visible": true,
+   "alpha_sha256": "bab611862945d51be54e59d2633a709d20cbd452976e92e0b4800db9efa80c55",
+   "alpha_min_max_mean": [
+    65535,
+    65535,
+    65535.0
+   ],
+   "mask_box_ltrb": [
+    0,
+    0,
+    10551,
+    7506
+   ],
+   "mask_background": 0,
+   "mask_sha256": "e0344916d2cb8a63ccd87905d889c000652d85aac8c8283300586c0551204b51",
+   "mask_min_max_mean": [
+    0,
+    65535,
+    57987.14644115119
+   ],
+   "mask_frac_65535": 0.8807030261173173
+  },
+  {
+   "name": "04 ACHF micro 1-16 · V32",
+   "key": "04",
+   "blend": "OVERLAY",
+   "opacity": 36,
+   "visible": false,
+   "alpha_sha256": "bab611862945d51be54e59d2633a709d20cbd452976e92e0b4800db9efa80c55",
+   "alpha_min_max_mean": [
+    65535,
+    65535,
+    65535.0
+   ],
+   "mask_box_ltrb": [
+    0,
+    0,
+    10551,
+    7506
+   ],
+   "mask_background": 0,
+   "mask_sha256": "8731fe52bc14601744613faf58a76b821b0f63b0869397b846ef410ced15dbbe",
+   "mask_min_max_mean": [
+    0,
+    65535,
+    58077.09885351757
+   ],
+   "mask_frac_65535": 0.8834605963856217
+  },
+  {
+   "name": "05 ACHF fi 2-48 · V32",
+   "key": "05",
+   "blend": "OVERLAY",
+   "opacity": 36,
+   "visible": false,
+   "alpha_sha256": "bab611862945d51be54e59d2633a709d20cbd452976e92e0b4800db9efa80c55",
+   "alpha_min_max_mean": [
+    65535,
+    65535,
+    65535.0
+   ],
+   "mask_box_ltrb": [
+    0,
+    0,
+    10551,
+    7506
+   ],
+   "mask_background": 0,
+   "mask_sha256": "65724b0def6c663183e01133d4d35b9c826af52cf288e277ac143c5613262c8f",
+   "mask_min_max_mean": [
+    0,
+    65535,
+    57713.539661165894
+   ],
+   "mask_frac_65535": 0.872172359733292
+  },
+  {
+   "name": "06 ACHF estructura 4-64 · V32",
+   "key": "06",
+   "blend": "OVERLAY",
+   "opacity": 36,
+   "visible": false,
+   "alpha_sha256": "bab611862945d51be54e59d2633a709d20cbd452976e92e0b4800db9efa80c55",
+   "alpha_min_max_mean": [
+    65535,
+    65535,
+    65535.0
+   ],
+   "mask_box_ltrb": [
+    0,
+    0,
+    10551,
+    7506
+   ],
+   "mask_background": 0,
+   "mask_sha256": "610b78d56a171dc15dd8bd26beda1d0c2a35e3e7dc8e34189d9fa04df5af7143",
+   "mask_min_max_mean": [
+    0,
+    65535,
+    57527.9136738251
+   ],
+   "mask_frac_65535": 0.8663597286957342
+  },
+  {
+   "name": "P01 NRGF · V32",
+   "key": "P01",
+   "blend": "NORMAL",
+   "opacity": 255,
+   "visible": false,
+   "alpha_sha256": "bab611862945d51be54e59d2633a709d20cbd452976e92e0b4800db9efa80c55",
+   "alpha_min_max_mean": [
+    65535,
+    65535,
+    65535.0
+   ],
+   "mask_box_ltrb": [
+    0,
+    0,
+    10551,
+    7506
+   ],
+   "mask_background": 0,
+   "mask_sha256": "38012d5ccf41737a89c87a64ec5859c53a1829854462f7d65ae1f4a72e1b3000",
+   "mask_min_max_mean": [
+    0,
+    65535,
+    58252.50417238004
+   ],
+   "mask_frac_65535": 0.8888762367037467
+  },
+  {
+   "name": "P02 RHEF · comparacio amb anells · V32",
+   "key": "P02",
+   "blend": "NORMAL",
+   "opacity": 255,
+   "visible": false,
+   "alpha_sha256": "bab611862945d51be54e59d2633a709d20cbd452976e92e0b4800db9efa80c55",
+   "alpha_min_max_mean": [
+    65535,
+    65535,
+    65535.0
+   ],
+   "mask_box_ltrb": [
+    0,
+    0,
+    10551,
+    7506
+   ],
+   "mask_background": 0,
+   "mask_sha256": "38012d5ccf41737a89c87a64ec5859c53a1829854462f7d65ae1f4a72e1b3000",
+   "mask_min_max_mean": [
+    0,
+    65535,
+    58252.50417238004
+   ],
+   "mask_frac_65535": 0.8888762367037467
+  },
+  {
+   "name": "P03 MGN · V32",
+   "key": "P03",
+   "blend": "NORMAL",
+   "opacity": 255,
+   "visible": false,
+   "alpha_sha256": "bab611862945d51be54e59d2633a709d20cbd452976e92e0b4800db9efa80c55",
+   "alpha_min_max_mean": [
+    65535,
+    65535,
+    65535.0
+   ],
+   "mask_box_ltrb": [
+    0,
+    0,
+    10551,
+    7506
+   ],
+   "mask_background": 0,
+   "mask_sha256": "38012d5ccf41737a89c87a64ec5859c53a1829854462f7d65ae1f4a72e1b3000",
+   "mask_min_max_mean": [
+    0,
+    65535,
+    58252.50417238004
+   ],
+   "mask_frac_65535": 0.8888762367037467
+  },
+  {
+   "name": "P04 WOW sense denoise · V32",
+   "key": "P04",
+   "blend": "NORMAL",
+   "opacity": 255,
+   "visible": false,
+   "alpha_sha256": "bab611862945d51be54e59d2633a709d20cbd452976e92e0b4800db9efa80c55",
+   "alpha_min_max_mean": [
+    65535,
+    65535,
+    65535.0
+   ],
+   "mask_box_ltrb": [
+    0,
+    0,
+    10551,
+    7506
+   ],
+   "mask_background": 0,
+   "mask_sha256": "38012d5ccf41737a89c87a64ec5859c53a1829854462f7d65ae1f4a72e1b3000",
+   "mask_min_max_mean": [
+    0,
+    65535,
+    58252.50417238004
+   ],
+   "mask_frac_65535": 0.8888762367037467
+  },
+  {
+   "name": "P05 WOW bilateral sense denoise · V32",
+   "key": "P05",
+   "blend": "NORMAL",
+   "opacity": 255,
+   "visible": false,
+   "alpha_sha256": "bab611862945d51be54e59d2633a709d20cbd452976e92e0b4800db9efa80c55",
+   "alpha_min_max_mean": [
+    65535,
+    65535,
+    65535.0
+   ],
+   "mask_box_ltrb": [
+    0,
+    0,
+    10551,
+    7506
+   ],
+   "mask_background": 0,
+   "mask_sha256": "38012d5ccf41737a89c87a64ec5859c53a1829854462f7d65ae1f4a72e1b3000",
+   "mask_min_max_mean": [
+    0,
+    65535,
+    58252.50417238004
+   ],
+   "mask_frac_65535": 0.8888762367037467
+  }
+ ],
+ "npz_sha256": "0833bba78ee0b6f3ebf9269aadbfec032c5eafabf53a106164a19100d1fc808f",
+ "npz_bytes": 6378487
+}

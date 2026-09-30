@@ -1,0 +1,14 @@
+{
+  "claim_id": "CODEX_GRAMOFON_2D_20260906",
+  "owner": "Codex /root",
+  "task": "Recerca causal gramofon: estimacio continua bidimensional, controls sintetiques i Sony contra Vixen fix",
+  "created_utc": "2026-09-06T21:04:53.352269+00:00",
+  "scope": [
+    "research/tools/gramofon_2d_20260906",
+    "output/gramofon_2d_20260906",
+    "research/143_*",
+    ".coordination/CODEX_STATUS.md",
+    ".coordination/HANDOFF_2026-09-06_GRAMOFON_2D.md"
+  ],
+  "writer": "root only; agents read-only; no Photoshop/RAW mutations"
+}

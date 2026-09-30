@@ -1,0 +1,1989 @@
+{
+  "source": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/sources/V31_abans.psb",
+  "source_sha256": "bbbb2b93a49a0e09226b89467754f6364d1c6b929bc147bd34387a1c66d7affe",
+  "target": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/staging/V31.psb",
+  "original_layers": [
+    {
+      "name": "12 1/3200 perles",
+      "bbox": [
+        1420,
+        908,
+        9123,
+        6764
+      ],
+      "visible": true,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "6b198094ec94229af1b988eba52413e475cdb12b6336925d32d224a3286cce55",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215369,
+          "sha256": "fb0d90b2afcd2cf058135e3470597216036872ea3d0e071fb9bfba7446a261b9"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 37504417,
+          "sha256": "e5cec04f3e52fbd1336618b2bf23de6a6e2a15d7caaa7c61857a14038384c9d0"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 35357173,
+          "sha256": "f8ca62facce7df2e88abd6a386b5580bfcabe7b624bb98cae9b268b87e0b5822"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 35989504,
+          "sha256": "c1e856beb0176d3121732e29c655bcb9a453084964c8e2df0c7b718c31a4231f"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 286416,
+          "sha256": "f8741c8bfbe07f56206e0beb2caa2ff13db82d5d1efedb00cb7d97f83cc563b2"
+        }
+      }
+    },
+    {
+      "name": "11 1/500 limbe",
+      "bbox": [
+        886,
+        410,
+        9398,
+        7096
+      ],
+      "visible": true,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "83ebaca71ff416801c475946d63b5840c3266547dbc3668dc75aa15e3b7b5d47",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 255849,
+          "sha256": "82b5efcac21eae41e31fec9d79f949b444f6f659620d324984b3e1c0dfe34409"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 36279912,
+          "sha256": "aa1b1c2eddfad3eaecc3cec4511d32829b941408f70d08424a915616c3bc0cc7"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 35289931,
+          "sha256": "f76decfa1c7291c28312fe882f4324a8aaa3bd8b2ec11fbf899bb34e979e253b"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 33953237,
+          "sha256": "205925a9858de7cc96c537b810cc19942039f9d330e66c2df70913c7cfea3587"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 4770661,
+          "sha256": "f3c7a7a8ffb22f8110288b103916364ba1f3eb946ed0c68fc2cb67f598f84657"
+        }
+      }
+    },
+    {
+      "name": "10 1/125",
+      "bbox": [
+        886,
+        410,
+        9398,
+        7096
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "1c4152800c0b5cef4a85d72aff04702b9d3a03c218ae778a3a13dab91886b088",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 255849,
+          "sha256": "82b5efcac21eae41e31fec9d79f949b444f6f659620d324984b3e1c0dfe34409"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 40224658,
+          "sha256": "19d4670e7fa82372e4db01d97e16d86069616870054fc1c3f4296360c8721582"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 40066450,
+          "sha256": "e534e760a8bf36e9f71e75de10d64e47c9bcd5e9607606ade8b496626f0e4b6c"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 38816956,
+          "sha256": "7e8eb131a6532085aad0cfe8495c418e93fe2d4edd7d2847d1dcd57fd3998a78"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 6842175,
+          "sha256": "e8232fc78b4c0d2429df5af7a81d796ee52dd5e3f0e9e63129102b927638e406"
+        }
+      }
+    },
+    {
+      "name": "09 1/60 x2",
+      "bbox": [
+        1423,
+        908,
+        9126,
+        6765
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "afce31ecf2ed3b546a502a2ce4dfd26657c52fc1084043c730ed1dce332e6466",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215339,
+          "sha256": "51621ef37ea117a2ec9c87f55a076c0d0db5d6fa88da51c24ba35d3f68fdaeb0"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 46318915,
+          "sha256": "8f7f88615bbe3e7cb6be6eaf20566d0a125c3122d16e86b6758a542b7d87ba25"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 41476654,
+          "sha256": "bcaaea44ecee3382fa33c4421be9e6f3953a2f259f380c05cb1ccad331772446"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 41070517,
+          "sha256": "6259ba85e793103173dd04d6606b6a1fb2dda7b13c44d9a99eb2485deb876da0"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 5684449,
+          "sha256": "489d1082f5f3de7a1ad6b9d7433784581f77d0c79e519b71ac0cf94f60cb173a"
+        }
+      }
+    },
+    {
+      "name": "08 1/30 x4 quar",
+      "bbox": [
+        1422,
+        909,
+        9126,
+        6766
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "b23c2f5f1514adf74e1d7c66d85b24a913e687be5b640562e0d1a1c7cf437f1c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215039,
+          "sha256": "5c1495fdbac59e7a4eb889dc76fe92d034d26044a08b3660193cbebb2ffc310a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 48969057,
+          "sha256": "39a12564d9ef4ed74612218929b6ca4865dc819a1d0abb16c0abf2d32e3d1631"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 47330488,
+          "sha256": "3cee7493696d489b6d2bb07d33a76d49795f38b2fc151a2c48051eebfbbaaf6b"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 46908877,
+          "sha256": "ffffceea6cf682b32e7a19e2436488d4a7b9f67af26b998efa92c36c5199925d"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 10432061,
+          "sha256": "5aa131974e3549a63a470d9f2cf122dc3ed68385dbcea9d20c8c6db07a5e4c7a"
+        }
+      }
+    },
+    {
+      "name": "07 1/15 x2 quar",
+      "bbox": [
+        1423,
+        908,
+        9126,
+        6765
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "903e99867bf06659818051814222fab72c79bc69e8bc7f540c432fb20e9f6a22",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215339,
+          "sha256": "51621ef37ea117a2ec9c87f55a076c0d0db5d6fa88da51c24ba35d3f68fdaeb0"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 51635946,
+          "sha256": "d38af5a814f3a4e219cc38c8da2ce81e4d4d3f1bf3a879f0f9c2d3c69078b5b1"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 47330841,
+          "sha256": "83880640e1aa40097df4618b742065bcb749806a0a42bc3468e70987b18cac33"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 47513116,
+          "sha256": "57b454487390da66fe0c0838a73d6236cd0c45db6f509e3b24e9b26693ddcf50"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 6569401,
+          "sha256": "f4786d105e615b2777ebbf4eea35691c99ec388a2b7f2faf0d2a400f440d3ba9"
+        }
+      }
+    },
+    {
+      "name": "06 1/8 x4 quar",
+      "bbox": [
+        1422,
+        909,
+        9126,
+        6766
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "c3e9b42bbd22365b2a95963f10fbde868c0f0c804faca4a91673b0416d79d4ca",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215039,
+          "sha256": "5c1495fdbac59e7a4eb889dc76fe92d034d26044a08b3660193cbebb2ffc310a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 51814342,
+          "sha256": "0acfa91b5b0c7f893cffd57dd9d7503f70723da5da1dead5dc7f23e5c4cce305"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 50735325,
+          "sha256": "d7f48269078918521413f15100dabc7b45bd80a6d082865e89304bd3cc59eb1d"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 50530806,
+          "sha256": "bd8c10274b12292178ea35d195e9bf33c7df8182937b808dfc336a1471ce5941"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 7275301,
+          "sha256": "6c331f34909e77c482637b6c150401b31857bd51473276f4c9b7a12c615b8521"
+        }
+      }
+    },
+    {
+      "name": "05 1/4 x2 quar",
+      "bbox": [
+        1423,
+        908,
+        9126,
+        6765
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "1475d9ce35fd984e617c35bdc6b945e2335521f9d4d8f028a027f3e97e5076d5",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215339,
+          "sha256": "51621ef37ea117a2ec9c87f55a076c0d0db5d6fa88da51c24ba35d3f68fdaeb0"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 49725503,
+          "sha256": "3ec40cfb7a91c31d4495a2b47b204124e7a2cd1afadf06564289a29194319114"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 51167407,
+          "sha256": "fecc50a9c9bcbeb3b7ad97d8d4dd3e4a5e8db02ccba937574fb74365ac90b97b"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 50593697,
+          "sha256": "10fcd766851d8923e4f064f7210eb40ad46c2cd437a14d6be7c9fd35c4689312"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 14117109,
+          "sha256": "b23c81f2b32ef5cbf8e223b678935f06a2c1730215e7e054d35402bdfd2931f4"
+        }
+      }
+    },
+    {
+      "name": "04 1/2 x4 quar",
+      "bbox": [
+        1422,
+        909,
+        9126,
+        6766
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "5a5286a0c60240415af03524d07fc01dc54fe731ed3f9d6ab2225a1753b440dc",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215039,
+          "sha256": "5c1495fdbac59e7a4eb889dc76fe92d034d26044a08b3660193cbebb2ffc310a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 55033264,
+          "sha256": "4be3a37c4ce6870456d42e691c22e36be2d95dbf7d35443922a340ce446d671c"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 51094954,
+          "sha256": "71111d41dfe907d96e09339680076601c385c8095d8488205ae2eabcfa2fb267"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 51053779,
+          "sha256": "a7038620073da4eaf5c153d0d7191819aec744dba1f7076f182fb1babc172dbc"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 10001410,
+          "sha256": "c4b7802805c56a9cc19b97765f5562b42d7e6758574de133a2ab843671e4729d"
+        }
+      }
+    },
+    {
+      "name": "03 1s x2 quar",
+      "bbox": [
+        1423,
+        908,
+        9126,
+        6765
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "8474ab090ad821a91f549000d3733a4f03f10f01e738a5181f8236b89cf23c86",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215339,
+          "sha256": "51621ef37ea117a2ec9c87f55a076c0d0db5d6fa88da51c24ba35d3f68fdaeb0"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 51470092,
+          "sha256": "d16586a0d12d4d2a368ce39ca1fa90ce070c784e94c4e04b6b450fac32d134dc"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 51747277,
+          "sha256": "b59eb9ea265502b11bb1629914c62d0a93b02742c2207f46058d25e671f021b9"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 51359576,
+          "sha256": "fe1457162ae526c41f26ed22006f26f98c5ddceff671de3511573d168b72ca86"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 14069410,
+          "sha256": "4426adfd6b54445df6f8300bd30286367409ccb1034fd38b4658481c69c1ec8c"
+        }
+      }
+    },
+    {
+      "name": "02 2s x3 quar",
+      "bbox": [
+        1424,
+        907,
+        9127,
+        6763
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "88ba2a00531e9abc46047ac4eadd0b023d10428c39b840ae1e2fa6cabbc92a0b",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215133,
+          "sha256": "f23c29aa265010357c626a8dca9869bc53aa5b390109a653eff3fad8c63d32dc"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 50331738,
+          "sha256": "0fec0182ccbaa1d1128466185001a294f832d148b85368a34ead40bc0cfb1e35"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 50749853,
+          "sha256": "1d17c8adddef8a240fbe8c3e8cb3da56b9c7ab7857143795d56df18263ab9d10"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 50465564,
+          "sha256": "d5fe5b1543c46eb781fb0a59ece2c0c33630d6d09e982de21a5cb238bd4d7c62"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 15180025,
+          "sha256": "73dda0afcaa6a87becef42285beb1979606427a1a6c71af93d36e369955efb79"
+        }
+      }
+    },
+    {
+      "name": "01 10.3s x3 quar",
+      "bbox": [
+        1423,
+        908,
+        9127,
+        6765
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "64930d74094992844ed455dda32b57f990b482ada2d1b892fd569dcb9dcb98c0",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215316,
+          "sha256": "16003ed43e987517a683eeae21dfdc9e225d37933cbe4bee770ee1a1edf9a893"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 44537083,
+          "sha256": "ad14ba230a0fe8eb48595c218d700f82757b171ce6e8c7ac2b2f03471780830d"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 45137040,
+          "sha256": "f3a4bee34f27e62239af567a78a15d32fcee64d14cdbb91eb64ec140165eb899"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 45801501,
+          "sha256": "a31e9933b210629f247d2b76f92bff108d30178a8c61213f6b4f839916690e62"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 11023983,
+          "sha256": "45042255b1d2aec1ff1c8ce9ab60f40eb86d776ab388f94505d12ab3893088fe"
+        }
+      }
+    },
+    {
+      "name": "13 Sony >1s",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "230c0bc64381372d118ebe53fff211991fb77ca66226b287466fb533cd86716d",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 182954,
+          "sha256": "8f63547cec7f01165ba992e5da14762980d57e97b8222da78c19d1d7f0335f52"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 83725223,
+          "sha256": "b5d188398b35cbb2441fc2ceb1c3cdefe2618331e93846b00daf94ceb3bcd198"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 84836029,
+          "sha256": "7e0f18c7f26fbb656da4dae83e6b5b93d233339001e32a94c130a45ef26a0e35"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 85601549,
+          "sha256": "880b84f5e919989bc7c168f81b6ca51982d61c8f151fe4294b332e0c6392398f"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 10036270,
+          "sha256": "ab766929a62ade9b11534bf22b7ccd2ebc1982348fd35f99c92f4564011dd889"
+        }
+      }
+    },
+    {
+      "name": "Fons per raig",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "15ca686be3a604b369351683cd6685c1c548857013b6ec05a1d86c935e7c7ec1",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 182954,
+          "sha256": "8f63547cec7f01165ba992e5da14762980d57e97b8222da78c19d1d7f0335f52"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 57487239,
+          "sha256": "ac91b3cd3e1c803ebbfb6aef84c1e56f6cbf7a1375ef494c52d7675fdd47b44a"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 55881869,
+          "sha256": "8b05020e2092d6ed88f92815f3895faff4bc8399813a82c753c38ca87c05b324"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 52707763,
+          "sha256": "94c2e87b8ac636d4cfb197ccadba563790f42c2fcfb6b923ddcb23bac7c5fc04"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 31120831,
+          "sha256": "a430ffabc7d15ae99a7fb41f4d99bff737f7d3fcc081f7609aa822cf3e3bc60a"
+        }
+      }
+    },
+    {
+      "name": "Earthshine v2",
+      "bbox": [
+        4866,
+        3279,
+        5857,
+        4270
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "a17eed469318c3761239ef849eca6abb28e627a9933f95ed22dc4e167552e4d2",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 1116779,
+          "sha256": "829615230f915e131c5c10320cd9c5a4fc69f73220a4542f17e09fbaa352daf7"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 1116779,
+          "sha256": "829615230f915e131c5c10320cd9c5a4fc69f73220a4542f17e09fbaa352daf7"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 1116779,
+          "sha256": "829615230f915e131c5c10320cd9c5a4fc69f73220a4542f17e09fbaa352daf7"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 229163,
+          "sha256": "ed37374de3f707fa5874e8d0b75a5681851cd21b4b8d8806d7b22f57749873f2"
+        }
+      }
+    },
+    {
+      "name": "Compara D87",
+      "bbox": [
+        4866,
+        3279,
+        5857,
+        4270
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "ea3aec419699d042d95c9e207d889c3af48565a4df7ca94c73be3b1b840eff69",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 1082951,
+          "sha256": "bcbf880fadcc09d7fc22a5988e369633bd76f2145fca99ca2d41df5cfb83f15f"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 1082951,
+          "sha256": "bcbf880fadcc09d7fc22a5988e369633bd76f2145fca99ca2d41df5cfb83f15f"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 1082951,
+          "sha256": "bcbf880fadcc09d7fc22a5988e369633bd76f2145fca99ca2d41df5cfb83f15f"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 229163,
+          "sha256": "ed37374de3f707fa5874e8d0b75a5681851cd21b4b8d8806d7b22f57749873f2"
+        }
+      }
+    },
+    {
+      "name": "Compara LROC",
+      "bbox": [
+        4866,
+        3279,
+        5857,
+        4270
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "7d78cdea53a4d727236f480cf1d78928e08ccb92dbad51b5e450978939733196",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 1043672,
+          "sha256": "295e77cd1a31e2fea3b26832b156c6d88e9dbf42b4c57a5a5cc68ba6c6a64a55"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 1043672,
+          "sha256": "295e77cd1a31e2fea3b26832b156c6d88e9dbf42b4c57a5a5cc68ba6c6a64a55"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 1043672,
+          "sha256": "295e77cd1a31e2fea3b26832b156c6d88e9dbf42b4c57a5a5cc68ba6c6a64a55"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 229163,
+          "sha256": "ed37374de3f707fa5874e8d0b75a5681851cd21b4b8d8806d7b22f57749873f2"
+        }
+      }
+    },
+    {
+      "name": "Earthshine V24e",
+      "bbox": [
+        4866,
+        3279,
+        5857,
+        4270
+      ],
+      "visible": true,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "2093639d81c54ab4b45148693ad3775e1128fb7bdf22c23d24f261b6504673dd",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 1307418,
+          "sha256": "7d312e9522d7ad005248962762974963cbd3d49b588267a1f936919e4d2b62a6"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 1286355,
+          "sha256": "f8cb2b98a3071d52b228a534824cfd48adcfef130b4d2cb453bc825981d5eaa4"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 1267082,
+          "sha256": "52864fd437a6b81f00a1d98807b1beae08847463fb525530ecb354c32683e746"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 229398,
+          "sha256": "36a4175987f4f8a1dee7119fdd32cca430707a42962644731b92a71230a599fe"
+        }
+      }
+    },
+    {
+      "name": "00 Base amb cel",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "778fe413cf3917cfc7208ab2094a7caad25851c39914463ad03bef95823eb816",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 51491600,
+          "sha256": "11548c82eb69b166bd63f941c103147713ec4bc40adc4799f06769a24f2175fb"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 45012418,
+          "sha256": "40f52a26733a344f6dd31dae109499378b5fe5eb3b0eeb13a366e2ae5aa00a52"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 34581420,
+          "sha256": "0dce0b668bdce631b5847e9c10c110c84cf8530c44a8d84e2636117504e02f5e"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 177721,
+          "sha256": "93b8a2ac576989618213fdd8e02dbd3aff6fae894578fe8abecb3e5030933499"
+        }
+      }
+    },
+    {
+      "name": "00 Base (cel/4)",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": true,
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "record_sha256": "61a12d7dcbc47e8d502137f7ed94214d6b1cb4e16602daef63d8eb73f52ed061",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 58198758,
+          "sha256": "095f6bb71536a3040ef3a71b389033dc28ab87b86dde932d8191a704f1b5dc75"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 52301775,
+          "sha256": "6d683b71f1b0f592a51ad8391f7e86f3b3037c9f91120d1341cd042069024c1a"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 40630341,
+          "sha256": "5739eee43e1b4400fde0949060cff0b89626387d440175fd644447d7ca097f35"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 177721,
+          "sha256": "93b8a2ac576989618213fdd8e02dbd3aff6fae894578fe8abecb3e5030933499"
+        }
+      }
+    },
+    {
+      "name": "03 ACHF azimutal 8-128 · V29",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 38,
+      "blend": "BlendMode.OVERLAY",
+      "record_sha256": "e72253218b534a7248c29e2c4af0c587941d160c455855e0e11793f7d14bfb8f",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 133618820,
+          "sha256": "30e096b8fec6bd1f4ca31ae7f3c6bc5ce5d40d5062dee8edd0627a5fb8fb366b"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 133618820,
+          "sha256": "30e096b8fec6bd1f4ca31ae7f3c6bc5ce5d40d5062dee8edd0627a5fb8fb366b"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 133618820,
+          "sha256": "30e096b8fec6bd1f4ca31ae7f3c6bc5ce5d40d5062dee8edd0627a5fb8fb366b"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 1569105,
+          "sha256": "bf23f49136a6d82b7712e78fb2f74e5c03d08a1bd2fb9809718ced7f3e50869e"
+        }
+      }
+    },
+    {
+      "name": "03 ACHF azimutal 8-128 · V30",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": true,
+      "opacity": 38,
+      "blend": "BlendMode.OVERLAY",
+      "record_sha256": "aecd3a16a97a6fecece6f98a49111818a95da9671d6cbfa0e8c9ddf4cd856786",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 131915111,
+          "sha256": "47b0adc1bd0a4dd41dbc369c5076d58ef77552a8669a790e92e05d225cefd978"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 131915111,
+          "sha256": "47b0adc1bd0a4dd41dbc369c5076d58ef77552a8669a790e92e05d225cefd978"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 131915111,
+          "sha256": "47b0adc1bd0a4dd41dbc369c5076d58ef77552a8669a790e92e05d225cefd978"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 1569105,
+          "sha256": "bf23f49136a6d82b7712e78fb2f74e5c03d08a1bd2fb9809718ced7f3e50869e"
+        }
+      }
+    },
+    {
+      "name": "07 ACHF azimutal suau r8 · V30",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 38,
+      "blend": "BlendMode.OVERLAY",
+      "record_sha256": "976114dff0e0a0c9fd922b4e1ed4d8bb5fca31fcd129d4ebfed2433e246f464e",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 129790142,
+          "sha256": "27ecde79bf26f47fe3e8ca40dac8df524882238ef81d39273f3bd335ac320b55"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 129790142,
+          "sha256": "27ecde79bf26f47fe3e8ca40dac8df524882238ef81d39273f3bd335ac320b55"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 129790142,
+          "sha256": "27ecde79bf26f47fe3e8ca40dac8df524882238ef81d39273f3bd335ac320b55"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 1569105,
+          "sha256": "bf23f49136a6d82b7712e78fb2f74e5c03d08a1bd2fb9809718ced7f3e50869e"
+        }
+      }
+    },
+    {
+      "name": "01 ACHF fi 2-32 · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": true,
+      "opacity": 36,
+      "blend": "BlendMode.OVERLAY",
+      "record_sha256": "032330dfe999032cfbed915006e67e5dce9b791f0eaa367a047b8c2c5bdd12d8",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 132230337,
+          "sha256": "74a6782073049a0456373c17962c9b277e890fb2be30c9ba40f873da7283f60e"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 132230337,
+          "sha256": "74a6782073049a0456373c17962c9b277e890fb2be30c9ba40f873da7283f60e"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 132230337,
+          "sha256": "74a6782073049a0456373c17962c9b277e890fb2be30c9ba40f873da7283f60e"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 612415,
+          "sha256": "fec1beae7ea9463204dc68bd77f77b49e3a9064ca6d3d72d830a4c443444ebda"
+        }
+      }
+    },
+    {
+      "name": "02 Passa-alt 24 · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": true,
+      "opacity": 20,
+      "blend": "BlendMode.OVERLAY",
+      "record_sha256": "16011ff686592974fca64c22152e5a90cfad281174c89fc99be31267656a5d94",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 134500846,
+          "sha256": "e98bdb5812a24fdcc4752d17b787669822c5f2b199240c538c206a9a78313efd"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 134500846,
+          "sha256": "e98bdb5812a24fdcc4752d17b787669822c5f2b199240c538c206a9a78313efd"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 134500846,
+          "sha256": "e98bdb5812a24fdcc4752d17b787669822c5f2b199240c538c206a9a78313efd"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 506786,
+          "sha256": "8320d7de8d49d33f4a3ffcd1c54a5623bf52fbd3a98335c4b4a8c7e150e1a9bf"
+        }
+      }
+    },
+    {
+      "name": "04 ACHF micro 1-16 · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 36,
+      "blend": "BlendMode.OVERLAY",
+      "record_sha256": "0a76125fff321814a286192a34aa0dff3d65550f567a1fa394958cc044f2bfeb",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 133440415,
+          "sha256": "d7f4cb96424bf396b80b078a0dcdfc04a8b3e47f479370610d2e61eb93342822"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 133440415,
+          "sha256": "d7f4cb96424bf396b80b078a0dcdfc04a8b3e47f479370610d2e61eb93342822"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 133440415,
+          "sha256": "d7f4cb96424bf396b80b078a0dcdfc04a8b3e47f479370610d2e61eb93342822"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 398177,
+          "sha256": "0849f207865c8b23c042c9f25089c2f19bc72f9dbce331c1b75e34491e86a0c3"
+        }
+      }
+    },
+    {
+      "name": "05 ACHF fi 2-48 · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 36,
+      "blend": "BlendMode.OVERLAY",
+      "record_sha256": "3a57bbaca3022130f72bc130b0dc05dadf77d6e1f3a269d51072ae4f08540689",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 132771068,
+          "sha256": "f02958547810db032e83466239a385078678c85fab0251c8573e57c440f27841"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 132771068,
+          "sha256": "f02958547810db032e83466239a385078678c85fab0251c8573e57c440f27841"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 132771068,
+          "sha256": "f02958547810db032e83466239a385078678c85fab0251c8573e57c440f27841"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 816252,
+          "sha256": "2e42fbbd403a920f1917ac9e594cca60c4fcfbca2d0144fac27be38a2ed71def"
+        }
+      }
+    },
+    {
+      "name": "06 ACHF estructura 4-64 · V31",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": false,
+      "opacity": 36,
+      "blend": "BlendMode.OVERLAY",
+      "record_sha256": "f4763792d89d347c3ee11fb84a7c62f5b17e1f3276cc3ef882934e7d0a2d56b9",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 133088903,
+          "sha256": "001f9ed3708d03bdff74d4d9a40b70c7ad2c2a22014adb51bb1ba854877a58a8"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 133088903,
+          "sha256": "001f9ed3708d03bdff74d4d9a40b70c7ad2c2a22014adb51bb1ba854877a58a8"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 133088903,
+          "sha256": "001f9ed3708d03bdff74d4d9a40b70c7ad2c2a22014adb51bb1ba854877a58a8"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 1011571,
+          "sha256": "ab6cdf860138e4ec29003977cd8e77b88e2eb61f130d7edb5cdfb77bdeb2b287"
+        }
+      }
+    },
+    {
+      "name": "Estrelles",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "visible": true,
+      "opacity": 255,
+      "blend": "BlendMode.LINEAR_DODGE",
+      "record_sha256": "aad31ef98897b74af0fd827b9d8fcd27a842b5493f02d5c984186d72fc180198",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 182954,
+          "sha256": "8f63547cec7f01165ba992e5da14762980d57e97b8222da78c19d1d7f0335f52"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 177678,
+          "sha256": "5b65b37d3c4c1d87d357ef8b19f5b427a30d67d85671510ac247c997e619a5bd"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 177816,
+          "sha256": "717965319ecfd057f1ab501aa40f64764bdcf8199205033ed6ae30d7c64cfdba"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 177772,
+          "sha256": "5593d5ac72514a05e46bd2f83960d74b3896736bcc182ab5018c0e5a092a0bb6"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 192847,
+          "sha256": "bcb6d7ac8cc1b1739b977d84f406e6b6cebb9dae1a21a9e61006a146396ca16f"
+        }
+      }
+    },
+    {
+      "name": "Reflex",
+      "bbox": [
+        4862,
+        3279,
+        5853,
+        4270
+      ],
+      "visible": true,
+      "opacity": 255,
+      "blend": "BlendMode.LINEAR_DODGE",
+      "record_sha256": "d0214eeeb63c61ff5efca2f8aa3617345595bd57a93e0d0e099bab73942a83d6",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 268358,
+          "sha256": "1b535676fa1aa41e8a0825327cb7276a8cdb2ccf07bb0c04d416d9d9732764db"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 254564,
+          "sha256": "67865a76606fee85b2b08ce85a6462995a96504e8d1711703fcdf31275f82c62"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 236339,
+          "sha256": "cce18f8a2a8fca7f91d6d096ff38b5ee6dc8043009e192afd2c2fc3f5de5fbff"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 164059,
+          "sha256": "ba98ae588e5d517e6cd89c180485bff18636f46384fd530abe62c447e5b52c29"
+        }
+      }
+    }
+  ],
+  "global": {
+    "header": "922364c883c7b37662b4fa4f3a4464f740aadbc8993074352c7e7905331d1dcb",
+    "color_mode": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+    "image_resources": "123a4954e2ff8ec04e301927c768f0b32b870cb60907fbc0c2fca8f9ced7a4ba",
+    "other_global_tagged_blocks": {}
+  },
+  "merged_sha256": "0d698383e2ca8af33839a3e4c7337d9ff8f761c0a07393da68d81218cf0766dc",
+  "added": [
+    {
+      "tag": "P01_NRGF",
+      "signature": {
+        "name": "P01 NRGF · V31",
+        "bbox": [
+          0,
+          0,
+          10551,
+          7506
+        ],
+        "visible": false,
+        "opacity": 255,
+        "blend": "BlendMode.NORMAL",
+        "record_sha256": "363b09e522aa78e1f68e365992e5a8b1d1cd2125527b5f27c1cb937b9bcecee3",
+        "channels": {
+          "-1": {
+            "compression": 2,
+            "bytes": 153965,
+            "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+          },
+          "0": {
+            "compression": 2,
+            "bytes": 130711644,
+            "sha256": "7711181099cb65d1f7c99be7ce37e17629c7c953cf738709abc06e035e55fe81"
+          },
+          "1": {
+            "compression": 2,
+            "bytes": 130711644,
+            "sha256": "7711181099cb65d1f7c99be7ce37e17629c7c953cf738709abc06e035e55fe81"
+          },
+          "2": {
+            "compression": 2,
+            "bytes": 130711644,
+            "sha256": "7711181099cb65d1f7c99be7ce37e17629c7c953cf738709abc06e035e55fe81"
+          },
+          "-2": {
+            "compression": 2,
+            "bytes": 196677,
+            "sha256": "aaa0760e91a2bdc99becd7ca46777ebe159e118605c8a1312ae81391dd36d649"
+          }
+        }
+      },
+      "parameters": {
+        "tag": "P01_NRGF",
+        "parameters": {
+          "annulus_width_px": 1,
+          "NRGF_profile_evaluation": "linear interpolation between annulus centers; no post-filter correction",
+          "RHEF_rank": "average ranks for ties / population; upsilon=None",
+          "count_min": 2,
+          "count_max": 23444,
+          "paper": "Morgan, Habbal & Woo 2006",
+          "equation": "(B-mean_theta(r))/std_theta(r)",
+          "coverage": "statistics of actual observed pixels; no zero-filled missing sky"
+        },
+        "physical_support_pixels": 70395270,
+        "float_sha256": "d8ccc5595a5ee78c6fc5e16cc601983ed0b7ddbbf79e3b1153981555e3b97678",
+        "display": {
+          "type": "one global affine LUT only; scientific float retained",
+          "black": -2.294110092163086,
+          "white": 3.0942893195152608,
+          "sample_percentiles": [
+            0.1,
+            99.9
+          ],
+          "clipped_low_fraction": 0.0009855349656305032,
+          "clipped_high_fraction": 0.0010002944800126486,
+          "statistics_sample_stride_px": 4
+        },
+        "u16_sha256": "c865699076c855fb144bc3bea91766d41afff228311ceee43a1803bec5daa6db"
+      }
+    },
+    {
+      "tag": "P02_RHEF",
+      "signature": {
+        "name": "P02 RHEF · comparacio amb anells · V31",
+        "bbox": [
+          0,
+          0,
+          10551,
+          7506
+        ],
+        "visible": false,
+        "opacity": 255,
+        "blend": "BlendMode.NORMAL",
+        "record_sha256": "2665ce53c96f72fc42aa559a3880cb4e91c47abfd3697d0ed92de29bb0394807",
+        "channels": {
+          "-1": {
+            "compression": 2,
+            "bytes": 153965,
+            "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+          },
+          "0": {
+            "compression": 2,
+            "bytes": 136433627,
+            "sha256": "371f381758979ad5d21a0f5d2b816a4fc438278497763eb4628343afdc540816"
+          },
+          "1": {
+            "compression": 2,
+            "bytes": 136433627,
+            "sha256": "371f381758979ad5d21a0f5d2b816a4fc438278497763eb4628343afdc540816"
+          },
+          "2": {
+            "compression": 2,
+            "bytes": 136433627,
+            "sha256": "371f381758979ad5d21a0f5d2b816a4fc438278497763eb4628343afdc540816"
+          },
+          "-2": {
+            "compression": 2,
+            "bytes": 196677,
+            "sha256": "aaa0760e91a2bdc99becd7ca46777ebe159e118605c8a1312ae81391dd36d649"
+          }
+        }
+      },
+      "parameters": {
+        "tag": "P02_RHEF",
+        "parameters": {
+          "annulus_width_px": 1,
+          "NRGF_profile_evaluation": "linear interpolation between annulus centers; no post-filter correction",
+          "RHEF_rank": "average ranks for ties / population; upsilon=None",
+          "count_min": 2,
+          "count_max": 23444,
+          "paper": "Gilly & Cranmer 2025",
+          "vignette": null,
+          "coverage": "rank only actual observed pixels"
+        },
+        "physical_support_pixels": 70395270,
+        "float_sha256": "5ba058d963e9d03bc7757b18fb1c5682a68dfdad70e538d761d0708ce9b1866b",
+        "display": {
+          "type": "one global affine LUT only; scientific float retained",
+          "black": 0,
+          "white": 1,
+          "sample_percentiles": null,
+          "clipped_low_fraction": 0.0,
+          "clipped_high_fraction": 0.0,
+          "statistics_sample_stride_px": 4
+        },
+        "u16_sha256": "8ea0c514778c673a23dbfeabf53b641d905273157f31c9e81d6076e05537a18b"
+      }
+    },
+    {
+      "tag": "P03_MGN",
+      "signature": {
+        "name": "P03 MGN · V31",
+        "bbox": [
+          0,
+          0,
+          10551,
+          7506
+        ],
+        "visible": false,
+        "opacity": 255,
+        "blend": "BlendMode.NORMAL",
+        "record_sha256": "085883a307374d3150a3f83668dc1a293db2a3958ca6d653ebbbe9fdf2a9328e",
+        "channels": {
+          "-1": {
+            "compression": 2,
+            "bytes": 153965,
+            "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+          },
+          "0": {
+            "compression": 2,
+            "bytes": 141139798,
+            "sha256": "416e02619fa0608f4deb6840ece61da406f835bb9ef6bc80cc66d490544726a4"
+          },
+          "1": {
+            "compression": 2,
+            "bytes": 141139798,
+            "sha256": "416e02619fa0608f4deb6840ece61da406f835bb9ef6bc80cc66d490544726a4"
+          },
+          "2": {
+            "compression": 2,
+            "bytes": 141139798,
+            "sha256": "416e02619fa0608f4deb6840ece61da406f835bb9ef6bc80cc66d490544726a4"
+          },
+          "-2": {
+            "compression": 2,
+            "bytes": 196677,
+            "sha256": "aaa0760e91a2bdc99becd7ca46777ebe159e118605c8a1312ae81391dd36d649"
+          }
+        }
+      },
+      "parameters": {
+        "tag": "P03_MGN",
+        "parameters": {
+          "paper": "Morgan & Druckmuller 2014, equations1-5",
+          "sigma_px": [
+            1.25,
+            2.5,
+            5,
+            10,
+            20,
+            40
+          ],
+          "k": 0.7,
+          "h": 0.7,
+          "gamma": 3.2,
+          "weights": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "input_limits": [
+            0.0,
+            6602665.0
+          ],
+          "nonpositive_input": "49 native limb pixels clipped to0 as allowed in paper; base itself unchanged",
+          "boundary": "normalized observed support, truncate3 Gaussian; no radial normalizer, H1, or external high-pass"
+        },
+        "physical_support_pixels": 70395270,
+        "float_sha256": "1ace8ff501b067a8b67d5669c83351f841c54fcacc89a3809162a820d40eb760",
+        "display": {
+          "type": "one global affine LUT only; scientific float retained",
+          "black": -0.2751680975854397,
+          "white": 0.34901174259185797,
+          "sample_percentiles": [
+            0.1,
+            99.9
+          ],
+          "clipped_low_fraction": 0.0009933764015678894,
+          "clipped_high_fraction": 0.0009918137965803668,
+          "statistics_sample_stride_px": 4
+        },
+        "u16_sha256": "ae8c6b8329709dc6b8ab77b6f26dd392ec0f0a5a891d5f079c7824fed9270760"
+      }
+    },
+    {
+      "tag": "P04_WOW",
+      "signature": {
+        "name": "P04 WOW sense denoise · V31",
+        "bbox": [
+          0,
+          0,
+          10551,
+          7506
+        ],
+        "visible": false,
+        "opacity": 255,
+        "blend": "BlendMode.NORMAL",
+        "record_sha256": "93c61f20eef68d179dd0b5a565b782b4abebb52069a6a97b472179f9d8306f80",
+        "channels": {
+          "-1": {
+            "compression": 2,
+            "bytes": 153965,
+            "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+          },
+          "0": {
+            "compression": 2,
+            "bytes": 139375872,
+            "sha256": "e8f9f9b0f2b6751b44f0eeb4d15a823e593ca70177dc34df970f61cd2c084314"
+          },
+          "1": {
+            "compression": 2,
+            "bytes": 139375872,
+            "sha256": "e8f9f9b0f2b6751b44f0eeb4d15a823e593ca70177dc34df970f61cd2c084314"
+          },
+          "2": {
+            "compression": 2,
+            "bytes": 139375872,
+            "sha256": "e8f9f9b0f2b6751b44f0eeb4d15a823e593ca70177dc34df970f61cd2c084314"
+          },
+          "-2": {
+            "compression": 2,
+            "bytes": 196677,
+            "sha256": "aaa0760e91a2bdc99becd7ca46777ebe159e118605c8a1312ae81391dd36d649"
+          }
+        }
+      },
+      "parameters": {
+        "tag": "P04_WOW",
+        "parameters": {
+          "paper": "Auchere et al. 2023 A&A670 A66 equations4-9,16-18",
+          "author_reference": "watroo",
+          "scales": 11,
+          "B3_kernel_1d": [
+            0.0625,
+            0.25,
+            0.375,
+            0.25,
+            0.0625
+          ],
+          "weights": "all1",
+          "h": 0,
+          "denoise": false,
+          "reason_no_denoise": "no validated full-canvas HDR noise sigma",
+          "bilateral": null,
+          "boundary": "mirror at rectangle; incomplete normalized convolution at actual missing support"
+        },
+        "physical_support_pixels": 70395270,
+        "float_sha256": "c0f48f5af12dcb5d11a3ef1c1f815566223a6a55a99d40ae215b7ade2f33dbf5",
+        "display": {
+          "type": "one global affine LUT only; scientific float retained",
+          "black": -12.105946032524109,
+          "white": 15.074313669204846,
+          "sample_percentiles": [
+            0.1,
+            99.9
+          ],
+          "clipped_low_fraction": 0.0009982772990287559,
+          "clipped_high_fraction": 0.0009991154235220634,
+          "statistics_sample_stride_px": 4
+        },
+        "u16_sha256": "3b8862c867b31d0f759f7139d040e1354335caa999aea1231a799534ca5c4d13"
+      }
+    },
+    {
+      "tag": "P05_WOW_bilateral",
+      "signature": {
+        "name": "P05 WOW bilateral sense denoise · V31",
+        "bbox": [
+          0,
+          0,
+          10551,
+          7506
+        ],
+        "visible": false,
+        "opacity": 255,
+        "blend": "BlendMode.NORMAL",
+        "record_sha256": "38c63425491ecc42de0f321b70a8b2dc2f1242165cce071d25496b0a13cda9fd",
+        "channels": {
+          "-1": {
+            "compression": 2,
+            "bytes": 153965,
+            "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+          },
+          "0": {
+            "compression": 2,
+            "bytes": 138567957,
+            "sha256": "cb8e0dd1a9352faa1ccea6a394f7dbcad608ded6a76127bc0360f87a32a1d105"
+          },
+          "1": {
+            "compression": 2,
+            "bytes": 138567957,
+            "sha256": "cb8e0dd1a9352faa1ccea6a394f7dbcad608ded6a76127bc0360f87a32a1d105"
+          },
+          "2": {
+            "compression": 2,
+            "bytes": 138567957,
+            "sha256": "cb8e0dd1a9352faa1ccea6a394f7dbcad608ded6a76127bc0360f87a32a1d105"
+          },
+          "-2": {
+            "compression": 2,
+            "bytes": 196677,
+            "sha256": "aaa0760e91a2bdc99becd7ca46777ebe159e118605c8a1312ae81391dd36d649"
+          }
+        }
+      },
+      "parameters": {
+        "tag": "P05_WOW_bilateral",
+        "parameters": {
+          "paper": "Auchere et al. 2023 A&A670 A66 equations4-9,16-18",
+          "author_reference": "watroo",
+          "scales": 11,
+          "B3_kernel_1d": [
+            0.0625,
+            0.25,
+            0.375,
+            0.25,
+            0.0625
+          ],
+          "weights": "all1",
+          "h": 0,
+          "denoise": false,
+          "reason_no_denoise": "no validated full-canvas HDR noise sigma",
+          "bilateral": 1,
+          "boundary": "mirror at rectangle; incomplete normalized convolution at actual missing support"
+        },
+        "physical_support_pixels": 70395270,
+        "float_sha256": "0b6a4982cfc1f58d921b789edb341f14246f178fe9c01924bef704d7f048f5d4",
+        "display": {
+          "type": "one global affine LUT only; scientific float retained",
+          "black": -16.224855323791505,
+          "white": 27.13622243309026,
+          "sample_percentiles": [
+            0.1,
+            99.9
+          ],
+          "clipped_low_fraction": 0.000996387967543842,
+          "clipped_high_fraction": 0.001002823058992458,
+          "statistics_sample_stride_px": 4
+        },
+        "u16_sha256": "37429cd658c6e42b803f8d8fe77ad9a6834b407d0c36b6f92b4ef4e4f7d25579"
+      }
+    },
+    {
+      "tag": "P06_NAFE",
+      "signature": {
+        "name": "P06 NAFE n65 · V31",
+        "bbox": [
+          0,
+          0,
+          10551,
+          7506
+        ],
+        "visible": false,
+        "opacity": 255,
+        "blend": "BlendMode.NORMAL",
+        "record_sha256": "7d40e01f7bc4253c19abb0059060e4ef4fb3cf74faab253d8d80388517256f5b",
+        "channels": {
+          "-1": {
+            "compression": 2,
+            "bytes": 153965,
+            "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+          },
+          "0": {
+            "compression": 2,
+            "bytes": 139850117,
+            "sha256": "a6bfb87f19de39caf6f7d645e25169483b5091c530a824fffbdbe687ce1dc5b0"
+          },
+          "1": {
+            "compression": 2,
+            "bytes": 139850117,
+            "sha256": "a6bfb87f19de39caf6f7d645e25169483b5091c530a824fffbdbe687ce1dc5b0"
+          },
+          "2": {
+            "compression": 2,
+            "bytes": 139850117,
+            "sha256": "a6bfb87f19de39caf6f7d645e25169483b5091c530a824fffbdbe687ce1dc5b0"
+          },
+          "-2": {
+            "compression": 2,
+            "bytes": 196677,
+            "sha256": "aaa0760e91a2bdc99becd7ca46777ebe159e118605c8a1312ae81391dd36d649"
+          }
+        }
+      },
+      "parameters": {
+        "tag": "P06_NAFE",
+        "parameters": {
+          "paper": "Druckmuller2013; public implementation ebuchlin/medocimage",
+          "n": 65,
+          "ngauss": 12,
+          "local_histogram_bins": 500,
+          "sigma_intensity": 5.0,
+          "sigma_meaning": "declared additive-noise suppression parameter in base G units; not claimed calibrated sensor sigma",
+          "a": [
+            0,
+            6602665.0
+          ],
+          "gamma": 2.4,
+          "gamma_weight": 0.2,
+          "detail_weight": 0.8,
+          "boundary": "only actual observed neighbors contribute; no zero-valued missing sky",
+          "native_reference_tolerance": 2e-06
+        },
+        "physical_support_pixels": 70395270,
+        "float_sha256": "8014cbeb71e6a2b1fb35fcfeeaff88e4a8fc072a8a0135408e4f01ef257a1b73",
+        "display": {
+          "type": "one global affine LUT only; scientific float retained",
+          "black": 0.12079525911808014,
+          "white": 0.6890864212512982,
+          "sample_percentiles": [
+            0.1,
+            99.9
+          ],
+          "clipped_low_fraction": 0.0009876657906134887,
+          "clipped_high_fraction": 0.0010226681423339949,
+          "statistics_sample_stride_px": 4
+        },
+        "u16_sha256": "7be94342d3b35791d8f2cb2b5984e5cfea012c76bddb8eaa79563d8c92db1799"
+      }
+    },
+    {
+      "tag": "P07_ACHF_precursor16",
+      "signature": {
+        "name": "P07 ACHF precursor sigma16 · V31",
+        "bbox": [
+          0,
+          0,
+          10551,
+          7506
+        ],
+        "visible": false,
+        "opacity": 255,
+        "blend": "BlendMode.NORMAL",
+        "record_sha256": "03089bee9229f9bdece45c3da4e19e7967766057a08800a438594e7bb659a31c",
+        "channels": {
+          "-1": {
+            "compression": 2,
+            "bytes": 153965,
+            "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+          },
+          "0": {
+            "compression": 2,
+            "bytes": 80469822,
+            "sha256": "0e6945b489399a69e1005bf6b5aa668f44888e08c593bfc47ad8faf6da6d8c03"
+          },
+          "1": {
+            "compression": 2,
+            "bytes": 80469822,
+            "sha256": "0e6945b489399a69e1005bf6b5aa668f44888e08c593bfc47ad8faf6da6d8c03"
+          },
+          "2": {
+            "compression": 2,
+            "bytes": 80469822,
+            "sha256": "0e6945b489399a69e1005bf6b5aa668f44888e08c593bfc47ad8faf6da6d8c03"
+          },
+          "-2": {
+            "compression": 2,
+            "bytes": 196677,
+            "sha256": "aaa0760e91a2bdc99becd7ca46777ebe159e118605c8a1312ae81391dd36d649"
+          }
+        }
+      },
+      "parameters": {
+        "tag": "P07_ACHF_precursor16",
+        "parameters": {
+          "source": "Druckmullerova thesis, section5.2 equations5.1-5.2",
+          "identity": "published ACHF precursor, not proprietary Corona ACHF",
+          "sigma_px": 16,
+          "radial_support": [
+            -32,
+            32
+          ],
+          "tangential_arc_support": [
+            -32,
+            32
+          ],
+          "input": "linear corrected G, no log/contrast/H1",
+          "quadrature": {
+            "dr_px": 0.5,
+            "angular_nodes": 32760,
+            "interpolation": "bilinear inside quadrature only; native output grid"
+          },
+          "boundary": "incomplete convolution normalized by observed support",
+          "notation": "coherent offsets u,v; fixes the absolute/offset notation conflict in printed eq5.2"
+        },
+        "physical_support_pixels": 70395270,
+        "float_sha256": "1100fd95975474b70de5127f5fe5e845f6c52e00024b09485f29235b97b1111e",
+        "display": {
+          "type": "one global affine LUT only; scientific float retained",
+          "black": -3115.848609375,
+          "white": 200.74414648442507,
+          "sample_percentiles": [
+            0.1,
+            99.9
+          ],
+          "clipped_low_fraction": 0.0009981494495297767,
+          "clipped_high_fraction": 0.0010101815079337007,
+          "statistics_sample_stride_px": 4
+        },
+        "u16_sha256": "ec1144ca6e10394836d80e97bbc17fbcf0ce7ccb89fb4fc04e36ac70e39eafee"
+      }
+    },
+    {
+      "tag": "P08_ACHF_precursor32",
+      "signature": {
+        "name": "P08 ACHF precursor sigma32 · V31",
+        "bbox": [
+          0,
+          0,
+          10551,
+          7506
+        ],
+        "visible": false,
+        "opacity": 255,
+        "blend": "BlendMode.NORMAL",
+        "record_sha256": "a9707258e0c1d1c600666be65f769de2e8732f59656c9664fc275cd55cc8c3ce",
+        "channels": {
+          "-1": {
+            "compression": 2,
+            "bytes": 153965,
+            "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+          },
+          "0": {
+            "compression": 2,
+            "bytes": 58159489,
+            "sha256": "c641323320da6b2de32faa1d23b66b8d3a1340a8d424e990a933079fe3161217"
+          },
+          "1": {
+            "compression": 2,
+            "bytes": 58159489,
+            "sha256": "c641323320da6b2de32faa1d23b66b8d3a1340a8d424e990a933079fe3161217"
+          },
+          "2": {
+            "compression": 2,
+            "bytes": 58159489,
+            "sha256": "c641323320da6b2de32faa1d23b66b8d3a1340a8d424e990a933079fe3161217"
+          },
+          "-2": {
+            "compression": 2,
+            "bytes": 196677,
+            "sha256": "aaa0760e91a2bdc99becd7ca46777ebe159e118605c8a1312ae81391dd36d649"
+          }
+        }
+      },
+      "parameters": {
+        "tag": "P08_ACHF_precursor32",
+        "parameters": {
+          "source": "Druckmullerova thesis, section5.2 equations5.1-5.2",
+          "identity": "published ACHF precursor, not proprietary Corona ACHF",
+          "sigma_px": 32,
+          "radial_support": [
+            -64,
+            64
+          ],
+          "tangential_arc_support": [
+            -64,
+            64
+          ],
+          "input": "linear corrected G, no log/contrast/H1",
+          "quadrature": {
+            "dr_px": 0.5,
+            "angular_nodes": 32760,
+            "interpolation": "bilinear inside quadrature only; native output grid"
+          },
+          "boundary": "incomplete convolution normalized by observed support",
+          "notation": "coherent offsets u,v; fixes the absolute/offset notation conflict in printed eq5.2"
+        },
+        "physical_support_pixels": 70395270,
+        "float_sha256": "5e6b5e3e858140e5274b925dbb94d481db03c7a1a9ed80bcf422fd6fa1632bb0",
+        "display": {
+          "type": "one global affine LUT only; scientific float retained",
+          "black": -6911.872486328125,
+          "white": 5277.983767578347,
+          "sample_percentiles": [
+            0.1,
+            99.9
+          ],
+          "clipped_low_fraction": 0.001001004755006977,
+          "clipped_high_fraction": 0.001000706439509359,
+          "statistics_sample_stride_px": 4
+        },
+        "u16_sha256": "6feae796e4d1f7dfc441db6b16c4ee3b145d7dd6554e2fa6a23812b74cb857ee"
+      }
+    },
+    {
+      "tag": "P09_SWAP_pilot",
+      "signature": {
+        "name": "P09 SWAP · pilot llum blanca · V31",
+        "bbox": [
+          0,
+          0,
+          10551,
+          7506
+        ],
+        "visible": false,
+        "opacity": 255,
+        "blend": "BlendMode.NORMAL",
+        "record_sha256": "bfc98d5b4e6707a60d598630526f237ba8eb85bd42061cfb03114cfe00ac66c1",
+        "channels": {
+          "-1": {
+            "compression": 2,
+            "bytes": 153965,
+            "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+          },
+          "0": {
+            "compression": 2,
+            "bytes": 98198802,
+            "sha256": "9fa0b9e3529649fbfbc435461e64df8372e83953868bcebe79442d1834768864"
+          },
+          "1": {
+            "compression": 2,
+            "bytes": 98198802,
+            "sha256": "9fa0b9e3529649fbfbc435461e64df8372e83953868bcebe79442d1834768864"
+          },
+          "2": {
+            "compression": 2,
+            "bytes": 98198802,
+            "sha256": "9fa0b9e3529649fbfbc435461e64df8372e83953868bcebe79442d1834768864"
+          },
+          "-2": {
+            "compression": 2,
+            "bytes": 196677,
+            "sha256": "aaa0760e91a2bdc99becd7ca46777ebe159e118605c8a1312ae81391dd36d649"
+          }
+        }
+      },
+      "parameters": {
+        "tag": "P09_SWAP_pilot",
+        "parameters": {
+          "paper": "Seaton et al.2023, off-limb recipe",
+          "angular_median_halfwidth_degrees": 15,
+          "polar_angle_nodes": 720,
+          "polar_dr_px": 1,
+          "filter_gaussian_sigma_px": 4,
+          "c0": 0.75,
+          "t0": 492.8470764160156,
+          "t0_definition": "median of F over actual observed support, intensity-unit aware",
+          "display": "global affine only, no optional fourth-root display",
+          "status": "EUV-to-white-light transfer pilot; author warns visible-light results can be poor",
+          "fill_missing_sectors": false
+        },
+        "physical_support_pixels": 70395270,
+        "float_sha256": "837d88e4b5e6ba16cf63f2d264006a0b30972874c8c9c716b9621672becb35b9",
+        "display": {
+          "type": "one global affine LUT only; scientific float retained",
+          "black": 2.457633385658264,
+          "white": 17.614231235504345,
+          "sample_percentiles": [
+            0.1,
+            99.9
+          ],
+          "clipped_low_fraction": 0.0009966152555420272,
+          "clipped_high_fraction": 0.0010014877420031203,
+          "statistics_sample_stride_px": 4
+        },
+        "u16_sha256": "c2b5c36be319b23c5da58fbf39ef988c652aa3e03694ccf5ba7be0aab30d4ddc"
+      }
+    },
+    {
+      "tag": "C01_Passa_alt24_lineal",
+      "signature": {
+        "name": "C01 Passa-alt24 lineal · control · V31",
+        "bbox": [
+          0,
+          0,
+          10551,
+          7506
+        ],
+        "visible": false,
+        "opacity": 255,
+        "blend": "BlendMode.NORMAL",
+        "record_sha256": "d80a429c6358e26000aafa18fd3c91528ae00235679d6e31b9dd1070c3ef35de",
+        "channels": {
+          "-1": {
+            "compression": 2,
+            "bytes": 153965,
+            "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+          },
+          "0": {
+            "compression": 2,
+            "bytes": 69067038,
+            "sha256": "e0cc4c8357fb4e6f64900c42eb1f31baf3c5f202ad2ecba87580efb7d0d7bc57"
+          },
+          "1": {
+            "compression": 2,
+            "bytes": 69067038,
+            "sha256": "e0cc4c8357fb4e6f64900c42eb1f31baf3c5f202ad2ecba87580efb7d0d7bc57"
+          },
+          "2": {
+            "compression": 2,
+            "bytes": 69067038,
+            "sha256": "e0cc4c8357fb4e6f64900c42eb1f31baf3c5f202ad2ecba87580efb7d0d7bc57"
+          },
+          "-2": {
+            "compression": 2,
+            "bytes": 196677,
+            "sha256": "aaa0760e91a2bdc99becd7ca46777ebe159e118605c8a1312ae81391dd36d649"
+          }
+        }
+      },
+      "parameters": {
+        "tag": "C01_Passa_alt24_lineal",
+        "parameters": {
+          "role": "classic control",
+          "definition": "B-Gaussian24(B), linear G",
+          "boundary": "normalized physical support",
+          "external_processing": "none"
+        },
+        "physical_support_pixels": 70395270,
+        "float_sha256": "c8f2dec6a4445a94e0b57fc2faa855bd0b8bcea1afc3ea91c9d63a0e6e270bf1",
+        "display": {
+          "type": "one global affine LUT only; scientific float retained",
+          "black": -4819.913671875,
+          "white": 2003.00549609651,
+          "sample_percentiles": [
+            0.1,
+            99.9
+          ],
+          "clipped_low_fraction": 0.0010026383874939325,
+          "clipped_high_fraction": 0.001002879880992004,
+          "statistics_sample_stride_px": 4
+        },
+        "u16_sha256": "7c2129a2dd1e17b4e1335d2cacef08712d45b7318937414cccfefdec0f12a76c"
+      }
+    }
+  ],
+  "total_layers": 40,
+  "default": "all30 originals intact including visibility; all10 new independent Normal100% views OFF; enable one new layer at a time",
+  "physical_support": "same exact fusion_support, no added circular mask/crop",
+  "disposition": "scientific comparison; not a claim of artifact-free final enhancement"
+}

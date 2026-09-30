@@ -1,0 +1,54 @@
+{
+  "PASS": true,
+  "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V57.psb",
+  "sha256": "ef4ee9fe93370e1d9c9bc453a788b6f67c1415061383887fa06ac2762b8f156a",
+  "bytes": 9042884658,
+  "layers": 35,
+  "size": [
+    10551,
+    7506
+  ],
+  "depth": 16,
+  "original_layers_preserved": 32,
+  "original_channels_masks_geometry_exact": true,
+  "imported_V56_layers_exact": 3,
+  "expected_fingerprints_match": true,
+  "merged_cache_native_max_DN16": 0,
+  "profile": "Adobe RGB (1998)",
+  "geometry": "identity; no resampling",
+  "published_utc": "2026-09-13T12:14:08.100299+00:00",
+  "Photoshop": "OBRE 10551 px x 7506 px · 35 capes",
+  "native_readback_max_DN16": 0,
+  "source_files_unchanged": [
+    {
+      "label": "V42",
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V42.psb",
+      "sha256": "c33804adb3859e26e1a5b71d19d78d6929c2127d10c987e3efbd6e3ab89ee5c2",
+      "exact": true
+    },
+    {
+      "label": "V56",
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes interiors/Earthshine_V56.psb",
+      "sha256": "edee45ad76f08f8450beed3e85ed0d226eb0b1e11347478d2e998d74281ce12e",
+      "exact": true
+    }
+  ],
+  "report": "/Users/USUARI/Downloads/Eclipse 2026/output/v57_integracio_20260913/RESULTAT.md",
+  "handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-13_CODEX_CAPES_TOTALS_V57.md",
+  "artifact_free": false,
+  "PASS_scope": "Exact layer integration, sources preserved, native Photoshop open and recomposition; visual acceptance by Pere pending",
+  "open_document": "ACTIVE /Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V57.psb | 35 layers | saved=false | 10551 px x 7506 px",
+  "corona_outside_r520_exact_V42": true,
+  "sources": {
+    "V42": {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V42.psb",
+      "sha256": "c33804adb3859e26e1a5b71d19d78d6929c2127d10c987e3efbd6e3ab89ee5c2",
+      "bytes": 8737945886
+    },
+    "V56": {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes interiors/Earthshine_V56.psb",
+      "sha256": "edee45ad76f08f8450beed3e85ed0d226eb0b1e11347478d2e998d74281ce12e",
+      "bytes": 1170457824
+    }
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "schema_version": 4,
+  "updated": "2026-09-06T17:44:50.267407+00:00",
+  "phase": "post-eclipse-V31-pure-filter-comparison",
+  "coordination_mode": "ALTERNATING_CODEX_CLAUDE_WITH_AUDITABLE_HANDOFFS",
+  "entrypoint": "/Users/USUARI/Desktop/Eclipse 2026/IA/README.md",
+  "asset_root": "/Users/USUARI/Desktop/Eclipse 2026",
+  "code_root": "/Users/USUARI/Downloads/Eclipse 2026",
+  "code_worktree": "/Users/USUARI/Downloads/Eclipse 2026",
+  "git_present": false,
+  "formal_worktree_handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-06_V31_FILTRES_PURS.md",
+  "handoff": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/HANDOFF_VIGENT.md",
+  "status": "/Users/USUARI/Desktop/Eclipse 2026/IA/ESTAT_ACTUAL.md",
+  "path_map": "/Users/USUARI/Desktop/Eclipse 2026/IA/MAPA_RUTES_I_OUTPUTS.md",
+  "paths": {
+    "sony_raw_root": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA",
+    "sony_calibrated": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/calibrated",
+    "sony_darks": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/Darks A7RIIIA Eclipse",
+    "vixen_all_raw_root": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III",
+    "vixen_totality_raw_root": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Vixen Fase totalitat",
+    "vixen_masters_v2": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Vixen Fase totalitat/Masters_v2",
+    "vixen_darks": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Darks Canon R6III Eclipse",
+    "vixen_posterior_flats_raw": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Flats R6III",
+    "sony_posterior_flats_raw": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/Flats Sony A7RIIIA 300mm",
+    "posterior_flat_output": "/Users/USUARI/Downloads/Eclipse 2026/output/flats_20260822",
+    "posterior_flat_assessment": "/Users/USUARI/Downloads/Eclipse 2026/output/flats_20260822/transfer_assessment_v1/TRANSFER_ASSESSMENT.json",
+    "derivatives_root": "/Users/USUARI/Desktop/Eclipse 2026/Derivats",
+    "vixen_hdr_master": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Vixen/Corona_HDR_Vixen",
+    "vixen_hdr4": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Vixen/HDR4",
+    "capestotals_work": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Vixen/CapesTotals_work",
+    "sony_stacks": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Sony/Apilats",
+    "current_technical_editable": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V31_FiltresPurs.psb",
+    "reference_mockup": "/Users/USUARI/Downloads/Maqueta de resultat esperat.tif",
+    "astrometry": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Astrometria/Estrelles",
+    "earthshine": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Earthshine",
+    "publication": "/Users/USUARI/Desktop/Eclipse 2026/Publicacio",
+    "photoshop_root": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop",
+    "photoshop_totals": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals",
+    "photoshop_interiors": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes interiors",
+    "photoshop_exteriors": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes exteriors",
+    "photoshop_filters_resources": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/2-Filtres/Recursos",
+    "current_delivery_manifest": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/delivery_manifest.json",
+    "current_visual_output": "/Users/USUARI/Desktop/Eclipse 2026/IA/output/v31_purs_20260906"
+  },
+  "current_product": {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V31_FiltresPurs.psb",
+    "sha256": "89d509bcc53982307cf9e3d78b0a84ed7548f4045e8cbb95d9f8594e4e877dfd",
+    "bytes": 9593292748,
+    "size": [
+      10551,
+      7506
+    ],
+    "depth": 16,
+    "layers": 40,
+    "published_utc": "2026-09-06T17:44:50.267407+00:00",
+    "PASS": true,
+    "PASS_scope": "container and implementation checks, not artifact-free visual enhancement",
+    "artifact_free": false,
+    "source": {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V31.psb",
+      "sha256": "bbbb2b93a49a0e09226b89467754f6364d1c6b929bc147bd34387a1c66d7affe",
+      "bytes": 6193861172,
+      "size": [
+        10551,
+        7506
+      ],
+      "depth": 16,
+      "layers": 30,
+      "published_utc": "2026-09-05T15:21:45.004948+00:00",
+      "PASS": true,
+      "source": {
+        "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V30.psb",
+        "bytes": 6233044488,
+        "sha256": "0d1f23fe5c56acf60bb35d3e24acea02fffaaf333d04d7a3aa17e0aac4f3f8c0"
+      },
+      "verification": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/psb_verification.json",
+      "photoshop": "OBRE 10551 px x 7506 px · 30 capes",
+      "visual_acceptance": "Pere final visual judgement pending",
+      "preservation": "25 layers entirely identical; five non-azimuthal layers only RGB and version name changed; all masks, alpha, opacity, visibility, order and azimuthal03/07 preserved",
+      "limitations": [
+        "Smoothing also attenuates real fine structures: sigma3 retains about74-75 percent coherent16-32px detail in four inner windows; about92 percent at32-64px.",
+        "H1b warnings remain for01/04/05; no certification of total microcircle elimination.",
+        "Outer detail beyond5R remains unvalidated by Brno; no crop or mask added.",
+        "Photographic derivative, same canvas/FOV; no RAW recalibration."
+      ],
+      "manifest": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/delivery_manifest.json"
+    },
+    "verification": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/receipts/psb_verification.json",
+    "photoshop": "OBRE 10551 px x 7506 px · 40 capes",
+    "visual_acceptance": "comparison delivered with visible limitations; Pere judgement pending",
+    "preservation": "all30 prior layer records/pixels/masks/visibility exact; ten independent hidden Normal100 views added",
+    "limitations": [
+      "No guarantee of all solar arcs eliminated; visible limitations documented.",
+      "Pure filters use intrinsic published operations plus declared numerical boundary handling; no added H1/tanh/external high-pass/denoise/circular fade.",
+      "FNRGF domain-only array, missing angular sectors not invented.",
+      "NAFE-VN and RLMF deferred for unverifiable specifications; SiRGraF lacks required temporal input; full Corona ACHF not reproduced.",
+      "G monochrome scientific views; pure float arrays retained before display LUT."
+    ],
+    "manifest": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/delivery_manifest.json"
+  },
+  "processing_authority": {
+    "type": "independent-scientific-filter-comparison-plus-preserved-photo",
+    "runs": "Vixen019/Sony016, immutable; exact dependencies in manifest",
+    "source": "corrected linear G, global Sony-to-Vixen gain0.3411462604999542",
+    "fov_status": "same10551x7506",
+    "raw_calibration_reexecuted": false
+  },
+  "visual_task": {
+    "status": "DELIVERED_COMPARISON_WITH_LIMITATIONS",
+    "target": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V31_FiltresPurs.psb",
+    "original30": "unchanged including classic controls",
+    "new10": "independent Normal100 views OFF",
+    "next_action": "No automatic task; follow-up requires current authority and a new claim"
+  },
+  "history": {
+    "previous_active_snapshot": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/docs_before/IA_ACTIVE.json",
+    "previous_active_sha256": "3d339d5696368d8e1487258f23c55e289eed9ba582e0b6fbdd1375efa99ab30b",
+    "meaning": "previous V31 and open unsaved documents preserved; this V31 comparison published under a new filename"
+  },
+  "jpeg_output": {
+    "status": "ACTIVE",
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/output",
+    "scope": "ALL_NEW_AI_GENERATED_JPEG",
+    "historical_files": "DO_NOT_MOVE"
+  }
+}

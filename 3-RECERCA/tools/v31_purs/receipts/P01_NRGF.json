@@ -1,0 +1,28 @@
+{
+  "tag": "P01_NRGF",
+  "parameters": {
+    "annulus_width_px": 1,
+    "NRGF_profile_evaluation": "linear interpolation between annulus centers; no post-filter correction",
+    "RHEF_rank": "average ranks for ties / population; upsilon=None",
+    "count_min": 2,
+    "count_max": 23444,
+    "paper": "Morgan, Habbal & Woo 2006",
+    "equation": "(B-mean_theta(r))/std_theta(r)",
+    "coverage": "statistics of actual observed pixels; no zero-filled missing sky"
+  },
+  "physical_support_pixels": 70395270,
+  "float_sha256": "d8ccc5595a5ee78c6fc5e16cc601983ed0b7ddbbf79e3b1153981555e3b97678",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": -2.294110092163086,
+    "white": 3.0942893195152608,
+    "sample_percentiles": [
+      0.1,
+      99.9
+    ],
+    "clipped_low_fraction": 0.0009855349656305032,
+    "clipped_high_fraction": 0.0010002944800126486,
+    "statistics_sample_stride_px": 4
+  },
+  "u16_sha256": "c865699076c855fb144bc3bea91766d41afff228311ceee43a1803bec5daa6db"
+}

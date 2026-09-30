@@ -1,0 +1,73 @@
+{
+ "que_es": "EL FORMAT CANÒNICAMENT BO de la capa Sony, declarat per Pere el 28-08-2026 («aquest és el format que vull que guardis com a canònicament bo») després de corregir-la a mà amb filtres de Camera Raw sobre la V17. Mesurat sobre la seva capa 13_mes1s_2sx3+8sx2_SONY300 al llenç de la V16/V17 (Sol a (6469,2 · 6757,6), RS 455,5 px).",
+ "com_es_llegeix": "Medianes RGB del render (0-1) per anell solar, i percentils del camp sencer (les ombres). La forma: interior neutre-càlid brillant (~0,90 a 2,2-2,6 R☉) que CAU radialment cap a un cel FOSC i BLAU (0,28-0,41 a 9-10 R☉, B/G 1,22, R/G 0,83), amb el terra d'ombres p0,5 ≈ 0,075-0,105. Tot render Sony futur s'ha d'acostar a això, no al render pla de la cadena.",
+ "mesures": {
+  "2.2-2.6Rsol": {
+   "RGB": [
+    0.878599226474762,
+    0.9025864005088806,
+    0.8460364937782288
+   ],
+   "R/G": 0.9734239580603091,
+   "B/G": 0.9373468216463611
+  },
+  "3-3.5Rsol": {
+   "RGB": [
+    0.6228579878807068,
+    0.5778439044952393,
+    0.5788815021514893
+   ],
+   "R/G": 1.0779000748044378,
+   "B/G": 1.0017956365865905
+  },
+  "4.5-5Rsol": {
+   "RGB": [
+    0.4295719861984253,
+    0.442694753408432,
+    0.4717784523963928
+   ],
+   "R/G": 0.9703570753685902,
+   "B/G": 1.065696958827809
+  },
+  "6.5-7Rsol": {
+   "RGB": [
+    0.31061264872550964,
+    0.34045928716659546,
+    0.3840085566043854
+   ],
+   "R/G": 0.9123341921746987,
+   "B/G": 1.1279132955961344
+  },
+  "9-10Rsol": {
+   "RGB": [
+    0.27911803126335144,
+    0.3357595205307007,
+    0.40897229313850403
+   ],
+   "R/G": 0.8313034007857116,
+   "B/G": 1.2180512185986072
+  },
+  "percentils_camp": {
+   "0.5": [
+    0.07492179423570633,
+    0.07739376276731491,
+    0.10461585223674774
+   ],
+   "2": [
+    0.09802395850419998,
+    0.10244907438755035,
+    0.13208208978176117
+   ],
+   "10": [
+    0.15197986364364624,
+    0.16983291506767273,
+    0.20938429236412048
+   ],
+   "50": [
+    0.30698099732398987,
+    0.3697260916233063,
+    0.443549245595932
+   ]
+  }
+ }
+}

@@ -1,0 +1,1052 @@
+{
+ "versio": "V28",
+ "base": "etapa 1 (V27: ghost 3 R☉ per inpainting a l'origen)",
+ "geometria": "etapa 2d V27 (azimutal + forat lunar)",
+ "detall": "etapa 1b V28: font híbrida, bandes fina/mitjana/ampla",
+ "geometria_num": {
+  "rotacio_total_deg": 46.58738327026368,
+  "escala_total": 0.9999999999999998,
+  "sol_v23": [
+   5361.787699906061,
+   3775.040698719501
+  ],
+  "angle_gros_azimutal": 46.583412170410156,
+  "validacio_azimutal": {
+   "retard_radial_final": {
+    "dx": -0.625785142064408,
+    "dy": 0.35784743723356505,
+    "c": -1.628795551378447,
+    "residu_px": 1.0840941379939095,
+    "n": 36,
+    "corr_mediana": 0.9874371588230133,
+    "r_mig": 704.9648
+   },
+   "control_nul_retard": {
+    "dx": 5.334802886483913,
+    "dy": 1.0876768098325105,
+    "c": -1.4907620300751885,
+    "residu_px": 2.0204687970093222,
+    "n": 36,
+    "corr_mediana": 0.9552835822105408,
+    "r_mig": 704.9648
+   },
+   "10_1-125s_572A2969.CR3 · FON": {
+    "angle_residual_deg": 0.238,
+    "pic": 1.0,
+    "a_0": 1.0
+   },
+   "09_1-60s_572A2975+572A2993_a": {
+    "angle_residual_deg": -0.018,
+    "pic": 1.0,
+    "a_0": 1.0
+   },
+   "13_mes1s_2sx3+8sx2_SONY300 ·": {
+    "angle_residual_deg": -0.498,
+    "pic": 1.0,
+    "a_0": 1.0
+   }
+  },
+  "control_nul_pic_mediana": 0.011498589803571893
+ },
+ "geometria_vella_v25_v26": {
+  "rotacio_deg": -91.96856924358922,
+  "nota": "girada 138,5° respecte de les capes de Pere; les seves marques es transformen amb ella"
+ },
+ "camp_exterior": {
+  "font": "capes 12 i 13 de Pere igualades PER SEPARAT a la base; guany local 13/12 a la vora del rectangle de la 13 (ploma 200 px)",
+  "rho_6-8.5Rsol": {
+   "rho13": {
+    "R": {
+     "radial": [
+      0.7015562273848404,
+      0.9006708493303277
+     ],
+     "az": [
+      1.0195558948649297,
+      -0.013186713406855443,
+      0.20284828322532106,
+      -0.011526790622607383,
+      -0.07526722964598621
+     ],
+     "residu_abans": 0.17553997039794922,
+     "residu_despres": 0.02984529733657837
+    },
+    "G": {
+     "radial": [
+      0.6485978145763297,
+      0.8318460448601078
+     ],
+     "az": [
+      1.0233969895376094,
+      -0.0057843414715199664,
+      0.21926184209372956,
+      -0.013573508001391149,
+      -0.06428392213996988
+     ],
+     "residu_abans": 0.23584359884262085,
+     "residu_despres": 0.031817615032196045
+    },
+    "B": {
+     "radial": [
+      0.5121692296373678,
+      0.6504946390973676
+     ],
+     "az": [
+      1.0234698048896256,
+      0.009348328629734878,
+      0.21973960204391427,
+      -0.01647637518729713,
+      -0.04800952099958294
+     ],
+     "residu_abans": 0.4017118215560913,
+     "residu_despres": 0.03173267841339111
+    }
+   },
+   "rho12": {
+    "R": {
+     "radial": [
+      0.8146445347053191,
+      0.9671385471221348
+     ],
+     "az": [
+      1.086984038352966,
+      -0.05511292611107669,
+      0.31098734294860336,
+      -0.0757856659073282,
+      -0.09304734489405093
+     ],
+     "residu_abans": 0.20283406972885132,
+     "residu_despres": 0.04944974184036255
+    },
+    "G": {
+     "radial": [
+      0.7142703321154494,
+      0.8697899498018776
+     ],
+     "az": [
+      1.0942045143908918,
+      -0.044327424833112576,
+      0.3557100771584797,
+      -0.08323102071401868,
+      -0.08190189333305557
+     ],
+     "residu_abans": 0.2547711431980133,
+     "residu_despres": 0.049789488315582275
+    },
+    "B": {
+     "radial": [
+      0.53829851955462,
+      0.6600243511864867
+     ],
+     "az": [
+      1.0808312512106364,
+      -0.022108885480622866,
+      0.34965348682111524,
+      -0.05788837019057218,
+      -0.06044269165618132
+     ],
+     "residu_abans": 0.3984239101409912,
+     "residu_despres": 0.043644845485687256
+    }
+   },
+   "guany_12_fora_mediana": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "salt_vora_13_abans": [
+    NaN,
+    NaN,
+    NaN
+   ]
+  },
+  "rho_base_k": {
+   "rho13": {
+    "R": {
+     "radial": [
+      0.38016974042036106,
+      0.4209813011349166
+     ],
+     "az": [
+      1.051133980353673,
+      0.016562112063751622,
+      0.2891265273879499,
+      -0.021305989570488775,
+      -0.05097660326179061
+     ],
+     "residu_abans": 0.5933395624160767,
+     "residu_despres": 0.03455543518066406
+    },
+    "G": {
+     "radial": [
+      0.3402640613396684,
+      0.3915839968525142
+     ],
+     "az": [
+      1.0356180253956047,
+      0.011984843544977872,
+      0.254710409985095,
+      -0.012848593350081658,
+      -0.04889387742786636
+     ],
+     "residu_abans": 0.6266224980354309,
+     "residu_despres": 0.03409004211425781
+    },
+    "B": {
+     "radial": [
+      0.2519632561066149,
+      0.2977864769007255
+     ],
+     "az": [
+      1.0236630505985675,
+      0.015106077287165991,
+      0.21265377906258004,
+      -0.013673831911095063,
+      -0.043394864149514024
+     ],
+     "residu_abans": 0.7193577289581299,
+     "residu_despres": 0.031578898429870605
+    }
+   },
+   "rho12": {
+    "R": {
+     "radial": [
+      0.3950935834226171,
+      0.46354940393761673
+     ],
+     "az": [
+      1.1142843746476696,
+      -0.03334171490543204,
+      0.40350704891517347,
+      -0.08846363107576002,
+      -0.07570377392046061
+     ],
+     "residu_abans": 0.5737766027450562,
+     "residu_despres": 0.052835166454315186
+    },
+    "G": {
+     "radial": [
+      0.3624805627254837,
+      0.40760883049109564
+     ],
+     "az": [
+      1.106330226692888,
+      -0.028510557059126678,
+      0.39717513897218976,
+      -0.08358693390190278,
+      -0.06686028371498971
+     ],
+     "residu_abans": 0.6162060499191284,
+     "residu_despres": 0.04859212040901184
+    },
+    "B": {
+     "radial": [
+      0.26481443662634996,
+      0.3014945832958927
+     ],
+     "az": [
+      1.077579943670167,
+      -0.016139974849439943,
+      0.34197912705165623,
+      -0.05393848067455666,
+      -0.053620051103091274
+     ],
+     "residu_abans": 0.7159379124641418,
+     "residu_despres": 0.04147893190383911
+    }
+   },
+   "guany_12_fora_mediana": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "salt_vora_13_abans": [
+    NaN,
+    NaN,
+    NaN
+   ]
+  },
+  "ploma_px": 250,
+  "finestra_rho_Rsol": [
+   6.0,
+   11.0
+  ],
+  "ploma_mesurada_a": "vora exterior (forat lunar omplert)",
+  "fraccio_llenc": 0.252282829219517
+ },
+ "ratllat_camp_exterior_base": {
+  "finestres": [
+   [
+    3774,
+    9107
+   ],
+   [
+    5647,
+    8605
+   ],
+   [
+    5647,
+    2118
+   ],
+   [
+    3774,
+    1616
+   ],
+   [
+    1902,
+    2118
+   ],
+   [
+    1902,
+    8605
+   ]
+  ],
+  "abans": [
+   {
+    "angle": -120.1,
+    "n_finestres": 3,
+    "pic_mitja": 7640.5,
+    "periode_mitja": 143.4
+   },
+   {
+    "angle": -108.4,
+    "n_finestres": 3,
+    "pic_mitja": 91.5,
+    "periode_mitja": 323.8
+   }
+  ],
+  "despres": [
+   {
+    "angle": -135.0,
+    "n_finestres": 6,
+    "pic_mitja": 96.0,
+    "periode_mitja": 362.0
+   },
+   {
+    "angle": -108.4,
+    "n_finestres": 5,
+    "pic_mitja": 76.6,
+    "periode_mitja": 323.8
+   }
+  ],
+  "notch": "famílies a ≥3 finestres, rampa 7,5→8,5 R☉"
+ },
+ "ghosts_tapats": [
+  {
+   "x": 2750,
+   "y": 6631,
+   "radi": 75,
+   "font": "detectat ACHF 7.7σ"
+  },
+  {
+   "x": 1912,
+   "y": 5558,
+   "radi": 138,
+   "font": "detectat ACHF 7.4σ"
+  },
+  {
+   "x": 2802,
+   "y": 7434,
+   "radi": 105,
+   "font": "detectat ACHF 6.9σ"
+  },
+  {
+   "x": 10197,
+   "y": 4360,
+   "radi": 79,
+   "font": "detectat ACHF 6.7σ"
+  },
+  {
+   "x": 8545,
+   "y": 5213,
+   "radi": 56,
+   "font": "detectat ACHF 5.7σ"
+  },
+  {
+   "x": 9237,
+   "y": 4479,
+   "radi": 65,
+   "font": "detectat ACHF 5.6σ"
+  },
+  {
+   "x": 9820,
+   "y": 3935,
+   "radi": 109,
+   "font": "detectat ACHF 5.5σ"
+  },
+  {
+   "x": 2570,
+   "y": 3824,
+   "radi": 75,
+   "font": "detectat ACHF 5.1σ"
+  },
+  {
+   "x": 2232,
+   "y": 5243,
+   "radi": 46,
+   "font": "detectat ACHF 5.0σ"
+  },
+  {
+   "x": 2246,
+   "y": 5721,
+   "radi": 46,
+   "font": "detectat ACHF 4.7σ"
+  }
+ ],
+ "blobs_detectats_achf": [
+  {
+   "x": 2750,
+   "y": 6631,
+   "w": 99,
+   "h": 125,
+   "area": 10060,
+   "r": 8.784360885620117,
+   "amp": 7.680734157562256,
+   "rodonesa": 0.79
+  },
+  {
+   "x": 1912,
+   "y": 5558,
+   "w": 199,
+   "h": 230,
+   "area": 24902,
+   "r": 8.81408405303955,
+   "amp": 7.423567295074463,
+   "rodonesa": 0.87
+  },
+  {
+   "x": 2802,
+   "y": 7434,
+   "w": 175,
+   "h": 149,
+   "area": 13000,
+   "r": 10.135598182678223,
+   "amp": 6.937795639038086,
+   "rodonesa": 0.85
+  },
+  {
+   "x": 10197,
+   "y": 4360,
+   "w": 133,
+   "h": 131,
+   "area": 9630,
+   "r": 11.053976058959961,
+   "amp": 6.696119785308838,
+   "rodonesa": 0.98
+  },
+  {
+   "x": 2970,
+   "y": 6439,
+   "w": 154,
+   "h": 96,
+   "area": 9809,
+   "r": 8.126163482666016,
+   "amp": 6.172985076904297,
+   "rodonesa": 0.62
+  },
+  {
+   "x": 8545,
+   "y": 5213,
+   "w": 90,
+   "h": 94,
+   "area": 6540,
+   "r": 7.927711009979248,
+   "amp": 5.6856184005737305,
+   "rodonesa": 0.96
+  },
+  {
+   "x": 9237,
+   "y": 4479,
+   "w": 109,
+   "h": 100,
+   "area": 8308,
+   "r": 8.939109802246094,
+   "amp": 5.596739768981934,
+   "rodonesa": 0.92
+  },
+  {
+   "x": 9820,
+   "y": 3935,
+   "w": 111,
+   "h": 182,
+   "area": 12767,
+   "r": 10.12476634979248,
+   "amp": 5.536938190460205,
+   "rodonesa": 0.61
+  },
+  {
+   "x": 2570,
+   "y": 3824,
+   "w": 124,
+   "h": 125,
+   "area": 8306,
+   "r": 6.337477207183838,
+   "amp": 5.149206638336182,
+   "rodonesa": 0.99
+  },
+  {
+   "x": 2638,
+   "y": 7286,
+   "w": 103,
+   "h": 101,
+   "area": 5896,
+   "r": 10.0860013961792,
+   "amp": 5.030015468597412,
+   "rodonesa": 0.98
+  },
+  {
+   "x": 2232,
+   "y": 5243,
+   "w": 77,
+   "h": 73,
+   "area": 3860,
+   "r": 7.846415042877197,
+   "amp": 5.011848449707031,
+   "rodonesa": 0.95
+  },
+  {
+   "x": 2246,
+   "y": 5721,
+   "w": 55,
+   "h": 78,
+   "area": 3498,
+   "r": 8.338058471679688,
+   "amp": 4.709959030151367,
+   "rodonesa": 0.71
+  }
+ ],
+ "ratllat_families": {
+  "finestres": [
+   [
+    3774,
+    8225
+   ],
+   [
+    5799,
+    7386
+   ],
+   [
+    6638,
+    5361
+   ],
+   [
+    5799,
+    3336
+   ],
+   [
+    3774,
+    2497
+   ],
+   [
+    1749,
+    3336
+   ],
+   [
+    910,
+    5361
+   ],
+   [
+    1749,
+    7386
+   ],
+   [
+    1659,
+    8181
+   ],
+   [
+    5625,
+    3511
+   ]
+  ],
+  "abans": [
+   {
+    "angle": -48.2,
+    "n_finestres": 3,
+    "pic_mitja": 117.7,
+    "periode_mitja": 139.0
+   },
+   {
+    "angle": -63.4,
+    "n_finestres": 3,
+    "pic_mitja": 116.8,
+    "periode_mitja": 94.7
+   },
+   {
+    "angle": -135.0,
+    "n_finestres": 5,
+    "pic_mitja": 95.4,
+    "periode_mitja": 35.1
+   }
+  ],
+  "per_finestra_abans": {
+   "(3774, 8225)": [
+    {
+     "periode_px": 27.4,
+     "orientacio_deg": -159.6,
+     "pic_sobre_anell": 158.6
+    },
+    {
+     "periode_px": 27.6,
+     "orientacio_deg": -176.9,
+     "pic_sobre_anell": 79.5
+    },
+    {
+     "periode_px": 41.4,
+     "orientacio_deg": -133.4,
+     "pic_sobre_anell": 58.1
+    }
+   ],
+   "(5799, 7386)": [
+    {
+     "periode_px": 80.5,
+     "orientacio_deg": -135.0,
+     "pic_sobre_anell": 138.2
+    },
+    {
+     "periode_px": 27.7,
+     "orientacio_deg": -128.4,
+     "pic_sobre_anell": 133.7
+    },
+    {
+     "periode_px": 159.9,
+     "orientacio_deg": -141.3,
+     "pic_sobre_anell": 129.0
+    }
+   ],
+   "(6638, 5361)": [
+    {
+     "periode_px": 27.5,
+     "orientacio_deg": -96.2,
+     "pic_sobre_anell": 415.2
+    },
+    {
+     "periode_px": 27.7,
+     "orientacio_deg": -88.5,
+     "pic_sobre_anell": 207.7
+    },
+    {
+     "periode_px": 17.9,
+     "orientacio_deg": -134.3,
+     "pic_sobre_anell": 84.6
+    }
+   ],
+   "(5799, 3336)": [
+    {
+     "periode_px": 27.3,
+     "orientacio_deg": -48.2,
+     "pic_sobre_anell": 169.3
+    },
+    {
+     "periode_px": 27.6,
+     "orientacio_deg": -66.2,
+     "pic_sobre_anell": 113.0
+    },
+    {
+     "periode_px": 17.9,
+     "orientacio_deg": -134.3,
+     "pic_sobre_anell": 91.9
+    }
+   ],
+   "(3774, 2497)": [
+    {
+     "periode_px": 27.3,
+     "orientacio_deg": -25.2,
+     "pic_sobre_anell": 81.9
+    },
+    {
+     "periode_px": 27.6,
+     "orientacio_deg": -3.1,
+     "pic_sobre_anell": 72.8
+    },
+    {
+     "periode_px": 62.9,
+     "orientacio_deg": -132.5,
+     "pic_sobre_anell": 22.8
+    }
+   ],
+   "(1749, 3336)": [
+    {
+     "periode_px": 190.2,
+     "orientacio_deg": -111.8,
+     "pic_sobre_anell": 20.6
+    },
+    {
+     "periode_px": 175.6,
+     "orientacio_deg": -121.0,
+     "pic_sobre_anell": 16.0
+    },
+    {
+     "periode_px": 362.0,
+     "orientacio_deg": -135.0,
+     "pic_sobre_anell": 10.9
+    }
+   ],
+   "(910, 5361)": [
+    {
+     "periode_px": 341.3,
+     "orientacio_deg": -90.0,
+     "pic_sobre_anell": 55.1
+    },
+    {
+     "periode_px": 323.8,
+     "orientacio_deg": -108.4,
+     "pic_sobre_anell": 23.3
+    },
+    {
+     "periode_px": 248.4,
+     "orientacio_deg": -76.0,
+     "pic_sobre_anell": 33.3
+    }
+   ],
+   "(1749, 7386)": [
+    {
+     "periode_px": 362.0,
+     "orientacio_deg": -45.0,
+     "pic_sobre_anell": 48.0
+    },
+    {
+     "periode_px": 284.0,
+     "orientacio_deg": -56.3,
+     "pic_sobre_anell": 95.0
+    },
+    {
+     "periode_px": 229.0,
+     "orientacio_deg": -63.4,
+     "pic_sobre_anell": 119.5
+    }
+   ],
+   "(1659, 8181)": [
+    {
+     "periode_px": 62.4,
+     "orientacio_deg": -37.6,
+     "pic_sobre_anell": 96.6
+    },
+    {
+     "periode_px": 341.3,
+     "orientacio_deg": -90.0,
+     "pic_sobre_anell": 8.5
+    },
+    {
+     "periode_px": 55.5,
+     "orientacio_deg": -130.6,
+     "pic_sobre_anell": 15.0
+    }
+   ],
+   "(5625, 3511)": [
+    {
+     "periode_px": 27.8,
+     "orientacio_deg": -49.4,
+     "pic_sobre_anell": 135.7
+    },
+    {
+     "periode_px": 27.6,
+     "orientacio_deg": -66.2,
+     "pic_sobre_anell": 117.8
+    },
+    {
+     "periode_px": 17.9,
+     "orientacio_deg": -134.3,
+     "pic_sobre_anell": 104.1
+    }
+   ]
+  },
+  "despres": [],
+  "tallades": [
+   -48.2,
+   -63.4,
+   -135.0
+  ]
+ },
+ "ratllat": {
+  "abans_PAL_ACHF": [
+   {
+    "periode_px": 62.4,
+    "orientacio_deg": -37.6,
+    "pic_sobre_anell": 96.6,
+    "rms": 0.006659706588834524
+   },
+   {
+    "periode_px": 362.0,
+    "orientacio_deg": -45.0,
+    "pic_sobre_anell": 9.5,
+    "rms": 3.4549530028016306e-06
+   },
+   {
+    "periode_px": 27.8,
+    "orientacio_deg": -49.4,
+    "pic_sobre_anell": 135.7,
+    "rms": 0.005902828183025122
+   }
+  ],
+  "despres_PAL_ACHF": [
+   {
+    "periode_px": 62.4,
+    "orientacio_deg": -37.6,
+    "pic_sobre_anell": 130.5,
+    "rms": 0.006087339483201504
+   },
+   {
+    "periode_px": 362.0,
+    "orientacio_deg": -45.0,
+    "pic_sobre_anell": 100.4,
+    "rms": 0.000595157325733453
+   },
+   {
+    "periode_px": 27.4,
+    "orientacio_deg": -69.6,
+    "pic_sobre_anell": 55.2,
+    "rms": 0.004966879263520241
+   }
+  ],
+  "notch": "pics espectrals a [-48.2, -63.4, -135.0]° ±5°, 8-600 px, rampa 2,65→3,5 R☉"
+ },
+ "costures_atenuades": {
+  "linies_hough_abans": 0,
+  "costures": [],
+  "sigma_px": 100,
+  "nomes_r_gt": "3,5 R☉",
+  "excloses": "rectes a < 1,5 R☉ del centre (streamers)"
+ },
+ "esvaiment_detall": {
+  "fi (ACHF 2-32, passa-alt 24)": "3,5→5 R☉ (declarat: a 4-5 R☉ el detall fi és gra)",
+  "gran (ACHF 32-256)": "5→6,5 R☉ (declarat: de 5,5 R☉ enfora la corona sola és residu del model de cel)"
+ },
+ "H1": {
+  "ACHF": {
+   "max_abs": 0.0013777613639831543,
+   "r_pitjor": 1.1874107197459298,
+   "passa": true
+  },
+  "PAL": {
+   "max_abs": 0.00023829936981201172,
+   "r_pitjor": 1.0615180212923783,
+   "passa": true
+  },
+  "GRAN": {
+   "max_abs": 0.0031696856021881104,
+   "r_pitjor": 3.4435001519685464,
+   "passa": true
+  },
+  "AMPLE": {
+   "max_abs": 0.011655867099761963,
+   "r_pitjor": 8.927413560238284,
+   "passa": true
+  }
+ },
+ "blobs_despres": {
+  "ACHF_fi_on_queda": [],
+  "GRAN": [
+   {
+    "x": 4354,
+    "y": 3965,
+    "w": 139,
+    "h": 110,
+    "area": 10184,
+    "r": 2.327895164489746,
+    "amp": 6.394086837768555,
+    "rodonesa": 0.79
+   },
+   {
+    "x": 5013,
+    "y": 2314,
+    "w": 101,
+    "h": 140,
+    "area": 9979,
+    "r": 3.4085681438446045,
+    "amp": 5.522520065307617,
+    "rodonesa": 0.72
+   },
+   {
+    "x": 4425,
+    "y": 3359,
+    "w": 129,
+    "h": 130,
+    "area": 8461,
+    "r": 2.3263063430786133,
+    "amp": 5.196555137634277,
+    "rodonesa": 0.99
+   },
+   {
+    "x": 4516,
+    "y": 5026,
+    "w": 53,
+    "h": 78,
+    "area": 2756,
+    "r": 3.4279158115386963,
+    "amp": 3.6809282302856445,
+    "rodonesa": 0.68
+   }
+  ]
+ },
+ "perfil_radial": {
+  "passa": true,
+  "pujades": []
+ },
+ "limbe": {
+  "perfil": [
+   [
+    0.98,
+    0.16701380908489227
+   ],
+   [
+    0.99,
+    0.17399862408638
+   ],
+   [
+    1.0,
+    0.29299819469451904
+   ],
+   [
+    1.01,
+    0.8059014081954956
+   ],
+   [
+    1.02,
+    0.7946218848228455
+   ],
+   [
+    1.03,
+    0.777592122554779
+   ],
+   [
+    1.04,
+    0.7626262903213501
+   ],
+   [
+    1.05,
+    0.7431228756904602
+   ],
+   [
+    1.06,
+    0.7264022827148438
+   ],
+   [
+    1.07,
+    0.7146510481834412
+   ],
+   [
+    1.08,
+    0.7058720588684082
+   ],
+   [
+    1.09,
+    0.6981385946273804
+   ],
+   [
+    1.1,
+    0.6907055377960205
+   ],
+   [
+    1.11,
+    0.6829471588134766
+   ],
+   [
+    1.12,
+    0.6759233474731445
+   ],
+   [
+    1.13,
+    0.671076774597168
+   ],
+   [
+    1.14,
+    0.6656026840209961
+   ],
+   [
+    1.15,
+    0.6589495539665222
+   ]
+  ],
+  "franja_fosca": [],
+  "passa": true
+ },
+ "arestes_rectes_ACHF": [],
+ "arestes_rectes_GRAN": [],
+ "arestes_rectes_AMPLE": [
+  {
+   "x1": 8348,
+   "y1": 6173,
+   "x2": 8875,
+   "y2": 5668,
+   "long": 729.8999931497465,
+   "dist_centre": 3797.6
+  },
+  {
+   "x1": 8614,
+   "y1": 5921,
+   "x2": 9035,
+   "y2": 5518,
+   "long": 582.7949896833362,
+   "dist_centre": 3799.2
+  },
+  {
+   "x1": 8408,
+   "y1": 6114,
+   "x2": 8815,
+   "y2": 5724,
+   "long": 563.6922919465903,
+   "dist_centre": 3796.5
+  }
+ ],
+ "prova_azimutal": {
+  "angle_residual_deg": 0.0,
+  "correlacio_a_0": 1.0,
+  "PASSA": true
+ },
+ "capes_v27": [
+  "12 1/3200 perles",
+  "11 1/500 limbe",
+  "10 1/125",
+  "09 1/60 x2",
+  "08 1/30 x4 quar",
+  "07 1/15 x2 quar",
+  "06 1/8 x4 quar",
+  "05 1/4 x2 quar",
+  "04 1/2 x4 quar",
+  "03 1s x2 quar",
+  "02 2s x3 quar",
+  "01 10.3s x3 quar",
+  "13 Sony >1s",
+  "Fons per raig",
+  "Earthshine v2",
+  "Compara D87",
+  "Compara LROC",
+  "Earthshine V24e",
+  "00 Base amb cel",
+  "00 Base (cel/4)",
+  "04 ACHF ample 9R",
+  "03 ACHF gran azimutal",
+  "01 ACHF fi 2-32",
+  "02 Passa-alt 24",
+  "Estrelles",
+  "Reflex"
+ ],
+ "noms_curts": {
+  "0": "12 1/3200 perles",
+  "1": "11 1/500 limbe",
+  "2": "10 1/125",
+  "3": "09 1/60 x2",
+  "4": "08 1/30 x4 quar",
+  "5": "07 1/15 x2 quar",
+  "6": "06 1/8 x4 quar",
+  "7": "05 1/4 x2 quar",
+  "8": "04 1/2 x4 quar",
+  "9": "03 1s x2 quar",
+  "10": "02 2s x3 quar",
+  "11": "01 10.3s x3 quar",
+  "12": "13 Sony >1s",
+  "13": "Fons per raig",
+  "14": "Earthshine v2",
+  "15": "Compara D87",
+  "16": "Compara LROC",
+  "17": "Estrelles",
+  "18": "Earthshine V24e",
+  "19": "Reflex"
+ },
+ "fidelitat": "3/3",
+ "porta_photoshop": "OBRE 10551 px x 7506 px · 26 capes",
+ "fitxer": {
+  "psb": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V28.psb",
+  "bytes": 3932243472
+ }
+}

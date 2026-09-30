@@ -1,0 +1,57 @@
+{
+  "tag": "P03_MGN",
+  "parameters": {
+    "paper": "Morgan & Druckmuller 2014, equations1-5",
+    "sigma_px": [
+      1.25,
+      2.5,
+      5,
+      10,
+      20,
+      40
+    ],
+    "k": 0.7,
+    "h": 0.7,
+    "gamma": 3.2,
+    "weights": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "input_limits": [
+      0.0,
+      7364944.0
+    ],
+    "nonpositive_input": "native limb pixels clipped to 0 as allowed in paper; base itself unchanged",
+    "boundary": "V37 variant B: input = base where supported; elsewhere exp(azimuthal mean ln profile with PARTIAL-ring means kept, local-slope inward continuation decaying over 60 px, rise <= 5 ln); used ONLY as operator input; output saved on physical support",
+    "farcit": {
+      "primer_anell_amb_dada_px": 443,
+      "primer_anell_sencer_px": 461,
+      "pendent_local_ln_per_px": -0.10695624004117754,
+      "L_px": 60.0,
+      "pujada_max_ln": 5.0,
+      "ultim_anell_amb_dada_px": 6417,
+      "px_farcits": 8800536,
+      "variant": "B (A11)"
+    },
+    "display": "V34 receipts LUT",
+    "ring_bias_limb": {
+      "V36": 4.437952969966438,
+      "V37": 1.6346261308969152
+    }
+  },
+  "physical_support_pixels": 70395270,
+  "float_sha256": "11c48f30801067708115c35d88dc98b570d1f128008ba7cc295fe13a2c9a2707",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": -0.27781726863980294,
+    "white": 0.35017163938283985,
+    "sample_percentiles": null,
+    "clipped_low_fraction": 0.0010594035650406625,
+    "clipped_high_fraction": 0.000654007009277754
+  },
+  "u16_sha256": "11efe3d31a88607a8a52d2a6ec6ed4b02c60a42fe724072f9f99525caab682fb"
+}

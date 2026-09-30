@@ -1,0 +1,12 @@
+{
+  "default": "radial4 + unchanged01/02",
+  "alternatives": "one alternative instead of its parent, never automatically stacked",
+  "previews": [
+    "default_r4",
+    "suau_r8",
+    "micro1_16",
+    "fi2_48",
+    "estructura4_64"
+  ],
+  "outside03_mask_max_abs_change": 0
+}

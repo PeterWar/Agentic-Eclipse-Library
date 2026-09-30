@@ -1,0 +1,58 @@
+[
+  {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/CLAUDE.md",
+    "prepared": "CLAUDE.md",
+    "before_sha256": "d111ba13e6862bdf1e39a0026b653abd27ce37d000d728af8e7589dc9b4493c0",
+    "after_sha256": "4927fdea49f48c46d9d4fd30851d320bda2a8f0434d431089a041763a3d913a3",
+    "where": "local"
+  },
+  {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/AGENTS.md",
+    "prepared": "AGENTS.md",
+    "before_sha256": "e2023a32091aac3c86f6c054c7db2f7f0c9b22c92f5edf967246cd4ff17e5a67",
+    "after_sha256": "756bda3a1f67c3aacfa2fbae4f10f4c0bcec82ac6bfd9b2f7ca925790ddac23d",
+    "where": "local"
+  },
+  {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/README.md",
+    "prepared": "research_README.md",
+    "before_sha256": "f64253dde0609c3f31aeb32cf47e0ad324804a9a945855276e55833a3af7b84d",
+    "after_sha256": "2a9e2a53ca3c987a92e94bef9df566faed78373d704d2109f700761ec7753490",
+    "where": "local"
+  },
+  {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/README.md",
+    "prepared": "IA_README.md",
+    "before_sha256": "e10238a9b0bd2b1ac5c6c70935e2edd3c5b7ced7b5c397b1fafd3601a09bbcee",
+    "after_sha256": "f80e7bf87d4c99376b0d8803777fab27ffd1d8b2d1df64472da35e6f397a60d2",
+    "where": "desktop"
+  },
+  {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/ESTAT_ACTUAL.md",
+    "prepared": "IA_ESTAT_ACTUAL.md",
+    "before_sha256": "b82d37f8bd38a0101e205b8f5b5c4956b2fcff9cdc6a1e98ee26817dcae357cd",
+    "after_sha256": "62d6cac621cceeb6c8c7961ab59db5a2079d3539e55e0d386a3c332fd4c5c049",
+    "where": "desktop"
+  },
+  {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/MAPA_RUTES_I_OUTPUTS.md",
+    "prepared": "IA_MAPA_RUTES_I_OUTPUTS.md",
+    "before_sha256": "7582d0f5f1f2f285563674d4b60a058c4c95873588e53fb17e578be74c968106",
+    "after_sha256": "984d5d75b9f07dabf26ba3d74fd07c30832c261513305752888d27fdb47eb584",
+    "where": "desktop"
+  },
+  {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/HANDOFF_VIGENT.md",
+    "prepared": "IA_HANDOFF_VIGENT.md",
+    "before_sha256": "36d4ef6bf185f2a90c606ff8f04d6bb5d361b8c0e33afcae14189aade750468b",
+    "after_sha256": "c696e7ef03ee073ff1cf7aaf0568c8cfe28db3021c9d3ec3ea95000e0ee0c48d",
+    "where": "desktop"
+  },
+  {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/ACTIVE.json",
+    "prepared": "IA_ACTIVE.json",
+    "before_sha256": "b432c4872b45ea764575ecec82b04617561bafdc40ab4b1f95c23fbf7d1f3525",
+    "after_sha256": "59c68fd7b717ff2c7eaadc29ff19f36b78d1b3f8d00ff538628fd72c02d1305a",
+    "where": "desktop"
+  }
+]

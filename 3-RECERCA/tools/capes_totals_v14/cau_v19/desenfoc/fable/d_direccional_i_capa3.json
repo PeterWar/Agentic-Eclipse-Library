@@ -1,0 +1,214 @@
+{
+ "capa1_q4": [
+  {
+   "anell": [
+    1.5,
+    2.5
+   ],
+   "rms_gr_hp": 102.27,
+   "rms_gt_hp": 146.13,
+   "quocient_gt2_sobre_total": 0.671
+  },
+  {
+   "anell": [
+    2.5,
+    3.5
+   ],
+   "rms_gr_hp": 144.58,
+   "rms_gt_hp": 153.08,
+   "quocient_gt2_sobre_total": 0.529
+  },
+  {
+   "anell": [
+    3.5,
+    5
+   ],
+   "rms_gr_hp": 142.92,
+   "rms_gt_hp": 139.03,
+   "quocient_gt2_sobre_total": 0.486
+  },
+  {
+   "anell": [
+    5,
+    7
+   ],
+   "rms_gr_hp": 102.93,
+   "rms_gt_hp": 95.6,
+   "quocient_gt2_sobre_total": 0.463
+  },
+  {
+   "anell": [
+    7,
+    9.5
+   ],
+   "rms_gr_hp": 24.44,
+   "rms_gt_hp": 23.88,
+   "quocient_gt2_sobre_total": 0.488
+  }
+ ],
+ "capa2_q4": [
+  {
+   "anell": [
+    1.5,
+    2.5
+   ],
+   "rms_gr_hp": 13.3,
+   "rms_gt_hp": 33.69,
+   "quocient_gt2_sobre_total": 0.865
+  },
+  {
+   "anell": [
+    2.5,
+    3.5
+   ],
+   "rms_gr_hp": 16.25,
+   "rms_gt_hp": 21.07,
+   "quocient_gt2_sobre_total": 0.627
+  },
+  {
+   "anell": [
+    3.5,
+    5
+   ],
+   "rms_gr_hp": 8.9,
+   "rms_gt_hp": 10.42,
+   "quocient_gt2_sobre_total": 0.579
+  },
+  {
+   "anell": [
+    5,
+    7
+   ],
+   "rms_gr_hp": 2.07,
+   "rms_gt_hp": 2.82,
+   "quocient_gt2_sobre_total": 0.649
+  },
+  {
+   "anell": [
+    7,
+    9.5
+   ],
+   "rms_gr_hp": 0.69,
+   "rms_gt_hp": 0.75,
+   "quocient_gt2_sobre_total": 0.54
+  }
+ ],
+ "capa0": [
+  {
+   "anell": [
+    1.5,
+    2.5
+   ],
+   "rms_gr_hp": 0.39,
+   "rms_gt_hp": 0.25,
+   "quocient_gt2_sobre_total": 0.289
+  },
+  {
+   "anell": [
+    2.5,
+    3.5
+   ],
+   "rms_gr_hp": 0.28,
+   "rms_gt_hp": 0.24,
+   "quocient_gt2_sobre_total": 0.414
+  },
+  {
+   "anell": [
+    3.5,
+    5
+   ],
+   "rms_gr_hp": 0.26,
+   "rms_gt_hp": 0.24,
+   "quocient_gt2_sobre_total": 0.452
+  },
+  {
+   "anell": [
+    5,
+    7
+   ],
+   "rms_gr_hp": 0.39,
+   "rms_gt_hp": 0.24,
+   "quocient_gt2_sobre_total": 0.285
+  },
+  {
+   "anell": [
+    7,
+    9.5
+   ],
+   "rms_gr_hp": 0.25,
+   "rms_gt_hp": 0.25,
+   "quocient_gt2_sobre_total": 0.497
+  }
+ ],
+ "capa3": [
+  {
+   "anell": [
+    1.5,
+    2.5
+   ],
+   "rms_gr_hp": 2697.87,
+   "rms_gt_hp": 1335.99,
+   "quocient_gt2_sobre_total": 0.197
+  },
+  {
+   "anell": [
+    2.5,
+    3.5
+   ],
+   "rms_gr_hp": 49.16,
+   "rms_gt_hp": 50.05,
+   "quocient_gt2_sobre_total": 0.509
+  },
+  {
+   "anell": [
+    3.5,
+    5
+   ],
+   "rms_gr_hp": 93.94,
+   "rms_gt_hp": 73.02,
+   "quocient_gt2_sobre_total": 0.377
+  },
+  {
+   "anell": [
+    5,
+    7
+   ],
+   "rms_gr_hp": 158.77,
+   "rms_gt_hp": 99.72,
+   "quocient_gt2_sobre_total": 0.283
+  },
+  {
+   "anell": [
+    7,
+    9.5
+   ],
+   "rms_gr_hp": 142.96,
+   "rms_gt_hp": 111.04,
+   "quocient_gt2_sobre_total": 0.376
+  }
+ ],
+ "capa3_vs_capa1_lineal": {
+  "pendent": 0.7058,
+  "ordenada": 1286.8,
+  "corr": 0.579
+ },
+ "capa3_corr_amb_passaalt_capa1_s8": 0.0791,
+ "capa3_corr_amb_bandpass_capa1_2_16": 0.1322,
+ "capa3_stats": {
+  "min": 0.0,
+  "max": 62997.66796875,
+  "p1": 0.0,
+  "p50": 24840.0,
+  "p99": 48902.33203125
+ },
+ "capa0_stats": {
+  "min": 30.66666603088379,
+  "max": 59514.33203125,
+  "p50": 31877.0
+ },
+ "capa0_corr_blur_capa2": {
+  "sigma_2": 0.9814,
+  "sigma_4": 0.9815,
+  "sigma_8": 0.9818
+ }
+}

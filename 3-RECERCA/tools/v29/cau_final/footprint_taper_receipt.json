@@ -1,0 +1,13 @@
+{
+  "definition": "smoothstep distance to actual outer coverage; lunar hole filled only for distance calculation; no circular radial fade",
+  "kernel_3sigma_px": {
+    "achf": 96,
+    "passalt24": 72,
+    "gran": 384
+  },
+  "all_inner_observed_pixels_full_alpha": {
+    "achf": true,
+    "passalt24": true,
+    "gran": false
+  }
+}

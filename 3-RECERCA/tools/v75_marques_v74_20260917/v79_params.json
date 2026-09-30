@@ -1,0 +1,16 @@
+{
+ "src": "/Users/USUARI/Desktop/Eclipse 2026/1-PHOTOSHOP/V78-FINAL.psb",
+ "dst": "/Users/USUARI/Desktop/Eclipse 2026/1-PHOTOSHOP/V79.psb",
+ "rebut": "/private/tmp/claude-501/-Users-USUARI-Downloads-Eclipse-2026/e4f0fbff-bfdf-4da5-a1d0-1bbdf0423383/scratchpad/b13_escriptura_v79.json",
+ "capa": "/private/tmp/claude-501/-Users-USUARI-Downloads-Eclipse-2026/e4f0fbff-bfdf-4da5-a1d0-1bbdf0423383/scratchpad/capa_v79_raco.npz",
+ "nom": "Cel continuat al racó del logo",
+ "nom_curt": "Cel continuat al racó del logo",
+ "id": 229,
+ "roi": [
+  6031,
+  3178,
+  8023,
+  5121
+ ],
+ "plantilla": 228
+}

@@ -1,0 +1,17 @@
+{
+  "method": "fullpixel200bins; median observed logradius nodes; PCHIP slopes; zeroendpointderivatives; minimum passes to0.03; no supportchanges",
+  "history": {
+    "achf": [
+      0.49980825185775757,
+      0.004041790496557951
+    ],
+    "passalt24": [
+      0.4999999403953552,
+      0.011417234316468239
+    ],
+    "gran": [
+      0.4999999403953552,
+      0.004473646637052298
+    ]
+  }
+}

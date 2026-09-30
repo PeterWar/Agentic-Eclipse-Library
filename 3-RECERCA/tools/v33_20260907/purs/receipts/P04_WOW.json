@@ -1,0 +1,69 @@
+{
+  "tag": "P04_WOW",
+  "parameters": {
+    "paper": "Auchere et al. 2023",
+    "scales": 11,
+    "bilateral": false,
+    "denoise": false,
+    "V33_post": "snmap.sn_v33 (σ = max(mapa C0 λ_min/8, f3.suavitza_sn t=0.18), smax=32.0) sobre el float",
+    "perfil_sigma": [
+      {
+        "r": 1.5,
+        "sigma_p50": 1.3454943895339966,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 2.0,
+        "sigma_p50": 1.5642813444137573,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 2.65,
+        "sigma_p50": 6.4783759117126465,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 3.0,
+        "sigma_p50": 7.967071533203125,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 4.0,
+        "sigma_p50": 13.522356033325195,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 5.0,
+        "sigma_p50": 18.49393653869629,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 6.0,
+        "sigma_p50": 22.478622436523438,
+        "frac_smax": 0.0
+      },
+      {
+        "r": 8.0,
+        "sigma_p50": 30.184268951416016,
+        "frac_smax": 0.10757740108068958
+      },
+      {
+        "r": 10.0,
+        "sigma_p50": 28.789342880249023,
+        "frac_smax": 0.05675193739929038
+      }
+    ],
+    "display_from": "V32 receipt"
+  },
+  "physical_support_pixels": 70395270,
+  "float_sha256": "f938c9865b3091f25d11c89ab4cd28e0895241659e13ed0c49fe48e832a467d6",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": -12.070696866035462,
+    "white": 15.045299069404631,
+    "sample_percentiles": null,
+    "clipped_low_fraction": 0.0,
+    "clipped_high_fraction": 0.000901481022801674
+  },
+  "u16_sha256": "a88f6ace38fa9fc0ddd0b39f9a7130c5cbf3da7035cf6ea58b12d7fa67109ad0"
+}

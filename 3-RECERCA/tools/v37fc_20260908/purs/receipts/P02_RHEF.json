@@ -1,0 +1,31 @@
+{
+  "tag": "P02_RHEF",
+  "parameters": {
+    "annulus_width_px": 1,
+    "r_edge_px": 3736,
+    "r_edge_R": 8.479287671563851,
+    "r_in_px": 461,
+    "r_in_R": 1.0462932592588157,
+    "blend_px": 64.0,
+    "completeness_ref": 1.000012174620321,
+    "varP_edge": 1.0001286370494247,
+    "varP_in": 0.9868032581047743,
+    "n_inner_partial_rings": 0,
+    "count_min": 2,
+    "count_max": 23444,
+    "rhef_rank": "continuous radius: CDFs of the two neighbouring 1-px rings interpolated by the sub-pixel radial position",
+    "paper": "Gilly & Cranmer 2025",
+    "V36": "continuous-radius rank (interpolated ring CDFs); F_edge(z) beyond canvas edge; F_in(z) inside partial inner rings; no smoothing"
+  },
+  "physical_support_pixels": 70359151,
+  "float_sha256": "a6fc8cd36c1de2a9c045d82841e5d4bd9c13da2a4b51ada02cce4f2dd17ed63a",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": 0,
+    "white": 1,
+    "sample_percentiles": null,
+    "clipped_low_fraction": 0.0,
+    "clipped_high_fraction": 0.0
+  },
+  "u16_sha256": "35407659a84a6074b7d266e0cb4bd53f127b59e9f8dba8aaf3a9615b3c41f6bc"
+}

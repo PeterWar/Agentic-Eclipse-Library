@@ -1,0 +1,5 @@
+from photoshop_api import *
+src=ROOT/'output/earthshine_reconstruction_20260911/V46_Detall_live_source.psd';dst=OUT/'D3_baseline_no_manual_grade_RGBA.tif';assert not dst.exists()
+js='''var prev=app.activeDocument;var ids=[];for(var i=0;i<app.documents.length;i++)ids.push(app.documents[i].id);var d=null,t=null;try{d=app.open(new File(__SRC__));for(var i=0;i<ids.length;i++)if(d.id===ids[i])throw new Error("Expected new snapshot document");for(var i=0;i<d.layers.length;i++)if(d.layers[i].name.indexOf("V46 · contorn fosc gradual")===0)d.layers[i].visible=false;app.refresh();t=d.duplicate("VALIDATION_BASELINE",true);var o=new TiffSaveOptions();o.imageCompression=TIFFEncoding.TIFFZIP;o.layers=false;o.alphaChannels=true;o.transparency=true;o.embedColorProfile=true;t.saveAs(new File(__DST__),o,true,Extension.LOWERCASE);}finally{if(t)t.close(SaveOptions.DONOTSAVECHANGES);if(d){var own=true;for(var j=0;j<ids.length;j++)if(d.id===ids[j])own=false;if(own)d.close(SaveOptions.DONOTSAVECHANGES);}app.activeDocument=prev;}"BASELINE_RENDERED";'''
+for k,v in [('__SRC__',src),('__DST__',dst)]:js=js.replace(k,json.dumps(str(v)))
+print(jsx(js),flush=True)

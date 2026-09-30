@@ -1,0 +1,59 @@
+{
+  "psb": {
+    "published_utc": "2026-09-07T16:53:56.741815+00:00",
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V33.psb",
+    "sha256": "79424a49c459953ce02b8ae26d9c0400bdb524861eaa0a38c31b617d9f6b33f3",
+    "bytes": 3622418302,
+    "layers": 11
+  },
+  "photoshop": {
+    "result": "OBRE 10551 px x 7506 px · 11 capes",
+    "file": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v33_20260907/staging/V33.psb",
+    "sha256": "79424a49c459953ce02b8ae26d9c0400bdb524861eaa0a38c31b617d9f6b33f3"
+  },
+  "verification_sha256": "79424a49c459953ce02b8ae26d9c0400bdb524861eaa0a38c31b617d9f6b33f3",
+  "layers": [
+    {
+      "name": "01 ACHF fi 2-32 · V33 S/N",
+      "exact": true
+    },
+    {
+      "name": "02 Passa-alt 24 · V33 S/N",
+      "exact": true
+    },
+    {
+      "name": "04 ACHF micro 1-16 · V33 S/N",
+      "exact": true
+    },
+    {
+      "name": "05 ACHF fi 2-48 · V33 S/N",
+      "exact": true
+    },
+    {
+      "name": "06 ACHF estructura 4-64 · V33 S/N",
+      "exact": true
+    },
+    {
+      "name": "P01 NRGF · V33 S/N vora",
+      "exact": true
+    },
+    {
+      "name": "P02 RHEF · V33 S/N vora",
+      "exact": true
+    },
+    {
+      "name": "P03 MGN · V33 S/N",
+      "exact": true
+    },
+    {
+      "name": "P04 WOW · V33 S/N",
+      "exact": true
+    },
+    {
+      "name": "P05 WOW bilateral · V33 S/N",
+      "exact": true
+    }
+  ],
+  "base": "fusion_total_v32",
+  "resolution_map": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v33_20260907/cau/resolucio_v33.npy"
+}

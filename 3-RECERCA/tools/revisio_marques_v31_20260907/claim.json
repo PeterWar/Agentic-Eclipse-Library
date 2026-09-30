@@ -1,0 +1,15 @@
+{
+  "claim_id": "CODEX_REVISIO_MARQUES_V31_20260907",
+  "owner": "Codex /root",
+  "task": "Revisio capa a capa PSB anotat de Pere; groc/blau/lila confirmats, verd dubtos",
+  "created_utc": "2026-09-06T22:09:17.320517+00:00",
+  "scope": [
+    "research/tools/revisio_marques_v31_20260907",
+    "output/revisio_marques_v31_20260907",
+    "research/145_*",
+    "research/README.md",
+    ".coordination/CODEX_STATUS.md",
+    ".coordination/HANDOFF_2026-09-07_MARQUES_V31.md"
+  ],
+  "writer": "root only; reviewers read-only"
+}

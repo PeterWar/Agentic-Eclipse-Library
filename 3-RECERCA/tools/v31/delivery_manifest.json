@@ -1,0 +1,256 @@
+{
+  "PASS": true,
+  "published_utc": "2026-09-05T15:21:45.004948+00:00",
+  "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V31.psb",
+  "sha256": "bbbb2b93a49a0e09226b89467754f6364d1c6b929bc147bd34387a1c66d7affe",
+  "bytes": 6193861172,
+  "size": [
+    10551,
+    7506
+  ],
+  "depth": 16,
+  "layers": 30,
+  "source": {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V30.psb",
+    "bytes": 6233044488,
+    "sha256": "0d1f23fe5c56acf60bb35d3e24acea02fffaaf333d04d7a3aa17e0aac4f3f8c0"
+  },
+  "dependencies": [
+    {
+      "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V30.psb",
+      "bytes": 6233044488,
+      "sha256": "0d1f23fe5c56acf60bb35d3e24acea02fffaaf333d04d7a3aa17e0aac4f3f8c0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/delivery_manifest.json",
+      "bytes": 50007,
+      "sha256": "8da4341f250e481b356f5ed0129c17e5f072f4356c542b91bb9a5dc86a6b10b8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/input_manifest.json",
+      "bytes": 358,
+      "sha256": "c38345269da2ae645923f6d3a8c5135640b6c348a7f6495b806e51142b8acef0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau_final/fusion_support.npy",
+      "bytes": 79195934,
+      "sha256": "72f67465aa43a26931a96a016c5a72e67ecf0fa66599bdd3d97abd947cfd8e4a"
+    }
+  ],
+  "code": [
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/check_candidate.py",
+      "bytes": 2565,
+      "sha256": "5caf78d962853805cab1b841528ebea652c8983d93d361cf50dd1e86b03d9bd5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/check_controls.py",
+      "bytes": 778,
+      "sha256": "9e7bf55647f93cd10a1d7156e92dfcb8449fef7916e1875d264e37cfa4949bc1"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/compare_brno_v31.py",
+      "bytes": 354,
+      "sha256": "e7161241b9fc375aefb1755db13c26f30865412895951cd0cd17712b3b53a83d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/finalize_delivery.py",
+      "bytes": 8408,
+      "sha256": "e8aa389edc95e628c89854eb3fdb7db5178e62ba41d5102bf852766033f3060e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/fixed_judge.py",
+      "bytes": 2006,
+      "sha256": "adedf7fa664d725e7a95cee4c8a78461f9ce14fc8bbb7aa9dd5cad8d6de8c113"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/package_v31.py",
+      "bytes": 5807,
+      "sha256": "cff1ebc7852584e6c8883f885cf5be1d7e4735d6eab45e5d9f1c66fb4421e6d7"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/photoshop_gate.py",
+      "bytes": 366,
+      "sha256": "33dd76fc1352f8e50cde39f562b55ec6a2625f25d6936c4f085a98e4eb9d6704"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/pilot_isotropic.py",
+      "bytes": 2397,
+      "sha256": "425fba029209ff12b2522b616ed1b09c6b1660e89f03c428a7ca29ad80348070"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/update_authority.py",
+      "bytes": 8082,
+      "sha256": "eb9b78136d20ee77593638d15b4f6048ae293994ad494b564f52d479f6ef2ef8"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/verify_v31.py",
+      "bytes": 1969,
+      "sha256": "2500ff45c8c90c17dd4487750544dc6eee6ba80e4bad04874e660b6d17758045"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/common.py",
+      "bytes": 3137,
+      "sha256": "1e3966401c811d9921c6af2bc07b6fb78bdb27d5dd6856e2d311d75600f6da6d"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/inspect_inputs.py",
+      "bytes": 4220,
+      "sha256": "348b570b71e115d326a8912c063056e7463a27ebf902fc1df8d1ad3e4c6e24d9"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/build_canvas.py",
+      "bytes": 5576,
+      "sha256": "afe0255b4fd2f0b1ae4b1d054fdc73f81719e0e16342ff9eb2518f56a30cf663"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/qa_rasters.py",
+      "bytes": 2405,
+      "sha256": "be0b8fbf6df06f1e0d0685e935ba52a41700cdc88c4fc21f41a9118dabd8e9b3"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/audit_geometry.py",
+      "bytes": 3702,
+      "sha256": "69aca09b9f50fa4a4e4e4b6290dfcf40e322b30c75ae60f2286970967cf824cd"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29_c03_fix/package_only03.py",
+      "bytes": 4092,
+      "sha256": "3941e4ea701b87a101f316f98408a342edd3004843d2350035f168f7af061dfd"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/compare_brno.py",
+      "bytes": 5242,
+      "sha256": "2a32a2edc6e4b944bba01466369785b99681a909ddbcd0a0f08455e83987c411"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v30/photoshop_gate.py",
+      "bytes": 1552,
+      "sha256": "61888ebcddfda1a0ad37ca513bdf740a939102c84217da3236ecc796493eaa80"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/comu.py",
+      "bytes": 49983,
+      "sha256": "241f44b41389389a3ea0ac6277523b660362489f8cbdc5d9984af36b098fa04e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/eclipse_determinista/f3.py",
+      "bytes": 32882,
+      "sha256": "546355979034547a06c6bf7a71c17010a06fc6f3920854429ccd6858e73b3609"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/encaix_sony/psb_utils.py",
+      "bytes": 5869,
+      "sha256": "f6464a170f48f1a5cebe2a6b3064337c1d95fdefe501af44ce351ed8b53cf037"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/capes_totals_v14/porta_photoshop.sh",
+      "bytes": 1221,
+      "sha256": "90cb498f1d9b1fc899b6c20d7fc3a847efa537779791e431ba0d5c19e50d16b1"
+    }
+  ],
+  "new_rasters": [
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/cau/01_final_u16.npy",
+      "bytes": 158391740,
+      "sha256": "1e7ceeb77b9b3225b806a1bc42aff2caaab5472cc69c38756dc08b381e75d499"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/cau/02_final_u16.npy",
+      "bytes": 158391740,
+      "sha256": "4c74c284f9298e33e5a9875dae5ae0cebae176e78eda6ade08d87cdd4511db5e"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/cau/04_final_u16.npy",
+      "bytes": 158391740,
+      "sha256": "c225b2cf9ad6b1366388b0a4bbe966f664ad24747c381774a2448d01c4cedaaf"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/cau/05_final_u16.npy",
+      "bytes": 158391740,
+      "sha256": "1948ff994b097a1bb80c8fd4e94e642ffb4eec5bdf906dd849c41eb4e607fcd0"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/cau/06_final_u16.npy",
+      "bytes": 158391740,
+      "sha256": "6dd88b81bb9245158e82045dcd4bbbb325037ffe8dc9ab6ec47be047f7497505"
+    }
+  ],
+  "composite": {
+    "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/cau/composite.npy",
+    "bytes": 950349800,
+    "sha256": "0cf5b79b4a16a41accb6f8371bea5810f646be68f7c1dbace526b6c440877c42"
+  },
+  "sigma_px": {
+    "01": 3,
+    "02": 3,
+    "04": 1.5,
+    "05": 3,
+    "06": 3
+  },
+  "verification": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/psb_verification.json",
+  "photoshop": "OBRE 10551 px x 7506 px · 30 capes",
+  "judges": [
+    "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/fixed_judge.json",
+    "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/cau/brno_comparison.json"
+  ],
+  "preservation": "25 layers entirely identical; five non-azimuthal layers only RGB and version name changed; all masks, alpha, opacity, visibility, order and azimuthal03/07 preserved",
+  "visual_acceptance": "Pere final visual judgement pending",
+  "limitations": [
+    "Smoothing also attenuates real fine structures: sigma3 retains about74-75 percent coherent16-32px detail in four inner windows; about92 percent at32-64px.",
+    "H1b warnings remain for01/04/05; no certification of total microcircle elimination.",
+    "Outer detail beyond5R remains unvalidated by Brno; no crop or mask added.",
+    "Photographic derivative, same canvas/FOV; no RAW recalibration."
+  ],
+  "runtime": {
+    "python": "3.12.13 (main, Mar  3 2026, 12:39:30) [Clang 21.0.0 (clang-2100.0.123.102)]",
+    "executable": "/Users/USUARI/.venvs/eines-ia-py312/bin/python"
+  },
+  "evidence": [
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/candidate_qa.json",
+      "bytes": 91105,
+      "sha256": "3ba3438ccd0384e4f9b18a576f663c131eeb1a9816323298c99e821c8bbfceb2"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/rotation_controls.json",
+      "bytes": 6032,
+      "sha256": "156b74e1e4310a97359e76328cc30a253a758b3dd4223ff5d16faddf4e1bff91"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/fixed_judge.json",
+      "bytes": 31763,
+      "sha256": "92e928ac21dc4eddf2a890e14f2a58f0da45580a84b5cecaf639fce25aa1bfcf"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/visual_review.json",
+      "bytes": 1079,
+      "sha256": "963ba3df1ea5f859a31becb37d72365de284f1cbd1b26fb0c8569e83c10c5e67"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/packaging_receipt.json",
+      "bytes": 47218,
+      "sha256": "d3451b6303eb43daabcad3f1f97406be82bf6d5ff5e02fc81a52ff4dd594d67a"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/psb_verification.json",
+      "bytes": 642,
+      "sha256": "86d19e210efa88d3cd194b2637da3c298fc504c7e9f0866aa89e1f8feba52df5"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/porta_photoshop.log",
+      "bytes": 36,
+      "sha256": "b50f55e380b8a58762a16787a20c08a62cb31e77d31b827adf89d256f0643696"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/photoshop_gate_meta.json",
+      "bytes": 248,
+      "sha256": "fe710dc77ef8739295dd1425f6a919d69872d60ac49fb9b47ebfccbcc56ac1aa"
+    },
+    {
+      "path": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31/cau/brno_comparison.json",
+      "bytes": 17387,
+      "sha256": "c637c4a8df24f7399c9618c94732745dd9b61defd87851c7219c55e9ff14a97f"
+    }
+  ]
+}

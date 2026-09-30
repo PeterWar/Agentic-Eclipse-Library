@@ -1,0 +1,78 @@
+{
+  "schema_version": 4,
+  "updated": "2026-09-07T19:21:47.583249+00:00",
+  "phase": "post-eclipse-V34-origin-cured-lean",
+  "coordination_mode": "ALTERNATING_CODEX_CLAUDE_WITH_AUDITABLE_HANDOFFS",
+  "entrypoint": "/Users/USUARI/Desktop/Eclipse 2026/IA/README.md",
+  "asset_root": "/Users/USUARI/Desktop/Eclipse 2026",
+  "code_root": "/Users/USUARI/Downloads/Eclipse 2026",
+  "code_worktree": "/Users/USUARI/Downloads/Eclipse 2026",
+  "git_present": false,
+  "formal_worktree_handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-07_V34.md",
+  "handoff": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/HANDOFF_VIGENT.md",
+  "status": "/Users/USUARI/Desktop/Eclipse 2026/IA/ESTAT_ACTUAL.md",
+  "path_map": "/Users/USUARI/Desktop/Eclipse 2026/IA/MAPA_RUTES_I_OUTPUTS.md",
+  "paths": {
+    "sony_raw_root": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA",
+    "sony_calibrated": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/calibrated",
+    "sony_darks": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/Darks A7RIIIA Eclipse",
+    "vixen_all_raw_root": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III",
+    "vixen_totality_raw_root": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Vixen Fase totalitat",
+    "vixen_masters_v2": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Vixen Fase totalitat/Masters_v2",
+    "vixen_darks": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Darks Canon R6III Eclipse",
+    "vixen_posterior_flats_raw": "/Users/USUARI/Desktop/Eclipse 2026/Vixen R6III/Flats R6III",
+    "sony_posterior_flats_raw": "/Users/USUARI/Desktop/Eclipse 2026/300mm A7RIIIA/Flats Sony A7RIIIA 300mm",
+    "posterior_flat_output": "/Users/USUARI/Downloads/Eclipse 2026/output/flats_20260822",
+    "posterior_flat_assessment": "/Users/USUARI/Downloads/Eclipse 2026/output/flats_20260822/transfer_assessment_v1/TRANSFER_ASSESSMENT.json",
+    "derivatives_root": "/Users/USUARI/Desktop/Eclipse 2026/Derivats",
+    "vixen_hdr_master": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Vixen/Corona_HDR_Vixen",
+    "vixen_hdr4": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Vixen/HDR4",
+    "capestotals_work": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Vixen/CapesTotals_work",
+    "sony_stacks": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Sony/Apilats",
+    "current_technical_editable": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V34.psb",
+    "reference_mockup": "/Users/USUARI/Downloads/Maqueta de resultat esperat.tif",
+    "astrometry": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Astrometria/Estrelles",
+    "earthshine": "/Users/USUARI/Desktop/Eclipse 2026/Derivats/Earthshine",
+    "publication": "/Users/USUARI/Desktop/Eclipse 2026/Publicacio",
+    "photoshop_root": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop",
+    "photoshop_totals": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals",
+    "photoshop_interiors": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes interiors",
+    "photoshop_exteriors": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes exteriors",
+    "photoshop_filters_resources": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/2-Filtres/Recursos",
+    "current_delivery_manifest": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v32_arcs_20260907/delivery_manifest.json",
+    "current_visual_output": "/Users/USUARI/Desktop/Eclipse 2026/IA/output/v34_20260907"
+  },
+  "current_product": {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V34.psb",
+    "sha256": "fa49221cad3352c4e4e7840018ee305e7ec360b3aad4e28c6c175ea3f0d50917",
+    "bytes": 4482115142,
+    "layers": 11,
+    "published_utc": "2026-09-07T19:21:47.583249+00:00",
+    "photoshop": "OBRE 10551 px x 7506 px · 11 capes",
+    "kind": "lean: linear base V34 + 10 filter layers (V32 recipe, no smoothing); other layers remain in V32.psb",
+    "PASS_scope": "container, gates, Photoshop; visual acceptance by Pere pending"
+  },
+  "processing_authority": {
+    "type": "independent-scientific-filter-comparison-plus-preserved-photo",
+    "runs": "Vixen019/Sony016, immutable; exact dependencies in manifest",
+    "source": "corrected linear G, global Sony-to-Vixen gain0.3411462604999542",
+    "fov_status": "same10551x7506",
+    "raw_calibration_reexecuted": false
+  },
+  "visual_task": {
+    "status": "DELIVERED_V34_PENDING_PERE_VISUAL_JUDGEMENT",
+    "target": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V34.psb",
+    "next_action": "Pere mira les 10 capes V34 contra les V32 (retalls a les seves marques)"
+  },
+  "history": {
+    "previous_active_snapshot": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v32_arcs_20260907/docs_before/IA_ACTIVE.json",
+    "previous_active_sha256": "c9db2d839c065e2cc1f829adcdef16d6123923412b7fd582670ad922b08588da",
+    "meaning": "V31_FiltresPurs preserved; V32 published as a new file"
+  },
+  "jpeg_output": {
+    "status": "ACTIVE",
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/IA/output",
+    "scope": "ALL_NEW_AI_GENERATED_JPEG",
+    "historical_files": "DO_NOT_MOVE"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "PASS": true,
+  "time_utc": "2026-09-05T15:22:29.149185+00:00",
+  "published_sha256": "bbbb2b93a49a0e09226b89467754f6364d1c6b929bc147bd34387a1c66d7affe",
+  "ten_authority_files_match_receipt": true,
+  "manifest_code_and_evidence_match": true,
+  "old_to_pilot_exact": true,
+  "outside_changed_masks_DN16": [
+    0,
+    0,
+    0
+  ],
+  "own_v31_workers": []
+}

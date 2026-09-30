@@ -1,0 +1,30 @@
+{
+  "groups": {
+    "even": [
+      "DSC06979.ARW",
+      "DSC06981.ARW",
+      "DSC06983.ARW",
+      "DSC06985.ARW",
+      "DSC06987.ARW",
+      "DSC06992.ARW",
+      "DSC06994.ARW",
+      "DSC06996.ARW",
+      "DSC06998.ARW",
+      "DSC07000.ARW",
+      "DSC07002.ARW"
+    ],
+    "odd": [
+      "DSC06980.ARW",
+      "DSC06982.ARW",
+      "DSC06984.ARW",
+      "DSC06986.ARW",
+      "DSC06991.ARW",
+      "DSC06993.ARW",
+      "DSC06995.ARW",
+      "DSC06997.ARW",
+      "DSC06999.ARW",
+      "DSC07001.ARW"
+    ]
+  },
+  "unchanged": "F0 calibration, F1.3 registration, F2.2 k, lunar mask per frame"
+}

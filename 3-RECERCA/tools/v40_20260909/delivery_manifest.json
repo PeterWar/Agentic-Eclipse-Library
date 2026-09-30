@@ -1,0 +1,145 @@
+{
+  "psb": {
+    "published_utc": "2026-09-09T19:00:52.769684+00:00",
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V40.psb",
+    "sha256": "e23c1ce4428d42cce38f9d699b8b7bd484ce1a6fdd97c75e1c154282d4cfbbc4",
+    "bytes": 5975709182,
+    "layers": 22
+  },
+  "photoshop": {
+    "result": "OBRE 10551 px x 7506 px · 22 capes",
+    "file": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v40_20260909/staging/V40.psb",
+    "sha256": "e23c1ce4428d42cce38f9d699b8b7bd484ce1a6fdd97c75e1c154282d4cfbbc4"
+  },
+  "verification_sha256": "e23c1ce4428d42cce38f9d699b8b7bd484ce1a6fdd97c75e1c154282d4cfbbc4",
+  "layers": [
+    {
+      "name": "12 1/3200 perles",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "11 1/500 limbe",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "10 1/125",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "09 1/60 x2",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "08 1/30 x4 quar",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "07 1/15 x2 quar",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "06 1/8 x4 quar",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "00 Base (cel/4) · V39",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "00 Base corba (total) · V39",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "03 ACHF azimutal 8-128 r0 · V38",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "03 ACHF azimutal 8-128 r4 · V38",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "07 ACHF azimutal suau r8 · V38",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "01 ACHF fi 2-32 · V40",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "04 ACHF micro 1-16 · V40",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "05 ACHF fi 2-48 · V40",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "06 ACHF estructura 4-64 · V40",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "P01 NRGF · V39",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "P01b NRGF (μσ dels anells parcials extrapolats en ln r) · V39",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "P02 RHEF · V39",
+      "kind": "copy",
+      "exact": true
+    },
+    {
+      "name": "P03 MGN · V40",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "P04 WOW · V40",
+      "kind": "u16",
+      "exact": true
+    },
+    {
+      "name": "P05 WOW bilateral · V40",
+      "kind": "u16",
+      "exact": true
+    }
+  ],
+  "tau": {
+    "tau": 1.0,
+    "mode": "wg",
+    "k": 3.0,
+    "se_factor": 6.0,
+    "se_min": 24.0,
+    "motiu": "V40 pilot (09-09, acordat amb Codex xhigh): el llindar tou k=2 de la V39 deixava el 58 % de l'amplitud del soroll pur (mesurat 0,61 al P03 a 5,5 R☉): l'ull veu presència de gra, no amplitud. Regla nova per banda g = max(Wiener regional 1 − N/E, garrote 1 − (3σ)²/w²): residu de soroll pur ≈ 0,06; el compacte fort passa (5 σ 0,64, 7 σ 0,82, 10 σ 0,91); dins de la corona (E ≫ N) no canvia res. El terme creuat deixa de ser guany: dibuixava el rectangle de la Vixen (dins del camp els dos trens confirmen, fora no).",
+    "soroll": "cau/soroll_escales_1q.npz + cau/soroll_bilateral_1q.npz",
+    "creuat": true,
+    "creuat_sigma_factor": 6.0,
+    "creuat_sigma_min": 24.0,
+    "creuat_z": 1.0,
+    "motiu_creuat": "V40 pilot 2: el creuat és el MODEL DE SOROLL (potència total − creuada entre sensors, per tren, calibrat per anell fora del solapament), no un guany: així els patrons fixos i tot el que l'altre telescopi no confirma compten com a soroll i la vora de la Vixen no es dibuixa. Pilot 1 (meitats soles + wg) va fallar la porta de vores (×4–6).",
+    "creuat_mode": "soroll",
+    "soroll_ref": "sony",
+    "motiu_soroll_ref": "El guany es calcula amb el soroll total de la SONY allà on la Sony hi és (tot l'exterior; continu a través del rectangle de la Vixen: cap contorn de tren) i amb el de la Vixen només a l'interior on la Sony no arriba; el coeficient fusionat conserva l'avantatge de S/N del segon tren. Refusats amb número (09-09): 'fusio' (w_V²N_V + w_S²N_S: g 0,05→0,28 a 16 px dins/fora) i 'pitjor' (max: clot a 0,00 a la franja d'entrada de la Vixen)."
+  },
+  "report": "research/157"
+}

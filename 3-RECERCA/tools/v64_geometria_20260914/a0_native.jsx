@@ -1,0 +1,16 @@
+var root='/Users/USUARI/Downloads/Eclipse 2026/output/v64_geometria_20260914/',own=[],old=app.displayDialogs,oldDoc=app.activeDocument;
+function log(s){var f=new File(root+'A0_native.log');f.encoding='UTF8';f.open('a');f.writeln(s);f.close();}
+function layer(d,id){for(var j=0;j<d.layers.length;j++)if(d.layers[j].id==id)return d.layers[j];throw new Error('layer '+id);}
+function psb(d,n){var f=new File(root+n+'.psb');if(f.exists)throw new Error('no-clobber '+n);app.activeDocument=d;var s=new ActionDescriptor(),o=new ActionDescriptor();o.putBoolean(stringIDToTypeID('maximizeCompatibility'),true);s.putObject(charIDToTypeID('As  '),stringIDToTypeID('largeDocumentFormat'),o);s.putPath(charIDToTypeID('In  '),f);s.putBoolean(charIDToTypeID('Cpy '),false);s.putBoolean(charIDToTypeID('LwCs'),true);executeAction(charIDToTypeID('save'),s,DialogModes.NO);log('SAVED '+n+' '+d.layers.length+' '+d.saved);}
+function exp(d,n){var f=new File(root+n+'.tif');if(f.exists)throw new Error('no-clobber '+n);var t=d.duplicate('V64_QA_'+n,true);own.push(t);t.crop([UnitValue(4377,'px'),UnitValue(2777,'px'),UnitValue(6377,'px'),UnitValue(4777,'px')]);var o=new TiffSaveOptions();o.imageCompression=TIFFEncoding.TIFFZIP;o.layers=false;o.alphaChannels=true;o.transparency=true;o.embedColorProfile=true;t.saveAs(f,o,true,Extension.LOWERCASE);t.close(SaveOptions.DONOTSAVECHANGES);own.pop();log('EXPORTED '+n);}
+function maskEnabled(l,on){app.activeDocument.activeLayer=l;var d=new ActionDescriptor(),r=new ActionReference();r.putIdentifier(stringIDToTypeID('layer'),l.id);d.putReference(charIDToTypeID('null'),r);var x=new ActionDescriptor();x.putBoolean(stringIDToTypeID('userMaskEnabled'),on);d.putObject(charIDToTypeID('T   '),charIDToTypeID('Lyr '),x);executeAction(charIDToTypeID('setd'),d,DialogModes.NO);}
+function only(d,id){for(var i=0;i<d.layers.length;i++)d.layers[i].visible=d.layers[i].id===id;}
+try{app.displayDialogs=DialogModes.NO;var src=null;for(var i=0;i<app.documents.length;i++)if(app.documents[i].id===4713)src=app.documents[i];if(!src||src.name!=='V63.psb'||src.layers.length!==25)throw new Error('Source changed');
+var d=src.duplicate('V63_Pere_input',false);own.push(d);psb(d,'V63_Pere_input');
+for(var i=0;i<d.layers.length;i++){var l=d.layers[i];log('LAYER '+l.id+'|'+l.name+'|'+l.visible+'|'+l.opacity+'|'+l.bounds);}
+exp(d,'A0_marked');layer(d,87).visible=false;exp(d,'A0_clean');layer(d,83).visible=false;exp(d,'A0_without_extra12');layer(d,76).visible=false;exp(d,'A0_no_interiors');
+for(var i=0;i<d.layers.length;i++)if(d.layers[i].id>=41&&d.layers[i].id<=56)d.layers[i].visible=false;exp(d,'A0_base_moon');only(d,3);exp(d,'A0_base_masked');maskEnabled(layer(d,3),false);exp(d,'A0_base_unmasked');
+only(d,76);exp(d,'A0_interiors_masked');maskEnabled(layer(d,76),false);exp(d,'A0_interiors_unmasked');
+only(d,83);exp(d,'A0_extra12_masked');maskEnabled(layer(d,83),false);exp(d,'A0_extra12_unmasked');
+only(d,30);exp(d,'A0_moon_masked');maskEnabled(layer(d,30),false);exp(d,'A0_moon_unmasked');only(d,87);exp(d,'A0_marks');log('COMPLETE');
+}catch(e){log('ERROR '+e+' line '+e.line);throw e;}finally{while(own.length){try{own.pop().close(SaveOptions.DONOTSAVECHANGES);}catch(e){}}try{app.activeDocument=oldDoc;}catch(e){}app.displayDialogs=old;}

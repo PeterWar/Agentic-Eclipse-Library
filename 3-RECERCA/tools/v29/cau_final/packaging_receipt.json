@@ -1,0 +1,2019 @@
+{
+  "input_snapshot": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v29/cau/input_V28.psb",
+  "output": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V29.psb",
+  "preserved_original_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    24,
+    25
+  ],
+  "original_layers": {
+    "0": {
+      "name": "12 1/3200 perles",
+      "bbox": [
+        1420,
+        908,
+        9123,
+        6764
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215369,
+          "sha256": "fb0d90b2afcd2cf058135e3470597216036872ea3d0e071fb9bfba7446a261b9"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 37504417,
+          "sha256": "e5cec04f3e52fbd1336618b2bf23de6a6e2a15d7caaa7c61857a14038384c9d0"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 35357173,
+          "sha256": "f8ca62facce7df2e88abd6a386b5580bfcabe7b624bb98cae9b268b87e0b5822"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 35989504,
+          "sha256": "c1e856beb0176d3121732e29c655bcb9a453084964c8e2df0c7b718c31a4231f"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 286416,
+          "sha256": "f8741c8bfbe07f56206e0beb2caa2ff13db82d5d1efedb00cb7d97f83cc563b2"
+        }
+      }
+    },
+    "1": {
+      "name": "11 1/500 limbe",
+      "bbox": [
+        886,
+        410,
+        9398,
+        7096
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 255849,
+          "sha256": "82b5efcac21eae41e31fec9d79f949b444f6f659620d324984b3e1c0dfe34409"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 36279912,
+          "sha256": "aa1b1c2eddfad3eaecc3cec4511d32829b941408f70d08424a915616c3bc0cc7"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 35289931,
+          "sha256": "f76decfa1c7291c28312fe882f4324a8aaa3bd8b2ec11fbf899bb34e979e253b"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 33953237,
+          "sha256": "205925a9858de7cc96c537b810cc19942039f9d330e66c2df70913c7cfea3587"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 4770661,
+          "sha256": "f3c7a7a8ffb22f8110288b103916364ba1f3eb946ed0c68fc2cb67f598f84657"
+        }
+      }
+    },
+    "2": {
+      "name": "10 1/125",
+      "bbox": [
+        886,
+        410,
+        9398,
+        7096
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 255849,
+          "sha256": "82b5efcac21eae41e31fec9d79f949b444f6f659620d324984b3e1c0dfe34409"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 40224658,
+          "sha256": "19d4670e7fa82372e4db01d97e16d86069616870054fc1c3f4296360c8721582"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 40066450,
+          "sha256": "e534e760a8bf36e9f71e75de10d64e47c9bcd5e9607606ade8b496626f0e4b6c"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 38816956,
+          "sha256": "7e8eb131a6532085aad0cfe8495c418e93fe2d4edd7d2847d1dcd57fd3998a78"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 6842175,
+          "sha256": "e8232fc78b4c0d2429df5af7a81d796ee52dd5e3f0e9e63129102b927638e406"
+        }
+      }
+    },
+    "3": {
+      "name": "09 1/60 x2",
+      "bbox": [
+        1423,
+        908,
+        9126,
+        6765
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215339,
+          "sha256": "51621ef37ea117a2ec9c87f55a076c0d0db5d6fa88da51c24ba35d3f68fdaeb0"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 46318915,
+          "sha256": "8f7f88615bbe3e7cb6be6eaf20566d0a125c3122d16e86b6758a542b7d87ba25"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 41476654,
+          "sha256": "bcaaea44ecee3382fa33c4421be9e6f3953a2f259f380c05cb1ccad331772446"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 41070517,
+          "sha256": "6259ba85e793103173dd04d6606b6a1fb2dda7b13c44d9a99eb2485deb876da0"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 5684449,
+          "sha256": "489d1082f5f3de7a1ad6b9d7433784581f77d0c79e519b71ac0cf94f60cb173a"
+        }
+      }
+    },
+    "4": {
+      "name": "08 1/30 x4 quar",
+      "bbox": [
+        1422,
+        909,
+        9126,
+        6766
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215039,
+          "sha256": "5c1495fdbac59e7a4eb889dc76fe92d034d26044a08b3660193cbebb2ffc310a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 48969057,
+          "sha256": "39a12564d9ef4ed74612218929b6ca4865dc819a1d0abb16c0abf2d32e3d1631"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 47330488,
+          "sha256": "3cee7493696d489b6d2bb07d33a76d49795f38b2fc151a2c48051eebfbbaaf6b"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 46908877,
+          "sha256": "ffffceea6cf682b32e7a19e2436488d4a7b9f67af26b998efa92c36c5199925d"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 10432061,
+          "sha256": "5aa131974e3549a63a470d9f2cf122dc3ed68385dbcea9d20c8c6db07a5e4c7a"
+        }
+      }
+    },
+    "5": {
+      "name": "07 1/15 x2 quar",
+      "bbox": [
+        1423,
+        908,
+        9126,
+        6765
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215339,
+          "sha256": "51621ef37ea117a2ec9c87f55a076c0d0db5d6fa88da51c24ba35d3f68fdaeb0"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 51635946,
+          "sha256": "d38af5a814f3a4e219cc38c8da2ce81e4d4d3f1bf3a879f0f9c2d3c69078b5b1"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 47330841,
+          "sha256": "83880640e1aa40097df4618b742065bcb749806a0a42bc3468e70987b18cac33"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 47513116,
+          "sha256": "57b454487390da66fe0c0838a73d6236cd0c45db6f509e3b24e9b26693ddcf50"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 6569401,
+          "sha256": "f4786d105e615b2777ebbf4eea35691c99ec388a2b7f2faf0d2a400f440d3ba9"
+        }
+      }
+    },
+    "6": {
+      "name": "06 1/8 x4 quar",
+      "bbox": [
+        1422,
+        909,
+        9126,
+        6766
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215039,
+          "sha256": "5c1495fdbac59e7a4eb889dc76fe92d034d26044a08b3660193cbebb2ffc310a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 51814342,
+          "sha256": "0acfa91b5b0c7f893cffd57dd9d7503f70723da5da1dead5dc7f23e5c4cce305"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 50735325,
+          "sha256": "d7f48269078918521413f15100dabc7b45bd80a6d082865e89304bd3cc59eb1d"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 50530806,
+          "sha256": "bd8c10274b12292178ea35d195e9bf33c7df8182937b808dfc336a1471ce5941"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 7275301,
+          "sha256": "6c331f34909e77c482637b6c150401b31857bd51473276f4c9b7a12c615b8521"
+        }
+      }
+    },
+    "7": {
+      "name": "05 1/4 x2 quar",
+      "bbox": [
+        1423,
+        908,
+        9126,
+        6765
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215339,
+          "sha256": "51621ef37ea117a2ec9c87f55a076c0d0db5d6fa88da51c24ba35d3f68fdaeb0"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 49725503,
+          "sha256": "3ec40cfb7a91c31d4495a2b47b204124e7a2cd1afadf06564289a29194319114"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 51167407,
+          "sha256": "fecc50a9c9bcbeb3b7ad97d8d4dd3e4a5e8db02ccba937574fb74365ac90b97b"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 50593697,
+          "sha256": "10fcd766851d8923e4f064f7210eb40ad46c2cd437a14d6be7c9fd35c4689312"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 14117109,
+          "sha256": "b23c81f2b32ef5cbf8e223b678935f06a2c1730215e7e054d35402bdfd2931f4"
+        }
+      }
+    },
+    "8": {
+      "name": "04 1/2 x4 quar",
+      "bbox": [
+        1422,
+        909,
+        9126,
+        6766
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215039,
+          "sha256": "5c1495fdbac59e7a4eb889dc76fe92d034d26044a08b3660193cbebb2ffc310a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 55033264,
+          "sha256": "4be3a37c4ce6870456d42e691c22e36be2d95dbf7d35443922a340ce446d671c"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 51094954,
+          "sha256": "71111d41dfe907d96e09339680076601c385c8095d8488205ae2eabcfa2fb267"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 51053779,
+          "sha256": "a7038620073da4eaf5c153d0d7191819aec744dba1f7076f182fb1babc172dbc"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 10001410,
+          "sha256": "c4b7802805c56a9cc19b97765f5562b42d7e6758574de133a2ab843671e4729d"
+        }
+      }
+    },
+    "9": {
+      "name": "03 1s x2 quar",
+      "bbox": [
+        1423,
+        908,
+        9126,
+        6765
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215339,
+          "sha256": "51621ef37ea117a2ec9c87f55a076c0d0db5d6fa88da51c24ba35d3f68fdaeb0"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 51470092,
+          "sha256": "d16586a0d12d4d2a368ce39ca1fa90ce070c784e94c4e04b6b450fac32d134dc"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 51747277,
+          "sha256": "b59eb9ea265502b11bb1629914c62d0a93b02742c2207f46058d25e671f021b9"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 51359576,
+          "sha256": "fe1457162ae526c41f26ed22006f26f98c5ddceff671de3511573d168b72ca86"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 14069410,
+          "sha256": "4426adfd6b54445df6f8300bd30286367409ccb1034fd38b4658481c69c1ec8c"
+        }
+      }
+    },
+    "10": {
+      "name": "02 2s x3 quar",
+      "bbox": [
+        1424,
+        907,
+        9127,
+        6763
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "70d9349805f1a68676f639a5e87148cdcd1ea77615dd61c79110b37681c90454",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215133,
+          "sha256": "f23c29aa265010357c626a8dca9869bc53aa5b390109a653eff3fad8c63d32dc"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 50331738,
+          "sha256": "0fec0182ccbaa1d1128466185001a294f832d148b85368a34ead40bc0cfb1e35"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 50749853,
+          "sha256": "1d17c8adddef8a240fbe8c3e8cb3da56b9c7ab7857143795d56df18263ab9d10"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 50465564,
+          "sha256": "d5fe5b1543c46eb781fb0a59ece2c0c33630d6d09e982de21a5cb238bd4d7c62"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 15180025,
+          "sha256": "73dda0afcaa6a87becef42285beb1979606427a1a6c71af93d36e369955efb79"
+        }
+      }
+    },
+    "11": {
+      "name": "01 10.3s x3 quar",
+      "bbox": [
+        1423,
+        908,
+        9127,
+        6765
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "05db99c9e2b0e0a4a3ef2a489c9ba97e0d0d14a963d153b55826883347e443e6",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215316,
+          "sha256": "16003ed43e987517a683eeae21dfdc9e225d37933cbe4bee770ee1a1edf9a893"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 44537083,
+          "sha256": "ad14ba230a0fe8eb48595c218d700f82757b171ce6e8c7ac2b2f03471780830d"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 45137040,
+          "sha256": "f3a4bee34f27e62239af567a78a15d32fcee64d14cdbb91eb64ec140165eb899"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 45801501,
+          "sha256": "a31e9933b210629f247d2b76f92bff108d30178a8c61213f6b4f839916690e62"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 11023983,
+          "sha256": "45042255b1d2aec1ff1c8ce9ab60f40eb86d776ab388f94505d12ab3893088fe"
+        }
+      }
+    },
+    "12": {
+      "name": "13 Sony >1s",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 182954,
+          "sha256": "8f63547cec7f01165ba992e5da14762980d57e97b8222da78c19d1d7f0335f52"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 83725223,
+          "sha256": "b5d188398b35cbb2441fc2ceb1c3cdefe2618331e93846b00daf94ceb3bcd198"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 84836029,
+          "sha256": "7e0f18c7f26fbb656da4dae83e6b5b93d233339001e32a94c130a45ef26a0e35"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 85601549,
+          "sha256": "880b84f5e919989bc7c168f81b6ca51982d61c8f151fe4294b332e0c6392398f"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 10036270,
+          "sha256": "ab766929a62ade9b11534bf22b7ccd2ebc1982348fd35f99c92f4564011dd889"
+        }
+      }
+    },
+    "13": {
+      "name": "Fons per raig",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 182954,
+          "sha256": "8f63547cec7f01165ba992e5da14762980d57e97b8222da78c19d1d7f0335f52"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 57487239,
+          "sha256": "ac91b3cd3e1c803ebbfb6aef84c1e56f6cbf7a1375ef494c52d7675fdd47b44a"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 55881869,
+          "sha256": "8b05020e2092d6ed88f92815f3895faff4bc8399813a82c753c38ca87c05b324"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 52707763,
+          "sha256": "94c2e87b8ac636d4cfb197ccadba563790f42c2fcfb6b923ddcb23bac7c5fc04"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 31120831,
+          "sha256": "a430ffabc7d15ae99a7fb41f4d99bff737f7d3fcc081f7609aa822cf3e3bc60a"
+        }
+      }
+    },
+    "14": {
+      "name": "Earthshine v2",
+      "bbox": [
+        4866,
+        3279,
+        5857,
+        4270
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 1116779,
+          "sha256": "829615230f915e131c5c10320cd9c5a4fc69f73220a4542f17e09fbaa352daf7"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 1116779,
+          "sha256": "829615230f915e131c5c10320cd9c5a4fc69f73220a4542f17e09fbaa352daf7"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 1116779,
+          "sha256": "829615230f915e131c5c10320cd9c5a4fc69f73220a4542f17e09fbaa352daf7"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 229163,
+          "sha256": "ed37374de3f707fa5874e8d0b75a5681851cd21b4b8d8806d7b22f57749873f2"
+        }
+      }
+    },
+    "15": {
+      "name": "Compara D87",
+      "bbox": [
+        4866,
+        3279,
+        5857,
+        4270
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 1082951,
+          "sha256": "bcbf880fadcc09d7fc22a5988e369633bd76f2145fca99ca2d41df5cfb83f15f"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 1082951,
+          "sha256": "bcbf880fadcc09d7fc22a5988e369633bd76f2145fca99ca2d41df5cfb83f15f"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 1082951,
+          "sha256": "bcbf880fadcc09d7fc22a5988e369633bd76f2145fca99ca2d41df5cfb83f15f"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 229163,
+          "sha256": "ed37374de3f707fa5874e8d0b75a5681851cd21b4b8d8806d7b22f57749873f2"
+        }
+      }
+    },
+    "16": {
+      "name": "Compara LROC",
+      "bbox": [
+        4866,
+        3279,
+        5857,
+        4270
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 1043672,
+          "sha256": "295e77cd1a31e2fea3b26832b156c6d88e9dbf42b4c57a5a5cc68ba6c6a64a55"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 1043672,
+          "sha256": "295e77cd1a31e2fea3b26832b156c6d88e9dbf42b4c57a5a5cc68ba6c6a64a55"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 1043672,
+          "sha256": "295e77cd1a31e2fea3b26832b156c6d88e9dbf42b4c57a5a5cc68ba6c6a64a55"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 229163,
+          "sha256": "ed37374de3f707fa5874e8d0b75a5681851cd21b4b8d8806d7b22f57749873f2"
+        }
+      }
+    },
+    "17": {
+      "name": "Earthshine V24e",
+      "bbox": [
+        4866,
+        3279,
+        5857,
+        4270
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 1307418,
+          "sha256": "7d312e9522d7ad005248962762974963cbd3d49b588267a1f936919e4d2b62a6"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 1286355,
+          "sha256": "f8cb2b98a3071d52b228a534824cfd48adcfef130b4d2cb453bc825981d5eaa4"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 1267082,
+          "sha256": "52864fd437a6b81f00a1d98807b1beae08847463fb525530ecb354c32683e746"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 229398,
+          "sha256": "36a4175987f4f8a1dee7119fdd32cca430707a42962644731b92a71230a599fe"
+        }
+      }
+    },
+    "18": {
+      "name": "00 Base amb cel",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 182954,
+          "sha256": "8f63547cec7f01165ba992e5da14762980d57e97b8222da78c19d1d7f0335f52"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 26978369,
+          "sha256": "e58baf65a8a1b0301aa02a9e19d9e94287da7ee09fc0de24bd3d3a04cfd479ec"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 26481327,
+          "sha256": "9c796495ca6d3110e72263327ceb4fea620df54b6f5751a1bb6baebd058dac0a"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 23260970,
+          "sha256": "46d8a2fd16ef29f6147cb4b85e53b32c5ff67792ab6d637dc87683d0cb1b91d9"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 215589,
+          "sha256": "284e18bf0998b08f590ccc4b91dbf375bda18e950caf0c5603d33492cce36f60"
+        }
+      }
+    },
+    "19": {
+      "name": "00 Base (cel/4)",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 182954,
+          "sha256": "8f63547cec7f01165ba992e5da14762980d57e97b8222da78c19d1d7f0335f52"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 27722521,
+          "sha256": "bc9e320631c97b7eee193cae82041d88b4f7bc449407482f1049d132025d373a"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 27370643,
+          "sha256": "a183bb790b13cb474e026d5d2bca1279af48990caf5c668bd947ccba14c0dcf0"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 24819021,
+          "sha256": "ef6d210dce9da561f132e87ffaf3e8fb40c202c98c9f0be916f9106cbe525737"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 215589,
+          "sha256": "284e18bf0998b08f590ccc4b91dbf375bda18e950caf0c5603d33492cce36f60"
+        }
+      }
+    },
+    "20": {
+      "name": "04 ACHF ample 9R",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 182954,
+          "sha256": "8f63547cec7f01165ba992e5da14762980d57e97b8222da78c19d1d7f0335f52"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 41940762,
+          "sha256": "453b6d9751ca55f3076cbdf839eb155c0eb2ccc9b9264e71580cd7a50c752634"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 41940762,
+          "sha256": "453b6d9751ca55f3076cbdf839eb155c0eb2ccc9b9264e71580cd7a50c752634"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 41940762,
+          "sha256": "453b6d9751ca55f3076cbdf839eb155c0eb2ccc9b9264e71580cd7a50c752634"
+        }
+      }
+    },
+    "21": {
+      "name": "03 ACHF gran azimutal",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 182954,
+          "sha256": "8f63547cec7f01165ba992e5da14762980d57e97b8222da78c19d1d7f0335f52"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 32707314,
+          "sha256": "10fce7cc5512d55b0d5aba9379e3cf50637b06dd8000121314265e68d4249573"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 32710840,
+          "sha256": "61ff2a3c4fda5d1c06517309c52e883e5d37096db9865a4258285ba32cb85b9a"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 32701909,
+          "sha256": "49d9f147b25c60d1b05500e207b5c2c712a63d0d6b4e29c92c4e6ffbcc0d065a"
+        }
+      }
+    },
+    "22": {
+      "name": "01 ACHF fi 2-32",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 182954,
+          "sha256": "8f63547cec7f01165ba992e5da14762980d57e97b8222da78c19d1d7f0335f52"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 19740314,
+          "sha256": "bbcb2428b30c3fc5a0fae5757d2829531d00d9fb618d5be967f07bb6377931fd"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 19740314,
+          "sha256": "bbcb2428b30c3fc5a0fae5757d2829531d00d9fb618d5be967f07bb6377931fd"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 19740314,
+          "sha256": "bbcb2428b30c3fc5a0fae5757d2829531d00d9fb618d5be967f07bb6377931fd"
+        }
+      }
+    },
+    "23": {
+      "name": "02 Passa-alt 24",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "opacity": 102,
+      "blend": "BlendMode.OVERLAY",
+      "mask_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 182954,
+          "sha256": "8f63547cec7f01165ba992e5da14762980d57e97b8222da78c19d1d7f0335f52"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 18790912,
+          "sha256": "6134c6b8af92fe32edc5b585da2c7c060eb9b6b2046e9a987cc0e678c0af8296"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 18790912,
+          "sha256": "6134c6b8af92fe32edc5b585da2c7c060eb9b6b2046e9a987cc0e678c0af8296"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 18790912,
+          "sha256": "6134c6b8af92fe32edc5b585da2c7c060eb9b6b2046e9a987cc0e678c0af8296"
+        }
+      }
+    },
+    "24": {
+      "name": "Estrelles",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.LINEAR_DODGE",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 182954,
+          "sha256": "8f63547cec7f01165ba992e5da14762980d57e97b8222da78c19d1d7f0335f52"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 177678,
+          "sha256": "5b65b37d3c4c1d87d357ef8b19f5b427a30d67d85671510ac247c997e619a5bd"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 177816,
+          "sha256": "717965319ecfd057f1ab501aa40f64764bdcf8199205033ed6ae30d7c64cfdba"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 177772,
+          "sha256": "5593d5ac72514a05e46bd2f83960d74b3896736bcc182ab5018c0e5a092a0bb6"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 192847,
+          "sha256": "bcb6d7ac8cc1b1739b977d84f406e6b6cebb9dae1a21a9e61006a146396ca16f"
+        }
+      }
+    },
+    "25": {
+      "name": "Reflex",
+      "bbox": [
+        4862,
+        3279,
+        5853,
+        4270
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.LINEAR_DODGE",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 268358,
+          "sha256": "1b535676fa1aa41e8a0825327cb7276a8cdb2ccf07bb0c04d416d9d9732764db"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 254564,
+          "sha256": "67865a76606fee85b2b08ce85a6462995a96504e8d1711703fcdf31275f82c62"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 236339,
+          "sha256": "cce18f8a2a8fca7f91d6d096ff38b5ee6dc8043009e192afd2c2fc3f5de5fbff"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 164059,
+          "sha256": "ba98ae588e5d517e6cd89c180485bff18636f46384fd530abe62c447e5b52c29"
+        }
+      }
+    }
+  },
+  "output_layers": [
+    {
+      "name": "12 1/3200 perles",
+      "bbox": [
+        1420,
+        908,
+        9123,
+        6764
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215369,
+          "sha256": "fb0d90b2afcd2cf058135e3470597216036872ea3d0e071fb9bfba7446a261b9"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 37504417,
+          "sha256": "e5cec04f3e52fbd1336618b2bf23de6a6e2a15d7caaa7c61857a14038384c9d0"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 35357173,
+          "sha256": "f8ca62facce7df2e88abd6a386b5580bfcabe7b624bb98cae9b268b87e0b5822"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 35989504,
+          "sha256": "c1e856beb0176d3121732e29c655bcb9a453084964c8e2df0c7b718c31a4231f"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 286416,
+          "sha256": "f8741c8bfbe07f56206e0beb2caa2ff13db82d5d1efedb00cb7d97f83cc563b2"
+        }
+      }
+    },
+    {
+      "name": "11 1/500 limbe",
+      "bbox": [
+        886,
+        410,
+        9398,
+        7096
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 255849,
+          "sha256": "82b5efcac21eae41e31fec9d79f949b444f6f659620d324984b3e1c0dfe34409"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 36279912,
+          "sha256": "aa1b1c2eddfad3eaecc3cec4511d32829b941408f70d08424a915616c3bc0cc7"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 35289931,
+          "sha256": "f76decfa1c7291c28312fe882f4324a8aaa3bd8b2ec11fbf899bb34e979e253b"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 33953237,
+          "sha256": "205925a9858de7cc96c537b810cc19942039f9d330e66c2df70913c7cfea3587"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 4770661,
+          "sha256": "f3c7a7a8ffb22f8110288b103916364ba1f3eb946ed0c68fc2cb67f598f84657"
+        }
+      }
+    },
+    {
+      "name": "10 1/125",
+      "bbox": [
+        886,
+        410,
+        9398,
+        7096
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 255849,
+          "sha256": "82b5efcac21eae41e31fec9d79f949b444f6f659620d324984b3e1c0dfe34409"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 40224658,
+          "sha256": "19d4670e7fa82372e4db01d97e16d86069616870054fc1c3f4296360c8721582"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 40066450,
+          "sha256": "e534e760a8bf36e9f71e75de10d64e47c9bcd5e9607606ade8b496626f0e4b6c"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 38816956,
+          "sha256": "7e8eb131a6532085aad0cfe8495c418e93fe2d4edd7d2847d1dcd57fd3998a78"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 6842175,
+          "sha256": "e8232fc78b4c0d2429df5af7a81d796ee52dd5e3f0e9e63129102b927638e406"
+        }
+      }
+    },
+    {
+      "name": "09 1/60 x2",
+      "bbox": [
+        1423,
+        908,
+        9126,
+        6765
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215339,
+          "sha256": "51621ef37ea117a2ec9c87f55a076c0d0db5d6fa88da51c24ba35d3f68fdaeb0"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 46318915,
+          "sha256": "8f7f88615bbe3e7cb6be6eaf20566d0a125c3122d16e86b6758a542b7d87ba25"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 41476654,
+          "sha256": "bcaaea44ecee3382fa33c4421be9e6f3953a2f259f380c05cb1ccad331772446"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 41070517,
+          "sha256": "6259ba85e793103173dd04d6606b6a1fb2dda7b13c44d9a99eb2485deb876da0"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 5684449,
+          "sha256": "489d1082f5f3de7a1ad6b9d7433784581f77d0c79e519b71ac0cf94f60cb173a"
+        }
+      }
+    },
+    {
+      "name": "08 1/30 x4 quar",
+      "bbox": [
+        1422,
+        909,
+        9126,
+        6766
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215039,
+          "sha256": "5c1495fdbac59e7a4eb889dc76fe92d034d26044a08b3660193cbebb2ffc310a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 48969057,
+          "sha256": "39a12564d9ef4ed74612218929b6ca4865dc819a1d0abb16c0abf2d32e3d1631"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 47330488,
+          "sha256": "3cee7493696d489b6d2bb07d33a76d49795f38b2fc151a2c48051eebfbbaaf6b"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 46908877,
+          "sha256": "ffffceea6cf682b32e7a19e2436488d4a7b9f67af26b998efa92c36c5199925d"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 10432061,
+          "sha256": "5aa131974e3549a63a470d9f2cf122dc3ed68385dbcea9d20c8c6db07a5e4c7a"
+        }
+      }
+    },
+    {
+      "name": "07 1/15 x2 quar",
+      "bbox": [
+        1423,
+        908,
+        9126,
+        6765
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215339,
+          "sha256": "51621ef37ea117a2ec9c87f55a076c0d0db5d6fa88da51c24ba35d3f68fdaeb0"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 51635946,
+          "sha256": "d38af5a814f3a4e219cc38c8da2ce81e4d4d3f1bf3a879f0f9c2d3c69078b5b1"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 47330841,
+          "sha256": "83880640e1aa40097df4618b742065bcb749806a0a42bc3468e70987b18cac33"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 47513116,
+          "sha256": "57b454487390da66fe0c0838a73d6236cd0c45db6f509e3b24e9b26693ddcf50"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 6569401,
+          "sha256": "f4786d105e615b2777ebbf4eea35691c99ec388a2b7f2faf0d2a400f440d3ba9"
+        }
+      }
+    },
+    {
+      "name": "06 1/8 x4 quar",
+      "bbox": [
+        1422,
+        909,
+        9126,
+        6766
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215039,
+          "sha256": "5c1495fdbac59e7a4eb889dc76fe92d034d26044a08b3660193cbebb2ffc310a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 51814342,
+          "sha256": "0acfa91b5b0c7f893cffd57dd9d7503f70723da5da1dead5dc7f23e5c4cce305"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 50735325,
+          "sha256": "d7f48269078918521413f15100dabc7b45bd80a6d082865e89304bd3cc59eb1d"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 50530806,
+          "sha256": "bd8c10274b12292178ea35d195e9bf33c7df8182937b808dfc336a1471ce5941"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 7275301,
+          "sha256": "6c331f34909e77c482637b6c150401b31857bd51473276f4c9b7a12c615b8521"
+        }
+      }
+    },
+    {
+      "name": "05 1/4 x2 quar",
+      "bbox": [
+        1423,
+        908,
+        9126,
+        6765
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215339,
+          "sha256": "51621ef37ea117a2ec9c87f55a076c0d0db5d6fa88da51c24ba35d3f68fdaeb0"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 49725503,
+          "sha256": "3ec40cfb7a91c31d4495a2b47b204124e7a2cd1afadf06564289a29194319114"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 51167407,
+          "sha256": "fecc50a9c9bcbeb3b7ad97d8d4dd3e4a5e8db02ccba937574fb74365ac90b97b"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 50593697,
+          "sha256": "10fcd766851d8923e4f064f7210eb40ad46c2cd437a14d6be7c9fd35c4689312"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 14117109,
+          "sha256": "b23c81f2b32ef5cbf8e223b678935f06a2c1730215e7e054d35402bdfd2931f4"
+        }
+      }
+    },
+    {
+      "name": "04 1/2 x4 quar",
+      "bbox": [
+        1422,
+        909,
+        9126,
+        6766
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215039,
+          "sha256": "5c1495fdbac59e7a4eb889dc76fe92d034d26044a08b3660193cbebb2ffc310a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 55033264,
+          "sha256": "4be3a37c4ce6870456d42e691c22e36be2d95dbf7d35443922a340ce446d671c"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 51094954,
+          "sha256": "71111d41dfe907d96e09339680076601c385c8095d8488205ae2eabcfa2fb267"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 51053779,
+          "sha256": "a7038620073da4eaf5c153d0d7191819aec744dba1f7076f182fb1babc172dbc"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 10001410,
+          "sha256": "c4b7802805c56a9cc19b97765f5562b42d7e6758574de133a2ab843671e4729d"
+        }
+      }
+    },
+    {
+      "name": "03 1s x2 quar",
+      "bbox": [
+        1423,
+        908,
+        9126,
+        6765
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215339,
+          "sha256": "51621ef37ea117a2ec9c87f55a076c0d0db5d6fa88da51c24ba35d3f68fdaeb0"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 51470092,
+          "sha256": "d16586a0d12d4d2a368ce39ca1fa90ce070c784e94c4e04b6b450fac32d134dc"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 51747277,
+          "sha256": "b59eb9ea265502b11bb1629914c62d0a93b02742c2207f46058d25e671f021b9"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 51359576,
+          "sha256": "fe1457162ae526c41f26ed22006f26f98c5ddceff671de3511573d168b72ca86"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 14069410,
+          "sha256": "4426adfd6b54445df6f8300bd30286367409ccb1034fd38b4658481c69c1ec8c"
+        }
+      }
+    },
+    {
+      "name": "02 2s x3 quar",
+      "bbox": [
+        1424,
+        907,
+        9127,
+        6763
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "70d9349805f1a68676f639a5e87148cdcd1ea77615dd61c79110b37681c90454",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215133,
+          "sha256": "f23c29aa265010357c626a8dca9869bc53aa5b390109a653eff3fad8c63d32dc"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 50331738,
+          "sha256": "0fec0182ccbaa1d1128466185001a294f832d148b85368a34ead40bc0cfb1e35"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 50749853,
+          "sha256": "1d17c8adddef8a240fbe8c3e8cb3da56b9c7ab7857143795d56df18263ab9d10"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 50465564,
+          "sha256": "d5fe5b1543c46eb781fb0a59ece2c0c33630d6d09e982de21a5cb238bd4d7c62"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 15180025,
+          "sha256": "73dda0afcaa6a87becef42285beb1979606427a1a6c71af93d36e369955efb79"
+        }
+      }
+    },
+    {
+      "name": "01 10.3s x3 quar",
+      "bbox": [
+        1423,
+        908,
+        9127,
+        6765
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "05db99c9e2b0e0a4a3ef2a489c9ba97e0d0d14a963d153b55826883347e443e6",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 215316,
+          "sha256": "16003ed43e987517a683eeae21dfdc9e225d37933cbe4bee770ee1a1edf9a893"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 44537083,
+          "sha256": "ad14ba230a0fe8eb48595c218d700f82757b171ce6e8c7ac2b2f03471780830d"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 45137040,
+          "sha256": "f3a4bee34f27e62239af567a78a15d32fcee64d14cdbb91eb64ec140165eb899"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 45801501,
+          "sha256": "a31e9933b210629f247d2b76f92bff108d30178a8c61213f6b4f839916690e62"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 11023983,
+          "sha256": "45042255b1d2aec1ff1c8ce9ab60f40eb86d776ab388f94505d12ab3893088fe"
+        }
+      }
+    },
+    {
+      "name": "13 Sony >1s",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 182954,
+          "sha256": "8f63547cec7f01165ba992e5da14762980d57e97b8222da78c19d1d7f0335f52"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 83725223,
+          "sha256": "b5d188398b35cbb2441fc2ceb1c3cdefe2618331e93846b00daf94ceb3bcd198"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 84836029,
+          "sha256": "7e0f18c7f26fbb656da4dae83e6b5b93d233339001e32a94c130a45ef26a0e35"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 85601549,
+          "sha256": "880b84f5e919989bc7c168f81b6ca51982d61c8f151fe4294b332e0c6392398f"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 10036270,
+          "sha256": "ab766929a62ade9b11534bf22b7ccd2ebc1982348fd35f99c92f4564011dd889"
+        }
+      }
+    },
+    {
+      "name": "Fons per raig",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 182954,
+          "sha256": "8f63547cec7f01165ba992e5da14762980d57e97b8222da78c19d1d7f0335f52"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 57487239,
+          "sha256": "ac91b3cd3e1c803ebbfb6aef84c1e56f6cbf7a1375ef494c52d7675fdd47b44a"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 55881869,
+          "sha256": "8b05020e2092d6ed88f92815f3895faff4bc8399813a82c753c38ca87c05b324"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 52707763,
+          "sha256": "94c2e87b8ac636d4cfb197ccadba563790f42c2fcfb6b923ddcb23bac7c5fc04"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 31120831,
+          "sha256": "a430ffabc7d15ae99a7fb41f4d99bff737f7d3fcc081f7609aa822cf3e3bc60a"
+        }
+      }
+    },
+    {
+      "name": "Earthshine v2",
+      "bbox": [
+        4866,
+        3279,
+        5857,
+        4270
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 1116779,
+          "sha256": "829615230f915e131c5c10320cd9c5a4fc69f73220a4542f17e09fbaa352daf7"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 1116779,
+          "sha256": "829615230f915e131c5c10320cd9c5a4fc69f73220a4542f17e09fbaa352daf7"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 1116779,
+          "sha256": "829615230f915e131c5c10320cd9c5a4fc69f73220a4542f17e09fbaa352daf7"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 229163,
+          "sha256": "ed37374de3f707fa5874e8d0b75a5681851cd21b4b8d8806d7b22f57749873f2"
+        }
+      }
+    },
+    {
+      "name": "Compara D87",
+      "bbox": [
+        4866,
+        3279,
+        5857,
+        4270
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 1082951,
+          "sha256": "bcbf880fadcc09d7fc22a5988e369633bd76f2145fca99ca2d41df5cfb83f15f"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 1082951,
+          "sha256": "bcbf880fadcc09d7fc22a5988e369633bd76f2145fca99ca2d41df5cfb83f15f"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 1082951,
+          "sha256": "bcbf880fadcc09d7fc22a5988e369633bd76f2145fca99ca2d41df5cfb83f15f"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 229163,
+          "sha256": "ed37374de3f707fa5874e8d0b75a5681851cd21b4b8d8806d7b22f57749873f2"
+        }
+      }
+    },
+    {
+      "name": "Compara LROC",
+      "bbox": [
+        4866,
+        3279,
+        5857,
+        4270
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 1043672,
+          "sha256": "295e77cd1a31e2fea3b26832b156c6d88e9dbf42b4c57a5a5cc68ba6c6a64a55"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 1043672,
+          "sha256": "295e77cd1a31e2fea3b26832b156c6d88e9dbf42b4c57a5a5cc68ba6c6a64a55"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 1043672,
+          "sha256": "295e77cd1a31e2fea3b26832b156c6d88e9dbf42b4c57a5a5cc68ba6c6a64a55"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 229163,
+          "sha256": "ed37374de3f707fa5874e8d0b75a5681851cd21b4b8d8806d7b22f57749873f2"
+        }
+      }
+    },
+    {
+      "name": "Earthshine V24e",
+      "bbox": [
+        4866,
+        3279,
+        5857,
+        4270
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 1307418,
+          "sha256": "7d312e9522d7ad005248962762974963cbd3d49b588267a1f936919e4d2b62a6"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 1286355,
+          "sha256": "f8cb2b98a3071d52b228a534824cfd48adcfef130b4d2cb453bc825981d5eaa4"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 1267082,
+          "sha256": "52864fd437a6b81f00a1d98807b1beae08847463fb525530ecb354c32683e746"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 229398,
+          "sha256": "36a4175987f4f8a1dee7119fdd32cca430707a42962644731b92a71230a599fe"
+        }
+      }
+    },
+    {
+      "name": "00 Base amb cel",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 51491600,
+          "sha256": "11548c82eb69b166bd63f941c103147713ec4bc40adc4799f06769a24f2175fb"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 45012418,
+          "sha256": "40f52a26733a344f6dd31dae109499378b5fe5eb3b0eeb13a366e2ae5aa00a52"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 34581420,
+          "sha256": "0dce0b668bdce631b5847e9c10c110c84cf8530c44a8d84e2636117504e02f5e"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 177721,
+          "sha256": "93b8a2ac576989618213fdd8e02dbd3aff6fae894578fe8abecb3e5030933499"
+        }
+      }
+    },
+    {
+      "name": "00 Base (cel/4)",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.NORMAL",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 58198758,
+          "sha256": "095f6bb71536a3040ef3a71b389033dc28ab87b86dde932d8191a704f1b5dc75"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 52301775,
+          "sha256": "6d683b71f1b0f592a51ad8391f7e86f3b3037c9f91120d1341cd042069024c1a"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 40630341,
+          "sha256": "5739eee43e1b4400fde0949060cff0b89626387d440175fd644447d7ca097f35"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 177721,
+          "sha256": "93b8a2ac576989618213fdd8e02dbd3aff6fae894578fe8abecb3e5030933499"
+        }
+      }
+    },
+    {
+      "name": "03 ACHF azimutal 8-128 · V29",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "opacity": 38,
+      "blend": "BlendMode.OVERLAY",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 134179588,
+          "sha256": "6647fd7656ed2a0596e322bd5d6d9eb4b019cb7b9b9ad5648cae7f0186b4d5cd"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 134179588,
+          "sha256": "6647fd7656ed2a0596e322bd5d6d9eb4b019cb7b9b9ad5648cae7f0186b4d5cd"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 134179588,
+          "sha256": "6647fd7656ed2a0596e322bd5d6d9eb4b019cb7b9b9ad5648cae7f0186b4d5cd"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 1569105,
+          "sha256": "bf23f49136a6d82b7712e78fb2f74e5c03d08a1bd2fb9809718ced7f3e50869e"
+        }
+      }
+    },
+    {
+      "name": "01 ACHF fi 2-32 · V29",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "opacity": 36,
+      "blend": "BlendMode.OVERLAY",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 135732427,
+          "sha256": "509385cd2cab1ab194a85246b36818a5a3aeeb452651dbe23f2346792706dfe6"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 135732427,
+          "sha256": "509385cd2cab1ab194a85246b36818a5a3aeeb452651dbe23f2346792706dfe6"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 135732427,
+          "sha256": "509385cd2cab1ab194a85246b36818a5a3aeeb452651dbe23f2346792706dfe6"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 612415,
+          "sha256": "fec1beae7ea9463204dc68bd77f77b49e3a9064ca6d3d72d830a4c443444ebda"
+        }
+      }
+    },
+    {
+      "name": "02 Passa-alt 24 · V29",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "opacity": 20,
+      "blend": "BlendMode.OVERLAY",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 2,
+          "bytes": 153965,
+          "sha256": "538a622df2c4e1624f2b21455b3f5fa7f6aef6a2f79eb95ffb65d16d47cd8570"
+        },
+        "0": {
+          "compression": 2,
+          "bytes": 136668971,
+          "sha256": "0c3bf81405fa35b5fff1610bc7106f956f91b9c00cb43d2797a9d002208c1717"
+        },
+        "1": {
+          "compression": 2,
+          "bytes": 136668971,
+          "sha256": "0c3bf81405fa35b5fff1610bc7106f956f91b9c00cb43d2797a9d002208c1717"
+        },
+        "2": {
+          "compression": 2,
+          "bytes": 136668971,
+          "sha256": "0c3bf81405fa35b5fff1610bc7106f956f91b9c00cb43d2797a9d002208c1717"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 506786,
+          "sha256": "8320d7de8d49d33f4a3ffcd1c54a5623bf52fbd3a98335c4b4a8c7e150e1a9bf"
+        }
+      }
+    },
+    {
+      "name": "Estrelles",
+      "bbox": [
+        0,
+        0,
+        10551,
+        7506
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.LINEAR_DODGE",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 182954,
+          "sha256": "8f63547cec7f01165ba992e5da14762980d57e97b8222da78c19d1d7f0335f52"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 177678,
+          "sha256": "5b65b37d3c4c1d87d357ef8b19f5b427a30d67d85671510ac247c997e619a5bd"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 177816,
+          "sha256": "717965319ecfd057f1ab501aa40f64764bdcf8199205033ed6ae30d7c64cfdba"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 177772,
+          "sha256": "5593d5ac72514a05e46bd2f83960d74b3896736bcc182ab5018c0e5a092a0bb6"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 192847,
+          "sha256": "bcb6d7ac8cc1b1739b977d84f406e6b6cebb9dae1a21a9e61006a146396ca16f"
+        }
+      }
+    },
+    {
+      "name": "Reflex",
+      "bbox": [
+        4862,
+        3279,
+        5853,
+        4270
+      ],
+      "opacity": 255,
+      "blend": "BlendMode.LINEAR_DODGE",
+      "mask_sha256": "8ddbcdca96a806f2eca7f604edb72fbd6f117e7116982b155c6131a8415f512c",
+      "channels": {
+        "-1": {
+          "compression": 3,
+          "bytes": 3914,
+          "sha256": "66163b5593da469f430317e06da4f136e2f44f6e8bbc5056869cbdd8d798f09a"
+        },
+        "0": {
+          "compression": 3,
+          "bytes": 268358,
+          "sha256": "1b535676fa1aa41e8a0825327cb7276a8cdb2ccf07bb0c04d416d9d9732764db"
+        },
+        "1": {
+          "compression": 3,
+          "bytes": 254564,
+          "sha256": "67865a76606fee85b2b08ce85a6462995a96504e8d1711703fcdf31275f82c62"
+        },
+        "2": {
+          "compression": 3,
+          "bytes": 236339,
+          "sha256": "cce18f8a2a8fca7f91d6d096ff38b5ee6dc8043009e192afd2c2fc3f5de5fbff"
+        },
+        "-2": {
+          "compression": 3,
+          "bytes": 164059,
+          "sha256": "ba98ae588e5d517e6cd89c180485bff18636f46384fd530abe62c447e5b52c29"
+        }
+      }
+    }
+  ],
+  "delivery_config": {
+    "accepted_for_packaging": true,
+    "candidate": "full_amplitude_layers_natural_opacities",
+    "layers": {
+      "achf": {
+        "strength": 1,
+        "opacity_u8": 36
+      },
+      "passalt24": {
+        "strength": 1,
+        "opacity_u8": 20
+      },
+      "gran": {
+        "strength": 1,
+        "opacity_u8": 38
+      }
+    },
+    "support": "actual observed temporal union; wideG uses positivefiniteG; physicalouterkernel taper only",
+    "visual_review": "fullcanvas and1:1limb; angularfinal only; earlierisotropicpilotsrejected"
+  }
+}

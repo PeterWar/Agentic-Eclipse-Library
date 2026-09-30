@@ -1,0 +1,27 @@
+# Handoff — revisió visible de Pere i diagnòstic de difracció — 2026-09-11T22:50:26.017689+00:00
+
+**ATURADA DEMANADA PER PERE AL PUNT VISIBLE.** Missatge: «para quan tinguis el pròxim resultat visible per ensenyar al photoshop, vull veure com vas si us plau». La V49 és l’últim resultat fotogràfic; les proves posteriors no han produït cap millora visual qualificada. S’ha dit expressament a Pere. No presentar les còpies de revisió com una V50 o una correcció nova. No reprendre la recerca sense una nova indicació de Pere. L’objectiu global continua incomplet; no s’ha marcat complet ni bloquejat.
+
+## Què queda obert a Photoshop
+
+- Document1596 `REVISIO_V49_sense_modificar.psb`, primer pla, ordre native Actual Pixels executada.
+- Document1593 `REVISIO_V48_sense_modificar.psb`, referència disponible en una altra pestanya.
+- Fitxers a `/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_diffraction_20260912`. Còpies byte a byte dels productes guardats V48/V49, amb els mateixos SHA. Porta Photoshop: `OBRE 10551 px x 7506 px · 25 capes` i `OBRE 10551 px x 7506 px · 26 capes`; segon lector ImageMagick RGB16, dimensions correctes. Vista sencera i lunar del readback V49 inspeccionades.
+- Quatre documents previs conservats: IDs79 V45_Fonts,140 V46_Detall,1275 V47 i1297 V48. Els estats saved/path/dimensions/ID coincideixen abans/després. No se n’ha guardat ni tancat cap. Això no és un hash dels píxels vius sense desar.
+- Les dues còpies obertes es lliuren a Pere per inspecció: no són documents temporals pendents de tancar. Cap procés propi de càlcul queda corrent. R0/R1/R2 contenen els rebuts. El CUA va quedar pendent de permisos; no s’ha insistit ni n’ha depès l’obertura, feta per l’API nativa ja disponible.
+
+Producte V49 `/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes interiors/Earthshine_V49.psb`, SHA `21896b1b40bfd2ba0c13aec07491bebbaf05f4f91dbe2698957e392b3928bc2d`. Camera Raw i originals intactes. Informe `/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_diffraction_20260912/RESULTAT.md`, represa `/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_diffraction_20260912/REPRESA.md`, manifest `/Users/USUARI/Downloads/Eclipse 2026/research/tools/earthshine_diffraction_20260912/delivery_manifest.json`.
+
+## Resultats que no cal repetir
+
+1. Vixen VSD90SS: pupil·la nominal90mm i escala mesurada2,1494813525884373arcsec/píxel. Banda declarada500/550/600nm, no resposta espectral Canon mesurada. Airy ideal a550nm: energia fora4/12px 2,9425%/0,9978%; cascada anterior4/12:2,9537%/0,8839%. Motiva una hipòtesi, no identifica PSF. **No sumar Airy i les gaussianes automàticament:** possible doble recompte.
+2. A1: inversió directa sobre presa mostrejada RMS4,17–5,28G FAIL. Suavitzada sigma2 passa només contra un objectiu també suavitzat. A2 demostra que falla respecte de la imatge completa (centenarsG). No promoure aquell PASS limitat.
+3. A2/A3:21camps D0 sense cap píxel censurat, fases reals i pesos congelats. La mitjana de preses invertides redueix l’error però no passa totes les meitats/espectres. Prior blanc alias-aware tampoc. És qualificació numèrica, no l’exclusió admissible dels altres RAW en un producte final.
+4. A4: resol quatre aliases Fourier conjuntament, sense prior de textura.36/36 PASS en escena sintètica comuna, registre exacte, sigma0,97 i frontera periòdica; RMS màxim0,008873G. Condicionament4,92/15,11/6,91; amplificació de variància d’alguns coeficients fins24 a l’inici.
+5. **A5 refusa l’aplicació directa:** error simulat0,01px u/v produeix RMS28,38/54,99/37,35G; variaciósigma RMS0,05px:38,99/80,59/30,64G; variació1% de la protuberància sintètica:5,29/28,03/7,03G. No són errors mesurats de les fotos. La mateixa escena i PSF al llarg de la totalitat és una hipòtesi inadequada per invertir el stack.
+6. B0/B1: perfils reals12sectors de21preses, bins0,5px; ajust a distància<=−27 o>=−3, reserva−25..−6. Model gaussià contra gaussià+Airy, mateix nombre de paràmetres. Cinc preses èpoques2/5 entrenen residu lunar;16validen sis èpoques.550nm: reduccions52,46/20,31/−1,30/30,32/40,18/−1,47%;4/6gates i50/72sectors.500/600 també fallen.
+7. **B2/inspecció visual invaliden la lectura física dels percentatges B0/B1.** L’exterior lineal no reprodueix el pic de cromosfera i la caiguda radial. El fit compensa amb un pendent lunar que les dades no sostenen.103/252Airy tenen chi2mitjà>5;71/252discrepen>3sigmes condicionals del pendent profund;13tocant límits. ExempleC2 572A2960sector6: el predictor dins la Lluna puja a desenes de milersG davant pocs milers observats. Flags retrospectius, no nous gates predeclarats. No usar aquestes restes, shifts o sigma com a font, geometria o mesura de seeing. Cap evidència favorable de recuperació nova.
+
+Les figures són diagnòstiques; els fantomes mai entren a una font lunar. La banda dels últims6px, la censura dels llargs i la corroboració entre telescopis continuen obertes. Si Pere autoritza reprendre, conservar D0 i l’operador natiu, fer un model directe amb llum solar temporal pròpia de cada presa i nucli comprovat, abans d’estimar una radiància lunar comuna. No arreglar el perfil forçant a mà el pendent lunar ni afegir una màscara. No repetir aquest paquet de proves.
+
+Z0 preserva46inputs consumits,28RAW, originals V46/V47/V48, V49 i3XMP;8autoritats congelades abans d’actualitzar. Handoff explícit, zero processos propis, dues còpies de revisió deixades obertes deliberadament a Pere. La recerca s’atura al punt visible demanat.

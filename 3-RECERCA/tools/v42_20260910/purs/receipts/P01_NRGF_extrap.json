@@ -1,0 +1,40 @@
+{
+  "tag": "P01_NRGF_extrap",
+  "parameters": {
+    "annulus_width_px": 1,
+    "r_edge_px": 3736,
+    "r_edge_R": 8.479287671563851,
+    "r_in_px": 460,
+    "r_in_R": 1.0440236426443714,
+    "blend_px": 64.0,
+    "completeness_ref": 1.000012174620321,
+    "varP_edge": 1.0001750114168804,
+    "varP_in": 0.9857385812617379,
+    "n_inner_partial_rings": 0,
+    "count_min": 2,
+    "count_max": 23444,
+    "rhef_rank": "continuous radius: CDFs of the two neighbouring 1-px rings interpolated by the sub-pixel radial position",
+    "V38_variant": "mu/sigma of partial inner rings extrapolated (linear fit of ln mu, ln sigma in r over the 40 complete rings above r_in)",
+    "anells_parcials_extrapolats": 18,
+    "pendent_ln_mu_per_px": -0.020776709676753123,
+    "pendent_ln_sigma_per_px": -0.018353608774131176,
+    "anells_ajust": [
+      460,
+      500
+    ]
+  },
+  "physical_support_pixels": 70395270,
+  "float_sha256": "42cb25ac175149afbea15e491a77c5eba94adc7453c3fb0ba61847847f890445",
+  "display": {
+    "type": "one global affine LUT only; scientific float retained",
+    "black": -1.8661712214946746,
+    "white": 3.106220128059431,
+    "sample_percentiles": [
+      0.1,
+      99.9
+    ],
+    "clipped_low_fraction": 0.0009873816806157572,
+    "clipped_high_fraction": 0.0010041441704819088
+  },
+  "u16_sha256": "7d6435618926892aa97f4533f068f9d6d84cfa81f95e3de4aa4804a5eaf57a0e"
+}

@@ -1,0 +1,382 @@
+{
+  "coordinates": {
+    "common_sun": [
+      4048.0,
+      4480.0
+    ],
+    "final_sun": [
+      5361.768111973117,
+      3775.747534140857
+    ],
+    "M": [
+      [
+        0.6872474884120418,
+        -0.726423354299227,
+        5834.16690614171
+      ],
+      [
+        0.726423354299227,
+        0.6872474884120418,
+        -2243.6829521483614
+      ]
+    ]
+  },
+  "known_bad_controls": {
+    "0": {
+      "valid_rings": 60,
+      "peak_angle_deg": 0.0,
+      "peak_pearson": 1.0,
+      "at_zero_pearson": 1.0,
+      "null_180_pearson": -0.04935886338353157,
+      "zero_minus_far_p99": 0.8346691727638245,
+      "PASS": true
+    },
+    "1": {
+      "valid_rings": 60,
+      "peak_angle_deg": 1.0,
+      "peak_pearson": 1.0,
+      "at_zero_pearson": 0.9360134601593018,
+      "null_180_pearson": -0.04700964689254761,
+      "zero_minus_far_p99": 0.7706825733184814,
+      "PASS": false
+    },
+    "-1": {
+      "valid_rings": 60,
+      "peak_angle_deg": -1.0,
+      "peak_pearson": 1.0,
+      "at_zero_pearson": 0.9360133409500122,
+      "null_180_pearson": -0.047009654343128204,
+      "zero_minus_far_p99": 0.7706824541091919,
+      "PASS": false
+    },
+    "180": {
+      "valid_rings": 60,
+      "peak_angle_deg": -180.0,
+      "peak_pearson": 1.0,
+      "at_zero_pearson": -0.04935887083411217,
+      "null_180_pearson": 1.0,
+      "zero_minus_far_p99": -0.889728844165802,
+      "PASS": false
+    }
+  },
+  "layers": [
+    {
+      "i": 0,
+      "name": "12 1/3200 perles",
+      "coordinate_frame": "C2 protected pearls",
+      "solar_alignment": "N/A; preserve source registration and verify channel/mask identity"
+    },
+    {
+      "i": 1,
+      "name": "11 1/500 limbe",
+      "coordinate_frame": "C2 protected lunar limb",
+      "solar_alignment": "N/A; preserve source registration and verify channel/mask identity"
+    },
+    {
+      "i": 2,
+      "name": "10 1/125",
+      "radius_range": [
+        1.1200000047683716,
+        1.5
+      ],
+      "valid_rings": 60,
+      "peak_angle_deg": 0.0,
+      "peak_pearson": 0.7687629461288452,
+      "at_zero_pearson": 0.7687629461288452,
+      "null_180_pearson": -0.17150041460990906,
+      "zero_minus_far_p99": 0.38481783866882324,
+      "PASS": true
+    },
+    {
+      "i": 3,
+      "name": "09 1/60 x2",
+      "radius_range": [
+        1.2000000476837158,
+        2.299999952316284
+      ],
+      "valid_rings": 60,
+      "peak_angle_deg": -0.25,
+      "peak_pearson": 0.8258192539215088,
+      "at_zero_pearson": 0.8247426748275757,
+      "null_180_pearson": -0.05375972017645836,
+      "zero_minus_far_p99": 0.5978010296821594,
+      "PASS": true
+    },
+    {
+      "i": 4,
+      "name": "08 1/30 x4 quar",
+      "radius_range": [
+        1.2000000476837158,
+        2.299999952316284
+      ],
+      "valid_rings": 60,
+      "peak_angle_deg": -0.25,
+      "peak_pearson": 0.8856844902038574,
+      "at_zero_pearson": 0.8840047121047974,
+      "null_180_pearson": -0.051848072558641434,
+      "zero_minus_far_p99": 0.6565592288970947,
+      "PASS": true
+    },
+    {
+      "i": 5,
+      "name": "07 1/15 x2 quar",
+      "radius_range": [
+        1.2000000476837158,
+        2.299999952316284
+      ],
+      "valid_rings": 60,
+      "peak_angle_deg": -0.25,
+      "peak_pearson": 0.9103171825408936,
+      "at_zero_pearson": 0.9098902344703674,
+      "null_180_pearson": -0.046778760850429535,
+      "zero_minus_far_p99": 0.6884790658950806,
+      "PASS": true
+    },
+    {
+      "i": 6,
+      "name": "06 1/8 x4 quar",
+      "radius_range": [
+        1.2000000476837158,
+        2.299999952316284
+      ],
+      "valid_rings": 60,
+      "peak_angle_deg": -0.25,
+      "peak_pearson": 0.9405849575996399,
+      "at_zero_pearson": 0.940380871295929,
+      "null_180_pearson": -0.04270034283399582,
+      "zero_minus_far_p99": 0.7408275008201599,
+      "PASS": true
+    },
+    {
+      "i": 7,
+      "name": "05 1/4 x2 quar",
+      "radius_range": [
+        1.2000000476837158,
+        2.299999952316284
+      ],
+      "valid_rings": 60,
+      "peak_angle_deg": 0.0,
+      "peak_pearson": 0.9495230913162231,
+      "at_zero_pearson": 0.9495230913162231,
+      "null_180_pearson": -0.034853577613830566,
+      "zero_minus_far_p99": 0.7600452899932861,
+      "PASS": true
+    },
+    {
+      "i": 8,
+      "name": "04 1/2 x4 quar",
+      "radius_range": [
+        1.2000000476837158,
+        2.299999952316284
+      ],
+      "valid_rings": 60,
+      "peak_angle_deg": 0.0,
+      "peak_pearson": 0.9341921806335449,
+      "at_zero_pearson": 0.9341921806335449,
+      "null_180_pearson": -0.028032703325152397,
+      "zero_minus_far_p99": 0.7537227869033813,
+      "PASS": true
+    },
+    {
+      "i": 9,
+      "name": "03 1s x2 quar",
+      "radius_range": [
+        1.2000000476837158,
+        2.299999952316284
+      ],
+      "valid_rings": 60,
+      "peak_angle_deg": 0.0,
+      "peak_pearson": 0.8873361349105835,
+      "at_zero_pearson": 0.8873361349105835,
+      "null_180_pearson": -0.021209541708230972,
+      "zero_minus_far_p99": 0.724358856678009,
+      "PASS": true
+    },
+    {
+      "i": 10,
+      "name": "02 2s x3 quar",
+      "radius_range": [
+        1.2000000476837158,
+        2.299999952316284
+      ],
+      "valid_rings": 60,
+      "peak_angle_deg": 0.0,
+      "peak_pearson": 0.8013628721237183,
+      "at_zero_pearson": 0.8013628721237183,
+      "null_180_pearson": -0.015435767360031605,
+      "zero_minus_far_p99": 0.6592898368835449,
+      "PASS": true
+    },
+    {
+      "i": 11,
+      "name": "01 10.3s x3 quar",
+      "radius_range": [
+        1.2000000476837158,
+        2.299999952316284
+      ],
+      "valid_rings": 52,
+      "peak_angle_deg": 0.25,
+      "peak_pearson": 0.5274010300636292,
+      "at_zero_pearson": 0.5246577262878418,
+      "null_180_pearson": -0.038836769759655,
+      "zero_minus_far_p99": 0.35647183656692505,
+      "PASS": true
+    },
+    {
+      "i": 12,
+      "name": "13 Sony >1s",
+      "radius_range": [
+        3.0,
+        5.5
+      ],
+      "valid_rings": 60,
+      "peak_angle_deg": -0.5,
+      "peak_pearson": 0.6506505608558655,
+      "at_zero_pearson": 0.6334768533706665,
+      "null_180_pearson": -0.008631628938019276,
+      "zero_minus_far_p99": 0.5332061648368835,
+      "PASS": true
+    },
+    {
+      "i": 13,
+      "name": "Fons per raig",
+      "radius_range": [
+        5.0,
+        8.0
+      ],
+      "valid_rings": 60,
+      "peak_angle_deg": -0.75,
+      "peak_pearson": 0.36661243438720703,
+      "at_zero_pearson": 0.354870468378067,
+      "null_180_pearson": -0.1339876800775528,
+      "zero_minus_far_p99": 0.19432848691940308,
+      "PASS": false
+    },
+    {
+      "i": 14,
+      "name": "Earthshine v2",
+      "coordinate_frame": "lunar earthshine",
+      "solar_alignment": "N/A; preserve source registration and verify channel/mask identity"
+    },
+    {
+      "i": 15,
+      "name": "Compara D87",
+      "coordinate_frame": "external comparison image",
+      "solar_alignment": "N/A; preserve source registration and verify channel/mask identity"
+    },
+    {
+      "i": 16,
+      "name": "Compara LROC",
+      "coordinate_frame": "lunar LROC comparison",
+      "solar_alignment": "N/A; preserve source registration and verify channel/mask identity"
+    },
+    {
+      "i": 17,
+      "name": "Earthshine V24e",
+      "coordinate_frame": "lunar earthshine V24e",
+      "solar_alignment": "N/A; preserve source registration and verify channel/mask identity"
+    },
+    {
+      "i": 18,
+      "name": "00 Base amb cel",
+      "radius_range": [
+        1.2000000476837158,
+        2.299999952316284
+      ],
+      "valid_rings": 60,
+      "peak_angle_deg": 0.0,
+      "peak_pearson": 0.9975171089172363,
+      "at_zero_pearson": 0.9975171089172363,
+      "null_180_pearson": -0.06502200663089752,
+      "zero_minus_far_p99": 0.823758602142334,
+      "PASS": true
+    },
+    {
+      "i": 19,
+      "name": "00 Base (cel/4)",
+      "radius_range": [
+        1.2000000476837158,
+        2.299999952316284
+      ],
+      "valid_rings": 60,
+      "peak_angle_deg": 0.0,
+      "peak_pearson": 0.9927467703819275,
+      "at_zero_pearson": 0.9927467703819275,
+      "null_180_pearson": -0.06506165117025375,
+      "zero_minus_far_p99": 0.8191453218460083,
+      "PASS": true
+    },
+    {
+      "i": 20,
+      "name": "04 ACHF ample 9R",
+      "radius_range": [
+        1.2000000476837158,
+        2.299999952316284
+      ],
+      "valid_rings": 60,
+      "peak_angle_deg": 0.75,
+      "peak_pearson": 0.3766535818576813,
+      "at_zero_pearson": 0.37597671151161194,
+      "null_180_pearson": 0.061966732144355774,
+      "zero_minus_far_p99": 0.06360825896263123,
+      "PASS": false
+    },
+    {
+      "i": 21,
+      "name": "03 ACHF gran azimutal",
+      "radius_range": [
+        1.2000000476837158,
+        2.299999952316284
+      ],
+      "valid_rings": 60,
+      "peak_angle_deg": 0.0,
+      "peak_pearson": 0.9632042050361633,
+      "at_zero_pearson": 0.9632042050361633,
+      "null_180_pearson": -0.08019763976335526,
+      "zero_minus_far_p99": 0.7876623272895813,
+      "PASS": true
+    },
+    {
+      "i": 22,
+      "name": "01 ACHF fi 2-32",
+      "radius_range": [
+        1.2000000476837158,
+        2.299999952316284
+      ],
+      "valid_rings": 60,
+      "peak_angle_deg": 0.0,
+      "peak_pearson": 0.6069381833076477,
+      "at_zero_pearson": 0.6069381833076477,
+      "null_180_pearson": -0.026469698175787926,
+      "zero_minus_far_p99": 0.5611733794212341,
+      "PASS": true
+    },
+    {
+      "i": 23,
+      "name": "02 Passa-alt 24",
+      "radius_range": [
+        1.2000000476837158,
+        2.299999952316284
+      ],
+      "valid_rings": 60,
+      "peak_angle_deg": 0.0,
+      "peak_pearson": 0.621654212474823,
+      "at_zero_pearson": 0.621654212474823,
+      "null_180_pearson": -0.028220945969223976,
+      "zero_minus_far_p99": 0.5751965641975403,
+      "PASS": true
+    },
+    {
+      "i": 24,
+      "name": "Estrelles",
+      "coordinate_frame": "stellar coordinates",
+      "solar_alignment": "N/A; preserve source registration and verify channel/mask identity"
+    },
+    {
+      "i": 25,
+      "name": "Reflex",
+      "coordinate_frame": "local lens-reflection correction",
+      "solar_alignment": "N/A; preserve source registration and verify channel/mask identity"
+    }
+  ]
+}

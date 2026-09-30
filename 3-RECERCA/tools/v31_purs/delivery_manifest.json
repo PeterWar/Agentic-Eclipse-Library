@@ -1,0 +1,108 @@
+{
+  "version": "V31_FiltresPurs",
+  "published_utc": "2026-09-06T17:44:50.267407+00:00",
+  "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V31_FiltresPurs.psb",
+  "sha256": "89d509bcc53982307cf9e3d78b0a84ed7548f4045e8cbb95d9f8594e4e877dfd",
+  "bytes": 9593292748,
+  "size": [
+    10551,
+    7506
+  ],
+  "depth": 16,
+  "layers": 40,
+  "container_PASS": true,
+  "scientific_status": "VERIFIED_COMPARISON_WITH_VISIBLE_LIMITATIONS",
+  "artifact_free": false,
+  "preserved_original_path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V31.psb",
+  "preserved_original_sha256": "bbbb2b93a49a0e09226b89467754f6364d1c6b929bc147bd34387a1c66d7affe",
+  "backup": {
+    "path": "/Users/USUARI/Desktop/Eclipse 2026/Projecte photoshop/1-Unint Capes/Capes Totals/V31_abans_filtres_purs_20260906.psb",
+    "sha256": "bbbb2b93a49a0e09226b89467754f6364d1c6b929bc147bd34387a1c66d7affe",
+    "scope": "saved disk version; not the unsaved Photoshop changes"
+  },
+  "filename_reason": "Photoshop V31.psb was open with saved=false; publish under new name to protect user work",
+  "original_layers_preserved_exactly": 30,
+  "new_independent_views": 10,
+  "default": "all new views OFF; original30 visibility and merged pixels unchanged",
+  "source": "corrected linear G, global Sony-to-Vixen gain0.3411462604999542",
+  "FOV": "unchanged native10551x7506",
+  "RAW_recalibration": false,
+  "photoshop_gate": {
+    "original_dialog_mode": "DialogModes.NO",
+    "restored": true,
+    "target": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/staging/V31.psb",
+    "closed_without_saving": true,
+    "result": "OBRE 10551 px x 7506 px · 40 capes"
+  },
+  "output": "/Users/USUARI/Desktop/Eclipse 2026/IA/output/v31_purs_20260906",
+  "report": "/Users/USUARI/Downloads/Eclipse 2026/research/142_V31_FILTRES_PURS_20260906.md",
+  "handoff": "/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-06_V31_FILTRES_PURS.md",
+  "receipts": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/receipts",
+  "source_code_sha256": {
+    "research/tools/v31_purs/qa_views.py": "1c8ed39b64e6764a0b782c940abc1590f185aaf9ded2e1eb34ac837212cc510f",
+    "research/tools/v31_purs/package.py": "fa6e3dcf2e7064cd0af820c4da5de6df1dc2183cbb7f63fb31fe41d4ab1d5073",
+    "research/tools/v31_purs/radial_filters.py": "bc666dfed3ae16aefd27ebc03542af8c3c8034c22a3c694de82ce986ef6a25b7",
+    "research/tools/v31_purs/nafe_filter.py": "5467cc273e6252a23438d4be8350f3440e5babebc922c4e1290b44e54fbee71b",
+    "research/tools/v31_purs/qa_injection.py": "3a86e9701d10d23e52bc64f4803134e09c9d6e0850172a428655ba25f8007e17",
+    "research/tools/v31_purs/sparse_conv.cpp": "ddfb17f496df182dba3b4fb7a4f09f1b50466dafd060fb33598db0bfc8161579",
+    "research/tools/v31_purs/photoshop_gate.py": "e6a4bb1ba0ea73c8aa7f42fc7f022fb8da9dd39232404deb333ebdb321a0f5bf",
+    "research/tools/v31_purs/wow_filters.py": "41920085bbf75ebf9223f084a631564936cdcb1caaf6d77dab74c1185b2221b4",
+    "research/tools/v31_purs/common.py": "01c72adae8006fef22a752702456239dc309263539e9f2191b97cbf0556c5aa4",
+    "research/tools/v31_purs/polar_filters.py": "3f645e11cdf0768ee2a7cb019b2781558ea25f59cf6a279c4fae347675a2500a",
+    "research/tools/v31_purs/build_base.py": "28899d256c1be8e44ba555f3be2717dce0c5c73c174b8a88770d0fc30f3d27f5",
+    "research/tools/v31_purs/nafe_native.cpp": "3b696599d49367359dc37b7c7b112833f4579924872d36c8183ea2df2241a9e9",
+    "research/tools/v31_purs/qa_science.py": "413796ed5610e7a28cadfa11ba473e8c343ae7cc45fc7e101af6b250bf86f6c3",
+    "research/tools/v31_purs/local_filters.py": "a3ab14320ab085c156636ada947eeb8ac0189fed3bbb358b153c056a2c7b6544",
+    "research/tools/v31_purs/conditional_filters.py": "4ca254c5366d5d85c848e6843ceaab85b61cccfefba46c166ecec68791cc377e",
+    "research/tools/v31_purs/publish.py": "49c30e9a38ef8170ab8fe46a0677e0a6de398969301436affbf4cee4f70ba4c7"
+  },
+  "documentation_snapshots": [
+    {
+      "original": "/Users/USUARI/Downloads/Eclipse 2026/AGENTS.md",
+      "snapshot": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/docs_before/ROOT_AGENTS.md",
+      "sha256": "1fb763890a2c79f9d647a53873fc125c43be3a26dca33fc08ebf66787586fdce"
+    },
+    {
+      "original": "/Users/USUARI/Downloads/Eclipse 2026/CLAUDE.md",
+      "snapshot": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/docs_before/ROOT_CLAUDE.md",
+      "sha256": "ed03349b5f31dfe27a78c50109f946980d42856e8d5841e18e55b0b4f97913f7"
+    },
+    {
+      "original": "/Users/USUARI/Downloads/Eclipse 2026/research/README.md",
+      "snapshot": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/docs_before/ROOT_README.md",
+      "sha256": "000762e02119cc07fe32825f02fda89abf752a17a5f8b6c8b6ed3f40355cdc4c"
+    },
+    {
+      "original": "/Users/USUARI/Desktop/Eclipse 2026/IA/ACTIVE.json",
+      "snapshot": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/docs_before/IA_ACTIVE.json",
+      "sha256": "3d339d5696368d8e1487258f23c55e289eed9ba582e0b6fbdd1375efa99ab30b"
+    },
+    {
+      "original": "/Users/USUARI/Desktop/Eclipse 2026/IA/README.md",
+      "snapshot": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/docs_before/IA_README.md",
+      "sha256": "5e5a3791c6259e77e7a29cd82d70f53c27447ed55b618c16ad2f11d0b2211ccc"
+    },
+    {
+      "original": "/Users/USUARI/Desktop/Eclipse 2026/IA/ESTAT_ACTUAL.md",
+      "snapshot": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/docs_before/IA_ESTAT_ACTUAL.md",
+      "sha256": "85d6ffb9178b9497adbbda17db8605e30d26128802ad60dbed6c92bbc75f6458"
+    },
+    {
+      "original": "/Users/USUARI/Desktop/Eclipse 2026/IA/MAPA_RUTES_I_OUTPUTS.md",
+      "snapshot": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/docs_before/IA_MAPA_RUTES_I_OUTPUTS.md",
+      "sha256": "110d66c46c5f72cb0f8a3673a7588d8553f0a343ed97c0d6df348e741211bd4d"
+    },
+    {
+      "original": "/Users/USUARI/Desktop/Eclipse 2026/IA/Coordinació/HANDOFF_VIGENT.md",
+      "snapshot": "/Users/USUARI/Downloads/Eclipse 2026/research/tools/v31_purs/docs_before/IA_HANDOFF_VIGENT.md",
+      "sha256": "8e850345732214d615d33e0f8909916d1899978959ed06fd4c773916eb32fd8a"
+    }
+  ],
+  "limits": [
+    "No guarantee of all solar arcs eliminated; visible limitations documented.",
+    "Pure filters use intrinsic published operations plus declared numerical boundary handling; no added H1/tanh/external high-pass/denoise/circular fade.",
+    "FNRGF domain-only array, missing angular sectors not invented.",
+    "NAFE-VN and RLMF deferred for unverifiable specifications; SiRGraF lacks required temporal input; full Corona ACHF not reproduced.",
+    "G monochrome scientific views; pure float arrays retained before display LUT."
+  ]
+}
