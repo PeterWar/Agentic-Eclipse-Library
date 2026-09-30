@@ -7,7 +7,8 @@ are: numbered in the order they were written, with later notes correcting earlie
 
 - `README.md` is the Catalan index. Notes `00`–`70` cover the capture side (camera control, exposure ladders,
   timing); `71` onwards the post-processing (calibration, registration, linear HDR fusion, filters, artefacts,
-  earthshine, stars, the lunar limb).
+  earthshine, stars, the lunar limb). `179` describes the runnable package `ael` (structure images, unrolled
+  views, coronal motion) and what it found in the 2026 data.
 - `tools/` holds the processing code, one folder per stage or image version. Only text files are published: the
   data arrays, logs and images they read and write are not.
 - `FONTS.md` lists sources with links. `PAPERS_CONSULTED.md` lists the papers read; the PDFs are **not** included

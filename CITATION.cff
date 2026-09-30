@@ -1,12 +1,12 @@
 cff-version: 1.2.0
 message: "If you use this work or publish an image made with it, a mention would be appreciated. This is a courtesy request, not a condition of the licence: Processed with Agentic Eclipse Library by Pere Guerra — https://github.com/PeterWar/Agentic-Eclipse-Library"
-title: "Agentic Eclipse Library: skills, research notes and code for processing the total solar eclipse of 12 August 2026"
+title: "Agentic Eclipse Library: skills, research notes and code for processing the total solar eclipse of 12 August 2026, and a runnable package for structure images, unrolled views and coronal motion"
 type: software
 authors:
   - family-names: Guerra Serra
     given-names: Pere
 date-released: 2026-09-30
-version: 1.0.0
+version: 1.1.0
 license: MIT
 repository-code: "https://github.com/PeterWar/Agentic-Eclipse-Library"
 keywords:

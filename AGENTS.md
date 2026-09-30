@@ -19,6 +19,7 @@ to start, and which working rules made the difference.
 | Darks, flats, stacking, noise, linearity, weights | `skills/apilatge-imatges-eclipsi/SKILL.md` |
 | Registration, HDR fusion, filters, tone curve, Photoshop layers, gates | `skills/postprocessat-corona/SKILL.md` |
 | Rings, seams, ghosts, striping, limb fringes, marks drawn by the photographer | `skills/corregeix-artefactes/SKILL.md` |
+| Structure images, unrolled (polar) views, coronal motion and animations | `skills/corona-visualizations/SKILL.md`, then `README_AEL.md` and `python -m ael selftest` |
 | Background, dated findings, why a decision was taken | `3-RECERCA/README.md` (index), then the numbered note |
 | Code of a given stage or image version | `3-RECERCA/tools/<stage-or-version>/` |
 | How the human–AI collaboration went | `docs/LESSONS_FOR_MODEL_DEVELOPERS.md` |
@@ -35,7 +36,8 @@ pointers to evidence, not as files to open. Absolute paths were rewritten to `/U
 numbers were replaced by `[SÈRIE]`.
 
 The scripts therefore do **not** run end to end from this repository. Do not tell a user they will; adapt them to
-the user's own data and say which constants you changed.
+the user's own data and say which constants you changed. The exception is the package `ael/` (since 1.1.0): it runs
+on the user's own data; start with `python -m ael selftest`, and never skip its visual-check sheets.
 
 ## Working rules that made the difference
 

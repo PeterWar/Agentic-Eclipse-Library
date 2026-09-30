@@ -7,9 +7,31 @@ Author and project owner: **Pere Guerra Serra**. The eclipse was photographed fr
 with two independent optical trains — a Vixen VSD90SS refractor with a Canon EOS R6 Mark III, and a Sony α7R IIIA
 with a 300 mm f/2.8 lens — both driven by [Eclipse Command](https://github.com/PeterWar/Eclipse-Command). The
 images were then processed over seven weeks by AI coding agents (Claude, from Anthropic, and Codex, from OpenAI)
-working under the author's direction: 123 versions of the image, 178 research notes and more than 3,000 scripts.
+working under the author's direction: 123 versions of the image, 179 research notes and more than 3,000 scripts.
 
-This repository is that work, published as it is.
+This repository is that work, published as it is — plus, since version 1.1.0, **a runnable package, `ael`**, that
+makes three modern corona products from anyone's eclipse data.
+
+## New in 1.1.0: `ael`, the part you can run
+
+| Product | What it is |
+|---|---|
+| **Structure image** | The corona's fine filaments from the limb to the edge of the field (the look made famous by Druckmüller's composites): mono, cool-toned, or in the data's own measured colour |
+| **Unrolled corona** | The corona in polar coordinates around the Sun or the Moon: the limb becomes a straight line and the streamers rise like curtains |
+| **Coronal motion** | Epochs of one totality aligned on the Sun, displacement vectors that reject sensor-fixed and Moon-fixed "motion", a visual-check sheet and GIF/MP4 animations |
+
+```
+pip install -e ".[raw]"
+python -m ael selftest                       # 11 tests with known truth, each gate with a negative control
+python -m ael structure --input composite.npy --valid valid.npy --geometry geometry.json --out out/
+python -m ael polar     --input out/structure_cool.tif --geometry out/structure_geometry.json --out out/
+python -m ael motion    --config motion_config.json --out out/     # see examples/motion_config_template.json
+```
+
+Every function reads only observed pixels; where there is no data the result is `NaN`, never a fill or a mirror.
+Details, and what the 2026 data taught (correlated noise, colour in linear light, a sensor pattern that looked
+like coronal motion), in [`README_AEL.md`](README_AEL.md). The agent's instructions for the three products are
+the skill [`skills/corona-visualizations/`](skills/corona-visualizations/) (in English).
 
 ## What is in it
 
@@ -19,7 +41,9 @@ This repository is that work, published as it is.
 | [`skills/apilatge-imatges-eclipsi/`](skills/apilatge-imatges-eclipsi/) | Linear calibration and stacking of eclipse RAW frames: darks, flats, pedestal, saturation, linearity, noise, weights, coverage | Catalan |
 | [`skills/postprocessat-corona/`](skills/postprocessat-corona/) | The post-processing method: registration by ephemeris, linear HDR fusion of the two trains, detail filters (NRGF, RHEF, MGN, WOW, ACHF and our own variants), tone curve, Photoshop layer files, external judge, gates and receipts, with a long log of traps | Catalan |
 | [`skills/corregeix-artefactes/`](skills/corregeix-artefactes/) | Finding and curing recurring artefacts at their root: lens ghosts, fixed-pattern striping, coverage edges, limb fringes, radial-profile rings, marks painted by the photographer | Catalan |
-| [`3-RECERCA/`](3-RECERCA/) | 177 numbered research notes, July–September 2026, with their corrections left in place: capture (camera control, exposure ladders, timing) and post-processing. Start at [`3-RECERCA/ABOUT_THESE_NOTES.md`](3-RECERCA/ABOUT_THESE_NOTES.md) | Catalan |
+| [`skills/corona-visualizations/`](skills/corona-visualizations/) | Structure images, unrolled views and coronal-motion analyses with the `ael` package, with their gates | English |
+| [`ael/`](ael/), [`tests/`](tests/), [`examples/`](examples/) | The runnable package (MIT), its tests with known truth and a configuration template | English |
+| [`3-RECERCA/`](3-RECERCA/) | 178 numbered research notes, July–September 2026, with their corrections left in place: capture (camera control, exposure ladders, timing) and post-processing. Start at [`3-RECERCA/ABOUT_THESE_NOTES.md`](3-RECERCA/ABOUT_THESE_NOTES.md) | Catalan |
 | [`3-RECERCA/tools/`](3-RECERCA/tools/) | The processing code: about 3,000 Python scripts, shell chains and Photoshop JSX, one folder per stage or version | Catalan comments |
 | [`docs/LESSONS_FOR_MODEL_DEVELOPERS.md`](docs/LESSONS_FOR_MODEL_DEVELOPERS.md) | Recurring AI failure modes seen in this project, what fixed them, and requests for model builders | English |
 | [`docs/REGISTRE_APORTACIONS_PERE_GUERRA_20260917.md`](docs/REGISTRE_APORTACIONS_PERE_GUERRA_20260917.md) | Dated record of the human contributions: method rules, defects found by eye, manual methods later formalised | Catalan |
@@ -40,9 +64,10 @@ This repository is that work, published as it is.
 
 ## Honest limits
 
-- **Not turnkey software.** The RAW frames, calibration frames, Photoshop files and intermediate data arrays are not
-  included, so the scripts will not run end to end as they are. Read them as a precise record of the method, and
-  adapt them to your own data.
+- **The research scripts are not turnkey software.** The RAW frames, calibration frames, Photoshop files and
+  intermediate data arrays are not included, so the scripts in `3-RECERCA/tools/` will not run end to end as they
+  are. Read them as a precise record of the method, and adapt them to your own data. The `ael` package is the
+  exception: it runs on your data and is tested on synthetic data with known truth.
 - **A snapshot of a working project.** Notes and skills cite paths of the original project (`0-RAW`, `1-PHOTOSHOP`,
   `4-RESULTATS`, `IA`, `.coordination`…). Only `3-RECERCA/` is here; the rest are references to evidence that stays
   with the author.
@@ -53,7 +78,7 @@ This repository is that work, published as it is.
 ## Acknowledgements
 
 The enhancement filters come from published work by M. Druckmüller, H. Druckmüllerová, H. Morgan, S. Habbal,
-F. Auchère, C. Gilly, S. Cranmer and colleagues; we implemented them ourselves from their papers
+F. Auchère, C. Gilly, S. Cranmer, J.-L. Starck, H. Knutsson and colleagues; we implemented them ourselves from their papers
 ([`3-RECERCA/PAPERS_CONSULTED.md`](3-RECERCA/PAPERS_CONSULTED.md)). Their published images of the same eclipse were
 used only as an external judge: no pixel of theirs is in any product, and none of their images is in this
 repository.

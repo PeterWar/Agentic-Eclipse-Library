@@ -1,0 +1,16 @@
+{
+ "_comment": "Template for `python -m ael motion`. Coordinates in the pixel grid of the RAW array you read (full sensor if full_raw is true). Times in seconds from any origin (e.g. second contact). Pairs A and B must not share any frame; nulls are two pairs of epochs a few seconds apart.",
+ "frames": [
+  {"path": "raw/IMG_0001.CR3", "t": 6.6, "exposure": 0.0005, "sun_xy": [3735.6, 2383.0], "moon_xy": [3748.6, 2385.9]}
+ ],
+ "epochs": {"E1": ["raw/IMG_0001.CR3"], "E1b": [], "E2": [], "E2b": [], "E3": [], "E4": []},
+ "dark": {"0.0005": "masters/dark_0.0005s.fits"},
+ "flat": "masters/flat_radial_x_prnu.npy",
+ "white": 16383, "pedestal": 511.5, "linear_frac": 0.85, "full_raw": true,
+ "sun_radius_px": 446.15, "moon_radius_px": 462.0, "arcsec_per_px": 2.1495, "sun_distance_au": 1.0134,
+ "north_deg": 0.0, "canvas": [3000, 3000],
+ "pairs": {"A": [["E1"], ["E3", "E4"]], "B": [["E1b"], ["E2", "E2b"]]},
+ "nulls": [["E1", "E1b"], ["E3", "E4"]],
+ "band_px": [2.0, 12.0], "r_range_rsun": [1.1, 2.2],
+ "sensor_velocity_px_s": [-0.181, 0.198], "moon_velocity_px_s": [-0.2456, -0.1299]
+}

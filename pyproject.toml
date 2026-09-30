@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentic-eclipse-library"
+version = "1.1.0"
+description = "Runnable tools for total-solar-eclipse corona images: structure images, unrolled polar views and coronal-motion animations, with gates that refuse invented pixels."
+readme = "README_AEL.md"
+license = { text = "MIT" }
+authors = [{ name = "Pere Guerra Serra" }]
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24", "scipy>=1.10", "opencv-python-headless>=4.8", "pillow>=9", "tifffile>=2023.1", "imageio>=2.30"]
+keywords = ["astrophotography", "solar eclipse", "corona", "image processing", "agents"]
+
+[project.optional-dependencies]
+raw = ["rawpy>=0.19", "astropy>=5"]
+test = ["pytest>=7"]
+
+[project.urls]
+Homepage = "https://github.com/PeterWar/Agentic-Eclipse-Library"
+
+[project.scripts]
+ael = "ael.__main__:main"
+
+[tool.setuptools]
+packages = ["ael"]
