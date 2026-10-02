@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.0 — prepared locally, 2026-10-03
+## 1.2.0 — 2026-10-03
 
 - `ael stack`: one-pass CFA interpolation, explicit calibration and affine registration,
   full union canvas, geometric coverage, shared saturation taper and optional two-band
@@ -17,4 +17,4 @@
 See `docs/DEVELOP.md` for parameter conventions, differences from historical filter
 recipes and limits. Registration, physical calibration and spatial cloud-map fitting
 remain explicit upstream tasks. File integrity is distinct from native application
-and scientific validation. This entry does not record a public release.
+and scientific validation.

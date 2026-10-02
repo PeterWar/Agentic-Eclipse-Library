@@ -1,6 +1,6 @@
 # 1.2.0 validation — 2026-10-03
 
-This is a local release candidate, not a publication record.
+These checks were performed locally before publication of version 1.2.0.
 
 ## Software checks
 
@@ -47,4 +47,5 @@ corrections are inputs that must be measured. The two-band variance is a weighti
 model, not a complete propagated uncertainty budget. These general-purpose filter
 variants differ from historical manually tuned operators (see `DEVELOP.md`).
 No new independent astronomical validation, automatic end-to-end scientific approval,
-or fresh-agent usability trial was performed. No Git push, tag or release was made.
+or fresh-agent usability trial was performed. These checks preceded the Git push,
+tag and release; they describe the validated package, not the publication process.
