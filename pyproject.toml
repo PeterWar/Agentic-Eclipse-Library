@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agentic-eclipse-library"
-version = "1.1.0"
+version = "1.1.1"
 description = "Runnable tools for total-solar-eclipse corona images: structure images, unrolled polar views and coronal-motion animations, with gates that refuse invented pixels."
 readme = "README_AEL.md"
 license = { text = "MIT" }
@@ -15,6 +15,7 @@ keywords = ["astrophotography", "solar eclipse", "corona", "image processing", "
 
 [project.optional-dependencies]
 raw = ["rawpy>=0.19", "astropy>=5"]
+photoshop = ["psd-tools>=1.18"]
 test = ["pytest>=7"]
 
 [project.urls]

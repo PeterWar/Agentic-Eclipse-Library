@@ -1,7 +1,7 @@
 {
   "name": "agentic-eclipse-library",
-  "description": "Four Agent Skills for processing total-solar-eclipse RAW frames into a faithful HDR image of the corona (calibration and stacking, post-processing with detail filters, root-cause artefact repair — in Catalan) and for making structure images, unrolled views and coronal-motion animations with the runnable `ael` package (in English). From the 12 August 2026 eclipse project by Pere Guerra.",
-  "version": "1.1.0",
+  "description": "Five Agent Skills: a first-steps guide that walks a newcomer from their own eclipse photos to a layered Photoshop project with the most useful corona filters, and skills for processing total-solar-eclipse RAW frames into a faithful HDR image of the corona (calibration and stacking, post-processing with detail filters, root-cause artefact repair — in Catalan) and for making structure images, unrolled views and coronal-motion animations with the runnable `ael` package (in English). From the 12 August 2026 eclipse project by Pere Guerra.",
+  "version": "1.1.1",
   "author": {
     "name": "Pere Guerra Serra",
     "url": "https://github.com/PeterWar"

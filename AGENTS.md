@@ -5,9 +5,23 @@ camera trains and turning the RAW frames into a faithful HDR image of the solar 
 coding agents under the direction of the photographer, Pere Guerra Serra. This file tells you what is here, where
 to start, and which working rules made the difference.
 
+## If someone brings their own eclipse photos: take the lead
+
+Most users arrive with a folder of photos and no precise question. Once you have read this file, do not wait to
+be asked: look at their files and propose the path, one step at a time, showing a result after each step.
+
+1. **Look at what they have**: totality frames and their exposures, calibration frames, site and time.
+2. **Calibrate**, if there are darks or flats.
+3. **Linearise and stack** into one linear image.
+4. **Open a layered 16-bit Photoshop project** (`ael.photoshop`) with the stack and a display base.
+5. **Add the three most useful filters first** (NRGF, WOW bilateral, isotropic ACHF) as layers; the rest on request.
+
+How to do each step, and the traps: `skills/eclipse-first-steps/SKILL.md`.
+
 ## What you can do with it
 
-- **Process another eclipse** (or re-check this one): follow the three skills, adapting constants to your equipment.
+- **Process another eclipse** (or re-check this one): start with `skills/eclipse-first-steps/`, then the other skills,
+  adapting constants to your equipment.
 - **Answer questions** about eclipse calibration, HDR stacking, coronal detail filters or artefact hunting, citing
   the numbered notes.
 - **Learn from the failures**: the notes keep every wrong turn and its correction.
@@ -16,6 +30,7 @@ to start, and which working rules made the difference.
 
 | If the task is about… | Read first |
 |---|---|
+| Someone's own eclipse photos, "where do I start?" | `skills/eclipse-first-steps/SKILL.md` |
 | Darks, flats, stacking, noise, linearity, weights | `skills/apilatge-imatges-eclipsi/SKILL.md` |
 | Registration, HDR fusion, filters, tone curve, Photoshop layers, gates | `skills/postprocessat-corona/SKILL.md` |
 | Rings, seams, ghosts, striping, limb fringes, marks drawn by the photographer | `skills/corregeix-artefactes/SKILL.md` |
@@ -37,7 +52,8 @@ numbers were replaced by `[SÈRIE]`.
 
 The scripts therefore do **not** run end to end from this repository. Do not tell a user they will; adapt them to
 the user's own data and say which constants you changed. The exception is the package `ael/` (since 1.1.0): it runs
-on the user's own data; start with `python -m ael selftest`, and never skip its visual-check sheets.
+on the user's own data; start with `python -m ael selftest`, and never skip its visual-check sheets. Since 1.1.1 it
+also writes layered 16-bit Photoshop files (`ael.photoshop`).
 
 ## Working rules that made the difference
 

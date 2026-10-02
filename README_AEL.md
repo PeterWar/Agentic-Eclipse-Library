@@ -18,7 +18,7 @@ continuation or a reflection; every product has a receipt with its parameters an
 
 ```
 pip install -e ".[raw]"      # from the repository root; 'raw' adds rawpy and astropy for RAW frames
-python -m ael selftest       # 11 tests with known truth, each gate with its negative control
+python -m ael selftest       # 12 tests with known truth, each gate with its negative control
 python -m ael demo-motion --out demo/   # what a detected motion looks like (synthetic data)
 ```
 
@@ -118,6 +118,25 @@ both pairs; a real motion is a feature visibly displaced.
 
 The same analysis run on synthetic data with known truth finds the moving blob at the right speed and
 direction and never marks the sensor dust or the lunar limb (`tests/`, `python -m ael demo-motion`).
+
+## 4 · Layered Photoshop files
+
+`ael.photoshop` writes 16-bit PSD/PSB files with full-canvas layers (Unicode name, blend mode, opacity,
+visibility, alpha 0 where there is no data) and reads them back to compare (`pip install -e ".[photoshop]"`):
+
+```python
+from ael import photoshop as ps
+doc = ps.new_document(width, height, psb=True)
+ps.add_layer(doc, "Linear stack", ps.to_u16(stack01), visible=False)
+ps.add_layer(doc, "Display base", ps.to_u16(base01))
+ps.add_layer(doc, "NRGF", ps.to_u16(nrgf01), ps.to_u16(valid), mode="multiply", opacity=0.39)
+ps.save(doc, "corona.psb", ps.to_u16(base01))          # refuses to overwrite an existing file
+ps.verify("corona.psb", [dict(name="Linear stack"), dict(name="Display base"), dict(name="NRGF", mode="multiply")])
+```
+
+At 16 bits Photoshop keeps the layers in the "Lr16" block; psd-tools reads them from there but writes them
+elsewhere, so `save` moves them. Never call psd-tools' own `save()` on these documents: it recomposes the
+flattened image at 8 bits.
 
 ## Credit
 

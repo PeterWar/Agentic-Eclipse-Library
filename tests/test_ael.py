@@ -197,3 +197,47 @@ def test_classify_negative_control():
           motion.Vector(0, 0, 5.0, 5.0, 0.9, 1.0, iso=0.8), motion.Vector(0, 0, 5.0, 5.0, 0.9, 1.0, iso=0.02)]
     motion.classify(vs, 80.0, sensor_velocity=(-0.10, 0.08), moon_velocity=(-0.15, -0.05), noise_px=0.3)
     assert [v.cls for v in vs] == ["sensor", "lunar", "coronal", "aperture"], [v.cls for v in vs]
+
+
+# ------------------------------------------------------------------ Photoshop
+def test_photoshop_16bit_layers_roundtrip():
+    import importlib.util
+    import tempfile
+    import unittest
+    from pathlib import Path
+
+    if importlib.util.find_spec("psd_tools") is None:
+        raise unittest.SkipTest('psd-tools not installed (pip install -e ".[photoshop]")')
+    from ael import photoshop as ps
+
+    rng = np.random.default_rng(3)
+    h, w = 48, 64
+    base = rng.integers(0, 65536, (h, w, 3), dtype=np.uint16)
+    nrgf = rng.integers(0, 65536, (h, w), dtype=np.uint16)
+    alpha = np.zeros((h, w), np.uint16)
+    alpha[8:40, 10:50] = 65535                      # no data outside: transparent
+    doc = ps.new_document(w, h, psb=True)
+    ps.add_layer(doc, "Black background", np.zeros((h, w, 3), np.uint16), rle=True)
+    ps.add_layer(doc, "Display base · stretched stack", base)
+    ps.add_layer(doc, "NRGF", nrgf, alpha, mode="multiply", opacity=0.39, visible=False)
+    expected = [dict(name="Black background", mode="normal", opacity=1.0, visible=True, rgb16=np.zeros((h, w, 3), np.uint16)),
+                dict(name="Display base · stretched stack", mode="normal", opacity=1.0, visible=True, rgb16=base),
+                dict(name="NRGF", mode="multiply", opacity=0.39, visible=False, rgb16=nrgf, alpha16=alpha)]
+    with tempfile.TemporaryDirectory() as tmp:
+        path = ps.save(doc, Path(tmp) / "test.psb", base)
+        rep = ps.verify(path, expected)
+        assert rep["ok"] and rep["depth"] == 16 and rep["layers"] == 3, rep
+        # negative control: one changed pixel and a wrong opacity must be caught
+        broken = [dict(e) for e in expected]
+        changed = nrgf.copy()
+        changed[20, 20] ^= 4096
+        broken[2]["rgb16"] = changed
+        broken[1]["opacity"] = 0.5
+        bad = ps.verify(path, broken)
+        assert not bad["ok"] and len(bad["mismatches"]) == 2, bad
+        # never overwrite: a second save to the same path must refuse
+        try:
+            ps.save(doc, path, base)
+            raise AssertionError("save overwrote an existing file")
+        except FileExistsError:
+            pass

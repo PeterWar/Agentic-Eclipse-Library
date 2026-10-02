@@ -12,7 +12,14 @@ working under the author's direction: 123 versions of the image, 179 research no
 This repository is that work, published as it is — plus, since version 1.1.0, **a runnable package, `ael`**, that
 makes three modern corona products from anyone's eclipse data.
 
-## New in 1.1.0: `ael`, the part you can run
+## Start here: your own eclipse photos
+
+Open this folder with your coding agent (Claude Code, Codex or similar) and tell it where your photos are. It reads
+[`AGENTS.md`](AGENTS.md) and the skill [`skills/eclipse-first-steps/`](skills/eclipse-first-steps/), looks at your
+files and proposes the path one step at a time: calibrate (if you took darks or flats), linearise and stack, open a
+layered 16-bit Photoshop project, and add the three most useful corona filters first. You choose how they look.
+
+## New in 1.1.0: `ael`: `ael`, the part you can run
 
 | Product | What it is |
 |---|---|
@@ -22,7 +29,7 @@ makes three modern corona products from anyone's eclipse data.
 
 ```
 pip install -e ".[raw]"
-python -m ael selftest                       # 11 tests with known truth, each gate with a negative control
+python -m ael selftest                       # 12 tests with known truth, each gate with a negative control
 python -m ael structure --input composite.npy --valid valid.npy --geometry geometry.json --out out/
 python -m ael polar     --input out/structure_cool.tif --geometry out/structure_geometry.json --out out/
 python -m ael motion    --config motion_config.json --out out/     # see examples/motion_config_template.json
@@ -38,6 +45,7 @@ the skill [`skills/corona-visualizations/`](skills/corona-visualizations/) (in E
 | Path | What it is | Language |
 |---|---|---|
 | [`AGENTS.md`](AGENTS.md) | Entry point for any AI agent: what is here, where to start, the working rules that made the difference | English |
+| [`skills/eclipse-first-steps/`](skills/eclipse-first-steps/) | How an agent leads a newcomer from their own photos to a layered Photoshop project with the most useful filters | English |
 | [`skills/apilatge-imatges-eclipsi/`](skills/apilatge-imatges-eclipsi/) | Linear calibration and stacking of eclipse RAW frames: darks, flats, pedestal, saturation, linearity, noise, weights, coverage | Catalan |
 | [`skills/postprocessat-corona/`](skills/postprocessat-corona/) | The post-processing method: registration by ephemeris, linear HDR fusion of the two trains, detail filters (NRGF, RHEF, MGN, WOW, ACHF and our own variants), tone curve, Photoshop layer files, external judge, gates and receipts, with a long log of traps | Catalan |
 | [`skills/corregeix-artefactes/`](skills/corregeix-artefactes/) | Finding and curing recurring artefacts at their root: lens ghosts, fixed-pattern striping, coverage edges, limb fringes, radial-profile rings, marks painted by the photographer | Catalan |

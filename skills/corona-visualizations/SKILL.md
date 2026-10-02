@@ -17,7 +17,7 @@ The package lives at the repository root (`ael/`, `pyproject.toml`) of
 https://github.com/PeterWar/Agentic-Eclipse-Library; in the author's project it is `3-RECERCA/tools/ael/`, and
 the scripts that made the 2026 products are in `3-RECERCA/tools/ael_2026/` (`p0`–`p4`).
 
-**Read this whole file before running anything.** Then run `python -m ael selftest` (11 tests with known
+**Read this whole file before running anything.** Then run `python -m ael selftest` (12 tests with known
 truth; each gate has a negative control). If a test fails, stop: the environment is not the one this was
 validated on.
 
