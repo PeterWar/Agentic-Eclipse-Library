@@ -12,5 +12,8 @@
  "pairs": {"A": [["E1"], ["E3", "E4"]], "B": [["E1b"], ["E2", "E2b"]]},
  "nulls": [["E1", "E1b"], ["E3", "E4"]],
  "band_px": [2.0, 12.0], "r_range_rsun": [1.1, 2.2],
- "sensor_velocity_px_s": [-0.181, 0.198], "moon_velocity_px_s": [-0.2456, -0.1299]
+ "sensor_velocity_px_s": [-0.181, 0.198], "moon_velocity_px_s": [-0.2456, -0.1299],
+ "gif": {"_comment": "Optional: the motion GIF without waves (same recipe and same grain in every frame). Labels: one per epoch.",
+         "feather_px": 60, "out_size": [1320, 1044], "rsun_out_px": 242, "rotation_deg": 0.0,
+         "labels": ["C2 + 11 s", "C2 + 18 s", "C2 + 73 s", "C2 + 79 s", "C2 + 86 s", "C2 + 92 s"], "force": false}
 }

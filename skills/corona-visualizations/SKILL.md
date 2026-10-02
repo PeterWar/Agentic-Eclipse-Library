@@ -6,9 +6,11 @@ description: >-
   measured colour), UNROLLED polar views of the corona around the Sun or the Moon, and CORONAL-MOTION
   analyses and animations from exposure ladders repeated during totality — each with its gates (nothing
   invented, noise measured per scale, sensor-fixed and Moon-fixed false motion rejected, visual check) and a
-  receipt. Use it for "structure image", "Druckmüller look", "fine filaments", "unrolled / polar /
-  panoramic corona", "coronal motions", "animation like …", "blink", "motion vectors", "does the corona
-  move", or to judge such a product made by someone else.
+  receipt — and the MOTION GIF in the reference look without "waves" (one or two cameras, same recipe and same
+  grain in every frame, arrows where two independent series see the same change). Use it for "structure
+  image", "Druckmüller look", "fine filaments", "unrolled / polar / panoramic corona", "coronal motions",
+  "animation like …", "motion GIF", "blink", "motion vectors", "does the corona move", "waves / rings in the
+  animation", or to judge such a product made by someone else.
 ---
 
 # Corona visualizations with `ael`
@@ -17,7 +19,7 @@ The package lives at the repository root (`ael/`, `pyproject.toml`) of
 https://github.com/PeterWar/Agentic-Eclipse-Library; in the author's project it is `3-RECERCA/tools/ael/`, and
 the scripts that made the 2026 products are in `3-RECERCA/tools/ael_2026/` (`p0`–`p4`).
 
-**Read this whole file before running anything.** Then run `python -m ael selftest` (12 tests with known
+**Read this whole file before running anything.** Then run `python -m ael selftest` (17 tests with known
 truth; each gate has a negative control). If a test fails, stop: the environment is not the one this was
 validated on.
 
@@ -109,6 +111,47 @@ r1 and r2 over Δt s; along-ray motion not measurable"). The animation shows onl
 Sun, with their times; arrows only for confirmed motions. Run `python -m ael demo-motion` to see what a real
 detection looks like.
 
+## 3b · Motion GIF without waves
+
+The animation people remember (grey band-pass detail, the Moon black, real epochs only, in a loop) has a trap
+the analysis does not: **the eye reads any difference between frames that follows the isophotes, or circles the
+Sun, as a wave.** In 2026 the photographer saw "concentric waves" in our first GIF — also in the one made with one
+camera only. They were not corona and not colour (rings per frame: 7 % of the detail in green and in R+2G+B
+alike); they were in the *changes between frames*, from how each frame was built. The rule:
+
+> **Every frame with the same recipe at every radius, and the same grain.**
+
+One camera (the usual case): add `"gif"` to the motion config (`examples/motion_config_template.json`) and run
+`python -m ael motion`. It builds every epoch with smooth boundary weights (`feather_px`) and a second version
+without its longest exposure, gives every epoch the grain of the noisiest (`equalize_fine_grain`), draws the
+same Moon rim in every frame, applies one noise filter and one gain per ring to all frames, and refuses to write
+if a gate fails (`grain_uniformity` ≤ 1.10× per ring; `no_concentric_bands` ≤ 0.35σ).
+
+Two cameras: register the second on the canvas (rotation, and **scale fixed by the Moon**: a free fit was fooled
+by the saturation edge), calibrate it fully (its flat may carry radial ripples: in 2026 they made a ring at
+2.7 R☉ that looked like a change of the corona), time its frames by the Moon's position (its clock was 3 s off),
+then `pipelines.motion_gif(epochs, out, noisier=[...], extras=[[(image, usable), ...], ...])`.
+
+Traps, each paid for once:
+- ⛔ The second camera enters only **beyond the radius where all its frames are unsaturated**
+  (`saturation_free_radius`), through the same window in every epoch, and adds **only fine detail** in log. Its
+  saturation isophotes, different in each epoch, were waves; matching its *level* to a mean of epochs made a ring
+  at the window that changed sign with the ladder.
+- ⛔ Measure the grain **in the finest band of the display filter**. At coarser scales the variance is real
+  sharpness (seeing changes from instant to instant) and the equalization goes wrong; differences between
+  neighbouring pixels fail too on registered stacks (sub-pixel shifts smooth the noise differently).
+- ⛔ Mix **only the fine part** towards the noisier version (mixing whole images makes boiling blotches), and fix the
+  target once (recomputing it every pass ratchets it up).
+- Check by eye: unroll each frame-to-frame difference around the Sun. A wave is a horizontal line there; the limb
+  keeps only the Moon covering and uncovering prominences, which is real.
+- Arrows (`two_site_change`, `draw_zone_arrows`) mark **places** where two independent series see the same change
+  between start and end (null: one series rotated about the Sun). They show no direction and cannot tell motion
+  from brightening; keep them off the limb.
+
+Cost, measured in 2026 (signal-to-noise of the displayed detail against the GIF with waves): −11 % at 1.2 R☉,
+−33 % at 1.6, −54 % at 2.0, −25 % at 2.4, −17 % at 2.8. Say so when you deliver. The real cure is at capture:
+the same exposure series repeated regularly through totality.
+
 ## 4 · Reference results (12 Aug 2026, for calibration)
 
 | | Value |
@@ -120,6 +163,9 @@ detection looks like.
 | Fine sensor sensitivity (green) | 1.1 % rms, from 125 flats |
 | Motion detection limit | 44 km/s (3σ local null, 78 s, 2.15″/px), 1.1–2.2 R☉ |
 | Motion detected | none (10 numeric candidates, all rejected at the visual check) |
+| Motion GIF, 5 epochs, Vixen + Sony (second camera beyond 2.15 R☉) | grain 1.105× per ring (limit), bands 0.19σ; reproduces the hand-made GIF (r = 1.000) |
+| Motion GIF from the Vixen RAWs alone (`"gif"`, 6 epochs) | grain 1.04×, bands 0.18σ, 150 s, 6 GB RAM |
+| Start-to-end change seen by two sites (our data vs a second observer at another site) | 12.2σ at 1.15–1.5 R☉, 11.3σ at 1.5–2 R☉, 3.6σ at 2–2.6 R☉ (5 confirmed zones beyond 1.2 R☉) |
 
 ## 5 · Credit
 

@@ -9,6 +9,7 @@ it honest.
 | **Structure image** | The corona's fine filaments from the limb to the edge of the field, in the style made famous by Miloslav Druckmüller's composites; mono, cool-toned or in the data's own colour | `python -m ael structure` · `ael.pipelines.structure_from_linear` |
 | **Unrolled corona** | The corona in polar coordinates: the limb becomes a straight line and the streamers rise like curtains; around the Sun or around the Moon | `python -m ael polar` · `ael.pipelines.polar_views` |
 | **Coronal motion** | Epochs of the same totality aligned on the Sun, displacement vectors with null tests, a visual-check sheet and GIF/MP4 animations | `python -m ael motion` · `ael.pipelines.motion_from_config` |
+| **Motion GIF without waves** | The animation in the reference look (band-pass grey, real epochs only), with one or two instruments, built so that no ring or isophote "wave" appears between frames; optional arrows where two independent series see the same change | `"gif"` section of the motion config · `ael.pipelines.motion_gif` · `ael.animation` |
 
 Everything follows one rule: **nothing invented, nothing mirrored.** Every filter reads only observed
 pixels (normalised convolution); where there is no data the result is `NaN`, never a fill, a
@@ -18,7 +19,7 @@ continuation or a reflection; every product has a receipt with its parameters an
 
 ```
 pip install -e ".[raw]"      # from the repository root; 'raw' adds rawpy and astropy for RAW frames
-python -m ael selftest       # 12 tests with known truth, each gate with its negative control
+python -m ael selftest       # 17 tests with known truth, each gate with its negative control
 python -m ael demo-motion --out demo/   # what a detected motion looks like (synthetic data)
 ```
 
@@ -118,6 +119,49 @@ both pairs; a real motion is a feature visibly displaced.
 
 The same analysis run on synthetic data with known truth finds the moving blob at the right speed and
 direction and never marks the sensor dust or the lunar limb (`tests/`, `python -m ael demo-motion`).
+
+### Motion GIF without waves (`ael.animation`, `ael.pipelines.motion_gif`)
+
+An animation shows every difference between its frames, and the eye reads any difference that follows
+the corona's isophotes, or circles the Sun, as a **wave**. On the 2026 data the waves came from how the
+frames were built, not from the corona, and not from working in colour (rings per frame were 7 % of the
+detail both in green and in R+2G+B). Four causes, the first two inside a single camera:
+
+1. the Moon's edge, made bright by the detail filter, changed thickness between epochs and pulsed;
+2. the epochs alternated two exposure ladders (up to 1/2 s and up to 1 s), each with its own saturation
+   boundaries (they follow isophotes) and its own grain: up to 1.35× from one frame to the next;
+3. a second camera whose frames saturated at different radii in different epochs: at each saturation
+   isophote the sharpness and the grain changed;
+4. different grain in each final frame.
+
+One rule cures them: **every frame with the same recipe at every radius, and the same grain.**
+
+| Step | Function |
+|---|---|
+| Saturation and Moon boundaries enter with smooth weights | `motion.merge_epoch(..., feather_px=...)` |
+| Every epoch gets the grain of the noisiest one: the fine part is mixed towards the same epoch made from fewer frames (nothing is added, data only lose weight) | `animation.equalize_fine_grain` |
+| A second camera adds only fine detail, beyond the radius where all its frames are unsaturated, through the same window in every epoch; the large scale is the main camera's | `animation.saturation_free_radius`, `animation.add_fine_detail` |
+| The same rim at the Moon's edge in every frame | `animation.uniform_moon_edge` |
+| One noise filter and one gain per ring for all frames (from pairs of epochs seconds apart) | `animation.common_noise_filter`, `animation.render_frames` |
+| Gates: grain per ring within 1.10× between frames; no ring appearing between frames (≤ 0.35σ) | `gates.grain_uniformity`, `gates.no_concentric_bands` |
+| Arrows where two independent series (two cameras or two sites) see the same change between start and end. **They mark a place, not a direction**, and cannot tell motion from brightening | `animation.two_site_change`, `animation.draw_zone_arrows` |
+
+With one camera, add a `"gif"` section to the motion config (see `examples/motion_config_template.json`):
+the pipeline then also writes `gif/motion_gif.gif`, its frames, an MP4 and a receipt, building for every
+epoch a second version without its longest exposure. With two cameras, register the second one on the
+canvas, match it photometrically and call `motion_gif(epochs, out, noisier=..., extras=...)`. Scales are
+in arcseconds (validated at 4.3″/px; `scale` adapts them).
+
+**What it costs, measured on the 2026 data** (signal-to-noise per point of the displayed detail): against
+the same GIF with waves, −11 % at 1.2 R☉, −33 % at 1.6, −54 % at 2.0, −25 % at 2.4 and −17 % at 2.8 R☉,
+because the second camera is left out where its saturation boundaries would move and every epoch is
+brought down to the noisiest. In an animation a constant grain is far less visible than one that changes.
+The best cure is at capture: repeat the same exposure series regularly through totality.
+
+On the 2026 data `motion_gif` reproduces the hand-made GIF exactly (correlation 1.000); its grain gate
+sits at the limit there (1.105 for a tolerance of 1.10, a residual of real fine structure in the grain
+measure, probably seeing that changes from instant to instant); from the RAW frames of one camera alone
+(`python -m ael motion` with `"gif"`) both gates pass (1.04 and 0.18σ).
 
 ## 4 · Layered Photoshop files
 

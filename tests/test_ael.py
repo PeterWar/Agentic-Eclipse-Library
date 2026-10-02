@@ -241,3 +241,144 @@ def test_photoshop_16bit_layers_roundtrip():
             raise AssertionError("save overwrote an existing file")
         except FileExistsError:
             pass
+
+
+# ------------------------------------------------------------------ animations without waves
+def _anim_scene(shape=(280, 280), R=40.0, seed=11):
+    # structure wider than a pixel, as in real stacks (the PSF spans several pixels): the finest band is grain
+    sc = SyntheticScene(R, seed=seed, moon_radius_px=41.5, psf_sigma_px=2.5, sky_level=50.0, n_rays=40)
+    geo = EclipseGeometry(shape=shape, sun_xy=(shape[1] / 2, shape[0] / 2), sun_radius_px=R,
+                          moon_xy=(shape[1] / 2 + 1.0, shape[0] / 2), moon_radius_px=41.5)
+    return geo, sc.radiance(shape, geo.sun_xy, geo.moon_xy)
+
+
+def test_equalize_fine_grain_same_grain_nothing_added():
+    from ael import animation
+    import cv2
+    geo, T = _anim_scene()
+    rng = np.random.default_rng(0)
+    s = 0.06
+    prim, noisy = [], []
+    for i in range(4):
+        y = (T * np.exp(rng.normal(0, s, T.shape))).astype(np.float32)
+        if i % 2 == 0:   # cleaner epochs: the optimal mean of y and an independent z (noise s/√2)
+            z = (T * np.exp(rng.normal(0, s, T.shape))).astype(np.float32)
+            prim.append(np.exp((np.log(y) + np.log(z)) / 2).astype(np.float32))
+        else:
+            prim.append(y)
+        noisy.append(y)
+    rs = geo.rsun_map()
+    frames = lambda xs: [animation.display_detail(x, geo) for x in xs]
+    ring = dict(r_range=(1.2, 2.8), step=0.4)        # rings ~16 px wide: enough pixels for a 10 % tolerance
+    g0 = gates.grain_uniformity(frames(prim), geo, **ring)
+    assert not g0["passed"] and g0["worst_ratio"] > 1.25, g0["worst_ratio"]          # negative control: a grain wave
+    eq, rep = animation.equalize_fine_grain(prim, noisy, geo, hp_px=6.0)
+    g1 = gates.grain_uniformity(frames(eq), geo, **ring)
+    assert g1["passed"], g1["worst_ratio"]
+    # nothing added: the cleaner epochs end with the noise of the noisier ones, not more
+    k = (rs > 1.3) & (rs < 2.8)
+    fine = lambda a: (a - cv2.GaussianBlur(a.astype(np.float32), (0, 0), 1.5))[k]
+    target = np.std(fine(np.log(noisy[0]) - np.log(T)))
+    got = np.std(fine(np.log(eq[0]) - np.log(T)))
+    assert got <= 1.08 * target, (got, target)
+    # the large scale is never touched
+    G = lambda a: cv2.GaussianBlur(a.astype(np.float32), (0, 0), 15)
+    assert np.max(np.abs((G(np.log(eq[0])) - G(np.log(prim[0])))[k])) < 0.004
+
+
+def test_add_fine_detail_keeps_large_scale_and_no_ring():
+    from ael import animation
+    import cv2
+    geo, T = _anim_scene(shape=(300, 300))
+    rng = np.random.default_rng(1)
+    s = 0.05
+    rs = geo.rsun_map()
+    base = (T * np.exp(rng.normal(0, s, T.shape))).astype(np.float32)
+    xx = np.tile(np.arange(300, dtype=np.float32) / 300.0, (300, 1))
+    extra = (T * (1.08 + 0.10 * xx) * np.exp(rng.normal(0, s, T.shape))).astype(np.float32)  # other level and gradient
+    usable = rs > 1.3                                                                     # "saturated" inside 1.3
+    wb = np.full(T.shape, 1.0 / s ** 2, np.float32)
+    ws = animation.feather(usable, 6) / s ** 2
+    out, _ = animation.add_fine_detail(base, wb, [(np.where(usable, extra, np.nan), ws)], geo, window_rsun=(1.6, 2.1))
+    G = lambda a: cv2.GaussianBlur(a.astype(np.float32), (0, 0), 12)
+    m = (rs > 1.25) & (rs < 3.0)
+    assert np.max(np.abs((G(np.log(out)) - G(np.log(base)))[m])) < 0.004        # the large scale is the base's
+    k = (rs > 2.3) & (rs < 3.0)
+    fine = lambda a: (a - cv2.GaussianBlur(a.astype(np.float32), (0, 0), 1.5))[k]
+    assert np.std(fine(np.log(out) - np.log(T))) < 0.8 * np.std(fine(np.log(base) - np.log(T)))  # less noise
+    # negative control: a plain weighted mean through the same window makes a ring at the window
+    win = animation.smoothstep((rs - 1.6) / 0.5)
+    naive = ((base * wb + np.nan_to_num(extra) * ws * win) / (wb + ws * win)).astype(np.float32)
+    det = lambda x: animation.display_detail(x, geo)
+    bad = gates.no_concentric_bands([det(base), det(naive)], geo, r_range=(1.35, 2.6), step=0.02)
+    good = gates.no_concentric_bands([det(base), det(out)], geo, r_range=(1.35, 2.6), step=0.02)
+    assert not bad["passed"] and good["passed"], (bad["worst_sigma"], good["worst_sigma"])
+
+
+def test_feathered_merge_softens_saturation_boundary():
+    from ael import animation
+    geo, T = _anim_scene(shape=(260, 260))
+    rs = geo.rsun_map()
+    sat_long = rs < 1.5                     # the long frame is 2 % brighter (extinction, sky): a step at its boundary
+    f_long = motion.Frame("long", 0.0, 1.0, geo.sun_xy, None, (1.02 * T).astype(np.float32), sat_long)
+    f_short = motion.Frame("short", 1.0, 0.25, geo.sun_xy, None, (0.25 * T).astype(np.float32), np.zeros(T.shape, bool))
+    d_true = animation.display_detail(T, geo)
+    def ring(feather_px):
+        e = motion.merge_epoch([f_long, f_short], geo.sun_xy, geo.shape, geo, sat_dilate=0, feather_px=feather_px)
+        d = animation.display_detail(e.data, geo) - d_true
+        return max(abs(np.nanmean(d[(rs >= r0) & (rs < r0 + 0.02)])) for r0 in np.arange(1.36, 1.66, 0.02))
+    hard, soft = ring(0.0), ring(16.0)
+    assert soft < 0.5 * hard, (hard, soft)
+
+
+def test_two_site_change_finds_common_change_and_control():
+    from ael import animation
+    geo, T = _anim_scene(shape=(300, 300))
+    rs, pa = geo.rsun_map(), geo.pa_map()
+    def blob(pa0, r0=1.7):
+        d = (pa - pa0 + 180) % 360 - 180
+        return 0.25 * np.exp(-0.5 * ((d / 3.0) ** 2 + ((rs - r0) / 0.06) ** 2))
+    def series(seed, change):
+        rng = np.random.default_rng(seed)
+        return [animation.display_detail((T * (1 + (change if k >= 2 else 0)) * np.exp(rng.normal(0, 0.03, T.shape))).astype(np.float32), geo)
+                for k in range(4)]
+    kw = dict(start=(0, 1), end=(2, 3), rings=((1.3, 2.1),), hp_px=6.0, smooth_px=8.0, min_area_px=30, r_min_rsun=1.2,
+              rotations=(-60, -45, -30, -20, 20, 30, 45, 60))
+    a = series(1, blob(60.0))
+    same = animation.two_site_change(a, series(2, blob(60.0)), geo, **kw)
+    other = animation.two_site_change(a, series(3, blob(240.0)), geo, **kw)
+    assert same["rings"][0]["sigma"] > 5, same["rings"]
+    assert other["rings"][0]["sigma"] < 3, other["rings"]
+    z = same["zones"][0]
+    zpa = float(geo.pa_map()[int(round(z["y"])), int(round(z["x"]))])
+    assert abs(((zpa - 60 + 180) % 360) - 180) < 15 and 1.45 < z["r_rsun"] < 1.95, z
+
+
+def test_motion_gif_pipeline_refuses_waves():
+    import tempfile
+    from ael import pipelines
+    geo, T = _anim_scene(shape=(240, 300), R=36.0)
+    rng = np.random.default_rng(4)
+    s = 0.06
+    epochs, noisy = [], []
+    for i in range(4):
+        y = (T * np.exp(rng.normal(0, s, T.shape))).astype(np.float32)
+        z = (T * np.exp(rng.normal(0, s, T.shape))).astype(np.float32)
+        d = np.exp((np.log(y) + np.log(z)) / 2).astype(np.float32) if i % 2 == 0 else y
+        mx = geo.sun_xy[0] + 1.0 - 0.3 * i
+        g = EclipseGeometry(shape=geo.shape, sun_xy=geo.sun_xy, sun_radius_px=geo.sun_radius_px,
+                            moon_xy=(mx, geo.sun_xy[1]), moon_radius_px=geo.moon_radius_px)
+        epochs.append(motion.Epoch(name=f"E{i}", t=6.0 * i, t_min=6.0 * i, t_max=6.0 * i, data=d,
+                                   valid=np.isfinite(d), geometry=g, moon_xy=[(mx, geo.sun_xy[1])]))
+        noisy.append(y)
+    kw = dict(out_size=(300, 240), rsun_out_px=36.0, noise_pairs=[(0, 1), (2, 3)])
+    with tempfile.TemporaryDirectory() as tmp:
+        try:   # negative control: alternating grain is a wave, the pipeline must refuse
+            pipelines.motion_gif(epochs, tmp, **kw)
+            raise AssertionError("waves not caught")
+        except RuntimeError as e:
+            assert "gates failed" in str(e), e
+        r = pipelines.motion_gif(epochs, tmp, noisier=noisy, **kw)
+        assert r["gates"]["grain_uniformity"]["passed"] and r["gates"]["no_concentric_bands"]["passed"]
+        import os
+        assert os.path.getsize(r["files"]["gif"]) > 1000

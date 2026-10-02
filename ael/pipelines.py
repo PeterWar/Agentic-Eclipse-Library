@@ -5,6 +5,9 @@
 * :func:`polar_views` – any image → unrolled views around the Sun and around the Moon, labelled.
 * :func:`motion_from_config` – calibrated RAW frames with times and Sun centres → epochs in the Sun
   frame, displacement vectors with every gate, a visual-check sheet and GIF/MP4 animations.
+* :func:`motion_gif` – epochs (one or two instruments) → the motion GIF in the reference look (band-pass grey,
+  common noise filter, real epochs only), built so that it has **no waves**: the same recipe at every radius
+  and the same grain in every frame, checked by two gates (see :mod:`ael.animation`).
 
 All three refuse to write a product whose gate fails, unless ``force=True`` (and then say so in the
 receipt).  Everything here was first done by hand on the 2026 data (see ``3-RECERCA/tools/ael_2026``).
@@ -17,11 +20,11 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-from . import annotate, calibrate, gates, motion, polar, render
+from . import animation, annotate, calibrate, gates, motion, polar, render
 from . import io as aio
 from .geometry import EclipseGeometry
 
-__all__ = ["structure_from_linear", "polar_views", "motion_from_config", "demo_motion_synthetic"]
+__all__ = ["structure_from_linear", "polar_views", "motion_from_config", "motion_gif", "demo_motion_synthetic"]
 
 
 # ------------------------------------------------------------------------------------------------
@@ -155,6 +158,9 @@ def motion_from_config(config: str | Path | dict, out_dir: str | Path) -> dict:
     ``pedestal``, ``sun_radius_px``, ``moon_radius_px``, ``arcsec_per_px``, ``north_deg``,
     ``canvas`` [h, w], ``pairs`` (A and B: [start epoch(s), end epoch(s)] with no frame in common),
     ``nulls`` (two [epoch, epoch] pairs a few seconds apart), ``band_px`` [2, 12], ``r_range_rsun``.
+    Optional ``gif`` {``feather_px`` (60), ``out_size`` [1320, 1044], ``rsun_out_px`` (242), ``rotation_deg`` (0),
+    ``labels``, ``force``}: also writes the motion GIF without waves (:func:`motion_gif`), with every epoch given the
+    grain of the noisiest one through the same epoch without its longest exposure.
     """
     cfg = json.loads(Path(config).read_text()) if not isinstance(config, dict) else config
     out = Path(out_dir)
@@ -185,11 +191,31 @@ def motion_from_config(config: str | Path | dict, out_dir: str | Path) -> dict:
                             moon_xy=tuple(fr["moon_xy"]) if fr.get("moon_xy") else None,
                             data=np.where(bad, np.nan, g).astype(np.float32), saturated=bad)
 
-    E = {}
+    gcfg = cfg.get("gif")
+    E, Ef, Es = {}, {}, {}
     for nm, paths in cfg["epochs"].items():
-        E[nm] = motion.merge_epoch([load(fr_by[p]) for p in paths], ref, (H, W), geo_t, name=nm)
+        fl = [load(fr_by[p]) for p in paths]
+        E[nm] = motion.merge_epoch(fl, ref, (H, W), geo_t, name=nm)
+        if gcfg:
+            fp = float(gcfg.get("feather_px", 60))
+            Ef[nm] = motion.merge_epoch(fl, ref, (H, W), geo_t, name=nm, feather_px=fp)
+            longest = max(fl, key=lambda f: f.exposure)
+            sub = [f for f in fl if f is not longest]
+            Es[nm] = motion.merge_epoch(sub, ref, (H, W), geo_t, name=nm, feather_px=fp) if sub else Ef[nm]
+        del fl
     names = list(cfg["epochs"])
     phot = motion.match_epochs([E[n] for n in names], ref=0, ring_rsun=tuple(cfg.get("match_ring_rsun", (1.1, 2.0))))
+    gif_res = None
+    if gcfg:
+        phf = motion.match_epochs([Ef[n] for n in names], ref=0, ring_rsun=tuple(cfg.get("match_ring_rsun", (1.1, 2.0))))
+        for n, ab in zip(names, phf):
+            if Es[n] is not Ef[n]:
+                Es[n].data = ((Es[n].data - ab["b"]) / ab["a"]).astype(np.float32)
+        gif_res = motion_gif([Ef[n] for n in names], out / "gif", noisier=[Es[n].data for n in names],
+                             labels=gcfg.get("labels"), rotation_deg=float(gcfg.get("rotation_deg", 0.0)),
+                             out_size=tuple(gcfg.get("out_size", (1320, 1044))), rsun_out_px=float(gcfg.get("rsun_out_px", 242.0)),
+                             force=bool(gcfg.get("force", False)), name="motion_gif")
+        del Ef, Es
 
     def combo(lst):
         eps = [E[n] for n in (lst if isinstance(lst, list) else [lst])]
@@ -253,6 +279,7 @@ def motion_from_config(config: str | Path | dict, out_dir: str | Path) -> dict:
     cand = [dict(x=v.x, y=v.y, r_rsun=v.r_rsun, residual_px=[v.rdx, v.rdy], km_s=float(np.hypot(v.rdx, v.rdy) * kmpx / dtA),
                  peak=v.peak, iso=v.iso) for v in vA if v.cls == "coronal"]
     res = dict(epochs={n: dict(t=E[n].t, members=E[n].members) for n in names}, photometry=phot, dt_s=dtA,
+               motion_gif=None if gif_res is None else dict(files=gif_res["files"], gates=gif_res["gates"]),
                dt_independent_s=dtB, global_affine=afA, null_noise_px=noise, detection_limit_px=lim,
                detection_limit_km_s=lim * kmpx / dtA, classes=cls, confirmation=conf, candidates=cand,
                note="Candidates must be checked by eye on candidates_visual_check.png before any claim.")
@@ -260,6 +287,109 @@ def motion_from_config(config: str | Path | dict, out_dir: str | Path) -> dict:
                       outputs=dict(gif=str(out / "motion_epochs.gif"), sheet=str(out / "candidates_visual_check.png")),
                       hash_inputs=False)
     return res
+
+
+# ------------------------------------------------------------------------------------------------
+# Motion GIF without waves
+# ------------------------------------------------------------------------------------------------
+def motion_gif(epochs: list, out_dir: str | Path, *, noisier: list | None = None, extras: list | None = None,
+               extras_window_rsun: tuple | None = None, noise_pairs: list | None = None, zones: list | None = None,
+               zones_space: str = "output", K: float = 2.2, out_size=(1320, 1044), rsun_out_px: float = 242.0,
+               rotation_deg: float = 0.0, labels: list | None = None, footer: str | None = None,
+               hold_ms: int = 700, step_ms: int = 220, name: str = "motion", force: bool = False,
+               scale: float | None = None) -> dict:
+    """The coronal-motion GIF in the reference look, without waves (see :mod:`ael.animation`).
+
+    ``epochs``: :class:`ael.motion.Epoch` on one canvas (Sun at the same point), photometrically matched
+    (:func:`ael.motion.match_epochs`), ideally merged with ``feather_px`` (≈30 px of the canvas).
+    ``noisier``: optional, one array per epoch — the same epoch made from a subset of its frames (e.g. without its
+    longest exposure): every epoch then gets the grain of the noisiest one.
+    ``extras``: optional, one list per epoch of ``(image, usable_mask)`` from a second instrument, already on the
+    canvas and matched; they add fine detail only, beyond ``extras_window_rsun`` (default: from the radius where
+    all of them are free of saturation, 0.5 R☉ wide).
+    ``noise_pairs``: epoch index pairs a few seconds apart (default: neighbours closer than 10 s).
+    ``zones``: places of confirmed change (e.g. from :func:`ael.animation.two_site_change`), drawn as radial arrows.
+    ``scale``: multiplies every scale in pixels (detail bands, grain windows, feathers).  The defaults were
+    validated at 4.3″/px (2026, superpixels); by default ``scale = 4.3 / geometry.arcsec_per_px`` (≥ 1), so the
+    same arcsecond scales are used at any pixel size.
+    Refuses to write if a gate fails, unless ``force``."""
+    out = Path(out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    geo = epochs[0].geometry
+    if scale is None:
+        scale = max(1.0, 4.3 / geo.arcsec_per_px) if geo.arcsec_per_px else 1.0
+    k = float(scale)
+    det = lambda img, g: animation.display_detail(img, g, fine=(0.7 * k, 4.0 * k), coarse=(1.3 * k, 6.0 * k))
+    eqkw = dict(detail=det, fine_px=1.4 * k, window_px=15.0 * k, hp_px=10.0 * k, smooth_px=3.0 * k)
+    data = [np.asarray(e.data, np.float32) for e in epochs]
+    report = {"scale": k}
+    if noisier is not None:
+        data, report["grain_epochs"] = animation.equalize_fine_grain(data, [np.asarray(x, np.float32) for x in noisier], geo, **eqkw)
+    if extras is not None:
+        usable = [u for ex in extras for (_, u) in ex]
+        if extras_window_rsun is None:
+            r0 = max(r for r in animation.saturation_free_radius(usable, geo) if np.isfinite(r)) + 0.03
+            extras_window_rsun = (r0, r0 + 0.5)
+        comb = []
+        for base, ex in zip(data, extras):
+            wb = animation.feather(np.isfinite(base), 0) / animation.ring_noise(base, geo, fine_px=1.5 * k) ** 2
+            ws = [(img, animation.feather(u, 12 * k) / animation.ring_noise(np.where(u, img, np.nan), geo, fine_px=1.5 * k) ** 2)
+                  for img, u in ex]
+            comb.append(animation.add_fine_detail(base, wb, ws, geo, window_rsun=extras_window_rsun, fine_px=15.0 * k)[0])
+        data, report["grain_combined"] = animation.equalize_fine_grain(comb, data, geo, **eqkw)
+        report["extras_window_rsun"] = list(extras_window_rsun)
+    details = [det(x, geo) for x in data]
+    moons = [tuple(np.mean(e.moon_xy, axis=0)) if len(e.moon_xy) else geo.moon_xy for e in epochs]
+    if geo.moon_radius_px and all(m is not None for m in moons):
+        details = animation.uniform_moon_edge(details, moons, geo.moon_radius_px, geo)
+    if noise_pairs is None:
+        noise_pairs = [(i, i + 1) for i in range(len(epochs) - 1) if abs(epochs[i + 1].t - epochs[i].t) < 10.0] or \
+                      [(i, i + 1) for i in range(len(epochs) - 1)]
+    flt = animation.common_noise_filter(details, geo, noise_pairs)
+    frames = animation.render_frames(details, geo, flt, K=K, moon_xy=moons, moon_radius_px=geo.moon_radius_px,
+                                     out_size=out_size, rsun_out_px=rsun_out_px, rotation_deg=rotation_deg)
+    W, H = out_size
+    geo_out = EclipseGeometry(shape=(H, W), sun_xy=(W / 2, H / 2), sun_radius_px=rsun_out_px)
+    valid = np.all([f > 0.02 for f in frames], axis=0)
+    g1 = gates.grain_uniformity(frames, geo_out, valid=valid)
+    g2 = gates.no_concentric_bands(frames, geo_out, valid=valid)
+    passed = g1["passed"] and g2["passed"]
+    if not passed and not force:
+        raise RuntimeError(f"motion GIF gates failed (waves): grain {g1['worst_ratio']:.2f} (tol {g1['tol']}), "
+                           f"bands {g2['worst_sigma']:.2f}σ at {g2['worst_r']} R☉ (tol {g2['tol_sigma']})")
+    if zones and zones_space == "canvas":
+        M = animation.output_matrix(geo, out_size, rsun_out_px, rotation_deg)
+        zones = [dict(z, x=float(M[0] @ [z["x"], z["y"], 1.0]), y=float(M[1] @ [z["x"], z["y"], 1.0])) for z in zones]
+    from . import CREDIT
+    imgs, files = [], {}
+    for i, (f, e) in enumerate(zip(frames, epochs)):
+        img = annotate.to_rgb8(f)
+        if zones:
+            animation.draw_zone_arrows(img, zones, (W / 2, H / 2))
+        annotate.draw_text(img, labels[i] if labels else f"t = {e.t:.0f} s", (22, 16), size=30)
+        annotate.draw_text(img, footer if footer is not None else CREDIT, (W - 14, H - 12), size=15, anchor="rd",
+                           color=(225, 225, 225))
+        imgs.append(img)
+        files[f"frame_{i + 1}"] = str(aio.save_png(out / f"{name}_frame_{i + 1}.png", img))
+    seq = imgs + imgs[-2:0:-1]
+    n = len(imgs)
+    dur = [hold_ms] + [step_ms] * (n - 2) + [hold_ms] + [step_ms] * (n - 2)
+    files["gif"] = str(aio.save_gif(out / f"{name}.gif", seq, dur[:len(seq)]))
+    mp4 = aio.save_mp4(out / f"{name}.mp4", seq * 3, (dur[:len(seq)]) * 3)
+    if mp4:
+        files["mp4"] = str(mp4)
+    rec = aio.write_receipt(out / f"{name}_RECEIPT.json", product="coronal motion GIF (same recipe, same grain)",
+                            outputs=files, parameters=dict(K=K, out_size=list(out_size), rsun_out_px=rsun_out_px,
+                                                           rotation_deg=rotation_deg, noise_pairs=noise_pairs,
+                                                           noise_filter={k: v for k, v in flt.items() if k != "G0"},
+                                                           G0=flt["G0"], epochs=[dict(name=e.name, t=e.t) for e in epochs],
+                                                           zones=zones or [], report=report),
+                            gates=dict(grain_uniformity=g1, no_concentric_bands=g2, forced=bool(force and not passed)),
+                            notes="Arrows mark places where two independent series see the same change; they do not "
+                                  "show a direction and cannot tell motion from a change of brightness.",
+                            hash_inputs=False)
+    return dict(files=files, receipt=str(rec), gates=dict(grain_uniformity=g1, no_concentric_bands=g2),
+                noise_filter=flt, report=report, frames=frames)
 
 
 # ------------------------------------------------------------------------------------------------

@@ -97,13 +97,18 @@ def to_sun_frame(data: np.ndarray, sun_xy, ref_xy, out_shape, *, valid: np.ndarr
 
 def merge_epoch(frames: list[Frame], ref_xy, out_shape, geometry_template: EclipseGeometry, *,
                 sat_dilate: int = 2, moon_margin_px: float = 4.0, name: str = "",
-                min_level: float = 0.0, interp: str = "lanczos") -> Epoch:
+                min_level: float = 0.0, interp: str = "lanczos", feather_px: float = 0.0) -> Epoch:
     """HDR merge of one epoch in the Sun frame.
 
     Radiance of each frame = ``data · gain / exposure``; weight = exposure (photon-noise optimal),
     zero where the pixel is saturated (dilated by ``sat_dilate``), below ``min_level`` counts, or inside
     that frame's Moon (+``moon_margin_px``).  Each pixel is the weighted mean of the frames that
     observed it cleanly; ``valid`` is False where none did.
+
+    ``feather_px`` > 0: every frame's weight rises smoothly from 0 at its unusable pixels (saturation,
+    Moon, sensor edge) to full weight ``feather_px`` pixels away (source pixels).  Use it for animations:
+    a hard saturation boundary follows an isophote and, if it differs between epochs, it becomes a wave
+    (see :mod:`ael.animation`).
     """
     h, w = out_shape
     num = np.zeros((h, w), np.float64)
@@ -123,8 +128,16 @@ def merge_epoch(frames: list[Frame], ref_xy, out_shape, geometry_template: Eclip
         rad = np.where(ok, d * np.float32(f.gain / f.exposure), np.nan)
         rs = to_sun_frame(rad, f.sun_xy, ref_xy, out_shape, valid=ok, interp=interp)
         good = np.isfinite(rs)
-        num[good] += f.exposure * rs[good]
-        den[good] += f.exposure
+        if feather_px > 0:
+            from .animation import feather
+            wt = to_sun_frame(feather(ok, feather_px), f.sun_xy, ref_xy, out_shape, interp="linear")
+            wt = np.nan_to_num(wt, nan=0.0)
+            good &= wt > 0
+            num[good] += f.exposure * wt[good] * rs[good]
+            den[good] += f.exposure * wt[good]
+        else:
+            num[good] += f.exposure * rs[good]
+            den[good] += f.exposure
         if f.moon_xy is not None:
             moons.append((f.moon_xy[0] - f.sun_xy[0] + ref_xy[0], f.moon_xy[1] - f.sun_xy[1] + ref_xy[1]))
         t_w.append((f.t, f.exposure))
