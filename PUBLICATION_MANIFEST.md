@@ -1,6 +1,6 @@
 # What is in this repository, what is not, and why
 
-Published on 30 September 2026 by decision of the author, Pere Guerra Serra. Version 1.1.0 (same day) adds the runnable
+Published on 30 September 2026 by decision of the author, Pere Guerra Serra. Version 1.1.0 (2 October 2026) adds the runnable
 package `ael`, its tests, a fourth skill and research note 179.
 
 | Included | Files | Notes |

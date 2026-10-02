@@ -53,7 +53,9 @@ def main(argv=None):
     elif a.cmd == "selftest":
         import runpy
         from pathlib import Path
-        runpy.run_path(str(Path(__file__).resolve().parents[1] / "tests" / "run_tests.py"), run_name="__main__")
+        runner = Path(__file__).resolve().parents[1] / "tests" / "run_tests.py"
+        sys.argv = [str(runner)]  # no name filter: run every test
+        runpy.run_path(str(runner), run_name="__main__")
     return 0
 
 
