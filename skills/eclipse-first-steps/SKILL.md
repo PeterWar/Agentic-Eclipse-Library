@@ -77,8 +77,12 @@ balance as channel ratios, no camera tone curve, no gamma, no export from a raw 
 Output: a 32-bit linear TIFF, the valid map, `geometry.json` (`ael.geometry.EclipseGeometry`) and a receipt.
 Show the user a stretched view and look at it yourself at full resolution near the limb before going on.
 
-Stacking is not yet a single command in `ael`: adapt `ael.calibrate` and the method of
-`skills/apilatge-imatges-eclipsi/` and `skills/postprocessat-corona/`, and say which constants you changed.
+Since 1.2.0 use `ael stack --config stack.json --out new_run/`; the schema and coordinate
+conventions are in `docs/DEVELOP.md` and `examples/stack_config_template.json`. Measure
+registration and calibration first. Geometric coverage is distinct from saturation weights.
+Hot-pixel detection needs confirmed dithering and uses local-noise-normalised residuals.
+With clouds, supply frozen spatial transmission/background maps and use two-band weighting;
+never fit just one scalar per frame or share fitted corrections between independent witnesses.
 
 ## Step 3 · Open the Photoshop project
 
@@ -100,6 +104,10 @@ one the user has worked on, and never save over a file they have open in Photosh
 
 ## Step 4 · The most useful filters first
 
+Use `ael filters --config filters.json --out new_filters/` (see `docs/DEVELOP.md`).
+It offers sixteen portable filter variants; these are not an exact replay of the historical project.
+The default selection is the three filters below.
+
 The library has sixteen filter layers. Propose these three first, add them visible at the opacities below, and
 leave the decision to the user. These are the opacities in the author's published image, for his data: a starting
 point, not a recipe.
@@ -107,8 +115,8 @@ point, not a recipe.
 | Filter | What it does | Mode, starting opacity | Code |
 |---|---|---|---|
 | **NRGF** (Morgan, Habbal and Woo 2006) | Evens out the steep fall of brightness with radius, so the whole corona, from the limb to the outer streamers, is visible at once | Multiply, 39 % | `ael.filters.nrgf` (subtract a sky model first: `ael.render.sky_background`) |
-| **WOW, bilateral** (Auchère et al. 2023) | Equalises the contrast of structures of every size: the fine filaments that make the "Druckmüller look" | Overlay, 37 % | `ael.filters.wow` with measured `noise_factors`; the bilateral variant is `wow_v95` in `3-RECERCA/tools/v95_20260924/` |
-| **ACHF, isotropic** (Druckmüller et al.) | Small-scale detail near the limb | Overlay, 8 % | stage E3 of `3-RECERCA/tools/v97_refundacio_20260924/f3_filtres_v97.py`, **on the logarithm of the luminance, never channel by channel** (otherwise colour leaks into the detail) |
+| **WOW, bilateral** (Auchère et al. 2023) | Equalises the contrast of structures of every size: the fine filaments that make the "Druckmüller look" | Overlay, 37 % | `ael.filterbank.make_filter("wow_bilateral", ...)`; the historical V95 operator remains in the research tree |
+| **ACHF, isotropic** (Druckmüller et al.) | Small-scale detail near the limb | Overlay, 8 % | `ael.filterbank.achf_isotropic`, **on log luminance after subtracting its radial spline, never channel by channel** |
 
 Then, if the user wants more: the extended NRGF (Multiply, 14 %), RHEF (an alternative radial normalisation,
 Gilly and Cranmer 2020), local RHEF, MGN (Morgan and Druckmüller 2014), the angular ACHF
@@ -121,7 +129,12 @@ Rules for every filter:
 - the author's display parameters do not transfer to other data: derive the ranges from the user's image
   (percentiles, robust scale per ring) and write them in the receipt.
 
-The research operators (`v86_operadors.py`, `wow_v95.py`, `f3_filtres_v97.py`) read the canvas geometry of the
+For the runnable command, use `ael.filterbank`: isotropic high-pass subtracts a smooth
+spline of ln luminance versus ln radius before filtering, and Multiply layers use the
+same limb ramp as the base. Do not subtract a staircase of ring medians. The `nrgf_log`
+variant replaces historical inward extrapolation with a measured-data log variant.
+
+For historical comparisons only, the research operators (`v86_operadors.py`, `wow_v95.py`, `f3_filtres_v97.py`) read the canvas geometry of the
 author's image from module constants (`CX`, `CY`, `RS`, `H`, `W` in `v86_comu.py` / `v97_comu.py`) and his own
 files: provide a small module with the user's geometry before importing them, follow the recipe, and say so.
 

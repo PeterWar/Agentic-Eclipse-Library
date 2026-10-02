@@ -1,11 +1,12 @@
 # `ael` — the runnable part of the Agentic Eclipse Library
 
 The rest of this repository is the record of one project. `ael` is the part you can **run on your own
-eclipse data**: three products that serious eclipse imagers now publish, each with the gates that keep
-it honest.
+eclipse data**: linear stacking, filter layers and the structure, polar and motion products below.
 
 | Product | What it is | Entry point |
 |---|---|---|
+| **Linear stack** | RAW/Bayer/RGB frames, declared calibration and registration, support and coverage | `python -m ael stack` |
+| **Filter layers** | Three defaults or sixteen portable variants, optional verified 16-bit PSB | `python -m ael filters` |
 | **Structure image** | The corona's fine filaments from the limb to the edge of the field, in the style made famous by Miloslav Druckmüller's composites; mono, cool-toned or in the data's own colour | `python -m ael structure` · `ael.pipelines.structure_from_linear` |
 | **Unrolled corona** | The corona in polar coordinates: the limb becomes a straight line and the streamers rise like curtains; around the Sun or around the Moon | `python -m ael polar` · `ael.pipelines.polar_views` |
 | **Coronal motion** | Epochs of the same totality aligned on the Sun, displacement vectors with null tests, a visual-check sheet and GIF/MP4 animations | `python -m ael motion` · `ael.pipelines.motion_from_config` |
@@ -19,9 +20,21 @@ continuation or a reflection; every product has a receipt with its parameters an
 
 ```
 pip install -e ".[raw]"      # from the repository root; 'raw' adds rawpy and astropy for RAW frames
-python -m ael selftest       # 17 tests with known truth, each gate with its negative control
+python -m ael selftest       # known-truth tests, including negative controls; also works from the installed wheel
 python -m ael demo-motion --out demo/   # what a detected motion looks like (synthetic data)
 ```
+
+## Stack and develop (1.2.0)
+
+```sh
+python -m ael stack --config stack.json --out stack_run/
+python -m ael filters --config filters.json --out filter_run/
+```
+
+Start with [`docs/DEVELOP.md`](docs/DEVELOP.md) and the JSON templates in `examples/`.
+Registration and calibration must be measured and declared first. The default filters
+are NRGF, bilateral WOW and isotropic ACHF; all sixteen variants are available on request.
+These are portable recipes, not an exact replay of the author's final Photoshop image.
 
 ## Geometry
 

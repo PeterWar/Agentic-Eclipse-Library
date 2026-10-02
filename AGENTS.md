@@ -53,7 +53,9 @@ numbers were replaced by `[SÈRIE]`.
 The scripts therefore do **not** run end to end from this repository. Do not tell a user they will; adapt them to
 the user's own data and say which constants you changed. The exception is the package `ael/` (since 1.1.0): it runs
 on the user's own data; start with `python -m ael selftest`, and never skip its visual-check sheets. Since 1.1.1 it
-also writes layered 16-bit Photoshop files (`ael.photoshop`).
+also writes layered 16-bit Photoshop files (`ael.photoshop`). Since 1.2.0, `ael stack` and
+`ael filters` execute declared stacking/filter recipes; start with `docs/DEVELOP.md`. Measure registration,
+linearity, geometry and any spatial cloud corrections before writing the configuration. Do not guess them.
 
 ## Working rules that made the difference
 

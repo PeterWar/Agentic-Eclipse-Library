@@ -20,7 +20,7 @@ Rule that shapes every function: **nothing invented, nothing mirrored**. Where t
 result is ``NaN`` (or transparent), never a fill, a continuation or a reflection.
 """
 
-__version__ = "1.1.1"
+__version__ = "1.2.0"
 
 CREDIT = ("Processed with Agentic Eclipse Library by Pere Guerra — "
           "https://github.com/PeterWar/Agentic-Eclipse-Library")

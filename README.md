@@ -10,7 +10,7 @@ images were then processed over seven weeks by AI coding agents (Claude, from An
 working under the author's direction: 123 versions of the image, 179 research notes and more than 3,000 scripts.
 
 This repository is that work, published as it is — plus, since version 1.1.0, **a runnable package, `ael`**, that
-makes three modern corona products from anyone's eclipse data.
+stacks declared RAW recipes, makes filter layers, and produces structure, polar and motion views.
 
 ## Start here: your own eclipse photos
 
@@ -19,7 +19,11 @@ Open this folder with your coding agent (Claude Code, Codex or similar) and tell
 files and proposes the path one step at a time: calibrate (if you took darks or flats), linearise and stack, open a
 layered 16-bit Photoshop project, and add the three most useful corona filters first. You choose how they look.
 
-## New in 1.1.0: `ael`: `ael`, the part you can run
+## Runnable tools in 1.2.0
+
+`ael stack` builds a linear stack with explicit calibration and registration. `ael filters`
+adds the first three filters or sixteen portable variants and an optional verified PSB.
+See [stacking and filters](docs/DEVELOP.md) for recipes, conventions and limits.
 
 | Product | What it is |
 |---|---|
@@ -29,7 +33,7 @@ layered 16-bit Photoshop project, and add the three most useful corona filters f
 
 ```
 pip install -e ".[raw]"
-python -m ael selftest                       # 12 tests with known truth, each gate with a negative control
+python -m ael selftest                       # known-truth tests and negative controls
 python -m ael structure --input composite.npy --valid valid.npy --geometry geometry.json --out out/
 python -m ael polar     --input out/structure_cool.tif --geometry out/structure_geometry.json --out out/
 python -m ael motion    --config motion_config.json --out out/     # see examples/motion_config_template.json

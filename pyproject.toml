@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agentic-eclipse-library"
-version = "1.1.1"
-description = "Runnable tools for total-solar-eclipse corona images: structure images, unrolled polar views and coronal-motion animations, with gates that refuse invented pixels."
+version = "1.2.0"
+description = "Linear eclipse stacking, corona filter layers, Photoshop files, polar views and motion animations with explicit support and receipts."
 readme = "README_AEL.md"
 license = { text = "MIT" }
 authors = [{ name = "Pere Guerra Serra" }]
@@ -24,5 +24,8 @@ Homepage = "https://github.com/PeterWar/Agentic-Eclipse-Library"
 [project.scripts]
 ael = "ael.__main__:main"
 
-[tool.setuptools]
-packages = ["ael"]
+[tool.setuptools.packages.find]
+include = ["ael*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
