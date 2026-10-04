@@ -44,6 +44,16 @@ Details, and what the 2026 data taught (correlated noise, colour in linear light
 like coronal motion), in [`README_AEL.md`](README_AEL.md). The agent's instructions for the three products are
 the skill [`skills/corona-visualizations/`](skills/corona-visualizations/) (in English).
 
+## Community contributions
+
+[NLFotografia](https://github.com/NLFotografia) contributed a
+[case study on preserving an existing edit with adjustable filters](docs/EXISTING_EDIT_CASE_STUDY.md)
+in [pull request #2](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/2).
+It records separate checks for registration and native Photoshop saves, including the remaining failures.
+
+Contributions are welcome through public pull requests. Only [PeterWar](https://github.com/PeterWar)
+can update or merge changes into `main`.
+
 ## What is in it
 
 | Path | What it is | Language |
