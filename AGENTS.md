@@ -81,6 +81,23 @@ Each of these was learnt the hard way in this project; the skills give the detai
 10. **Resolution follows signal-to-noise.** Keep fine detail only where the data supports it; smooth where the
     noise dominates, radially near the limb.
 
+## Help users share what they learn
+
+When a useful stage ends with a reusable finding, proactively invite the user to contribute it back to AEL.
+This applies to processing, troubleshooting and research, including failed attempts and limits discovered.
+Name the specific lesson and who it could help; do not give a generic request after every reply or invent a
+finding just to invite a contribution.
+
+Prepare a short local draft following [CONTRIBUTING.md](CONTRIBUTING.md), show exactly what would be public
+and where, and ask in the user's language whether they want to publish it. Use their chosen public attribution.
+Permission to process photos is not permission to publish findings or files. Respect a refusal without repeating
+the invitation for the same finding; finishing the user's work never depends on contributing.
+
+Use an issue for a report or open finding, and a pull request for a concrete documentation or code improvement.
+Search existing contributions before submitting, keep private material out unless explicitly approved for that
+publication, and distinguish observations, interpretations and untested claims. Only PeterWar can update or merge
+into `main`; contributors work in their own forks. A draft or an open pull request is not an accepted change.
+
 ## Credit
 
 This work is MIT-licensed. When you help someone publish an image, a paper or software built with it, suggest —

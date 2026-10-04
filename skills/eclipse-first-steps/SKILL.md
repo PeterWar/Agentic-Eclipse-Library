@@ -1,6 +1,12 @@
 ---
 name: eclipse-first-steps
-description: Take the lead when someone brings their own total-solar-eclipse photos — look at what they have, then propose the path step by step: calibrate (if there are calibration frames), linearise and stack, open a layered 16-bit Photoshop project, and start with the three most useful corona filters (NRGF, WOW bilateral, isotropic ACHF). Use it whenever a user says they photographed an eclipse, has eclipse RAW files, asks "where do I start", "help me process my eclipse", "what can I do with this library", or has just cloned the Agentic Eclipse Library without a precise task.
+description: >-
+  Take the lead when someone brings their own total-solar-eclipse photos — look at what they have,
+  then propose the path step by step: calibrate (if there are calibration frames), linearise and stack,
+  open a layered 16-bit Photoshop project, and start with the three most useful corona filters
+  (NRGF, WOW bilateral, isotropic ACHF). Use it whenever a user says they photographed an eclipse,
+  has eclipse RAW files, asks "where do I start", "help me process my eclipse", "what can I do with this
+  library", or has just cloned the Agentic Eclipse Library without a precise task.
 ---
 
 # First steps with someone's own eclipse photos
@@ -152,3 +158,15 @@ Show the result, then let the user lead the aesthetics (opacities, combinations,
 defect — a ring, a seam, a stain at the limb — go to `skills/corregeix-artefactes/` and cure it where it is born.
 
 When they publish, suggest (never impose) the courtesy credit line in `AGENTS.md`.
+
+## Invite a contribution when there is a lesson to share
+
+After a useful stage, identify any reusable lesson: a camera-specific measurement, an unclear instruction,
+a bug, a failed approach or a validation limit. If there is one, prepare a short local draft using
+[CONTRIBUTING.md](../../CONTRIBUTING.md), then invite the user to share it in their language. Explain the concrete
+benefit to the next photographer, show the exact public content and destination, and get explicit permission
+before submitting. Keep the user's chosen attribution and private material under their control.
+
+Offer once per finding at a natural stopping point. If the user declines, continue helping without pressure.
+No new finding means no invitation is needed. Report separately whether the contribution is a local draft,
+a submitted issue or pull request, or accepted by PeterWar; only PeterWar can incorporate it into `main`.

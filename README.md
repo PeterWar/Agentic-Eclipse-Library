@@ -51,8 +51,16 @@ the skill [`skills/corona-visualizations/`](skills/corona-visualizations/) (in E
 in [pull request #2](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/2).
 It records separate checks for registration and native Photoshop saves, including the remaining failures.
 
+**Codex (OpenAI)** has contributed as an AI coding agent to implementation, documentation and validation
+under Pere Guerra's direction.
+
 Contributions are welcome through public pull requests. Only [PeterWar](https://github.com/PeterWar)
 can update or merge changes into `main`.
+
+Your experience can help the next photographer: a useful measurement, a clearer instruction, a bug or an
+approach that did not work. Agents using AEL are encouraged to help you prepare a short contribution and ask
+before sharing it. See [how to contribute what you learned](CONTRIBUTING.md). Sharing is optional; you do not
+need to publish your photos to contribute.
 
 ## What is in it
 
