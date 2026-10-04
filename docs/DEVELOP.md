@@ -130,3 +130,8 @@ No lunar texture, saturated corona or stars are invented. A missing region remai
 empty/black in the preview. Review the full field and the limb at native resolution
 before choosing the presentation. A passing software test is not independent
 scientific validation of an image or a guarantee of no artefacts.
+
+For a preferred existing Photoshop edit with independently adjustable filters, see
+the [existing-edit case study](EXISTING_EDIT_CASE_STUDY.md). It separates appearance,
+measured registration and native-save integrity. Its image-specific settings are
+not additions to the default linear recipe.
