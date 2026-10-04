@@ -140,6 +140,14 @@ files: provide a small module with the user's geometry before importing them, fo
 
 ## After the first image
 
+If the user brings a preferred existing edit, clarify whether they want detail
+recomputed on that edit or each existing filter aligned with the reference base.
+Preserve the manual source and use separate controls for the latter. A fitted Moon
+disk does not prove coronal registration; a filter's alpha boundary is not a measured
+lunar limb. See the [existing-edit case study](../../docs/EXISTING_EDIT_CASE_STUDY.md)
+for held-out failures and native-save checks. Its zero-opacity starting point is
+optional for preserving an existing look, not a replacement for the defaults above.
+
 Show the result, then let the user lead the aesthetics (opacities, combinations, curves). When they point at a
 defect — a ring, a seam, a stain at the limb — go to `skills/corregeix-artefactes/` and cure it where it is born.
 
