@@ -7,7 +7,7 @@ import unittest
 
 def run(name_filter=''):
     cases=[]
-    for module in ('test_ael','test_develop'):
+    for module in ('test_ael','test_develop','test_lessons'):
         m=importlib.import_module(f'ael._tests.{module}')
         cases.extend((n,getattr(m,n)) for n in dir(m) if n.startswith('test_') and name_filter in n)
     if not cases:

@@ -1,4 +1,4 @@
-# Stacking and filter layers in 1.2.0
+# Stacking and filter layers in 1.2.1
 
 `ael stack` and `ael filters` turn a **declared recipe** into reproducible files.
 They do not infer the observing site, alignment, linearity ceiling, colour calibration
@@ -45,7 +45,10 @@ the .5-pixel centre convention; applying another -.5 would shift the result.
 `geometry.shape` is the native reference shape. Its solar centre must be independently
 measured or come from ephemerides; do not silently use the Moon's current centre.
 
-The canvas is the union of complete registered sensor footprints. CFA planes are
+By default the canvas is the union of complete registered sensor footprints.
+Set `stack.canvas: "reference"` to keep the full native reference rectangle with origin (0,0);
+the output geometry retains its native centres. This does not invent coverage in gaps.
+Choose the field with the owner before processing an existing image. CFA planes are
 interpolated directly to it, once, without demosaicing first. The two green planes
 are averaged with their own support. At each pixel, all colours use **one taper**,
 set by the raw plane nearest the linear ceiling. The taper is outside the
@@ -53,6 +56,7 @@ normalised interpolation. No reconstruction is made where every exposure clips.
 
 `stack` settings:
 
+- `canvas`: `"union"` (default) or `"reference"`; no inferred crop or new field choice.
 - `taper_start`: begin saturation taper at this fraction of the linear ceiling (.8).
 - `moon_guard_px`, `limb_fade_px`: exclusion and weighting ramp outside each Moon
   (2 and 4 native pixels by default). These are data-dependent recipe choices.
@@ -90,7 +94,12 @@ an unsaturated-frame count into it.
 3x3 colour matrix applied after those ratios. Default identity leaves sensor colour;
 it must not be called calibrated sRGB. Optional `icc` embeds a matching profile in
 the PSB. `display.scale` (positive luminance scale in input units) and `display.asinh`
-(positive, default 10) declare the display stretch. It never changes the linear input.
+(positive, default 10) declare the display stretch. `display.highlight_ceiling` is positive and at most `1 - 1/65535`,
+default .9, retaining at least one 16-bit code of headroom. After the per-channel asinh, a shared factor maps the RGB maximum `m` to
+`ceiling * (1-exp(-m/ceiling))`. This prevents positive hard clipping while preserving
+the asinh RGB ratios. It never changes the linear input. The receipt records effective
+parameters, negative RGB counts, clipping checks and the separate linear-reference scale.
+This changes the 1.2.0 display recipe: compare full canvases before adopting it for an existing image.
 
 The default visible layers are NRGF (Multiply, .39), bilateral WOW (Overlay, .37),
 and isotropic ACHF 04 (Overlay, .08). These opacities are starting points. Override
@@ -107,10 +116,17 @@ and isotropic ACHF 04 (Overlay, .08). These opacities are starting points. Overr
 These are portable parameterisations, **not a byte-identical reproduction** of the
 historical sixteen-layer project. In particular `nrgf_log` uses only measured log
 luminance rather than extrapolating the historical inward radial statistics; local
-RHEF uses blended observed-sector CDFs; bilateral WOW has paired observed taps and a
+RHEF interpolates measured log-intensity quantile functions in radius and angle before inversion; bilateral WOW has paired observed taps and a
 noise floor. The general recipes do not include the historical per-image resolution
 map or hand-made layer finishing. Ordit/Trama need independent registered witnesses
 and are not included in this single-stack command.
+
+NRGF evaluates measured radial mean and spread continuously using PCHIP instead of
+a staircase lookup. RHEF uses 257 quantiles per populated radial/sector cell, with
+constant distributions at .5 and no output outside positive observed data. Sparse
+annuli do not become valid by borrowing a neighbouring cell. These statistical
+interpolations do not smooth the image. See `docs/FIELD_LESSONS.md` for the ring
+negative controls, injection limits and the rejected alternative.
 
 Before isotropic filtering, a **smooth cubic spline in ln radius** is fitted to log
 luminance and subtracted. This prevents the one-sided lunar-edge kernel from turning
@@ -122,11 +138,16 @@ preventing the earlier disappearance of darkening from making a bright rim.
 Outputs: float layers with NaN outside observed data, their alpha arrays, a full
 canvas preview, display TIFF, and a receipt of actual operator/display parameters.
 `photoshop: true` adds a new layered 16-bit `corona.psb` and pixel-by-pixel verification.
-The hidden linear-reference layer is scaled and can clip: the original float input
-remains the HDR authority. The application is **never opened automatically**. The
+The hidden linear-reference layer has its own recorded scale, with the positive
+observed maximum at .98. Negative colour-matrix values are clipped only for 16-bit
+representation; the signed float input remains the HDR authority. The application is **never opened automatically**. The
 receipt distinguishes file roundtrip from a native Photoshop check.
 
 No lunar texture, saturated corona or stars are invented. A missing region remains
 empty/black in the preview. Review the full field and the limb at native resolution
 before choosing the presentation. A passing software test is not independent
 scientific validation of an image or a guarantee of no artefacts.
+
+Field guidance on astromodified colour, exposure metadata, earthshine candidates and
+partial dust-response estimates is in `docs/FIELD_LESSONS.md`. AEL does not infer
+a universal white balance or automatically remove dust or recover lunar relief.

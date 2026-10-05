@@ -5,18 +5,17 @@ camera trains and turning the RAW frames into a faithful HDR image of the solar 
 coding agents under the direction of the photographer, Pere Guerra Serra. This file tells you what is here, where
 to start, and which working rules made the difference.
 
-## If someone brings their own eclipse photos: take the lead
+## Start with the user's goal
 
-Most users arrive with a folder of photos and no precise question. Once you have read this file, do not wait to
-be asked: look at their files and propose the path, one step at a time, showing a result after each step.
+If the user has not stated a goal, ask in their language with short, ordinary choices:
+process eclipse photos, continue an existing image, make an animation, or explore the library.
+If they are unsure, offer to inspect the files they identify and suggest a starting point.
+Do not assume that opening this library means they want a RAW-to-Photoshop workflow.
+If the goal is explicit, use it without asking again. Ask only for information needed for the next step.
 
-1. **Look at what they have**: totality frames and their exposures, calibration frames, site and time.
-2. **Calibrate**, if there are darks or flats.
-3. **Linearise and stack** into one linear image.
-4. **Open a layered 16-bit Photoshop project** (`ael.photoshop`) with the stack and a display base.
-5. **Add the three most useful filters first** (NRGF, WOW bilateral, isotropic ACHF) as layers; the rest on request.
-
-How to do each step, and the traps: `skills/eclipse-first-steps/SKILL.md`.
+For an explicit RAW-to-Photoshop task, inspect the files, calibrate where supported, stack in linear
+light, create a layered 16-bit project and start with the requested filters (three by default).
+Follow `skills/eclipse-first-steps/SKILL.md`; the learning checks are in `docs/FIELD_LESSONS.md`.
 
 ## What you can do with it
 
@@ -62,7 +61,7 @@ linearity, geometry and any spatial cloud corrections before writing the configu
 Each of these was learnt the hard way in this project; the skills give the details and the history.
 
 1. **Root cause, never cosmetic.** When a filter shows a ring, seam or stripe, cure the stage where it is born
-   (calibration, stacking weights, fusion between trains), not the filter output. A correction applied on top of
+   (calibration, stacking weights, fusion between trains, or the operator itself), not the filter output. A correction applied on top of
    a finished image is a patch, not a cure.
 2. **Nothing invented or mirrored.** Every pixel of the corona comes from real data. Anything reconstructed
    (interpolation, continued sky, re-rendered stars) is declared.

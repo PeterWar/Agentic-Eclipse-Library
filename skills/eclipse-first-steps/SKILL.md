@@ -1,17 +1,18 @@
 ---
 name: eclipse-first-steps
-description: Take the lead when someone brings their own total-solar-eclipse photos — look at what they have, then propose the path step by step: calibrate (if there are calibration frames), linearise and stack, open a layered 16-bit Photoshop project, and start with the three most useful corona filters (NRGF, WOW bilateral, isotropic ACHF). Use it whenever a user says they photographed an eclipse, has eclipse RAW files, asks "where do I start", "help me process my eclipse", "what can I do with this library", or has just cloned the Agentic Eclipse Library without a precise task.
+description: First establish the user's goal in their language, without asking again when it is explicit. Then take the lead when someone brings their own total-solar-eclipse photos — look at what they have, then propose the path step by step: calibrate (if there are calibration frames), linearise and stack, open a layered 16-bit Photoshop project, and start with the three most useful corona filters (NRGF, WOW bilateral, isotropic ACHF). Use it whenever a user says they photographed an eclipse, has eclipse RAW files, asks "where do I start", "help me process my eclipse", "what can I do with this library", or has just cloned the Agentic Eclipse Library without a precise task.
 ---
 
 # First steps with someone's own eclipse photos
 
-Most people who open this library have just come back from an eclipse with a folder of photos and do not know the
-words (dark, flat, linear, NRGF). **Do not wait for them to ask the right question.** Once you have read
-`AGENTS.md`, look at their data, tell them what you found, and propose the next step. One step at a time: do it,
-show a small view of the result, say in one line what you checked, and propose the next one.
+If the goal is missing, first ask in the user's language what they want to do. Offer short choices:
+process eclipse photos, continue an existing image, make an animation, or explore the library.
+If they are unsure, offer to inspect the files they identify and recommend a starting point.
+**Do not ask again when the user has already given a goal.** Ask only for missing information needed
+for the next step. An animation or a question about the library does not automatically require RAW stacking.
 
-The path is always the same, and its order matters (the author's rule: cure each defect on the floor where it is
-born, never on top of a finished image):
+For an explicit RAW-to-Photoshop request, follow this path. Explain what you found and show the complete
+canvas after each meaningful stage. Cure each defect where it starts and regenerate dependent products.
 
 | Step | What you propose | What the user gets |
 |---|---|---|
@@ -21,16 +22,15 @@ born, never on top of a finished image):
 | 3 | Open the Photoshop project | A layered 16-bit file they can start working in |
 | 4 | The three most useful filters first | The corona's structure, as layers they can switch on and off |
 
-**Your first reply** names this path in this order, as numbered steps — calibration first (or what its absence
-means), then linearising and stacking, the Photoshop project, and the three filters — and then proposes to start
-with step 0 right away. Keep the limits short (it is not one click; nothing is invented) and ask only the questions
-that block step 0 or 1.
+For an explicit processing request, name the next action and begin the inventory. For a missing goal,
+use the short choices above; do not present the whole processing recipe as an assumed decision.
 
 ## Step 0 · Look before proposing
 
 Read the metadata of every file (`ael.calibrate.read_raw`, or `exiftool`) and present a table:
 
-- **Camera, lens, focal length, ISO, exposure time, timestamp** of each frame. The EXIF can lie (an adapted lens
+- **Camera, lens, focal length, ISO, exposure time, timestamp** of each frame. Read exposure durations
+  from metadata and check them against the sequence; a filename such as `0.5` need not mean 0.5 seconds. The EXIF can lie (an adapted lens
   reports 50 mm and f/0): measure the scale from the Sun's radius in pixels when you can.
 - **Which frames are totality** (between second and third contact) and which are partial phases, diamond ring
   or Baily's beads. Group the totality frames by exposure: that is the exposure ladder.
@@ -48,7 +48,9 @@ observe?"). Answer in the user's language.
 - Flats: `ael.calibrate.master_flat` (with `fine_sensor_factor` for the fine sensitivity pattern of the sensor).
 - Check the Bayer pattern of the RAW (RGGB or another) on the data itself, not only in the metadata.
 - **No calibration frames?** Say what that means — dust spots and vignetting stay, hot pixels are removed
-  statistically between frames — and go on. Never invent a flat.
+  statistically only with supported dithering — and go on. Never invent a flat. A data-derived response
+  is an experimental calibration hypothesis requiring separate controls, not a generic dust-removal tool
+  (`docs/FIELD_LESSONS.md`).
 
 Details and traps: `skills/apilatge-imatges-eclipsi/SKILL.md` (in Catalan).
 
@@ -68,11 +70,13 @@ balance as channel ratios, no camera tone curve, no gamma, no export from a raw 
   Moon's positions in all frames leaves an irregular black stain.
 - **Combine the exposure ladder** in linear light, weighting by exposure; a pixel is valid only where at least
   half a frame of real data supports it. Keep a map of valid pixels and one of coverage (frames per pixel).
-- **The inner corona usually saturates in every frame** near the limb unless the ladder has very short
-  exposures. Mark that ring. If you put an estimate there, it is an estimate: declare it and keep it in its own
-  layer.
+- **Check saturation exposure by exposure.** Short frames may retain the inner corona even when the
+  displayed image looks white. Inspect the linear HDR and contribution weights before declaring lost data.
+  If every exposure clips, mark it as missing; do not reconstruct it.
 - Do not trust the camera's as-shot white balance on an eclipse; use daylight or measured ratios, applied in
-  linear light.
+  linear light. For an astromodified camera, obtain that fact from the owner and measure suitable ratios;
+  default daylight/as-shot settings and another camera's coefficients are not a calibration. Check R/G, B/G
+  and both green planes. Label a neutral-continuum assumption as provisional, not absolute colour.
 
 Output: a 32-bit linear TIFF, the valid map, `geometry.json` (`ael.geometry.EclipseGeometry`) and a receipt.
 Show the user a stretched view and look at it yourself at full resolution near the limb before going on.
@@ -95,12 +99,18 @@ layer per product. From the bottom up:
 3. the display base: the stack stretched for the screen (logarithmic or asinh), visible;
 4. the saturated ring and the coverage map, hidden, if there are any;
 5. the filter layers (step 4);
-6. the Moon of one instant, opaque, on top.
+6. a lunar source or earthshine candidate when supported, independently aligned in lunar coordinates.
+   Keep unvalidated relief hidden and explain its status. Do not omit it silently, paint texture,
+   reshape the lunar limb or treat a shared sensor pattern as independent confirmation.
 
 Filter layers are grey and full canvas, with alpha 0 where there is no data. Multiply layers are 0–1 factor
 images; Overlay and Difference layers are detail with mid-grey (0.5) as neutral. Before handing the file over,
-reopen it and compare it with what you wrote (`ael.photoshop.verify`). Always write a new file: never overwrite
+reopen a uniquely named copy and compare it with what you wrote (`ael.photoshop.verify`). Always write a new file: never overwrite
 one the user has worked on, and never save over a file they have open in Photoshop.
+Before `app.open`, check all open document paths inside the same script; if the target is open, stop.
+Close only the document the script opened, save native exports as copies and restore the previous document.
+`ael filters` uses a shared soft highlight shoulder and a separately scaled hidden reference; the original
+signed float HDR remains authoritative. Reopening bytes is not the same as checking Photoshop's native render.
 
 ## Step 4 · The most useful filters first
 
@@ -144,3 +154,11 @@ Show the result, then let the user lead the aesthetics (opacities, combinations,
 defect — a ring, a seam, a stain at the limb — go to `skills/corregeix-artefactes/` and cure it where it is born.
 
 When they publish, suggest (never impose) the courtesy credit line in `AGENTS.md`.
+
+## Field checks added in 1.2.1
+
+Read `docs/FIELD_LESSONS.md` before diagnosing white inner corona, radial grooves or dust.
+Measure rings at the input and at the operator output: NRGF statistics and RHEF quantiles are now
+evaluated continuously in radius. Never remove an operator artefact by blurring the final layer.
+After changing a calibration, regenerate the stack, display and every dependent filter.
+Preserve prior user work and compare full canvases before changing an existing image's presentation.

@@ -24,7 +24,7 @@ python -m ael selftest       # known-truth tests, including negative controls; a
 python -m ael demo-motion --out demo/   # what a detected motion looks like (synthetic data)
 ```
 
-## Stack and develop (1.2.0)
+## Stack and develop (1.2.1)
 
 ```sh
 python -m ael stack --config stack.json --out stack_run/
@@ -203,3 +203,8 @@ https://github.com/PeterWar/Agentic-Eclipse-Library*. The filters come from publ
 Morgan, Habbal & Woo (2006, NRGF); Morgan & Druckmüller (2014, MGN); Auchère, Soubrié, Pelouze &
 Buchlin (2023, WOW); Druckmüller, Rušin & Minarovjech (2006, adaptive circular filters); Starck,
 Fadili & Murtagh (2007, starlet); Knutsson & Westin (1993, normalised convolution).
+
+Version 1.2.1 corrects stepped radial statistics and clipped display highlights, adds
+an explicit native-reference canvas option and documents the limits of internal dust
+calibration. See [field lessons](docs/FIELD_LESSONS.md) and [recipe details](docs/DEVELOP.md).
+Existing images are not rewritten; compare the new numerical recipe before adopting it.

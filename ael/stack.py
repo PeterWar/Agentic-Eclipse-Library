@@ -1,7 +1,7 @@
 """Linear CFA/RGB stacking with explicit, frozen calibration and registration.
 
 All affine matrices map reference pixel centres to input pixel centres. CFA samples
-are interpolated once, directly onto the union canvas. No demosaicing, auto crop,
+are interpolated once, directly onto the declared canvas. No demosaicing, auto crop,
 cloud fitting, registration guess or saturation reconstruction is hidden here.
 """
 from __future__ import annotations
@@ -205,10 +205,13 @@ def stack_from_config(config_path, out_dir, *, progress=print):
     if not np.isfinite(geo.sun_radius_px) or geo.sun_radius_px <= 0 or not np.isfinite(geo.sun_xy).all():
         raise ValueError('solar geometry must be finite with a positive radius')
     settings = cfg.get('stack', {})
-    keys(settings, 'taper_start band_sigma_px clouds hot_pixels moon_guard_px limb_fade_px gain_e_per_dn read_noise_dn', 'stack')
+    keys(settings, 'canvas taper_start band_sigma_px clouds hot_pixels moon_guard_px limb_fade_px gain_e_per_dn read_noise_dn', 'stack')
     for f in frames:
         keys(f, 'path kind pattern iso train exposure_s black white dark flat transmission background flux_scale '
              'linearity_fraction reference_to_input moon_xy moon_radius_px cirrus_fraction note', 'frame')
+    canvas = settings.get('canvas', 'union')
+    if canvas not in ('union', 'reference'):
+        raise ValueError('canvas must be union or reference')
     taper_start = float(settings.get('taper_start', .8))
     if not 0 < taper_start < 1:
         raise ValueError('taper_start must be in (0,1)')
@@ -246,7 +249,7 @@ def stack_from_config(config_path, out_dir, *, progress=print):
     del v, r
     if any(p != patterns[0] for p in patterns):
         raise ValueError('CFA patterns must agree within a train')
-    shape, origin = union_canvas(shapes, matrices)
+    shape, origin = union_canvas(shapes, matrices) if canvas == 'union' else (tuple(geo.shape), (0, 0))
     outgeo = geo.shifted(-origin[0], -origin[1], shape)
     hot = None
     if hp.get('enabled'):
@@ -338,7 +341,7 @@ def stack_from_config(config_path, out_dir, *, progress=print):
     colour = np.nanmedian(result[valid],axis=0) if valid.any() else np.zeros(3)
     gates = {'observed_support': bool(valid.any()), 'nothing_outside_data': bool(np.isnan(result[~valid]).all())}
     receipt = io.write_receipt(out/'receipt.json', product='linear stack', inputs=inputs, outputs=files,
-        parameters=dict(recipe=cfg, origin_reference_xy=origin, frames=frame_reports,
+        parameters=dict(recipe=cfg, canvas=canvas, origin_reference_xy=origin, frames=frame_reports,
                         hot_pixels_per_plane=[] if hot is None else [int(a.sum()) for a in hot],
                         median_rgb_dn_per_s=colour.tolist(), colour_region='all valid pixels, unbalanced sensor RGB'),
         gates=gates, notes='One train/ISO. Frozen registration and calibrations. No automatic cloud fitting. '

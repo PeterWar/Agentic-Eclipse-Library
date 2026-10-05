@@ -90,48 +90,14 @@ def nrgf(img: np.ndarray, valid: np.ndarray | None, geometry: EclipseGeometry, *
     """Normalising-radial-graded filter: ``(I − <I>(r)) / σ(r)`` over annuli around the centre.
 
     ``robust`` uses the median and 1.4826·MAD instead of mean and standard deviation.  Only observed
-    pixels enter each annulus; annuli with fewer than ``min_count`` pixels give ``NaN``.  The sky
+    pixels enter each annulus. Statistics are evaluated continuously in radius, not by a stepwise
+    bin lookup; no image pixels are smoothed. Annuli with fewer than ``min_count`` pixels give ``NaN``.  The sky
     gradient is *not* removed by an NRGF (it is normalised along with the corona): subtract a sky
     model first (:func:`ael.render.sky_background`) if the field is large.
     """
-    a = np.asarray(img, np.float32)
-    m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))
-    r = geometry.radius_map(center, np.float32)
-    b = np.floor(r / bin_px).astype(np.int64)
-    nb = int(b.max()) + 1
-    bm, am = b[m], a[m]
-    cnt = np.bincount(bm, minlength=nb)
-    if robust:
-        order = np.argsort(bm, kind="stable")
-        bs, as_ = bm[order], am[order]
-        starts = np.concatenate([[0], np.cumsum(cnt)[:-1]])
-        mu = np.full(nb, np.nan)
-        sd = np.full(nb, np.nan)
-        for k in np.nonzero(cnt >= min_count)[0]:
-            seg = as_[starts[k]:starts[k] + cnt[k]]
-            med = np.median(seg)
-            mu[k] = med
-            sd[k] = 1.4826 * np.median(np.abs(seg - med))
-    else:
-        s1 = np.bincount(bm, weights=am, minlength=nb)
-        s2 = np.bincount(bm, weights=am.astype(np.float64) ** 2, minlength=nb)
-        with np.errstate(invalid="ignore", divide="ignore"):
-            mu = s1 / cnt
-            sd = np.sqrt(np.maximum(s2 / cnt - mu ** 2, 0))
-        mu[cnt < min_count] = np.nan
-        sd[cnt < min_count] = np.nan
-    if smooth_bins > 0:
-        from scipy.ndimage import gaussian_filter1d
-        for arr in (mu, sd):
-            ok = np.isfinite(arr)
-            if ok.sum() > 3:
-                num = gaussian_filter1d(np.where(ok, arr, 0.0), smooth_bins)
-                den = gaussian_filter1d(ok.astype(float), smooth_bins)
-                arr[ok] = (num / np.maximum(den, 1e-9))[ok]
-    out = np.full(a.shape, np.nan, np.float32)
-    with np.errstate(invalid="ignore", divide="ignore"):
-        out[m] = ((am - mu[bm]) / sd[bm]).astype(np.float32)
-    return out
+    from .radial import continuous_nrgf
+    return continuous_nrgf(img, valid, geometry, center=center, bin_px=bin_px,
+                           robust=robust, min_count=min_count, smooth_bins=smooth_bins)
 
 
 # ------------------------------------------------------------------------------------------------

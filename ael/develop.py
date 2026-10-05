@@ -16,6 +16,31 @@ def layer_alpha(base_alpha,observed,mode):
     return np.where(observed,alpha,0).astype(np.float32)
 
 
+def tone_map(rgb, valid, *, scale, strength=10., highlight_ceiling=.9):
+    """Per-channel asinh followed by one shared, continuous highlight shoulder.
+
+    No positive hard clipping. The shared factor preserves asinh RGB ratios;
+    the original linear data and its physical support are unchanged.
+    """
+    if not np.isfinite([scale, strength, highlight_ceiling]).all():
+        raise ValueError('display parameters must be finite')
+    if scale <= 0 or strength <= 0 or not 0 < highlight_ceiling <= 1-1/65535:
+        raise ValueError('scale/asinh must be positive; highlight_ceiling must leave one 16-bit DN below 1')
+    a = np.asarray(rgb, np.float64)
+    m = np.asarray(valid, bool)
+    if a.shape != (*m.shape, 3) or not np.isfinite(a[m]).all():
+        raise ValueError('RGB must be finite on a matching valid domain')
+    a = np.where(m[...,None], a, 0)
+    with np.errstate(over='ignore', invalid='ignore'):
+        u = np.arcsinh(np.maximum(a, 0)/scale*strength)/np.arcsinh(strength)
+    if not np.isfinite(u).all():
+        raise ValueError('display scale/asinh overflow; choose a usable scale')
+    peak = np.max(u, axis=-1)
+    shoulder = highlight_ceiling*(-np.expm1(-peak/highlight_ceiling))
+    factor = np.divide(shoulder, peak, out=np.zeros_like(peak), where=peak>0)
+    return (u*factor[...,None]).astype(np.float32)
+
+
 def filters_from_config(config_path,out_dir,*,progress=print):
     path=Path(config_path).resolve(); root=path.parent
     cfg=json.loads(path.read_text())
@@ -71,11 +96,20 @@ def filters_from_config(config_path,out_dir,*,progress=print):
     if any(not np.isfinite(v) or not 0<=v<=1 for v in cfg.get('opacities',{}).values()):
         raise ValueError('opacities must be finite in [0,1]')
     stretch=cfg['display']
-    if set(stretch)-{'scale','asinh'}: raise ValueError('unknown display parameter')
+    if set(stretch)-{'scale','asinh','highlight_ceiling'}: raise ValueError('unknown display parameter')
     scale=float(stretch['scale']); strength=float(stretch.get('asinh',10))
-    if not np.isfinite(scale*strength) or scale<=0 or strength<=0: raise ValueError('display scale and asinh must be positive')
-    base=np.clip(np.arcsinh(np.maximum(rgb,0)/scale*strength)/np.arcsinh(strength),0,1)
-    base=np.where(valid[...,None],base,0).astype(np.float32)
+    ceiling=float(stretch.get('highlight_ceiling',.9))
+    base=tone_map(rgb,valid,scale=scale,strength=strength,highlight_ceiling=ceiling)
+    # A reference is independently scaled, so positive observed HDR is not clipped
+    # merely because the display stretch uses a lower scale.
+    reference_scale=float(np.max(rgb[valid]))/.98
+    reference=np.where(valid[...,None],rgb.astype(np.float64)/reference_scale,0)
+    display_info=dict(scale=scale,asinh=strength,highlight_ceiling=ceiling,
+                      method='asinh RGB with shared exponential highlight shoulder',
+                      positive_base_clip_pixels=int(np.count_nonzero((photoshop.to_u16(base[valid])==65535).any(axis=-1))),
+                      negative_rgb_samples=int(np.count_nonzero(rgb[valid]<0)),
+                      linear_reference_scale=reference_scale,
+                      linear_reference_peak=.98)
     out=Path(out_dir).resolve(); out.mkdir(parents=True,exist_ok=False)
     outputs={}; params=[]; expected=[]
     export=bool(cfg.get('photoshop',False))
@@ -94,8 +128,8 @@ def filters_from_config(config_path,out_dir,*,progress=print):
             weight=aa.astype(np.float32)[...,None]/65535*(round(opacity*255)/255)
             comp=comp*(1-weight)+blend*weight
     add('Background',np.zeros_like(base),np.ones(valid.shape))
-    # The actual HDR values remain in the float TIFF/NPY, not a clipped 16-bit layer.
-    add('Linear reference / declared scale',np.nan_to_num(rgb)/scale,alpha,visible=False)
+    # Signed floating input remains authoritative; 16-bit reference retains positive range.
+    add('Linear reference / receipt scale',reference,alpha,visible=False)
     add('Display base',base,alpha)
     domain_checks=[]
     for i,name in enumerate(names):
@@ -115,7 +149,9 @@ def filters_from_config(config_path,out_dir,*,progress=print):
                            observed_pixels=int(observed.sum()),alpha='same as display base on observed domain'))
     outputs['preview']=io.save_png(out/'preview.png',np.round(np.clip(comp,0,1)*255).astype(np.uint8))
     outputs['display']=io.save_tiff(out/'display.tif',photoshop.to_u16(comp),description='Display only; not linear photometry')
-    gates={'nothing_outside_data':all(domain_checks),'photoshop_native':'not checked (no application is opened)'}
+    gates={'nothing_outside_data':all(domain_checks),
+           'positive_display_base_not_clipped':display_info['positive_base_clip_pixels']==0,
+           'photoshop_native':'not checked (no application is opened)'}
     if doc is not None:
         icc=resolve(cfg['icc']).read_bytes() if 'icc' in cfg else None
         outputs['psb']=photoshop.save(doc,out/'corona.psb',photoshop.to_u16(comp),icc=icc)
@@ -124,9 +160,10 @@ def filters_from_config(config_path,out_dir,*,progress=print):
     inputs={key:resolve(cfg[key]) for key in ('input','geometry','valid','exclude','coverage','alpha','icc') if key in cfg}
     inputs['config']=path
     receipt=io.write_receipt(out/'receipt.json',product='corona filter layers',inputs=inputs,outputs=outputs,
-        parameters=dict(recipe=cfg,layers=params),gates=gates,
+        parameters=dict(recipe=cfg,layers=params,display=display_info),gates=gates,
         notes='Generalised operators, not an exact replay of historical project recipes. No reconstructed saturation, '
         'stars or lunar texture. NRGF-log is a measured-data variant, not historical inward extrapolation. '
-        'Linear reference layer is scaled/clipped; original HDR input is authoritative. '
+        'Linear reference is scaled to retain positive range; negative RGB is clipped in 16-bit display only. '
+        'Original signed floating HDR input is authoritative. '
         'No scientific or native Photoshop validation implied by file roundtrip.')
     return dict(files={k:str(v) for k,v in outputs.items()},receipt=str(receipt))

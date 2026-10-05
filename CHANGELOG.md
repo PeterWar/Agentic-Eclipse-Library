@@ -1,19 +1,24 @@
 # Changelog
 
-## 1.2.1 — planned
+## 1.2.1 — 2026-10-06 (local, unpublished)
 
-- **Ask a new user's goal before choosing a workflow.** When someone arrives without
-  a clear task, the agent should proactively ask what they want to do, in their
-  language and without requiring technical vocabulary. Offer a short choice: start
-  with eclipse photos, continue an already processed image, create an animation, or
-  explore the library. If they are unsure, offer to inspect the files they identify
-  and recommend a starting point. Do not assume they need the RAW-to-Photoshop path.
-- If the user has already stated their goal, use it without asking again. Adapt the
-  next step to that goal and ask only for missing information needed to proceed.
-- Update `AGENTS.md` and `skills/eclipse-first-steps/SKILL.md` consistently. Before
-  calling this complete, check first replies for an unspecified goal, an explicit
-  goal, and an unsure user; record what was actually checked. This is a pending
-  improvement, not implemented or validated in 1.2.0.
+- Fix radial lookup discontinuities in both NRGF variants and four RHEF variants.
+  NRGF evaluates measured annular statistics continuously; RHEF interpolates
+  log-intensity quantile functions before inversion. No spatial image blur.
+- Replace hard-clipped asinh display with a shared soft highlight shoulder and
+  independently scale the hidden 16-bit linear reference. Effective parameters
+  and clipping/negative-channel counts are recorded; signed float HDR stays authoritative.
+- Add explicit `stack.canvas: "reference"` alongside the existing union default,
+  preserving the agreed native rectangle without per-project monkey-patching.
+- Add installed regression tests: frozen 1.2.0 ring-producing negative operators,
+  seeded angular detail, missing/constant/tied data, bright PSB pixels and receipts,
+  native flat-before-warp calibration with a wrong-stage control, and canvas choice.
+- Implement the planned goal-first guidance in both `AGENTS.md` and the first-steps
+  skill. Review three sample first replies (missing, explicit and unsure goal);
+  this is a manual instruction review, not an independent model benchmark.
+- Document astromodified colour assumptions, exposure-name disagreements, separate
+  lunar/earthshine sources, native Photoshop checks and the limited dust pilot.
+  The experimental dust fitter is not promoted to an automatic cleanup command.
 
 ## 1.2.0 — 2026-10-03
 

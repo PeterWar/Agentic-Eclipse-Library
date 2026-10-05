@@ -9,6 +9,6 @@
       "black": 512, "white": 16000, "linearity_fraction": 0.95,
       "reference_to_input": [[1,0,2],[0,1,-1]], "moon_xy": [3005.5,2000], "moon_radius_px": 460}
   ],
-  "stack": {"taper_start": 0.8, "moon_guard_px": 2, "limb_fade_px": 4,
+  "stack": {"canvas": "union", "taper_start": 0.8, "moon_guard_px": 2, "limb_fade_px": 4,
     "band_sigma_px": 0, "hot_pixels": {"enabled": false}}
 }

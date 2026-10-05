@@ -19,7 +19,7 @@ Open this folder with your coding agent (Claude Code, Codex or similar) and tell
 files and proposes the path one step at a time: calibrate (if you took darks or flats), linearise and stack, open a
 layered 16-bit Photoshop project, and add the three most useful corona filters first. You choose how they look.
 
-## Runnable tools in 1.2.0
+## Runnable tools in 1.2.1
 
 `ael stack` builds a linear stack with explicit calibration and registration. `ael filters`
 adds the first three filters or sixteen portable variants and an optional verified PSB.
@@ -110,3 +110,8 @@ repository").
 
 [MIT](LICENSE) © 2026 Pere Guerra Serra. You may use, copy, modify and redistribute this work freely, including
 commercially; the licence only asks you to keep the copyright notice with copies of the work.
+
+Version 1.2.1 corrects stepped radial statistics and clipped display highlights, adds
+an explicit native-reference canvas option and documents the limits of internal dust
+calibration. See [field lessons](docs/FIELD_LESSONS.md) and [recipe details](docs/DEVELOP.md).
+Existing images are not rewritten; compare the new numerical recipe before adopting it.

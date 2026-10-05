@@ -6,7 +6,7 @@ of the author's manually finished image. All outputs preserve the observed domai
 from __future__ import annotations
 import numpy as np
 from scipy.interpolate import LSQUnivariateSpline
-from scipy.stats import rankdata
+from .radial import radial_quantile_rank
 from . import filters as F
 from .geometry import EclipseGeometry
 
@@ -71,36 +71,8 @@ def achf_isotropic(luminance, valid, geometry, *, sigmas=(1,2,4,8,16), outer_sig
 
 
 def radial_rank(img, valid, geometry, sector_deg=None, bin_px=2):
-    """Empirical radial histogram equalisation; local sectors blend continuously.
-
-    Local CDFs are measured every quarter-sector and linearly blended in angle.
-    Cells with fewer than 12 observations remain undefined, never extrapolated.
-    """
-    m=valid & np.isfinite(img)
-    radius=geometry.radius_map(); ri=np.floor(radius/bin_px).astype(int)
-    ids=np.flatnonzero(m); bins=ri.ravel()[ids]
-    order=np.argsort(bins,kind='stable'); counts=np.bincount(bins); cuts=np.r_[0,np.cumsum(counts)]
-    vals=img.ravel()[ids]
-    angles=geometry.pa_map().ravel()[ids]
-    out=np.full(len(ids),np.nan,np.float32)
-    for b in np.flatnonzero(counts>=12):
-        ix=order[cuts[b]:cuts[b+1]]; v=vals[ix]
-        if sector_deg is None:
-            out[ix]=(rankdata(v,method='average')-.5)/len(ix)
-            continue
-        step=sector_deg/4; k0=np.floor(angles[ix]/step).astype(int)
-        blend=angles[ix]/step-k0; total=np.zeros(len(ix)); weight=np.zeros(len(ix))
-        for k in np.unique(np.r_[k0,k0+1]):
-            delta=(angles[ix]-k*step+180)%360-180
-            sample=np.sort(v[np.abs(delta)<=sector_deg/2])
-            if len(sample)<12: continue
-            use=(k0==k)|(k0+1==k)
-            wk=np.where(k0[use]==k,1-blend[use],blend[use])
-            cdf=(np.searchsorted(sample,v[use],'left')+np.searchsorted(sample,v[use],'right'))/(2*len(sample))
-            total[use]+=wk*cdf; weight[use]+=wk
-        out[ix]=np.where(weight>.999,total/np.maximum(weight,1e-9),np.nan)
-    result=np.full(img.shape,np.nan,np.float32); result.ravel()[ids]=out
-    return result
+    """Continuous radial/sector quantile rank of positive observed luminance."""
+    return radial_quantile_rank(img, valid, geometry, sector_deg, bin_px)
 
 
 def wow_bilateral(img,valid,*,n_scales=6,noise_floor=3):
@@ -161,13 +133,16 @@ def make_filter(name,luminance,valid,geometry):
         q=F.nrgf(np.log(np.maximum(a,1e-30)) if name=='nrgf_log' else a,m,geometry,
                  bin_px=2,min_count=12,smooth_bins=3)
         result,info=display_detail(q,m)
-        return result,'multiply',dict(**info,input='ln L' if name=='nrgf_log' else 'L',bin_px=2,smooth_bins=3)
+        return result,'multiply',dict(**info,input='ln L' if name=='nrgf_log' else 'L',bin_px=2,smooth_bins=3,
+                                           profile_evaluation='continuous PCHIP at measured radial anchors')
     if name.startswith('rhef'):
         sector=60 if name.endswith('60') else 30 if name.endswith('30') else None
         q=radial_rank(a,m,geometry,sector)
         if name=='rhef_upsilon':
             q=np.where(q<.5,.5*np.maximum(2*q,0)**.35,1-.5*np.maximum(2-2*q,0)**.35)
-        return q,'multiply',dict(sector_deg=sector,bin_px=2,upsilon=.35 if name=='rhef_upsilon' else 1)
+        return q,'multiply',dict(sector_deg=sector,bin_px=2,upsilon=.35 if name=='rhef_upsilon' else 1,
+                                 quantiles=257,statistics='continuous log-quantiles in radius and angle',
+                                 image_smoothing=False)
     if name in ISO:
         sigmas,outer=ISO[name]
         q,info=achf_isotropic(a,m,geometry,sigmas=sigmas,outer_sigma=outer)
