@@ -151,3 +151,8 @@ scientific validation of an image or a guarantee of no artefacts.
 Field guidance on astromodified colour, exposure metadata, earthshine candidates and
 partial dust-response estimates is in `docs/FIELD_LESSONS.md`. AEL does not infer
 a universal white balance or automatically remove dust or recover lunar relief.
+
+For a preferred existing Photoshop edit with independently adjustable filters, see
+the [existing-edit case study](EXISTING_EDIT_CASE_STUDY.md). It separates appearance,
+measured registration and native-save integrity. Its image-specific settings are
+not additions to the default linear recipe.

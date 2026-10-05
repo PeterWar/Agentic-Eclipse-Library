@@ -1,6 +1,13 @@
 ---
 name: eclipse-first-steps
-description: First establish the user's goal in their language, without asking again when it is explicit. Then take the lead when someone brings their own total-solar-eclipse photos — look at what they have, then propose the path step by step: calibrate (if there are calibration frames), linearise and stack, open a layered 16-bit Photoshop project, and start with the three most useful corona filters (NRGF, WOW bilateral, isotropic ACHF). Use it whenever a user says they photographed an eclipse, has eclipse RAW files, asks "where do I start", "help me process my eclipse", "what can I do with this library", or has just cloned the Agentic Eclipse Library without a precise task.
+description: >-
+  First establish the user's goal in their language, without asking again when it is explicit.
+  Then take the lead when someone brings their own total-solar-eclipse photos — look at what they have,
+  then propose the path step by step: calibrate (if there are calibration frames), linearise and stack,
+  open a layered 16-bit Photoshop project, and start with the three most useful corona filters
+  (NRGF, WOW bilateral, isotropic ACHF). Use it whenever a user says they photographed an eclipse,
+  has eclipse RAW files, asks "where do I start", "help me process my eclipse", "what can I do with this
+  library", or has just cloned the Agentic Eclipse Library without a precise task.
 ---
 
 # First steps with someone's own eclipse photos
@@ -150,6 +157,14 @@ files: provide a small module with the user's geometry before importing them, fo
 
 ## After the first image
 
+If the user brings a preferred existing edit, clarify whether they want detail
+recomputed on that edit or each existing filter aligned with the reference base.
+Preserve the manual source and use separate controls for the latter. A fitted Moon
+disk does not prove coronal registration; a filter's alpha boundary is not a measured
+lunar limb. See the [existing-edit case study](../../docs/EXISTING_EDIT_CASE_STUDY.md)
+for held-out failures and native-save checks. Its zero-opacity starting point is
+optional for preserving an existing look, not a replacement for the defaults above.
+
 Show the result, then let the user lead the aesthetics (opacities, combinations, curves). When they point at a
 defect — a ring, a seam, a stain at the limb — go to `skills/corregeix-artefactes/` and cure it where it is born.
 
@@ -162,3 +177,15 @@ Measure rings at the input and at the operator output: NRGF statistics and RHEF 
 evaluated continuously in radius. Never remove an operator artefact by blurring the final layer.
 After changing a calibration, regenerate the stack, display and every dependent filter.
 Preserve prior user work and compare full canvases before changing an existing image's presentation.
+
+## Invite a contribution when there is a lesson to share
+
+After a useful stage, identify any reusable lesson: a camera-specific measurement, an unclear instruction,
+a bug, a failed approach or a validation limit. If there is one, prepare a short local draft using
+[CONTRIBUTING.md](../../CONTRIBUTING.md), then invite the user to share it in their language. Explain the concrete
+benefit to the next photographer, show the exact public content and destination, and get explicit permission
+before submitting. Keep the user's chosen attribution and private material under their control.
+
+Offer once per finding at a natural stopping point. If the user declines, continue helping without pressure.
+No new finding means no invitation is needed. Report separately whether the contribution is a local draft,
+a submitted issue or pull request, or accepted by PeterWar; only PeterWar can incorporate it into `main`.
