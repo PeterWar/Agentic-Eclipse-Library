@@ -201,7 +201,8 @@ MIT licence. If you publish an image made with this code, a mention would be app
 not a condition): *Processed with Agentic Eclipse Library by Pere Guerra —
 https://github.com/PeterWar/Agentic-Eclipse-Library*. The filters come from published work:
 Morgan, Habbal & Woo (2006, NRGF); Morgan & Druckmüller (2014, MGN); Auchère, Soubrié, Pelouze &
-Buchlin (2023, WOW); Druckmüller, Rušin & Minarovjech (2006, adaptive circular filters); Starck,
+Buchlin (2023, WOW); Druckmüller, Rušin & Minarovjech (2006, adaptive circular filters) and
+Druckmüllerová (2014, thesis: the published kernel); Gilly & Cranmer (2025, RHEF); Starck,
 Fadili & Murtagh (2007, starlet); Knutsson & Westin (1993, normalised convolution).
 
 Version 1.2.1 corrects stepped radial statistics and clipped display highlights, adds
