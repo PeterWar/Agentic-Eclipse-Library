@@ -71,8 +71,8 @@ the sky `S`, which is light scattered *in* the atmosphere. So the correction is 
 - **`k` is an input, not a result.** Measure it from the dimming of the corona during totality: two
   frames of the same exposure and ISO, as far apart in time as possible, registered on the Sun; ring
   profiles fitted as `later = a·earlier + b`; `k = −2.5·log10(a)/ΔX` (`dimming_k`). In 2026,
-  14 pairs over seven exposures gave **0.402 ± 0.036 mag per air mass** (research note 78 in
-  `3-RECERCA/`, in Catalan). This measures every
+  14 pairs at eight exposure times gave **0.402 ± 0.036 mag per air mass** (mean and scatter
+  between pairs; research note 78 in `3-RECERCA/`, in Catalan). This measures every
   multiplicative change between the frames: it is the extinction only if the transparency was steady.
 - **Achromatic by default**: one `k` for all channels keeps every colour ratio. Extinction is
   chromatic, so one `k` per channel is possible; it changes the image's colour. Compare full canvases

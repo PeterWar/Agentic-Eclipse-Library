@@ -78,14 +78,15 @@ mote with a smooth model, clone another patch or hide it with a final-image corr
 This lesson comes from the author's 2026 data (Sun about 9° high), not from the nine-exposure case.
 Across a corona photographed through 5.75 to 6.39 air masses within two solar radii, the
 horizon side is dimmer and the zenith side brighter than the Sun's own line of sight. A global
-colour vector cannot correct that; it was declared in the processing chain and never applied
-to the image. The cure belongs to the linear stack, after the sky is subtracted, followed by a
-rebuild of every filter layer (`ael extinction`, `docs/DEVELOP.md`).
+colour vector cannot correct that, because it is the same for every pixel. The cure belongs to
+the linear stack, after the sky is subtracted, followed by a rebuild of every filter layer
+(`ael extinction`, `docs/DEVELOP.md`).
 
 - **Measure `k` on its own.** The corona dimmed by 4–6 % between second and third contact,
   multiplicatively and uniformly in azimuth, while the Sun's air mass rose from 6.02 to 6.20.
-  Same-exposure pairs gave 0.402 ± 0.036 mag per air mass. Pairs only seconds apart carry too
-  small an air-mass change to say anything and were left out.
+  Fourteen same-exposure pairs, at eight exposure times, gave 0.402 ± 0.036 mag per air mass
+  (mean and scatter between pairs). Pairs only seconds apart carry too small an air-mass
+  change to say anything and were left out.
 - **The sky absorbs what the model lets it.** A sky plane fitted on uncorrected data takes the
   extinction dipole of whatever corona remains in the fitting region as a sky gradient. A
   constant sky estimated a few solar radii from the Sun contains corona; the correction then
@@ -94,7 +95,7 @@ rebuild of every filter layer (`ael extinction`, `docs/DEVELOP.md`).
 - **Use the correction as a consistency test.** Against a space coronagraph, the uncorrected
   dipole pointed within a few degrees of the zenith. The `k` that cancelled it ring by ring
   depended on the sky model, falling outwards with a plane fitted beyond 8 R☉ and rising
-  outwards with a constant sky. The adopted wording became a consistency test conditional on
+  outwards with a constant sky. The comparison is therefore a consistency test conditional on
   the sky plane, not an independent measurement of `k`.
 - **A pass is not proof of the level.** In the synthetic tests, a plane fitted on a corona tail
   and the same tail raising the sky level compensate in the dipole: the gate passes while the
