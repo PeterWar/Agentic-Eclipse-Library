@@ -73,6 +73,36 @@ mote with a smooth model, clone another patch or hide it with a final-image corr
   and scattered coronal light. Supply an explicitly labelled hidden candidate if useful;
   a failed relief check is not proof that the lunar signal is zero.
 
+## Low Sun: sky and extinction are degenerate (unreleased)
+
+This lesson comes from the author's 2026 data (Sun about 9° high), not from the nine-exposure case.
+Across a corona photographed through 5.75 to 6.39 air masses within two solar radii, the
+horizon side is dimmer and the zenith side brighter than the Sun's own line of sight. A global
+colour vector cannot correct that; it was declared in the processing chain and never applied
+to the image. The cure belongs to the linear stack, after the sky is subtracted, followed by a
+rebuild of every filter layer (`ael extinction`, `docs/DEVELOP.md`).
+
+- **Measure `k` on its own.** The corona dimmed by 4–6 % between second and third contact,
+  multiplicatively and uniformly in azimuth, while the Sun's air mass rose from 6.02 to 6.20.
+  Same-exposure pairs gave 0.402 ± 0.036 mag per air mass. Pairs only seconds apart carry too
+  small an air-mass change to say anything and were left out.
+- **The sky absorbs what the model lets it.** A sky plane fitted on uncorrected data takes the
+  extinction dipole of whatever corona remains in the fitting region as a sky gradient. A
+  constant sky estimated a few solar radii from the Sun contains corona; the correction then
+  amplifies the over-subtraction on the horizon side. A joint fit of sky, corona and `k` was
+  degenerate on these data and was kept as a negative result.
+- **Use the correction as a consistency test.** Against a space coronagraph, the uncorrected
+  dipole pointed within a few degrees of the zenith. The `k` that cancelled it ring by ring
+  depended on the sky model, falling outwards with a plane fitted beyond 8 R☉ and rising
+  outwards with a constant sky. The adopted wording became a consistency test conditional on
+  the sky plane, not an independent measurement of `k`.
+- **A pass is not proof of the level.** In the synthetic tests, a plane fitted on a corona tail
+  and the same tail raising the sky level compensate in the dipole: the gate passes while the
+  level is 7 % low at 3–4 R☉ and 15 % low at 4–5 R☉. Estimate that bias by passing a corona model
+  through the same sky fit, and declare it.
+- **Keep `X_ref` explicit.** Bring every pixel to the air mass at which the photometric zero
+  point was evaluated; with k = 0.40, an error of 0.03 in `X_ref` moves the whole level by 1 %.
+
 ## Deliver and describe the actual file
 
 Rebuild every dependent product when a source calibration or operator changes. Preserve

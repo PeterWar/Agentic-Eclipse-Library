@@ -11,6 +11,8 @@ the general part of it, rewritten so that an agent — or a person — can run i
 * :mod:`ael.motion`    – coronal-motion animations: epochs, Sun-frame merging, displacement vectors
   with null tests that reject sensor-fixed and Moon-fixed motion.
 * :mod:`ael.calibrate` – minimal RAW calibration (dark, flat, saturation, Bayer handling).
+* :mod:`ael.extinction` – air mass per pixel (Kasten & Young 1989) and the differential-extinction
+  correction of a linear, sky-subtracted stack under a low Sun, with its consistency tests.
 * :mod:`ael.photoshop` – layered 16-bit Photoshop files (PSD/PSB), verified by reopening; needs psd-tools.
 * :mod:`ael.annotate`, :mod:`ael.io`, :mod:`ael.synthetic`, :mod:`ael.gates` – drawing, files and
   receipts, synthetic coronae for tests, and the gates every product must pass.
@@ -25,5 +27,5 @@ __version__ = "1.2.1"
 CREDIT = ("Processed with Agentic Eclipse Library by Pere Guerra — "
           "https://github.com/PeterWar/Agentic-Eclipse-Library")
 
-from . import geometry, polar, filters, render, motion, calibrate, photoshop, annotate, io, synthetic, gates, pipelines  # noqa: E402,F401
+from . import geometry, polar, filters, render, motion, calibrate, extinction, photoshop, annotate, io, synthetic, gates, pipelines  # noqa: E402,F401
 from .geometry import EclipseGeometry  # noqa: E402,F401

@@ -33,6 +33,7 @@ Follow `skills/eclipse-first-steps/SKILL.md`; the learning checks are in `docs/F
 | Darks, flats, stacking, noise, linearity, weights | `skills/apilatge-imatges-eclipsi/SKILL.md` |
 | Registration, HDR fusion, filters, tone curve, Photoshop layers, gates | `skills/postprocessat-corona/SKILL.md` |
 | Rings, seams, ghosts, striping, limb fringes, marks drawn by the photographer | `skills/corregeix-artefactes/SKILL.md` |
+| Sky, absolute brightness, differential extinction under a low Sun | `docs/DEVELOP.md` (extinction recipe), then `docs/FIELD_LESSONS.md` |
 | Structure images, unrolled (polar) views, coronal motion and animations | `skills/corona-visualizations/SKILL.md`, then `README_AEL.md` and `python -m ael selftest` |
 | Background, dated findings, why a decision was taken | `3-RECERCA/README.md` (index), then the numbered note |
 | Code of a given stage or image version | `3-RECERCA/tools/<stage-or-version>/` |

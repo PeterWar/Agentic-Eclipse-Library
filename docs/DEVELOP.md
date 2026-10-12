@@ -10,6 +10,7 @@ working directory. Every output directory must be new.
 pip install ".[raw,photoshop]"
 ael selftest
 ael stack --config stack.json --out stack_run/
+ael extinction --config extinction.json --out ext_run/   # optional: low Sun (unreleased)
 ael filters --config filters.json --out filter_run/
 ```
 
@@ -81,6 +82,49 @@ Outputs: `linear.npy` and float32 `linear.tif` (DN/s sensor RGB); `valid.npy`;
 `weight.npy`; `alpha.npy`; shifted `geometry.json`; and a hashed `receipt.json`.
 There is no formal uncertainty map: the two-band variance is a weighting model,
 not a propagated absolute-photometry uncertainty budget.
+
+## Extinction recipe (optional, unreleased)
+
+With a low Sun the air mass changes across the field and the corona carries a dipole of
+atmospheric origin (in 2026, about ±9 % at 1.5 R☉ and ±23 % at 4 R☉ around the Sun's own
+line of sight). `ael extinction` corrects it on the **linear stack, after subtracting the
+sky**: `(I − sky)·10^(0.4·k·(X − x_ref))`. Run it between `stack` and `filters`, and rebuild
+every filter layer from its output; a correction applied to a finished image is a patch.
+See `examples/extinction_config_template.json`.
+
+| Key | Meaning |
+| --- | --- |
+| `input`, `geometry`, `valid` | The linear stack, its geometry (with `arcsec_per_px` and `north_deg` when the air mass is computed) and its valid mask |
+| `sky` | Exactly one of `{"fit": {"r_min_rsun": 8, "order": 1}}` (robust polynomial per channel, far from the Sun), `{"array": "sky.npy"}`, or `{"value": number or one per channel}` (0 if already subtracted) |
+| `airmass` | `{"site": {...}, "time_utc": "..."}` (astropy), or `{"sun_altitude_deg": h, "zenith_pa_deg": q}` / `{"sun_altitude_deg": h, "zenith_image_deg": a}`, or `{"array": "airmass.npy"}`. Optional `north_px`/`east_px` (image pixels per arcsecond towards north and east, from a plate solution) or `arcsec_per_px` |
+| `site` | `lat_deg`, `lon_deg` (east positive), `height_m`, `pressure_hpa` (null: standard atmosphere at that height), `temperature_c`, `relative_humidity`, `wavelength_um` |
+| `k` | Extinction coefficient in mag per air mass: one value (achromatic) or one per channel. **Measured, never assumed** |
+| `x_ref` | Reference air mass: a number (e.g. where the photometric zero point was evaluated) or `"sun"` |
+| `keep_sky` | Also write `corrected_with_sky.npy`: the corrected corona plus the same sky model, for `ael filters` |
+
+No key has a default that changes the result: `sky`, `airmass`, `k` and `x_ref` are required.
+Outputs: `corrected_net.npy` (sky-subtracted, NaN outside data), optionally
+`corrected_with_sky.npy`, `airmass.npy`, `factor.npy`, `sky.npy` and a hashed `receipt.json`
+with the air-mass and factor ranges, the factor at 1.5–4 R☉ and the sky-fit details.
+Pixels whose line of sight is below the horizon have no air mass and stay NaN.
+
+Conventions: `zenith_pa_deg` is measured on the sky from celestial north through east
+(`ael.extinction.solar_horizontal` gives it, with ICRS north); `zenith_image_deg` on the
+image, clockwise from up. The image is treated as a gnomonic projection of the apparent sky
+centred on the Sun; with a plate solution fitted on stars (`airmass_map_from_wcs`), pixels
+map to true positions and refraction is applied point by point. The two routes differ by
+the differential refraction (about 0.8 % of the vertical offset at 9° altitude).
+
+Measuring `k`: `ael.extinction.dimming_k` on pairs of registered frames with the same
+exposure and ISO, far apart in time. It refuses air-mass differences below 0.02. Quote the
+scatter between pairs, not the fit error. It reads any change of transparency as extinction.
+
+Sky and extinction are degenerate. Fit the sky where the corona is negligible; check the
+result against a reference without atmosphere with `ring_dipole`, `k_nulling_dipole` and
+the gate `k_consistency` (one `k` for every ring, no radial trend). A pass is consistency,
+not a measurement of `k`, and says nothing about the absolute level: estimate the corona
+left in the sky region by passing a corona model through the same sky fit, and declare it.
+See `docs/FIELD_LESSONS.md`.
 
 ## Filters recipe
 

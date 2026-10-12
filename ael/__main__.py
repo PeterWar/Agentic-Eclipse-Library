@@ -13,6 +13,8 @@ def main(argv=None):
     ap = argparse.ArgumentParser(prog="ael", description=f"Agentic Eclipse Library {__version__}. {CREDIT}")
     sub = ap.add_subparsers(dest="cmd", required=True)
     for command, help_text in (("stack", "RAW/Bayer/linear RGB + frozen registration -> linear HDR stack"),
+                               ("extinction", "linear stack + declared sky, air mass and k -> stack corrected "
+                                              "for differential atmospheric extinction"),
                                ("filters", "linear stack -> corona filter layers and optional 16-bit PSB")):
         parser = sub.add_parser(command, help=help_text)
         parser.add_argument("--config", required=True, help="JSON recipe; paths relative to this file")
@@ -37,10 +39,11 @@ def main(argv=None):
     a = ap.parse_args(argv)
 
     from . import io as aio, pipelines
-    if a.cmd in ("stack", "filters"):
+    if a.cmd in ("stack", "extinction", "filters"):
         from .stack import stack_from_config
         from .develop import filters_from_config
-        run = stack_from_config if a.cmd == "stack" else filters_from_config
+        from .extinction import extinction_from_config
+        run = dict(stack=stack_from_config, extinction=extinction_from_config, filters=filters_from_config)[a.cmd]
         try:
             print(json.dumps(run(a.config, a.out), indent=1))
         except (ValueError, FileExistsError, KeyError) as exc:

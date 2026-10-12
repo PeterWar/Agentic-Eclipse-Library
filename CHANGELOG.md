@@ -1,5 +1,32 @@
 # Changelog
 
+## Unreleased (local branch, not published)
+
+- Add `ael.extinction` and `ael extinction --config ... --out ...`: differential atmospheric
+  extinction across the field under a low Sun. Per-pixel air mass from the site and time
+  (astropy: the Sun's apparent altitude with refraction and the zenith's position angle,
+  projected with the image's north/east vectors or a plate solution), or directly from the
+  Sun's apparent altitude, the zenith direction and the plate scale. Air mass of Kasten &
+  Young (1989), on apparent altitude; `NaN` below the horizon.
+- The correction works in linear light after subtracting the sky:
+  `(I − sky)·10^(0.4·k·(X − X_ref))`, with `X_ref` the air mass at the Sun or at the
+  photometric zero point. Achromatic by default (colour ratios unchanged); one `k` per channel
+  is optional and changes colour. `k` is an input; `dimming_k` measures it from the dimming of
+  the corona between same-exposure frames of totality and refuses pairs too close in air mass.
+- Consistency tests instead of a fitted `k`: `ring_dipole`, `k_nulling_dipole` and the gate
+  `k_consistency` (one `k` must cancel the zenith dipole against a reference without
+  atmosphere in every ring, with no radial trend). Documented lesson: sky and extinction are
+  degenerate; fit the sky where the corona is negligible (e.g. r ≥ 8 R☉).
+- Known-truth tests on synthetic coronae: exact recovery with the true sky; recovery within
+  0.5 % with a sky plane fitted beyond 8 R☉ when no corona is there; negative tests where a
+  sky plane fitted on uncorrected data absorbs the extinction dipole of the corona tail, a
+  constant sky estimated at 3–4 R☉ contains corona, and a constant sky misses a sky gradient
+  (all three detected by the same gate); air-mass sanity checks (zenith, horizon,
+  plane-parallel limit, symmetry about the vertical, three equivalent orientations, the
+  astropy and plate-solution routes).
+- Fix `render.sky_background` on noise-free data: the robust scale was zero and a strict
+  comparison clipped every pixel, returning a zero sky without warning.
+
 ## 1.2.1 — 2026-10-06 (local, unpublished)
 
 - Fix radial lookup discontinuities in both NRGF variants and four RHEF variants.

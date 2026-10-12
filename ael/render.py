@@ -61,7 +61,8 @@ def sky_background(img: np.ndarray, valid: np.ndarray | None, geometry: EclipseG
         coef, *_ = np.linalg.lstsq(A[use], z[use], rcond=None)
         res = z - A @ coef
         s = 1.4826 * np.median(np.abs(res[use] - np.median(res[use])))
-        new = np.abs(res - np.median(res[use])) < clip_sigma * s
+        # "<=": with noise-free data s is 0 and "<" rejected every pixel, returning a zero sky silently.
+        new = np.abs(res - np.median(res[use])) <= clip_sigma * s
         if (new == use).all():
             break
         use = new

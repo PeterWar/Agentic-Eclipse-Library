@@ -36,6 +36,79 @@ Registration and calibration must be measured and declared first. The default fi
 are NRGF, bilateral WOW and isotropic ACHF; all sixteen variants are available on request.
 These are portable recipes, not an exact replay of the author's final Photoshop image.
 
+## Differential extinction under a low Sun (unreleased)
+
+When the Sun is low, the air mass changes across the corona. In 2026 the Sun stood about 9° high:
+the air mass was about **5.75 two solar radii above the Sun** (towards the zenith), **6.05 at the Sun**
+and **6.39 two radii below**. With the extinction coefficient measured during that totality
+(0.40 mag per air mass), the side towards the horizon received about 9 % less light than the Sun's
+own line of sight at 1.5 R☉ and about 23 % less at 4 R☉; the side towards the zenith about 9 % and
+24 % more. It is a dipole across the corona that grows with radius. A global brightness or colour
+scale does not remove it. It is born in the linear stack, so it is corrected there, and every
+filter layer is then rebuilt from the corrected stack.
+
+```sh
+python -m ael stack      --config stack.json      --out stack_run/
+python -m ael extinction --config extinction.json --out ext_run/   # see examples/extinction_config_template.json
+python -m ael filters    --config filters.json    --out filter_run/  # input: ext_run/corrected_with_sky.npy
+```
+
+What is observed is `I = C·10^(−0.4·k·X) + S`: the corona `C` dimmed along each line of sight, plus
+the sky `S`, which is light scattered *in* the atmosphere. So the correction is made in linear light
+**after subtracting the sky**, and the sky itself is not corrected:
+
+    I_corr = (I − S)·10^(0.4·k·(X − X_ref))
+
+- **Air mass per pixel** (`ael.extinction`): Kasten & Young (1989) on the apparent altitude of each
+  line of sight. Either from the site and the time with astropy (`airmass_map_from_site`: the Sun's
+  altitude with refraction and the position angle of the zenith, projected with the image's
+  north/east vectors), from a plate solution (`airmass_map_from_wcs`), or directly from the Sun's
+  apparent altitude, the zenith direction and the plate scale (`airmass_map`). On an alt-azimuth
+  mount with a level camera the zenith is simply image up. Use the optical plate scale, not the Sun's
+  vertical diameter, which refraction compresses. Below the horizon the result is `NaN`.
+- **`X_ref`** is the air mass at the Sun, or the one at which your photometric zero point was
+  evaluated. Write it down: with k = 0.40, an error of 0.03 in `X_ref` moves the whole level by 1 %.
+- **`k` is an input, not a result.** Measure it from the dimming of the corona during totality: two
+  frames of the same exposure and ISO, as far apart in time as possible, registered on the Sun; ring
+  profiles fitted as `later = a·earlier + b`; `k = −2.5·log10(a)/ΔX` (`dimming_k`). In 2026,
+  14 pairs over seven exposures gave **0.402 ± 0.036 mag per air mass** (research note 78 in
+  `3-RECERCA/`, in Catalan). This measures every
+  multiplicative change between the frames: it is the extinction only if the transparency was steady.
+- **Achromatic by default**: one `k` for all channels keeps every colour ratio. Extinction is
+  chromatic, so one `k` per channel is possible; it changes the image's colour. Compare full canvases
+  side by side before adopting either for an image someone has already seen.
+
+### The lesson: sky and extinction are degenerate
+
+The sky and the extinction leave similar marks on the corona. A sky plane fitted on uncorrected data
+where corona is still present takes the corona's extinction dipole as a sky gradient. A constant sky
+estimated a few solar radii from the Sun contains corona, and the correction then amplifies the
+over-subtraction on the horizon side. A joint fit of sky, corona and `k` was degenerate on the 2026
+data. So:
+
+1. fit the sky where the corona is negligible (e.g. r ≥ 8 R☉; `sky.fit` in the recipe); if the field
+   is smaller, say so, and estimate the corona left in the sky region by passing a corona model through
+   the same sky fit;
+2. measure `k` independently (dimming during totality);
+3. treat the correction as a **consistency test**, not as a measurement of `k`: against a reference
+   without atmosphere (for instance a coronagraph image of the same day, scaled to your field), one `k`
+   must cancel the zenith dipole in every ring (`k_nulling_dipole`, gate `k_consistency`). A `k_null`
+   that drifts with radius means sky and extinction are being confused: a sky gradient that absorbed
+   part of the dipole pulls it down, a sky level that contains corona or a missing sky gradient
+   pushes it up, and the two can cancel.
+
+On the 2026 data the uncorrected dipole against a space coronagraph pointed within a few degrees of
+the zenith, and the `k` that cancelled it depended on the sky model; the correction was therefore
+kept as a consistency test conditional on the sky plane fitted beyond 8 R☉. A pass of the gate is
+consistency, not proof: in the tests, a plane fitted on a corona tail and the same tail raising the
+sky level compensate each other, the gate passes, and the level is still 7 % low at 3–4 R☉ and
+15 % low at 4–5 R☉.
+
+The tests use synthetic coronae with known truth: exact recovery with the true sky; recovery within
+0.5 % in level and dipole when the sky region holds no corona; and three wrong sky models (a plane
+fitted where corona is present, a constant sky from 3–4 R☉, a constant sky that misses a gradient)
+that the same gate rejects with the same thresholds.
+
 ## Geometry
 
 Every product needs an `EclipseGeometry` (JSON): image shape, Sun centre and radius in pixels, Moon
@@ -203,7 +276,8 @@ https://github.com/PeterWar/Agentic-Eclipse-Library*. The filters come from publ
 Morgan, Habbal & Woo (2006, NRGF); Morgan & Druckmüller (2014, MGN); Auchère, Soubrié, Pelouze &
 Buchlin (2023, WOW); Druckmüller, Rušin & Minarovjech (2006, adaptive circular filters) and
 Druckmüllerová (2014, thesis: the published kernel); Gilly & Cranmer (2025, RHEF); Starck,
-Fadili & Murtagh (2007, starlet); Knutsson & Westin (1993, normalised convolution).
+Fadili & Murtagh (2007, starlet); Knutsson & Westin (1993, normalised convolution). The air mass
+is that of Kasten & Young (1989, *Applied Optics* 28, 4735).
 
 Version 1.2.1 corrects stepped radial statistics and clipped display highlights, adds
 an explicit native-reference canvas option and documents the limits of internal dust

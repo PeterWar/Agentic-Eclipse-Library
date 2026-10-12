@@ -84,9 +84,21 @@ balance as channel ratios, no camera tone curve, no gamma, no export from a raw 
   linear light. For an astromodified camera, obtain that fact from the owner and measure suitable ratios;
   default daylight/as-shot settings and another camera's coefficients are not a calibration. Check R/G, B/G
   and both green planes. Label a neutral-continuum assumption as provisional, not absolute colour.
+- **A low Sun dims the corona unevenly.** The air mass changes across the field: the corona is
+  dimmer on the horizon side and brighter towards the zenith, more so far from the Sun. At 4 R☉,
+  with k = 0.4 mag per air mass, about ±2 % with the Sun at 30°, ±5 % at 20° and ±23 % at 9° (2026).
+  When brightness matters (photometry, comparisons, the radial balance of the image), correct it on
+  the linear stack with `ael extinction`: subtract a sky fitted far from the Sun (r ≥ 8 R☉) first,
+  use a measured `k` (`ael.extinction.dimming_k`), then rebuild every filter layer. Keep the
+  uncorrected stack. The correction changes the brightness across an image the user may already
+  have seen: show both full canvases before adopting it. Sky and extinction are degenerate; use
+  the correction as a consistency test, not a measurement of `k` (`docs/FIELD_LESSONS.md`).
 
 Output: a 32-bit linear TIFF, the valid map, `geometry.json` (`ael.geometry.EclipseGeometry`) and a receipt.
 Show the user a stretched view and look at it yourself at full resolution near the limb before going on.
+
+For a low Sun, `ael extinction --config extinction.json --out new_ext/` sits between `stack`
+and `filters` (recipe in `docs/DEVELOP.md`, template in `examples/`; not yet in a release).
 
 Since 1.2.0 use `ael stack --config stack.json --out new_run/`; the schema and coordinate
 conventions are in `docs/DEVELOP.md` and `examples/stack_config_template.json`. Measure

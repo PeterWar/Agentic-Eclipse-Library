@@ -23,6 +23,8 @@ layered 16-bit Photoshop project, and add the three most useful corona filters f
 
 `ael stack` builds a linear stack with explicit calibration and registration. `ael filters`
 adds the first three filters or sixteen portable variants and an optional verified PSB.
+Not yet released: `ael extinction` corrects the linear stack for differential atmospheric
+extinction when the Sun is low, after subtracting the sky, before the filters are built.
 See [stacking and filters](docs/DEVELOP.md) for recipes, conventions and limits.
 
 | Product | What it is |
