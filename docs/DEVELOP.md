@@ -102,8 +102,12 @@ See `examples/extinction_config_template.json`.
 | `x_ref` | Reference air mass: a number (e.g. where the photometric zero point was evaluated) or `"sun"` |
 | `keep_sky` | Also write `corrected_with_sky.npy`: the corrected corona plus the same sky model, for `ael filters` |
 
-No key has a default that changes the result: `sky`, `airmass`, `k` and `x_ref` are required.
-Outputs: `corrected_net.npy` (sky-subtracted, NaN outside data), optionally
+The top-level keys `sky`, `airmass`, `k` and `x_ref` are required and have no default.
+Sub-keys that do default (`sky.fit.order` = 1; the site's height 0 m, standard-atmosphere
+pressure, 10 °C, 0 % humidity and 0.55 µm) are recorded in the receipt; give measured values
+where you have them. A sky array may be (H, W) or (H, W, C); a sky value is one number or one
+per channel. Every input is checked and every output computed before the output directory is
+created, and an existing directory is refused. Outputs: `corrected_net.npy` (sky-subtracted, NaN outside data), optionally
 `corrected_with_sky.npy`, `airmass.npy`, `factor.npy`, `sky.npy` and a hashed `receipt.json`
 with the air-mass and factor ranges, the factor at 1.5–4 R☉ and the sky-fit details.
 Pixels whose line of sight is below the horizon have no air mass and stay NaN.

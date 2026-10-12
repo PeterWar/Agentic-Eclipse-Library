@@ -24,6 +24,11 @@
   (all three detected by the same gate); air-mass sanity checks (zenith, horizon,
   plane-parallel limit, symmetry about the vertical, three equivalent orientations, the
   astropy and plate-solution routes).
+- The sky may be one value, one value per channel, or an (H, W) or (H, W, C) map, on images
+  of any height (the correction runs by blocks of rows; a constant sky is never sliced). The
+  command checks every input and computes every output before it creates the output
+  directory, and refuses an existing one. Regression tests cover each sky form with several
+  block sizes and the refusals.
 - Fix `render.sky_background` on noise-free data: the robust scale was zero and a strict
   comparison clipped every pixel, returning a zero sky without warning.
 

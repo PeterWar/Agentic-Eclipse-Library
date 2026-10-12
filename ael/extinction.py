@@ -324,6 +324,35 @@ def extinction_factor(airmass, k, x_ref: float) -> np.ndarray:
     return 10.0 ** (0.4 * kk.astype(X.dtype)[None, None, :] * (X[..., None] - float(x_ref)))
 
 
+def _sky_for(sky, shape) -> tuple[np.ndarray, bool]:
+    """Check a sky against an image of ``shape`` and put it in a form that broadcasts against it.
+
+    Returns ``(S, per_pixel)``.  A scalar or one value per channel is a constant (``per_pixel`` False: never
+    sliced by rows).  An (H, W) or (H, W, C) map is per pixel (sliced by rows); an (H, W) map gets a channel
+    axis when the image has channels.  Anything else is refused.
+    """
+    shape = tuple(shape)
+    channels = shape[2] if len(shape) == 3 else None
+    S = np.asarray(sky)
+    if not (np.issubdtype(S.dtype, np.integer) or np.issubdtype(S.dtype, np.floating)):
+        raise ValueError("sky must be numeric")
+    if S.ndim == 0:
+        if not np.isfinite(S):
+            raise ValueError("a constant sky must be finite")
+        return S.astype(np.float64), False
+    if S.ndim == 1:
+        if channels is None or S.size != channels:
+            raise ValueError("a sky vector needs one value per channel")
+        if not np.isfinite(S).all():
+            raise ValueError("a constant sky must be finite")
+        return S.astype(np.float64)[None, None, :], False
+    if S.ndim == 2 and S.shape == shape[:2]:
+        return (S[..., None] if channels is not None else S), True
+    if S.ndim == 3 and S.shape == shape:
+        return S, True
+    raise ValueError(f"sky of shape {S.shape} does not match the image {shape}")
+
+
 def correct_extinction(image, airmass, k, *, x_ref: float, sky, valid=None, keep_sky: bool = False,
                        block_rows: int = 512) -> np.ndarray:
     """Differential-extinction correction of a **linear** image: ``(image − sky)·10^(0.4·k·(X − x_ref))``.
@@ -346,16 +375,7 @@ def correct_extinction(image, airmass, k, *, x_ref: float, sky, valid=None, keep
         raise ValueError("x_ref must be finite")
     channels = a.shape[2] if a.ndim == 3 else None
     kk = _k_vector(k, channels)
-    S = np.asarray(sky, np.float64) if np.ndim(sky) < 2 else np.asarray(sky)
-    if S.ndim == 1:
-        if channels is None or S.size != channels:
-            raise ValueError("a sky vector needs one value per channel")
-        S = S[None, None, :]
-    elif S.ndim == 2:
-        if S.shape != a.shape[:2]:
-            raise ValueError("sky map does not match the image")
-    elif S.ndim == 3 and S.shape != a.shape:
-        raise ValueError("sky map does not match the image")
+    S, per_pixel = _sky_for(sky, a.shape)
     v = None
     if valid is not None:
         v = np.asarray(valid, bool)
@@ -365,9 +385,7 @@ def correct_extinction(image, airmass, k, *, x_ref: float, sky, valid=None, keep
     for y0 in range(0, a.shape[0], block_rows):
         sl = slice(y0, min(a.shape[0], y0 + block_rows))
         ab = np.asarray(a[sl], np.float64)
-        Sb = np.asarray(S[sl] if S.ndim >= 2 else S, np.float64)
-        if channels is not None and Sb.ndim == 2:
-            Sb = Sb[..., None]
+        Sb = np.asarray(S[sl] if per_pixel else S, np.float64)     # a constant sky is never sliced
         Xb = np.asarray(X[sl], np.float64)
         Eb = extinction_factor(Xb, kk, x_ref)
         if channels is not None and Eb.ndim == 2:
@@ -576,6 +594,9 @@ def extinction_from_config(config_path, out_dir, *, progress=print) -> dict:
         p = Path(v).expanduser()
         return p if p.is_absolute() else root / p
 
+    out = Path(out_dir).resolve()
+    if out.exists():
+        raise FileExistsError(f"output directory already exists: {out} (nothing is overwritten)")
     a = np.asarray(io.load_array(resolve(cfg["input"])), np.float32)
     if a.ndim not in (2, 3):
         raise ValueError("input must be a linear (H, W) or (H, W, C) array")
@@ -602,6 +623,8 @@ def extinction_from_config(config_path, out_dir, *, progress=print) -> dict:
     else:
         sky = np.asarray(spec, np.float64)
         sky_info = dict(method="declared value", value=spec)
+    # Checked here, before anything heavy and before any file is written; the full-canvas copy is saved.
+    sky_full = np.broadcast_to(_sky_for(sky, a.shape)[0], a.shape).astype(np.float32)
 
     # --- air mass ------------------------------------------------------------------------------
     am = cfg["airmass"]
@@ -641,22 +664,12 @@ def extinction_from_config(config_path, out_dir, *, progress=print) -> dict:
         x_ref = float(cfg["x_ref"])
     keep_sky = bool(cfg.get("keep_sky", False))
     progress(f"extinction: k={k}, x_ref={x_ref:.4f}, X {np.nanmin(X):.3f}–{np.nanmax(X):.3f}")
+    # Every output is computed (and every input refused) before the output directory is created.
     net = correct_extinction(a, X, k, x_ref=x_ref, sky=sky, valid=valid)
     E = extinction_factor(X, k, x_ref)
-
-    out = Path(out_dir).resolve()
-    out.mkdir(parents=True, exist_ok=False)
-    outputs = {}
-    for name, arr in (("corrected_net", net), ("airmass", X.astype(np.float32)), ("factor", E.astype(np.float32)),
-                      ("sky", np.broadcast_to(np.asarray(sky, np.float32), a.shape).astype(np.float32))):
-        p = out / f"{name}.npy"
-        np.save(p, arr)
-        outputs[name] = p
+    arrays = {"corrected_net": net, "airmass": X.astype(np.float32), "factor": E.astype(np.float32), "sky": sky_full}
     if keep_sky:
-        ws = correct_extinction(a, X, k, x_ref=x_ref, sky=sky, valid=valid, keep_sky=True)
-        p = out / "corrected_with_sky.npy"
-        np.save(p, ws)
-        outputs["corrected_with_sky"] = p
+        arrays["corrected_with_sky"] = correct_extinction(a, X, k, x_ref=x_ref, sky=sky, valid=valid, keep_sky=True)
     below = int(np.count_nonzero(~np.isfinite(X)))
     nan_in = ~valid
     nan_out = ~(np.isfinite(net).all(axis=-1) if net.ndim == 3 else np.isfinite(net))
@@ -676,6 +689,13 @@ def extinction_from_config(config_path, out_dir, *, progress=print) -> dict:
                   factor_range=[float(np.min(E[fin])), float(np.max(E[fin]))] if fin.any() else None,
                   factor_by_radius=summary, formula="(I - sky) * 10**(0.4*k*(X - x_ref))",
                   airmass_formula="Kasten & Young (1989), apparent altitude")
+
+    out.mkdir(parents=True, exist_ok=False)
+    outputs = {}
+    for name, arr in arrays.items():
+        p = out / f"{name}.npy"
+        np.save(p, arr)
+        outputs[name] = p
     inputs = {key: resolve(cfg[key]) for key in ("input", "geometry", "valid") if key in cfg}
     inputs["config"] = path
     receipt = io.write_receipt(out / "receipt.json", product="differential extinction correction", inputs=inputs,

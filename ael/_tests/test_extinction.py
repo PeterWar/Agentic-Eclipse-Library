@@ -351,3 +351,105 @@ def test_sky_background_keeps_noise_free_data():
     g = EclipseGeometry(shape=(200, 240), sun_xy=(119.4, 99.7), sun_radius_px=12.0)
     model, info = render.sky_background(np.full(g.shape, 300.0, np.float32), None, g, r_min_rsun=8, order=1)
     assert info["n_used"] > 1000 and np.allclose(model, 300.0, atol=1e-3)
+
+
+def test_correction_by_row_blocks_for_every_sky_form():
+    """Regression: a constant sky given as one value per channel was sliced by rows like a map, so every
+    block after the first got an empty sky and the call failed on any image taller than ``block_rows``.
+    Every sky form must give the same, exact result whatever the block size."""
+    rng = np.random.default_rng(11)
+    h, w = 600, 40                                   # taller than the default block of 512 rows
+    yy, xx = np.mgrid[0:h, 0:w]
+    X = 5.7 + 0.7 * yy / h + 0.01 * xx / w
+    x_ref = 6.05
+    E = 10.0 ** (0.4 * K * (X - x_ref))              # written out here, independently of ex.extinction_factor
+    grey = rng.uniform(100.0, 5000.0, (h, w))
+    rgb = grey[..., None] * np.array([1.2, 1.0, 0.6])
+    plane = 300.0 + 0.05 * yy - 0.2 * xx
+    cases = [("scalar, grey", grey, 300.0), ("2-D map, grey", grey, plane),
+             ("scalar, RGB", rgb, 300.0), ("one value per channel", rgb, [300.0, 310.0, 320.0]),
+             ("2-D map, RGB", rgb, plane), ("3-D map", rgb, plane[..., None] * np.array([1.0, 1.03, 1.07]))]
+    for label, truth, sky in cases:
+        S = np.asarray(sky, np.float64)
+        Sfull = np.broadcast_to(S[..., None] if (S.ndim == 2 and truth.ndim == 3) else S, truth.shape)
+        I = truth / (E[..., None] if truth.ndim == 3 else E) + Sfull
+        ref = None
+        for block_rows in (512, 64, 7, h):          # the default, small, not a divisor of h, a single block
+            out = ex.correct_extinction(I, X, K, x_ref=x_ref, sky=sky, block_rows=block_rows)
+            assert out.shape == truth.shape and out.dtype == np.float32, (label, block_rows)
+            assert np.max(np.abs(out / truth - 1.0)) < 1e-5, (label, block_rows)
+            ref = out if ref is None else ref
+            assert np.max(np.abs(out / ref - 1.0)) < 1e-6, (label, block_rows)
+            kept = ex.correct_extinction(I, X, K, x_ref=x_ref, sky=sky, block_rows=block_rows, keep_sky=True)
+            assert np.allclose(kept - Sfull, out, rtol=1e-5, atol=1e-2), (label, block_rows)
+    # Skies that do not fit the image are refused before any work.
+    for sky in (plane[:-1], np.zeros((h, w, 2)), np.zeros((1, h, w, 3)), [300.0, 310.0], [300.0, np.nan, 320.0],
+                np.nan, ["300", "310", "320"]):
+        _raises(ValueError, lambda: ex.correct_extinction(rgb, X, K, x_ref=x_ref, sky=sky, block_rows=64))
+    _raises(ValueError, lambda: ex.correct_extinction(grey, X, K, x_ref=x_ref, sky=[300.0, 310.0, 320.0]))
+    _raises(ValueError, lambda: ex.correct_extinction(grey, X, K, x_ref=x_ref, sky=rgb))
+
+
+def test_extinction_command_sky_forms_and_refusals_before_writing():
+    """Regression: a 2-D sky array with an RGB stack failed after the output directory had been created,
+    leaving it empty and blocking a re-run.  Every sky form must work, and every refusal must come before
+    anything is written."""
+    import contextlib
+    import io as _io
+
+    from ael.__main__ import main
+
+    g = EclipseGeometry(shape=(200, 240), sun_xy=(119.4, 99.7), sun_radius_px=12.0, north_deg=0.0,
+                        arcsec_per_px=946.66 / 12.0)
+    r = g.rsun_map(dtype=np.float64)
+    X = ex.airmass_map(g, H_SUN, zenith_image_deg=0)
+    x_ref = float(ex.kasten_young(H_SUN))
+    C = (_smooth_corona(r) * np.exp(-(r / 5.0) ** 6))[..., None] * np.array([1.2, 1.0, 0.6])
+    h, w = g.shape
+    yy, xx = np.mgrid[0:h, 0:w]
+    plane = 300.0 + 0.1 * yy - 0.05 * xx
+    sky3 = plane[..., None] * np.array([1.0, 1.05, 0.9])
+    valid = r >= 1.1
+    ok = valid & (r < 4)
+    with tempfile.TemporaryDirectory() as td:
+        td = Path(td)
+        g.to_json(td / "geometry.json")
+        np.save(td / "valid.npy", valid)
+        np.save(td / "sky2d.npy", plane.astype(np.float32))
+        np.save(td / "sky3d.npy", sky3.astype(np.float32))
+        np.save(td / "sky_bad.npy", plane[:-1].astype(np.float32))
+        base = {"geometry": "geometry.json", "valid": "valid.npy",
+                "airmass": {"sun_altitude_deg": H_SUN, "zenith_image_deg": 0}, "k": K, "x_ref": "sun",
+                "keep_sky": True}
+        skies = [("2-D array", plane, {"array": "sky2d.npy"}), ("3-D array", sky3, {"array": "sky3d.npy"}),
+                 ("one value per channel", np.array([300.0, 310.0, 320.0]), {"value": [300.0, 310.0, 320.0]}),
+                 ("scalar", np.array(300.0), {"value": 300.0})]
+        for i, (label, S, spec) in enumerate(skies):
+            Sfull = np.broadcast_to(S[..., None] if S.ndim == 2 else S, C.shape)
+            np.save(td / f"linear{i}.npy", (C * 10.0 ** (-0.4 * K * (X - x_ref))[..., None] + Sfull).astype(np.float32))
+            (td / f"ext{i}.json").write_text(json.dumps(dict(base, input=f"linear{i}.npy", sky=spec)))
+            res = ex.extinction_from_config(td / f"ext{i}.json", td / f"run{i}", progress=lambda *_: None)
+            net = np.load(res["files"]["corrected_net"])
+            sky = np.load(res["files"]["sky"])
+            assert sky.shape == C.shape and np.allclose(sky, Sfull, rtol=1e-6), label
+            assert np.max(np.abs(net[ok] / C[ok] - 1.0)) < 1e-4, label
+            withsky = np.load(res["files"]["corrected_with_sky"])
+            assert np.allclose(withsky[valid] - sky[valid], net[valid], atol=1e-2), label
+        # Refusals: a sky of the wrong shape, a sky vector or a k vector of the wrong length.  Nothing written.
+        for j, change in enumerate(({"sky": {"array": "sky_bad.npy"}}, {"sky": {"value": [300.0, 310.0]}},
+                                    {"k": [0.3, 0.4]})):
+            bad = dict(base, input="linear0.npy", sky={"array": "sky2d.npy"})
+            bad.update(change)
+            (td / f"bad{j}.json").write_text(json.dumps(bad))
+            _raises(ValueError, lambda: ex.extinction_from_config(td / f"bad{j}.json", td / f"never{j}",
+                                                                  progress=lambda *_: None))
+            assert not (td / f"never{j}").exists(), change
+            with contextlib.redirect_stderr(_io.StringIO()):
+                _raises(SystemExit, lambda: main(["extinction", "--config", str(td / f"bad{j}.json"),
+                                                  "--out", str(td / f"never_cli{j}")]))
+            assert not (td / f"never_cli{j}").exists(), change
+        # An existing output directory is refused before any work, and left as it was.
+        (td / "taken").mkdir()
+        (td / "taken" / "keep.txt").write_text("x")
+        _raises(FileExistsError, lambda: ex.extinction_from_config(td / "ext0.json", td / "taken"))
+        assert [p.name for p in (td / "taken").iterdir()] == ["keep.txt"]
