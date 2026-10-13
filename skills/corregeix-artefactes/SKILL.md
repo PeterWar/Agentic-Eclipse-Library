@@ -314,3 +314,15 @@ Detall a `references/v88_cremallera_soroll_franja_i_earthshine.md`. En una líni
 - **⛔ `W_CURT` = 0 a la V86:** una condició que no descarta cap píxel és sospitosa. Llegeix el valor dels llindars derivats al rebut.
 - **Earthshine:** meitats independents contra LROC. Si coincideixen entre elles però no amb LROC, és llum dispersa i l'anell es deixa llis. L'apilat Vixen des de zero és pitjor que la capa de Pere a l'interior.
 - **Mirar:** el compositor emulat no fa les capes d'ajust (el jutge és Photoshop). L'estirament per separat a 6:1 fa una línia puntejada falsa al limbe, i els mosaics de vistes adjacents fan formes falses.
+
+## Cas de camp de NLFotografia (incidència #1 de l'AEL, 13-10-2026)
+
+Un cas independent (FRA400, focals i enquadraments variables, sense flats ni foscos) i el que se'n va comprovar al
+paquet `ael` són a `docs/FIELD_LESSONS.md` del repositori públic. Per a aquesta skill, tres coses:
+- Davant d'anells, mira primer l'operador i les estadístiques que normalitzen el detall (al seu cas, anells
+  log-radials de 8–10 px). Cap capa residual ni màscara radial pintada a sobre.
+- Als filtres de l'`ael`, amb la Lluna descentrada, l'ACHF isòtrop i el WOW fan una franja al llarg del limbe:
+  neix al perfil radial ajustat amb anells mig tapats (incidència #3). Es cura allà, no a la capa.
+- El WOW bilateral de l'`ael` pot girar el signe del detall fi i feble que té al costat una estructura més forta
+  (incidència #4). Un detall invertit no és un artefacte de la base.
+

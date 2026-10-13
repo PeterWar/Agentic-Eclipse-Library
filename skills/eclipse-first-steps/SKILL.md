@@ -176,6 +176,10 @@ disk does not prove coronal registration; a filter's alpha boundary is not a mea
 lunar limb. See the [existing-edit case study](../../docs/EXISTING_EDIT_CASE_STUDY.md)
 for held-out failures and native-save checks. Its zero-opacity starting point is
 optional for preserving an existing look, not a replacement for the defaults above.
+The rest of that contribution (variable framing without calibration frames, rings,
+earthshine, Photoshop, validation), what the package was checked for, and two filter
+limitations found while checking it are in the
+[field lessons](../../docs/FIELD_LESSONS.md#a-field-case-contributed-by-nlfotografia-issue-1).
 
 Show the result, then let the user lead the aesthetics (opacities, combinations, curves). When they point at a
 defect — a ring, a seam, a stain at the limb — go to `skills/corregeix-artefactes/` and cure it where it is born.

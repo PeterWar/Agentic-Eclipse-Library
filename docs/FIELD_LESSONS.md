@@ -153,6 +153,99 @@ resources that depend on the layers (1026, 1036, 1072). Then compare every origi
 of your own, not only through the library that wrote the file. The author's writer is
 `3-RECERCA/tools/v128_extincio_20261012/v2b_escriu_psb.py`; `ael.photoshop` only writes new files.
 
+## A field case contributed by NLFotografia (issue #1)
+
+An independent processing case: an FRA400 telescope and a camera used at several focal lengths and
+framings, without darks or flats, contributed by NLFotografia in
+[issue #1](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/1). Its existing-edit part is the
+case study of pull request #2 ([`EXISTING_EDIT_CASE_STUDY.md`](EXISTING_EDIT_CASE_STUDY.md)). The figures
+in the first list are results reported for that case: they are not library constants, and they do not
+validate the author's own chain.
+
+**What the case reported**
+
+- *Inputs.* Keep RAWs and originals untouched and work on hashed copies. Do not infer the time of a phase
+  from the order of the files. Record framing, focal length or scale and exposure for every photograph: a
+  lunar disc that matches does not prove that the filaments are registered. Without darks or flats, state
+  what the defect correction cannot do.
+- *Variable framing.* Sensor dust stays fixed on the detector and moves across the sky when the framing
+  changes. Variable coverage makes rectangles, seams and steps in noise. Real signal need not appear in every
+  exposure (saturation, signal-to-noise, PSF, change during totality): reject only with the exposures that
+  can measure each region.
+- *Rings.* The base profile was monotonic; the new rings came from the normalisation of the detail filters,
+  computed in log-radial bins 8–10 px wide. The cure was statistics at the native 1 px distance from the
+  measured limb, medians of observed data, a PCHIP interpolation of the statistics and the ACHF spread
+  regularised at its 8 px support, with no radial smoothing of the texture and no residual layer or painted
+  radial mask on top. Per-ring levels then measured 0.036, 0.018 and 0.046 for ACHF, MGN and WOW against a
+  0.05 gate. Two checks still failed and were reported: ACHF in a partial sector (0.076), and a raw null whose
+  effective alpha was almost zero (2e-8), with the effective result given separately.
+- *Signed detail and 16-bit layers.* Limiting a signed 32-bit detail field analytically so that it fitted a
+  16-bit layer lost 15–25 % of its amplitude and was rejected. Keep the signed field and the 16-bit blend
+  encoding apart, and record the Photoshop blend mode that decodes it.
+- *Detail on an existing edit.* A global noise estimate amplified the background grain by 12–42 %; the
+  confidence of the added detail was recomputed from local measured noise (a MAD of the residual in 128 px
+  windows). A stronger gain failed the declared brightness gate (2.41 % against ±2 %) and was discarded
+  rather than the gate relaxed.
+- *Earthshine.* Lunar relief must come from measured signal. A source disc smaller than the Moon leaves a
+  visible cut: measure its scale, centre and limb, apply it only over the disc it observed, with a transition
+  at its edge, and declare the rest as having no data. Do not fill the disc with geography it never saw.
+- *Photoshop.* A 32-bit preview and an HDR conversion to 16 bits are different operations; Exposure 0 and
+  Gamma 1 in the dialog do not prove a visual match. Overlay may need a 16-bit document. Avoid repeated
+  destructive conversions of the master.
+- *Validation.* Keep presentation choices, operator controls and independent scientific tests apart. Freeze
+  windows and thresholds before comparing, keep the failed attempts, and do not turn a sector that passes
+  into a global pass. Independent readers for the registration, the file format and the presentation.
+
+**What was checked in the package (1.3.1)**
+
+- *Rings.* NRGF evaluates its statistics continuously with PCHIP, RHEF interpolates log-intensity quantiles
+  in radius and angle, the isotropic ACHF and WOW subtract a smooth spline in ln r, and MGN uses local
+  statistics. A test measures the sixteen filters of `ael filters` on one scene: a ring-free corona with
+  angular structure and no noise, the Moon on the Sun's centre and a straight coverage edge. There, two-pixel
+  grooves stay below 0.15 of the old NRGF's, and a ring metric in the 2–16 px band (a filtered RMS of the
+  azimuthal-mean profile: it detects concentric structure, it is not a bound on every ring) stays below its
+  threshold over whole rings at the limb, in the middle and in an outer zone, and in 45° sectors of the middle
+  and outer zones, all inside the largest circle clear of the edges; WOW bilateral is the exception in sectors
+  (below). The old stepped NRGF and rings of 8–10 px added to a layer exceed the threshold. Every filter keeps
+  at least 99 % of its support band by band from the lunar limb and from the straight edge (the angular ACHF
+  from 2 px) and in every sector (`test_no_filter_makes_rings_on_a_ring_free_input`).
+- *Signed detail.* With 0.3 % noise, a faint angular pattern added to the corona comes out with its own sign
+  (correlation 0.68–0.98) and within ±25 % of its 1.3.0 strength in fifteen filters
+  (`test_filters_keep_injected_fine_detail_with_its_sign_and_strength`). WOW bilateral is the exception below.
+- *Stacking.* `ael stack` lets saturated and empty samples not vote, finds hot pixels by their persistence on
+  the sensor (and only on a sequence declared as dithered), and writes coverage, support and weights. It does
+  not write a propagated variance: there is no formal uncertainty map. It registers with affine transforms:
+  with several focal lengths or optics, measure and correct each one's distortion before stacking, and check
+  the registration for each optical configuration.
+- *Photoshop and earthshine.* These remain written guidance. Keep the 32-bit master, record the tone mapping
+  and check the highlights after converting; the lunar support must belong to the source and instant that
+  observed it, without moving anyone's manual geometry. The package does not reconstruct lunar relief.
+
+**Reproduced in the package and not fixed yet**
+
+- *Bands along the edges of the data in ACHF and WOW*
+  ([issue #3](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/3)). With a smooth
+  synthetic corona, the Moon 9 px off centre at R☉ = 60 px and a straight coverage edge, the default isotropic
+  ACHF layer is 0.19 brighter 5 px from the lunar data edge and 0.12 darker at 16 px than far from it (display
+  units), and 0.61 brighter next to the straight edge than 40–60 px inside (NRGF: 0.09). WOW shows up to 0.03
+  at the limb and 0.34 at the straight edge, WOW bilateral up to 0.08 at the limb. Both come mainly from the
+  Sun-centred radial profile, fitted to medians of annuli that the Moon or the frame only partly observe: near
+  those edges it is off by 3–7 % in ln, and the multi-scale high-pass turns that into bands. Subtracting the exact radial law instead removes the limb fringe
+  and brings the straight-edge band down to 0.10. A second, smaller mechanism shows on a purely radial corona:
+  the profile pairs the median of ln I with the mean of ln r (taking the median of ln r there moves the limb
+  ring metric from 0.051 to 0.001; with angular structure it changes little). Weighting the annuli by their
+  coverage or spacing the knots further apart did not cure it.
+- *WOW bilateral*
+  ([issue #4](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/4)). It can return faint
+  fine detail with the opposite sign: the pattern that plain WOW returns at +0.82 (+0.95 with 1 % noise) comes
+  out at −0.27 (−0.16 with 1 % noise), and the inversion is already in the bilateral detail of the finest
+  scales, before the whitening. On a smooth corona without noise it also draws lines and lobes along isophotes
+  that the input does not have (ring metric 0.0144 in one sector; the other filters reach at most 0.0040). It is
+  one of the three default filters.
+
+**Not reproduced.** The case's own producer and configuration were not available. These checks test the
+package as it is today, not the version used for that case.
+
 ## Deliver and describe the actual file
 
 Rebuild every dependent product when a source calibration or operator changes. Preserve

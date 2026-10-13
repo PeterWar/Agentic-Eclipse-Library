@@ -5,14 +5,15 @@ package `ael`, its tests, a fourth skill and research note 179. Version 1.1.1 (s
 `eclipse-first-steps`, which tells an agent how to lead a newcomer through their own photos, and `ael.photoshop`.
 Version 1.2.0 (3 October) adds `ael stack` and `ael filters`. Version 1.3.0 (13 October) adds `ael.extinction`,
 `ael.coronagraph`, the skill `coronagraph-comparison`, research notes 180 and 185 and the code of five new
-research folders, and releases the fixes prepared as 1.2.1.
+research folders, and releases the fixes prepared as 1.2.1. Version 1.3.1 (same day) adds the field report of
+issue #1 to the field lessons and two tests.
 
 | Included | Files | Notes |
 |---|---:|---|
 | `skills/` — six Agent Skills | 35 | Snapshot of the working skills on 30 Sep 2026 (`eclipse-first-steps` revised and `coronagraph-comparison` added on 13 Oct), with their reference files and helper scripts; `corona-visualizations` (English) is new in 1.1.0, `eclipse-first-steps` (English) in 1.1.1, `coronagraph-comparison` (English) in 1.3.0 |
 | `3-RECERCA/` — research notes | 187 | 180 numbered notes plus indexes, sources, prompts and reports of consultations with other models, small data tables |
 | `3-RECERCA/tools/` — processing code | 4,352 | Python, shell and Photoshop JSX scripts, and the small JSON/CSV parameter files they read |
-| `ael/`, `tests/`, `examples/`, `pyproject.toml`, `README_AEL.md` — the runnable package | 38 | Stacking, extinction, filter layers, structure images, unrolled views, coronal motion, coronagraph checks and layered Photoshop files from anyone's data; 67 tests with known truth (1.3.0) |
+| `ael/`, `tests/`, `examples/`, `pyproject.toml`, `README_AEL.md` — the runnable package | 38 | Stacking, extinction, filter layers, structure images, unrolled views, coronal motion, coronagraph checks and layered Photoshop files from anyone's data; 69 tests with known truth (1.3.1) |
 | `docs/` | 10 | Recipes, field lessons, validation records and a community case study (English); lessons for model developers (English); record of the author's contributions (Catalan) |
 | `AGENTS.md`, `README.md`, `LICENSE` (MIT), `CITATION.cff`, `.claude-plugin/` | — | Entry points, licence, citation and plugin manifest |
 

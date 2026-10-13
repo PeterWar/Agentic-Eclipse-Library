@@ -172,3 +172,117 @@ def test_stack_reference_canvas_is_explicit_and_keeps_native_geometry():
         cfg['stack']['canvas']='crop';p.write_text(json.dumps(cfg))
         raises(ValueError,lambda:stack_from_config(p,root/'bad'))
         assert not (root/'bad').exists()
+
+
+
+
+def _ring_band(a, r, m, lo, hi, pa=None, sector=None, pmin=2., pmax=16.):
+    """RMS of the azimuthal-mean profile in the 2–16 px period band, after removing a smooth trend.
+
+    A filtered, weighted RMS: it detects concentric structure, it is not a bound on every ring. Returns None
+    when a radial bin of the region has no data (gaps are not interpolated away).
+    """
+    sel=m & np.isfinite(a) & (r>=lo) & (r<hi)
+    if sector is not None:
+        sel&=np.abs((pa-sector+180)%360-180)<22.5
+    bins=np.floor((r[sel]-lo)*4).astype(int)
+    count=np.bincount(bins,minlength=int((hi-lo)*4))[:int((hi-lo)*4)]
+    if (count==0).any():
+        return None
+    profile=np.bincount(bins,weights=a[sel],minlength=len(count))[:len(count)]/count
+    x=(np.arange(len(count))-len(count)/2)/len(count)
+    profile=profile-np.polyval(np.polyfit(x,profile,5),x)
+    freq=np.fft.rfftfreq(len(profile),.25); spec=np.fft.rfft(profile*np.hanning(len(profile)))
+    band=np.fft.irfft(np.where((freq>=1/pmax)&(freq<=1/pmin),spec,0),n=len(profile))
+    cut=len(band)//8
+    return float(np.sqrt(np.mean(band[cut:-cut]**2)))
+
+
+def _ring_free_scene(moon_xy=(310.3,370.7)):
+    g=EclipseGeometry((640,768),(310.3,370.7),60,moon_xy,61)
+    r=g.radius_map(); pa=g.pa_map(); theta=np.radians(pa)
+    m=g.radius_map('moon')>63
+    m[:,700:]=False                                   # a straight coverage edge
+    a=((np.maximum(r,1)/60)**-3*(1+.3*np.cos(3*theta)+.1*np.sin(7*theta))).astype(np.float32)
+    return g,r,pa,theta,m,a
+
+
+_ZONES=((70,110),(110,220),(220,268))      # limb, middle, outer: inside the largest Sun-centred circle (269 px)
+                                            # clear of the frame and of the coverage edge
+
+
+def test_no_filter_makes_rings_on_a_ring_free_input():
+    """All sixteen filters, not only the radial ones (issue #1 blamed rings on ACHF/MGN/WOW).
+
+    In this scene (a ring-free corona with angular structure and no noise, the Moon on the Sun's centre, a
+    straight coverage edge) and these regions: two-pixel grooves with the 1.2.1 measure; rings of 2–16 px over
+    whole rings in three radial zones inside the largest circle clear of the edges and, in the middle and outer
+    zones, in all eight 45° sectors (near the limb a 45° sector holds too few pixels to tell the controls from the
+    filters); the support of every filter band by band from the lunar limb and from the straight edge, and in
+    every sector. The sectors are fixed by the input, so an output cannot avoid one by leaving it empty. Positive
+    controls must be detected. Not checked here, because they are reported limitations (docs/FIELD_LESSONS.md):
+    the bands that an off-centre Moon or a straight edge make in ACHF and WOW, and the structure WOW bilateral
+    draws in sectors of a noise-free corona.
+    """
+    g,r,pa,theta,m,a=_ring_free_scene()
+    rm=g.radius_map('moon'); yy,xx=np.mgrid[0:m.shape[0],0:m.shape[1]]
+    assert min(g.sun_xy[0],g.sun_xy[1],m.shape[0]-g.sun_xy[1],700-g.sun_xy[0])>_ZONES[-1][1]
+
+    def sector(lo,hi,c):
+        return m & (r>=lo) & (r<hi) & (np.abs((pa-c+180)%360-180)<22.5)
+    sectors=[(lo,hi,c) for lo,hi in _ZONES[1:] for c in range(0,360,45)]
+    assert all(_ring_band(np.where(m,1.,np.nan),r,m,lo,hi,pa,c) is not None for lo,hi,c in sectors)
+    old2=_old_layer('nrgf',a,m,g)
+    assert _period2(old2,r,m)>.005
+    old10=display_detail(legacy.nrgf(a,m,g,bin_px=10,min_count=12,smooth_bins=0),m)[0]
+    rings=sum(np.sin(2*np.pi*r/p) for p in (8,9,10))/3
+    base=make_filter('achf_iso_04',a,m,g)[0]
+    for control in (old10,np.where(m,base+.1*rings,np.nan)):
+        assert all(_ring_band(control,r,m,lo,hi)>.005 for lo,hi in _ZONES)
+    assert all(_ring_band(np.where(m,base+.02*rings,np.nan),r,m,lo,hi)>.005 for lo,hi in _ZONES[:2])
+    holed=base.copy(); holed[(rm>=63)&(rm<66)]=np.nan                      # a layer that drops a band at the limb
+    assert np.isfinite(holed[m & (rm>=63) & (rm<64)]).mean()<.99
+    cut=base.copy(); cut[sector(220,268,0)]=np.nan                          # a layer that drops a whole sector
+    assert np.isfinite(cut[sector(220,268,0)]).mean()<.99
+    for name in NAMES:
+        layer=make_filter(name,a,m,g)[0]
+        assert np.isnan(layer[~m]).all(), name
+        first=2 if name.startswith('achf_angular') else 0                   # its angular kernel needs neighbours
+        for d in range(first,20):
+            assert np.isfinite(layer[m & (rm>=63+d) & (rm<64+d)]).mean()>=.99, (name,'limb',d)
+            assert np.isfinite(layer[m & (yy>150) & (yy<470) & (xx==699-d)]).mean()>=.99, (name,'edge',d)
+        for lo,hi,c in sectors:
+            assert np.isfinite(layer[sector(lo,hi,c)]).mean()>=.99, (name,'sector',lo,hi,c)
+        assert _period2(layer,r,m)<.15*_period2(old2,r,m), name
+        whole=[_ring_band(layer,r,m,lo,hi) for lo,hi in _ZONES]
+        assert max(whole)<.005, (name,whole)
+        if name!='wow_bilateral':
+            values=[_ring_band(layer,r,m,lo,hi,pa,c) for lo,hi,c in sectors]
+            assert max(values)<.005, (name,max(values))
+
+
+# Transfer of a faint injected pattern by each layer in 1.3.0 (display units per unit ln I), measured on this scene.
+_DETAIL_GAIN={'nrgf':.64,'nrgf_log':.62,'rhef':1.25,'rhef_upsilon':.92,'rhef_local60':2.83,'rhef_local30':5.47,
+              'achf_angular':19.18,'achf_angular4':30.22,'achf_angular8':10.28,'achf_iso_01':6.72,'achf_iso_04':17.86,
+              'achf_iso_05':4.05,'achf_iso_06':3.31,'mgn':6.63,'wow':14.73}
+
+
+def test_filters_keep_injected_fine_detail_with_its_sign_and_strength():
+    """A faint angular pattern added to the corona must come out with its own sign and its 1.3.0 strength (±25 %).
+
+    WOW bilateral is left out on purpose: it can return faint fine detail with the opposite sign, a reported
+    limitation (docs/FIELD_LESSONS.md); its correction will have to bring it into this test.
+    """
+    g,r,pa,theta,m,a=_ring_free_scene()
+    rng=np.random.default_rng(20261005)
+    signal=.005*np.sin(37*theta+rng.uniform(-np.pi,np.pi))*np.exp(-((r-160)/65)**4)
+    noise=(1+.003*np.random.default_rng(1).standard_normal(a.shape)).astype(np.float32)
+    clean=(a*noise).astype(np.float32); injected=(a*np.exp(signal)*noise).astype(np.float32)
+    sel=m & (r>90) & (r<260)
+    assert set(_DETAIL_GAIN)==set(NAMES)-{'wow_bilateral'}
+    for name,expected in _DETAIL_GAIN.items():
+        change=make_filter(name,injected,m,g)[0]-make_filter(name,clean,m,g)[0]
+        ok=sel & np.isfinite(change)
+        corr=float(np.corrcoef(change[ok],signal[ok])[0,1])
+        gain=float(np.sum(change[ok]*signal[ok])/np.sum(signal[ok]**2))
+        assert corr>.5 and abs(gain/expected-1)<.25, (name,corr,gain)

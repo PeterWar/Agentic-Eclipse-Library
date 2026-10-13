@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.3.1 — 2026-10-13
+
+Documentation and new controls from the field report of NLFotografia
+([issue #1](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/1)). No filter, stacking or
+coronagraph code changes its output.
+
+- `docs/FIELD_LESSONS.md`: the case (an FRA400 and a camera at several focal lengths and framings, without
+  darks or flats), kept apart in three lists: what the case reported, what was checked in the package, and
+  what was reproduced in the package and is not fixed yet. The skills for first steps, post-processing and
+  artefact repair point to it, and the README credits it.
+- New tests for the sixteen filters of `ael filters`, on one synthetic scene (a ring-free corona with angular
+  structure, the Moon on the Sun's centre, a straight coverage edge): two-pixel grooves and a 2–16 px ring
+  metric over whole rings at the limb, in the middle and in an outer zone clear of the edges, and in 45° sectors
+  of the middle and outer zones, with positive controls (the old stepped NRGF at 2 and 10 px, rings of 8–10 px
+  added to a layer); support band by band from the limb and from the edge; and, with 0.3 % noise, a faint
+  injected pattern returned with its sign and within ±25 % of its 1.3.0 strength. WOW bilateral is left out of
+  the sector and detail checks, for the reasons in its issue.
+- Two limitations found while checking the report, reported and not fixed: ACHF and WOW make bands along the
+  edges of the data (the lunar limb when the Moon is off the Sun's centre, and straight frame or coverage
+  edges), mainly from the Sun-centred radial profile (issue #3); and WOW bilateral can return faint
+  fine detail with the opposite sign and draws isophote lines on a smooth, noise-free corona (issue #4).
+- `ael stack` is documented as writing no propagated variance and as registering with affine transforms
+  (correct each optic's distortion first).
+
 ## 1.3.0 — 2026-10-13
 
 Coronagraph checks and differential extinction, plus the fixes prepared as 1.2.1 (never released

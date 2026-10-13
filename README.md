@@ -56,6 +56,11 @@ the skill [`skills/corona-visualizations/`](skills/corona-visualizations/) (in E
 [case study on preserving an existing edit with adjustable filters](docs/EXISTING_EDIT_CASE_STUDY.md)
 in [pull request #2](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/2).
 It records separate checks for registration and native Photoshop saves, including the remaining failures.
+Her field report in [issue #1](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/1) (variable framing
+without calibration frames, rings, earthshine, Photoshop, validation) is in the
+[field lessons](docs/FIELD_LESSONS.md#a-field-case-contributed-by-nlfotografia-issue-1) since 1.3.1. Checking
+it against the package added ring, support and detail tests for the sixteen filters and found two filter
+limitations, now reported as issues.
 
 **Codex (OpenAI)** has contributed as an AI coding agent to implementation, documentation and validation
 under Pere Guerra's direction.
@@ -135,6 +140,13 @@ repository").
 
 [MIT](LICENSE) © 2026 Pere Guerra Serra. You may use, copy, modify and redistribute this work freely, including
 commercially; the licence only asks you to keep the copyright notice with copies of the work.
+
+## What is new in 1.3.1
+
+- The field report of NLFotografia ([issue #1](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/1))
+  in [`docs/FIELD_LESSONS.md`](docs/FIELD_LESSONS.md#a-field-case-contributed-by-nlfotografia-issue-1),
+  with what was checked in the package and two filter limitations it brought to light.
+- Ring, support and detail tests for the sixteen filters on a synthetic scene. No output changes.
 
 ## What is new in 1.3.0
 
