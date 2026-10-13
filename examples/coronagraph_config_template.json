@@ -1,0 +1,32 @@
+{
+ "_comment": "Structure comparison with coronagraphs (python -m ael coronagraph --config this.json --out new_dir/). Paths are relative to this file. Each image has its own solar frame: 'geometry' + 'p_angle_deg' (an ael geometry; celestial north and the solar P angle), 'wcs' (a helioprojective FITS header: K-Cor level 2, AIA level 1.5; 'rsun_arcsec' overrides RSUN_OBS), or the explicit 'center_xy' + 'north_px' + 'east_px' (pixel offsets of 1 Rsun towards solar north and east; may be affine). For LASCO level 0.5 build the frame with sunpy (see skills/coronagraph-comparison) and write it explicitly. 'bin' averages b x b blocks first (a block with any missing pixel is missing); 'normalise' false for an image that is already an NRGF. 'dark_sector' masks the contiguous dark run that contains the seed (an occulter pylon), never a global threshold. Agreement in position angle only: nothing here measures brightness.",
+ "radii_rsun": {"min": 1.05, "max": 6.3, "n": 420, "spacing": "log"},
+ "pa_step_deg": 0.5,
+ "sigma_deg": 1.5,
+ "highpass_sigma_deg": 12.0,
+ "max_shift_deg": 10.0,
+ "ours": {
+  "image": "linear_stack.npy",
+  "channel": "luminance",
+  "valid": "valid.npy",
+  "bin": 2,
+  "supersample": 2,
+  "frame": {"geometry": "geometry.json", "p_angle_deg": 15.191}
+ },
+ "references": [
+  {
+   "name": "K-Cor pB",
+   "image": "20260812_182932_kcor_l2_pb.fts.gz",
+   "hdu": 0,
+   "frame": {"wcs": true},
+   "rings": [[1.15, 1.30], [1.30, 1.50], [1.50, 1.75], [1.75, 1.98]]
+  },
+  {
+   "name": "LASCO C2",
+   "image": "c2_dn_per_s.npy",
+   "frame": {"_comment": "LASCO C2 24038985.fts (12 Aug 2026, 18:24:31), from sunpy with SOHO R☉ = 957.22 arcsec", "center_xy": [510.2, 506.5], "north_px": [-5.202, -80.271], "east_px": [80.271, -5.202]},
+   "rings": [[2.4, 2.8], [2.8, 3.3], [3.3, 4.0], [4.0, 5.0], [5.0, 6.0]],
+   "dark_sector": {"r_range": [2.5, 6.0], "seed_pa_deg": 320, "threshold": -0.3, "dilate_deg": 4.0}
+  }
+ ]
+}
