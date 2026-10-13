@@ -8,6 +8,8 @@ with two independent optical trains — a Vixen VSD90SS refractor with a Canon E
 with a 300 mm f/2.8 lens — both driven by [Eclipse Command](https://github.com/PeterWar/Eclipse-Command). The
 images were then processed over seven weeks by AI coding agents (Claude, from Anthropic, and Codex, from OpenAI)
 working under the author's direction: 123 versions of the image, 179 research notes and more than 3,000 scripts.
+In October the work went on with an independent check against coronagraphs and an absolute calibration of the
+corona (research notes 180 and 185).
 
 This repository is that work, published as it is — plus, since version 1.1.0, **a runnable package, `ael`**, that
 stacks declared RAW recipes, makes filter layers, and produces structure, polar and motion views.
@@ -19,13 +21,15 @@ Open this folder with your coding agent (Claude Code, Codex or similar) and tell
 files and proposes the path one step at a time: calibrate (if you took darks or flats), linearise and stack, open a
 layered 16-bit Photoshop project, and add the three most useful corona filters first. You choose how they look.
 
-## Runnable tools in 1.2.1
+## Runnable tools
 
-`ael stack` builds a linear stack with explicit calibration and registration. `ael filters`
-adds the first three filters or sixteen portable variants and an optional verified PSB.
-Not yet released: `ael extinction` corrects the linear stack for differential atmospheric
-extinction when the Sun is low, after subtracting the sky, before the filters are built.
-See [stacking and filters](docs/DEVELOP.md) for recipes, conventions and limits.
+`ael stack` builds a linear stack with explicit calibration and registration. `ael extinction`
+corrects that stack for differential atmospheric extinction when the Sun is low, after
+subtracting the sky. `ael filters` adds the first three filters or sixteen portable variants
+and an optional verified PSB. `ael coronagraph` checks the corona against K-Cor, SOHO/LASCO and
+SDO/AIA: angular structure ring by ring with its null, and, with `ael.coronagraph`, brightness in
+mean solar brightness with the right calibrations. See [stacking and filters](docs/DEVELOP.md)
+and the skill [`skills/coronagraph-comparison/`](skills/coronagraph-comparison/).
 
 | Product | What it is |
 |---|---|
@@ -74,8 +78,9 @@ need to publish your photos to contribute.
 | [`skills/postprocessat-corona/`](skills/postprocessat-corona/) | The post-processing method: registration by ephemeris, linear HDR fusion of the two trains, detail filters (NRGF, RHEF, MGN, WOW, ACHF and our own variants), tone curve, Photoshop layer files, external judge, gates and receipts, with a long log of traps | Catalan |
 | [`skills/corregeix-artefactes/`](skills/corregeix-artefactes/) | Finding and curing recurring artefacts at their root: lens ghosts, fixed-pattern striping, coverage edges, limb fringes, radial-profile rings, marks painted by the photographer | Catalan |
 | [`skills/corona-visualizations/`](skills/corona-visualizations/) | Structure images, unrolled views and coronal-motion analyses with the `ael` package, with their gates | English |
+| [`skills/coronagraph-comparison/`](skills/coronagraph-comparison/) | Checking an eclipse image against K-Cor, SOHO/LASCO and SDO/AIA: structure, orientation and brightness in mean solar brightness, with the traps that were real | English |
 | [`ael/`](ael/), [`tests/`](tests/), [`examples/`](examples/) | The runnable package (MIT), its tests with known truth and a configuration template | English |
-| [`3-RECERCA/`](3-RECERCA/) | 178 numbered research notes, July–September 2026, with their corrections left in place: capture (camera control, exposure ladders, timing) and post-processing. Start at [`3-RECERCA/ABOUT_THESE_NOTES.md`](3-RECERCA/ABOUT_THESE_NOTES.md) | Catalan |
+| [`3-RECERCA/`](3-RECERCA/) | 180 numbered research notes, July–October 2026, with their corrections left in place: capture (camera control, exposure ladders, timing) and post-processing. Start at [`3-RECERCA/ABOUT_THESE_NOTES.md`](3-RECERCA/ABOUT_THESE_NOTES.md) | Catalan |
 | [`3-RECERCA/tools/`](3-RECERCA/tools/) | The processing code: about 3,000 Python scripts, shell chains and Photoshop JSX, one folder per stage or version | Catalan comments |
 | [`docs/LESSONS_FOR_MODEL_DEVELOPERS.md`](docs/LESSONS_FOR_MODEL_DEVELOPERS.md) | Recurring AI failure modes seen in this project, what fixed them, and requests for model builders | English |
 | [`docs/REGISTRE_APORTACIONS_PERE_GUERRA_20260917.md`](docs/REGISTRE_APORTACIONS_PERE_GUERRA_20260917.md) | Dated record of the human contributions: method rules, defects found by eye, manual methods later formalised | Catalan |
@@ -83,7 +88,7 @@ need to publish your photos to contribute.
 
 ## Using it with an agent
 
-- **Claude Code:** clone the repository and open it; the three skills load from `.claude/skills/`. Or install them
+- **Claude Code:** clone the repository and open it; the skills load from `.claude/skills/`. Or install them
   as a plugin in any project:
   ```
   /plugin marketplace add PeterWar/Agentic-Eclipse-Library
@@ -131,7 +136,19 @@ repository").
 [MIT](LICENSE) © 2026 Pere Guerra Serra. You may use, copy, modify and redistribute this work freely, including
 commercially; the licence only asks you to keep the copyright notice with copies of the work.
 
-Version 1.2.1 corrects stepped radial statistics and clipped display highlights, adds
-an explicit native-reference canvas option and documents the limits of internal dust
-calibration. See [field lessons](docs/FIELD_LESSONS.md) and [recipe details](docs/DEVELOP.md).
-Existing images are not rewritten; compare the new numerical recipe before adopting it.
+## What is new in 1.3.0
+
+- **Coronagraph check** (`ael coronagraph`, `ael.coronagraph`, skill `coronagraph-comparison`):
+  structure against K-Cor, LASCO and AIA, and brightness in mean solar brightness, validated on the
+  2026 data against the research results.
+- **Differential extinction** (`ael extinction`, `ael.extinction`) for a low Sun, with the lesson
+  that sky and extinction are degenerate.
+- **Fixes prepared as 1.2.1:** continuous radial statistics in NRGF and RHEF (no more two-pixel
+  rings), a soft highlight shoulder instead of hard clipping, an explicit reference canvas, and the
+  goal-first start for a new user.
+- **Field lessons** ([`docs/FIELD_LESSONS.md`](docs/FIELD_LESSONS.md)): coronagraphs, dust, a
+  rotational-gradient layer, and adding layers to someone's file without rewriting theirs.
+- Research notes 180 and 185, and the code behind them in `3-RECERCA/tools/`.
+
+Existing images are not rewritten; compare a new numerical recipe before adopting it.
+See the [changelog](CHANGELOG.md) and [validation](docs/VALIDATION_1.3.0.md).

@@ -1,15 +1,18 @@
-# Field lessons in 1.2.1
+# Field lessons
 
-A nine-exposure RAW processing case exposed two reproducible software defects and several
-limits that the software must state. This note contains no private photographs or camera
-identifiers. The portable tests use synthetic scenes with known truth.
+Lessons from real cases that changed the software or its instructions; each section says where it
+comes from. This note contains no private photographs or camera identifiers. The portable tests use
+synthetic scenes with known truth.
+
+The first sections come from a nine-exposure RAW processing case, prepared as 1.2.1 and released in
+1.3.0. It exposed two reproducible software defects and several limits that the software must state.
 
 ## White inner corona: identify the stage that clips
 
 A bright displayed region is not evidence that every RAW saturated. Compare the shortest
 frames, per-frame saturation taper and contribution weights, linear HDR and display output.
 The 1.2.0 asinh display hard-clipped positive RGB at one; this could erase differences that
-were present in the HDR. Version 1.2.1 applies a shared exponential shoulder after asinh,
+were present in the HDR. Since 1.3.0 (prepared as 1.2.1) a shared exponential shoulder follows asinh,
 with a declared ceiling below one. It does not recover saturated RAW data or alter the stack.
 The hidden reference has a separate recorded scale so its positive range fits in 16 bits.
 Negative colour-matrix values cannot be represented there; the signed float input is authoritative.
@@ -73,7 +76,7 @@ mote with a smooth model, clone another patch or hide it with a final-image corr
   and scattered coronal light. Supply an explicitly labelled hidden candidate if useful;
   a failed relief check is not proof that the lunar signal is zero.
 
-## Low Sun: sky and extinction are degenerate (unreleased)
+## Low Sun: sky and extinction are degenerate
 
 This lesson comes from the author's 2026 data (Sun about 9° high), not from the nine-exposure case.
 Across a corona photographed through 5.75 to 6.39 air masses within two solar radii, the
@@ -103,6 +106,52 @@ the linear stack, after the sky is subtracted, followed by a rebuild of every fi
   through the same sky fit, and declare it.
 - **Keep `X_ref` explicit.** Bring every pixel to the air mass at which the photometric zero
   point was evaluated; with k = 0.40, an error of 0.03 in `X_ref` moves the whole level by 1 %.
+
+## Coronagraphs: structure is not brightness
+
+This lesson comes from comparing the author's 2026 image and its calibrated map with K-Cor, SOHO/LASCO
+and SDO/AIA (research notes 180 and 185; `skills/coronagraph-comparison/`, `ael.coronagraph`). The first
+comparison declared its brightness "validated by an independent instrument". Two rounds of verification,
+each with its own code, showed that it was not, and why.
+
+- **Angles agree before levels do.** Angular profiles ring by ring matched all three instruments without
+  fitting anything (K-Cor 0.90–0.95, C2 0.82 falling to 0.42 with radius, AIA 211 Å 0.87–0.89). That test
+  is blind to any radial tone curve `a(r)·I + b(r)`; it says nothing about brightness.
+- **A coronagraph's pB is not what a camera sees.** pB/p(r) is the K corona; a photograph records K + F.
+  Comparing a photograph with pB/p made a false excess of 13–15 %. The public GIF overestimated pB by 2–3 %,
+  which partly hid that excess, and one ring lay inside the lunar-motion band. With the F corona, the level-2
+  FITS and cells clear of the band: 1.06–1.12, compatible.
+- **One coronagraph, two calibrations.** For LASCO C2 in August 2026, Colaninno & Howard (2015) and
+  SolarSoft differ by 13.5 % in level. Using one of them hid half of the question; give both.
+- **Measure the uncertainty before comparing.** The photometric zero point, bootstrapped over its stars,
+  was −17 %/+2 %, not the ±10 % assumed. The band of a ratio is then [1/(1 + σ_hi), 1/(1 − σ_lo)]:
+  0.90–1.25 for −20 %/+11 %, where a first figure had drawn 0.80–1.11.
+- **Every observer has its own Sun and its own axes.** SOHO sees the Sun 1.1 % larger than the Earth; a
+  file reader may assume an Earth observer. A star plate under a low Sun is affine (north and east 90.43°
+  apart): a pure rotation moved points 3 px at the limb and 20 px at 6 R☉.
+- **The sky decides the outer corona.** Beyond 3 R☉ the sky model moved the level more than anything else
+  (from map 1 to map 2: +6/+15/+31 % at 3/4/5 R☉), and a sky fitted where corona remains takes a share of
+  it. See "Low Sun" above.
+
+## A rotational-gradient layer copies rays
+
+The Larson–Sekanina filter (Larson & Sekanina 1984, *AJ* 89, 571), tried in 2026 as hidden Overlay layers
+with Δθ = 0.4° and 1°, needs its input cleaned first: compact bright objects (prominences, the band at the
+lunar limb) turned into saturated light and dark copies at ±Δθ. Removing them from the input (prominences by
+their R/G excess, dilated; the 0.035 R☉ next to the Moon) left no alpha over them. A ray narrower than Δθ
+still gets two dark copies at ±Δθ of half its amplitude: that is the filter, not the data. Keep such a filter
+as a separate layer the owner can switch off, and say what it does.
+
+## Adding layers must not rewrite the owner's layers
+
+New layers were added to an existing layered file by reading and re-saving it with psd-tools. Every pixel of
+the owner's layers stayed identical, and the receipts said "byte for byte"; but the record of a
+Hue/Saturation adjustment layer had been rewritten from 656 to 564 bytes. psd-tools re-serialises what it
+reads. For a file whose layers must stay exactly as they are, copy its bytes and append the new layer records
+and their channel data, changing only the layer count, the section lengths, the merged image and the
+resources that depend on the layers (1026, 1036, 1072). Then compare every original record with a raw reader
+of your own, not only through the library that wrote the file. The author's writer is
+`3-RECERCA/tools/v128_extincio_20261012/v2b_escriu_psb.py`; `ael.photoshop` only writes new files.
 
 ## Deliver and describe the actual file
 

@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agentic-eclipse-library"
-version = "1.2.1"
-description = "Linear eclipse stacking, corona filter layers, Photoshop files, polar views and motion animations with explicit support and receipts."
+version = "1.3.0"
+description = "Linear eclipse stacking, differential extinction, corona filter layers, Photoshop files, polar views, motion animations and checks against coronagraphs, with explicit support and receipts."
 readme = "README_AEL.md"
 license = { text = "MIT" }
 authors = [{ name = "Pere Guerra Serra" }]

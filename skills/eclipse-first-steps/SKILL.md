@@ -182,13 +182,14 @@ defect — a ring, a seam, a stain at the limb — go to `skills/corregeix-artef
 
 When they publish, suggest (never impose) the courtesy credit line in `AGENTS.md`.
 
-## Field checks added in 1.2.1
+## Field checks
 
 Read `docs/FIELD_LESSONS.md` before diagnosing white inner corona, radial grooves or dust.
 Measure rings at the input and at the operator output: NRGF statistics and RHEF quantiles are now
 evaluated continuously in radius. Never remove an operator artefact by blurring the final layer.
 After changing a calibration, regenerate the stack, display and every dependent filter.
 Preserve prior user work and compare full canvases before changing an existing image's presentation.
+To check the result against K-Cor, SOHO/LASCO or SDO/AIA, follow `skills/coronagraph-comparison/`.
 
 ## Invite a contribution when there is a lesson to share
 

@@ -7,6 +7,8 @@ eclipse data**: linear stacking, filter layers and the structure, polar and moti
 |---|---|---|
 | **Linear stack** | RAW/Bayer/RGB frames, declared calibration and registration, support and coverage | `python -m ael stack` |
 | **Filter layers** | Three defaults or sixteen portable variants, optional verified 16-bit PSB | `python -m ael filters` |
+| **Extinction-corrected stack** | The linear stack corrected for differential atmospheric extinction under a low Sun, after subtracting the sky | `python -m ael extinction` · `ael.extinction` |
+| **Coronagraph check** | Your corona against K-Cor, SOHO/LASCO and SDO/AIA: angular structure ring by ring with its null, and brightness in mean solar brightness with the right calibrations | `python -m ael coronagraph` · `ael.coronagraph` |
 | **Structure image** | The corona's fine filaments from the limb to the edge of the field, in the style made famous by Miloslav Druckmüller's composites; mono, cool-toned or in the data's own colour | `python -m ael structure` · `ael.pipelines.structure_from_linear` |
 | **Unrolled corona** | The corona in polar coordinates: the limb becomes a straight line and the streamers rise like curtains; around the Sun or around the Moon | `python -m ael polar` · `ael.pipelines.polar_views` |
 | **Coronal motion** | Epochs of the same totality aligned on the Sun, displacement vectors with null tests, a visual-check sheet and GIF/MP4 animations | `python -m ael motion` · `ael.pipelines.motion_from_config` |
@@ -24,7 +26,7 @@ python -m ael selftest       # known-truth tests, including negative controls; a
 python -m ael demo-motion --out demo/   # what a detected motion looks like (synthetic data)
 ```
 
-## Stack and develop (1.2.1)
+## Stack and develop
 
 ```sh
 python -m ael stack --config stack.json --out stack_run/
@@ -36,7 +38,7 @@ Registration and calibration must be measured and declared first. The default fi
 are NRGF, bilateral WOW and isotropic ACHF; all sixteen variants are available on request.
 These are portable recipes, not an exact replay of the author's final Photoshop image.
 
-## Differential extinction under a low Sun (unreleased)
+## Differential extinction under a low Sun (1.3.0)
 
 When the Sun is low, the air mass changes across the corona. In 2026 the Sun stood about 9° high:
 the air mass was about **5.75 two solar radii above the Sun** (towards the zenith), **6.05 at the Sun**
@@ -108,6 +110,45 @@ The tests use synthetic coronae with known truth: exact recovery with the true s
 0.5 % in level and dipole when the sky region holds no corona; and three wrong sky models (a plane
 fitted where corona is present, a constant sky from 3–4 R☉, a constant sky that misses a gradient)
 that the same gate rejects with the same thresholds.
+
+## Checking against coronagraphs (1.3.0)
+
+Two questions, kept apart because they fail differently. **Structure:** are the rays and streamers where
+an independent instrument sees them? **Brightness:** how bright is the corona in mean solar brightness
+(MSB, B/B☉)? The agent's recipe, with the data to ask for and the traps, is the skill
+[`skills/coronagraph-comparison/`](skills/coronagraph-comparison/).
+
+```sh
+python -m ael coronagraph --config coronagraph.json --out cmp_run/   # see examples/coronagraph_config_template.json
+```
+
+- **One solar frame per image** (`SolarFrame`): the Sun's centre and the pixel offsets of 1 R☉ towards
+  solar north and east *as seen by that observer*. The two axes may be non-perpendicular: the 2026 plate,
+  solved on stars with the Sun 9° high, had them 90.43° apart, and treating them as perpendicular moved
+  points 3 px at the limb and 20 px at 6 R☉. Frames come from an `ael` geometry and the P angle, from an
+  affine plate solution, from a helioprojective FITS header (K-Cor level 2, AIA level 1.5), or from three
+  pixel positions (LASCO level 0.5 through sunpy, with SOHO's own R☉: `rsun_arcsec`; SOHO sees the Sun
+  1.1 % larger than the Earth).
+- **Structure** (`unroll`, `nrgf_rows`, `compare_structure`): each image unrolled in its own coordinates,
+  normalised radius by radius, angular profiles per ring correlated at zero rotation and at the best
+  rotation within ±10°, with a null from rotations of 30–330° and a fine-detail version (angular
+  high-pass below 12°). `dark_sector` masks an occulter pylon as the one dark run that contains a seed angle,
+  never with a global threshold that would also remove coronal holes. The test compares angles only: a
+  radial tone curve `a(r)·I + b(r)` passes it unchanged (a test shows it).
+- **Brightness** (`cell_medians`, `level_ratios`, `ratio_band`): medians in 1° cells of each ring, each image
+  in its own frame, without resampling; cells that touch the lunar-motion band, the gap at the limb or a
+  prominence are dropped whole (`drop_touching`). K-Cor measures pB: `kcor_total_msb` turns it into what a
+  photograph sees, pB/p(r) for the K corona (Thomson polarisation integrated along the line of sight with
+  the van de Hulst coefficients, Baumbach–Allen or Saito densities) **plus the F corona** (van de Hulst 1950).
+  LASCO C2: `lasco_c2_msb_per_dn` gives both published calibrations (Colaninno & Howard 2015 and SolarSoft),
+  13.5 % apart in level for August 2026. `ratio_band(σ_lo, σ_hi)` is the 1σ band of ours/reference when the
+  photograph's uncertainty is asymmetric: for −20 %/+11 %, 0.90–1.25.
+
+Validated on the 2026 data from the published MSB map (`docs/VALIDATION_1.3.0.md`): the module reproduces the
+research results within 0.005 for LASCO C2 (1.14 to 1.40 with Colaninno & Howard, 1.32 to 1.62 with SolarSoft)
+and within 0.01 for K-Cor (1.06/1.06/1.12 at 1.15–1.70 R☉), and the plate's 90.43° comes out of the map's own
+FITS header. Without the F corona the K-Cor ratios would have been 1.19/1.21/1.43: the false excess of the
+first comparison.
 
 ## Geometry
 
@@ -277,9 +318,14 @@ Morgan, Habbal & Woo (2006, NRGF); Morgan & Druckmüller (2014, MGN); Auchère, 
 Buchlin (2023, WOW); Druckmüller, Rušin & Minarovjech (2006, adaptive circular filters) and
 Druckmüllerová (2014, thesis: the published kernel); Gilly & Cranmer (2025, RHEF); Starck,
 Fadili & Murtagh (2007, starlet); Knutsson & Westin (1993, normalised convolution). The air mass
-is that of Kasten & Young (1989, *Applied Optics* 28, 4735).
+is that of Kasten & Young (1989, *Applied Optics* 28, 4735). The coronagraph comparison uses the
+scattering coefficients and the F and K coronae of van de Hulst (1950, *BAN* 11, 135), the line-of-sight
+integral of Billings (1966), the Baumbach–Allen and Saito (1977) electron densities, and the LASCO C2
+calibrations of Colaninno & Howard (2015, *Solar Physics* 290, 997) and SolarSoft; K-Cor data: K-Cor Team
+(2013), doi:10.5065/D69G5JV8.
 
-Version 1.2.1 corrects stepped radial statistics and clipped display highlights, adds
-an explicit native-reference canvas option and documents the limits of internal dust
-calibration. See [field lessons](docs/FIELD_LESSONS.md) and [recipe details](docs/DEVELOP.md).
-Existing images are not rewritten; compare the new numerical recipe before adopting it.
+Version 1.3.0 adds `ael extinction` and `ael coronagraph`, corrects stepped radial statistics and
+clipped display highlights (prepared as 1.2.1), adds an explicit native-reference canvas option and
+documents the limits of internal dust calibration. See [field lessons](docs/FIELD_LESSONS.md) and
+[recipe details](docs/DEVELOP.md). Existing images are not rewritten; compare the new numerical recipe
+before adopting it.

@@ -1,4 +1,4 @@
-# Stacking and filter layers in 1.2.1
+# Stacking, extinction and filter layers
 
 `ael stack` and `ael filters` turn a **declared recipe** into reproducible files.
 They do not infer the observing site, alignment, linearity ceiling, colour calibration
@@ -10,7 +10,7 @@ working directory. Every output directory must be new.
 pip install ".[raw,photoshop]"
 ael selftest
 ael stack --config stack.json --out stack_run/
-ael extinction --config extinction.json --out ext_run/   # optional: low Sun (unreleased)
+ael extinction --config extinction.json --out ext_run/   # optional: low Sun
 ael filters --config filters.json --out filter_run/
 ```
 
@@ -83,7 +83,7 @@ Outputs: `linear.npy` and float32 `linear.tif` (DN/s sensor RGB); `valid.npy`;
 There is no formal uncertainty map: the two-band variance is a weighting model,
 not a propagated absolute-photometry uncertainty budget.
 
-## Extinction recipe (optional, unreleased)
+## Extinction recipe (optional)
 
 With a low Sun the air mass changes across the field and the corona carries a dipole of
 atmospheric origin (in 2026, about ±9 % at 1.5 R☉ and ±23 % at 4 R☉ around the Sun's own

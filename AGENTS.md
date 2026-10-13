@@ -34,6 +34,7 @@ Follow `skills/eclipse-first-steps/SKILL.md`; the learning checks are in `docs/F
 | Registration, HDR fusion, filters, tone curve, Photoshop layers, gates | `skills/postprocessat-corona/SKILL.md` |
 | Rings, seams, ghosts, striping, limb fringes, marks drawn by the photographer | `skills/corregeix-artefactes/SKILL.md` |
 | Sky, absolute brightness, differential extinction under a low Sun | `docs/DEVELOP.md` (extinction recipe), then `docs/FIELD_LESSONS.md` |
+| Comparing with K-Cor, SOHO/LASCO or SDO/AIA; brightness in mean solar brightness | `skills/coronagraph-comparison/SKILL.md`, then `README_AEL.md` |
 | Structure images, unrolled (polar) views, coronal motion and animations | `skills/corona-visualizations/SKILL.md`, then `README_AEL.md` and `python -m ael selftest` |
 | Background, dated findings, why a decision was taken | `3-RECERCA/README.md` (index), then the numbered note |
 | Code of a given stage or image version | `3-RECERCA/tools/<stage-or-version>/` |
@@ -54,7 +55,9 @@ The scripts therefore do **not** run end to end from this repository. Do not tel
 the user's own data and say which constants you changed. The exception is the package `ael/` (since 1.1.0): it runs
 on the user's own data; start with `python -m ael selftest`, and never skip its visual-check sheets. Since 1.1.1 it
 also writes layered 16-bit Photoshop files (`ael.photoshop`). Since 1.2.0, `ael stack` and
-`ael filters` execute declared stacking/filter recipes; start with `docs/DEVELOP.md`. Measure registration,
+`ael filters` execute declared stacking/filter recipes; start with `docs/DEVELOP.md`. Since 1.3.0,
+`ael extinction` corrects a low-Sun stack and `ael coronagraph` checks the corona against
+coronagraphs. Measure registration,
 linearity, geometry and any spatial cloud corrections before writing the configuration. Do not guess them.
 
 ## Working rules that made the difference

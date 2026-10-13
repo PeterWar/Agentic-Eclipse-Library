@@ -8,6 +8,12 @@ Photoshop).  The flattened composite is written uncompressed, never with ZIP.  A
 (:func:`verify`) before handing it over.
 
 Tested with psd-tools 1.18 and 1.23 (it uses its record classes directly).  Install with ``pip install -e ".[photoshop]"``.
+
+This module writes *new* files.  Do not use psd-tools to add layers to someone's existing file and save it: it
+re-serialises every record it read, and in 2026 the record of an adjustment layer (Hue/Saturation) lost part of
+its ``hue2`` block although every pixel stayed the same.  For an existing file, copy its bytes and append the new
+records (``3-RECERCA/tools/v128_extincio_20261012/v2b_escriu_psb.py``), then compare each original record with a
+raw reader of your own (``docs/FIELD_LESSONS.md``).
 """
 from __future__ import annotations
 

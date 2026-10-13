@@ -1,6 +1,41 @@
 # Changelog
 
-## Unreleased (local branch, not published)
+## 1.3.0 — 2026-10-13
+
+Coronagraph checks and differential extinction, plus the fixes prepared as 1.2.1 (never released
+on their own). Research notes 180 and 185 and the code behind them are added to `3-RECERCA/`.
+
+### Coronagraph comparison (`ael.coronagraph`, `ael coronagraph`, skill `coronagraph-comparison`)
+
+- `SolarFrame`: solar coordinates of each image as seen by its own observer, with axes that may be
+  non-perpendicular (an affine star plate) and an exact 2×2 inverse; built from an `ael` geometry and
+  the P angle, an affine plate solution, a helioprojective FITS header (K-Cor level 2, AIA level 1.5)
+  or three pixel positions (LASCO level 0.5 through sunpy). `rsun_arcsec` gives each observer's Sun.
+- Structure: `unroll` (optional supersampling; nothing interpolated across missing data), `nrgf_rows`,
+  `angular_profile`, `angular_highpass`, `circular_correlation`, `rotation_null`, `compare_structure`
+  (zero and best rotation, a null from 30–330° rotations, fine detail below 12°), `dark_sector` for an
+  occulter pylon (only the dark run that contains the seed angle) and `subtract_low_harmonics` for
+  displaying LASCO level 0.5.
+- Brightness in mean solar brightness: `thomson_polarization` (van de Hulst coefficients integrated
+  along the line of sight; Baumbach–Allen, Saito or any density), `kcor_total_msb` (K-Cor pB/p plus
+  the F corona), `k_band_transfer`, van de Hulst (1950) K and F coronae, `lasco_c2_msb_per_dn` with the
+  Colaninno & Howard (2015) and SolarSoft calibrations, `cell_medians` (each image in its own frame,
+  no resampling; `drop_touching` drops a cell that touches the lunar-motion band), `level_ratios` and
+  `ratio_band` (the asymmetric 1σ band of a ratio).
+- `python -m ael coronagraph --config ... --out ...`: declared structure comparison with a JSON
+  receipt and one check sheet per reference; every input is read and checked before anything is
+  written. Template: `examples/coronagraph_config_template.json`.
+- Known-truth tests (14): the affine trap (3.3 px at the limb, ~20 px at 6 R☉), SOHO's larger Sun,
+  the P angle, a helioprojective header, agreement and a recovered 5° rotation, a negative control
+  (another corona) and the same broad shape with other rays, blindness to a radial tone curve, the
+  pylon including a run across 0°, the polarisation regression and limits, K + F, the two C2
+  calibrations in 2026 and 2013, a known brightness scale with dropped cells, the ratio band and the
+  command with its refusals.
+- Validated on the 2026 data from the published calibrated map (`docs/VALIDATION_1.3.0.md`): LASCO C2
+  ratios within 0.005 and K-Cor within 0.01 of the research results; the plate's 90.43° read from the
+  map's own FITS header.
+
+### Differential extinction (`ael.extinction`, `ael extinction`)
 
 - Add `ael.extinction` and `ael extinction --config ... --out ...`: differential atmospheric
   extinction across the field under a low Sun. Per-pixel air mass from the site and time
@@ -32,7 +67,22 @@
 - Fix `render.sky_background` on noise-free data: the robust scale was zero and a strict
   comparison clipped every pixel, returning a zero sky without warning.
 
-## 1.2.1 — 2026-10-06 (local, unpublished)
+### Documentation and research
+
+- `docs/FIELD_LESSONS.md`: coronagraphs (structure is not brightness; pB is not what a camera sees;
+  two C2 calibrations; asymmetric bands; each observer's Sun), a rotational-gradient
+  (Larson–Sekanina) layer that copies rays, and adding layers to someone's file without rewriting
+  theirs (psd-tools re-serialised an adjustment-layer record). `ael.photoshop` says it only writes
+  new files.
+- Research notes 180 (structure against SDO/AIA, LASCO and K-Cor) and 185 (corrections to the
+  absolute calibration and differential extinction), and five research folders in `3-RECERCA/tools/`:
+  `comparacio_sdo_lasco_20261001`, `msb_calibrat_20261011`, `extincio_diferencial_20261012`,
+  `larson_sekanina_20261002` and `v128_extincio_20261012` (the byte-preserving PSB writer). Notes
+  181–184 started from other photographers' images and are not published; the names of private
+  correspondents were removed from notes 180 and 185 and from a few lines of their code.
+- Six skills: `coronagraph-comparison` is new; the first-steps skill points to it.
+
+### Fixes and lessons prepared as 1.2.1 (2026-10-06)
 
 - Fix radial lookup discontinuities in both NRGF variants and four RHEF variants.
   NRGF evaluates measured annular statistics continuously; RHEF interpolates
