@@ -1,6 +1,6 @@
 # 180 · La final contra SDO/AIA, SOHO/LASCO i K-Cor: validació externa de l'estructura (01-10-2026)
 
-**Origen:** un suggeriment rebut: comparar la imatge amb la de l'SDO, per veure la fidelitat del tractament, i amb SOHO/LASCO. *[Editat per a la publicació: sense el nom ni les paraules d'un missatge privat.]* Feia de model un mosaic publicat: l'eclipsi al centre, el LASCO C2 en vermell i el C3 en blau.
+**Origen:** un suggeriment rebut: comparar la imatge amb la de l'SDO, per veure la fidelitat del tractament, i amb SOHO/LASCO. Feia de model un mosaic publicat: l'eclipsi al centre, el LASCO C2 en vermell i el C3 en blau. *[Editat per a la publicació: sense els noms de dues persones ni les paraules d'un missatge privat.]*
 
 **Antecedent:** és la porta G7c del `research/74` («LASCO no comparteix res» amb els nostres dos trens), proposada el 15-08 i mai feta fins avui. La part de brillantor absoluta («Fita 6») continua pendent.
 
@@ -32,7 +32,7 @@ Sense ajustar cap paràmetre amb els satèl·lits, l'estructura de la final coin
 - l'orientació hi coincideix dins de ~0,5°;
 - les tres protuberàncies són on les veu l'SDO a 304 Å.
 
-Detall, taules, límits i fitxers: `3-RECERCA/resultats/comparacio_sdo_lasco_20261001/RESULTAT.md`.
+Detall, taules, límits i fitxers: `3-RECERCA/resultats/comparacio_sdo_lasco_20261001/RESULTAT.md`. *[Editat per a la publicació: sense un enllaç privat.]*
 
 ## Mètode, per reutilitzar-lo
 

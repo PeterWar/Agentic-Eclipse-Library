@@ -52,7 +52,8 @@ north and solar east, as seen by *that* observer.
 
 - **Your image.** From your plate solution (stars): `SolarFrame.from_celestial_plate(centre, R☉″, N_px_per_arcsec,
   E_px_per_arcsec, P)`, with P the solar P angle at mid-totality. From an `ael` geometry:
-  `SolarFrame.from_geometry(geometry, P)`. A plate solved under a low Sun is **affine** (2026: north and east
+  `SolarFrame.from_geometry(geometry, P)` (P is required: in August it is about 15°). A plate solved under a
+  low Sun is **affine** (2026: north and east
   90.43° apart); never convert with a pure rotation, which moved points 3 px at the limb and 20 px at 6 R☉.
 - **The Sun's centre in your image** is not the Moon's. In 2026: the measured lunar centre minus the
   topocentric Sun–Moon offset from an ephemeris (DE421) at the instant the Moon was measured.
@@ -92,10 +93,11 @@ res_c2 = cg.compare_structure(ours, c2, [(2.4, 2.8), (2.8, 3.3), (3.3, 4.0), (4.
 - **Pylon.** Only the contiguous dark run that contains the seed; a global threshold would remove real coronal
   holes. Labels and occulter edges: mask them, never fill them.
 - **Prominences.** Overlay AIA 304 Å contours (outside the disc and the Moon) and say where they match *by eye*.
-- **2026, for orientation.** Display image vs K-Cor NRGF: 0.90–0.95 (1.15–1.75 R☉); vs C2 0.82 falling to 0.42
-  (2.4–6 R☉), fine detail 0.88 to 0.58; vs AIA 211 Å 0.87–0.89. Linear MSB map vs K-Cor pB: 0.97–0.98
-  (1.15–1.75 R☉); vs C2 0.97 falling to 0.78, fine detail 0.98 to 0.70. Orientation −0.5° to +0.8°; the whole C2
-  profile at 5–6 R☉ prefers up to +9°, which is the broad shape, not the orientation.
+- **2026, for orientation.** Display image vs K-Cor NRGF: 0.90–0.95 up to 1.75 R☉; vs C2 0.82 falling to 0.42
+  (2.4–6 R☉), fine detail 0.88 to 0.58; vs AIA 211 Å 0.87–0.89. Linear MSB map vs K-Cor pB: 0.96–0.98
+  (1.15–1.75 R☉); vs C2 0.97 falling to 0.78, fine detail 0.97 to 0.69. Orientation −0.5° to +0.8°. The whole C2
+  profile at 5–6 R☉ prefers +9° to +10°, the edge of the ±10° search (`at_search_edge`): that is the broad shape,
+  not the orientation.
 
 ## 4 · Brightness in MSB
 
@@ -118,8 +120,9 @@ K-Cor only where its pB is reliable (2026: negative beyond ~1.95 R☉, so it was
 
 **c. LASCO C2.** `(DN − bias) / (exposure time × exposure factor) × vignetting × factor`, with
 `lasco_c2_msb_per_dn(date, "colaninno_howard_2015")` and `(…, "solarsoft")`. They differ by 13.5 % in level for
-August 2026, a difference already present in 2013. Give both. Average the images before and after totality;
-exclude the pylon by PA.
+August 2026, a difference already present in 2013. Give both. Only the Orange filter is calibrated; a summed
+image divides the factor (`summing=lasco_c2_summing(header)`), and a polariser image is calibrated only by
+SolarSoft (factor / 0.25256). Average the images before and after totality; exclude the pylon by PA.
 
 **d. Judge.** `ratio_band(σ_lo, σ_hi)` gives the 1σ band of ours/reference: for −20 %/+11 %, **0.90–1.25**
 (not 0.80–1.11). Say "compatible" only inside the band, ring by ring.
@@ -127,11 +130,12 @@ exclude the pylon by PA.
 **2026 result, for orientation:** K-Cor 1.06/1.06/1.12 at 1.15–1.70 R☉ (compatible); C2 1.14→1.40 with
 Colaninno & Howard (inside 1σ at every ring) and 1.32→1.62 with SolarSoft; cause of the C2 level not
 separated (stray light, sky, the second camera, the C2 calibration). `ael.coronagraph` reproduces those
-numbers within 0.005 (C2) and 0.01 (K-Cor) from the published map (`docs/VALIDATION_1.3.0.md`).
+numbers within 0.003 (C2) and 0.009 (K-Cor) from the research's calibrated map, which is not distributed
+(`docs/VALIDATION_1.3.0.md`).
 
 ## 5 · Traps that were real
 
-- K-Cor **pB/p without the F corona** gave a false +13 % excess; the K-Cor GIF overestimated pB by 2–3 %.
+- K-Cor **pB/p without the F corona** gave a false +13–15 % excess; the K-Cor GIF overestimated pB by 2–3 %.
 - A ring inside the **lunar-motion band** (the Moon moves during totality) was compared as if it were corona.
   Drop every cell that touches the band, the 1–2 px gap at the limb or a prominence (`drop_touching`).
 - **R☉** taken from another day or observer (959″ instead of 946.66″) put the brightness 6 % low.

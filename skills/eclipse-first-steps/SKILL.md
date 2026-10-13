@@ -98,7 +98,7 @@ Output: a 32-bit linear TIFF, the valid map, `geometry.json` (`ael.geometry.Ecli
 Show the user a stretched view and look at it yourself at full resolution near the limb before going on.
 
 For a low Sun, `ael extinction --config extinction.json --out new_ext/` sits between `stack`
-and `filters` (recipe in `docs/DEVELOP.md`, template in `examples/`; not yet in a release).
+and `filters` (recipe in `docs/DEVELOP.md`, template in `examples/`; since 1.3.0).
 
 Since 1.2.0 use `ael stack --config stack.json --out new_run/`; the schema and coordinate
 conventions are in `docs/DEVELOP.md` and `examples/stack_config_template.json`. Measure

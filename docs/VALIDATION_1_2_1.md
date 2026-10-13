@@ -24,3 +24,4 @@ removal, calibrated spectral colour or recovered lunar relief. The internal dust
 response fitter remains an experimental, documented lesson outside the production API.
 
 This records a local version. A commit and wheel are not a published GitHub release.
+Version 1.2.1 was never released on its own; its changes are part of 1.3.0.

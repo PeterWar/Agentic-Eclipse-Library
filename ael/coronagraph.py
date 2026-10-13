@@ -23,7 +23,7 @@ What the 12 August 2026 data taught, and how it shaped this module (research not
 * SOHO, at L1, sees the Sun 1.1 % larger than an observer on the Earth.  R☉ in pixels must be that of
   each observer (:func:`rsun_arcsec`); readers of LASCO level-0.5 files may put the observer on the Earth.
 * K-Cor measures polarised brightness, pB.  pB/p(r) is the K corona only; a photograph sees K + F.
-  Comparing a photograph with pB/p gave a false 13 % excess (:func:`kcor_total_msb` adds the F corona).
+  Comparing a photograph with pB/p gave a false 13–15 % excess (:func:`kcor_total_msb` adds the F corona).
   The public K-Cor GIFs are 8-bit and gamma-encoded: use the level-2 FITS for brightness.
 * LASCO C2 has two calibrations whose levels differ by 13.5 % for August 2026
   (:func:`lasco_c2_msb_per_dn`).  Give both; the choice is not a detail.
@@ -34,18 +34,22 @@ What the 12 August 2026 data taught, and how it shaped this module (research not
   Nothing is filled in their place.
 
 Nothing invented: a sample whose interpolation support touches missing data is ``NaN``, and a cell
-without data is ``NaN``.
+without data is ``NaN``.  One smoothing is declared: an angular profile is a normalised convolution
+(Gaussian of 1.5° by default), so a gap narrower than the kernel takes the mean of its observed
+neighbours where at least 60 % of the kernel saw data; wider gaps stay ``NaN``.
 """
 from __future__ import annotations
 
 import datetime as _dt
 import json
 import math
+import numbers
 from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
 from scipy import ndimage as nd
+from scipy.integrate import trapezoid as _trapezoid
 
 from .geometry import EclipseGeometry, direction_of_pa
 
@@ -53,7 +57,8 @@ __all__ = ["AU_KM", "RSUN_KM", "rsun_arcsec", "SolarFrame", "Unrolled", "sample"
            "subtract_low_harmonics", "dark_sector", "angular_profile", "angular_highpass",
            "circular_correlation", "rotation_null", "compare_structure", "van_de_hulst_abcd", "DENSITY_MODELS",
            "k_corona_tb_pb", "thomson_polarization", "f_corona_van_de_hulst_1950", "k_corona_van_de_hulst_1950",
-           "kcor_total_msb", "k_band_transfer", "LASCO_C2_CALIBRATIONS", "mjd", "lasco_c2_msb_per_dn",
+           "kcor_total_msb", "k_band_transfer", "LASCO_C2_CALIBRATIONS", "mjd", "lasco_c2_summing",
+           "lasco_c2_msb_per_dn",
            "cell_medians", "level_ratios", "ratio_band", "structure_from_config"]
 
 AU_KM = 149_597_870.7
@@ -101,10 +106,11 @@ class SolarFrame:
         return cls(center_xy, rsun_px * n / np.linalg.norm(n), rsun_px * e / np.linalg.norm(e), **kw)
 
     @classmethod
-    def from_geometry(cls, geometry: EclipseGeometry, p_angle_deg: float = 0.0, **kw) -> "SolarFrame":
+    def from_geometry(cls, geometry: EclipseGeometry, p_angle_deg: float, **kw) -> "SolarFrame":
         """From an :class:`ael.geometry.EclipseGeometry` (orthogonal axes; ``north_deg`` is *celestial* north).
 
-        Solar north lies ``p_angle_deg`` (the solar P angle) east of celestial north.
+        Solar north lies ``p_angle_deg`` (the solar P angle) east of celestial north.  It is required: in
+        August the P angle is about 15°, and assuming 0 would rotate every position angle by that much.
         """
         n = direction_of_pa(p_angle_deg, geometry.north_deg, geometry.mirrored)
         e = direction_of_pa(p_angle_deg + 90.0, geometry.north_deg, geometry.mirrored)
@@ -367,6 +373,8 @@ def dark_sector(nrgf_data, radii_rsun, r_range, seed_pa_deg: float, *, threshold
     ``dilate_deg`` on both sides): a global threshold would also remove real coronal holes.  If the seed
     angle is not dark, nothing is masked.  Find the seed by looking at the unrolled image.
     """
+    if dilate_deg < 0:
+        raise ValueError("dilate_deg must be >= 0")
     a = np.asarray(nrgf_data.data if isinstance(nrgf_data, Unrolled) else nrgf_data, np.float64)
     r = np.asarray(radii_rsun, np.float64)
     sel = (r >= r_range[0]) & (r <= r_range[1])
@@ -385,10 +393,9 @@ def dark_sector(nrgf_data, radii_rsun, r_range, seed_pa_deg: float, *, threshold
         return out
     if dark.all():
         return np.ones(n, bool)
-    shift = n // 2 - s                              # put the seed in the middle: no wrap inside the run
-    rolled = np.roll(dark, shift)
-    lab, _ = nd.label(rolled)
-    run = np.roll(lab == lab[n // 2], -shift)
+    k0 = int(np.flatnonzero(~dark)[0])              # start the circle on an angle that is not dark:
+    lab, _ = nd.label(np.roll(dark, -k0))           # then no dark run wraps round the end of the array
+    run = np.roll(lab == lab[(s - k0) % n], k0)
     k = int(math.ceil(dilate_deg / step - 1e-9))
     for d in range(-k, k + 1):
         out |= np.roll(run, d)
@@ -445,7 +452,8 @@ def circular_correlation(p, q, *, max_shift_deg: float = 10.0, min_points: int =
     """Pearson correlation of two angular profiles at zero rotation and at the best rotation of ``q``.
 
     ``shift_deg`` is the rotation of ``q`` towards larger PA that maximises the correlation: if the
-    reference sees a feature δ degrees further round than we do, ``shift_deg`` = −δ.
+    reference sees a feature δ degrees further round than we do, ``shift_deg`` = −δ.  ``at_search_edge`` is
+    True when the best rotation is the largest one searched: then it is not an orientation.
     """
     p = np.asarray(p, np.float64)
     q = np.asarray(q, np.float64)
@@ -457,9 +465,10 @@ def circular_correlation(p, q, *, max_shift_deg: float = 10.0, min_points: int =
     rho = np.array([_pearson(p, np.roll(q, s), min_points) for s in shifts])
     n0 = int((np.isfinite(p) & np.isfinite(q)).sum())
     if not np.isfinite(rho).any():
-        return dict(rho_0=np.nan, rho_best=np.nan, shift_deg=np.nan, n_angles=n0)
+        return dict(rho_0=np.nan, rho_best=np.nan, shift_deg=np.nan, at_search_edge=False, n_angles=n0)
     i = int(np.nanargmax(rho))
-    return dict(rho_0=float(rho[k]), rho_best=float(rho[i]), shift_deg=float(shifts[i] * step), n_angles=n0)
+    return dict(rho_0=float(rho[k]), rho_best=float(rho[i]), shift_deg=float(shifts[i] * step),
+                at_search_edge=bool(k > 0 and abs(int(shifts[i])) == k), n_angles=n0)
 
 
 def rotation_null(p, q, *, shifts_deg=None, min_points: int = 60) -> np.ndarray:
@@ -549,16 +558,31 @@ def _density(model):
         raise ValueError(f"unknown density model {model!r}; known: {sorted(DENSITY_MODELS)}") from None
 
 
-def k_corona_tb_pb(rho: float, density="baumbach_allen", *, u: float = 0.56, z_max_rsun: float = 20.0,
-                   n_z: int = 20001) -> tuple[float, float]:
+def _z_grid(z_max_rsun: float) -> np.ndarray:
+    """Line-of-sight samples: every 0.001 R☉ up to 20 R☉, then geometric (4000 steps) up to ``z_max_rsun``."""
+    near = np.linspace(0.0, min(20.0, float(z_max_rsun)), 20001)
+    if z_max_rsun <= 20.0:
+        return near
+    return np.concatenate([near, np.geomspace(20.0, float(z_max_rsun), 4001)[1:]])
+
+
+def k_corona_tb_pb(rho: float, density="baumbach_allen", *, u: float = 0.56,
+                   z_max_rsun: float = 2000.0) -> tuple[float, float]:
     """Total and polarised brightness of the K corona at projected distance ``rho`` (R☉), in arbitrary
-    units, integrated along the line of sight from the plane of the sky to ``z_max_rsun`` (Billings 1966)."""
-    z = np.linspace(0.0, float(z_max_rsun), int(n_z))
-    r = np.sqrt(float(rho) ** 2 + z ** 2)
+    units, integrated along the line of sight from the plane of the sky to ``z_max_rsun`` (Billings 1966).
+
+    The 2026 research stopped at 20 R☉, which raised p by 0.1 % at 2 R☉ and by 6 % at 8 R☉; the default
+    goes to 2000 R☉ (what is left beyond is below 1e-6).
+    """
+    rho = float(rho)
+    if not rho > 1.0:
+        raise ValueError("rho must be larger than 1 R☉ (outside the photosphere)")
+    z = _z_grid(z_max_rsun)
+    r = np.sqrt(rho ** 2 + z ** 2)
     A, B, C, D = van_de_hulst_abcd(r)
     n = _density(density)(r)
-    it = np.trapezoid(n * ((1 - u) * C + u * D), z)
-    pb = np.trapezoid(n * (float(rho) / r) ** 2 * ((1 - u) * A + u * B), z)
+    it = _trapezoid(n * ((1 - u) * C + u * D), z)
+    pb = _trapezoid(n * (rho / r) ** 2 * ((1 - u) * A + u * B), z)
     return float(2.0 * it - pb), float(pb)
 
 
@@ -570,13 +594,18 @@ def thomson_polarization(rho, density="baumbach_allen", *, u: float = 0.56) -> n
     """Degree of polarisation p = pB/tB of the K corona at projected distance ``rho`` (R☉).
 
     Named density models are tabulated once on 1.02–8 R☉ (step 0.005) and interpolated; outside that
-    range the result is ``NaN``.  A callable density is integrated at every requested value.
+    range the result is ``NaN``.  A callable density is tabulated the same way over the requested range.
     """
     rho = np.asarray(rho, np.float64)
     if callable(density):
-        flat = [np.nan if not np.isfinite(x) or x <= 1.0 else (lambda t: t[1] / t[0])(k_corona_tb_pb(x, density, u=u))
-                for x in rho.ravel()]
-        return np.asarray(flat).reshape(rho.shape)
+        out = np.full(rho.shape, np.nan)
+        ok = np.isfinite(rho) & (rho > 1.0)
+        if ok.any():
+            lo, hi = float(rho[ok].min()), float(rho[ok].max())
+            grid = np.append(np.arange(lo, hi, 0.005), hi)
+            vals = np.array([(lambda t: t[1] / t[0])(k_corona_tb_pb(x, density, u=u)) for x in grid])
+            out[ok] = np.interp(rho[ok], grid, vals) if grid.size > 1 else vals[0]
+        return out
     key = (density, float(u))
     if key not in _P_CACHE:
         _density(density)
@@ -639,7 +668,7 @@ LASCO_C2_CALIBRATIONS = {
 
 def mjd(when) -> float:
     """Modified Julian Date of an ISO time string (UTC), a datetime, or a number (returned as is)."""
-    if isinstance(when, (int, float, np.floating)):
+    if isinstance(when, numbers.Real) and not isinstance(when, bool):
         return float(when)
     t = when if isinstance(when, _dt.datetime) else _dt.datetime.fromisoformat(str(when).replace("Z", "+00:00"))
     if t.tzinfo is not None:
@@ -647,19 +676,45 @@ def mjd(when) -> float:
     return (t - _dt.datetime(1858, 11, 17)).total_seconds() / 86400.0
 
 
-def lasco_c2_msb_per_dn(when, calibration: str = "colaninno_howard_2015") -> float:
+LASCO_C2_POLARIZER_DIVISOR = 0.25256          # SolarSoft c2_calfactor.pro: polariser images use factor / 0.25256
+
+
+def lasco_c2_summing(header) -> int:
+    """Pixel summing of a LASCO image: SUMCOL × SUMROW × LEBXSUM × LEBYSUM (0 or missing counts as 1)."""
+    f = 1
+    for key in ("SUMCOL", "SUMROW", "LEBXSUM", "LEBYSUM"):
+        v = header.get(key, 1) if hasattr(header, "get") else 1
+        f *= max(int(v or 1), 1)
+    return f
+
+
+def lasco_c2_msb_per_dn(when, calibration: str = "colaninno_howard_2015", *, filter_name: str = "Orange",
+                        polarizer: str = "Clear", summing: int = 1) -> float:
     """LASCO C2 calibration factor, MSB per DN/s/pixel, for a date (ISO string, datetime or MJD).
 
     For 12 August 2026 the two calibrations give 7.589e-12 (Colaninno & Howard) and 6.562e-12
     (SolarSoft): 13.5 % apart in level, a difference already present in 2013, inside the period both were
     fitted on.  Report results with both.  Apply after ``(DN − bias) / (exposure time × exposure factor)``
     and the vignetting correction (``c2vig_final.fts``, multiplicative).
+
+    Only the Orange filter is calibrated here.  A summed image (``summing`` = :func:`lasco_c2_summing` of its
+    header) divides the factor, as SolarSoft does.  A polariser image divides the SolarSoft factor by
+    0.25256; Colaninno & Howard (2015) calibrate unpolarised (Clear) images only, so that case is refused.
     """
     try:
         a, b = LASCO_C2_CALIBRATIONS[calibration]
     except KeyError:
         raise ValueError(f"unknown calibration {calibration!r}; known: {sorted(LASCO_C2_CALIBRATIONS)}") from None
-    return (a * mjd(when) + b) * 1e-12
+    if str(filter_name).strip().lower() != "orange":
+        raise ValueError(f"filter {filter_name!r}: only the Orange filter is calibrated here")
+    if int(summing) != summing or int(summing) < 1:
+        raise ValueError("summing must be a positive integer (SUMCOL x SUMROW x LEBXSUM x LEBYSUM)")
+    f = (a * mjd(when) + b) * 1e-12 / int(summing)
+    if str(polarizer).strip().lower() != "clear":
+        if calibration != "solarsoft":
+            raise ValueError("Colaninno & Howard (2015) calibrate unpolarised (Clear) images only")
+        f /= LASCO_C2_POLARIZER_DIVISOR
+    return f
 
 
 # ------------------------------------------------------------------------------------------------
@@ -686,6 +741,12 @@ def cell_medians(image, frame: SolarFrame, rings, *, cell_deg: float = 1.0, vali
     if abs(n_cells - round(n_cells)) > 1e-9:
         raise ValueError("cell_deg must divide 360")
     n_cells = int(round(n_cells))
+    rings = [(float(r1), float(r2)) for r1, r2 in rings]
+    if any(not 0.0 <= r1 < r2 for r1, r2 in rings):
+        raise ValueError("each ring needs 0 <= r1 < r2")
+    srt = sorted(rings)
+    if any(b2[0] < b1[1] for b1, b2 in zip(srt, srt[1:])):
+        raise ValueError("rings overlap: a pixel would be counted in one ring only")
     r, pa = frame.solar_maps(a.shape)
     ok = np.isfinite(a)
     label = np.full(a.shape, -1, np.int64)
@@ -742,62 +803,131 @@ def ratio_band(sigma_lo: float, sigma_hi: float) -> tuple[float, float]:
 # ------------------------------------------------------------------------------------------------
 # Declared structure comparison (python -m ael coronagraph)
 # ------------------------------------------------------------------------------------------------
-def _frame_from_spec(spec: dict, root: Path, image_path: Path | None, hdu) -> SolarFrame:
-    keys = set(spec)
+_FITS_SUFFIXES = (".fits", ".fit", ".fts")
+_SPEC_KEYS = {"image", "frame", "hdu", "channel", "valid", "bin", "supersample", "normalise", "_comment"}
+_REF_KEYS = _SPEC_KEYS | {"name", "rings", "dark_sector"}
+_DARK_KEYS = {"r_range", "seed_pa_deg", "threshold", "dilate_deg", "_comment"}
+_RADII_KEYS = {"min", "max", "n", "spacing", "_comment"}
+_TOP_KEYS = {"ours", "references", "radii_rsun", "pa_step_deg", "sigma_deg", "highpass_sigma_deg", "max_shift_deg",
+             "note", "_comment"}
+
+
+def _is_fits(path: Path) -> bool:
+    suf = [x.lower() for x in Path(path).suffixes]
+    return bool(suf) and (suf[-1] in _FITS_SUFFIXES or (len(suf) > 1 and suf[-1] == ".gz" and suf[-2] in _FITS_SUFFIXES))
+
+
+def _fits_hdu(hl, hdu):
+    """The requested HDU, or the first one that holds an image (AIA level 1.5 keeps it in HDU 1)."""
+    if hdu is not None:
+        return hl[int(hdu)]
+    for h in hl:
+        if h.data is not None and np.ndim(h.data) >= 2:
+            return h
+    raise ValueError("no image HDU in this FITS file")
+
+
+def _json_safe(x):
+    """NaN and infinities become null, so that any JSON reader can read the receipt."""
+    if isinstance(x, dict):
+        return {k: _json_safe(v) for k, v in x.items()}
+    if isinstance(x, (list, tuple)):
+        return [_json_safe(v) for v in x]
+    if isinstance(x, (bool, np.bool_)):
+        return bool(x)
+    if isinstance(x, (numbers.Integral, np.integer)):
+        return int(x)
+    if isinstance(x, (numbers.Real, np.floating)):
+        return float(x) if math.isfinite(float(x)) else None
+    return x
+
+
+def _frame_from_spec(spec, root: Path, image_path: Path, hdu, shape) -> tuple[SolarFrame, list]:
+    """Frame of one image from its recipe, and the extra files it read (for the receipt)."""
+    if not isinstance(spec, dict):
+        raise ValueError("a frame must be a JSON object")
+    keys = set(spec) - {"_comment"}
     if {"center_xy", "north_px", "east_px"} <= keys:
-        return SolarFrame.from_dict(spec)
-    if {"center_xy", "rsun_px", "north_dir", "east_dir"} <= keys:
-        return SolarFrame.from_axes(spec["center_xy"], spec["rsun_px"], spec["north_dir"], spec["east_dir"])
-    if "geometry" in keys:
-        if "p_angle_deg" not in keys:
+        kind, allowed = "explicit", {"center_xy", "north_px", "east_px", "observer", "time_utc", "rsun_px",
+                                     "north_east_angle_deg"}
+    elif {"center_xy", "rsun_px", "north_dir", "east_dir"} <= keys:
+        kind, allowed = "axes", {"center_xy", "rsun_px", "north_dir", "east_dir"}
+    elif "geometry" in keys:
+        kind, allowed = "geometry", {"geometry", "p_angle_deg"}
+    elif spec.get("wcs") is True:
+        kind, allowed = "wcs", {"wcs", "rsun_arcsec"}
+    else:
+        raise ValueError(f"cannot build a frame from keys {sorted(keys)}")
+    if keys - allowed:
+        raise ValueError(f"unknown keys in a {kind} frame: {sorted(keys - allowed)}")
+    if kind == "explicit":
+        return SolarFrame.from_dict(spec), []
+    if kind == "axes":
+        return SolarFrame.from_axes(spec["center_xy"], spec["rsun_px"], spec["north_dir"], spec["east_dir"]), []
+    if kind == "geometry":
+        if "p_angle_deg" not in spec:
             raise ValueError("a frame from a geometry needs p_angle_deg (the solar P angle; nothing is assumed)")
-        p = Path(spec["geometry"]).expanduser()
-        return SolarFrame.from_geometry(EclipseGeometry.from_json(p if p.is_absolute() else root / p),
-                                        float(spec["p_angle_deg"]))
-    if spec.get("wcs"):
-        if image_path is None or image_path.suffix.lower() not in (".fits", ".fit", ".fts", ".gz"):
-            raise ValueError("frame 'wcs' needs a FITS image")
-        from astropy.io import fits
-        with fits.open(image_path) as hl:
-            h = hl[hdu if hdu is not None else 0].header
-            return SolarFrame.from_wcs_header(h, rsun_arcsec_=spec.get("rsun_arcsec"))
-    raise ValueError(f"cannot build a frame from keys {sorted(keys)}")
+        gp = Path(spec["geometry"]).expanduser()
+        gp = gp if gp.is_absolute() else root / gp
+        if not gp.is_file():
+            raise ValueError(f"geometry not found: {gp}")
+        geo = EclipseGeometry.from_json(gp)
+        if tuple(geo.shape) != tuple(shape):
+            raise ValueError(f"the geometry is for a {tuple(geo.shape)} canvas, the image is {tuple(shape)}")
+        return SolarFrame.from_geometry(geo, float(spec["p_angle_deg"])), [gp]
+    if not _is_fits(image_path):
+        raise ValueError("frame 'wcs' needs a FITS image")
+    from astropy.io import fits
+    with fits.open(image_path) as hl:
+        h = _fits_hdu(hl, hdu)
+        if tuple(np.shape(h.data)[-2:]) != tuple(shape):
+            raise ValueError("the FITS image and the array read from it differ in shape")
+        return SolarFrame.from_wcs_header(h.header, rsun_arcsec_=spec.get("rsun_arcsec")), []
 
 
-def _load_image(path: Path, hdu, channel):
+def _load_image(path: Path, hdu, channel) -> np.ndarray:
+    """A 2-D image: one plane of a FITS cube (planes first) or one channel of an RGB array (channels last)."""
     from . import io as aio
-    if path.suffix.lower() in (".fits", ".fit", ".fts", ".gz"):
+    if _is_fits(path):
         from astropy.io import fits
         with fits.open(path) as hl:
-            a = np.asarray(hl[hdu if hdu is not None else 0].data, np.float64)
+            a = np.asarray(_fits_hdu(hl, hdu).data, np.float64)
+        planes_first = True
     else:
+        if hdu is not None:
+            raise ValueError(f"{path.name}: 'hdu' applies to FITS files only")
         a = np.asarray(aio.load_array(path), np.float64)
+        planes_first = False
     if a.ndim == 3:
         if channel == "luminance":
             from .render import luminance
-            a = luminance(a).astype(np.float64)
+            a = luminance(np.moveaxis(a, 0, -1) if planes_first else a).astype(np.float64)
         elif channel is None:
-            raise ValueError(f"{path.name} is a colour image: give 'channel' (index or 'luminance')")
+            raise ValueError(f"{path.name} has several planes: give 'channel' (an index or 'luminance')")
         else:
-            a = a[..., int(channel)]
+            a = a[int(channel)] if planes_first else a[..., int(channel)]
+    elif channel is not None:
+        raise ValueError(f"{path.name} has a single plane: remove 'channel'")
+    if a.ndim != 2:
+        raise ValueError(f"{path.name}: expected an image, got shape {a.shape}")
     return a
 
 
 def structure_from_config(config_path, out_dir, *, progress=print) -> dict:
     """Run a declared structure comparison (see ``examples/coronagraph_config_template.json``).
 
-    Writes ``coronagraph_structure.json`` (results and receipt) and, per reference, an 8-bit PNG with the
-    two unrolled, normalised images one above the other for the visual check.  Inputs are never modified.
+    Every key of the recipe is checked, and every input is read and checked (canvas sizes, masks, frames)
+    before the output directory is created.  Writes ``coronagraph_structure.json`` (results, frames, gates
+    and limits), ``receipt.json`` (inputs with SHA-256, the recipe included) and, per reference, an 8-bit PNG
+    with the two unrolled, normalised images one above the other for the visual check.
     """
     from . import CREDIT, __version__, io as aio
 
     path = Path(config_path).resolve()
     root = path.parent
     cfg = json.loads(path.read_text())
-    allowed = {"ours", "references", "radii_rsun", "pa_step_deg", "sigma_deg", "highpass_sigma_deg",
-               "max_shift_deg", "note", "_comment"}
-    if set(cfg) - allowed:
-        raise ValueError(f"unknown recipe keys: {sorted(set(cfg) - allowed)}")
+    if not isinstance(cfg, dict) or set(cfg) - _TOP_KEYS:
+        raise ValueError(f"unknown recipe keys: {sorted(set(cfg) - _TOP_KEYS) if isinstance(cfg, dict) else cfg}")
     for key in ("ours", "references", "radii_rsun"):
         if key not in cfg:
             raise ValueError(f"missing recipe key: {key!r} (nothing is assumed)")
@@ -806,58 +936,108 @@ def structure_from_config(config_path, out_dir, *, progress=print) -> dict:
         raise FileExistsError(f"output directory already exists: {out} (nothing is overwritten)")
 
     def resolve(v):
-        p = Path(v).expanduser()
-        return p if p.is_absolute() else root / p
+        q = Path(v).expanduser()
+        return q if q.is_absolute() else root / q
 
     rr = cfg["radii_rsun"]
-    if rr.get("spacing", "log") == "log":
-        radii = np.geomspace(float(rr["min"]), float(rr["max"]), int(rr["n"]))
-    else:
-        radii = np.linspace(float(rr["min"]), float(rr["max"]), int(rr["n"]))
+    if not isinstance(rr, dict) or set(rr) - _RADII_KEYS or not {"min", "max", "n"} <= set(rr):
+        raise ValueError("radii_rsun needs min, max and n (and optionally spacing)")
+    spacing = rr.get("spacing", "log")
+    if spacing not in ("log", "linear"):
+        raise ValueError("radii_rsun.spacing is 'log' or 'linear'")
+    r0, r1, nr = float(rr["min"]), float(rr["max"]), int(rr["n"])
+    if not (0.0 < r0 < r1 and nr >= 2):
+        raise ValueError("radii_rsun needs 0 < min < max and n >= 2")
+    radii = np.geomspace(r0, r1, nr) if spacing == "log" else np.linspace(r0, r1, nr)
     step = float(cfg.get("pa_step_deg", 0.5))
+    _pa_grid(step)
+
+    def check_spec(spec, label, allowed):
+        if not isinstance(spec, dict):
+            raise ValueError(f"{label}: expected a JSON object")
+        if set(spec) - allowed:
+            raise ValueError(f"{label}: unknown keys {sorted(set(spec) - allowed)}")
+        for key in ("image", "frame"):
+            if key not in spec:
+                raise ValueError(f"{label}: missing {key!r} (nothing is assumed)")
+        for key in ("bin", "supersample"):
+            v = spec.get(key, 1)
+            if not isinstance(v, int) or isinstance(v, bool) or v < 1:
+                raise ValueError(f"{label}: {key} must be an integer >= 1")
+        if not isinstance(spec.get("normalise", True), bool):
+            raise ValueError(f"{label}: normalise is true or false")
 
     def prepare(spec, label):
         ip = resolve(spec["image"])
+        if not ip.is_file():
+            raise ValueError(f"{label}: image not found: {ip}")
         a = _load_image(ip, spec.get("hdu"), spec.get("channel"))
         valid = np.isfinite(a)
+        files = [ip]
         if "valid" in spec:
-            vm = np.asarray(aio.load_array(resolve(spec["valid"]))).astype(bool)
+            vp = resolve(spec["valid"])
+            if not vp.is_file():
+                raise ValueError(f"{label}: valid mask not found: {vp}")
+            vm = np.asarray(aio.load_array(vp)).astype(bool)
             if vm.shape != a.shape:
-                raise ValueError(f"{label}: valid mask does not match the image")
+                raise ValueError(f"{label}: valid mask {vm.shape} does not match the image {a.shape}")
             valid &= vm
-        bin_ = int(spec.get("bin", 1))
-        fr = _frame_from_spec(spec["frame"], root, ip, spec.get("hdu"))
-        if bin_ > 1:
-            h, w = (a.shape[0] // bin_) * bin_, (a.shape[1] // bin_) * bin_
-            blk = np.where(valid, a, np.nan)[:h, :w].reshape(h // bin_, bin_, w // bin_, bin_)
+            files.append(vp)
+        fr, extra = _frame_from_spec(spec["frame"], root, ip, spec.get("hdu"), a.shape)
+        files += extra
+        native, b = fr, int(spec.get("bin", 1))
+        if b > 1:
+            h, w = (a.shape[0] // b) * b, (a.shape[1] // b) * b
+            blk = np.where(valid, a, np.nan)[:h, :w].reshape(h // b, b, w // b, b)
             a = blk.mean(axis=(1, 3))          # a block with any missing pixel is missing
             valid = np.isfinite(a)
-            fr = fr.scaled(1.0 / bin_)
+            fr = fr.scaled(1.0 / b)
         u = unroll(a, fr, radii, pa_step_deg=step, valid=valid, supersample=int(spec.get("supersample", 1)))
-        return ip, fr, u
+        return dict(files=files, native=native, frame=fr, bin=b, unrolled=u)
 
-    ours_spec = cfg["ours"]
-    ip_o, fr_o, u_o = prepare(ours_spec, "ours")
-    progress(f"ours unrolled: R☉ = {fr_o.rsun_px:.2f} px, axes {fr_o.axis_angle_deg:.3f}° apart")
-    N_o = nrgf_rows(u_o) if ours_spec.get("normalise", True) else u_o.data
-    prepared = []
-    for ref in cfg["references"]:                    # every input is read and checked before anything is written
-        for key in ("name", "image", "frame", "rings"):
-            if key not in ref:
-                raise ValueError(f"reference without {key!r} (nothing is assumed)")
-        prepared.append((ref, *prepare(ref, ref["name"])))
-    results, files, inputs, sheets = [], {}, {"ours": str(ip_o)}, []
-    for ref, ip_r, fr_r, u_r in prepared:
-        name = ref["name"]
-        inputs[name] = str(ip_r)
-        N_r = nrgf_rows(u_r) if ref.get("normalise", True) else u_r.data
+    check_spec(cfg["ours"], "ours", _SPEC_KEYS)
+    refs = cfg["references"]
+    if not isinstance(refs, list) or not refs:
+        raise ValueError("references must be a non-empty list")
+    names, safes = set(), set()
+    for i, ref in enumerate(refs):
+        label = f"references[{i}]"
+        check_spec(ref, label, _REF_KEYS)
+        if "name" not in ref or "rings" not in ref:
+            raise ValueError(f"{label}: needs a name and rings (nothing is assumed)")
+        name = str(ref["name"])
+        safe = "".join(ch if ch.isalnum() else "_" for ch in name)
+        if name in names or safe in safes or name == "ours":
+            raise ValueError(f"{label}: the name {name!r} is used twice (or clashes once made a file name)")
+        names.add(name)
+        safes.add(safe)
+        rings = ref["rings"]
+        if not isinstance(rings, list) or not rings or any(len(x) != 2 or not 0 < float(x[0]) < float(x[1])
+                                                            for x in rings):
+            raise ValueError(f"{label}: rings are [r1, r2] pairs with 0 < r1 < r2")
+        ds = ref.get("dark_sector")
+        if ds is not None:
+            if not isinstance(ds, dict) or set(ds) - _DARK_KEYS or not {"r_range", "seed_pa_deg"} <= set(ds):
+                raise ValueError(f"{label}: dark_sector needs r_range and seed_pa_deg "
+                                 f"(and optionally threshold, dilate_deg)")
+            if float(ds.get("dilate_deg", 4.0)) < 0:
+                raise ValueError(f"{label}: dark_sector.dilate_deg must be >= 0")
+
+    ours = prepare(cfg["ours"], "ours")              # every input is read and checked before anything is written
+    progress(f"ours unrolled: R☉ = {ours['frame'].rsun_px:.2f} px, axes {ours['frame'].axis_angle_deg:.3f}° apart")
+    prepared = [(ref, prepare(ref, str(ref["name"]))) for ref in refs]
+    N_o = nrgf_rows(ours["unrolled"]) if cfg["ours"].get("normalise", True) else ours["unrolled"].data
+    pa = ours["unrolled"].pa
+    results, sheets, gates = [], [], {}
+    for ref, pr in prepared:
+        name = str(ref["name"])
+        N_r = nrgf_rows(pr["unrolled"]) if ref.get("normalise", True) else pr["unrolled"].data
         excl = None
         if ref.get("dark_sector"):
             ds = ref["dark_sector"]
             excl = dark_sector(N_r, radii, ds["r_range"], float(ds["seed_pa_deg"]),
                                threshold=float(ds.get("threshold", -0.3)), dilate_deg=float(ds.get("dilate_deg", 4.0)))
-        rings = [tuple(x) for x in ref["rings"]]
-        res = compare_structure(Unrolled(N_o, radii, u_o.pa), Unrolled(N_r, radii, u_r.pa), rings,
+        res = compare_structure(Unrolled(N_o, radii, pa), Unrolled(N_r, radii, pa), [tuple(x) for x in ref["rings"]],
                                 normalise_ours=False, normalise_ref=False, exclude_ref=excl,
                                 sigma_deg=float(cfg.get("sigma_deg", 1.5)),
                                 highpass_sigma_deg=float(cfg.get("highpass_sigma_deg", 12.0)),
@@ -866,29 +1046,44 @@ def structure_from_config(config_path, out_dir, *, progress=print) -> dict:
             progress(f"{name} r {x['r_rsun'][0]:.2f}–{x['r_rsun'][1]:.2f}: rho(0) {x['rho_0']:+.3f} "
                      f"(best {x['rho_best']:+.3f} at {x['shift_deg']:+.1f}°; null max {x['null_max']:+.2f}); "
                      f"detail {x['fine_detail']['rho_0']:+.3f} (null max {x['fine_detail']['null_max']:+.2f})")
-        # visual check: ours above, reference below, NRGF clipped to −2…+4, smallest radius at the bottom
-        def to8(a):
+
+        def to8(a):                          # NRGF −2…+4, smallest radius at the bottom
             t = np.clip((a + 2.0) / 6.0, 0, 1)
             return np.where(np.isfinite(t), (255 * t).round(), 0).astype(np.uint8)[::-1]
         sheet = np.vstack([to8(N_o), np.full((4, N_o.shape[1]), 255, np.uint8), to8(N_r)])
         safe = "".join(ch if ch.isalnum() else "_" for ch in name)
         sheets.append((name, f"unrolled_ours_over_{safe}.png", sheet))
-        results.append(dict(name=name, frame=fr_r.to_dict(), excluded_pa_deg=(
-            None if excl is None else [float(u_r.pa[i]) for i in np.nonzero(excl)[0]]), rings=res))
+        gates[name] = dict(
+            rings_with_enough_angles=[bool(x["n_angles"] >= 60) for x in res],
+            fine_detail_above_its_null=[bool(np.isfinite(x["fine_detail"]["rho_0"]) and
+                                             x["fine_detail"]["rho_0"] > x["fine_detail"]["null_max"]) for x in res],
+            best_rotation_at_search_edge=[bool(x["at_search_edge"]) for x in res])
+        results.append(dict(name=name, frame_native=pr["native"].to_dict(), bin=pr["bin"], frame_used=pr["frame"].to_dict(),
+                            excluded_pa_deg=None if excl is None else [float(pa[i]) for i in np.nonzero(excl)[0]],
+                            rings=res))
     out.mkdir(parents=True)
+    files = {}
     for name, fname, sheet in sheets:
         files[name] = str(aio.save_png(out / fname, sheet, description=(
             f"ours (top) and {name} (bottom), NRGF -2..+4, PA 0-360 left to right, smallest radius at the bottom")))
+    inputs = {"recipe": str(path)}
+    for label, pr in [("ours", ours)] + [(str(ref["name"]), pr) for ref, pr in prepared]:
+        for j, f in enumerate(pr["files"]):
+            inputs[label if j == 0 else f"{label} ({Path(f).name})"] = str(f)
+    limits = ("Agreement in position angle only. A radial tone curve a(r)*I + b(r) leaves every number unchanged; "
+              "nothing here measures brightness or excludes local artefacts. A best rotation at the edge of the "
+              "search window is not an orientation.")
     rec = dict(product="coronagraph structure comparison", library=f"ael {__version__}", credit=CREDIT,
-               recipe=str(path), radii_rsun=[float(radii[0]), float(radii[-1]), int(radii.size)], pa_step_deg=step,
-               ours=dict(frame=fr_o.to_dict()), references=results, sheets=files,
-               limits=("Agreement in position angle only. A radial tone curve a(r)*I + b(r) leaves every number "
-                       "unchanged; nothing here measures brightness or excludes local artefacts."))
+               recipe=str(path), radii_rsun=[float(radii[0]), float(radii[-1]), int(radii.size), spacing],
+               pa_step_deg=step, ours=dict(frame_native=ours["native"].to_dict(), bin=ours["bin"],
+                                           frame_used=ours["frame"].to_dict()),
+               references=results, gates=gates, sheets=files, limits=limits)
     aio.write_receipt(out / "receipt.json", product="coronagraph structure comparison", inputs=inputs,
-                      outputs=files, parameters=dict(cfg))
-    (out / "coronagraph_structure.json").write_text(json.dumps(rec, indent=1, ensure_ascii=False, default=float),
+                      outputs=files, parameters=_json_safe(cfg), gates=_json_safe(gates), notes=limits)
+    (out / "coronagraph_structure.json").write_text(json.dumps(_json_safe(rec), indent=1, ensure_ascii=False),
                                                     encoding="utf-8")
-    return dict(results=[dict(name=x["name"], rings=[dict(r=y["r_rsun"], rho_0=y["rho_0"], null_max=y["null_max"],
-                                                            fine_rho_0=y["fine_detail"]["rho_0"])
-                                                       for y in x["rings"]]) for x in results],
-                out=str(out / "coronagraph_structure.json"))
+    return _json_safe(dict(results=[dict(name=x["name"], rings=[dict(r=y["r_rsun"], rho_0=y["rho_0"],
+                                                                     null_max=y["null_max"],
+                                                                     fine_rho_0=y["fine_detail"]["rho_0"])
+                                                                for y in x["rings"]]) for x in results],
+                           gates=gates, out=str(out / "coronagraph_structure.json")))

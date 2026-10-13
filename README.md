@@ -28,7 +28,7 @@ corrects that stack for differential atmospheric extinction when the Sun is low,
 subtracting the sky. `ael filters` adds the first three filters or sixteen portable variants
 and an optional verified PSB. `ael coronagraph` checks the corona against K-Cor, SOHO/LASCO and
 SDO/AIA: angular structure ring by ring with its null, and, with `ael.coronagraph`, brightness in
-mean solar brightness with the right calibrations. See [stacking and filters](docs/DEVELOP.md)
+mean solar brightness with both published LASCO C2 calibrations and K + F for K-Cor. See [stacking and filters](docs/DEVELOP.md)
 and the skill [`skills/coronagraph-comparison/`](skills/coronagraph-comparison/).
 
 | Product | What it is |
@@ -139,13 +139,13 @@ commercially; the licence only asks you to keep the copyright notice with copies
 ## What is new in 1.3.0
 
 - **Coronagraph check** (`ael coronagraph`, `ael.coronagraph`, skill `coronagraph-comparison`):
-  structure against K-Cor, LASCO and AIA, and brightness in mean solar brightness, validated on the
-  2026 data against the research results.
+  structure against K-Cor, LASCO and AIA, and brightness in mean solar brightness; on the 2026 data it
+  reproduces the research results.
 - **Differential extinction** (`ael extinction`, `ael.extinction`) for a low Sun, with the lesson
   that sky and extinction are degenerate.
-- **Fixes prepared as 1.2.1:** continuous radial statistics in NRGF and RHEF (no more two-pixel
-  rings), a soft highlight shoulder instead of hard clipping, an explicit reference canvas, and the
-  goal-first start for a new user.
+- **Fixes prepared as 1.2.1:** continuous radial statistics in NRGF and RHEF (in the field test the
+  two-pixel rings fell to about 1 % of their old amplitude), a soft highlight shoulder instead of hard
+  clipping, an explicit reference canvas, and the goal-first start for a new user.
 - **Field lessons** ([`docs/FIELD_LESSONS.md`](docs/FIELD_LESSONS.md)): coronagraphs, dust, a
   rotational-gradient layer, and adding layers to someone's file without rewriting theirs.
 - Research notes 180 and 185, and the code behind them in `3-RECERCA/tools/`.

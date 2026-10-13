@@ -206,3 +206,5 @@ Les parts d'estructura de la nota 180 i del `RESULTAT.md` continuen valent (secc
   - 47 de 47 proves bé, entre elles les de veritat coneguda i les negatives (cel ajustat sense corregir, cel constant amb corona).
   - Verificada amb mutacions.
   - No s'ha pujat ni fusionat amb `main`: espera el sí de Pere.
+
+*[Afegit en publicar-la a l'AEL 1.3.0 (13-10-2026): la funció d'extinció i la comparació amb els coronògrafs ja són a la llibreria (`ael.extinction`, `ael.coronagraph`).]*

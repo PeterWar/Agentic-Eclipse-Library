@@ -8,7 +8,7 @@ eclipse data**: linear stacking, filter layers and the structure, polar and moti
 | **Linear stack** | RAW/Bayer/RGB frames, declared calibration and registration, support and coverage | `python -m ael stack` |
 | **Filter layers** | Three defaults or sixteen portable variants, optional verified 16-bit PSB | `python -m ael filters` |
 | **Extinction-corrected stack** | The linear stack corrected for differential atmospheric extinction under a low Sun, after subtracting the sky | `python -m ael extinction` · `ael.extinction` |
-| **Coronagraph check** | Your corona against K-Cor, SOHO/LASCO and SDO/AIA: angular structure ring by ring with its null, and brightness in mean solar brightness with the right calibrations | `python -m ael coronagraph` · `ael.coronagraph` |
+| **Coronagraph check** | Your corona against K-Cor, SOHO/LASCO and SDO/AIA: angular structure ring by ring with its null, and brightness in mean solar brightness with both published LASCO C2 calibrations and K + F for K-Cor | `python -m ael coronagraph` · `ael.coronagraph` |
 | **Structure image** | The corona's fine filaments from the limb to the edge of the field, in the style made famous by Miloslav Druckmüller's composites; mono, cool-toned or in the data's own colour | `python -m ael structure` · `ael.pipelines.structure_from_linear` |
 | **Unrolled corona** | The corona in polar coordinates: the limb becomes a straight line and the streamers rise like curtains; around the Sun or around the Moon | `python -m ael polar` · `ael.pipelines.polar_views` |
 | **Coronal motion** | Epochs of the same totality aligned on the Sun, displacement vectors with null tests, a visual-check sheet and GIF/MP4 animations | `python -m ael motion` · `ael.pipelines.motion_from_config` |
@@ -134,21 +134,24 @@ python -m ael coronagraph --config coronagraph.json --out cmp_run/   # see examp
   rotation within ±10°, with a null from rotations of 30–330° and a fine-detail version (angular
   high-pass below 12°). `dark_sector` masks an occulter pylon as the one dark run that contains a seed angle,
   never with a global threshold that would also remove coronal holes. The test compares angles only: a
-  radial tone curve `a(r)·I + b(r)` passes it unchanged (a test shows it).
+  radial tone curve `a(r)·I + b(r)` passes it unchanged (a test shows it). A best rotation at the edge of the
+  search is flagged (`at_search_edge`): it is the broad shape, not an orientation.
 - **Brightness** (`cell_medians`, `level_ratios`, `ratio_band`): medians in 1° cells of each ring, each image
   in its own frame, without resampling; cells that touch the lunar-motion band, the gap at the limb or a
   prominence are dropped whole (`drop_touching`). K-Cor measures pB: `kcor_total_msb` turns it into what a
   photograph sees, pB/p(r) for the K corona (Thomson polarisation integrated along the line of sight with
   the van de Hulst coefficients, Baumbach–Allen or Saito densities) **plus the F corona** (van de Hulst 1950).
   LASCO C2: `lasco_c2_msb_per_dn` gives both published calibrations (Colaninno & Howard 2015 and SolarSoft),
-  13.5 % apart in level for August 2026. `ratio_band(σ_lo, σ_hi)` is the 1σ band of ours/reference when the
+  13.5 % apart in level for August 2026, for the Orange filter; a summed image divides the factor
+  (`lasco_c2_summing`), and polariser images are calibrated by SolarSoft only. `ratio_band(σ_lo, σ_hi)` is the 1σ band of ours/reference when the
   photograph's uncertainty is asymmetric: for −20 %/+11 %, 0.90–1.25.
 
-Validated on the 2026 data from the published MSB map (`docs/VALIDATION_1.3.0.md`): the module reproduces the
-research results within 0.005 for LASCO C2 (1.14 to 1.40 with Colaninno & Howard, 1.32 to 1.62 with SolarSoft)
-and within 0.01 for K-Cor (1.06/1.06/1.12 at 1.15–1.70 R☉), and the plate's 90.43° comes out of the map's own
-FITS header. Without the F corona the K-Cor ratios would have been 1.19/1.21/1.43: the false excess of the
-first comparison.
+Checked on the 2026 data (`docs/VALIDATION_1.3.0.md`), from the research's calibrated MSB map (a FITS file
+binned 2×2, not distributed): the module reproduces the research ratios within 0.003 for LASCO C2 (1.14 to 1.40
+with Colaninno & Howard, 1.32 to 1.62 with SolarSoft) and within 0.009 for K-Cor (1.06/1.06/1.12 at
+1.15–1.70 R☉), and the plate's 90.43° comes out of the map's own FITS header. Without the F corona the K-Cor
+ratios would be 1.19/1.21/1.43: leaving out the F corona is what made the first comparison's excess
+(+13–15 %).
 
 ## Geometry
 

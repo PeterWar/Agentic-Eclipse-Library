@@ -25,15 +25,22 @@ on their own). Research notes 180 and 185 and the code behind them are added to 
 - `python -m ael coronagraph --config ... --out ...`: declared structure comparison with a JSON
   receipt and one check sheet per reference; every input is read and checked before anything is
   written. Template: `examples/coronagraph_config_template.json`.
-- Known-truth tests (14): the affine trap (3.3 px at the limb, ~20 px at 6 R☉), SOHO's larger Sun,
-  the P angle, a helioprojective header, agreement and a recovered 5° rotation, a negative control
-  (another corona) and the same broad shape with other rays, blindness to a radial tone curve, the
-  pylon including a run across 0°, the polarisation regression and limits, K + F, the two C2
-  calibrations in 2026 and 2013, a known brightness scale with dropped cells, the ratio band and the
-  command with its refusals.
-- Validated on the 2026 data from the published calibrated map (`docs/VALIDATION_1.3.0.md`): LASCO C2
-  ratios within 0.005 and K-Cor within 0.01 of the research results; the plate's 90.43° read from the
-  map's own FITS header.
+- Known-truth tests (20): the affine trap (3.3 px at the limb, ~20 px at 6 R☉), SOHO's larger Sun,
+  the P angle (frames and command), an affine celestial plate, helioprojective headers (`RSUN_OBS` or
+  `DSUN_OBS`), agreement and a recovered 5° rotation, a negative control (another corona) and the same
+  broad shape with other rays, blindness to a radial tone curve, the pylon (across 0°, longer than 180°,
+  inside the command), the polarisation against a quadrature to infinity, the published van de Hulst
+  constants, K + F, the band transfer, the C2 calibrations in 2026 and 2013 with summing and polariser,
+  medians and dropped cells, the ratio band, binning, masks and every refusal of the command. All 27
+  deliberate mutations of the module tried before release make at least one test fail.
+- After an independent review: the line-of-sight integral uses SciPy (the package still runs on
+  NumPy 1.24) and goes to 2000 R☉ (stopping at 20 R☉ had raised p by 6 % at 8 R☉); the P angle is
+  required; overlapping rings, unknown keys at any level, a geometry for another canvas and duplicate
+  reference names are refused; the receipt hashes the recipe, geometries and masks and has gates;
+  missing values are written as `null`.
+- Checked on the 2026 data (`docs/VALIDATION_1.3.0.md`), from the research's calibrated map (a FITS file
+  binned 2×2, not distributed): it reproduces the research ratios within 0.003 for LASCO C2 and 0.009 for
+  K-Cor, and reads the plate's 90.43° from the map's own FITS header.
 
 ### Differential extinction (`ael.extinction`, `ael extinction`)
 
@@ -78,8 +85,9 @@ on their own). Research notes 180 and 185 and the code behind them are added to 
   absolute calibration and differential extinction), and five research folders in `3-RECERCA/tools/`:
   `comparacio_sdo_lasco_20261001`, `msb_calibrat_20261011`, `extincio_diferencial_20261012`,
   `larson_sekanina_20261002` and `v128_extincio_20261012` (the byte-preserving PSB writer). Notes
-  181–184 started from other photographers' images and are not published; the names of private
-  correspondents were removed from notes 180 and 185 and from a few lines of their code.
+  181–184 start from or build on other photographers' images and presentations and are not published.
+  Names of private correspondents, the words of a private message and a private link were removed from
+  three passages of note 180, one of note 185 and a few lines of their code; each edit in a note is marked.
 - Six skills: `coronagraph-comparison` is new; the first-steps skill points to it.
 
 ### Fixes and lessons prepared as 1.2.1 (2026-10-06)
