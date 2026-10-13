@@ -1,3 +1,9 @@
+## Octubre del 2026 (publicades a l'1.3.0)
+
+- [180 — La final contra SDO/AIA, SOHO/LASCO i K-Cor: validació externa de l'estructura](180_COMPARACIO_AMB_SDO_LASCO_I_KCOR_20261001.md) — 01-10-2026. La part de brillantor absoluta la corregeix la 185.
+- [185 — Correccions del calibratge i extinció diferencial](185_CORRECCIONS_CALIBRATGE_I_EXTINCIO_DIFERENCIAL_20261012.md) — 12-10-2026. Codi a `tools/msb_calibrat_20261011/` i `tools/extincio_diferencial_20261012/`; a la llibreria, `ael.coronagraph` i `ael.extinction`.
+- Les notes 181–184 no es publiquen: parteixen d'imatges d'altres fotògrafs.
+
 > **13-09-2026 · Earthshine V54:** [resultat de les quatre vies](/Users/USUARI/Downloads/Eclipse 2026/output/earthshine_v54_detail_20260913/RESULTAT.md) i [represa](/Users/USUARI/Downloads/Eclipse 2026/.coordination/HANDOFF_2026-09-13_CODEX_EARTHSHINE_V54.md). Millora fotogràfica limitada; negatives i discrepància de detectors preservades.
 
 - [Earthshine V50–V53 (12/13-09-2026): el limbe lunar a l'origen (tres vores, forat de la base, ala de la PSF) — informe a `output/earthshine_v50_temporal_20260912/RESULTAT.md`; lliçó a `.claude/skills/corregeix-artefactes/references/limbe_lunar_earthshine.md`](../output/earthshine_v50_temporal_20260912/RESULTAT.md)

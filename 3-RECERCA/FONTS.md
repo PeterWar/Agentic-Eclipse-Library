@@ -75,6 +75,16 @@ Prioritat:
 - [Plasma instabilities i Parker/WISPR, 2026](https://arxiv.org/abs/2601.10818).
 - [Espectre K-coronal, 2026](https://doi.org/10.3847/1538-4365/ae2fc2).
 
+## Coronògrafs i calibratge absolut (octubre del 2026)
+
+- [K-Cor, arxiu de dades de l'MLSO (HAO)](https://mlso.hao.ucar.edu/): pB de nivell 2 en brillantor solar mitjana. Cita: K-Cor Team (2013), doi:10.5065/D69G5JV8.
+- [Taules del factor d'exposició del LASCO (SolarSoft)](https://sohoftp.nascom.nasa.gov/solarsoft/soho/lasco/idl/expfac/data/).
+- [Colaninno i Howard (2015), *Solar Physics* 290, 997: calibratge fotomètric del LASCO C2 amb estrelles](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4479163/).
+- [Llebaria et al. (2021), *Solar Physics* 296, 53](https://doi.org/10.1007/s11207-021-01800-w): mètode de calibratge amb estrelles, sense cap factor numèric per al 2026.
+- [van de Hulst (1950), *BAN* 11, 135: densitat electrònica i corones K i F](https://ui.adsabs.harvard.edu/abs/1950BAN....11..135V).
+- Koutchmy i Lamy (1985), IAU Colloq. 85 (ASSL 119), p. 63: model de la corona F (figura 3, digitalitzada).
+- [Kasten i Young (1989), *Applied Optics* 28, 4735: massa d'aire](https://doi.org/10.1364/AO.28.004735).
+
 ## Fotometria i genealogia
 
 - [Història Newkirk, HAO/NCAR](https://news.ucar.edu/123881/50-years-ago-ncar-camera-snaps-game-changing-eclipse-picture).

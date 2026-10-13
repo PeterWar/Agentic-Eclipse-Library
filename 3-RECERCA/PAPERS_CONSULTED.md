@@ -2,6 +2,16 @@
 
 File names follow `Author_Year_Journal_Topic`. Links and DOIs are in `FONTS.md`.
 
+Added in 1.3.0 (October 2026, coronagraph comparison and absolute calibration; notes 180 and 185):
+
+- Colaninno_Howard_2015_SolPhys290_997_LASCO_C2_photometric_calibration_stars
+- Kasten_Young_1989_ApplOpt28_4735_revised_optical_air_mass
+- Koutchmy_Lamy_1985_IAUColloq85_F_corona_model
+- Llebaria_2021_SolPhys296_53_LASCO_C2_C3_calibration_stars
+- vandeHulst_1950_BAN11_135_electron_density_solar_corona
+
+Earlier:
+
 - Auchere_2023_AA670_A66_WOW_wavelets_optimized_whitening
 - Bailey_2025_turbulence_injection_scale_eclipse_images
 - Bazin_Koutchmy_2015_SF2A_photometric_analysis_corona_Baumbach_star_reference
