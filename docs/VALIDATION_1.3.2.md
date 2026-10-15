@@ -1,11 +1,11 @@
 # Validation of 1.3.2 (prepared 2026-10-15, not released)
 
-- `python -m ael selftest`: **81 of 81** (69 from 1.3.1 and 12 new in `ael/_tests/test_review.py`).
+- `python -m ael selftest`: **83 of 83** (69 from 1.3.1 and 14 new in `ael/_tests/test_review.py`).
 - The detail-transfer regression of the sixteen filters (`test_filters_keep_injected_fine_detail_with_its_sign_and_strength`)
   still passes against the 1.3.0 values: 0.644 and 0.622 for the NRGF and its logarithmic form (0.64 and 0.62 in 1.3.0).
 - `spread_about='bin'` gives the 1.3.1 output bit for bit: 24 of 24 outputs over four scenes, both statistics and three
   parameter sets (`p12_bin_igual_que_131_i_temps.log`).
-- The new NRGF takes about three times as long as that of 1.3.1: 1.16 s against 0.37 s on a 2000 × 2000 image with the
+- The new NRGF takes three to four times as long as that of 1.3.1: 1.26 s against 0.35 s on a 2000 × 2000 image with the
   filter bank's parameters (same log).
 
 The logs and scripts named below are kept with the author (`3-AEL/proves/validacio_1.3.2/`).
@@ -14,25 +14,28 @@ The logs and scripts named below are kept with the author (`3-AEL/proves/validac
 
 - Each 2-pixel annulus gives a node at the mean radius of its own pixels. Inside the annulus, the profile's slope and
   curvature are removed before the median (or mean) is taken. Both come from the quartic through the five nearest
-  nodes (the cubic through four next to the ends of a run), refined up to four times.
-- A not-a-knot cubic spline through the nodes gives the profile at every pixel's radius and continues it inside the
-  end annuli. The spread is measured about that profile and interpolated without overshoot (PCHIP on its logarithm),
-  held at the end nodes.
+  median nodes (the cubic through four next to the ends of a run), refined up to four times; with the mean statistic
+  only the level of each node is a mean.
+- A cubic Hermite curve through the nodes, with those slopes, gives the profile at every pixel's radius and continues
+  it inside the end annuli; a node moves only the two intervals beside it. The spread is measured about that profile
+  and interpolated without overshoot (PCHIP on its logarithm), held at the end nodes.
 - Each run is modelled on the values and on their logarithm, or, when a node is not positive (a subtracted sky taking
   the far corona through zero), on asinh(I/s) with s the median size of the nodes. The run keeps the model with the
-  smaller mean square misfit.
+  smaller score: the sum over its annuli of the logarithm of the mean square residual about the profile (residuals
+  clipped at five spreads; a float32 floor added).
 - No output: in runs of fewer than four annuli; in annuli where half the pixels share one value (zeros, clipping,
   integers coarser than the noise: the MAD is zero); and in annuli without angular signal, that is, whose residuals,
-  once any function of radius is removed (their running median in order of radius), spread less than one float32 step
-  of the annulus' own operands (the median size of its values, and its slope times the radius; at least the smallest
-  subnormal).
+  once a smooth function of radius is removed (the mean residual of bands a tenth of a pixel wide, joined by a cubic
+  spline), spread less than one float32 step of the annulus' own operands (the median size of its values, and its
+  slope times the radius; at least the smallest subnormal). The bands are too coarse to follow angular structure
+  even where pixels at one radius are mirror images of each other (a centre on the pixel grid).
 - The nodes are not smoothed by default (`smooth_bins=0`, also in `make_filter`). `make_filter('nrgf')` keeps pixels
   at or below zero; `nrgf_log` and the rank filters still need positive ones.
 
 ## How the reviews shaped it
 
 The first commit of 1.3.2 replaced the Gaussian smoothing of 1.3.1 with nodes at the exact centre of each annulus,
-the annulus' own slope removed, and a local polynomial. Five rounds of review by an independent agent at high
+the annulus' own slope removed, and a local polynomial. Six rounds of review by an independent agent at high
 reasoning effort, and two adversarial checks (four readers and a verifier, then three readers and a verifier), found
 the following. Everything is fixed except what is listed under Limits.
 
@@ -59,6 +62,11 @@ the following. Everything is fixed except what is listed under Limits.
    zero (up to a third of a subtracted far corona); a radial step or kink inside an annulus gave rings without noise;
    no test checked the unit of q, the `min_count` boundary or a floor three times too high; sharp changes of curvature
    left up to 1.5 sigma on a clean stack; with the mean statistic, one bright pixel moved several annuli.
+7. A sixth review found that the detector of angular signal then in use (each residual against the running median of
+   its nine neighbours in radius) took structure with 4-fold symmetry for a radial profile when the centre sat on the
+   pixel grid, and dropped 73 % of the data; and that `make_filter('nrgf')` refused an input negative everywhere.
+   Checking how far a bright pixel reaches with the mean statistic showed that the global spline then used for the
+   profile carried it about 1 sigma five annuli away; the profile is now local and its shape comes from median nodes.
 
 The readers' scripts, rerun on the final code: `verificacio_adversa_guions_dels_lectors_banc.log` (first check, filter
 bank's parameters), `verificacio_adversa_guions_dels_lectors.log` (first check, with the node smoothing they were
@@ -89,13 +97,13 @@ An unbiased profile gives ~0. Filter-bank parameters, median statistics; `p6_bia
 
 | Sun radius | Noise 10⁻² | Noise 10⁻³ | Noise 10⁻⁴ |
 |---|---|---|---|
-| 60 px | 0.06 | 0.05 | 0.06 |
+| 60 px | 0.05 | 0.04 | 0.06 |
 | 120 px | 0.05 | 0.04 | 0.04 |
 | 200 px | 0.04 | 0.03 | 0.03 |
 | 60 px, earlier draft (`875e817`) | 0.19 | 0.76 | 6.1 |
 | 60 px, nodes smoothed over 3 annuli | 0.08 | 0.06 | 0.61 |
 
-With the mean statistic every cell is at most 0.01. Over ten noise seeds (Sun of 120 px, noise 10⁻⁴) the worst annulus
+With the mean statistic every cell is at most 0.02. Over ten noise seeds (Sun of 120 px, noise 10⁻⁴) the worst annulus
 stays at or below 0.07 with the median and 0.01 with the mean; with the data starting anywhere inside the first annulus
 of a 60- or 120-px Sun, that annulus averages within 0.01 over eight seeds (`p10_llavors_i_vores.log`).
 
@@ -128,7 +136,10 @@ scene scaled by 10⁻²⁸ or 10²⁸ gives the same correlation (0.9998).
 ## Bad pixels, ties and numerical inputs
 
 - One zero or negative pixel at 71 px on the six-decade profile leaves the layer beyond 100 px unchanged. With the
-  median, one pixel 10⁷ times too bright changes the rest of its annulus by less than 0.01 sigma.
+  median, one pixel 10 to 10⁷ times too bright changes the rest of its annulus by less than 0.01 sigma and the other
+  annuli by less than 0.004 (`p15_pixel_dolent_i_simetria.log`).
+- Structure with 2-, 4- or 8-fold symmetry, with the centre on the pixel grid, on half a pixel or off it, is kept
+  whole (correlation 0.999 or more); `make_filter('nrgf')` takes an input negative everywhere (same log).
 - Constants (3, −3, 0), straight profiles through zero (at 100, 101 and 101.3 px; scales 10⁻⁶ to 10⁶; float32 and exact
   radii), noiseless r⁻³ and Baumbach profiles, a radial step or kink inside an annulus, and the same at subnormal
   scale give no output with either statistic; so does a noiseless corona around a 15-px Sun.
@@ -136,9 +147,9 @@ scene scaled by 10⁻²⁸ or 10²⁸ gives the same correlation (0.9998).
   data keep their output when the noise is one grey level or more (|q| ≤ 4) and give none at half a level.
 - A sky subtracted too deep (a Baumbach corona whose far annuli average below zero) is modelled on asinh: every annulus
   within 0.05 sigma (on the values it kept 0.63).
-- The floor removes angular structure only when it is fainter than about 10⁻⁶ of the brightness: from 3·10⁻⁷ on r⁻³ to
-  3·10⁻⁶ on an exponential falling six decades, about ten float32 steps; on a bright pedestal 3·10⁻⁷ survives in most
-  annuli (`p13_sol_i_estructura_feble.log`).
+- Noiseless, the floor removes angular structure only when it is fainter than about 10⁻⁶ of the brightness: from
+  3·10⁻⁷ on r⁻³ to 1–3·10⁻⁶ on steep exponentials, about ten float32 steps; on a bright pedestal 3·10⁻⁷ survives
+  (`p13_sol_i_estructura_feble.log`).
 
 ## Limits
 
@@ -148,18 +159,19 @@ scene scaled by 10⁻²⁸ or 10²⁸ gives the same correlation (0.9998).
 - Where the curvature of the profile changes within a few pixels (an exponential of 6-px scale meeting a sky floor), a
   very clean stack (noise 10⁻⁴) keeps up to 0.5 sigma in a few annuli; at noise 10⁻³ every annulus is within 0.15.
 - With the mean statistic (`robust=False`, the original form of Morgan, Habbal and Woo), one bright pixel also moves
-  the two or three annuli beside its own (a pixel 100 times too bright: 0.65, 0.30 and 0.10 sigma one, two and three
-  annuli away; 1.3.1: 0.36, 0.05 and 0), and where the Moon is off-centre the inner half of the first annulus can sit
-  about 2 sigma low. With the median, the default, one pixel 10 to 10⁷ times too bright moves the other annuli by
-  less than 0.003 sigma, and the crescent stays within ±0.6 sigma.
-- Around a 15-px Sun with the data starting exactly at 16 px, the first annulus can sit 0.3 sigma high with the median
+  the next annulus and, less, the one after: 1000 to 10⁷ times too bright, 0.76 to 0.79 sigma one annulus away, 0.16 to
+  0.26 two away and 0.004 three away (1.3.1: 0.36, 0.05 and 0). Where the Moon is off-centre and streamers cross the
+  crescent, the first annulus averages up to 0.6 sigma low and the inner half of it up to 2.5 sigma low
+  (`verificacio_adversa_e82aa49_guions_dels_lectors.log`). With the median, the default, that annulus stays within
+  0.01 and its inner half within +0.9.
+- Around a 15-px Sun with the data starting exactly at 16 px, the first annulus can sit 0.4 sigma high with the median
   on a very clean stack (noise 10⁻⁴).
 - A run of fewer than four annuli gives no output: the end nodes need the cubic through four nodes.
-- The new operator is about three times slower than that of 1.3.1.
+- The new operator is three to four times slower than that of 1.3.1.
 
 ## Mutations
 
-Each fault must be detected by a test (`mutacions.log`). "NRGF tests" means the eight review tests of the NRGF run
+Each fault must be detected by a test (`mutacions.log`). "NRGF tests" means the ten review tests of the NRGF run
 together.
 
 | Mutation | Test that detects it |
@@ -181,17 +193,17 @@ together.
 | The model chosen by the spread instead of the mean square misfit | NRGF tests |
 | Smoothing window cut on one side near the ends | constants, gaps, short runs, outlier |
 | Node at the annulus' centre, not at the mean radius of its pixels | NRGF tests |
-| PCHIP instead of the cubic spline for the profile | NRGF tests |
+| PCHIP instead of the Hermite curve for the profile | NRGF tests |
 | The logarithm requiring every pixel to be positive | NRGF tests |
 | Numerical floor from the mean size of the values | NRGF tests |
-| Runs of one to three annuli giving output | NRGF tests (the code fails) |
-| Slope from the two halves of the annulus | NRGF tests (the code fails) |
+| Runs of one to three annuli giving output | NRGF tests |
+| Slope from the two halves of the annulus | NRGF tests |
 | Derivatives from the three-node parabola, also at the ends | NRGF tests |
 | No-output decision on the total spread, not the angular spread | NRGF tests |
 | Node smoothing over 3 annuli in the filter bank | filter bank without node smoothing |
 | Numerical floor without the subnormal step | NRGF tests |
 | A single refinement of the nodes | NRGF tests |
-| Angular part from a cubic in radius per annulus, not the running median | NRGF tests |
+| Angular part from the running median of nine pixels in radius, not the bands | NRGF tests |
 | The spread from the cubic spline, extrapolated at the ends | NRGF tests |
 | No asinh model | NRGF tests |
 | No rule for ties | NRGF tests |
@@ -199,7 +211,9 @@ together.
 | MAD without its factor 1.4826 | NRGF tests |
 | `min_count` off by one | NRGF tests |
 | Numerical floor three times too high | NRGF tests |
-| `make_filter('nrgf')` dropping pixels at or below zero | ties, zeros, clipping and a sky below zero |
+| `make_filter('nrgf')` dropping pixels at or below zero | ties, zeros, clipping, a sky below zero; negative input |
+| A global spline instead of the local Hermite curve | NRGF tests |
+| With the mean statistic, the shape from mean nodes | NRGF tests |
 
-All 36 were detected, two of them because the mutated code fails. The blend-algebra test has no mutation: it checks
+All 38 were detected. The blend-algebra test has no mutation: it checks
 an identity and carries its own negative control (Overlay at the same opacity).

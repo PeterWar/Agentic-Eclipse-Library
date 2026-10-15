@@ -143,15 +143,16 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None):
     apply to any RHEF layer, for example ``make_filter('rhef_local30', L, m, g, upsilon_curve=(.35, .35))``.
     ``'rhef_upsilon'`` is the whole-ring RHEF with ``(.35, .35)`` unless another curve is given. Any other filter
     with ``upsilon_curve`` is refused."""
-    a=np.asarray(luminance,np.float32); m=valid & np.isfinite(a) & (a>0)
+    a=np.asarray(luminance,np.float32)
+    m=valid & np.isfinite(a)                          # the values NRGF needs no positive pixels (a subtracted sky)
+    if name!='nrgf': m=m & (a>0)
     if name not in NAMES: raise ValueError(f'unknown filter {name!r}; choose from {NAMES}')
     if upsilon_curve is not None:
         if not name.startswith('rhef'): raise ValueError('upsilon_curve applies to RHEF layers only')
         if len(upsilon_curve)!=2: raise ValueError('upsilon_curve is (low, high)')
-    if not m.any(): raise ValueError('no positive observed luminance')
+    if not m.any(): raise ValueError('no observed luminance' if name=='nrgf' else 'no positive observed luminance')
     info={}
     if name in ('nrgf','nrgf_log'):
-        if name=='nrgf': m=valid & np.isfinite(a)       # the values need no positive pixels (a subtracted sky goes below 0)
         q=F.nrgf(np.log(np.maximum(a,1e-30)) if name=='nrgf_log' else a,m,geometry,
                  bin_px=2,min_count=12,smooth_bins=0)
         result,info=display_detail(q,m)

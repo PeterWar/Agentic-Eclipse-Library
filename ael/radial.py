@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import numpy as np
-from scipy.interpolate import CubicSpline, PchipInterpolator
+from scipy.interpolate import CubicHermiteSpline, CubicSpline, PchipInterpolator
 from scipy.ndimage import gaussian_filter1d, median_filter
 
 
@@ -59,6 +59,26 @@ def _node_derivatives(y, x):
     return d1, d2
 
 
+def _radial_smooth(rr, z, step):
+    """A smooth function of radius through z (sorted radii rr): the means of z in radial bands `step` px wide (merged
+    until each holds at least eight samples), joined by a not-a-knot cubic spline. One pass over the data."""
+    band = np.floor((rr-rr[0])/step).astype(np.int64)
+    cnt = np.bincount(band)
+    gid, acc, g = np.empty(len(cnt), np.int64), 0, 0
+    for i, c in enumerate(cnt):                                  # merge sparse bands into the next
+        gid[i] = g; acc += c
+        if acc >= 8:
+            g += 1; acc = 0
+    if acc and g:                                                # a short last group joins the one before
+        gid[gid == g] = g-1
+    grp = gid[band]; n = int(grp.max())+1
+    w = np.bincount(grp, minlength=n)
+    centre = np.bincount(grp, rr, minlength=n)/w; level = np.bincount(grp, z, minlength=n)/w
+    if n < 4 or np.any(np.diff(centre) <= 0):
+        return median_filter(z, size=9, mode='nearest')
+    return CubicSpline(centre, level, bc_type='not-a-knot')(rr)
+
+
 def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=True,
                     min_count=50, smooth_bins=0., spread_about='profile'):
     """Evaluate annular mean/spread at the actual radius, without image smoothing.
@@ -68,8 +88,9 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
     constant input) is undefined.
 
     ``spread_about='profile'`` (default since 1.3.2): each annulus gives a node at the mean radius of its pixels,
-    with the profile's slope and curvature removed inside it (both from the neighbouring nodes). A cubic spline
-    through the nodes gives the mean at every pixel's radius, also inside the end annuli of a run, and the spread,
+    with the profile's slope and curvature removed inside it (both from the neighbouring median nodes). A cubic
+    Hermite curve through the nodes gives the mean at every pixel's radius, also inside the end annuli of a run; one
+    node moves only the two intervals beside it. The spread,
     measured about it, is interpolated without overshoot and held at the end nodes. Each run is also modelled on its
     logarithm (or on asinh when the profile goes through zero) and keeps the model that fits its pixels better.
     Undefined: a run of fewer than four annuli; an annulus where half the pixels share one value (zeros,
@@ -127,10 +148,12 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
     # next to the ends of a run), refined up to four times. Without the curvature, the node keeps
     # ~I''·<Δr²>/2 (5·10⁻⁴ of the brightness just above the limb of a 60-pixel Sun on r⁻³), which a very clean stack
     # turns into a broad offset of several sigma; a slope measured from the two halves of the annulus itself is
-    # thrown off by angular structure, because the halves see different angles. A run of fewer than four annuli gives
-    # no output. A not-a-knot cubic spline through the nodes gives the profile at every pixel's radius; the spread
-    # is interpolated without overshoot (PCHIP on its logarithm) and held at the end nodes, so it never dips towards
-    # zero. The nodes are not smoothed by default: each averages hundreds of pixels, and a smoothing window bends a
+    # thrown off by angular structure, because the halves see different angles. The slope and curvature always come
+    # from median nodes, so that with the mean statistic one bright pixel moves only its own node. A run of fewer than
+    # four annuli gives no output. A cubic Hermite curve through the nodes, with those slopes, gives the profile at
+    # every pixel's radius and moves only the two intervals beside a node (a global spline carried one bright pixel's
+    # node to five annuli away); the spread is interpolated without overshoot (PCHIP on its logarithm) and held at
+    # the end nodes, so it never dips towards zero. The nodes are not smoothed by default: each averages hundreds of pixels, and a smoothing window bends a
     # profile whose power-law index changes (2.5 sigma on a Baumbach corona, 10 sigma on a 15-pixel Sun at 6 px).
     anchors = np.full(len(count), np.nan); mag = np.full(len(count), np.nan); usable = count >= min_count
     for k in np.flatnonzero(usable):
@@ -157,24 +180,28 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
         """Nodes of one run in the transform tr, their slopes and curvatures; None if a node has no logarithm."""
         n = len(run); s1, s2 = np.zeros(n), np.zeros(n)
 
-        def nodes():
+        def nodes(stat):
             nd = np.empty(n)
             for i, k in enumerate(run):
                 dr, z = segment(k); t = s1[i]*dr+.5*s2[i]*dr**2
                 x = z-t if tr[0] == 'lin' else z*np.exp(-t) if tr[0] == 'log' else inv(tr, fwd(tr, z)-t)
-                c = np.median(x) if robust else np.mean(x)
+                c = stat(x)
                 if tr[0] == 'log' and not c > 0:
                     return None
                 nd[i] = fwd(tr, c)
             return nd
-        nd = nodes()
+        # The shape of the profile (slope and curvature) always comes from median nodes, so that with the mean
+        # statistic one bright pixel moves only its own node and not the shape of its neighbours'.
+        nd = nodes(np.median)
         for _ in range(4):                                      # slope and curvature from the neighbouring nodes
             if nd is None:
                 return None
             s1, s2 = _node_derivatives(nd, anchors[run])
-            prev, nd = nd, nodes()
+            prev, nd = nd, nodes(np.median)
             if nd is not None and np.max(np.abs(nd-prev)) <= 1e-9*np.max(np.abs(nd)):
                 break
+        if nd is not None and not robust:
+            nd = nodes(np.mean)
         return None if nd is None else (nd, s1, s2)
 
     def smooth(y, run):
@@ -183,10 +210,11 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
         # 0.2 R☉ above the limb of a 120-pixel Sun with σ = 6 px), which leaves a broad false ring.
         return _local_quadratic(y, smooth_bins, anchors[run]/bin_px) if smooth_bins > 0 else y
 
-    def along(y, run, rr, tr):
-        """Profile at radii rr inside the run: a not-a-knot cubic spline through the nodes y (in the transform tr),
-        which follows the profile's curvature between nodes and continues it inside the end annuli."""
-        return inv(tr, CubicSpline(anchors[run], y, bc_type='not-a-knot')(rr))
+    def along(y, run, rr, tr, d1):
+        """Profile at radii rr inside the run: a cubic Hermite curve through the nodes y (in the transform tr) with
+        slopes d1, which follows the profile's curvature between nodes, continues it inside the end annuli, and lets a
+        node move only the two intervals beside it."""
+        return inv(tr, CubicHermiteSpline(anchors[run], y, d1)(rr))
 
     def spread(res, run):
         """Per annulus: the spread of the residuals about their centre, and their mean square about the profile
@@ -200,9 +228,17 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
         return sp, mse
 
     def angular_spread(res, run):
-        """Per annulus: the spread left once any function of radius is removed (the residuals, in order of radius,
-        minus their running median over nine pixels): what radius alone cannot explain."""
-        e = res-median_filter(res, size=9, mode='nearest')
+        """Per annulus: the spread left once a smooth function of radius is removed: what radius alone cannot explain.
+        The function joins the mean residual of radial bands a tenth of a pixel wide (at least eight samples each;
+        residuals clipped at five spreads, annulus by annulus, when robust): too coarse to follow angular structure
+        even where pixels at one radius are mirror images of each other (a centre on the pixel grid), fine enough to
+        follow the profile's own shape, a step or a kink."""
+        lo = cuts[run[0]]; rr = radii[lo:lo+len(res)].astype(np.float64); z = res.copy()
+        if robust:                                             # clipped annulus by annulus: their scales differ
+            for k in run:
+                sl = slice(cuts[k]-lo, cuts[k+1]-lo); c = np.median(z[sl]); w = 1.4826*np.median(np.abs(z[sl]-c))
+                z[sl] = np.clip(z[sl], c-5*w, c+5*w)
+        e = z-_radial_smooth(rr, z, .1)
         ang = np.full(len(run), np.nan)
         for i, k in enumerate(run):
             z = e[cuts[k]-cuts[run[0]]:cuts[k+1]-cuts[run[0]]]
@@ -232,7 +268,8 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
                     cands.append(('asinh', float(np.median(np.abs(best[2])))))   # best[2]: the linear nodes
                 continue
             nd, s1, s2 = f
-            res = au-along(smooth(nd, run), run, ru, tr)
+            y = smooth(nd, run)
+            res = au-along(y, run, ru, tr, s1 if smooth_bins == 0 else _node_derivatives(y, anchors[run])[0])
             sp, mse = spread(res, run)
             score = float(np.nansum(np.log(mse+(eps*mag[run])**2+tiny**2)))
             if best is None or score < best[0]:

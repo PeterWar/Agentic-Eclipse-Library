@@ -170,8 +170,9 @@ map or hand-made layer finishing. Ordit/Trama need independent registered witnes
 and are not included in this single-stack command.
 
 NRGF (since 1.3.2) measures each annulus about a continuous profile: a node at the mean
-radius of the annulus' pixels with the local slope and curvature removed, a cubic spline
-between nodes, and the spread interpolated without overshoot; see `docs/VALIDATION_1.3.2.md`. RHEF uses 257 quantiles per populated radial/sector cell, with
+radius of the annulus' pixels with the local slope and curvature removed, a local cubic
+Hermite curve between nodes, and the spread interpolated without overshoot; see
+`docs/VALIDATION_1.3.2.md`. RHEF uses 257 quantiles per populated radial/sector cell, with
 constant distributions at .5 and no output outside positive observed data. Sparse
 annuli do not become valid by borrowing a neighbouring cell. These statistical
 interpolations do not smooth the image. See `docs/FIELD_LESSONS.md` for the ring

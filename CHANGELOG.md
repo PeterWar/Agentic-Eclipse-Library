@@ -9,23 +9,24 @@ keep their names; the NRGF output changes where the radial profile is steep.
   (`smooth_bins=3` in the filter bank). On a steep, curved profile that biases the mean (about 1 % of the brightness,
   half a ring sigma with 2 % structure, 0.2 R☉ above the limb of a 120-pixel Sun) and leaves broad false rings. Now:
   - each 2-px annulus gives a node at the mean radius of its own pixels, with the profile's slope and curvature
-    removed inside it; both come from the neighbouring nodes (a quartic, and a cubic next to the ends of a run);
-  - a cubic spline through the nodes gives the profile at every pixel's radius; the spread is measured about it and
-    interpolated without overshoot;
+    removed inside it; both come from the neighbouring median nodes (a quartic, and a cubic next to the ends of a run);
+  - a local cubic Hermite curve through the nodes gives the profile at every pixel's radius; the spread is measured
+    about it and interpolated without overshoot;
   - each run is modelled on the values and on their logarithm (or on asinh when a subtracted sky takes it through
     zero), and keeps the model that fits it better;
   - the filter bank no longer smooths the nodes, and `make_filter('nrgf')` keeps pixels at or below zero;
   - no output in runs of fewer than four annuli, in annuli where half the pixels share one value (zeros, clipping,
-    coarse integers), or where the residuals have no angular part above one float32 step.
+    coarse integers), or where the residuals, once a smooth function of radius is removed, have no part above one
+    float32 step (structure with mirror symmetry about a centre on the pixel grid is kept).
 
   With 2 % angular structure on an r⁻³ profile, the concentric ripple stays at the sampling floor of the flattened
   input (1.00×; 1.3.1: 1.9–2.5×; 1.2.0: 10–12×). Next to a gap in the data, the median of the 1.3.1 NRGF was −2.8 and
   +2.1 sigma on the two sides; it is now 0.000. On a clean structureless corona every annulus averages within 0.06
   sigma (Sun of 60 to 200 px, noise 10⁻² to 10⁻⁴, median statistic). Faint structure (10⁻⁴) on r⁻³ or on an exponential
-  falling six decades is recovered (correlation 1.00). With the robust statistic (the default), one bad pixel, however
-  bright, changes the layer outside its own annulus by less than 0.003 sigma; with the mean statistic it still moves
-  the next two or three annuli. Constants, straight profiles and noiseless, purely radial profiles give no output in the tested scenes.
-  The new operator takes about three times as long. `spread_about='bin'` gives the 1.3.1 output bit for bit. Details
+  falling six decades is recovered (correlation 1.00). With the robust statistic (the default), one bad pixel 10 to 10⁷
+  times too bright changes the layer outside its own annulus by less than 0.004 sigma; with the mean statistic it
+  moves the next annulus (0.8 sigma) and, less, the one after (up to 0.26). Constants, straight profiles and noiseless, purely radial profiles give no output in the tested scenes.
+  The new operator takes three to four times as long. `spread_about='bin'` gives the 1.3.1 output bit for bit. Details
   and limits: `docs/VALIDATION_1.3.2.md`.
 - **Upsilon with an exponent for each side**: `ael.filterbank.upsilon(q, low, high)` (eq. 2 of Gilly & Cranmer
   2025; exponents must be positive, missing values stay missing), and `make_filter(..., upsilon_curve=(low, high))`
@@ -41,7 +42,8 @@ keep their names; the NRGF output changes where the radial profile is steep.
   sky-subtracted corona, faint structure over six decades, straight, curved, stepped and purely radial profiles,
   subnormal values and strong streamers; the filter bank without node smoothing on a 15-px Sun; bad pixels, data
   edges inside an annulus and runs of one to five annuli; ties (zeros, clipping, 8-bit data); a sky subtracted too
-  deep; the unit of q and the `min_count` boundary. 81 of 81 tests; 36 of 36 mutations detected. The NRGF went
+  deep; the unit of q and the `min_count` boundary; symmetric structure about a centre on the pixel grid; an input
+  negative everywhere; a bright pixel with the mean statistic. 83 of 83 tests; 38 of 38 mutations detected. The NRGF went
   through two adversarial checks by independent readers and a verifier; their scripts are rerun on the final code
   (`docs/VALIDATION_1.3.2.md`).
 - The radial rank (RHEF) of 1.2.1 already reaches the sampling floor on the same scene (0.45–0.88×); unchanged.

@@ -15,7 +15,7 @@ image is version V125 of the project). "Library" means `ael` 1.3.2.
 |---|---|---|
 | Input | Green channel of the linear composite, stars removed | Luminance; `nrgf_log` uses ln L |
 | Rings | 1 px; partial rings completed from the 40 neighbouring complete rings (outwards at the limb, inwards at the edge of the canvas) | 2 px |
-| Statistics | Mean and standard deviation, interpolated linearly to each pixel's radius | Median and 1.4826·MAD (`ael.filters.nrgf(..., robust=False)` gives mean and standard deviation; `make_filter` uses the robust form); one node per ring at the mean radius of its pixels, with the profile's slope and curvature (from the neighbouring nodes) removed; a cubic spline through the nodes; each run modelled on the values, on their logarithm or on asinh, keeping the better fit; spread measured about the continuous profile; no node smoothing in `make_filter`; no output where the residuals have no angular part, where half a ring shares one value, or in runs of fewer than four rings |
+| Statistics | Mean and standard deviation, interpolated linearly to each pixel's radius | Median and 1.4826·MAD (`ael.filters.nrgf(..., robust=False)` gives mean and standard deviation; `make_filter` uses the robust form); one node per ring at the mean radius of its pixels, with the profile's slope and curvature (from the neighbouring median nodes) removed; a local cubic Hermite curve through the nodes; each run modelled on the values, on their logarithm or on asinh, keeping the better fit; spread measured about the continuous profile; no node smoothing in `make_filter`; no output where the residuals have no angular part, where half a ring shares one value, or in runs of fewer than four rings |
 | Display | Affine stretch; the same NRGF twice, with two stretches | `0.5 + 0.5·tanh(q/(2.5·max(1.4826·MAD, 1e−5)))` |
 | Limits | Local dark structure compressed to 0.2 (σ 400 px); a limiter that restrains darkening relative to an estimated sky level | None |
 | Blend | Multiply, 39 % and 14 % | Multiply |
@@ -87,4 +87,6 @@ In `ael/_tests/test_review.py`:
   one subtracted too deep) and with strong streamers; it recovers faint structure on a profile falling six decades;
   it gives no output for straight, curved, stepped or purely radial noiseless profiles, or where half a ring shares
   one value; with the median, one bad pixel does not change it away from its own annulus; data edges inside an
-  annulus leave no bias; q is in units of the ring spread; and the filter bank does not smooth the nodes.
+  annulus leave no bias; q is in units of the ring spread; structure with mirror symmetry about a centre on the
+  pixel grid is kept; with the mean statistic a bright pixel reaches no further than two rings; and the filter bank
+  does not smooth the nodes and takes negative input.

@@ -387,3 +387,38 @@ def test_nrgf_is_in_units_of_the_spread_and_keeps_every_measurable_annulus():
     exact = g.radius_map('sun', np.float64)
     q = F.nrgf(((exact/60)**-3*(1+1e-6*np.cos(5*th))).astype(np.float32), m, g, bin_px=2, min_count=12)
     assert np.isfinite(q[m]).mean() > .99
+
+
+
+def test_nrgf_keeps_symmetric_structure_on_a_centred_grid_and_all_negative_input():
+    """Ninth review of 1.3.2. (1) With the Sun's centre on the pixel grid, pixels at one radius are mirror images of
+    each other and carry the same value of a 4-fold structure; a detector of angular signal that compared each pixel
+    with its neighbours in radius took that structure for a radial profile and dropped 73 % of the data. Every
+    structure must be kept, whatever the centre and the symmetry. (2) make_filter('nrgf') accepts an input that is
+    negative everywhere (it refused it before building its own mask)."""
+    for centre in ((160., 160.), (160.5, 160.5), (159.63, 160.21)):
+        g = EclipseGeometry((320, 320), centre, 60)
+        r = g.radius_map().astype(np.float64); th = np.radians(g.pa_map().astype(np.float64)); m = (r >= 64) & (r < 150)
+        for n in (2, 4, 8):
+            a = ((np.maximum(r, 1)/60)**-3*(1+.02*np.cos(n*th))).astype(np.float32)
+            q = F.nrgf(a, m, g, bin_px=2, min_count=12); f = np.isfinite(q) & m
+            assert f.sum() > .99*m.sum() and np.corrcoef(q[f], np.cos(n*th[f]))[0, 1] > .99, (centre, n)
+    neg = ((r/60)**-3*(1+.02*np.cos(5*th))-1).astype(np.float32)
+    layer = make_filter('nrgf', neg, m, g)[0]
+    assert np.isfinite(layer[m]).mean() > .99
+
+
+
+def test_nrgf_mean_statistic_keeps_a_bright_pixel_to_its_own_neighbourhood():
+    """With the mean statistic (robust=False, the form of Morgan, Habbal and Woo), one pixel 1000 times too bright
+    moves its own annulus' mean. The profile through the nodes is local, and the slope and curvature come from median
+    nodes, so three annuli away the layer does not change (a global spline carried it there at about 1 sigma). With the
+    median it moves nothing beyond its own annulus."""
+    g = EclipseGeometry((320, 320), (159.63, 160.21), 60)
+    r = g.radius_map().astype(np.float64); m = (r >= 64) & (r < 150); k = np.floor(r/2).astype(int)
+    img = ((r/60)**-3*(1+1e-3*np.random.default_rng(3).standard_normal(r.shape))).astype(np.float32)
+    yy, xx = np.nonzero(m & (k == 60)); hot = img.copy(); hot[yy[0], xx[0]] *= 1e3
+    for robust, j, limit in ((False, 3, .05), (True, 1, .01)):
+        d = np.abs(F.nrgf(img, m, g, bin_px=2, min_count=12, robust=robust)-F.nrgf(hot, m, g, bin_px=2, min_count=12, robust=robust))
+        far = m & (np.abs(k-60) >= j)
+        assert np.nanmax(d[far]) < limit if robust else np.nanmean(d[far]) < limit, (robust, np.nanmax(d[far]), np.nanmean(d[far]))
