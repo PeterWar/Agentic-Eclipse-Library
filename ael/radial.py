@@ -59,21 +59,30 @@ def _node_derivatives(y, x):
     return d1, d2
 
 
-def _radial_smooth(rr, z, step):
-    """A smooth function of radius through z (sorted radii rr): the means of z in radial bands `step` px wide (merged
-    until each holds at least eight samples), joined by a not-a-knot cubic spline. One pass over the data."""
+def _radial_smooth(rr, z, step, least=24):
+    """A smooth function of radius through z (sorted radii rr): in radial bands `step` px wide (merged until each holds
+    at least `least` samples), the value at the band's centroid of a parabola fitted inside the band (a plain band
+    mean would be off by z''·width²/24), joined by a not-a-knot cubic spline. One pass over the data."""
     band = np.floor((rr-rr[0])/step).astype(np.int64)
     cnt = np.bincount(band)
     gid, acc, g = np.empty(len(cnt), np.int64), 0, 0
     for i, c in enumerate(cnt):                                  # merge sparse bands into the next
         gid[i] = g; acc += c
-        if acc >= 8:
+        if acc >= least:
             g += 1; acc = 0
     if acc and g:                                                # a short last group joins the one before
         gid[gid == g] = g-1
     grp = gid[band]; n = int(grp.max())+1
     w = np.bincount(grp, minlength=n)
-    centre = np.bincount(grp, rr, minlength=n)/w; level = np.bincount(grp, z, minlength=n)/w
+    centre = np.bincount(grp, rr, minlength=n)/w
+    u = (rr-centre[grp])/step
+    S = [np.bincount(grp, u**k, minlength=n) for k in range(5)]
+    T = [np.bincount(grp, z*u**k, minlength=n) for k in range(3)]
+    A = np.stack([np.stack([S[0], S[1], S[2]], -1), np.stack([S[1], S[2], S[3]], -1), np.stack([S[2], S[3], S[4]], -1)], -2)
+    level = T[0]/w
+    ok = np.abs(np.linalg.det(A)) > 1e-12*np.maximum(S[0], 1)**3
+    if ok.any():
+        level[ok] = np.linalg.solve(A[ok], np.stack([T[0], T[1], T[2]], -1)[ok][..., None])[..., 0, 0]
     if n < 4 or np.any(np.diff(centre) <= 0):
         return median_filter(z, size=9, mode='nearest')
     return CubicSpline(centre, level, bc_type='not-a-knot')(rr)
@@ -229,10 +238,10 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
 
     def angular_spread(res, run):
         """Per annulus: the spread left once a smooth function of radius is removed: what radius alone cannot explain.
-        The function joins the mean residual of radial bands a tenth of a pixel wide (at least eight samples each;
-        residuals clipped at five spreads, annulus by annulus, when robust): too coarse to follow angular structure
-        even where pixels at one radius are mirror images of each other (a centre on the pixel grid), fine enough to
-        follow the profile's own shape, a step or a kink."""
+        The function joins, by a cubic spline, the value at the centre of radial bands a tenth of a pixel wide (at least
+        24 samples each) of a parabola fitted inside each band (residuals clipped at five spreads, annulus by annulus,
+        when robust): too coarse to follow angular structure even where pixels at one radius are mirror images of each
+        other (a centre on the pixel grid), fine enough to follow the profile's own shape, a ripple, a step or a kink."""
         lo = cuts[run[0]]; rr = radii[lo:lo+len(res)].astype(np.float64); z = res.copy()
         if robust:                                             # clipped annulus by annulus: their scales differ
             for k in run:

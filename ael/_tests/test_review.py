@@ -229,7 +229,7 @@ def test_nrgf_is_unbiased_on_clean_curved_profiles_and_gives_nothing_without_ang
     the dip left 10 sigma). (3) Faint structure (10^-4) over six decades, and 10^-3 on r^-3, is recovered. (4) No
     output where nothing varies with angle: straight profiles through zero at several positions and scales (float32
     and exact radii), noiseless r^-3 and Baumbach coronae (curved, so the profile model leaves a residual that is a
-    function of radius only), a radial step and a kink inside an annulus, and the same at subnormal scale. A narrow ring of structure: the spread profile is
+    function of radius only), radial steps, a kink and a ripple, and the same at subnormal scale. A narrow ring of structure: the spread profile is
     shape-preserving and held at the end nodes, so it never dips towards zero (a cubic spline there gave |q| = 50).
     The model is chosen the same way at any scale of the data (at 1e-28 it was not). (5) Strong streamers on a clean stack: with the robust
     statistic every annulus keeps a median of q near zero, because the slope inside an annulus comes from the
@@ -258,6 +258,8 @@ def test_nrgf_is_unbiased_on_clean_curved_profiles_and_gives_nothing_without_ang
     flat = [scale*(rr-zero) for rr in (r, exact) for zero in (101., 101.3) for scale in (1e-6, -1., 1e6)]
     curved = [(exact/60)**-3, _baumbach(exact/60), 1e-40*(exact-101), 1e-43*(exact/60)**-3,
               (exact/60)**-3*(1+.01/(1+np.exp(-(exact-100.7)/.3))),                        # a 1 % step 0.3 px wide
+              (exact/60)**-3*(1+.02*np.sin(2*np.pi*exact/6)),                              # a radial ripple, 6 px
+              (exact/60)**-3*(1+.2/(1+np.exp(-(exact-101)/1.))),                           # a 20 % step 1 px wide
               np.where(exact < 100.7, (exact/60)**-3, (100.7/60)**-3*(exact/100.7)**-2)]   # r^-3 turning into r^-2
     for a in flat+curved:
         for robust in (True, False):
@@ -420,5 +422,6 @@ def test_nrgf_mean_statistic_keeps_a_bright_pixel_to_its_own_neighbourhood():
     yy, xx = np.nonzero(m & (k == 60)); hot = img.copy(); hot[yy[0], xx[0]] *= 1e3
     for robust, j, limit in ((False, 3, .05), (True, 1, .01)):
         d = np.abs(F.nrgf(img, m, g, bin_px=2, min_count=12, robust=robust)-F.nrgf(hot, m, g, bin_px=2, min_count=12, robust=robust))
-        far = m & (np.abs(k-60) >= j)
-        assert np.nanmax(d[far]) < limit if robust else np.nanmean(d[far]) < limit, (robust, np.nanmax(d[far]), np.nanmean(d[far]))
+        for i in np.unique(k[m & (np.abs(k-60) >= j)]):           # annulus by annulus: an aggregate could dilute one
+            ring = m & (k == i)
+            assert (np.nanmax(d[ring]) if robust else np.nanmean(d[ring])) < limit, (robust, i)
