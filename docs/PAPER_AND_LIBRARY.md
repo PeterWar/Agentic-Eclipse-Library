@@ -15,7 +15,7 @@ image is version V125 of the project). "Library" means `ael` 1.3.2.
 |---|---|---|
 | Input | Green channel of the linear composite, stars removed | Luminance; `nrgf_log` uses ln L |
 | Rings | 1 px; partial rings completed from the 40 neighbouring complete rings (outwards at the limb, inwards at the edge of the canvas) | 2 px |
-| Statistics | Mean and standard deviation, interpolated linearly to each pixel's radius | Median and 1.4826·MAD (`ael.filters.nrgf(..., robust=False)` gives mean and standard deviation; `make_filter` uses the robust form); nodes at the exact ring centres with the local slope and curvature removed; a run of positive rings also modelled on the logarithm, keeping the less biased model; spread measured about the continuous mean profile; profiles smoothed by a local parabola and interpolated by PCHIP; inside the end annuli of a run, the annulus' own slope and curvature |
+| Statistics | Mean and standard deviation, interpolated linearly to each pixel's radius | Median and 1.4826·MAD (`ael.filters.nrgf(..., robust=False)` gives mean and standard deviation; `make_filter` uses the robust form); one node per ring at the mean radius of its pixels, with the profile's slope and curvature (from the neighbouring nodes) removed; a cubic spline through the nodes; each run modelled on the values and on their logarithm, keeping the better fit; spread measured about the continuous profile; no node smoothing in `make_filter`; no output where the residuals have no angular part, or in runs of fewer than three rings |
 | Display | Affine stretch; the same NRGF twice, with two stretches | `0.5 + 0.5·tanh(q/(2.5·max(1.4826·MAD, 1e−5)))` |
 | Limits | Local dark structure compressed to 0.2 (σ 400 px); a limiter that restrains darkening relative to an estimated sky level | None |
 | Blend | Multiply, 39 % and 14 % | Multiply |
@@ -76,12 +76,14 @@ Sun is low. The published layers of the paper were computed without either corre
 
 In `ael/_tests/test_review.py`:
 - ring ripple with faint (2 %) structure on a steep r⁻³ profile, against the sampling floor of the flattened input, with the 1.2.0 operators and the 1.3.1 NRGF as negative controls;
-- the NRGF on constant inputs (no output), next to a gap in the data (both sides keep their slope; 1.3.1 as a negative control), on short runs of annuli, and with one outlier pixel;
+- the NRGF on constant inputs (no output), next to a gap in the data (1.3.1 as a negative control), and with one outlier pixel;
 - the blend algebra above, with Overlay at the same opacity as a negative control;
 - the Upsilon curve against eq. 2 of the RHEF paper;
 - a structureless corona (photon noise only, off-centre Moon, a straight edge inside the measured zone) through the ring filters: no rings and no seams at the quarter-sector nodes, measured as the correlation between two noise realisations, with positive controls;
 - the local RHEF with Upsilon keeps the sign of faint detail, with a lower gain;
 - the NRGF keeps faint annuli on a profile that falls by six decades, and the explicit Upsilon option applies to
   `rhef_upsilon` and is refused by other filters;
-- the NRGF is unbiased on a clean structureless corona and on a profile with a dip, recovers faint structure on
-  a profile falling six decades, and gives no output for straight profiles through zero.
+- the NRGF is unbiased on a clean structureless corona, on a profile with a dip, on a sky-subtracted corona and
+  with strong streamers; it recovers faint structure on a profile falling six decades; it gives no output for
+  straight or purely radial profiles; one bad pixel does not change it away from its own annulus; data edges
+  inside an annulus leave no bias; and the filter bank does not smooth the nodes.

@@ -159,8 +159,9 @@ def test_local_rhef_with_upsilon_keeps_the_sign_of_faint_detail_and_tempers_its_
 
 def test_nrgf_constants_gaps_short_runs_and_a_single_outlier():
     """Counterexamples found in review of 1.3.2 (October 2026). A constant input has no spread: no output. Next to a
-    gap in the data, on a steep profile, the annuli on both sides keep their own slope (the 1.3.1 operator, used as a
-    negative control, holds the end of the profile flat and sends the median several sigma away). The local polynomial
+    gap in the data, on a steep profile, the profile on both sides follows its own curvature into the end annuli (the
+    1.3.1 operator, used as a negative control, holds the end of the profile flat and sends the median several sigma
+    away). The local polynomial (used only when the nodes are smoothed)
     returns constants, straight lines, parabolas and cubics unchanged on runs of 1 to 5 nodes. One pixel 10,000 times too
     bright does not move the rest of its annulus."""
     from ael.radial import _local_quadratic
@@ -207,44 +208,109 @@ def test_nrgf_keeps_faint_annuli_beside_bright_ones_and_upsilon_options_are_expl
         raise AssertionError(('upsilon_curve accepted by', name))
 
 
-def _annulus_means(q, r, m):
+def _annulus_means(q, r, m, coverage=.99):
+    """Azimuthal mean of q in each 2-px annulus; the layer must also cover the data (an annulus lost is a failure)."""
     k = np.floor(r[m]/2).astype(int); v = q[m]; f = np.isfinite(v)
+    assert f.mean() >= coverage, ('coverage', f.mean())
     s, c = np.bincount(k[f], v[f]), np.bincount(k[f])
     return s[c > 0]/c[c > 0]
 
 
-def test_nrgf_is_unbiased_on_clean_curved_profiles_and_gives_nothing_for_rounding():
-    """Third review of 1.3.2. (1) A structureless r^-3 corona from a very clean stack (noise 10^-4 of the brightness):
-    removing only each annulus' slope left its curvature in the node, an offset of up to 1.6 sigma; with the curvature
-    removed every annulus averages within 0.3 sigma. (2) A profile with a dip (a parabola above zero, noise 10^-3):
-    modelled on the logarithm the dip left offsets of 10 sigma; the run keeps the less biased model (judged by its
-    spread instead, an r^-3 corona with 10^-3 structure lost correlation, 0.92). (3) Faint structure (10^-4) on a
-    profile falling six decades is recovered (correlation above 0.95; 0.08 before). (4) A
-    purely radial straight profile through zero, at several positions and scales, has only rounding for spread (of
-    its values, or of the float32 radius map against exact radii): no output anywhere, with either statistic."""
+def _baumbach(rho):
+    """The K corona of Baumbach (1937), in units of the mean solar brightness times 1e6."""
+    return .0532*rho**-2.5+1.425*rho**-7+2.565*rho**-17
+
+
+def test_nrgf_is_unbiased_on_clean_curved_profiles_and_gives_nothing_without_angular_signal():
+    """Reviews of 1.3.2, with the filter bank's parameters (2-px annuli, no node smoothing). (1) A structureless r^-3
+    corona from a very clean stack (noise 10^-4 of the brightness): every annulus averages within 0.2 sigma; a node
+    that kept the profile's curvature inside its annulus left 1.6 sigma. (2) A profile with a dip (a parabola above
+    zero) and the same corona sky-subtracted to zero: the run keeps the model that fits it (modelled on the logarithm
+    the dip left 10 sigma). (3) Faint structure (10^-4) over six decades, and 10^-3 on r^-3, is recovered. (4) No
+    output where nothing varies with angle: straight profiles through zero at several positions and scales (float32
+    and exact radii), noiseless r^-3 and Baumbach coronae (curved, so the profile model leaves a residual that is a
+    function of radius only), and the same at subnormal scale. (5) Strong streamers on a clean stack: with the robust
+    statistic every annulus keeps a median of q near zero, because the slope inside an annulus comes from the
+    neighbouring nodes; the two halves of the annulus see different angles and gave up to 1.3 sigma."""
+    kw = dict(bin_px=2, min_count=12)
     rng = np.random.default_rng(7)
     g = EclipseGeometry((700, 700), (349.63, 350.21), 120)
     r = g.radius_map().astype(np.float64); m = (r >= 126) & (r <= 312)
     img = ((r/120)**-3*(1+1e-4*rng.standard_normal(r.shape))).astype(np.float32)
     for robust in (True, False):
-        mq = _annulus_means(F.nrgf(img, m, g, bin_px=2, min_count=12, smooth_bins=3, robust=robust), r, m)
-        assert np.abs(mq).max() < .3, ('clean corona', robust, np.abs(mq).max())
+        mq = _annulus_means(F.nrgf(img, m, g, robust=robust, **kw), r, m)
+        assert np.abs(mq).max() < .2, ('clean corona', robust, np.abs(mq).max())
     g = EclipseGeometry((320, 320), (159.63, 160.21), 60)
     r = g.radius_map().astype(np.float64); th = np.radians(g.pa_map().astype(np.float64)); m = (r >= 64) & (r < 150)
+    noise = rng.standard_normal(r.shape)
+    dip = (((r-101)**2+1)*(1+1e-3*noise)).astype(np.float32)
+    sky = ((r/60)**-3*(1+1e-4*noise)-2.5**-3).astype(np.float32)          # some outer pixels are below zero
+    for name, a in (('dip', dip), ('sky-subtracted', sky)):
+        for robust in (True, False):
+            mq = _annulus_means(F.nrgf(a, m, g, robust=robust, **kw), r, m)
+            assert np.abs(mq).max() < .3, (name, robust, np.abs(mq).max())
+    for prof, amp, least in ((np.exp(-(r-64)*np.log(1e6)/86), 1e-4, .95), ((r/60)**-3, 1e-3, .99)):
+        q = F.nrgf((prof*(1+amp*np.cos(5*th))).astype(np.float32), m, g, **kw); f = np.isfinite(q) & m
+        assert f.sum() > .99*m.sum() and np.corrcoef(q[f], np.cos(5*th[f]))[0, 1] > least, amp
+    exact = g.radius_map('sun', np.float64)
+    flat = [scale*(rr-zero) for rr in (r, exact) for zero in (101., 101.3) for scale in (1e-6, -1., 1e6)]
+    curved = [(exact/60)**-3, _baumbach(exact/60), 1e-40*(exact-101), 1e-43*(exact/60)**-3]
+    for a in flat+curved:
+        for robust in (True, False):
+            assert not np.isfinite(F.nrgf(a.astype(np.float32), m, g, robust=robust, **kw)[m]).any(), robust
+    streamers = 1+.3*np.exp(-.5*(np.angle(np.exp(1j*(th-np.pi/2)))/np.radians(15))**2)+.3*np.exp(-.5*(np.angle(np.exp(1j*(th+np.pi/3)))/np.radians(10))**2)
+    img = ((r/60)**-3*streamers*(1+1e-4*rng.standard_normal(r.shape))).astype(np.float32)
+    q = F.nrgf(img, m, g, robust=True, **kw)
+    k = np.floor(r[m]/2).astype(int); v = q[m]
+    worst = max(abs(float(np.median(v[k == i]))) for i in np.unique(k))
+    assert worst < .3, ('streamers', worst)
+
+
+def test_filter_bank_nrgf_has_no_node_smoothing():
+    """A smoothing window of three annuli bends a profile whose power-law index changes: on a 15-px Sun it left a ring
+    of 2.3 sigma (noise 10^-3), and 2.5 sigma on a Baumbach corona. The filter bank does not smooth the nodes, whose
+    noise is a few hundredths of sigma."""
+    g = EclipseGeometry((160, 160), (79.63, 80.21), 15)
+    r = g.radius_map().astype(np.float64); m = (r >= 15.75) & (r <= 39)
+    a = ((r/15)**-3*(1+1e-3*np.random.default_rng(3).standard_normal(r.shape))).astype(np.float32)
+    layer, mode, info = make_filter('nrgf', a, m, g)
+    z = np.arctanh(np.clip(2*layer.astype(np.float64)-1, -1+1e-9, 1-1e-9))      # the layer is 0.5 + 0.5 tanh(q / s)
+    z /= 1.4826*np.median(np.abs(z[m]-np.median(z[m])))
+    assert info['smooth_bins'] == 0 and np.abs(_annulus_means(z, r, m)).max() < .5
+
+
+def test_nrgf_bad_pixels_partial_annuli_and_short_runs():
+    """Fourth review of 1.3.2. (1) One zero or negative pixel no longer switches a whole run from the logarithmic to
+    the linear model (it changed the layer by 7.9 sigma far away). (2) One pixel 10^7 times too bright no longer
+    raises the numerical floor of its annulus (the floor uses the median size of the values). (3) Data that start
+    inside an annulus: the node sits at the mean radius of its own pixels, not extrapolated to the annulus' centre
+    (that left up to 4 sigma). (4) Runs of one or two annuli give no output (there are no neighbours to give the
+    curvature); runs of three to five annuli keep faint structure."""
     kw = dict(bin_px=2, min_count=12, smooth_bins=3)
-    dip = (((r-101)**2+1)*(1+1e-3*rng.standard_normal(r.shape))).astype(np.float32)
+    g = EclipseGeometry((320, 320), (159.63, 160.21), 60)
+    r = g.radius_map().astype(np.float64); th = np.radians(g.pa_map().astype(np.float64)); m = (r >= 64) & (r < 150)
+    c5 = np.cos(5*th)
+    six = (np.exp(-(r-64)*np.log(1e6)/86)*(1+1e-4*c5)).astype(np.float32); base = F.nrgf(six, m, g, **kw)
+    yy, xx = np.nonzero(m & (r >= 70.5) & (r < 71.5))
+    for bad in (0., -1e-3):
+        im = six.copy(); im[yy[0], xx[0]] = bad; q = F.nrgf(im, m, g, **kw)
+        far = m & (r > 100)
+        assert np.isfinite(q[far]).all() and np.sqrt(np.mean((q[far]-base[far])**2)) < .01, bad
+    law = ((r/60)**-3*(1+1e-4*c5)).astype(np.float32)
+    yy, xx = np.nonzero(m & (r >= 120) & (r < 122)); spike = law.copy(); spike[yy[0], xx[0]] *= 1e7
+    ring = m & (r >= 120) & (r < 122); ring[yy[0], xx[0]] = False
     for robust in (True, False):
-        mq = _annulus_means(F.nrgf(dip, m, g, robust=robust, **kw), r, m)
-        assert np.abs(mq).max() < 2, ('dip', robust, np.abs(mq).max())
-    six = (np.exp(-(r-64)*np.log(1e6)/86)*(1+1e-4*np.cos(5*th))).astype(np.float32)
-    q = F.nrgf(six, m, g, **kw); f = np.isfinite(q) & m
-    assert f.sum() > .99*m.sum() and np.corrcoef(q[f], np.cos(5*th[f]))[0, 1] > .95
-    law = ((r/60)**-3*(1+1e-3*np.cos(5*th))).astype(np.float32)   # the model is chosen by its bias, not its spread
-    q = F.nrgf(law, m, g, **kw); f = np.isfinite(q) & m
-    assert np.corrcoef(q[f], np.cos(5*th[f]))[0, 1] > .99
-    for rr in (r, g.radius_map('sun', np.float64)):              # the filter's own float32 radii, and exact ones
-        for zero in (101., 101.3):
-            for scale in (1e-6, -1., 1e6):
-                for robust in (True, False):
-                    line = (scale*(rr-zero)).astype(np.float32)
-                    assert not np.isfinite(F.nrgf(line, m, g, robust=robust, **kw)[m]).any(), (zero, scale, robust)
+        assert np.isfinite(F.nrgf(spike, m, g, robust=robust, **kw)[ring]).mean() > .99, robust
+    for n in range(1, 6):
+        sel = (r >= 64) & (r < 64+2*n)
+        for robust in (True, False):
+            q = F.nrgf(law, sel, g, robust=robust, **kw); f = sel & np.isfinite(q)
+            if n < 3:
+                assert not f.any(), (n, robust)
+            else:
+                assert f.sum() == sel.sum() and np.corrcoef(q[f], c5[f])[0, 1] > .95, (n, robust)
+    G = EclipseGeometry((700, 700), (349.63, 350.21), 120); R = G.radius_map().astype(np.float64)
+    img = ((R/120)**-3*(1+1e-4*np.random.default_rng(34).standard_normal(R.shape))).astype(np.float32)
+    for start in (127.5, 127.9):
+        M = (R >= start) & (R <= 312)
+        assert np.abs(_annulus_means(F.nrgf(img, M, G, **kw), R, M)).max() < .3, start
