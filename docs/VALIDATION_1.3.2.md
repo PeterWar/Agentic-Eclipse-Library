@@ -1,6 +1,6 @@
 # Validation of 1.3.2 (prepared 2026-10-15, not released)
 
-- `python -m ael selftest`: **76 of 76** (69 from 1.3.1 and 7 new in `ael/_tests/test_review.py`).
+- `python -m ael selftest`: **77 of 77** (69 from 1.3.1 and 8 new in `ael/_tests/test_review.py`).
 - The detail-transfer regression of the sixteen filters (`test_filters_keep_injected_fine_detail_with_its_sign_and_strength`)
   still passes against the 1.3.0 values: the NRGF change leaves the transfer of faint detail as it was
   (0.644 and 0.621 against 0.64 and 0.62).
@@ -10,8 +10,13 @@
   have tests or mutations below.
 - A second review found one more: the test for a spread that is zero to rounding compared each annulus with the
   brightest annulus of its run, so on a profile that falls by six decades the faintest annuli were dropped although
-  they carried real structure. The tolerance now uses each annulus' own level; the test and mutation M8 below cover
-  it, and the ripple table is unchanged.
+  they carried real structure.
+- A third review found that a straight profile crossing zero inside an annulus passed rounding as structure. Checking
+  it showed a larger fault of the first commit: each node removed its annulus' slope but not its curvature, which
+  left ~I''·<Δr²>/2 in the node and, on a very clean stack, a broad offset of several sigma. Now the node removes the
+  local curvature as well; a run of positive annuli is also modelled on the logarithm and keeps the less biased
+  model; the smoothing window is symmetric about each node; and a spread below four float32 steps of the annulus'
+  own operands (its values, and its slope times the radius) is undefined. The ripple table is unchanged.
 
 ## Concentric ripple with faint structure
 
@@ -34,12 +39,50 @@ The 1.3.1 NRGF gave 2.5× (120 px) and 1.9× (200 px). The 1.3.1 radial rank was
 ## Edges of the data
 
 Steep profile (60-px Sun, r⁻³, 2 % structure) with a gap in the data between 100 and 104 px: median of the NRGF on
-the 4 px on each side of the gap.
+the 4 px on each side of the gap (`p8_vores_buit.log`; median statistics, the mean ones agree).
 
 | | Inside edge | Outside edge |
 |---|---|---|
-| 1.3.1 | −2.85 | +2.93 |
-| 1.3.2 | −0.01 | −0.003 |
+| 1.3.1 | −2.85 | +2.13 |
+| 1.3.2 | −0.004 | +0.002 |
+
+`spread_about='bin'` reproduces the 1.3.1 output bit for bit (checked on this scene with both statistics).
+
+## A clean corona without structure
+
+r⁻³ with noise only, data from 1.05 to 2.6 R☉: the largest azimuthal mean of the NRGF over the 2-px annuli, in
+sigma (an unbiased profile gives ~0; `p6_biaix_sense_estructura.log`, median statistics).
+
+| Sun radius | Noise 10⁻² | Noise 10⁻³ | Noise 10⁻⁴ |
+|---|---|---|---|
+| 60 px, earlier 1.3.2 draft | 0.19 | 0.76 | 6.1 |
+| 60 px, 1.3.2 | 0.20 | 0.40 | 1.38 |
+| 120 px, earlier draft | 0.07 | 0.19 | 1.63 |
+| 120 px, 1.3.2 | 0.06 | 0.09 | 0.09 |
+| 200 px, earlier draft | 0.04 | 0.07 | 0.58 |
+| 200 px, 1.3.2 | 0.04 | 0.04 | 0.07 |
+
+What remains at a 60-pixel Sun with noise 10⁻⁴ is the fourth-order bias of the smoothing (σ = 3 annuli); it falls
+with the fourth power of the window.
+
+## Faint structure on curved profiles
+
+cos 5θ structure on a 60-pixel Sun, noiseless: correlation of the NRGF with the structure (`p7_estructura_feble.log`).
+
+| Profile, structure | Earlier 1.3.2 draft | 1.3.2 |
+|---|---|---|
+| Six decades (exponential), 10⁻⁴ | 0.08 | 0.99 |
+| Six decades, 10⁻² | 0.99 | 1.00 |
+| r⁻³, 10⁻⁴ | 0.42 | 0.97 |
+| r⁻³, 10⁻³ | 0.97 | 1.00 |
+
+A parabola above zero with noise 10⁻³ (a dip in the profile): largest annulus mean 0.83 sigma (10 sigma when the dip
+is modelled on the logarithm).
+
+## Numerical inputs
+
+Constants (3, −3, 0) and straight profiles through zero (at 100, 101 and 101.3 px; scales 10⁻⁶ to 10⁶; float32
+and exact radii) give no output with either statistic and with or without smoothing (`p6_biaix_sense_estructura.log`).
 
 ## Mutations
 
@@ -54,11 +97,17 @@ Each fault must be detected by a test:
 | Fixed rings of 7 px added to every ring layer | structureless corona |
 | Profile held flat at the ends of each run (no slope of its own) | NRGF constants, gaps, short runs, outlier |
 | A three-node mean instead of the local polynomial | NRGF constants, gaps, short runs, outlier |
-| Zero-spread tolerance from the brightest annulus of the run (M8) | faint annuli beside bright ones; Upsilon options |
+| Numerical floor from the brightest annulus of the run | faint annuli beside bright ones; Upsilon options |
 | `rhef_upsilon` ignoring an explicit `upsilon_curve` | faint annuli beside bright ones; Upsilon options |
 | A filter other than the RHEF accepting `upsilon_curve` silently | faint annuli beside bright ones; Upsilon options |
+| Numerical floor without the slope times the radius | unbiased on clean curved profiles; nothing for rounding |
+| Node without the local curvature removed | unbiased on clean curved profiles; nothing for rounding |
+| A positive run always modelled on the logarithm | unbiased on clean curved profiles; nothing for rounding |
+| Every run modelled on the values | unbiased on clean curved profiles; nothing for rounding |
+| The model chosen by its spread instead of its bias | unbiased on clean curved profiles; nothing for rounding |
+| Smoothing window cut on one side near the ends (earlier draft) | NRGF constants, gaps, short runs, outlier |
 
-All ten were detected. The blend-algebra test has no mutation: it checks an identity and carries its own negative
+All sixteen were detected (`mutacions.log`). The blend-algebra test has no mutation: it checks an identity and carries its own negative
 control (Overlay at the same opacity).
 
 Logs and scripts are kept with the author (`3-AEL/proves/validacio_1.3.2/`).

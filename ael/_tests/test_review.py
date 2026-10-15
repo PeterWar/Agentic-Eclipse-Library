@@ -161,7 +161,7 @@ def test_nrgf_constants_gaps_short_runs_and_a_single_outlier():
     """Counterexamples found in review of 1.3.2 (October 2026). A constant input has no spread: no output. Next to a
     gap in the data, on a steep profile, the annuli on both sides keep their own slope (the 1.3.1 operator, used as a
     negative control, holds the end of the profile flat and sends the median several sigma away). The local polynomial
-    returns constants, straight lines and parabolas unchanged on runs of 1 to 5 nodes. One pixel 10,000 times too
+    returns constants, straight lines, parabolas and cubics unchanged on runs of 1 to 5 nodes. One pixel 10,000 times too
     bright does not move the rest of its annulus."""
     from ael.radial import _local_quadratic
     g = EclipseGeometry((320, 320), (159.63, 160.21), 60)
@@ -178,7 +178,7 @@ def test_nrgf_constants_gaps_short_runs_and_a_single_outlier():
         assert abs(np.median(old[side])) > 1, ('negative control', lo, np.median(old[side]))
     for n in range(1, 6):
         t = np.arange(n, dtype=float)
-        for y in (np.full(n, 2.5), 1.5+.7*t, .3+.2*t-.05*t*t):
+        for y in (np.full(n, 2.5), 1.5+.7*t, .3+.2*t-.05*t*t, .1-.3*t+.02*t**3):
             assert np.allclose(_local_quadratic(y, 3), y, atol=1e-9) and np.allclose(_local_quadratic(y, 1), y, atol=1e-9), (n, y)
     yy, xx = np.nonzero(m & (r >= 120) & (r < 122)); spike = img.copy(); spike[yy[0], xx[0]] *= 1e4
     a = F.nrgf(img, m, g, **kw); b = F.nrgf(spike, m, g, **kw)
@@ -205,3 +205,46 @@ def test_nrgf_keeps_faint_annuli_beside_bright_ones_and_upsilon_options_are_expl
         except ValueError:
             continue
         raise AssertionError(('upsilon_curve accepted by', name))
+
+
+def _annulus_means(q, r, m):
+    k = np.floor(r[m]/2).astype(int); v = q[m]; f = np.isfinite(v)
+    s, c = np.bincount(k[f], v[f]), np.bincount(k[f])
+    return s[c > 0]/c[c > 0]
+
+
+def test_nrgf_is_unbiased_on_clean_curved_profiles_and_gives_nothing_for_rounding():
+    """Third review of 1.3.2. (1) A structureless r^-3 corona from a very clean stack (noise 10^-4 of the brightness):
+    removing only each annulus' slope left its curvature in the node, an offset of up to 1.6 sigma; with the curvature
+    removed every annulus averages within 0.3 sigma. (2) A profile with a dip (a parabola above zero, noise 10^-3):
+    modelled on the logarithm the dip left offsets of 10 sigma; the run keeps the less biased model (judged by its
+    spread instead, an r^-3 corona with 10^-3 structure lost correlation, 0.92). (3) Faint structure (10^-4) on a
+    profile falling six decades is recovered (correlation above 0.95; 0.08 before). (4) A
+    purely radial straight profile through zero, at several positions and scales, has only rounding for spread (of
+    its values, or of the float32 radius map against exact radii): no output anywhere, with either statistic."""
+    rng = np.random.default_rng(7)
+    g = EclipseGeometry((700, 700), (349.63, 350.21), 120)
+    r = g.radius_map().astype(np.float64); m = (r >= 126) & (r <= 312)
+    img = ((r/120)**-3*(1+1e-4*rng.standard_normal(r.shape))).astype(np.float32)
+    for robust in (True, False):
+        mq = _annulus_means(F.nrgf(img, m, g, bin_px=2, min_count=12, smooth_bins=3, robust=robust), r, m)
+        assert np.abs(mq).max() < .3, ('clean corona', robust, np.abs(mq).max())
+    g = EclipseGeometry((320, 320), (159.63, 160.21), 60)
+    r = g.radius_map().astype(np.float64); th = np.radians(g.pa_map().astype(np.float64)); m = (r >= 64) & (r < 150)
+    kw = dict(bin_px=2, min_count=12, smooth_bins=3)
+    dip = (((r-101)**2+1)*(1+1e-3*rng.standard_normal(r.shape))).astype(np.float32)
+    for robust in (True, False):
+        mq = _annulus_means(F.nrgf(dip, m, g, robust=robust, **kw), r, m)
+        assert np.abs(mq).max() < 2, ('dip', robust, np.abs(mq).max())
+    six = (np.exp(-(r-64)*np.log(1e6)/86)*(1+1e-4*np.cos(5*th))).astype(np.float32)
+    q = F.nrgf(six, m, g, **kw); f = np.isfinite(q) & m
+    assert f.sum() > .99*m.sum() and np.corrcoef(q[f], np.cos(5*th[f]))[0, 1] > .95
+    law = ((r/60)**-3*(1+1e-3*np.cos(5*th))).astype(np.float32)   # the model is chosen by its bias, not its spread
+    q = F.nrgf(law, m, g, **kw); f = np.isfinite(q) & m
+    assert np.corrcoef(q[f], np.cos(5*th[f]))[0, 1] > .99
+    for rr in (r, g.radius_map('sun', np.float64)):              # the filter's own float32 radii, and exact ones
+        for zero in (101., 101.3):
+            for scale in (1e-6, -1., 1e6):
+                for robust in (True, False):
+                    line = (scale*(rr-zero)).astype(np.float32)
+                    assert not np.isfinite(F.nrgf(line, m, g, robust=robust, **kw)[m]).any(), (zero, scale, robust)

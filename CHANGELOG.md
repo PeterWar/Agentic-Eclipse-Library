@@ -8,15 +8,17 @@ keep their names; the NRGF output changes where the radial profile is steep.
 - **Reduced NRGF profile bias in the tested region.** The ring profiles were smoothed with a plain Gaussian
   (`smooth_bins=3` in the filter bank). On a steep, curved profile that biases the mean (about 1 % of the
   brightness, one ring sigma, 0.2 R☉ above the limb of a 120-pixel Sun) and leaves broad false rings. Now each
-  annulus gives a node at its exact centre with its own local slope removed (robust: from the medians of its inner
-  and outer halves), the nodes are smoothed by a local polynomial (on their logarithm when positive), the spread is
-  measured about the continuous mean at each pixel's radius, and inside the end annuli of a run the mean follows
-  that annulus' slope instead of being held flat. With 2 % angular structure on an r⁻³ profile, the concentric
-  ripple falls to the sampling floor of the flattened input (1.00–1.01×; 1.3.1: 1.9–2.5×; 1.2.0: 10–12×). Next to
-  a gap in the data on a steep profile, the median of the 1.3.1 NRGF was −2.8 and +2.9 sigma on the two sides; it
-  is now within 0.02. A constant input gives no output, and one outlier pixel no longer moves the rest of its
-  annulus. A spread counts as zero only against the annulus' own level, so a profile that falls by six decades
-  keeps its faintest annuli. `spread_about='bin'` gives the 1.3.1 behaviour.
+  annulus gives a node at its exact centre with its own local slope (robust: from the medians of its inner and
+  outer halves) and the local curvature removed; a run of positive annuli is also modelled on the logarithm and
+  keeps the less biased model; the nodes are smoothed by a local parabola in a window symmetric about each node;
+  the spread is measured about the continuous mean at each pixel's radius; and inside the end annuli of a run the
+  mean follows that annulus' slope and curvature instead of being held flat. With 2 % angular structure on an r⁻³
+  profile, the concentric ripple falls to the sampling floor of the flattened input (1.00×; 1.3.1: 1.9–2.5×;
+  1.2.0: 10–12×). Next to a gap in the data on a steep profile, the median of the 1.3.1 NRGF was −2.8 and +2.1 sigma
+  on the two sides; it is now within 0.01. On a clean structureless corona every annulus averages within 0.1 sigma
+  for a Sun of 120 px or more. A constant input, or a straight profile through zero, gives no output (a spread
+  below four float32 steps of the annulus' own values, or of its slope times the radius, is undefined), and one
+  outlier pixel no longer moves the rest of its annulus. `spread_about='bin'` gives the 1.3.1 behaviour.
 - **Upsilon with an exponent for each side**: `ael.filterbank.upsilon(q, low, high)` (eq. 2 of Gilly & Cranmer
   2025; exponents must be positive, missing values stay missing), and `make_filter(..., upsilon_curve=(low, high))`
   for any RHEF layer, including the local ones (refused for other filters).
@@ -27,7 +29,8 @@ keep their names; the NRGF output changes where the radial profile is steep.
   with the 1.2.0 operators and the 1.3.1 NRGF as negative controls; the blend algebra; the Upsilon curve; a
   structureless corona through the ring filters (no rings, no seams at the sector nodes; positive controls); the
   local RHEF with Upsilon; the NRGF on constants, next to a gap, on short runs and with an outlier; faint annuli
-  beside bright ones; the explicit Upsilon option and its refusal for other filters. 76 of 76 tests.
+  beside bright ones; the explicit Upsilon option and its refusal for other filters; a clean curved profile, a
+  profile with a dip, faint structure over six decades and straight profiles through zero. 77 of 77 tests.
 - The radial rank (RHEF) of 1.2.1 already reaches the sampling floor on the same scene (0.45–0.88×); unchanged.
 
 ## 1.3.1 — 2026-10-13

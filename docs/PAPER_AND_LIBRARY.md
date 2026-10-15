@@ -15,7 +15,7 @@ image is version V125 of the project). "Library" means `ael` 1.3.2.
 |---|---|---|
 | Input | Green channel of the linear composite, stars removed | Luminance; `nrgf_log` uses ln L |
 | Rings | 1 px; partial rings completed from the 40 neighbouring complete rings (outwards at the limb, inwards at the edge of the canvas) | 2 px |
-| Statistics | Mean and standard deviation, interpolated linearly to each pixel's radius | Median and 1.4826·MAD (`ael.filters.nrgf(..., robust=False)` gives mean and standard deviation; `make_filter` uses the robust form); nodes at the exact ring centres with the local slope removed; spread measured about the continuous mean profile; profiles smoothed by a local polynomial and interpolated by PCHIP; inside the end annuli of a run, the annulus' own slope |
+| Statistics | Mean and standard deviation, interpolated linearly to each pixel's radius | Median and 1.4826·MAD (`ael.filters.nrgf(..., robust=False)` gives mean and standard deviation; `make_filter` uses the robust form); nodes at the exact ring centres with the local slope and curvature removed; a run of positive rings also modelled on the logarithm, keeping the less biased model; spread measured about the continuous mean profile; profiles smoothed by a local parabola and interpolated by PCHIP; inside the end annuli of a run, the annulus' own slope and curvature |
 | Display | Affine stretch; the same NRGF twice, with two stretches | `0.5 + 0.5·tanh(q/(2.5·max(1.4826·MAD, 1e−5)))` |
 | Limits | Local dark structure compressed to 0.2 (σ 400 px); a limiter that restrains darkening relative to an estimated sky level | None |
 | Blend | Multiply, 39 % and 14 % | Multiply |
@@ -82,4 +82,6 @@ In `ael/_tests/test_review.py`:
 - a structureless corona (photon noise only, off-centre Moon, a straight edge inside the measured zone) through the ring filters: no rings and no seams at the quarter-sector nodes, measured as the correlation between two noise realisations, with positive controls;
 - the local RHEF with Upsilon keeps the sign of faint detail, with a lower gain;
 - the NRGF keeps faint annuli on a profile that falls by six decades, and the explicit Upsilon option applies to
-  `rhef_upsilon` and is refused by other filters.
+  `rhef_upsilon` and is refused by other filters;
+- the NRGF is unbiased on a clean structureless corona and on a profile with a dip, recovers faint structure on
+  a profile falling six decades, and gives no output for straight profiles through zero.
