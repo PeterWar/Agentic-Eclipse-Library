@@ -163,4 +163,4 @@ commercially; the licence only asks you to keep the copyright notice with copies
 - Research notes 180 and 185, and the code behind them in `3-RECERCA/tools/`.
 
 Existing images are not rewritten; compare a new numerical recipe before adopting it.
-See the [changelog](CHANGELOG.md) and [validation](docs/VALIDATION_1.3.0.md).
+See the [changelog](CHANGELOG.md) and [validation](docs/VALIDATION_1.3.0.md). How the filters of the library differ from the layers of the paper's published image, filter by filter: [`docs/PAPER_AND_LIBRARY.md`](docs/PAPER_AND_LIBRARY.md).

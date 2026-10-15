@@ -115,6 +115,15 @@ def wow_bilateral(img,valid,*,n_scales=6,noise_floor=3):
     return np.where(m,out,np.nan).astype(np.float32)
 
 
+def upsilon(q, low=.35, high=.35):
+    """Upsilon redistribution of Gilly & Cranmer (2025, eq. 2): a gamma-like curve below the median and an
+    inverted one above it, with its own exponent for each side (``low`` below 0.5, ``high`` above). It pulls the
+    extremes of a rank image towards mid grey; 0.35 on both sides is the example of their Figure 3, and their
+    suggested defaults for SDO/AIA are asymmetric. Continuous at 0.5; maps 0 to 0 and 1 to 1."""
+    q = np.asarray(q, np.float32)
+    return np.where(q < .5, .5*np.maximum(2*q, 0)**low, 1-.5*np.maximum(2-2*q, 0)**high).astype(np.float32)
+
+
 def display_detail(detail, valid, *, noise_floor=1e-5):
     good=valid & np.isfinite(detail)
     if not good.any(): raise ValueError('filter produced no observed values')
@@ -123,8 +132,12 @@ def display_detail(detail, valid, *, noise_floor=1e-5):
     return np.where(good,.5+.5*np.tanh(detail/(2.5*scale)),np.nan).astype(np.float32),dict(scale=scale,tanh=2.5)
 
 
-def make_filter(name,luminance,valid,geometry):
-    """Return (display layer in [0,1], blend mode, effective parameters)."""
+def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None):
+    """Return (display layer in [0,1], blend mode, effective parameters).
+
+    ``upsilon_curve`` (since 1.3.2): ``(low, high)`` exponents of the Upsilon curve of Gilly & Cranmer (2025) to
+    apply to any RHEF layer, for example ``make_filter('rhef_local30', L, m, g, upsilon_curve=(.35, .35))``.
+    ``'rhef_upsilon'`` is the whole-ring RHEF with ``(.35, .35)``."""
     a=np.asarray(luminance,np.float32); m=valid & np.isfinite(a) & (a>0)
     if name not in NAMES: raise ValueError(f'unknown filter {name!r}; choose from {NAMES}')
     if not m.any(): raise ValueError('no positive observed luminance')
@@ -138,11 +151,16 @@ def make_filter(name,luminance,valid,geometry):
     if name.startswith('rhef'):
         sector=60 if name.endswith('60') else 30 if name.endswith('30') else None
         q=radial_rank(a,m,geometry,sector)
-        if name=='rhef_upsilon':
-            q=np.where(q<.5,.5*np.maximum(2*q,0)**.35,1-.5*np.maximum(2-2*q,0)**.35)
-        return q,'multiply',dict(sector_deg=sector,bin_px=2,upsilon=.35 if name=='rhef_upsilon' else 1,
+        ups=(.35,.35) if name=='rhef_upsilon' else upsilon_curve
+        if ups is not None:
+            if not name.startswith('rhef'): raise ValueError('upsilon_curve applies to RHEF layers only')
+            q=upsilon(q,*ups)
+        return q,'multiply',dict(sector_deg=sector,bin_px=2,upsilon=list(ups) if ups is not None else 1,
                                  quantiles=257,statistics='continuous log-quantiles in radius and angle',
-                                 image_smoothing=False)
+                                 image_smoothing=False,
+                                 note='Multiply with a layer centred on 0.5 = a uniform darkening (1 - a/2) times a '
+                                      'modulation symmetric about mid grey; ranking gives a 0.5 % gap the same '
+                                      'contrast as a 15 % one, and Upsilon tempers both tails (docs/PAPER_AND_LIBRARY.md)')
     if name in ISO:
         sigmas,outer=ISO[name]
         q,info=achf_isotropic(a,m,geometry,sigmas=sigmas,outer_sigma=outer)

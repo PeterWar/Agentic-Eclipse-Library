@@ -86,18 +86,26 @@ def local_mean_std(img: np.ndarray, valid: np.ndarray | None, sigma: float, min_
 # NRGF
 # ------------------------------------------------------------------------------------------------
 def nrgf(img: np.ndarray, valid: np.ndarray | None, geometry: EclipseGeometry, *, center="sun",
-         bin_px: float = 1.0, robust: bool = True, min_count: int = 50, smooth_bins: float = 0.0):
+         bin_px: float = 1.0, robust: bool = True, min_count: int = 50, smooth_bins: float = 0.0,
+         spread_about: str = "profile"):
     """Normalising-radial-graded filter: ``(I − <I>(r)) / σ(r)`` over annuli around the centre.
 
-    ``robust`` uses the median and 1.4826·MAD instead of mean and standard deviation.  Only observed
-    pixels enter each annulus. Statistics are evaluated continuously in radius, not by a stepwise
-    bin lookup; no image pixels are smoothed. Annuli with fewer than ``min_count`` pixels give ``NaN``.  The sky
-    gradient is *not* removed by an NRGF (it is normalised along with the corona): subtract a sky
-    model first (:func:`ael.render.sky_background`) if the field is large.
+    ``robust`` uses the median and 1.4826·MAD instead of mean and standard deviation (Morgan, Habbal and
+    Woo 2006 use the mean and standard deviation: ``robust=False``).  Only observed pixels enter each
+    annulus. Statistics are evaluated continuously in radius, not by a stepwise bin lookup; no image
+    pixels are smoothed. Since 1.3.2 the spread is measured about the continuous mean profile at each
+    pixel's own radius (``spread_about='profile'``), so a steep fall of brightness inside an annulus no
+    longer inflates it; ``'bin'`` gives the 1.3.1 behaviour. Annuli with fewer than ``min_count`` pixels
+    give ``NaN``.  The sky gradient is *not* removed by an NRGF (it is normalised along with the corona),
+    and neither is the differential extinction of a low Sun: subtract a sky model first
+    (:func:`ael.render.sky_background`) and correct the extinction (:mod:`ael.extinction`) if the field
+    is large or the Sun was low. See docs/PAPER_AND_LIBRARY.md for how this differs from the layers of
+    the paper's published image.
     """
     from .radial import continuous_nrgf
     return continuous_nrgf(img, valid, geometry, center=center, bin_px=bin_px,
-                           robust=robust, min_count=min_count, smooth_bins=smooth_bins)
+                           robust=robust, min_count=min_count, smooth_bins=smooth_bins,
+                           spread_about=spread_about)
 
 
 # ------------------------------------------------------------------------------------------------
