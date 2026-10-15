@@ -5,22 +5,27 @@
 Corrections from an external review of the paper draft (October 2026). The sixteen filters of `ael filters`
 keep their names; the NRGF output changes where the radial profile is steep.
 
-- **NRGF without profile bias.** The ring profiles were smoothed with a plain Gaussian (`smooth_bins=3` in the
-  filter bank). On a steep, curved profile that biases the mean (about 1 % of the brightness, one ring sigma,
-  0.2 R☉ above the limb of a 120-pixel Sun) and leaves broad false rings. The profiles are now smoothed by a local
-  quadratic fit (on their logarithm when positive), the ring nodes sit at the exact ring centres with the local
-  slope removed, and the spread is measured about the continuous mean profile at each pixel's radius. With 2 %
-  angular structure on an r⁻³ profile, the concentric ripple falls to the sampling floor of the flattened input
-  (1.00–1.01×; 1.3.1: 1.9–2.5×; 1.2.0: 10–12×). `spread_about='bin'` gives the 1.3.1 behaviour.
+- **Reduced NRGF profile bias in the tested region.** The ring profiles were smoothed with a plain Gaussian
+  (`smooth_bins=3` in the filter bank). On a steep, curved profile that biases the mean (about 1 % of the
+  brightness, one ring sigma, 0.2 R☉ above the limb of a 120-pixel Sun) and leaves broad false rings. Now each
+  annulus gives a node at its exact centre with its own local slope removed (robust: from the medians of its inner
+  and outer halves), the nodes are smoothed by a local polynomial (on their logarithm when positive), the spread is
+  measured about the continuous mean at each pixel's radius, and inside the end annuli of a run the mean follows
+  that annulus' slope instead of being held flat. With 2 % angular structure on an r⁻³ profile, the concentric
+  ripple falls to the sampling floor of the flattened input (1.00–1.01×; 1.3.1: 1.9–2.5×; 1.2.0: 10–12×). Next to
+  a gap in the data on a steep profile, the median of the 1.3.1 NRGF was −2.8 and +2.9 sigma on the two sides; it
+  is now within 0.02. A constant input gives no output, and one outlier pixel no longer moves the rest of its
+  annulus. `spread_about='bin'` gives the 1.3.1 behaviour.
 - **Upsilon with an exponent for each side**: `ael.filterbank.upsilon(q, low, high)` (eq. 2 of Gilly & Cranmer
-  2025), and `make_filter(..., upsilon_curve=(low, high))` for any RHEF layer, including the local ones.
+  2025; exponents must be positive, missing values stay missing), and `make_filter(..., upsilon_curve=(low, high))`
+  for any RHEF layer, including the local ones (refused for other filters).
 - **`docs/PAPER_AND_LIBRARY.md`**: what the published layers of the paper did and what the library does, filter by
   filter (input channel, rings, statistics, limits, blend), the algebra of blending a layer centred on mid grey,
   and the sky and extinction that ring filters turn into structure.
 - **New controls** (`ael/_tests/test_review.py`): faint structure on a steep profile against the sampling floor,
   with the 1.2.0 operators and the 1.3.1 NRGF as negative controls; the blend algebra; the Upsilon curve; a
   structureless corona through the ring filters (no rings, no seams at the sector nodes; positive controls); the
-  local RHEF with Upsilon. 74 of 74 tests.
+  local RHEF with Upsilon; the NRGF on constants, next to a gap, on short runs and with an outlier. 75 of 75 tests.
 - The radial rank (RHEF) of 1.2.1 already reaches the sampling floor on the same scene (0.45–0.88×); unchanged.
 
 ## 1.3.1 — 2026-10-13

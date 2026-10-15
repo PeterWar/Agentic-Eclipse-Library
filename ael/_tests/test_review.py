@@ -74,6 +74,13 @@ def test_upsilon_is_the_published_curve():
         assert abs(float(upsilon(np.float32(.5-1e-5), lo, hi)[()])-.5) < 1e-3
     assert np.allclose(upsilon(q, 1, 1), q, atol=1e-6)
     assert np.std(upsilon(q)) < .7*np.std(q)                         # the tails move towards mid grey
+    assert np.isnan(upsilon(np.array([np.nan, .2], np.float32))[0])   # no value is made where there was none
+    for bad in ((0, .35), (.35, -1), (np.nan, .35)):
+        try:
+            upsilon(q, *bad)
+        except ValueError:
+            continue
+        raise AssertionError(('exponents accepted', bad))
 
 
 def _null_scene(seed, rings=0., seam=0.):
@@ -82,7 +89,7 @@ def _null_scene(seed, rings=0., seam=0.):
     g = EclipseGeometry((N, N), (379.7, 380.3), R, (388.2, 377.1), 124.)
     r = g.radius_map(); th = np.radians(g.pa_map())
     m = (g.radius_map('moon') > 126) & (r <= 2.6*R)
-    m[:, 735:] = False                                               # a straight coverage edge (outside 2.6 R)
+    m[:, 640:] = False                                               # a straight coverage edge, inside the measured zone
     lam = 4000*(np.maximum(r, 1)/R)**-3*(1+rings*np.sin(2*np.pi*r/9))*(1+seam*np.cos(24*th))
     img = np.random.default_rng(seed).poisson(lam).astype(np.float32)/4000
     return g, r, th, m, np.where(m, np.maximum(img, 1e-6), 0).astype(np.float32)
@@ -148,3 +155,32 @@ def test_local_rhef_with_upsilon_keeps_the_sign_of_faint_detail_and_tempers_its_
             ok = sel & np.isfinite(change)
             corr = float(np.corrcoef(change[ok], signal[ok])[0, 1]); gain = float(np.sum(change[ok]*signal[ok])/np.sum(signal[ok]**2))
             assert corr > .5 and abs(gain/expected-1) < .25, (name, ups, corr, gain)
+
+
+def test_nrgf_constants_gaps_short_runs_and_a_single_outlier():
+    """Counterexamples found in review of 1.3.2 (October 2026). A constant input has no spread: no output. Next to a
+    gap in the data, on a steep profile, the annuli on both sides keep their own slope (the 1.3.1 operator, used as a
+    negative control, holds the end of the profile flat and sends the median several sigma away). The local polynomial
+    returns constants, straight lines and parabolas unchanged on runs of 1 to 5 nodes. One pixel 10,000 times too
+    bright does not move the rest of its annulus."""
+    from ael.radial import _local_quadratic
+    g = EclipseGeometry((320, 320), (159.63, 160.21), 60)
+    r = g.radius_map().astype(np.float64); th = np.radians(g.pa_map().astype(np.float64)); m = (r >= 64) & (r < 150)
+    kw = dict(bin_px=2, min_count=12, smooth_bins=3)
+    for c in (3., 1e-3, 1e4):
+        for robust in (True, False):
+            assert not np.isfinite(F.nrgf(np.full((320, 320), c, np.float32), m, g, robust=robust, **kw)).any(), (c, robust)
+    img = ((r/60)**-3*(1+.02*np.cos(5*th))).astype(np.float32); gap = m & ~((r >= 100) & (r < 104))
+    new = F.nrgf(img, gap, g, **kw); old = F.nrgf(img, gap, g, spread_about='bin', **kw)
+    for lo, hi in ((96, 100), (104, 108)):
+        side = gap & (r >= lo) & (r < hi)
+        assert abs(np.median(new[side])) < .1, (lo, np.median(new[side]))
+        assert abs(np.median(old[side])) > 1, ('negative control', lo, np.median(old[side]))
+    for n in range(1, 6):
+        t = np.arange(n, dtype=float)
+        for y in (np.full(n, 2.5), 1.5+.7*t, .3+.2*t-.05*t*t):
+            assert np.allclose(_local_quadratic(y, 3), y, atol=1e-9) and np.allclose(_local_quadratic(y, 1), y, atol=1e-9), (n, y)
+    yy, xx = np.nonzero(m & (r >= 120) & (r < 122)); spike = img.copy(); spike[yy[0], xx[0]] *= 1e4
+    a = F.nrgf(img, m, g, **kw); b = F.nrgf(spike, m, g, **kw)
+    ring = m & (r >= 120) & (r < 122); ring[yy[0], xx[0]] = False
+    assert np.median(np.abs(a[ring]-b[ring])) < .01 and np.mean(np.sign(a[ring]) != np.sign(b[ring])) < .005

@@ -120,8 +120,12 @@ def upsilon(q, low=.35, high=.35):
     inverted one above it, with its own exponent for each side (``low`` below 0.5, ``high`` above). It pulls the
     extremes of a rank image towards mid grey; 0.35 on both sides is the example of their Figure 3, and their
     suggested defaults for SDO/AIA are asymmetric. Continuous at 0.5; maps 0 to 0 and 1 to 1."""
+    if not (np.isfinite(low) and np.isfinite(high) and low > 0 and high > 0):
+        raise ValueError('Upsilon exponents must be finite and positive')
     q = np.asarray(q, np.float32)
-    return np.where(q < .5, .5*np.maximum(2*q, 0)**low, 1-.5*np.maximum(2-2*q, 0)**high).astype(np.float32)
+    with np.errstate(invalid='ignore'):
+        u = np.where(q < .5, .5*np.maximum(2*q, 0)**low, 1-.5*np.maximum(2-2*q, 0)**high)
+    return np.where(np.isfinite(q), u, np.nan).astype(np.float32)
 
 
 def display_detail(detail, valid, *, noise_floor=1e-5):
@@ -137,9 +141,13 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None):
 
     ``upsilon_curve`` (since 1.3.2): ``(low, high)`` exponents of the Upsilon curve of Gilly & Cranmer (2025) to
     apply to any RHEF layer, for example ``make_filter('rhef_local30', L, m, g, upsilon_curve=(.35, .35))``.
-    ``'rhef_upsilon'`` is the whole-ring RHEF with ``(.35, .35)``."""
+    ``'rhef_upsilon'`` is the whole-ring RHEF with ``(.35, .35)`` unless another curve is given. Any other filter
+    with ``upsilon_curve`` is refused."""
     a=np.asarray(luminance,np.float32); m=valid & np.isfinite(a) & (a>0)
     if name not in NAMES: raise ValueError(f'unknown filter {name!r}; choose from {NAMES}')
+    if upsilon_curve is not None:
+        if not name.startswith('rhef'): raise ValueError('upsilon_curve applies to RHEF layers only')
+        if len(upsilon_curve)!=2: raise ValueError('upsilon_curve is (low, high)')
     if not m.any(): raise ValueError('no positive observed luminance')
     info={}
     if name in ('nrgf','nrgf_log'):
@@ -151,9 +159,8 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None):
     if name.startswith('rhef'):
         sector=60 if name.endswith('60') else 30 if name.endswith('30') else None
         q=radial_rank(a,m,geometry,sector)
-        ups=(.35,.35) if name=='rhef_upsilon' else upsilon_curve
+        ups=upsilon_curve if upsilon_curve is not None else (.35,.35) if name=='rhef_upsilon' else None
         if ups is not None:
-            if not name.startswith('rhef'): raise ValueError('upsilon_curve applies to RHEF layers only')
             q=upsilon(q,*ups)
         return q,'multiply',dict(sector_deg=sector,bin_px=2,upsilon=list(ups) if ups is not None else 1,
                                  quantiles=257,statistics='continuous log-quantiles in radius and angle',

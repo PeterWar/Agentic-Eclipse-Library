@@ -24,20 +24,34 @@ def _observed(img, valid, geometry, bin_px, min_count, center='sun'):
 
 
 def _local_quadratic(y, sigma):
-    """Value at each node of a quadratic fitted to its neighbours with Gaussian weights (σ in nodes).
+    """Value at each node of a polynomial fitted to its neighbours with Gaussian weights (σ in nodes).
 
-    Equally spaced nodes; near the ends the window is truncated and the fit uses the nodes that exist."""
+    Equally spaced nodes. The degree is two where three or more nodes are in the window, one with two, and a single
+    node is returned as it is; near the ends the window is truncated to the nodes that exist, and the fitted value is
+    always at a node inside the data. Constants, straight lines and parabolas come back unchanged."""
     y = np.asarray(y, np.float64); n = len(y)
-    if n < 4:
+    if n < 2 or not sigma > 0:
         return y.copy()
-    K = int(np.ceil(3*sigma)); out = np.empty(n)
+    K = max(1, int(np.ceil(3*sigma))); out = np.empty(n)
     for i in range(n):
         lo, hi = max(0, i-K), min(n, i+K+1)
-        t = np.arange(lo, hi)-i; w = np.exp(-.5*(t/sigma)**2)
-        A = np.stack([np.ones_like(t, float), t, t*t], 1) if hi-lo >= 5 else np.stack([np.ones_like(t, float), t], 1)
-        coef = np.linalg.lstsq(A*np.sqrt(w)[:, None], y[lo:hi]*np.sqrt(w), rcond=None)[0]
-        out[i] = coef[0]
+        t = (np.arange(lo, hi)-i).astype(np.float64); w = np.sqrt(np.exp(-.5*(t/sigma)**2))
+        A = np.vander(t, min(2, hi-lo-1)+1, increasing=True)
+        out[i] = np.linalg.lstsq(A*w[:, None], y[lo:hi]*w, rcond=None)[0][0]
     return out
+
+
+def _annulus_slope(rr, z, robust):
+    """Local slope dI/dr of one annulus: least squares, or (robust) the medians of its inner and outer halves."""
+    if robust:
+        cut = np.median(rr); inner = rr <= cut; outer = ~inner
+        if inner.any() and outer.any():
+            dr = float(np.median(rr[outer])-np.median(rr[inner]))
+            if dr > 0:
+                return float(np.median(z[outer])-np.median(z[inner]))/dr
+        return 0.
+    dr = rr-rr.mean(); den = float(np.dot(dr, dr))
+    return float(np.dot(dr, z-z.mean()))/den if den > 0 else 0.
 
 
 def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=True,
@@ -45,14 +59,14 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
     """Evaluate annular mean/spread at the actual radius, without image smoothing.
 
     PCHIP interpolates measured statistical nodes, separately across each contiguous
-    run of populated annuli. Sparse annuli stay undefined; endpoint statistics are
-    held only inside their own observed end annulus. A zero spread is undefined.
+    run of populated annuli. Sparse annuli stay undefined. A zero spread (also one that
+    is zero to rounding, as for a constant input) is undefined.
 
-    ``spread_about='profile'`` (default since 1.3.2) measures the spread of each annulus
-    about the continuous mean profile evaluated at every pixel's own radius, so the
-    fall of brightness *inside* an annulus no longer inflates the spread nor prints
-    ripples locked to the annuli where the profile is steep. ``'bin'`` reproduces 1.3.1
-    (spread about the annulus' own centre value).
+    ``spread_about='profile'`` (default since 1.3.2): each annulus gives a node at its exact centre, with its own
+    local slope removed (robust: from the medians of its inner and outer halves), the nodes are smoothed by a local
+    polynomial (on their logarithm when positive), the mean is evaluated at every pixel's radius, and the spread is
+    measured about that continuous mean. Inside the end annuli of a run the mean follows that annulus' own measured
+    slope instead of being held flat. ``'bin'`` reproduces 1.3.1.
     """
     if spread_about not in ('profile', 'bin'):
         raise ValueError("spread_about must be 'profile' or 'bin'")
@@ -69,7 +83,7 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
     cuts = np.r_[0, np.cumsum(count)]
     values, radii = v[order], r[m][order]
     mu = np.full(len(count), np.nan)
-    sd, anchors = mu.copy(), mu.copy()
+    sd, anchors, slopes = mu.copy(), mu.copy(), np.zeros(len(count))
     for k in np.flatnonzero(count >= min_count):
         seg = slice(cuts[k], cuts[k+1])
         z = values[seg].astype(np.float64)
@@ -79,47 +93,59 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
             anchors[k] = np.median(radii[seg]) if robust else np.mean(radii[seg])
         else:                                                   # 1.3.2: node at the annulus' exact centre, local slope removed
             rr = radii[seg].astype(np.float64); rc = (k+.5)*bin_px
-            dr = rr-rr.mean(); den = float(np.dot(dr, dr))
-            slope = float(np.dot(dr, z-z.mean()))/den if den > 0 else 0.
-            zc = z-slope*(rr-rc)                                # each value moved to the centre radius along the local slope
+            slopes[k] = _annulus_slope(rr, z, robust)
+            zc = z-slopes[k]*(rr-rc)
             mu[k] = np.median(zc) if robust else np.mean(zc)
-            sd[k] = 1.4826*np.median(np.abs(zc-mu[k])) if robust else np.std(zc)
             anchors[k] = rc
 
     def runs_of(ok):
         populated = np.flatnonzero(ok)
         return [run for run in np.split(populated, np.flatnonzero(np.diff(populated) != 1)+1) if len(run)]
 
-    def evaluate(nodes, run, use):
-        vals = nodes[run]
-        if smooth_bins > 0:
-            if spread_about != 'bin':
-                # 1.3.2: a local quadratic fit with Gaussian weights instead of a plain Gaussian blur. Blurring a
-                # steep, curved profile biases it (by ~σ²·I''/2: about 1 % of the brightness, one ring sigma,
-                # 0.2 R☉ above the limb of a 120-pixel Sun with σ = 6 px), which leaves a broad false ring; a
-                # local quadratic keeps the curvature, and on the logarithm of a positive profile the residual
-                # bias is of fourth order.
-                pos = bool(np.all(vals > 0))
-                vals = _local_quadratic(np.log(vals) if pos else vals, smooth_bins)
-                vals = np.exp(vals) if pos else vals
-            else:
-                vals = gaussian_filter1d(vals, smooth_bins, mode='nearest')
-        if len(run) == 1:
-            return np.full(int(use.sum()), vals[0])
-        at = np.clip(r[use], anchors[run[0]], anchors[run[-1]])
-        return PchipInterpolator(anchors[run], vals)(at)
-
     if spread_about == 'bin':
+        def evaluate(nodes, run, use):
+            vals = nodes[run]
+            if smooth_bins > 0:
+                vals = gaussian_filter1d(vals, smooth_bins, mode='nearest')
+            if len(run) == 1:
+                return np.full(int(use.sum()), vals[0])
+            at = np.clip(r[use], anchors[run[0]], anchors[run[-1]])
+            return PchipInterpolator(anchors[run], vals)(at)
         for run in runs_of(np.isfinite(mu) & (sd > 0)):
             use = m & (bins >= run[0]) & (bins <= run[-1])
             out[use] = (a[use]-evaluate(mu, run, use))/np.maximum(evaluate(sd, run, use), 1e-12)
         return out
+
+    def smooth(vals):
+        if not smooth_bins > 0:
+            return vals
+        # A local polynomial instead of a plain Gaussian blur: blurring a steep, curved profile biases it (by
+        # ~σ²·I''/2: about 1 % of the brightness, one ring sigma, 0.2 R☉ above the limb of a 120-pixel Sun with
+        # σ = 6 px), which leaves a broad false ring. On the logarithm of a positive profile the residual bias is of
+        # fourth order.
+        if np.all(vals > 0):
+            return np.exp(_local_quadratic(np.log(vals), smooth_bins))
+        return _local_quadratic(vals, smooth_bins)
+
+    def along(vals, run, rr, with_slope):
+        """Profile at radii rr inside the run; beyond the first/last node, the end annulus' own slope (or flat)."""
+        if len(run) == 1:
+            base = np.full(len(rr), vals[0])
+        else:
+            base = PchipInterpolator(anchors[run], vals)(np.clip(rr, anchors[run[0]], anchors[run[-1]]))
+        if with_slope:
+            lo = rr < anchors[run[0]]; hi = rr > anchors[run[-1]]
+            base[lo] += slopes[run[0]]*(rr[lo]-anchors[run[0]]); base[hi] += slopes[run[-1]]*(rr[hi]-anchors[run[-1]])
+        return base
+
     # 1st pass: the continuous mean profile at every pixel's radius
-    resid = np.full(a.shape, np.nan, np.float64)
+    resid = np.full(a.shape, np.nan, np.float64); level = np.full(len(count), np.nan)
     for run in runs_of(np.isfinite(mu)):
         use = m & (bins >= run[0]) & (bins <= run[-1])
-        resid[use] = a[use]-evaluate(mu, run, use)
-    # 2nd pass: the spread of each annulus about that profile
+        sm = smooth(mu[run])
+        resid[use] = a[use].astype(np.float64)-along(sm, run, r[use].astype(np.float64), True)
+        level[run] = np.max(np.abs(sm))
+    # 2nd pass: the spread of each annulus about that profile; a spread that is zero to rounding is no spread
     ok = m & np.isfinite(resid)
     d = resid[ok]; bd = bins[ok]
     o2 = np.argsort(bd, kind='stable'); c2 = np.bincount(bd, minlength=len(count)); k2 = np.r_[0, np.cumsum(c2)]
@@ -128,9 +154,10 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
     for k in np.flatnonzero(c2 >= min_count):
         z = ds[k2[k]:k2[k+1]]
         sd2[k] = 1.4826*np.median(np.abs(z-np.median(z))) if robust else np.std(z)
-    for run in runs_of(np.isfinite(mu) & np.isfinite(sd2) & (sd2 > 0)):
+    real = np.isfinite(sd2) & (sd2 > 1e-9*np.nan_to_num(level, nan=0.)) & (sd2 > 0)
+    for run in runs_of(np.isfinite(mu) & real):
         use = ok & (bins >= run[0]) & (bins <= run[-1])
-        out[use] = resid[use]/np.maximum(evaluate(sd2, run, use), 1e-12)
+        out[use] = resid[use]/np.maximum(along(smooth(sd2[run]), run, r[use].astype(np.float64), False), 1e-30)
     return out
 
 
