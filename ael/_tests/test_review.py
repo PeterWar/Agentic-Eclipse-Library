@@ -425,3 +425,19 @@ def test_nrgf_mean_statistic_keeps_a_bright_pixel_to_its_own_neighbourhood():
         for i in np.unique(k[m & (np.abs(k-60) >= j)]):           # annulus by annulus: an aggregate could dilute one
             ring = m & (k == i)
             assert (np.nanmax(d[ring]) if robust else np.nanmean(d[ring])) < limit, (robust, i)
+
+
+def test_nrgf_gives_nothing_for_noiseless_radial_profiles_on_a_small_grid():
+    """Eleventh review of 1.3.2. A noiseless radial profile has no angular signal, so it must give no output. On a
+    small Sun (25 px, centre on a pixel corner), a 2 % radial ripple 6 px long gave output over a quarter of the field:
+    0.1-px bands held only one or two different radii, where a parabola is not determined, and the profile's own kinks
+    stayed in the residuals. Each band now holds four radii or more, and a second function of radius is fitted to the
+    values themselves. A steep exponential on a 15-px Sun needs the residuals."""
+    for R, c, profile in ((25, 80.5, lambda r: (r/25)**-3*(1+.02*np.sin(2*np.pi*r/6))),
+                          (15, 80.5, lambda r: np.exp(-(r-15)/3))):
+        g = EclipseGeometry((160, 160), (c, c), R)
+        r = g.radius_map().astype(np.float64); m = (r >= 1.05*R) & (r < 2.6*R)
+        a = profile(np.maximum(r, 1)).astype(np.float32)
+        for robust in (True, False):
+            q = F.nrgf(a, m, g, bin_px=2, min_count=12, robust=robust)
+            assert not np.isfinite(q[m]).any(), (R, robust, np.isfinite(q[m]).mean())

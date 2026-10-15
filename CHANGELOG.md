@@ -17,8 +17,8 @@ keep their names; the NRGF output changes where the radial profile is steep.
   - the filter bank no longer smooths the nodes, and `make_filter('nrgf')` keeps pixels at or below zero;
   - no output in runs of fewer than four annuli, in annuli where half the pixels share one value (zeros, clipping,
     coarse integers), or where the residuals, once a smooth function of radius is removed, have no part above one
-    float32 step (structure with mirror symmetry about a centre on the pixel grid is kept; noiseless radial ripples,
-    steps and kinks give no output).
+    float32 step (structure with mirror symmetry about a centre on the pixel grid is kept). That smooth function is
+    fitted twice, to the residuals and to the values, in radial bands that each hold four different radii or more.
 
   With 2 % angular structure on an r⁻³ profile, the concentric ripple stays at the sampling floor of the flattened
   input (1.00×; 1.3.1: 1.9–2.5×; 1.2.0: 10–12×). Next to a gap in the data, the median of the 1.3.1 NRGF was −2.8 and
@@ -26,9 +26,10 @@ keep their names; the NRGF output changes where the radial profile is steep.
   sigma (Sun of 60 to 200 px, noise 10⁻² to 10⁻⁴, median statistic). Faint structure (10⁻⁴) on r⁻³ or on an exponential
   falling six decades is recovered (correlation 1.00). With the robust statistic (the default), one bad pixel 10 to 10⁷
   times too bright changes the layer outside its own annulus by less than 0.004 sigma; with the mean statistic it
-  moves the next annulus and, less, the one after, as in 1.3.1. Constants, straight profiles and noiseless, purely
-  radial profiles give no output in the tested scenes.
-  The new operator takes about four times as long. `spread_about='bin'` gives the 1.3.1 output bit for bit. Details
+  moves the next annulus and, less, the one after, as in 1.3.1. Constants, straight profiles and smooth noiseless
+  radial profiles give no output in the tested scenes; a noiseless radial feature a few pixels long can still give
+  rounding-level output around a Sun smaller than 60 px.
+  The new operator takes about five times as long. `spread_about='bin'` gives the 1.3.1 output bit for bit. Details
   and limits: `docs/VALIDATION_1.3.2.md`.
 - **Upsilon with an exponent for each side**: `ael.filterbank.upsilon(q, low, high)` (eq. 2 of Gilly & Cranmer
   2025; exponents must be positive, missing values stay missing), and `make_filter(..., upsilon_curve=(low, high))`
@@ -45,7 +46,8 @@ keep their names; the NRGF output changes where the radial profile is steep.
   subnormal values and strong streamers; the filter bank without node smoothing on a 15-px Sun; bad pixels, data
   edges inside an annulus and runs of one to five annuli; ties (zeros, clipping, 8-bit data); a sky subtracted too
   deep; the unit of q and the `min_count` boundary; symmetric structure about a centre on the pixel grid; an input
-  negative everywhere; a bright pixel with the mean statistic. 83 of 83 tests; 39 of 39 mutations detected. The NRGF went
+  negative everywhere; a bright pixel with the mean statistic; noiseless radial profiles around small Suns. 84 of 84
+  tests; 42 of 42 mutations detected. The NRGF went
   through two adversarial checks by independent readers and a verifier; their scripts are rerun on the final code
   (`docs/VALIDATION_1.3.2.md`).
 - The radial rank (RHEF) of 1.2.1 already reaches the sampling floor on the same scene (0.45–0.88×); unchanged.

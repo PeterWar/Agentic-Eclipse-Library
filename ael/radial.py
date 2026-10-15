@@ -59,17 +59,19 @@ def _node_derivatives(y, x):
     return d1, d2
 
 
-def _radial_smooth(rr, z, step, least=24):
+def _radial_smooth(rr, z, step, least=24, distinct=4):
     """A smooth function of radius through z (sorted radii rr): in radial bands `step` px wide (merged until each holds
-    at least `least` samples), the value at the band's centroid of a parabola fitted inside the band (a plain band
-    mean would be off by z''·width²/24), joined by a not-a-knot cubic spline. One pass over the data."""
+    at least `least` samples at `distinct` different radii), the value at the band's centroid of a parabola fitted
+    inside the band (a plain band mean would be off by z''·width²/24; with fewer than three radii the parabola is not
+    determined), joined by a not-a-knot cubic spline. One pass over the data."""
     band = np.floor((rr-rr[0])/step).astype(np.int64)
     cnt = np.bincount(band)
-    gid, acc, g = np.empty(len(cnt), np.int64), 0, 0
+    new = np.bincount(band, np.r_[True, np.diff(rr) > 1e-3*step], minlength=len(cnt))   # radii a band adds
+    gid, acc, nd, g = np.empty(len(cnt), np.int64), 0, 0, 0
     for i, c in enumerate(cnt):                                  # merge sparse bands into the next
-        gid[i] = g; acc += c
-        if acc >= least:
-            g += 1; acc = 0
+        gid[i] = g; acc += c; nd += new[i]
+        if acc >= least and nd >= distinct:
+            g += 1; acc = nd = 0
     if acc and g:                                                # a short last group joins the one before
         gid[gid == g] = g-1
     grp = gid[band]; n = int(grp.max())+1
@@ -236,22 +238,26 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
             mse[i] = np.mean(np.clip(z, c-5*sp[i], c+5*sp[i])**2)
         return sp, mse
 
-    def angular_spread(res, run):
+    def angular_spread(res, run, au):
         """Per annulus: the spread left once a smooth function of radius is removed: what radius alone cannot explain.
-        The function joins, by a cubic spline, the value at the centre of radial bands a tenth of a pixel wide (at least
-        24 samples each) of a parabola fitted inside each band (residuals clipped at five spreads, annulus by annulus,
-        when robust): too coarse to follow angular structure even where pixels at one radius are mirror images of each
-        other (a centre on the pixel grid), fine enough to follow the profile's own shape, a ripple, a step or a kink."""
+        Two functions are tried and the smaller spread is kept: one through the residuals, in radial bands a tenth of a
+        pixel wide, and one through the values (residual plus profile: no kinks where the profile's pieces meet), in
+        bands half as wide. Each band holds at least 24 samples at four or more different radii, and gives the value at
+        its centre of a parabola fitted inside it; a cubic spline joins them (residuals clipped at five spreads, annulus
+        by annulus, when robust). Too coarse to follow angular structure even where pixels at one radius are mirror
+        images of each other (a centre on the pixel grid); fine enough to follow, to rounding, the profile's own shape
+        and a ripple, a step or a kink a few pixels wide (limits in docs/VALIDATION_1.3.2.md)."""
         lo = cuts[run[0]]; rr = radii[lo:lo+len(res)].astype(np.float64); z = res.copy()
         if robust:                                             # clipped annulus by annulus: their scales differ
             for k in run:
                 sl = slice(cuts[k]-lo, cuts[k+1]-lo); c = np.median(z[sl]); w = 1.4826*np.median(np.abs(z[sl]-c))
                 z[sl] = np.clip(z[sl], c-5*w, c+5*w)
-        e = z-_radial_smooth(rr, z, .1)
-        ang = np.full(len(run), np.nan)
-        for i, k in enumerate(run):
-            z = e[cuts[k]-cuts[run[0]]:cuts[k+1]-cuts[run[0]]]
-            ang[i] = 1.4826*np.median(np.abs(z-np.median(z))) if robust else np.std(z)
+        ang = np.full(len(run), np.inf)
+        for zz, step in ((z, .1), (z+(au-res), .05)):
+            e = zz-_radial_smooth(rr, zz, step)
+            for i, k in enumerate(run):
+                ez = e[cuts[k]-cuts[run[0]]:cuts[k+1]-cuts[run[0]]]
+                ang[i] = min(ang[i], 1.4826*np.median(np.abs(ez-np.median(ez))) if robust else np.std(ez))
         return ang
 
     # The profile at every pixel's radius and the spread of each annulus about it. Every run is modelled on its values
@@ -284,7 +290,7 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
             if best is None or score < best[0]:
                 best = (score, tr, nd, s1, res, sp)
         _, tr, nd, s1, res, sp = best
-        resid[lo:hi] = res; sd2[run] = sp; angular[run] = angular_spread(res, run)
+        resid[lo:hi] = res; sd2[run] = sp; angular[run] = angular_spread(res, run, au)
         dIdy = 1. if tr[0] == 'lin' else np.exp(nd) if tr[0] == 'log' else tr[1]*np.cosh(nd)
         floor[run] = eps*(mag[run]+np.abs(s1*dIdy)*anchors[run])+4*tiny
     real = np.isfinite(sd2) & (sd2 > 0) & (angular > floor)

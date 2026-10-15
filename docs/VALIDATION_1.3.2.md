@@ -1,11 +1,11 @@
 # Validation of 1.3.2 (prepared 2026-10-15, not released)
 
-- `python -m ael selftest`: **83 of 83** (69 from 1.3.1 and 14 new in `ael/_tests/test_review.py`).
+- `python -m ael selftest`: **84 of 84** (69 from 1.3.1 and 15 new in `ael/_tests/test_review.py`).
 - The detail-transfer regression of the sixteen filters (`test_filters_keep_injected_fine_detail_with_its_sign_and_strength`)
   still passes against the 1.3.0 values: 0.644 and 0.622 for the NRGF and its logarithmic form (0.64 and 0.62 in 1.3.0).
 - `spread_about='bin'` gives the 1.3.1 output bit for bit: 24 of 24 outputs over four scenes, both statistics and three
   parameter sets (`p12_bin_igual_que_131_i_temps.log`).
-- The new NRGF takes about four times as long as that of 1.3.1: 1.50 s against 0.38 s on a 2000 × 2000 image with the
+- The new NRGF takes about five times as long as that of 1.3.1: 1.90 s against 0.38 s on a 2000 × 2000 image with the
   filter bank's parameters (same log).
 
 The logs and scripts named below are kept with the author (`3-AEL/proves/validacio_1.3.2/`).
@@ -25,18 +25,20 @@ The logs and scripts named below are kept with the author (`3-AEL/proves/validac
   clipped at five spreads; a float32 floor added).
 - No output: in runs of fewer than four annuli; in annuli where half the pixels share one value (zeros, clipping,
   integers coarser than the noise: the MAD is zero); and in annuli without angular signal, that is, whose residuals,
-  once a smooth function of radius is removed (in radial bands a tenth of a pixel wide holding at least 24 samples,
-  the value at the band's centre of a parabola fitted inside it, joined by a cubic spline), spread less than one
-  float32 step of the annulus' own operands (the median size of its values, and its
-  slope times the radius; at least the smallest subnormal). The bands are too coarse to follow angular structure
-  even where pixels at one radius are mirror images of each other (a centre on the pixel grid).
+  once a smooth function of radius is removed, spread less than one float32 step of the annulus' own operands (the
+  median size of its values, and its slope times the radius; at least the smallest subnormal). Two such functions are
+  tried and the smaller spread is kept: one through the residuals, in radial bands a tenth of a pixel wide, and one
+  through the values themselves (which have no kinks where the profile's pieces meet), in bands half as wide. Each
+  band holds at least 24 samples at four or more different radii and gives the value at its centre of a parabola
+  fitted inside it; a cubic spline joins the bands. The bands are too coarse to follow angular structure even where
+  pixels at one radius are mirror images of each other (a centre on the pixel grid).
 - The nodes are not smoothed by default (`smooth_bins=0`, also in `make_filter`). `make_filter('nrgf')` keeps pixels
   at or below zero; `nrgf_log` and the rank filters still need positive ones.
 
 ## How the reviews shaped it
 
 The first commit of 1.3.2 replaced the Gaussian smoothing of 1.3.1 with nodes at the exact centre of each annulus,
-the annulus' own slope removed, and a local polynomial. Seven rounds of review by an independent agent at high
+the annulus' own slope removed, and a local polynomial. Eight rounds of review by an independent agent at high
 reasoning effort, and two adversarial checks (four readers and a verifier, then three readers and a verifier), found
 the following. Everything is fixed except what is listed under Limits.
 
@@ -71,6 +73,14 @@ the following. Everything is fixed except what is listed under Limits.
 8. A seventh review found that the plain mean of each radial band, which the next detector used, is off the profile
    by its curvature times the band width squared over 24: a noiseless radial ripple (2 %, period 6 px) then gave
    output everywhere. Each band now gives the value of a parabola fitted inside it.
+9. An eighth review found that, around a 25-px Sun centred on a pixel corner, that ripple still gave output on 26 %
+   of the field: many bands held only one or two different radii, where a parabola is not determined. Measuring the
+   case over 15 geometries showed a wider limit than first declared: off the grid as well, up to 40 px with the
+   6-px ripple and up to 60 px with a 3-px one; the profile's own kinks (where the pieces of the Hermite curve meet)
+   also stayed in the residuals. Each band now holds four different radii or more, and a second function of radius
+   is fitted to the values. Over 150 noiseless radial profiles the share of output fell from 0.235 to 0.157, with no
+   output left at 60 or 100 px, and symmetric structure down to 3·10⁻⁶ kept its coverage
+   (`p17_perfils_radials_sense_soroll.log`).
 
 The readers' scripts, rerun on the final code: `verificacio_adversa_guions_dels_lectors_banc.log` (first check, filter
 bank's parameters), `verificacio_adversa_guions_dels_lectors.log` (first check, with the node smoothing they were
@@ -171,17 +181,19 @@ scene scaled by 10⁻²⁸ or 10²⁸ gives the same correlation (0.9998).
   0.01 and its inner half within +0.9.
 - Around a 15-px Sun with the data starting exactly at 16 px, the first annulus can sit 0.4 sigma high with the median
   on a very clean stack (noise 10⁻⁴).
-- With the centre exactly on the pixel grid (whole or half pixel) and a Sun of 25 px or less, a noiseless, purely
-  radial ripple or step can still give output in part of the field: up to 50 % of the pixels with the median and
-  99 % with the mean at 15 px (`p16_sol_petit_centrat_sense_soroll.log`). There, mirror-image pixels share so few
-  distinct radii that a function of radius cannot be told from mirror-symmetric angular structure, which is kept.
-  With the Sun off the grid, or at 60 px, none; any noise in the data also gives the layer its ordinary meaning.
+- In noiseless data, a purely radial feature a few pixels long can still give output around a small Sun: a 2 %
+  ripple with a 3-px period up to a 40-px Sun (the whole field at 15 to 25 px with the mean statistic), a 6-px period
+  up to 20 px, a 1-px step at 10 px; at 60 and 100 px, none (`p17_perfils_radials_sense_soroll.log`; on a pixel corner,
+  `p16_sol_petit_centrat_sense_soroll.log`). The function of radius cannot follow such a feature down to float32
+  rounding, so the output is rounding divided by rounding (|q| ≤ 6.5). On the pixel grid, mirror-image pixels share
+  so few distinct radii that a narrower function of radius would also absorb mirror-symmetric angular structure,
+  which is kept. Any noise above about 10⁻⁶ of the brightness gives the layer its ordinary meaning.
 - A run of fewer than four annuli gives no output: the end nodes need the cubic through four nodes.
-- The new operator is about four times slower than that of 1.3.1.
+- The new operator is about five times slower than that of 1.3.1.
 
 ## Mutations
 
-Each fault must be detected by a test (`mutacions.log`). "NRGF tests" means the ten review tests of the NRGF run
+Each fault must be detected by a test (`mutacions.log`). "NRGF tests" means the eleven review tests of the NRGF run
 together.
 
 | Mutation | Test that detects it |
@@ -225,6 +237,9 @@ together.
 | A global spline instead of the local Hermite curve | NRGF tests |
 | With the mean statistic, the shape from mean nodes | NRGF tests |
 | Plain means of the radial bands instead of the parabola inside each | NRGF tests |
+| Bands without the minimum of four different radii | NRGF tests |
+| Angular part from the function of radius of the residuals only | NRGF tests |
+| Angular part from the function of radius of the values only | NRGF tests |
 
-All 39 were detected, one of them because the mutated code fails. The blend-algebra test has no mutation: it checks
+All 42 were detected, one of them because the mutated code fails. The blend-algebra test has no mutation: it checks
 an identity and carries its own negative control (Overlay at the same opacity).
