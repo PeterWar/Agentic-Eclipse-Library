@@ -441,10 +441,18 @@ def test_nrgf_gives_nothing_for_noiseless_radial_profiles_on_a_small_grid():
         for robust in (True, False):
             q = F.nrgf(a, m, g, bin_px=2, min_count=12, robust=robust)
             assert not np.isfinite(q[m]).any(), (R, robust, np.isfinite(q[m]).mean())
-    # Ninth review: a strong ripple (20 %, 4 px) around a 100-px Sun. The float32 radius map rounds each radius; times
-    # the ripple's own slope, ten times the profile's, that exceeded a floor counting only the profile's slope.
+    # Ninth and tenth reviews: a strong ripple (20 %, 4 px) around a 100-px Sun. A float32 radius is off by up to half a
+    # step; times the ripple's own slope, that looked like angular signal (output on 95 % of the field). The radii are
+    # now exact. Raising the floor instead dropped real structure of 10^-5 on the same ripple, so that is the positive
+    # control. The input is made on exact radii: one made on float32 radii carries that rounding as real jitter.
+    # With the mean statistic that ripple still gives some output (the smooth function of radius cannot follow it to
+    # rounding; a declared limit). Pixels mirrored about the diagonal share a radius, so their difference in q
+    # cancels the rings and keeps the structure.
     g = EclipseGeometry((560, 560), (280., 280.), 100)
-    r = g.radius_map().astype(np.float64); m = (r >= 105) & (r < 260)
-    a = ((r/100)**-3*(1+.2*np.sin(2*np.pi*r/4+.7))).astype(np.float32)
-    for robust in (True, False):
-        assert not np.isfinite(F.nrgf(a, m, g, bin_px=2, min_count=12, robust=robust)[m]).any(), robust
+    r = g.radius_map('sun', np.float64); th = np.radians(g.pa_map().astype(np.float64)); m = (r >= 105) & (r < 260)
+    ripple = (r/100)**-3*(1+.2*np.sin(2*np.pi*r/4+.7))
+    assert not np.isfinite(F.nrgf(ripple.astype(np.float32), m, g, bin_px=2, min_count=12)[m]).any()
+    q = F.nrgf((ripple*(1+1e-5*np.cos(2*th))).astype(np.float32), m, g, bin_px=2, min_count=12)
+    f = np.isfinite(q) & np.isfinite(q.T) & m; c = np.cos(2*th)
+    assert f.sum() > .97*m.sum() and np.corrcoef((q-q.T)[f], (c-c.T)[f])[0, 1] > .9, f.sum()/m.sum()   # 98 %: all
+    # but the partial outer annulus (258-260 px)

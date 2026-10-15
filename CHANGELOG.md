@@ -18,7 +18,9 @@ keep their names; the NRGF output changes where the radial profile is steep.
   - no output in runs of fewer than four annuli, in annuli where half the pixels share one value (zeros, clipping,
     coarse integers), or where the residuals, once a smooth function of radius is removed, have no part above one
     float32 step (structure with mirror symmetry about a centre on the pixel grid is kept). That smooth function is
-    fitted twice, to the residuals and to the values, in radial bands that each hold four different radii or more.
+    fitted twice, to the residuals and to the values, in radial bands that each hold four different radii or more;
+  - the new NRGF works on exact (float64) radii: a float32 radius, times the slope of a steep radial ripple, passed
+    for angular signal.
 
   With 2 % angular structure on an r⁻³ profile, the concentric ripple stays at the sampling floor of the flattened
   input (1.00×; 1.3.1: 1.9–2.5×; 1.2.0: 10–12×). Next to a gap in the data, the median of the 1.3.1 NRGF was −2.8 and
@@ -30,7 +32,7 @@ keep their names; the NRGF output changes where the radial profile is steep.
   radial profiles give no output in the tested scenes; a noiseless radial feature a few pixels long can still give
   output around a small Sun, and on a very clean stack radial structure a few annuli wide stays in the layer as
   rings (limits in `docs/VALIDATION_1.3.2.md`).
-  The new operator takes about six times as long. `spread_about='bin'` gives the 1.3.1 output bit for bit. Details
+  The new operator takes about five times as long. `spread_about='bin'` gives the 1.3.1 output bit for bit. Details
   and limits: `docs/VALIDATION_1.3.2.md`.
 - **Upsilon with an exponent for each side**: `ael.filterbank.upsilon(q, low, high)` (eq. 2 of Gilly & Cranmer
   2025; exponents must be positive, missing values stay missing), and `make_filter(..., upsilon_curve=(low, high))`
@@ -48,7 +50,7 @@ keep their names; the NRGF output changes where the radial profile is steep.
   edges inside an annulus and runs of one to five annuli; ties (zeros, clipping, 8-bit data); a sky subtracted too
   deep; the unit of q and the `min_count` boundary; symmetric structure about a centre on the pixel grid; an input
   negative everywhere; a bright pixel with the mean statistic; noiseless radial profiles around small Suns. 84 of 84
-  tests; 43 of 43 mutations detected. The NRGF went
+  tests; 42 of 43 mutations detected (the other gives the same layer in the tested scenes). The NRGF went
   through two adversarial checks by independent readers and a verifier; their scripts are rerun on the final code
   (`docs/VALIDATION_1.3.2.md`).
 - The radial rank (RHEF) of 1.2.1 already reaches the sampling floor on the same scene (0.45–0.88×); unchanged.
