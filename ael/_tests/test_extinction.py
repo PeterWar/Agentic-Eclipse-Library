@@ -264,39 +264,43 @@ def test_solar_horizontal_and_plate_solution_route():
         import astropy.units as u
         from astropy.coordinates import TETE, SkyCoord, get_body
         from astropy.wcs import WCS
+        from astropy.utils import iers
     except ImportError:
         raise unittest.SkipTest("astropy is not installed")
-    site = ex.Site(42.299407, -5.02503, 798.0, pressure_hpa=930.0, temperature_c=20.0)
-    t = "2026-08-12T18:29:34"
-    info = ex.solar_horizontal(site, t)
-    assert 0.05 < info["apparent_altitude_deg"] - info["true_altitude_deg"] < 0.12      # refraction at 9°
-    assert abs(info["airmass"] - 6.053) < 0.005
-    frame, loc, time = ex._altaz_frame(site, t)
-    te = get_body("sun", time, loc).transform_to(TETE(obstime=time, location=loc))
-    H = (time.sidereal_time("apparent", longitude=loc.lon) - te.ra).wrap_at(180 * u.deg).rad
-    q = math.degrees(math.atan2(math.sin(H), math.tan(loc.lat.rad) * math.cos(te.dec.rad)
-                                - math.sin(te.dec.rad) * math.cos(H)))           # parallactic angle
-    assert abs(((info["zenith_pa_deg"] - q) + 180) % 360 - 180) < 0.3, (info["zenith_pa_deg"], q)
-    s = 946.66 / 15.0
-    geo = EclipseGeometry(shape=(120, 150), sun_xy=(74.3, 59.6), sun_radius_px=15.0, arcsec_per_px=s)
-    for refraction, lo, hi in ((False, 0.0, 2e-3), (True, 1e-3, 0.03)):
-        hor = ex.solar_horizontal(site, t, refraction=refraction)
-        fr = ex._altaz_frame(site, t, refraction)[0]
-        sun = get_body("sun", time, loc).transform_to(fr)
-        c = SkyCoord(alt=sun.alt, az=sun.az, frame=fr).icrs
-        w = WCS(naxis=2)
-        w.wcs.ctype = ["RA---TAN", "DEC--TAN"]
-        w.wcs.crpix = [geo.sun_xy[0] + 1, geo.sun_xy[1] + 1]
-        w.wcs.crval = [c.ra.deg, c.dec.deg]
-        w.wcs.cd = [[-s / 3600, 0], [0, -s / 3600]]                       # north up, east left
-        Xw, iw = ex.airmass_map_from_wcs(w, geo.shape, site, t, step_px=16, refraction=refraction, check_points=50)
-        Xa = ex.airmass_map(geo, hor["apparent_altitude_deg"], zenith_pa_deg=hor["zenith_pa_deg"])
-        diff = float(np.max(np.abs(Xw - Xa)))
-        # Without refraction the two routes are the same geometry; with it they differ by the
-        # differential refraction (true vs apparent offsets), as documented.
-        assert lo <= diff < hi, (refraction, diff, iw)
-    Xs, si = ex.airmass_map_from_site(geo, site, t)
-    assert abs(Xs[int(round(geo.sun_xy[1])), int(round(geo.sun_xy[0]))] - si["airmass"]) < 5e-3
+    # The eclipse date is inside the IERS tables bundled with Astropy (two days of prediction at most). Without this,
+    # Astropy tries to download newer ones and, offline, refuses predictions more than 30 days old (83/84 offline).
+    with iers.conf.set_temp('auto_download', False), iers.conf.set_temp('auto_max_age', None):
+        site = ex.Site(42.299407, -5.02503, 798.0, pressure_hpa=930.0, temperature_c=20.0)
+        t = "2026-08-12T18:29:34"
+        info = ex.solar_horizontal(site, t)
+        assert 0.05 < info["apparent_altitude_deg"] - info["true_altitude_deg"] < 0.12      # refraction at 9°
+        assert abs(info["airmass"] - 6.053) < 0.005
+        frame, loc, time = ex._altaz_frame(site, t)
+        te = get_body("sun", time, loc).transform_to(TETE(obstime=time, location=loc))
+        H = (time.sidereal_time("apparent", longitude=loc.lon) - te.ra).wrap_at(180 * u.deg).rad
+        q = math.degrees(math.atan2(math.sin(H), math.tan(loc.lat.rad) * math.cos(te.dec.rad)
+                                    - math.sin(te.dec.rad) * math.cos(H)))           # parallactic angle
+        assert abs(((info["zenith_pa_deg"] - q) + 180) % 360 - 180) < 0.3, (info["zenith_pa_deg"], q)
+        s = 946.66 / 15.0
+        geo = EclipseGeometry(shape=(120, 150), sun_xy=(74.3, 59.6), sun_radius_px=15.0, arcsec_per_px=s)
+        for refraction, lo, hi in ((False, 0.0, 2e-3), (True, 1e-3, 0.03)):
+            hor = ex.solar_horizontal(site, t, refraction=refraction)
+            fr = ex._altaz_frame(site, t, refraction)[0]
+            sun = get_body("sun", time, loc).transform_to(fr)
+            c = SkyCoord(alt=sun.alt, az=sun.az, frame=fr).icrs
+            w = WCS(naxis=2)
+            w.wcs.ctype = ["RA---TAN", "DEC--TAN"]
+            w.wcs.crpix = [geo.sun_xy[0] + 1, geo.sun_xy[1] + 1]
+            w.wcs.crval = [c.ra.deg, c.dec.deg]
+            w.wcs.cd = [[-s / 3600, 0], [0, -s / 3600]]                       # north up, east left
+            Xw, iw = ex.airmass_map_from_wcs(w, geo.shape, site, t, step_px=16, refraction=refraction, check_points=50)
+            Xa = ex.airmass_map(geo, hor["apparent_altitude_deg"], zenith_pa_deg=hor["zenith_pa_deg"])
+            diff = float(np.max(np.abs(Xw - Xa)))
+            # Without refraction the two routes are the same geometry; with it they differ by the
+            # differential refraction (true vs apparent offsets), as documented.
+            assert lo <= diff < hi, (refraction, diff, iw)
+        Xs, si = ex.airmass_map_from_site(geo, site, t)
+        assert abs(Xs[int(round(geo.sun_xy[1])), int(round(geo.sun_xy[0]))] - si["airmass"]) < 5e-3
 
 
 def test_extinction_command_declared_recipe():

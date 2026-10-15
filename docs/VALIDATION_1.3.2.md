@@ -1,8 +1,10 @@
 # Validation of 1.3.2 (prepared 2026-10-15, not released)
 
-- `python -m ael selftest`: **84 of 84** (69 from 1.3.1 and 15 new in `ael/_tests/test_review.py`). One test of 1.3.1,
-  `test_solar_horizontal_and_plate_solution_route`, needs current IERS tables for Astropy: without network and with
-  tables more than 30 days old it fails, with 1.3.1 as with 1.3.2 (83 of 84 in an independent check run offline).
+- `python -m ael selftest`: **84 of 84** (69 from 1.3.1 and 15 new in `ael/_tests/test_review.py`), with or without
+  network. An independent check run offline got 83 of 84 at first: the 1.3.1 test of the solar route let Astropy
+  try to download newer IERS tables and, offline, refuse predictions more than 30 days old. The test now uses the
+  tables bundled with Astropy (`iers.conf.auto_download = False`, `auto_max_age = None`), which cover the eclipse
+  date. Offline use of `ael.extinction` with a site and a time needs the same two settings.
 - The detail-transfer regression of the sixteen filters (`test_filters_keep_injected_fine_detail_with_its_sign_and_strength`)
   still passes against the 1.3.0 values: 0.644 and 0.622 for the NRGF and its logarithmic form (0.64 and 0.62 in 1.3.0).
 - `spread_about='bin'` gives the 1.3.1 output bit for bit: 24 of 24 outputs over four scenes, both statistics and three
