@@ -171,6 +171,11 @@ scene scaled by 10⁻²⁸ or 10²⁸ gives the same correlation (0.9998).
   0.01 and its inner half within +0.9.
 - Around a 15-px Sun with the data starting exactly at 16 px, the first annulus can sit 0.4 sigma high with the median
   on a very clean stack (noise 10⁻⁴).
+- With the centre exactly on the pixel grid (whole or half pixel) and a Sun of 25 px or less, a noiseless, purely
+  radial ripple or step can still give output in part of the field: up to 50 % of the pixels with the median and
+  99 % with the mean at 15 px (`p16_sol_petit_centrat_sense_soroll.log`). There, mirror-image pixels share so few
+  distinct radii that a function of radius cannot be told from mirror-symmetric angular structure, which is kept.
+  With the Sun off the grid, or at 60 px, none; any noise in the data also gives the layer its ordinary meaning.
 - A run of fewer than four annuli gives no output: the end nodes need the cubic through four nodes.
 - The new operator is about four times slower than that of 1.3.1.
 
