@@ -86,7 +86,7 @@ In `ael/_tests/test_review.py`:
 - the NRGF is unbiased on a clean structureless corona, on a profile with a dip, on a sky-subtracted corona (also
   one subtracted too deep) and with strong streamers; it recovers faint structure on a profile falling six decades;
   it gives no output for the noiseless, purely radial profiles in the tests (straight, curved, stepped, kinked,
-  rippled; around a Sun smaller than 60 px a radial feature a few pixels long still can, see the limits in
+  rippled; around a small Sun a radial feature a few pixels long still can, see the limits in
   `docs/VALIDATION_1.3.2.md`), or where half a ring shares one value; with the median, one bad pixel does not change it away from its own annulus; data edges inside an
   annulus leave no bias; q is in units of the ring spread; structure with mirror symmetry about a centre on the
   pixel grid is kept; with the mean statistic, in the tested scene, a bright pixel changes the layer three rings away

@@ -5,7 +5,7 @@
   still passes against the 1.3.0 values: 0.644 and 0.622 for the NRGF and its logarithmic form (0.64 and 0.62 in 1.3.0).
 - `spread_about='bin'` gives the 1.3.1 output bit for bit: 24 of 24 outputs over four scenes, both statistics and three
   parameter sets (`p12_bin_igual_que_131_i_temps.log`).
-- The new NRGF takes about five times as long as that of 1.3.1: 1.90 s against 0.38 s on a 2000 × 2000 image with the
+- The new NRGF takes about six times as long as that of 1.3.1: 2.63 s against 0.43 s on a 2000 × 2000 image with the
   filter bank's parameters (same log).
 
 The logs and scripts named below are kept with the author (`3-AEL/proves/validacio_1.3.2/`).
@@ -26,7 +26,8 @@ The logs and scripts named below are kept with the author (`3-AEL/proves/validac
 - No output: in runs of fewer than four annuli; in annuli where half the pixels share one value (zeros, clipping,
   integers coarser than the noise: the MAD is zero); and in annuli without angular signal, that is, whose residuals,
   once a smooth function of radius is removed, spread less than one float32 step of the annulus' own operands (the
-  median size of its values, and its slope times the radius; at least the smallest subnormal). Two such functions are
+  median size of its values, and its slope times the radius, where the slope is the larger of the profile's and
+  that of the function of radius through the values; at least the smallest subnormal). Two such functions are
   tried and the smaller spread is kept: one through the residuals, in radial bands a tenth of a pixel wide, and one
   through the values themselves (which have no kinks where the profile's pieces meet), in bands half as wide. Each
   band holds at least 24 samples at four or more different radii and gives the value at its centre of a parabola
@@ -38,7 +39,7 @@ The logs and scripts named below are kept with the author (`3-AEL/proves/validac
 ## How the reviews shaped it
 
 The first commit of 1.3.2 replaced the Gaussian smoothing of 1.3.1 with nodes at the exact centre of each annulus,
-the annulus' own slope removed, and a local polynomial. Eight rounds of review by an independent agent at high
+the annulus' own slope removed, and a local polynomial. Nine rounds of review by an independent agent at high
 reasoning effort, and two adversarial checks (four readers and a verifier, then three readers and a verifier), found
 the following. Everything is fixed except what is listed under Limits.
 
@@ -78,9 +79,13 @@ the following. Everything is fixed except what is listed under Limits.
    case over 15 geometries showed a wider limit than first declared: off the grid as well, up to 40 px with the
    6-px ripple and up to 60 px with a 3-px one; the profile's own kinks (where the pieces of the Hermite curve meet)
    also stayed in the residuals. Each band now holds four different radii or more, and a second function of radius
-   is fitted to the values. Over 150 noiseless radial profiles the share of output fell from 0.235 to 0.157, with no
+   is fitted to the values. Over 150 noiseless radial profiles the share of output fell from 0.235 to 0.150, with no
    output left at 60 or 100 px, and symmetric structure down to 3·10⁻⁶ kept its coverage
    (`p17_perfils_radials_sense_soroll.log`).
+10. A ninth review found a strong radial ripple (20 %, period 4 px) giving output on 95 % of the field around a
+   100-px Sun, without noise. The radius map is float32, and its rounding times the ripple's own slope (ten times the
+   profile's) exceeded the floor, which counted only the profile's slope. The floor now takes the larger of the two
+   slopes: no output there.
 
 The readers' scripts, rerun on the final code: `verificacio_adversa_guions_dels_lectors_banc.log` (first check, filter
 bank's parameters), `verificacio_adversa_guions_dels_lectors.log` (first check, with the node smoothing they were
@@ -181,15 +186,24 @@ scene scaled by 10⁻²⁸ or 10²⁸ gives the same correlation (0.9998).
   0.01 and its inner half within +0.9.
 - Around a 15-px Sun with the data starting exactly at 16 px, the first annulus can sit 0.4 sigma high with the median
   on a very clean stack (noise 10⁻⁴).
-- In noiseless data, a purely radial feature a few pixels long can still give output around a small Sun: a 2 %
-  ripple with a 3-px period up to a 40-px Sun (the whole field at 15 to 25 px with the mean statistic), a 6-px period
-  up to 20 px, a 1-px step at 10 px; at 60 and 100 px, none (`p17_perfils_radials_sense_soroll.log`; on a pixel corner,
-  `p16_sol_petit_centrat_sense_soroll.log`). The function of radius cannot follow such a feature down to float32
-  rounding, so the output is rounding divided by rounding (|q| ≤ 6.5). On the pixel grid, mirror-image pixels share
-  so few distinct radii that a narrower function of radius would also absorb mirror-symmetric angular structure,
-  which is kept. Any noise above about 10⁻⁶ of the brightness gives the layer its ordinary meaning.
+- In noiseless data, a purely radial feature a few pixels long can still give output around a small Sun: in the
+  scenes measured, a 2 % ripple with a 3-px period up to a 40-px Sun (the whole field at 15 to 25 px with the mean
+  statistic), a 6-px period up to 20 px, a 1-px step at 10 px; at 60 and 100 px, none
+  (`p17_perfils_radials_sense_soroll.log`; on a pixel corner, `p16_sol_petit_centrat_sense_soroll.log`). The function
+  of radius cannot follow such a feature down to float32 rounding; |q| reached 6.5 there, and 8.4 in a scene of the
+  ninth review with the Moon off-centre. On the pixel grid, mirror-image pixels share so few distinct radii that a
+  narrower function of radius would also absorb mirror-symmetric angular structure, which is kept.
+- Radial structure only a few annuli wide is followed in part by a profile measured on 2-px annuli; what the profile
+  misses stays in the layer as rings, in units of the noise. A 2 % ripple of 6 px gives annulus means up to 11 sigma
+  around a 15-px Sun on a very clean stack (noise 3·10⁻⁶), 0.7 sigma at noise 10⁻⁴ and 0.2 at 10⁻²; around a 60-px
+  Sun, up to 0.75 sigma. 1.3.1 measured the spread about each annulus' own median, which absorbs such a ripple
+  (0.3–0.5 sigma).
+- Taking the smaller of the two angular spreads drops a few more annuli where the structure is within a few float32
+  steps: noiseless, 10⁻⁶ structure on an exponential keeps 81 % of the field (87 % with `fc5fcc2`), and 3·10⁻⁶ on six
+  decades 87 % (90 %), where kept pixels can move by up to 0.2 sigma (`p13_sol_i_estructura_feble.log` and its
+  `_fc5fcc2` copy).
 - A run of fewer than four annuli gives no output: the end nodes need the cubic through four nodes.
-- The new operator is about five times slower than that of 1.3.1.
+- The new operator is about six times slower than that of 1.3.1.
 
 ## Mutations
 
@@ -240,6 +254,7 @@ together.
 | Bands without the minimum of four different radii | NRGF tests |
 | Angular part from the function of radius of the residuals only | NRGF tests |
 | Angular part from the function of radius of the values only | NRGF tests |
+| Numerical floor with the profile's slope only, not the local slope of the values | NRGF tests |
 
-All 42 were detected, one of them because the mutated code fails. The blend-algebra test has no mutation: it checks
+All 43 were detected, one of them because the mutated code fails. The blend-algebra test has no mutation: it checks
 an identity and carries its own negative control (Overlay at the same opacity).

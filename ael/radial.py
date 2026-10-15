@@ -59,11 +59,11 @@ def _node_derivatives(y, x):
     return d1, d2
 
 
-def _radial_smooth(rr, z, step, least=24, distinct=4):
+def _radial_smooth(rr, z, step, least=24, distinct=4, slope=False):
     """A smooth function of radius through z (sorted radii rr): in radial bands `step` px wide (merged until each holds
     at least `least` samples at `distinct` different radii), the value at the band's centroid of a parabola fitted
     inside the band (a plain band mean would be off by z''·width²/24; with fewer than three radii the parabola is not
-    determined), joined by a not-a-knot cubic spline. One pass over the data."""
+    determined), joined by a not-a-knot cubic spline. One pass over the data. With `slope`, also its derivative."""
     band = np.floor((rr-rr[0])/step).astype(np.int64)
     cnt = np.bincount(band)
     new = np.bincount(band, np.r_[True, np.diff(rr) > 1e-3*step], minlength=len(cnt))   # radii a band adds
@@ -86,8 +86,10 @@ def _radial_smooth(rr, z, step, least=24, distinct=4):
     if ok.any():
         level[ok] = np.linalg.solve(A[ok], np.stack([T[0], T[1], T[2]], -1)[ok][..., None])[..., 0, 0]
     if n < 4 or np.any(np.diff(centre) <= 0):
-        return median_filter(z, size=9, mode='nearest')
-    return CubicSpline(centre, level, bc_type='not-a-knot')(rr)
+        s = median_filter(z, size=9, mode='nearest')
+        return (s, np.zeros(len(z))) if slope else s
+    f = CubicSpline(centre, level, bc_type='not-a-knot')
+    return (f(rr), f(rr, 1)) if slope else f(rr)
 
 
 def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=True,
@@ -246,19 +248,22 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
         its centre of a parabola fitted inside it; a cubic spline joins them (residuals clipped at five spreads, annulus
         by annulus, when robust). Too coarse to follow angular structure even where pixels at one radius are mirror
         images of each other (a centre on the pixel grid); fine enough to follow, to rounding, the profile's own shape
-        and a ripple, a step or a kink a few pixels wide (limits in docs/VALIDATION_1.3.2.md)."""
+        and a ripple, a step or a kink a few pixels wide (limits in docs/VALIDATION_1.3.2.md). Also returns, per annulus,
+        the median slope of the function through the values: the radius map is float32, so its rounding times that
+        local slope belongs to the floor (a profile's own slope can be far smaller than that of a radial ripple)."""
         lo = cuts[run[0]]; rr = radii[lo:lo+len(res)].astype(np.float64); z = res.copy()
         if robust:                                             # clipped annulus by annulus: their scales differ
             for k in run:
                 sl = slice(cuts[k]-lo, cuts[k+1]-lo); c = np.median(z[sl]); w = 1.4826*np.median(np.abs(z[sl]-c))
                 z[sl] = np.clip(z[sl], c-5*w, c+5*w)
-        ang = np.full(len(run), np.inf)
+        ang, steep = np.full(len(run), np.inf), np.zeros(len(run))
         for zz, step in ((z, .1), (z+(au-res), .05)):
-            e = zz-_radial_smooth(rr, zz, step)
+            s, ds = _radial_smooth(rr, zz, step, slope=True); e = zz-s
             for i, k in enumerate(run):
-                ez = e[cuts[k]-cuts[run[0]]:cuts[k+1]-cuts[run[0]]]
+                sl = slice(cuts[k]-lo, cuts[k+1]-lo); ez = e[sl]
                 ang[i] = min(ang[i], 1.4826*np.median(np.abs(ez-np.median(ez))) if robust else np.std(ez))
-        return ang
+                steep[i] = np.median(np.abs(ds[sl]))               # the last function: the one through the values
+        return ang, steep
 
     # The profile at every pixel's radius and the spread of each annulus about it. Every run is modelled on its values
     # and on their logarithm (or, when a node is not positive, on asinh(I/s) with s the median size of the nodes:
@@ -290,9 +295,9 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
             if best is None or score < best[0]:
                 best = (score, tr, nd, s1, res, sp)
         _, tr, nd, s1, res, sp = best
-        resid[lo:hi] = res; sd2[run] = sp; angular[run] = angular_spread(res, run, au)
+        resid[lo:hi] = res; sd2[run] = sp; angular[run], steep = angular_spread(res, run, au)
         dIdy = 1. if tr[0] == 'lin' else np.exp(nd) if tr[0] == 'log' else tr[1]*np.cosh(nd)
-        floor[run] = eps*(mag[run]+np.abs(s1*dIdy)*anchors[run])+4*tiny
+        floor[run] = eps*(mag[run]+np.maximum(np.abs(s1*dIdy), steep)*anchors[run])+4*tiny
     real = np.isfinite(sd2) & (sd2 > 0) & (angular > floor)
     flat = out.reshape(-1)
     for run in [run for run in runs_of(real) if len(run) >= 4]:

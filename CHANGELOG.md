@@ -28,8 +28,9 @@ keep their names; the NRGF output changes where the radial profile is steep.
   times too bright changes the layer outside its own annulus by less than 0.004 sigma; with the mean statistic it
   moves the next annulus and, less, the one after, as in 1.3.1. Constants, straight profiles and smooth noiseless
   radial profiles give no output in the tested scenes; a noiseless radial feature a few pixels long can still give
-  rounding-level output around a Sun smaller than 60 px.
-  The new operator takes about five times as long. `spread_about='bin'` gives the 1.3.1 output bit for bit. Details
+  output around a small Sun, and on a very clean stack radial structure a few annuli wide stays in the layer as
+  rings (limits in `docs/VALIDATION_1.3.2.md`).
+  The new operator takes about six times as long. `spread_about='bin'` gives the 1.3.1 output bit for bit. Details
   and limits: `docs/VALIDATION_1.3.2.md`.
 - **Upsilon with an exponent for each side**: `ael.filterbank.upsilon(q, low, high)` (eq. 2 of Gilly & Cranmer
   2025; exponents must be positive, missing values stay missing), and `make_filter(..., upsilon_curve=(low, high))`
@@ -47,7 +48,7 @@ keep their names; the NRGF output changes where the radial profile is steep.
   edges inside an annulus and runs of one to five annuli; ties (zeros, clipping, 8-bit data); a sky subtracted too
   deep; the unit of q and the `min_count` boundary; symmetric structure about a centre on the pixel grid; an input
   negative everywhere; a bright pixel with the mean statistic; noiseless radial profiles around small Suns. 84 of 84
-  tests; 42 of 42 mutations detected. The NRGF went
+  tests; 43 of 43 mutations detected. The NRGF went
   through two adversarial checks by independent readers and a verifier; their scripts are rerun on the final code
   (`docs/VALIDATION_1.3.2.md`).
 - The radial rank (RHEF) of 1.2.1 already reaches the sampling floor on the same scene (0.45–0.88×); unchanged.

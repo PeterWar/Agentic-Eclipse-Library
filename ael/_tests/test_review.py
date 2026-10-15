@@ -441,3 +441,10 @@ def test_nrgf_gives_nothing_for_noiseless_radial_profiles_on_a_small_grid():
         for robust in (True, False):
             q = F.nrgf(a, m, g, bin_px=2, min_count=12, robust=robust)
             assert not np.isfinite(q[m]).any(), (R, robust, np.isfinite(q[m]).mean())
+    # Ninth review: a strong ripple (20 %, 4 px) around a 100-px Sun. The float32 radius map rounds each radius; times
+    # the ripple's own slope, ten times the profile's, that exceeded a floor counting only the profile's slope.
+    g = EclipseGeometry((560, 560), (280., 280.), 100)
+    r = g.radius_map().astype(np.float64); m = (r >= 105) & (r < 260)
+    a = ((r/100)**-3*(1+.2*np.sin(2*np.pi*r/4+.7))).astype(np.float32)
+    for robust in (True, False):
+        assert not np.isfinite(F.nrgf(a, m, g, bin_px=2, min_count=12, robust=robust)[m]).any(), robust
