@@ -184,3 +184,24 @@ def test_nrgf_constants_gaps_short_runs_and_a_single_outlier():
     a = F.nrgf(img, m, g, **kw); b = F.nrgf(spike, m, g, **kw)
     ring = m & (r >= 120) & (r < 122); ring[yy[0], xx[0]] = False
     assert np.median(np.abs(a[ring]-b[ring])) < .01 and np.mean(np.sign(a[ring]) != np.sign(b[ring])) < .005
+
+
+def test_nrgf_keeps_faint_annuli_beside_bright_ones_and_upsilon_options_are_explicit():
+    """Review of 1.3.2: the test for a spread that is zero to rounding uses each annulus' own level, so a run that
+    spans six decades keeps its faintest annuli. And the Upsilon option is explicit: an explicit curve applies to
+    rhef_upsilon too, and any other filter refuses it."""
+    g = EclipseGeometry((320, 320), (159.63, 160.21), 60)
+    r = g.radius_map().astype(np.float64); th = np.radians(g.pa_map().astype(np.float64)); m = (r >= 64) & (r < 150)
+    img = (np.exp(-(r-64)*np.log(1e6)/86)*(1+1e-4*np.cos(5*th))).astype(np.float32)
+    q = F.nrgf(img, m, g, bin_px=2, min_count=12, smooth_bins=3)
+    assert np.isfinite(q[m & (r >= 140) & (r < 148)]).mean() > .99
+    a = (np.maximum(r, 1)**-3*(1+.1*np.cos(5*th))).astype(np.float32)
+    default = make_filter('rhef_upsilon', a, m, g)[0]; same = make_filter('rhef_upsilon', a, m, g, upsilon_curve=(.35, .35))[0]
+    other = make_filter('rhef_upsilon', a, m, g, upsilon_curve=(.7, .35))[0]
+    assert np.allclose(default, same, equal_nan=True) and not np.allclose(default, other, equal_nan=True)
+    for name in ('nrgf', 'mgn', 'achf_iso_04'):
+        try:
+            make_filter(name, a, m, g, upsilon_curve=(.35, .35))
+        except ValueError:
+            continue
+        raise AssertionError(('upsilon_curve accepted by', name))

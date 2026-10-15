@@ -1,6 +1,6 @@
 # Validation of 1.3.2 (prepared 2026-10-15, not released)
 
-- `python -m ael selftest`: **75 of 75** (69 from 1.3.1 and 6 new in `ael/_tests/test_review.py`).
+- `python -m ael selftest`: **76 of 76** (69 from 1.3.1 and 7 new in `ael/_tests/test_review.py`).
 - The detail-transfer regression of the sixteen filters (`test_filters_keep_injected_fine_detail_with_its_sign_and_strength`)
   still passes against the 1.3.0 values: the NRGF change leaves the transfer of faint detail as it was
   (0.644 and 0.621 against 0.64 and 0.62).
@@ -8,6 +8,10 @@
   ends next to gaps, a linear fit at the ends of short runs, a non-robust slope), plus two in Upsilon (missing values
   turned into mid grey with a zero exponent, an explicit curve ignored by `rhef_upsilon`). All six are fixed and now
   have tests or mutations below.
+- A second review found one more: the test for a spread that is zero to rounding compared each annulus with the
+  brightest annulus of its run, so on a profile that falls by six decades the faintest annuli were dropped although
+  they carried real structure. The tolerance now uses each annulus' own level; the test and mutation M8 below cover
+  it, and the ripple table is unchanged.
 
 ## Concentric ripple with faint structure
 
@@ -50,8 +54,11 @@ Each fault must be detected by a test:
 | Fixed rings of 7 px added to every ring layer | structureless corona |
 | Profile held flat at the ends of each run (no slope of its own) | NRGF constants, gaps, short runs, outlier |
 | A three-node mean instead of the local polynomial | NRGF constants, gaps, short runs, outlier |
+| Zero-spread tolerance from the brightest annulus of the run (M8) | faint annuli beside bright ones; Upsilon options |
+| `rhef_upsilon` ignoring an explicit `upsilon_curve` | faint annuli beside bright ones; Upsilon options |
+| A filter other than the RHEF accepting `upsilon_curve` silently | faint annuli beside bright ones; Upsilon options |
 
-All seven were detected. The blend-algebra test has no mutation: it checks an identity and carries its own negative
+All ten were detected. The blend-algebra test has no mutation: it checks an identity and carries its own negative
 control (Overlay at the same opacity).
 
 Logs and scripts are kept with the author (`3-AEL/proves/validacio_1.3.2/`).

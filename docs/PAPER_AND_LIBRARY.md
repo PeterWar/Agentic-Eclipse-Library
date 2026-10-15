@@ -80,4 +80,6 @@ In `ael/_tests/test_review.py`:
 - the blend algebra above, with Overlay at the same opacity as a negative control;
 - the Upsilon curve against eq. 2 of the RHEF paper;
 - a structureless corona (photon noise only, off-centre Moon, a straight edge inside the measured zone) through the ring filters: no rings and no seams at the quarter-sector nodes, measured as the correlation between two noise realisations, with positive controls;
-- the local RHEF with Upsilon keeps the sign of faint detail, with a lower gain.
+- the local RHEF with Upsilon keeps the sign of faint detail, with a lower gain;
+- the NRGF keeps faint annuli on a profile that falls by six decades, and the explicit Upsilon option applies to
+  `rhef_upsilon` and is refused by other filters.

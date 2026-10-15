@@ -144,7 +144,7 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
         use = m & (bins >= run[0]) & (bins <= run[-1])
         sm = smooth(mu[run])
         resid[use] = a[use].astype(np.float64)-along(sm, run, r[use].astype(np.float64), True)
-        level[run] = np.max(np.abs(sm))
+        level[run] = np.abs(sm)                               # the local scale of each annulus (not the run's maximum)
     # 2nd pass: the spread of each annulus about that profile; a spread that is zero to rounding is no spread
     ok = m & np.isfinite(resid)
     d = resid[ok]; bd = bins[ok]
