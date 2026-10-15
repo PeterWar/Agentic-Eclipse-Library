@@ -197,7 +197,7 @@ scene scaled by 10⁻²⁸ or 10²⁸ gives the same correlation (0.9998).
   ninth review with the Moon off-centre. On the pixel grid, mirror-image pixels share so few distinct radii that a
   narrower function of radius would also absorb mirror-symmetric angular structure, which is kept.
 - Radial structure only a few annuli wide is followed in part by a profile measured on 2-px annuli; what the profile
-  misses stays in the layer as rings, in units of the noise. A 2 % ripple of 6 px gives annulus means up to 11 sigma
+  misses stays in the layer as rings, in units of the estimated residual spread. A 2 % ripple of 6 px gives annulus means up to 11 sigma
   around a 15-px Sun on a very clean stack (noise 3·10⁻⁶), 0.7 sigma at noise 10⁻⁴ and 0.2 at 10⁻²; around a 60-px
   Sun, up to 0.75 sigma. 1.3.1 measured the spread about each annulus' own median, which absorbs such a ripple
   (0.3–0.5 sigma).
@@ -230,7 +230,7 @@ together.
 | Nodes without the curvature removed | NRGF tests |
 | The logarithm always preferred when it can be used | NRGF tests |
 | Every run modelled on the values | NRGF tests |
-| The model chosen by the spread instead of the mean square misfit | not detected: the same layer in the tested scenes |
+| The model chosen by the spread instead of the mean square misfit | bad pixels, partial annuli and short runs |
 | Smoothing window cut on one side near the ends | constants, gaps, short runs, outlier |
 | Node at the annulus' centre, not at the mean radius of its pixels | NRGF tests |
 | PCHIP instead of the Hermite curve for the profile | NRGF tests |
@@ -260,5 +260,5 @@ together.
 | Angular part from the function of radius of the values only | NRGF tests |
 | The new NRGF on float32 radii instead of exact ones | NRGF tests |
 
-42 of the 43 were detected, one of them because the mutated code fails. Choosing the model by the spread gives the same layer in the scenes tested (annulus means within 0.005 sigma); it is kept in the table as an equivalent, not a covered, fault. The blend-algebra test has no mutation: it checks
+All 43 were detected, one of them because the mutated code fails. Choosing the model by the spread changes the output in 17 of 128 calls of the review tests; a five-annulus run on r⁻³ drops from correlation 0.9996 to 0.959, which the test of short runs now catches (it asks 0.99 on r⁻³). The blend-algebra test has no mutation: it checks
 an identity and carries its own negative control (Overlay at the same opacity).

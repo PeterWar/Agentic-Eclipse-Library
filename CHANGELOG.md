@@ -50,7 +50,7 @@ keep their names; the NRGF output changes where the radial profile is steep.
   edges inside an annulus and runs of one to five annuli; ties (zeros, clipping, 8-bit data); a sky subtracted too
   deep; the unit of q and the `min_count` boundary; symmetric structure about a centre on the pixel grid; an input
   negative everywhere; a bright pixel with the mean statistic; noiseless radial profiles around small Suns. 84 of 84
-  tests; 42 of 43 mutations detected (the other gives the same layer in the tested scenes). The NRGF went
+  tests; 43 of 43 mutations detected. The NRGF went
   through two adversarial checks by independent readers and a verifier; their scripts are rerun on the final code
   (`docs/VALIDATION_1.3.2.md`).
 - The radial rank (RHEF) of 1.2.1 already reaches the sampling floor on the same scene (0.45–0.88×); unchanged.

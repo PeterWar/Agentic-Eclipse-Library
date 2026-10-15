@@ -319,13 +319,13 @@ def test_nrgf_bad_pixels_partial_annuli_and_short_runs():
     baum = (_baumbach(r/60)*(1+1e-4*c5)).astype(np.float32)
     for n in range(1, 6):
         sel = (r >= 64) & (r < 64+2*n)
-        for a in (law, baum):
+        for a, least in ((law, .99), (baum, .95)):                   # measured: 0.9996 or more on r^-3, 0.98 on Baumbach
             for robust in (True, False):
                 q = F.nrgf(a, sel, g, robust=robust, **kw); f = sel & np.isfinite(q)
                 if n < 4:
                     assert not f.any(), (n, robust)
                 else:
-                    assert f.sum() == sel.sum() and np.corrcoef(q[f], c5[f])[0, 1] > .95, (n, robust)
+                    assert f.sum() == sel.sum() and np.corrcoef(q[f], c5[f])[0, 1] > least, (n, robust)
     G = EclipseGeometry((700, 700), (349.63, 350.21), 120); R = G.radius_map().astype(np.float64)
     img = ((R/120)**-3*(1+1e-4*np.random.default_rng(34).standard_normal(R.shape))).astype(np.float32)
     for start in (127.5, 127.9):
