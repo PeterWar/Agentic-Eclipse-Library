@@ -267,7 +267,7 @@ def test_solar_horizontal_and_plate_solution_route():
         from astropy.utils import iers
     except ImportError:
         raise unittest.SkipTest("astropy is not installed")
-    # The eclipse date is inside the IERS tables bundled with Astropy (two days of prediction at most). Without this,
+    # The eclipse date is inside the IERS tables bundled with Astropy (check this for other dates). Without this,
     # Astropy tries to download newer ones and, offline, refuses predictions more than 30 days old (83/84 offline).
     with iers.conf.set_temp('auto_download', False), iers.conf.set_temp('auto_max_age', None):
         site = ex.Site(42.299407, -5.02503, 798.0, pressure_hpa=930.0, temperature_c=20.0)
