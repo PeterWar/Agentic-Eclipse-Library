@@ -95,10 +95,10 @@ def nrgf(img: np.ndarray, valid: np.ndarray | None, geometry: EclipseGeometry, *
     annulus. Statistics are evaluated continuously in radius, not by a stepwise bin lookup; no image
     pixels are smoothed. Since 1.3.2 the spread is measured about the continuous mean profile at each
     pixel's own radius (``spread_about='profile'``), so a steep fall of brightness inside an annulus no
-    longer inflates it; ``'bin'`` gives the 1.3.1 behaviour. Annuli with fewer than ``min_count`` pixels,
-    runs of fewer than three annuli and annuli without angular signal give ``NaN``. ``smooth_bins`` smooths
-    the annulus nodes with a local parabola (default 0, also in the filter bank): on a profile whose power-law
-    index changes it bends the profile, by up to a few sigma on a small Sun.  The sky gradient is *not* removed by an NRGF (it is normalised along with the corona),
+    longer inflates it; ``'bin'`` gives the 1.3.1 behaviour. ``NaN``: annuli with fewer than ``min_count``
+    pixels, runs of fewer than four annuli, annuli where half the pixels share one value, and annuli without
+    angular signal. ``smooth_bins`` smooths the annulus nodes with a local parabola (default 0, also in the
+    filter bank); on a profile whose power-law index changes it bends the profile (see docs/VALIDATION_1.3.2.md).  The sky gradient is *not* removed by an NRGF (it is normalised along with the corona),
     and neither is the differential extinction of a low Sun: subtract a sky model first
     (:func:`ael.render.sky_background`) and correct the extinction (:mod:`ael.extinction`) if the field
     is large or the Sun was low. See docs/PAPER_AND_LIBRARY.md for how this differs from the layers of

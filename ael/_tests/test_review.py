@@ -229,7 +229,9 @@ def test_nrgf_is_unbiased_on_clean_curved_profiles_and_gives_nothing_without_ang
     the dip left 10 sigma). (3) Faint structure (10^-4) over six decades, and 10^-3 on r^-3, is recovered. (4) No
     output where nothing varies with angle: straight profiles through zero at several positions and scales (float32
     and exact radii), noiseless r^-3 and Baumbach coronae (curved, so the profile model leaves a residual that is a
-    function of radius only), and the same at subnormal scale. (5) Strong streamers on a clean stack: with the robust
+    function of radius only), a radial step and a kink inside an annulus, and the same at subnormal scale. A narrow ring of structure: the spread profile is
+    shape-preserving and held at the end nodes, so it never dips towards zero (a cubic spline there gave |q| = 50).
+    The model is chosen the same way at any scale of the data (at 1e-28 it was not). (5) Strong streamers on a clean stack: with the robust
     statistic every annulus keeps a median of q near zero, because the slope inside an annulus comes from the
     neighbouring nodes; the two halves of the annulus see different angles and gave up to 1.3 sigma."""
     kw = dict(bin_px=2, min_count=12)
@@ -254,10 +256,19 @@ def test_nrgf_is_unbiased_on_clean_curved_profiles_and_gives_nothing_without_ang
         assert f.sum() > .99*m.sum() and np.corrcoef(q[f], np.cos(5*th[f]))[0, 1] > least, amp
     exact = g.radius_map('sun', np.float64)
     flat = [scale*(rr-zero) for rr in (r, exact) for zero in (101., 101.3) for scale in (1e-6, -1., 1e6)]
-    curved = [(exact/60)**-3, _baumbach(exact/60), 1e-40*(exact-101), 1e-43*(exact/60)**-3]
+    curved = [(exact/60)**-3, _baumbach(exact/60), 1e-40*(exact-101), 1e-43*(exact/60)**-3,
+              (exact/60)**-3*(1+.01/(1+np.exp(-(exact-100.7)/.3))),                        # a 1 % step 0.3 px wide
+              np.where(exact < 100.7, (exact/60)**-3, (100.7/60)**-3*(exact/100.7)**-2)]   # r^-3 turning into r^-2
     for a in flat+curved:
         for robust in (True, False):
             assert not np.isfinite(F.nrgf(a.astype(np.float32), m, g, robust=robust, **kw)[m]).any(), robust
+    local = ((r/60)**-3*(1+.02*np.exp(-(r-101)**2/2)*np.cos(5*th))).astype(np.float32)   # a narrow ring of structure
+    for robust in (True, False):
+        assert np.nanmax(np.abs(F.nrgf(local, m, g, robust=robust, **kw)[m])) < 5, robust
+    six = (np.exp(-(r-64)*np.log(1e6)/86)*(1+1e-4*np.cos(5*th)))
+    for scale in (1e-28, 1e28):                                  # the choice of model does not depend on units
+        q = F.nrgf((six*scale).astype(np.float32), m, g, **kw); f = np.isfinite(q) & m
+        assert np.corrcoef(q[f], np.cos(5*th[f]))[0, 1] > .99, scale
     streamers = 1+.3*np.exp(-.5*(np.angle(np.exp(1j*(th-np.pi/2)))/np.radians(15))**2)+.3*np.exp(-.5*(np.angle(np.exp(1j*(th+np.pi/3)))/np.radians(10))**2)
     img = ((r/60)**-3*streamers*(1+1e-4*rng.standard_normal(r.shape))).astype(np.float32)
     q = F.nrgf(img, m, g, robust=True, **kw)
@@ -269,10 +280,12 @@ def test_nrgf_is_unbiased_on_clean_curved_profiles_and_gives_nothing_without_ang
 def test_filter_bank_nrgf_has_no_node_smoothing():
     """A smoothing window of three annuli bends a profile whose power-law index changes: on a 15-px Sun it left a ring
     of 2.3 sigma (noise 10^-3), and 2.5 sigma on a Baumbach corona. The filter bank does not smooth the nodes, whose
-    noise is a few hundredths of sigma."""
+    noise is a few hundredths of sigma. On so small a Sun a noiseless, structureless corona gives no output."""
     g = EclipseGeometry((160, 160), (79.63, 80.21), 15)
     r = g.radius_map().astype(np.float64); m = (r >= 15.75) & (r <= 39)
     a = ((r/15)**-3*(1+1e-3*np.random.default_rng(3).standard_normal(r.shape))).astype(np.float32)
+    flat = (g.radius_map('sun', np.float64)/15)**-3
+    assert not np.isfinite(F.nrgf(flat.astype(np.float32), m, g, bin_px=2, min_count=12)[m]).any()   # no structure
     layer, mode, info = make_filter('nrgf', a, m, g)
     z = np.arctanh(np.clip(2*layer.astype(np.float64)-1, -1+1e-9, 1-1e-9))      # the layer is 0.5 + 0.5 tanh(q / s)
     z /= 1.4826*np.median(np.abs(z[m]-np.median(z[m])))
@@ -281,11 +294,12 @@ def test_filter_bank_nrgf_has_no_node_smoothing():
 
 def test_nrgf_bad_pixels_partial_annuli_and_short_runs():
     """Fourth review of 1.3.2. (1) One zero or negative pixel no longer switches a whole run from the logarithmic to
-    the linear model (it changed the layer by 7.9 sigma far away). (2) One pixel 10^7 times too bright no longer
-    raises the numerical floor of its annulus (the floor uses the median size of the values). (3) Data that start
+    the linear model (it changed the layer by 7.9 sigma far away). (2) With the robust statistic, one pixel 10^7 times
+    too bright no longer raises the numerical floor of its annulus (the floor uses the median size of the values). (3) Data that start
     inside an annulus: the node sits at the mean radius of its own pixels, not extrapolated to the annulus' centre
-    (that left up to 4 sigma). (4) Runs of one or two annuli give no output (there are no neighbours to give the
-    curvature); runs of three to five annuli keep faint structure."""
+    (that left up to 4 sigma). (4) Runs of one to three annuli give no output (the end nodes need the cubic through
+    four nodes; with three, a Baumbach corona kept correlation 0.27); runs of four and five annuli keep faint
+    structure, on r^-3 and on a Baumbach corona."""
     kw = dict(bin_px=2, min_count=12, smooth_bins=3)
     g = EclipseGeometry((320, 320), (159.63, 160.21), 60)
     r = g.radius_map().astype(np.float64); th = np.radians(g.pa_map().astype(np.float64)); m = (r >= 64) & (r < 150)
@@ -299,18 +313,77 @@ def test_nrgf_bad_pixels_partial_annuli_and_short_runs():
     law = ((r/60)**-3*(1+1e-4*c5)).astype(np.float32)
     yy, xx = np.nonzero(m & (r >= 120) & (r < 122)); spike = law.copy(); spike[yy[0], xx[0]] *= 1e7
     ring = m & (r >= 120) & (r < 122); ring[yy[0], xx[0]] = False
-    for robust in (True, False):
-        assert np.isfinite(F.nrgf(spike, m, g, robust=robust, **kw)[ring]).mean() > .99, robust
+    assert np.isfinite(F.nrgf(spike, m, g, robust=True, **kw)[ring]).mean() > .99       # (the mean statistic is not robust)
+    baum = (_baumbach(r/60)*(1+1e-4*c5)).astype(np.float32)
     for n in range(1, 6):
         sel = (r >= 64) & (r < 64+2*n)
-        for robust in (True, False):
-            q = F.nrgf(law, sel, g, robust=robust, **kw); f = sel & np.isfinite(q)
-            if n < 3:
-                assert not f.any(), (n, robust)
-            else:
-                assert f.sum() == sel.sum() and np.corrcoef(q[f], c5[f])[0, 1] > .95, (n, robust)
+        for a in (law, baum):
+            for robust in (True, False):
+                q = F.nrgf(a, sel, g, robust=robust, **kw); f = sel & np.isfinite(q)
+                if n < 4:
+                    assert not f.any(), (n, robust)
+                else:
+                    assert f.sum() == sel.sum() and np.corrcoef(q[f], c5[f])[0, 1] > .95, (n, robust)
     G = EclipseGeometry((700, 700), (349.63, 350.21), 120); R = G.radius_map().astype(np.float64)
     img = ((R/120)**-3*(1+1e-4*np.random.default_rng(34).standard_normal(R.shape))).astype(np.float32)
     for start in (127.5, 127.9):
         M = (R >= start) & (R <= 312)
         assert np.abs(_annulus_means(F.nrgf(img, M, G, **kw), R, M)).max() < .3, start
+
+
+def test_nrgf_ties_zeros_clipping_and_a_sky_below_zero():
+    """Second adversarial check of 1.3.2. (1) Exact ties: a zero-padded frame, a clipped inner corona and 8-bit data
+    whose noise is below one grey level. When half an annulus' pixels share one value its robust spread (MAD) is
+    zero and its node is that value, not the corona: no output there (such annuli reached |q| = 10^37, and 8-bit
+    data with half a grey level of noise |q| = 500). With one grey level of noise the data are measurable and kept. (2) A sky
+    subtracted too deep takes the far corona below zero; the run is then modelled on asinh(I/s), logarithmic where
+    the corona is bright and linear near zero, and the limb stays unbiased (on the values it kept 0.6 sigma).
+    (3) make_filter('nrgf') keeps the pixels below zero (it used to drop them, leaving holes in a subtracted sky)."""
+    kw = dict(bin_px=2, min_count=12)
+    g = EclipseGeometry((320, 320), (159.63, 160.21), 60)
+    r = g.radius_map().astype(np.float64); th = np.radians(g.pa_map().astype(np.float64)); m = (r >= 64) & (r < 150)
+    rng = np.random.default_rng(12); noise = rng.standard_normal(r.shape)
+    img = ((r/60)**-3*(1+1e-3*noise)).astype(np.float32)
+    pad = img.copy(); pad[r > 120] = 0
+    q = F.nrgf(pad, m, g, **kw)
+    assert not np.isfinite(q[m & (r >= 122)]).any() and np.isfinite(q[m & (r < 116)]).mean() > .99
+    clip = np.minimum(img, np.float32((72/60)**-3))
+    q = F.nrgf(clip, m, g, **kw)
+    assert not np.isfinite(q[m & (r < 70)]).any() and np.nanmax(np.abs(q[m])) < 10
+    for sigma, least in ((.15, 0.), (.5, 0.), (1., .99), (2., .99)):        # noise in grey levels of 8-bit data
+        grey = np.clip(np.round(30*(r/60)**-3+20+sigma*noise), 0, 255).astype(np.uint8)
+        q = F.nrgf(grey, m, g, **kw)
+        assert not (np.abs(q[m]) >= 10).any() and np.isfinite(q[m]).mean() >= least, sigma
+    baum = _baumbach(r/60)*(1+1e-4*noise)
+    deep = (baum-1.2*baum[m].min()).astype(np.float32)
+    for robust in (True, False):
+        assert np.abs(_annulus_means(F.nrgf(deep, m, g, robust=robust, **kw), r, m)).max() < .15, robust
+    sky = ((r/60)**-3*(1+.02*np.cos(5*th))-2.2**-3+3e-4*noise).astype(np.float32)
+    assert (sky[m] <= 0).mean() > .05
+    layer = make_filter('nrgf', sky, m, g)[0]
+    assert np.isfinite(layer[m]).mean() > .99
+
+
+
+def test_nrgf_is_in_units_of_the_spread_and_keeps_every_measurable_annulus():
+    """Second adversarial check of 1.3.2. (1) q is in units of the annulus spread: on structureless noise its robust
+    spread (or standard deviation, with the mean statistic) is 1 in every annulus; a spread ten times too large, or a
+    MAD without its 1.4826, passed every other test. (2) An annulus holding exactly min_count pixels gives output.
+    (3) The numerical floor sits at one float32 step: angular structure of 10⁻⁶ of the brightness on r⁻³ survives
+    (a floor three times higher passed every other test)."""
+    g = EclipseGeometry((320, 320), (159.63, 160.21), 60)
+    r = g.radius_map().astype(np.float64); th = np.radians(g.pa_map().astype(np.float64)); m = (r >= 64) & (r < 150)
+    img = ((r/60)**-3*(1+1e-3*np.random.default_rng(21).standard_normal(r.shape))).astype(np.float32)
+    k = np.floor(r/2).astype(int)
+    for robust in (True, False):
+        q = F.nrgf(img, m, g, bin_px=2, min_count=12, robust=robust)
+        for i in np.unique(k[m]):
+            v = q[m & (k == i)]
+            s = 1.4826*np.median(np.abs(v-np.median(v))) if robust else np.std(v)
+            assert .9 < s < 1.1, (robust, i, s)
+    sel = m.copy(); yy, xx = np.nonzero(m & (k == 50)); sel[m & (k == 50)] = False; sel[yy[:12], xx[:12]] = True
+    q = F.nrgf(img, sel, g, bin_px=2, min_count=12)
+    assert np.isfinite(q[yy[:12], xx[:12]]).all()
+    exact = g.radius_map('sun', np.float64)
+    q = F.nrgf(((exact/60)**-3*(1+1e-6*np.cos(5*th))).astype(np.float32), m, g, bin_px=2, min_count=12)
+    assert np.isfinite(q[m]).mean() > .99

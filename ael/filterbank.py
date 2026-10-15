@@ -151,6 +151,7 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None):
     if not m.any(): raise ValueError('no positive observed luminance')
     info={}
     if name in ('nrgf','nrgf_log'):
+        if name=='nrgf': m=valid & np.isfinite(a)       # the values need no positive pixels (a subtracted sky goes below 0)
         q=F.nrgf(np.log(np.maximum(a,1e-30)) if name=='nrgf_log' else a,m,geometry,
                  bin_px=2,min_count=12,smooth_bins=0)
         result,info=display_detail(q,m)
