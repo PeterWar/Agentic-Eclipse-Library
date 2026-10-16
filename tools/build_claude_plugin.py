@@ -98,6 +98,21 @@ Optional credit: Processed with Agentic Eclipse Library by Pere Guerra.
 """
 
 
+def icon_bytes():
+    """The Codex icon, 768 px, stored uncompressed (about 1.7 MB, under the 2 MB limit).
+
+    The directory scans an icon's bytes for text. Compressed PNG data holds thousands of short
+    printable runs by chance, and one of them was read as a download-and-run command; stored
+    uncompressed, the same pixels leave no printable run longer than six characters.
+    """
+    import io
+    from PIL import Image
+    im = Image.open(SRC / "assets" / "icon.png").convert("RGB").resize((768, 768), Image.LANCZOS)
+    buf = io.BytesIO()
+    im.save(buf, "PNG", compress_level=0)
+    return buf.getvalue()
+
+
 def files(base):
     return sorted(p.relative_to(base) for p in base.rglob("*") if p.is_file() and not SKIP & set(p.parts))
 
@@ -112,7 +127,7 @@ def expected():
         else:
             for f in files(s):
                 out[Path(item) / f] = s / f
-    out[Path(".claude-plugin/icon.png")] = SRC / "assets" / "icon.png"
+    out[Path(".claude-plugin/icon.png")] = icon_bytes()
     out[Path(".claude-plugin/plugin.json")] = json.dumps(MANIFEST, indent=2, ensure_ascii=False) + "\n"
     out[Path("README.md")] = README
     return out
@@ -129,6 +144,9 @@ def differences():
         elif isinstance(src, str):
             if dst.read_text() != src:
                 diffs.append(f"changed: {rel}")
+        elif isinstance(src, bytes):
+            if dst.read_bytes() != src:
+                diffs.append(f"changed: {rel}")
         elif not filecmp.cmp(src, dst, shallow=False):
             diffs.append(f"changed: {rel}")
     return diffs
@@ -142,6 +160,8 @@ def build():
         dst.parent.mkdir(parents=True, exist_ok=True)
         if isinstance(src, str):
             dst.write_text(src)
+        elif isinstance(src, bytes):
+            dst.write_bytes(src)
         else:
             shutil.copy2(src, dst)
 
