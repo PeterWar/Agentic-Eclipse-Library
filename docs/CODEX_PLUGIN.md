@@ -1,7 +1,7 @@
 # AEL for Codex
 
 Agentic Eclipse Library is available as a desktop plugin with six guided workflows and the bundled
-AEL 1.3.2 numerical engine. Plugin version 1.0.0 is independently versioned from the Python library.
+AEL 1.3.2 numerical engine. Plugin version 1.0.1 is independently versioned from the Python library.
 The repository marketplace works independently of OpenAI's public directory review.
 
 ![AEL synthetic workflow demonstration](../plugins/codex-ael/assets/synthetic-workflow.png)
@@ -67,6 +67,8 @@ The historical research archive is kept in the repository, outside the plugin pa
 plugin are MIT licensed. Credit is welcome, not a licence condition. Report reproducible problems through
 [GitHub Issues](https://github.com/PeterWar/Agentic-Eclipse-Library/issues), without private photographs or
 personal information unless you intentionally choose to publish them.
+
+Read the [privacy policy](CODEX_PLUGIN_PRIVACY.md) and [licence and terms](CODEX_PLUGIN_TERMS.md).
 
 ## Maintainers
 

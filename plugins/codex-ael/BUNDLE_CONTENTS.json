@@ -1,7 +1,7 @@
 {
   "files": {
     "LICENSE": "82d9e805b85e5df3a3b181e8a09eefb5e2c7f02d955b51be443eacaf419d1702",
-    "README.md": "b04a2d81fcff54c35e43885f3de245959662a7194d7d686c564e04f5af0cf119",
+    "README.md": "a4e20172616cf8ccf7ef24350780e14bb2275f30bfe050b0abef393eaffe0aa4",
     "assets/icon.png": "59adb6a1f420229a5afa3f3ed55197fd8ce97eaf3eec5fab8e065d723259157a",
     "assets/synthetic-workflow.png": "d5a7c5b3eea6d900a12175e5797f0457d198557d1e320f0ddfba6e386771e979",
     "docs/DEVELOP.md": "486c31bea01b7fe80b1af63adfcdb96146d1bdaf292203ca67eeff880f64c388",
@@ -17,7 +17,7 @@
     "examples/filters_config_template.json": "8595b668c7f1cb66ed2e3b59e14faba58956e77c2df97635b09751ed41c4c802",
     "examples/motion_config_template.json": "b40338293117014df75b5f84cceb42e562ab28e1bb8fa643489a69fd4ccfbfdb",
     "examples/stack_config_template.json": "bac6469c408ca45cb916f5bdb18c5b0edd041623121e83ba0717708da2569775",
-    "plugin.json": "b745d9f5822a797acc514d7895a14207434747bec61671b6406bd86628963837",
+    "plugin.json": "a097d640d2debf688ecf9361c7cb65c26551134928a45c26be2ab214e7b7be1e",
     "runtime/LICENSE": "82d9e805b85e5df3a3b181e8a09eefb5e2c7f02d955b51be443eacaf419d1702",
     "runtime/README_AEL.md": "43611f3c5af41e2baf5f5983f522defaa3c7bb24f5a0bb456d95b93492c29644",
     "runtime/ael/__init__.py": "0d9991b6700251eee6f41819e601eef5a19762a7a1c07f92f74202c7ebbd7b8f",
@@ -59,7 +59,7 @@
     "skills/eclipse-calibration-stacking/SKILL.md": "ad68c47a16d39a5f4484778c244dde027bb8eb68946893cb9214a8926a3dd2b8",
     "skills/eclipse-first-steps/SKILL.md": "25f14048a345459556405ad9751169e18c546e3dae616f6b26e59444e12ddee9"
   },
-  "plugin_version": "1.0.0",
+  "plugin_version": "1.0.1",
   "runtime_snapshot_matches_source": true,
   "runtime_source_commit": "8ade9c7d04f7ef46191ec71c6aa1a9dc50004fd0"
 }

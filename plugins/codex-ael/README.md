@@ -50,4 +50,6 @@ The original project's historical research archive remains available in the
 The bundled runtime is an exact snapshot of the maintained package, checked by the packaging script.
 
 Support: [GitHub Issues](https://github.com/PeterWar/Agentic-Eclipse-Library/issues).
+See the [privacy policy](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/main/docs/CODEX_PLUGIN_PRIVACY.md)
+and [licence and terms](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/main/docs/CODEX_PLUGIN_TERMS.md).
 Optional credit: Processed with Agentic Eclipse Library by Pere Guerra.
