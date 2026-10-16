@@ -111,6 +111,23 @@ need to publish your photos to contribute.
 - Most text is in Catalan. Current models read and translate it without trouble; ask your agent to answer in your
   language.
 
+## What this plugin runs, fetches and sends
+
+- **On your computer.** The skills run the `ael` package and the scripts in `skills/*/scripts/`. Installing `ael`
+  with `pip` downloads its dependencies from PyPI: NumPy, SciPy, OpenCV, Pillow, tifffile and imageio, plus rawpy
+  and Astropy with `[raw]`. The plugin has no hooks and no MCP servers.
+- **Public data, after you approve it.** The skill `coronagraph-comparison` tells the agent to ask before any
+  download and to say what, from where and how large: K-Cor level-2 FITS from the Mauna Loa Solar Observatory,
+  SOHO/LASCO level-0.5 FITS from the Naval Research Laboratory, and SDO/AIA images from Stanford's JSOC.
+- **Ephemeris.** The stacking scripts use Skyfield, which downloads the JPL ephemeris `de440s.bsp` (about 33 MB)
+  if it is not already in `~/.cache/skyfield/`.
+- **Research record.** `3-RECERCA/tools/astrometria/prediccio/baixa_catalegs.sh`, cited in the post-processing
+  skill's astrometry notes, downloads the Hipparcos and Tycho-2 star catalogues from CDS/VizieR with `curl`.
+  `3-RECERCA/tools/openrouter_client.py` is the client the project used to consult other AI models: if you run it,
+  it reads your own OpenRouter key (`OPENROUTER_API_KEY` or the macOS Keychain) and sends your prompt and the files
+  you pass to openrouter.ai. No skill tells an agent to run it.
+- **Nothing else leaves your computer.** Nothing in this plugin sends your photos or any other data anywhere.
+
 ## Honest limits
 
 - **The research scripts are not turnkey software.** The RAW frames, calibration frames, Photoshop files and

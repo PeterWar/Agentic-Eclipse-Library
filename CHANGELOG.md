@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- **README: "What this plugin runs, fetches and sends".** The packages that `pip` installs, the public coronagraph
+  data that one skill downloads after the user approves it, the Skyfield ephemeris, and two research scripts that
+  reach the network: a star-catalogue download and the OpenRouter client the project used to consult other models.
+- **`postprocessat-corona`:** the line about the author's private tool for consulting Codex is removed from the skill
+  and from its two older copies in `references/`, with an "Editat per a la publicació" mark.
+
 ## 1.3.2 — 2026-10-16
 
 In October 2026 Chris Gilly (NorthWest Research Associates), first author of the RHEF paper (Gilly & Cranmer
