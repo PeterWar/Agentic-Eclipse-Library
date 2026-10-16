@@ -1,0 +1,12 @@
+{
+  "_comment": "EXAMPLE ONLY. Template for `ael extinction`: replace every value with your own measurements. Paths are relative to this file. Run it on the linear stack, before any filter; then run `ael filters` on the corrected stack. k is an input you must measure (e.g. ael.extinction.dimming_k on same-exposure frames of totality); the correction is a consistency test, not a measurement of k.",
+  "input": "stack_run/linear.npy", "valid": "stack_run/valid.npy", "geometry": "stack_run/geometry.json",
+  "sky": {"fit": {"r_min_rsun": 8.0, "order": 1}},
+  "airmass": {
+    "site": {"lat_deg": 40.0, "lon_deg": -4.0, "height_m": 800, "pressure_hpa": null, "temperature_c": 15},
+    "time_utc": "2027-08-02T08:50:00"
+  },
+  "k": 0.40,
+  "x_ref": "sun",
+  "keep_sky": true
+}
