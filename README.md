@@ -16,6 +16,10 @@ stacks declared RAW recipes, makes filter layers, and produces structure, polar 
 
 ## Start here: your own eclipse photos
 
+**Using Codex?** Install the [AEL desktop plugin](docs/CODEX_PLUGIN.md): six guided workflows,
+the AEL processing engine, a synthetic demonstration and explicit validation limits.
+The plugin can be installed from this repository's marketplace; public directory review is a separate process.
+
 Open this folder with your coding agent (Claude Code, Codex or similar) and tell it where your photos are. It reads
 [`AGENTS.md`](AGENTS.md) and the skill [`skills/eclipse-first-steps/`](skills/eclipse-first-steps/), looks at your
 files and proposes the path one step at a time: calibrate (if you took darks or flats), linearise and stack, open a
@@ -106,7 +110,14 @@ need to publish your photos to contribute.
   /plugin marketplace add PeterWar/Agentic-Eclipse-Library
   /plugin install agentic-eclipse-library@pere-guerra-eclipse
   ```
-- **Codex and other agents:** point the agent at [`AGENTS.md`](AGENTS.md). Each skill is a plain `SKILL.md` with
+- **Codex:** install the [desktop plugin](docs/CODEX_PLUGIN.md) from this repository's marketplace:
+  ```
+  codex plugin marketplace add PeterWar/Agentic-Eclipse-Library
+  codex plugin add agentic-eclipse-library@pere-guerra-eclipse
+  ```
+  Python and its dependencies are checked separately. The plugin runs locally and includes the maintained
+  AEL 1.3.2 engine. See the guide for desktop-app installation and supported workflows.
+- **Other agents:** point the agent at [`AGENTS.md`](AGENTS.md). Each skill is a plain `SKILL.md` with
   `references/` and `scripts/`.
 - Most text is in Catalan. Current models read and translate it without trouble; ask your agent to answer in your
   language.

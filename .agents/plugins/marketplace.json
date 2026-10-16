@@ -1,0 +1,20 @@
+{
+  "name": "pere-guerra-eclipse",
+  "interface": {
+    "displayName": "Pere Guerra · Eclipse"
+  },
+  "plugins": [
+    {
+      "name": "agentic-eclipse-library",
+      "source": {
+        "source": "local",
+        "path": "./plugins/codex-ael"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

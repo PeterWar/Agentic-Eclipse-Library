@@ -1,0 +1,76 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "agentic-eclipse-library",
+  "version": "1.0.0",
+  "description": "Process total solar eclipse photos locally: calibrated HDR stacking, corona filter layers, layered Photoshop files, polar views, motion analysis and coronagraph comparisons, with measured inputs and explicit validation limits.",
+  "author": {
+    "name": "Pere Guerra Serra",
+    "url": "https://github.com/PeterWar"
+  },
+  "homepage": "https://github.com/PeterWar/Agentic-Eclipse-Library",
+  "repository": "https://github.com/PeterWar/Agentic-Eclipse-Library",
+  "license": "MIT",
+  "keywords": [
+    "solar-eclipse",
+    "astrophotography",
+    "astronomy",
+    "solar-corona",
+    "HDR",
+    "RAW",
+    "image-processing",
+    "Photoshop",
+    "photometry",
+    "coronagraph",
+    "polar",
+    "scientific-imaging"
+  ],
+  "extensions": {
+    "com.openai": {
+      "requires_local_executor": true,
+      "interface": {
+        "displayName": "Agentic Eclipse Library",
+        "shortDescription": "Process solar eclipse photos",
+        "longDescription": "Turn total solar eclipse photographs into linear stacks, corona filter layers, layered Photoshop files and polar views. Explore changes during totality with motion controls, or compare your observations with K-Cor, SOHO/LASCO and SDO/AIA.\n\nSix guided workflows help you inspect the files, measure calibration and registration, diagnose artefacts at their source and preserve the originals. The bundled AEL 1.3.2 engine runs numerical processing on your computer. Start with your own observations or a clearly labelled synthetic demonstration. Ask in your preferred language.\n\nDesktop execution and Python 3.10+ are required; Python dependencies are installed separately. Photoshop is optional. Measured calibration and geometry are required: this is not a one-click RAW-to-finished-photo service. Known limitations include ACHF/WOW edge bands and possible fine-detail sign inversion in WOW bilateral. Passing tests does not validate a new astronomical observation. Missing data stays missing.\n\nOpen-source software by Pere Guerra Serra, MIT licensed. The plugin itself has no telemetry or upload service; the AI host's data policies still apply.",
+        "developerName": "Pere Guerra Serra",
+        "category": "Productivity",
+        "capabilities": [
+          "Eclipse photo onboarding",
+          "Linear calibration and HDR stacking",
+          "Corona filter layers and Photoshop files",
+          "Root-cause artefact diagnosis",
+          "Polar views and coronal motion",
+          "Coronagraph comparisons"
+        ],
+        "websiteURL": "https://github.com/PeterWar/Agentic-Eclipse-Library",
+        "supportURL": "https://github.com/PeterWar/Agentic-Eclipse-Library/issues",
+        "defaultPrompt": [
+          "Help me process my eclipse photos while preserving the originals.",
+          "Find what caused the rings in my corona image.",
+          "Show me a labelled synthetic eclipse demonstration."
+        ],
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/icon.png",
+        "screenshots": ["./assets/synthetic-workflow.png"]
+      },
+      "onboardingSkill": "./skills/eclipse-first-steps/SKILL.md",
+      "publication": {
+        "countries": [],
+        "release_notes": "First Codex plugin distribution. Six portable workflows, bundled AEL 1.3.2 runtime and tests, full-canvas structure launcher, dependency check and explicit scientific limits.",
+        "translations": {
+          "ca-ES": {
+            "subtitle": "Processa fotos d’eclipsis",
+            "description": "Processa fotografies d’eclipsis totals de Sol amb sis guies: calibratge i apilat lineal, filtres de la corona, fitxers de Photoshop amb capes, diagnosi d’artefactes, vistes polars i moviment, i comparació amb coronògrafs. Conserva els originals i deixa sense dada allà on no n’hi ha. Inclou una demostració sintètica identificada com a tal. Necessita execució local, Python 3.10 o posterior i dependències addicionals. Els filtres tenen limitacions documentades; les proves del programa no validen una observació nova. Programari lliure de Pere Guerra Serra, amb llicència MIT."
+          },
+          "es-ES": {
+            "subtitle": "Procesa fotos de eclipses",
+            "description": "Procesa fotografías de eclipses totales de Sol con seis guías: calibración y apilado lineal, filtros de la corona, archivos Photoshop con capas, diagnóstico de artefactos, vistas polares y movimiento, y comparación con coronógrafos. Conserva los originales y no inventa datos ausentes. Incluye una demostración sintética identificada como tal. Requiere ejecución local, Python 3.10 o posterior y dependencias adicionales. Los filtros tienen limitaciones documentadas; las pruebas del programa no validan una observación nueva. Software libre de Pere Guerra Serra, licencia MIT."
+          },
+          "fr-FR": {
+            "subtitle": "Traitez vos photos d’éclipse",
+            "description": "Traitez des photographies d’éclipses totales de Soleil : calibration et empilement linéaire, filtres de la couronne, fichiers Photoshop avec calques, diagnostic des artefacts, vues polaires, mouvements et comparaisons avec des coronographes. Préserve les originaux et ne remplace pas les données manquantes. Inclut une démonstration synthétique clairement identifiée. Exécution locale, Python 3.10 ou ultérieur et dépendances supplémentaires requis. Les limites des filtres sont documentées ; les tests du logiciel ne valident pas une nouvelle observation. Logiciel libre de Pere Guerra Serra, licence MIT."
+          }
+        }
+      }
+    }
+  }
+}
