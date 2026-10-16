@@ -156,7 +156,7 @@ and isotropic ACHF 04 (Overlay, .08). These opacities are starting points. Overr
 | Family | Identifiers |
 | --- | --- |
 | Radial normalisation | `nrgf`, `nrgf_log` |
-| Radial histogram equalisation | `rhef`, `rhef_upsilon`, `rhef_local60`, `rhef_local30` (any of them with `upsilon_curve=(low, high)` since 1.3.2) |
+| Radial histogram equalisation | `rhef`, `rhef_upsilon`, `rhef_local60`, `rhef_local30` (since 1.3.2, any of them with `make_filter(..., upsilon_curve=(low, high))` from Python; the command does not take it) |
 | Angular high-pass | `achf_angular`, `achf_angular4`, `achf_angular8` |
 | Isotropic multi-scale high-pass | `achf_iso_01`, `achf_iso_04`, `achf_iso_05`, `achf_iso_06` |
 | Local/wavelet normalisation | `mgn`, `wow`, `wow_bilateral` |

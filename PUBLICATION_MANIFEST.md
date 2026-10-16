@@ -6,15 +6,16 @@ package `ael`, its tests, a fourth skill and research note 179. Version 1.1.1 (s
 Version 1.2.0 (3 October) adds `ael stack` and `ael filters`. Version 1.3.0 (13 October) adds `ael.extinction`,
 `ael.coronagraph`, the skill `coronagraph-comparison`, research notes 180 and 185 and the code of five new
 research folders, and releases the fixes prepared as 1.2.1. Version 1.3.1 (same day) adds the field report of
-issue #1 to the field lessons and two tests.
+issue #1 to the field lessons and two tests. Version 1.3.2 (16 October) answers Chris Gilly's review of the
+draft of the paper *A Faithful Corona*: a new NRGF, Upsilon for any RHEF layer, `docs/PAPER_AND_LIBRARY.md` and fifteen controls.
 
 | Included | Files | Notes |
 |---|---:|---|
 | `skills/` — six Agent Skills | 35 | Snapshot of the working skills on 30 Sep 2026 (`eclipse-first-steps` revised and `coronagraph-comparison` added on 13 Oct), with their reference files and helper scripts; `corona-visualizations` (English) is new in 1.1.0, `eclipse-first-steps` (English) in 1.1.1, `coronagraph-comparison` (English) in 1.3.0 |
 | `3-RECERCA/` — research notes | 187 | 180 numbered notes plus indexes, sources, prompts and reports of consultations with other models, small data tables |
 | `3-RECERCA/tools/` — processing code | 4,352 | Python, shell and Photoshop JSX scripts, and the small JSON/CSV parameter files they read |
-| `ael/`, `tests/`, `examples/`, `pyproject.toml`, `README_AEL.md` — the runnable package | 38 | Stacking, extinction, filter layers, structure images, unrolled views, coronal motion, coronagraph checks and layered Photoshop files from anyone's data; 69 tests with known truth (1.3.1) |
-| `docs/` | 10 | Recipes, field lessons, validation records and a community case study (English); lessons for model developers (English); record of the author's contributions (Catalan) |
+| `ael/`, `tests/`, `examples/`, `pyproject.toml`, `README_AEL.md` — the runnable package | 39 | Stacking, extinction, filter layers, structure images, unrolled views, coronal motion, coronagraph checks and layered Photoshop files from anyone's data; 84 tests with known truth (1.3.2) |
+| `docs/` | 13 | Recipes, field lessons, validation records, a community case study and the paper's layers against the library (English); lessons for model developers (English); record of the author's contributions (Catalan) |
 | `AGENTS.md`, `README.md`, `LICENSE` (MIT), `CITATION.cff`, `.claude-plugin/` | — | Entry points, licence, citation and plugin manifest |
 
 | Left out | Why |
@@ -26,6 +27,7 @@ issue #1 to the field lessons and two tests.
 | Data downloaded from K-Cor, SOHO/LASCO and SDO/AIA | Public, and not redistributed here; the skill `coronagraph-comparison` says where to get them and how to cite K-Cor |
 | Note 81A, a transcription of a video tutorial | Not ours to publish |
 | Raw answers from other AI models | Kept out for simplicity; prompts and reports are included |
+| The reviewer's letter and synthetic test scripts (October 2026) | Private correspondence; the changes they led to are in the changelog |
 | Third-party code copied during research (`umbra`, `eclipsetools`, `sunkit-image`) | Not ours; available from their authors under their own licences |
 
 **Cleaning applied to every published text file:** absolute personal paths rewritten to `/Users/USUARI/…`;

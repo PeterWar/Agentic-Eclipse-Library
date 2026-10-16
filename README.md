@@ -50,7 +50,7 @@ Details, and what the 2026 data taught (correlated noise, colour in linear light
 like coronal motion), in [`README_AEL.md`](README_AEL.md). The agent's instructions for the three products are
 the skill [`skills/corona-visualizations/`](skills/corona-visualizations/) (in English).
 
-## Community contributions
+## Contributors
 
 [NLFotografia](https://github.com/NLFotografia) contributed a
 [case study on preserving an existing edit with adjustable filters](docs/EXISTING_EDIT_CASE_STUDY.md)
@@ -61,6 +61,13 @@ without calibration frames, rings, earthshine, Photoshop, validation) is in the
 [field lessons](docs/FIELD_LESSONS.md#a-field-case-contributed-by-nlfotografia-issue-1) since 1.3.1. Checking
 it against the package added ring, support and detail tests for the sixteen filters and found two filter
 limitations, now reported as issues.
+
+**Chris Gilly** (NorthWest Research Associates), first author of the RHEF paper (Gilly & Cranmer 2025), reviewed
+the draft of the author's paper *A Faithful Corona* and this library in October 2026. Version 1.3.2 answers his
+review: an NRGF without the rings that his synthetic test, repeated on 1.3.1, still found on a steep profile; the
+Upsilon curve, with an exponent for each side, for any RHEF layer; and
+[how the library's filters differ from the layers of the paper's published image](docs/PAPER_AND_LIBRARY.md),
+filter by filter.
 
 **Codex (OpenAI)** has contributed as an AI coding agent to implementation, documentation and validation
 under Pere Guerra's direction.
@@ -141,6 +148,21 @@ repository").
 [MIT](LICENSE) © 2026 Pere Guerra Serra. You may use, copy, modify and redistribute this work freely, including
 commercially; the licence only asks you to keep the copyright notice with copies of the work.
 
+## What is new in 1.3.2
+
+In answer to the review of Chris Gilly (see [Contributors](#contributors)):
+- **An NRGF without profile bias.** In 1.3.1 the ring profile was smoothed with a plain Gaussian, which biased
+  steep profiles and left a concentric ripple 1.9–2.5 times the sampling floor. Each ring now gives a node with
+  the profile's slope and curvature removed, joined by a local curve; in the tests the ripple stays at the
+  sampling floor. It takes about five times as long. The NRGF layers of the filter bank change; with the same
+  arguments, `spread_about='bin'` in `ael.filters.nrgf` gives the 1.3.1 output bit for bit.
+- **Upsilon for any RHEF layer**, with an exponent for each side: `make_filter(..., upsilon_curve=(low, high))`
+  from Python (the `ael filters` command does not take it).
+- **[The paper and the library](docs/PAPER_AND_LIBRARY.md)**, filter by filter: input channel, rings,
+  statistics, limits and blend of the published layers against the library; the algebra of blending a layer
+  centred on mid grey; the sky and extinction that ring filters turn into structure.
+- Fifteen new controls (84 of 84 tests). Checks and limits: [`docs/VALIDATION_1.3.2.md`](docs/VALIDATION_1.3.2.md).
+
 ## What is new in 1.3.1
 
 - The field report of NLFotografia ([issue #1](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/1))
@@ -163,4 +185,4 @@ commercially; the licence only asks you to keep the copyright notice with copies
 - Research notes 180 and 185, and the code behind them in `3-RECERCA/tools/`.
 
 Existing images are not rewritten; compare a new numerical recipe before adopting it.
-See the [changelog](CHANGELOG.md) and [validation](docs/VALIDATION_1.3.0.md). How the filters of the library differ from the layers of the paper's published image, filter by filter: [`docs/PAPER_AND_LIBRARY.md`](docs/PAPER_AND_LIBRARY.md).
+See the [changelog](CHANGELOG.md) and [validation](docs/VALIDATION_1.3.0.md).

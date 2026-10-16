@@ -327,8 +327,16 @@ integral of Billings (1966), the Baumbach–Allen and Saito (1977) electron dens
 calibrations of Colaninno & Howard (2015, *Solar Physics* 290, 997) and SolarSoft; K-Cor data: K-Cor Team
 (2013), doi:10.5065/D69G5JV8.
 
+Contributors: Chris Gilly (NorthWest Research Associates), first author of the RHEF paper, reviewed the draft
+of the author's paper *A Faithful Corona* and this library in October 2026; version 1.3.2 answers his review.
+Other contributions are listed in the repository [README](README.md#contributors).
+
 Version 1.3.0 adds `ael extinction` and `ael coronagraph`, corrects stepped radial statistics and
 clipped display highlights (prepared as 1.2.1), adds an explicit native-reference canvas option and
 documents the limits of internal dust calibration. See [field lessons](docs/FIELD_LESSONS.md) and
-[recipe details](docs/DEVELOP.md). Existing images are not rewritten; compare the new numerical recipe
-before adopting it.
+[recipe details](docs/DEVELOP.md). Version 1.3.2 replaces the smoothed ring profile of the NRGF, which
+biased steep profiles, lets any RHEF layer made with `make_filter` use the Upsilon curve with an exponent for
+each side, and
+documents how the library's filters differ from the paper's published layers
+([`docs/PAPER_AND_LIBRARY.md`](docs/PAPER_AND_LIBRARY.md)). Existing images are not rewritten; compare the
+new numerical recipe before adopting it.

@@ -148,7 +148,7 @@ point, not a recipe.
 | **ACHF, isotropic** (Druckmüller et al.) | Small-scale detail near the limb | Overlay, 8 % | `ael.filterbank.achf_isotropic`, **on log luminance after subtracting its radial spline, never channel by channel** |
 
 Then, if the user wants more: the extended NRGF (Multiply, 14 %), RHEF (an alternative radial normalisation,
-Gilly and Cranmer 2020), local RHEF, MGN (Morgan and Druckmüller 2014), the angular ACHF
+Gilly and Cranmer 2025), local RHEF, MGN (Morgan and Druckmüller 2014), the angular ACHF
 (`ael.filters.tangential_highpass`) and plain WOW. Beyond the layered file, `ael` makes structure images,
 unrolled polar views and coronal-motion animations (`skills/corona-visualizations/`).
 

@@ -51,7 +51,7 @@ First check the [existing issues](https://github.com/PeterWar/Agentic-Eclipse-Li
 
 Issues and pull requests are public. Choose the GitHub identity and attribution you want to use; an anonymous
 case description does not hide the account or commit metadata used to submit it. Accepted contributions retain
-their authorship and can be linked from the community section of the README.
+their authorship and can be linked from the contributors section of the README.
 
 Only **PeterWar** can update or merge into `main`. A submitted contribution remains a proposal until the
 maintainer accepts it. Contributions to the repository use its existing [MIT licence](LICENSE).

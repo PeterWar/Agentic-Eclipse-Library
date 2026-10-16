@@ -1,4 +1,4 @@
-"""Controls added in 1.3.2 after an external review of the paper draft (October 2026).
+"""Controls added in 1.3.2 after Chris Gilly's review of the draft of the paper "A Faithful Corona" (October 2026).
 
 No private image fixtures: every scene is synthetic and has a known answer.
 """
@@ -280,9 +280,10 @@ def test_nrgf_is_unbiased_on_clean_curved_profiles_and_gives_nothing_without_ang
 
 
 def test_filter_bank_nrgf_has_no_node_smoothing():
-    """A smoothing window of three annuli bends a profile whose power-law index changes: on a 15-px Sun it left a ring
-    of 2.3 sigma (noise 10^-3), and 2.5 sigma on a Baumbach corona. The filter bank does not smooth the nodes, whose
-    noise is a few hundredths of sigma. On so small a Sun a noiseless, structureless corona gives no output."""
+    """A smoothing window of three annuli bends a profile whose power-law index changes: on a 15-px Sun it leaves a
+    ring of 1.6 sigma (noise 10^-3), and 2.4 sigma on a Baumbach corona (docs/VALIDATION_1.3.2.md). The filter bank
+    does not smooth the nodes, whose noise is a few hundredths of sigma. On so small a Sun a noiseless, structureless
+    corona gives no output."""
     g = EclipseGeometry((160, 160), (79.63, 80.21), 15)
     r = g.radius_map().astype(np.float64); m = (r >= 15.75) & (r <= 39)
     a = ((r/15)**-3*(1+1e-3*np.random.default_rng(3).standard_normal(r.shape))).astype(np.float32)
@@ -393,7 +394,7 @@ def test_nrgf_is_in_units_of_the_spread_and_keeps_every_measurable_annulus():
 
 
 def test_nrgf_keeps_symmetric_structure_on_a_centred_grid_and_all_negative_input():
-    """Ninth review of 1.3.2. (1) With the Sun's centre on the pixel grid, pixels at one radius are mirror images of
+    """Sixth review of 1.3.2. (1) With the Sun's centre on the pixel grid, pixels at one radius are mirror images of
     each other and carry the same value of a 4-fold structure; a detector of angular signal that compared each pixel
     with its neighbours in radius took that structure for a radial profile and dropped 73 % of the data. Every
     structure must be kept, whatever the centre and the symmetry. (2) make_filter('nrgf') accepts an input that is
@@ -428,7 +429,7 @@ def test_nrgf_mean_statistic_keeps_a_bright_pixel_to_its_own_neighbourhood():
 
 
 def test_nrgf_gives_nothing_for_noiseless_radial_profiles_on_a_small_grid():
-    """Eleventh review of 1.3.2. A noiseless radial profile has no angular signal, so it must give no output. On a
+    """Eighth review of 1.3.2. A noiseless radial profile has no angular signal, so it must give no output. On a
     small Sun (25 px, centre on a pixel corner), a 2 % radial ripple 6 px long gave output over a quarter of the field:
     0.1-px bands held only one or two different radii, where a parabola is not determined, and the profile's own kinks
     stayed in the residuals. Each band now holds four radii or more, and a second function of radius is fitted to the

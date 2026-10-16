@@ -1,4 +1,8 @@
-# Validation of 1.3.2 (prepared 2026-10-15, not released)
+# Validation of 1.3.2 — 2026-10-16
+
+Version 1.3.2 answers the review by Chris Gilly (NorthWest Research Associates, October 2026) of the draft of
+the author's paper *A Faithful Corona* and of this library. What the paper's layers did and what the library
+does: `docs/PAPER_AND_LIBRARY.md`.
 
 - `python -m ael selftest`: **84 of 84** (69 from 1.3.1 and 15 new in `ael/_tests/test_review.py`), with or without
   network. An independent check run offline got 83 of 84 at first: the 1.3.1 test of the solar route let Astropy
@@ -7,12 +11,14 @@
   date. Offline use of `ael.extinction` with a site and a time needs the same two settings.
 - The detail-transfer regression of the sixteen filters (`test_filters_keep_injected_fine_detail_with_its_sign_and_strength`)
   still passes against the 1.3.0 values: 0.644 and 0.622 for the NRGF and its logarithmic form (0.64 and 0.62 in 1.3.0).
-- `spread_about='bin'` gives the 1.3.1 output bit for bit: 24 of 24 outputs over four scenes, both statistics and three
-  parameter sets (`p12_bin_igual_que_131_i_temps.log`).
+- With the same arguments, `spread_about='bin'` in `ael.filters.nrgf` gives the 1.3.1 output bit for bit: 24 of 24
+  outputs over four scenes, both statistics and three parameter sets (`p12_bin_igual_que_131_i_temps.log`).
 - The new NRGF takes about five times as long as that of 1.3.1: 2.66 s against 0.56 s on a 2000 × 2000 image with the
   filter bank's parameters (same log).
 
-The logs and scripts named below are kept with the author (`3-AEL/proves/validacio_1.3.2/`).
+The logs and scripts named below are kept with the author (`3-AEL/proves/validacio_1.3.2/`). A short hash in
+a file name is the one the commit had before publication; the published commits have the same content under
+other hashes.
 
 ## The NRGF of 1.3.2 in brief
 
@@ -43,9 +49,9 @@ The logs and scripts named below are kept with the author (`3-AEL/proves/validac
 ## How the reviews shaped it
 
 The first commit of 1.3.2 replaced the Gaussian smoothing of 1.3.1 with nodes at the exact centre of each annulus,
-the annulus' own slope removed, and a local polynomial. Ten rounds of review by an independent agent at high
-reasoning effort, and two adversarial checks (four readers and a verifier, then three readers and a verifier), found
-the following. Everything is fixed except what is listed under Limits.
+the annulus' own slope removed, and a local polynomial. Twelve rounds of review by another AI coding agent (Codex),
+and two adversarial checks by AI agents (four readers and a verifier, then three readers
+and a verifier), found the following. Everything is fixed except what is listed under Limits.
 
 1. A constant input gave an output; the profile was held flat next to gaps; a straight-line fit at the ends of short
    runs; a slope that one pixel could move; in Upsilon, missing values became mid grey and `rhef_upsilon` ignored an
@@ -89,8 +95,9 @@ the following. Everything is fixed except what is listed under Limits.
 10. A ninth review found a strong radial ripple (20 %, period 4 px) giving output on 95 % of the field around a
    100-px Sun, without noise. The radius map was float32, and its rounding times the ripple's own slope (ten times
    the profile's) passed for angular signal. Raising the floor by that slope cured it, but a tenth review showed that
-   it also dropped real structure of 10⁻⁵ on the same ripple (coverage 99 % → 0 around a 440-px Sun). The cure went
-   one floor down: the new NRGF now works on exact radii and keeps the earlier floor. With the median, the ripple
+   it also dropped real structure of 10⁻⁵ on the same ripple (coverage 99 % → 0 around a 440-px Sun). The cause lay
+   one step earlier, in the float32 radius map: the new NRGF now works on exact radii and keeps the earlier floor.
+   With the median, the ripple
    gives no output and the 10⁻⁵ structure keeps 99 % of the field (`p18_contraexemples_ronda12.log`,
    `p19_contraexemple_ronda13.log`).
 
@@ -126,7 +133,7 @@ An unbiased profile gives ~0. Filter-bank parameters, median statistics; `p6_bia
 | 60 px | 0.05 | 0.04 | 0.06 |
 | 120 px | 0.05 | 0.04 | 0.04 |
 | 200 px | 0.04 | 0.03 | 0.03 |
-| 60 px, earlier draft (`875e817`) | 0.19 | 0.76 | 6.1 |
+| 60 px, earlier draft (`5ed6f37`) | 0.19 | 0.76 | 6.1 |
 | 60 px, nodes smoothed over 3 annuli | 0.08 | 0.06 | 0.61 |
 
 With the mean statistic every cell is at most 0.02. Over ten noise seeds (Sun of 120 px, noise 10⁻⁴) the worst annulus
@@ -148,7 +155,7 @@ the 4 px on each side of the gap (`p8_vores_buit.log`; the mean statistic agrees
 
 cos 5θ structure on a 60-pixel Sun, noiseless: correlation of the NRGF with the structure (`p7_estructura_feble.log`).
 
-| Profile, structure | Earlier draft (`875e817`) | 1.3.2 |
+| Profile, structure | Earlier draft (`5ed6f37`) | 1.3.2 |
 |---|---|---|
 | Six decades (exponential), 10⁻⁴ | 0.08 | 1.00 |
 | Six decades, 10⁻² | 0.99 | 1.00 |

@@ -2,9 +2,10 @@
 
 The paper *A Faithful Corona* describes the filter layers of the author's published image of 12 August 2026.
 The package `ael` implements portable recipes of the same published methods. They are general-purpose
-parameterisations and they are not byte replays of those layers. An external review of the paper draft
-(October 2026) found that the paper, the code behind the published layers and the library described three
-different operators for the NRGF and the RHEF. This page says what each one does, filter by filter.
+parameterisations and do not reproduce those layers pixel for pixel. Reviewing the paper draft and the library in
+October 2026, Chris Gilly (NorthWest Research Associates), first author of the RHEF paper, found that the paper,
+the code behind the published layers and the library described three different operators for the NRGF and the
+RHEF. This page says what each one does, filter by filter.
 
 "Production" means the code that made the layers of the published image, under `3-RECERCA/tools/` (the paper's
 image is version V125 of the project). "Library" means `ael` 1.3.2.

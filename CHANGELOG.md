@@ -1,9 +1,12 @@
 # Changelog
 
-## 1.3.2 — prepared 2026-10-15 (not released)
+## 1.3.2 — 2026-10-16
 
-Corrections from an external review of the paper draft (October 2026). The sixteen filters of `ael filters`
-keep their names; the NRGF output changes where the radial profile is steep.
+In October 2026 Chris Gilly (NorthWest Research Associates), first author of the RHEF paper (Gilly & Cranmer
+2025), reviewed the draft of the author's paper *A Faithful Corona* and this library. This version answers his
+review. His synthetic test, a corona falling as r⁻³ with faint structure, repeated on 1.3.1, showed that its NRGF
+still left rings. The sixteen filters of `ael filters` keep their names; the NRGF output changes where the radial
+profile is steep.
 
 - **Reduced NRGF profile bias in the tested scenes.** In 1.3.1 the ring profiles were smoothed with a plain Gaussian
   (`smooth_bins=3` in the filter bank). On a steep, curved profile that biases the mean (about 1 % of the brightness,
@@ -32,8 +35,9 @@ keep their names; the NRGF output changes where the radial profile is steep.
   radial profiles give no output in the tested scenes; a noiseless radial feature a few pixels long can still give
   output around a small Sun, and on a very clean stack radial structure a few annuli wide stays in the layer as
   rings (limits in `docs/VALIDATION_1.3.2.md`).
-  The new operator takes about five times as long. `spread_about='bin'` gives the 1.3.1 output bit for bit. Details
-  and limits: `docs/VALIDATION_1.3.2.md`.
+  The new operator takes about five times as long. With the same arguments, `spread_about='bin'` in
+  `ael.filters.nrgf` gives the 1.3.1 output bit for bit; `make_filter` has no such option and no longer smooths
+  the nodes. Details and limits: `docs/VALIDATION_1.3.2.md`.
 - **Upsilon with an exponent for each side**: `ael.filterbank.upsilon(q, low, high)` (eq. 2 of Gilly & Cranmer
   2025; exponents must be positive, missing values stay missing), and `make_filter(..., upsilon_curve=(low, high))`
   for any RHEF layer, including the local ones (refused for other filters).
@@ -50,10 +54,14 @@ keep their names; the NRGF output changes where the radial profile is steep.
   edges inside an annulus and runs of one to five annuli; ties (zeros, clipping, 8-bit data); a sky subtracted too
   deep; the unit of q and the `min_count` boundary; symmetric structure about a centre on the pixel grid; an input
   negative everywhere; a bright pixel with the mean statistic; noiseless radial profiles around small Suns. 84 of 84
-  tests; 43 of 43 mutations detected. The NRGF went
-  through two adversarial checks by independent readers and a verifier; their scripts are rerun on the final code
-  (`docs/VALIDATION_1.3.2.md`).
-- The radial rank (RHEF) of 1.2.1 already reaches the sampling floor on the same scene (0.45–0.88×); unchanged.
+  tests; 43 of 43 mutations detected. The NRGF went through twelve rounds of review by another AI coding agent
+  (Codex) and two adversarial checks by AI agents (independent readers and a verifier); their scripts are rerun
+  on the final code (`docs/VALIDATION_1.3.2.md`).
+- The test of the solar route uses the IERS tables bundled with Astropy, so the self-test also passes offline.
+  Offline use of `ael.extinction` with a site and a time needs the same two settings:
+  `iers.conf.auto_download = False` and `iers.conf.auto_max_age = None` (`docs/VALIDATION_1.3.2.md`).
+- The radial rank (RHEF), with continuous statistics since 1.3.0, already reaches the sampling floor on the same
+  scene (0.45–0.88×); unchanged.
 
 ## 1.3.1 — 2026-10-13
 
