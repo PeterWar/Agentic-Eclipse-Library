@@ -184,6 +184,8 @@ on their own). Research notes 180 and 185 and the code behind them are added to 
   Names of private correspondents, the words of a private message and a private link were removed from
   three passages of note 180, one of note 185 and a few lines of their code; each edit in a note is marked.
 - Six skills: `coronagraph-comparison` is new; the first-steps skill points to it.
+- `docs/EXISTING_EDIT_CASE_STUDY.md`: a case study on adding adjustable filters to an existing edit, contributed
+  by NLFotografia ([pull request #2](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/2)).
 
 ### Fixes and lessons prepared as 1.2.1 (2026-10-06)
 

@@ -56,6 +56,10 @@ the skill [`skills/corona-visualizations/`](skills/corona-visualizations/) (in E
 
 ## Contributors
 
+Agentic Eclipse Library was created by Pere Guerra Serra, who maintains it and decides what enters `main` and
+each release. The contributors below have added to it; their commits keep their names, and their contributions
+are published under the same [MIT licence](LICENSE).
+
 [NLFotografia](https://github.com/NLFotografia) contributed a
 [case study on preserving an existing edit with adjustable filters](docs/EXISTING_EDIT_CASE_STUDY.md)
 in [pull request #2](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/2).
