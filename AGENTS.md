@@ -30,6 +30,7 @@ Follow `skills/eclipse-first-steps/SKILL.md`; the learning checks are in `docs/F
 | If the task is about… | Read first |
 |---|---|
 | Someone's own eclipse photos, "where do I start?" | `skills/eclipse-first-steps/SKILL.md` |
+| Explicit ASTRO case workflow, operational/scientific limits, editable-master acceptance or closeout | `skills/eclipse-astrophotography/SKILL.md` |
 | Darks, flats, stacking, noise, linearity, weights | `skills/apilatge-imatges-eclipsi/SKILL.md` |
 | Registration, HDR fusion, filters, tone curve, Photoshop layers, gates | `skills/postprocessat-corona/SKILL.md` |
 | Rings, seams, ghosts, striping, limb fringes, marks drawn by the photographer | `skills/corregeix-artefactes/SKILL.md` |

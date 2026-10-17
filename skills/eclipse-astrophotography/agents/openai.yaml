@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eclipse Astrophotography"
+  short_description: "Eclipse photos to accepted editable masters"
+  default_prompt: "Use $eclipse-astrophotography to guide my eclipse case through measured inputs, editable delivery and photographer review."
