@@ -255,3 +255,14 @@ For native Photoshop checking, use a uniquely named copy, verify it is not alrea
 close only the script-owned document and save exports as copies. Check the native render
 as well as merged file data. Report method, file integrity and visual/scientific validation
 as separate verdicts; a passing roundtrip is not a scientific certification.
+
+
+## Three-camera ASTROPHOTOGRAPHY cases
+
+[Sony, Nikon and Canon case lessons](ASTRO_THREE_CAMERA_CASE_STUDY.md) add three
+photographer-accepted editable endpoints with different remaining qualifications:
+a Sony local noise-proxy improvement that did not justify promotion, Nikon measured
+signal versus presentation support, and Canon operational geometry with an unfilled
+34-pixel invalid-support hole and a later accepted CLEAN preset. These are private-data
+case observations, not library defaults or complete scientific certification. The study
+states which results cannot be reproduced from the public repository.
