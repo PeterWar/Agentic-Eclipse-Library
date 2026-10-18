@@ -16,7 +16,7 @@ stacks declared RAW recipes, makes filter layers, and produces structure, polar 
 
 ## Start here: your own eclipse photos
 
-**Using Codex?** Install the [AEL desktop plugin](docs/CODEX_PLUGIN.md): six guided workflows,
+**Using Codex?** Install the [AEL desktop plugin](docs/CODEX_PLUGIN.md): seven guided workflows,
 the AEL processing engine, a synthetic demonstration and explicit validation limits.
 The plugin can be installed from this repository's marketplace; public directory review is a separate process.
 
@@ -77,6 +77,22 @@ Upsilon curve, with an exponent for each side, for any RHEF layer; and
 [how the library's filters differ from the layers of the paper's published image](docs/PAPER_AND_LIBRARY.md),
 filter by filter.
 
+**Raúl Hussein** ([@rahusga](https://github.com/rahusga)) is the lead contributor of the first new skill and the
+first multi-camera field case contributed from outside the project, in pull requests
+[#5](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/5),
+[#6](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/6) and
+[#7](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/7). His skill
+[`eclipse-astrophotography`](skills/eclipse-astrophotography/SKILL.md) takes an agent through a whole eclipse
+case, from the chosen frames to an editable master the photographer accepts. It brings rules already in AEL into
+one route, and adds a stage table, five geometry and support roles that one centre or one mask tends to merge, and
+a case closeout in which stopping at a known limit is a valid end. His
+[three-camera case study](docs/ASTRO_THREE_CAMERA_CASE_STUDY.md) follows a Sony, a Nikon and a Canon of the same
+eclipse and keeps in view what each could not establish. He also found that the field lessons still described the
+NRGF of 1.3.1 after the 1.3.2 release, and corrected them.
+
+**Oscar Maseda** (Sony) and **Carlos Oltra** (Nikon) photographed that eclipse and made their RAW frames available
+for the case study, as Raúl Hussein did with his Canon. The frames stay private.
+
 **Codex (OpenAI)** has contributed as an AI coding agent to implementation, documentation and validation
 under Pere Guerra's direction.
 
@@ -94,6 +110,7 @@ need to publish your photos to contribute.
 |---|---|---|
 | [`AGENTS.md`](AGENTS.md) | Entry point for any AI agent: what is here, where to start, the working rules that made the difference | English |
 | [`skills/eclipse-first-steps/`](skills/eclipse-first-steps/) | How an agent leads a newcomer from their own photos to a layered Photoshop project with the most useful filters | English |
+| [`skills/eclipse-astrophotography/`](skills/eclipse-astrophotography/) | A whole eclipse case, from the chosen frames to an editable master the photographer accepts, with photographic acceptance kept apart from scientific claims; contributed by Raúl Hussein | English |
 | [`skills/apilatge-imatges-eclipsi/`](skills/apilatge-imatges-eclipsi/) | Linear calibration and stacking of eclipse RAW frames: darks, flats, pedestal, saturation, linearity, noise, weights, coverage | Catalan |
 | [`skills/postprocessat-corona/`](skills/postprocessat-corona/) | The post-processing method: registration by ephemeris, linear HDR fusion of the two trains, detail filters (NRGF, RHEF, MGN, WOW, ACHF and our own variants), tone curve, Photoshop layer files, external judge, gates and receipts, with a long log of traps | Catalan |
 | [`skills/corregeix-artefactes/`](skills/corregeix-artefactes/) | Finding and curing recurring artefacts at their root: lens ghosts, fixed-pattern striping, coverage edges, limb fringes, radial-profile rings, marks painted by the photographer | Catalan |
@@ -165,30 +182,6 @@ used only as an external judge: no pixel of theirs is in any product, and none o
 repository.
 
 ## Credit
-
-ASTROPHOTOGRAPHY workflow and skill, developed from three camera case studies and built on Agentic Eclipse Library.
-Raúl Hussein ([@rahusga](https://github.com/rahusga)) — creator and lead contributor of the proposed
-[`eclipse-astrophotography` workflow/skill](skills/eclipse-astrophotography/SKILL.md).
-
-The observational credits below describe original image acquisition and private RAW dataset contributions;
-they are separate from authorship of the contributed workflow/skill:
-
-| Camera case | Original image acquisition and private RAW dataset contributor |
-|---|---|
-| Sony | Oscar Maseda |
-| Nikon | Carlos Oltra |
-| Canon | Raúl Hussein |
-
-Dataset contribution does not imply skill authorship, manuscript coauthorship or publication of the underlying files.
-
-No original RAW files, photographs or editable masters are distributed with this contribution.
-All photographic datasets, image derivatives, capture metadata and private scientific evidence remain private.
-Permission to name contributors does not authorize distribution of those materials. No dataset release is planned.
-
-Pere Guerra Serra is the original author of Agentic Eclipse Library. The numerical methods retain their
-existing attribution in [AEL's method documentation](docs/PAPER_AND_LIBRARY.md). This contribution assigns no
-ownership of AEL or maintainer privilege; independent manuscript authorship remains a separate process.
-
 
 If you use this work — the skills, the notes or the code — or publish an image made with it, a mention in its
 caption, description or references would be appreciated. This is a courtesy request, not a condition of the

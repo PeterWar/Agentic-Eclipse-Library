@@ -2,6 +2,22 @@
 
 ## Unreleased
 
+- **A contribution by Raúl Hussein**, with RAW frames from Oscar Maseda and Carlos Oltra (pull requests
+  [#5](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/5),
+  [#6](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/6) and
+  [#7](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/7), merged as one):
+  - **`skills/eclipse-astrophotography/`**, a seventh skill, also in both plugins: a whole eclipse case from the
+    chosen frames to an editable master the photographer accepts. It brings rules already in AEL into one route
+    and adds a stage table, five geometry and support roles and a case closeout.
+  - **`docs/ASTRO_THREE_CAMERA_CASE_STUDY.md`**: Sony, Nikon and Canon cases of the same eclipse. The data are
+    private; the study says what cannot be reproduced from this repository.
+  - **`docs/FIELD_LESSONS.md`: the NRGF description follows 1.3.2.** The profile is a local cubic Hermite curve
+    through slope- and curvature-corrected nodes; only the spread uses PCHIP, on its logarithm. The old sentence,
+    written for 1.2.1, was still in the 1.3.2 release and in Codex plugin 1.0.1.
+- **On top of that contribution:** the skill and the case study say that different optical trains are never fused
+  without a calibrated distortion model for each, even for a presentation; colour propagated for display is a declared
+  reconstruction in its own layer; the skill's links point to the copies in the package; the credit moves to the
+  README's Contributors section; the plugins, their receipt and the workflow counts are brought up to date.
 - **README: "What this plugin runs, fetches and sends".** The packages that `pip` installs, the public coronagraph
   data that one skill downloads after the user approves it, the Skyfield ephemeris, and two research scripts that
   reach the network: a star-catalogue download and the OpenRouter client the project used to consult other models.

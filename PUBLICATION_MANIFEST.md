@@ -11,7 +11,7 @@ draft of the paper *A Faithful Corona*: a new NRGF, Upsilon for any RHEF layer, 
 
 | Included | Files | Notes |
 |---|---:|---|
-| `skills/` — six Agent Skills | 35 | Snapshot of the working skills on 30 Sep 2026 (`eclipse-first-steps` revised and `coronagraph-comparison` added on 13 Oct), with their reference files and helper scripts; `corona-visualizations` (English) is new in 1.1.0, `eclipse-first-steps` (English) in 1.1.1, `coronagraph-comparison` (English) in 1.3.0 |
+| `skills/` — seven Agent Skills | 39 | Snapshot of the working skills on 30 Sep 2026 (`eclipse-first-steps` revised and `coronagraph-comparison` added on 13 Oct), with their reference files and helper scripts; `corona-visualizations` (English) is new in 1.1.0, `eclipse-first-steps` (English) in 1.1.1, `coronagraph-comparison` (English) in 1.3.0; `eclipse-astrophotography` (English), contributed by Raúl Hussein, after 1.3.2 |
 | `3-RECERCA/` — research notes | 187 | 180 numbered notes plus indexes, sources, prompts and reports of consultations with other models, small data tables |
 | `3-RECERCA/tools/` — processing code | 4,352 | Python, shell and Photoshop JSX scripts, and the small JSON/CSV parameter files they read |
 | `ael/`, `tests/`, `examples/`, `pyproject.toml`, `README_AEL.md` — the runnable package | 39 | Stacking, extinction, filter layers, structure images, unrolled views, coronal motion, coronagraph checks and layered Photoshop files from anyone's data; 84 tests with known truth (1.3.2) |
