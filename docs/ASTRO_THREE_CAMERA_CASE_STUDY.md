@@ -1,4 +1,4 @@
-# ASTROPHOTOGRAPHY: Lessons from Three Eclipse Camera Cases
+# Lessons from three eclipse camera cases: Sony, Nikon and Canon
 
 ## 1. Context and relation to AEL
 
@@ -7,6 +7,8 @@ Three separate Sony, Nikon and Canon camera datasets and processing cases from t
 Measured registration, negative controls, separate lunar support and native-file checks are already part of [AEL's field lessons](FIELD_LESSONS.md). The [existing-edit case study](EXISTING_EDIT_CASE_STUDY.md) already distinguishes a filter mask from a measured edge and good disk agreement from coronal alignment. Those are prior work, not discoveries claimed here.
 
 The historical Canon workflow used AEL 1.2.0, commit `91431acea491b1e00653db2625a56ec79202ac22`. This documentation was reviewed against [public main at 5629b37](https://github.com/PeterWar/Agentic-Eclipse-Library/tree/5629b37071ec87a32f3cf37b5ce6dfcc8b02ada1). The case-specific scripts and astronomical inputs are private; this is not a demonstration that current public AEL reproduces the three masters.
+
+> **Maintainer's note.** Some steps below came from the contributors' own scripts and are not functions of the public `ael` package: the 13-contributor eligibility rule, the automatic geometric certification and the grey presentation base of the lunar disk. The Canon translation accepted after certification failed joined exposure levels from one camera; AEL never accepts fusing different optical trains without a calibrated distortion model for each ([DEVELOP](DEVELOP.md)).
 
 ## 2. Three camera cases and acquisition characteristics
 
@@ -20,7 +22,7 @@ These are aggregate historical inventory and processing-cohort records, not new 
 
 Matched dark/flat/bias calibration was not available for these cases. Camera colour, relative radiometry, background and optical-response uncertainties therefore remain explicit. No camera-to-solar-colour calibration or absolute brightness qualification follows from these presentations.
 
-## 3. Photographic ASTRO workflow and accepted endpoints
+## 3. Photographic workflow and accepted endpoints
 
 The practical sequence was to identify the selected inputs, freeze geometry and support, preserve the linear authorities, build separately adjustable presentation layers, check the written document and obtain the photographer's decision. Changing a filter or a display curve did not silently redefine the scientific inputs.
 
@@ -101,20 +103,13 @@ This preparation reviewed existing documents and receipts; it performed no new R
 
 Readers cannot independently reproduce the private cohort qualifications, astronomical measurements, support counts, Sony experiment, accepted image appearance or preferences from this public text. The aggregate values are reported case evidence, not portable test fixtures. No universal filter validation or new algorithm benchmark is claimed. Complete SCIENTIFIC acceptance remains independent of all three photographic closures.
 
-## 11. Contributor attribution and references
+## 11. Contributors
 
-**Raúl Hussein (@rahusga)** is the creator and lead contributor of the contributed ASTROPHOTOGRAPHY workflow/skill and author of this case-study synthesis. Observational contributions are separate:
+Written by Raúl Hussein (@rahusga), lead contributor of this case study and of the `eclipse-astrophotography` skill.
+Photographs: Oscar Maseda (Sony), Carlos Oltra (Nikon) and Raúl Hussein (Canon), named with their permission. The
+photographs, their derivatives and capture metadata stay private and are not part of this repository.
 
-- **Oscar Maseda:** original Sony acquisition and private RAW dataset contribution.
-- **Carlos Oltra:** original Nikon acquisition and private RAW dataset contribution.
-- **Raúl Hussein:** original Canon acquisition and private RAW dataset contribution.
-
-Observational dataset contribution does not imply skill authorship or whitepaper coauthorship. The contributors consented to public naming and their stated roles, not distribution of the underlying files.
-
-**Pere Guerra Serra** is the original author of Agentic Eclipse Library. Original numerical-method credit remains with the authors identified in [AEL's method documentation](PAPER_AND_LIBRARY.md); no ownership of AEL, maintainer privileges or manuscript coauthorship is assigned here. This proposed documentation contribution follows the repository's [MIT licence](../LICENSE) and [contribution guide](../CONTRIBUTING.md).
-
-No original RAW files, photographs or editable masters are distributed with this contribution.
-
-Image derivatives, arrays, masks, exact capture metadata and private scientific evidence are also excluded. No dataset release is planned. This account stands independently of any future whitepaper and does not depend on whether the skill integration is pending or merged.
+Agentic Eclipse Library was created by Pere Guerra Serra; the method papers are credited in its
+[acknowledgements](https://github.com/PeterWar/Agentic-Eclipse-Library#acknowledgements).
 
 Processed with Agentic Eclipse Library by Pere Guerra — https://github.com/PeterWar/Agentic-Eclipse-Library

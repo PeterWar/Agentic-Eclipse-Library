@@ -12,7 +12,7 @@ Inventory only the selected sources within the user's authorization. Separate to
 
 Example request: “The faint outer corona has useful green signal, while red and blue are weak.”
 
-Do not discard qualified green luminance solely to make RGB support uniform. Identify whether the output is measured RGB, luminance without qualified chroma, or a declared presentation colour choice. Obtain approval before adopting a material propagated-colour interpretation. The display must not imply measured RGB where it is absent. No specific propagation algorithm is provided by this skill.
+Do not discard qualified green luminance solely to make RGB support uniform. Identify whether the output is measured RGB, luminance without qualified chroma, or a declared presentation colour choice. Obtain approval before adopting a material propagated-colour interpretation. The display must not imply measured RGB where it is absent. Propagated colour is a declared reconstruction: keep it in its own layer, with a mask of where colour was not measured, and say so in the caption. No specific propagation algorithm is provided by this skill.
 
 ## Existing preferred edit
 
