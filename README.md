@@ -137,7 +137,7 @@ need to publish your photos to contribute.
   codex plugin add agentic-eclipse-library@pere-guerra-eclipse
   ```
   Python and its dependencies are checked separately. The plugin runs locally and includes the maintained
-  AEL 1.3.2 engine. See the guide for desktop-app installation and supported workflows.
+  AEL 1.3.3 engine. See the guide for desktop-app installation and supported workflows.
 - **Other agents:** point the agent at [`AGENTS.md`](AGENTS.md). Each skill is a plain `SKILL.md` with
   `references/` and `scripts/`.
 - Most text is in Catalan. Current models read and translate it without trouble; ask your agent to answer in your
@@ -196,6 +196,20 @@ repository").
 
 [MIT](LICENSE) © 2026 Pere Guerra Serra. You may use, copy, modify and redistribute this work freely, including
 commercially; the licence only asks you to keep the copyright and permission notices with copies of the work.
+
+## What is new in 1.3.3
+
+A contribution by Raúl Hussein, with RAW frames from Oscar Maseda and Carlos Oltra (see [Contributors](#contributors)):
+- **A seventh skill, [`eclipse-astrophotography`](skills/eclipse-astrophotography/)**: a whole eclipse case, from
+  the chosen frames to an editable master the photographer accepts, with photographic acceptance kept apart from
+  scientific claims. It brings rules already in AEL into one route and adds a stage table, five geometry and support
+  roles and a case closeout. It is also in both plugins.
+- **[Three camera cases](docs/ASTRO_THREE_CAMERA_CASE_STUDY.md)**: a Sony, a Nikon and a Canon that photographed one
+  eclipse, with what each could not establish.
+- **The NRGF description in the [field lessons](docs/FIELD_LESSONS.md) follows 1.3.2**, which it did not.
+
+And a rule for all of AEL: **correct each optic before fusing**, even for a presentation
+([`AGENTS.md`](AGENTS.md), rule 11). The `ael` package does not change.
 
 ## What is new in 1.3.2
 
