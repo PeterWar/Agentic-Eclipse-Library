@@ -53,7 +53,7 @@ they are not ready-to-run observations. Copy them into the user's workspace befo
 The plugin's `structure` command uses the full canvas (`crop_height_rsun=None`) and mono by default.
 Choose `--style measured` only for colour data with a justified colour interpretation. `--style cool` is an
 explicit display choice, not measured colour. It also accepts `--sky-r-min-rsun` for a justified sky region;
-never fit a sky inside the corona just to make an image run. The underlying AEL 1.3.2 CLI has different
+never fit a sky inside the corona just to make an image run. The underlying AEL 1.3.3 CLI has different
 display/crop defaults; use this launcher for plugin work.
 
 ## Preserve evidence

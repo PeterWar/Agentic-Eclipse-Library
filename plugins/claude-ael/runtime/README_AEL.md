@@ -329,6 +329,8 @@ calibrations of Colaninno & Howard (2015, *Solar Physics* 290, 997) and SolarSof
 
 Contributors: Chris Gilly (NorthWest Research Associates), first author of the RHEF paper, reviewed the draft
 of the author's paper *A Faithful Corona* and this library in October 2026; version 1.3.2 answers his review.
+Raúl Hussein contributed the `eclipse-astrophotography` skill and a three-camera case study, with RAW frames
+from Oscar Maseda and Carlos Oltra, and corrected the NRGF description in the field lessons (1.3.3).
 Other contributions are listed in the repository [README](README.md#contributors).
 
 Version 1.3.0 adds `ael extinction` and `ael coronagraph`, corrects stepped radial statistics and
