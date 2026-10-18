@@ -24,8 +24,10 @@ Trace the defect through individual frames, calibration, HDR weighting and filte
 The 1.2.0 NRGF and RHEF operators could produce coherent two-pixel rings on an input without
 radial rings: an independent histogram or a mean/spread lookup for each annulus has boundaries.
 
-- NRGF now evaluates mean and spread continuously at the pixel radius with PCHIP. Statistics
-  come from populated annuli at their measured radial coordinates. Gaps remain undefined.
+- Since 1.3.2, default NRGF uses a local cubic Hermite profile through slope/curvature-corrected
+  annular nodes; residual spread uses PCHIP on its logarithm, held at each qualifying run's end nodes.
+  Invalid pixels and unqualified annuli remain undefined. In 1.3.0–1.3.1, both profile and spread
+  used PCHIP; `spread_about='bin'` retains the 1.3.1 behaviour. See [version-specific definitions](PAPER_AND_LIBRARY.md).
 - RHEF interpolates 257 measured log-intensity quantiles in radius and angle, then inverts
   that monotone distribution. Tied/constant samples and sparse support are checked explicitly.
 - Neither remedy spatially smooths the photograph. Both operate on the full observed rectangle.
@@ -255,3 +257,14 @@ For native Photoshop checking, use a uniquely named copy, verify it is not alrea
 close only the script-owned document and save exports as copies. Check the native render
 as well as merged file data. Report method, file integrity and visual/scientific validation
 as separate verdicts; a passing roundtrip is not a scientific certification.
+
+
+## Three-camera ASTROPHOTOGRAPHY cases
+
+[Sony, Nikon and Canon case lessons](ASTRO_THREE_CAMERA_CASE_STUDY.md) add three
+photographer-accepted editable endpoints with different remaining qualifications:
+a Sony local noise-proxy improvement that did not justify promotion, Nikon measured
+signal versus presentation support, and Canon operational geometry with an unfilled
+34-pixel invalid-support hole and a later accepted CLEAN preset. These are private-data
+case observations, not library defaults or complete scientific certification. The study
+states which results cannot be reproduced from the public repository.

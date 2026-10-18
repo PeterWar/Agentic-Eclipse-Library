@@ -166,6 +166,30 @@ repository.
 
 ## Credit
 
+ASTROPHOTOGRAPHY workflow and skill, developed from three camera case studies and built on Agentic Eclipse Library.
+Raúl Hussein ([@rahusga](https://github.com/rahusga)) — creator and lead contributor of the proposed
+[`eclipse-astrophotography` workflow/skill](skills/eclipse-astrophotography/SKILL.md).
+
+The observational credits below describe original image acquisition and private RAW dataset contributions;
+they are separate from authorship of the contributed workflow/skill:
+
+| Camera case | Original image acquisition and private RAW dataset contributor |
+|---|---|
+| Sony | Oscar Maseda |
+| Nikon | Carlos Oltra |
+| Canon | Raúl Hussein |
+
+Dataset contribution does not imply skill authorship, manuscript coauthorship or publication of the underlying files.
+
+No original RAW files, photographs or editable masters are distributed with this contribution.
+All photographic datasets, image derivatives, capture metadata and private scientific evidence remain private.
+Permission to name contributors does not authorize distribution of those materials. No dataset release is planned.
+
+Pere Guerra Serra is the original author of Agentic Eclipse Library. The numerical methods retain their
+existing attribution in [AEL's method documentation](docs/PAPER_AND_LIBRARY.md). This contribution assigns no
+ownership of AEL or maintainer privilege; independent manuscript authorship remains a separate process.
+
+
 If you use this work — the skills, the notes or the code — or publish an image made with it, a mention in its
 caption, description or references would be appreciated. This is a courtesy request, not a condition of the
 licence:

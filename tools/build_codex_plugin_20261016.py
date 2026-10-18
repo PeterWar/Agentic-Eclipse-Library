@@ -25,6 +25,11 @@ def sources():
     pairs += [(REPO / "README_AEL.md", PLUGIN / "docs" / "README_AEL.md"),
               (REPO / "LICENSE", PLUGIN / "LICENSE"),
               (REPO / ".claude-plugin" / "icon.png", PLUGIN / "assets" / "icon.png")]
+    # Keep the case-workflow skill canonical at the source root and mirror it for Codex.
+    astro = Path("skills") / "eclipse-astrophotography"
+    pairs += [(REPO / astro / n, PLUGIN / astro / n) for n in (
+        "SKILL.md", "agents/openai.yaml", "references/acquisition-and-authority.md",
+        "references/examples-and-receipts.md")]
     return pairs
 
 
@@ -65,7 +70,7 @@ def main():
     receipt = {"plugin_version": manifest["version"],
                "runtime_source_commit": subprocess.check_output(["git", "log", "-1", "--format=%H", "--", "ael", "pyproject.toml"], cwd=REPO, text=True).strip(),
                "runtime_snapshot_matches_source": True,
-               "files": {str(f.relative_to(PLUGIN)): digest(f) for f in files}}
+               "files": {f.relative_to(PLUGIN).as_posix(): digest(f) for f in files}}
     index = PLUGIN / "BUNDLE_CONTENTS.json"
     index.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n")
     args.out.parent.mkdir(parents=True, exist_ok=True)
