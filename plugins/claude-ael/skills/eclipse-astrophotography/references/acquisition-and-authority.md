@@ -8,7 +8,7 @@ Record the camera/optical train, ISO, CFA/layout or RGB representation, exposure
 
 Matched calibration must match its acquisition conditions. Without matched darks/flats/bias, describe the consequence and assess whether a bounded photographic route remains useful. Do not invent calibration data. Measure this camera's clipping/linearity and overlap; a nominal default in an example recipe is not a measured ceiling.
 
-Register on the intended coronal structure, not merely the moving Moon. An optimizer returning decimals does not certify a transform. Different optical trains need a calibrated distortion model each before they are combined; a free affine is not a substitute, and photographic acceptance cannot waive this. Within one train, changing scale or distortion also needs an optical model, not a convenient affine. Preserve complete reference-to-native-input mappings and qualify bridges between exposure products where required. Do not transfer thresholds, guards, centres or opacity choices from the three motivating camera cases.
+Register on the intended coronal structure, not merely the moving Moon. An optimizer returning decimals does not certify a transform. Apply each optical train's calibrated distortion correction before combining different trains; a free affine is not a substitute, and photographic acceptance cannot waive this. Within one train, changing scale or distortion also needs an optical model, not a convenient affine. Preserve complete reference-to-native-input mappings and qualify bridges between exposure products where required. Do not transfer thresholds, guards, centres or opacity choices from the three motivating camera cases.
 
 The AEL stack recipe can directly combine declared exposures. If exposure-specific stacks are needed to assess intra-exposure drift and inter-exposure bridges, keep their geometry and resampling history explicit. This skill supplies neither an additional registration solver nor an HDR builder.
 
@@ -30,7 +30,7 @@ Routine: identities, phase/cohort consistency, measured calibration/registration
 
 Escalation: new radiometric certification, uncertain cross-camera distortion, physical limb attribution below a pixel, a causal optical model, absolute brightness/colour, lunar albedo/Earthshine or a new sky/extinction interpretation. State the scientific question and missing evidence. A separate scientific failure may remain unresolved alongside an accepted photograph.
 
-Operational geometry acceptance has conditions: the failed scientific criterion remains failed; the user explicitly accepts the intended presentation use; observed-data support and other required contracts are intact; and it never covers fusing different optical trains without a distortion model for each. If any required parent has changed identity or is absent, STOP its dependent build rather than invoking the photographer's aesthetic permission.
+Operational geometry acceptance has conditions: the failed scientific criterion remains failed; the user explicitly accepts the intended presentation use; observed-data support and other required contracts are intact; and it never covers fusing different optical trains before each one's calibrated distortion correction is applied. If any required parent has changed identity or is absent, STOP its dependent build rather than invoking the photographer's aesthetic permission.
 
 ## Existing AEL implementation
 

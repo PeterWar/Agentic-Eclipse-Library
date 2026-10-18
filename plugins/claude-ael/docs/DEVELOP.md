@@ -18,8 +18,8 @@ ael filters --config filters.json --out filter_run/
 
 See `examples/stack_config_template.json`. Use totality frames from **one optical
 train and one ISO**, with a registration measured on coronal structure after removing
-the radial gradient. A different optical train requires a calibrated distortion
-model before combining it; a free affine is not a substitute.
+the radial gradient. A different optical train requires its calibrated distortion
+correction before combining it, even for a presentation; a free affine is not a substitute.
 
 Each frame supplies:
 

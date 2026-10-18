@@ -14,10 +14,14 @@
   - **`docs/FIELD_LESSONS.md`: the NRGF description follows 1.3.2.** The profile is a local cubic Hermite curve
     through slope- and curvature-corrected nodes; only the spread uses PCHIP, on its logarithm. The old sentence,
     written for 1.2.1, was still in the 1.3.2 release and in Codex plugin 1.0.1.
-- **On top of that contribution:** the skill and the case study say that different optical trains are never fused
-  without a calibrated distortion model for each, even for a presentation; colour propagated for display is a declared
-  reconstruction in its own layer; the skill's links point to the copies in the package; the credit moves to the
-  README's Contributors section; the plugins, their receipt and the workflow counts are brought up to date.
+- **A rule for all of AEL: correct each optic before fusing.** Different lenses, telescopes or cameras are never
+  combined until each one's calibrated distortion correction has been applied, not even for a presentation
+  (`AGENTS.md`, rule 11, and `docs/DEVELOP.md`). The new skill and the case study say the same.
+- **Changes by the maintainer on top of that contribution:** colour propagated for display is a declared
+  reconstruction in its own layer; the skill's links point to the copies in the package; the credit block moves from
+  "Credit" to the README's Contributors section, and the authorship clauses in the skill and the case study become one
+  line and a short Contributors section; the case study gains a maintainer's note on what came from private scripts;
+  both plugins, the Codex receipt and the workflow counts are brought up to date.
 - **README: "What this plugin runs, fetches and sends".** The packages that `pip` installs, the public coronagraph
   data that one skill downloads after the user approves it, the Skyfield ephemeris, and two research scripts that
   reach the network: a star-catalogue download and the OpenRouter client the project used to consult other models.

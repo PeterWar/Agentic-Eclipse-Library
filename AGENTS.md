@@ -84,6 +84,9 @@ Each of these was learnt the hard way in this project; the skills give the detai
    resolution, near the lunar limb and at the edges, before presenting it.
 10. **Resolution follows signal-to-noise.** Keep fine detail only where the data supports it; smooth where the
     noise dominates, radially near the limb.
+11. **Correct each optic before fusing.** Different lenses, telescopes or cameras are never combined until each
+    one's calibrated distortion correction has been applied, not even for a presentation. A free affine fitted to
+    make the overlap match is not a substitute.
 
 ## Help users share what they learn
 

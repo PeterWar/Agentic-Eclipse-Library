@@ -8,7 +8,7 @@ Measured registration, negative controls, separate lunar support and native-file
 
 The historical Canon workflow used AEL 1.2.0, commit `91431acea491b1e00653db2625a56ec79202ac22`. This documentation was reviewed against [public main at 5629b37](https://github.com/PeterWar/Agentic-Eclipse-Library/tree/5629b37071ec87a32f3cf37b5ce6dfcc8b02ada1). The case-specific scripts and astronomical inputs are private; this is not a demonstration that current public AEL reproduces the three masters.
 
-> **Maintainer's note.** Some steps below came from the contributors' own scripts and are not functions of the public `ael` package: the 13-contributor eligibility rule, the automatic geometric certification and the grey presentation base of the lunar disk. The Canon translation accepted after certification failed joined exposure levels from one camera; AEL never accepts fusing different optical trains without a calibrated distortion model for each ([DEVELOP](DEVELOP.md)).
+> **Maintainer's note.** Two steps below came from the cases' own private scripts and are not functions of the public `ael` package: the rule of 13 contributing frames per pixel in each green phase, and the automatic geometric certification. The report attributes the grey lunar disk to its presentation base; that step has not been reproduced here. The Canon translation accepted after certification failed joined exposure levels from one camera; AEL never fuses different optical trains before each one's calibrated distortion correction is applied ([DEVELOP](DEVELOP.md)).
 
 ## 2. Three camera cases and acquisition characteristics
 

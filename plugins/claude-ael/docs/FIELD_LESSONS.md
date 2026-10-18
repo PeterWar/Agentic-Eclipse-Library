@@ -248,13 +248,13 @@ validate the author's own chain.
 **Not reproduced.** The case's own producer and configuration were not available. These checks test the
 package as it is today, not the version used for that case.
 
-## Three camera cases contributed by Raúl Hussein (Sony, Nikon, Canon)
+## Three camera cases (Sony, Nikon, Canon), written up by Raúl Hussein
 
-[Sony, Nikon and Canon case lessons](ASTRO_THREE_CAMERA_CASE_STUDY.md) add three
-photographer-accepted editable endpoints with different remaining qualifications:
+[Sony, Nikon and Canon case lessons](ASTRO_THREE_CAMERA_CASE_STUDY.md), with photographs by Oscar Maseda,
+Carlos Oltra and Raúl Hussein, add three photographer-accepted editable endpoints with different remaining qualifications:
 a Sony local noise-proxy improvement that did not justify promotion, Nikon measured
 signal versus presentation support, and Canon operational geometry with an unfilled
-34-pixel invalid-support hole and a later accepted CLEAN preset. These are private-data
+34-pixel invalid-support hole and a later accepted clean presentation preset. These are private-data
 case observations, not library defaults or complete scientific certification. The study
 states which results cannot be reproduced from the public repository.
 

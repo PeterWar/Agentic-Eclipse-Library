@@ -57,8 +57,8 @@ the skill [`skills/corona-visualizations/`](skills/corona-visualizations/) (in E
 ## Contributors
 
 Agentic Eclipse Library was created by Pere Guerra Serra, who maintains it and decides what enters `main` and
-each release. The contributors below have added to it; their commits keep their names, and their contributions
-are published under the same [MIT licence](LICENSE).
+each release. The contributors below have added to it; commits sent by contributors keep their authors' names, and every
+contribution is published under the same [MIT licence](LICENSE).
 
 [NLFotografia](https://github.com/NLFotografia) contributed a
 [case study on preserving an existing edit with adjustable filters](docs/EXISTING_EDIT_CASE_STUDY.md)
@@ -82,12 +82,12 @@ first multi-camera field case contributed from outside the project, in pull requ
 [#5](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/5),
 [#6](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/6) and
 [#7](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/7). His skill
-[`eclipse-astrophotography`](skills/eclipse-astrophotography/SKILL.md) takes an agent through a whole eclipse
-case, from the chosen frames to an editable master the photographer accepts. It brings rules already in AEL into
+[`eclipse-astrophotography`](skills/eclipse-astrophotography/SKILL.md), developed from three camera cases, takes an
+agent through a whole eclipse case, from the chosen frames to an editable master the photographer accepts. It brings rules already in AEL into
 one route, and adds a stage table, five geometry and support roles that one centre or one mask tends to merge, and
 a case closeout in which stopping at a known limit is a valid end. His
-[three-camera case study](docs/ASTRO_THREE_CAMERA_CASE_STUDY.md) follows a Sony, a Nikon and a Canon of the same
-eclipse and keeps in view what each could not establish. He also found that the field lessons still described the
+[three-camera case study](docs/ASTRO_THREE_CAMERA_CASE_STUDY.md) follows a Sony, a Nikon and a Canon that photographed
+one eclipse, and keeps in view what each could not establish. He also found that the field lessons still described the
 NRGF of 1.3.1 after the 1.3.2 release, and corrected them.
 
 **Oscar Maseda** (Sony) and **Carlos Oltra** (Nikon) photographed that eclipse and made their RAW frames available
@@ -195,7 +195,7 @@ repository").
 ## Licence
 
 [MIT](LICENSE) © 2026 Pere Guerra Serra. You may use, copy, modify and redistribute this work freely, including
-commercially; the licence only asks you to keep the copyright notice with copies of the work.
+commercially; the licence only asks you to keep the copyright and permission notices with copies of the work.
 
 ## What is new in 1.3.2
 
