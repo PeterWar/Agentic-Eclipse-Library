@@ -5,8 +5,9 @@
 ## 1.3.3 — 2026-10-18
 
 A contribution from outside the project, merged as one, and a rule for all of AEL. The `ael` package does not
-change (its version number only; 84 of 84 tests). The Codex plugin goes to 1.1.0 and the Claude plugins to 1.3.3,
-with seven workflows.
+change (its version number only; 84 of 84 tests). The Codex plugin goes to 1.1.0; the Claude Code plugin of this
+repository's marketplace and the Claude plugin folder `plugins/claude-ael/` go to 1.3.3, with seven skills. That folder,
+built from the Codex plugin by `tools/build_claude_plugin.py`, is in a library release for the first time.
 
 - **A contribution by Raúl Hussein**, with RAW frames from Oscar Maseda and Carlos Oltra (pull requests
   [#5](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/5),
@@ -28,6 +29,8 @@ with seven workflows.
   "Credit" to the README's Contributors section, and the authorship clauses in the skill and the case study become one
   line and a short Contributors section; the case study gains a maintainer's note on what came from private scripts;
   both plugins, the Codex receipt and the workflow counts are brought up to date.
+Also since 1.3.2:
+
 - **README: "What this plugin runs, fetches and sends".** The packages that `pip` installs, the public coronagraph
   data that one skill downloads after the user approves it, the Skyfield ephemeris, and two research scripts that
   reach the network: a star-catalogue download and the OpenRouter client the project used to consult other models.

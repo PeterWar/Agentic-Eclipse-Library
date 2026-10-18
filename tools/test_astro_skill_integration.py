@@ -96,10 +96,14 @@ class SkillIntegration(unittest.TestCase):
     def test_engine_unchanged(self):
         if BASE is None:
             self.skipTest("No pre-change base supplied; engine comparison untested")
-        old = {p.relative_to(BASE / "ael").as_posix(): sha(p) for p in (BASE / "ael").glob("*.py")}
-        new = {p.relative_to(REPO / "ael").as_posix(): sha(p) for p in (REPO / "ael").glob("*.py")}
+        # A release changes only the version line; every other line of the engine must match the base.
+        def body(path):
+            lines = path.read_text(encoding="utf-8").splitlines()
+            return [l for l in lines if not re.match(r'\s*(__version__|version)\s*=\s*"', l)]
+        old = {p.relative_to(BASE / "ael").as_posix(): body(p) for p in (BASE / "ael").rglob("*.py")}
+        new = {p.relative_to(REPO / "ael").as_posix(): body(p) for p in (REPO / "ael").rglob("*.py")}
         self.assertEqual(old, new)
-        self.assertEqual(sha(BASE / "pyproject.toml"), sha(REPO / "pyproject.toml"))
+        self.assertEqual(body(BASE / "pyproject.toml"), body(REPO / "pyproject.toml"))
 
     def test_duplicate_catalog_rejected(self):
         with tempfile.TemporaryDirectory(prefix="astro-duplicate-") as tmp:

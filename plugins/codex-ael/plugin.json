@@ -40,7 +40,7 @@
           "Root-cause artefact diagnosis",
           "Polar views and coronal motion",
           "Coronagraph comparisons",
-          "Case workflow and editable-master closeout"
+          "Whole case to an accepted editable master"
         ],
         "websiteURL": "https://github.com/PeterWar/Agentic-Eclipse-Library",
         "supportURL": "https://github.com/PeterWar/Agentic-Eclipse-Library/issues",
@@ -72,7 +72,7 @@
           },
           "fr-FR": {
             "subtitle": "Traitez vos photos d’éclipse",
-            "description": "Traitez des photographies d’éclipses totales de Soleil : calibration et empilement linéaire, filtres de la couronne, fichiers Photoshop avec calques, diagnostic des artefacts, vues polaires, mouvements, comparaisons avec des coronographes et un cas complet, des images choisies à un fichier maître modifiable accepté par le photographe (guide contribué par Raúl Hussein). Préserve les originaux et ne remplace pas les données manquantes. Inclut une démonstration synthétique clairement identifiée. Exécution locale, Python 3.10 ou ultérieur et dépendances supplémentaires requis. Les limites des filtres sont documentées ; les tests du logiciel ne valident pas une nouvelle observation. Logiciel libre de Pere Guerra Serra, licence MIT."
+            "description": "Traitez des photographies d’éclipses totales de Soleil : calibration et empilement linéaire, filtres de la couronne, fichiers Photoshop avec calques, diagnostic des artefacts, vues polaires, mouvements, comparaisons avec des coronographes et un cas complet, des images choisies à un fichier maître modifiable accepté par le photographe (guide proposé par Raúl Hussein). Préserve les originaux et ne remplace pas les données manquantes. Inclut une démonstration synthétique clairement identifiée. Exécution locale, Python 3.10 ou ultérieur et dépendances supplémentaires requis. Les limites des filtres sont documentées ; les tests du logiciel ne valident pas une nouvelle observation. Logiciel libre de Pere Guerra Serra, licence MIT."
           }
         }
       }

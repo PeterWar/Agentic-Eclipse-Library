@@ -77,8 +77,8 @@ Upsilon curve, with an exponent for each side, for any RHEF layer; and
 [how the library's filters differ from the layers of the paper's published image](docs/PAPER_AND_LIBRARY.md),
 filter by filter.
 
-**Raúl Hussein** ([@rahusga](https://github.com/rahusga)) is the lead contributor of the first new skill and the
-first multi-camera field case contributed from outside the project, in pull requests
+**Raúl Hussein** ([@rahusga](https://github.com/rahusga)) is the lead contributor of the first skill and the first
+case study with several cameras contributed from outside the project, in pull requests
 [#5](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/5),
 [#6](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/6) and
 [#7](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/7). His skill
@@ -206,7 +206,8 @@ A contribution by Raúl Hussein, with RAW frames from Oscar Maseda and Carlos Ol
   roles and a case closeout. It is also in both plugins.
 - **[Three camera cases](docs/ASTRO_THREE_CAMERA_CASE_STUDY.md)**: a Sony, a Nikon and a Canon that photographed one
   eclipse, with what each could not establish.
-- **The NRGF description in the [field lessons](docs/FIELD_LESSONS.md) follows 1.3.2**, which it did not.
+- **The [field lessons](docs/FIELD_LESSONS.md) now describe the NRGF of 1.3.2**; until now they described that of
+  1.3.0–1.3.1.
 
 And a rule for all of AEL: **correct each optic before fusing**, even for a presentation
 ([`AGENTS.md`](AGENTS.md), rule 11). The `ael` package does not change.

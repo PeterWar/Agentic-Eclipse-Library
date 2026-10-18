@@ -143,7 +143,7 @@ def differences():
         if not dst.is_file():
             diffs.append(f"missing: {rel}")
         elif isinstance(src, str):
-            if dst.read_text() != src:
+            if dst.read_text(encoding="utf-8") != src:
                 diffs.append(f"changed: {rel}")
         elif isinstance(src, bytes):
             if dst.read_bytes() != src:
@@ -160,7 +160,7 @@ def build():
         dst = DEST / rel
         dst.parent.mkdir(parents=True, exist_ok=True)
         if isinstance(src, str):
-            dst.write_text(src)
+            dst.write_text(src, encoding="utf-8")
         elif isinstance(src, bytes):
             dst.write_bytes(src)
         else:

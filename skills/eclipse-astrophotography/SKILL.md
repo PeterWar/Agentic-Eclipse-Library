@@ -14,7 +14,7 @@ Processing approval is not publication permission. Do not add publication or sub
 ## Enter at the right point
 
 - For an unclear goal or a first look at eclipse photos, route to [AEL first steps](../eclipse-first-steps/SKILL.md).
-- Keep a single-stage request with its existing specialist. In either plugin (Codex or Claude) use `eclipse-calibration-stacking`, `corona-filter-layers` or `eclipse-artefact-diagnosis`; in a source checkout the corresponding skills are `apilatge-imatges-eclipsi`, `postprocessat-corona` and `corregeix-artefactes`. Read their actual local entrypoints when present. This skill coordinates case decisions across stages; it does not replace those procedures.
+- Keep a single-stage request with its existing specialist. In the Codex plugin or the Claude plugin folder (`plugins/claude-ael`) use `eclipse-calibration-stacking`, `corona-filter-layers` or `eclipse-artefact-diagnosis`; in this repository, and in the Claude Code plugin installed from its marketplace, the corresponding skills are `apilatge-imatges-eclipsi`, `postprocessat-corona` and `corregeix-artefactes`. Read their actual local entrypoints when present. This skill coordinates case decisions across stages; it does not replace those procedures.
 - For Earthshine, absolute brightness or another physical claim, identify the required evidence and limits first. Route supported sky/extinction and coronagraph comparisons to AEL's existing documentation and `coronagraph-comparison`; that skill is not an Earthshine certification method. Do not run a physical investigation under photographic approval.
 - For a preferred existing edit, establish whether the user wants detail recomputed on that edit or separately aligned existing layers. Read the [existing-edit case](../../docs/EXISTING_EDIT_CASE_STUDY.md). Do not call a finished RGB image linear RAW data.
 - For an already accepted master, preserve its identity and closeout. A new library release or better local metric does not authorize another version or reopen acceptance.
@@ -52,4 +52,4 @@ For artifacts, route to AEL's artefact-diagnosis skill (`eclipse-artefact-diagno
 
 Retain a negative result when a measured local improvement yields no demonstrated useful photographic gain. Distinguish agent assessment from photographer judgement. Close photographic, scientific, lunar, reproduction and conservation dimensions separately; never infer complete SCIENTIFIC acceptance, Earthshine or RAW-to-final replay from an accepted Photoshop file.
 
-Skill written by Raúl Hussein (@rahusga), building on Agentic Eclipse Library, created by Pere Guerra Serra; AEL's general safeguards, numerical methods and human-review practices predate it.
+Skill written by Raúl Hussein (@rahusga) and edited for release by the maintainer, building on Agentic Eclipse Library, created by Pere Guerra Serra; AEL's general safeguards, numerical methods and human-review practices predate it.

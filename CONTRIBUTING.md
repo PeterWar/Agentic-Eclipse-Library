@@ -53,9 +53,8 @@ Issues and pull requests are public. Choose the GitHub identity and attribution 
 case description does not hide the account or commit metadata used to submit it. Accepted contributions keep
 their commits under the contributor's name and are credited in the README's
 [Contributors](README.md#contributors) section and in the release notes, so files need no credit or authorship
-clauses of their own; a contributed skill may name its author in one line. Keep existing copyright and licence
-notices. Contributions use the repository's MIT licence, which does not transfer copyright; contributing does not
-change who created and maintains the library.
+clauses of their own; a contributed skill or case study may name its authors briefly. Keep existing copyright and licence notices;
+the licence does not transfer copyright, and contributing does not change who created and maintains the library.
 
 Only **PeterWar** can update or merge into `main`. A submitted contribution remains a proposal until the
 maintainer accepts it. Contributions to the repository use its existing [MIT licence](LICENSE).
