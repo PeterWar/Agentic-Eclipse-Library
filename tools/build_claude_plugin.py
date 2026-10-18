@@ -1,6 +1,6 @@
 """Build the Claude plugin folder from the published Codex plugin, without touching it.
 
-plugins/codex-ael/ is the host-neutral bundle (AEL runtime, six short skills, docs, examples,
+plugins/codex-ael/ is the host-neutral bundle (AEL runtime, seven short skills, docs, examples,
 launcher) maintained by tools/build_codex_plugin_20261016.py. The Claude plugin directory needs
 a `.claude-plugin/plugin.json`, an icon and a README written for Claude, and validates one small
 folder; the whole repository is too large for it. This script copies the shared files into
@@ -37,9 +37,10 @@ MANIFEST = {
 
 README = """# Agentic Eclipse Library for Claude
 
-Process total solar eclipse photographs with six guided workflows: get started, calibrate and stack,
-create corona filter layers, investigate artefacts, make polar views and motion analyses, and compare
-observations with coronagraphs. Created by Pere Guerra Serra. MIT licensed.
+Process total solar eclipse photographs with seven guided workflows: get started, calibrate and stack,
+create corona filter layers, investigate artefacts, make polar views and motion analyses, compare
+observations with coronagraphs, and take a whole case to an editable master the photographer accepts
+(contributed by Raúl Hussein). Created by Pere Guerra Serra. MIT licensed.
 
 This plugin bundles the AEL 1.3.2 Python processing engine, its known-truth tests, recipe templates and
 practical documentation. It runs on your computer with Python 3.10 or later. Claude plans the work and

@@ -1,8 +1,9 @@
 # Agentic Eclipse Library for Codex
 
-Process total solar eclipse photographs with six guided workflows: get started, calibrate and stack,
-create corona filter layers, investigate artefacts, make polar views and motion analyses, and compare
-observations with coronagraphs. Created by Pere Guerra Serra. MIT licensed.
+Process total solar eclipse photographs with seven guided workflows: get started, calibrate and stack,
+create corona filter layers, investigate artefacts, make polar views and motion analyses, compare
+observations with coronagraphs, and take a whole case to an editable master the photographer accepts
+(contributed by Raúl Hussein). Created by Pere Guerra Serra. MIT licensed.
 
 This desktop plugin bundles the AEL 1.3.2 Python processing engine, its known-truth tests, recipe
 templates and practical documentation. It runs on the user's computer with Python 3.10 or later.

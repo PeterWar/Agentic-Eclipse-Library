@@ -1,6 +1,6 @@
 # AEL for Codex
 
-Agentic Eclipse Library is available as a desktop plugin with six guided workflows and the bundled
+Agentic Eclipse Library is available as a desktop plugin with seven guided workflows and the bundled
 AEL 1.3.2 numerical engine. Plugin version 1.0.1 is independently versioned from the Python library.
 The repository marketplace works independently of OpenAI's public directory review.
 
@@ -35,8 +35,9 @@ open/edit Photoshop deliverables, not for AEL's numerical processing.
 - “Make a polar view with the solar geometry I measured.”
 - “Show me a clearly labelled synthetic demonstration.”
 
-The six workflows cover onboarding, calibration/stacking, filter layers, artefact diagnosis,
-structure/polar/motion views and coronagraph comparisons. An agent must measure inputs and explain
+The seven workflows cover onboarding, calibration/stacking, filter layers, artefact diagnosis,
+structure/polar/motion views, coronagraph comparisons and a whole case taken to an accepted editable master
+(contributed by Raúl Hussein). An agent must measure inputs and explain
 uncertainties; the plugin is not a one-click reconstruction of a finished photograph.
 
 ## Validation and limitations
