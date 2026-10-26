@@ -27,7 +27,7 @@ import numpy as np
 import ael
 from ael import calibrate, develop, io, photoshop, stack
 from ael.filterbank import DEFAULTS, NAMES
-from ael.geometry import EclipseGeometry
+from ael.geometry import EclipseGeometry, fit_limb
 
 CREDIT = ael.CREDIT
 
@@ -211,6 +211,17 @@ def proxy(path: Path, kind: str, black: float):
     return reduced, array.shape[:2], None
 
 
+def full_luminance(path: Path, kind: str, black: float) -> np.ndarray:
+    if kind == "raw":
+        raw = calibrate.read_raw(path, full=False)
+        green, _ = calibrate.green_plane(raw["bayer"].astype(np.float32) - black, raw["pattern"])
+        return green
+    array = io.load_array(path).astype(np.float32)
+    if array.ndim != 3 or array.shape[-1] != 3:
+        raise ValueError(f"Linear RGB input must be HxWx3: {path}")
+    return (array[..., 0] + 2 * array[..., 1] + array[..., 2]) / 4
+
+
 def radial_residual(rgb: np.ndarray, geometry: EclipseGeometry) -> tuple[np.ndarray, np.ndarray]:
     lum = rgb if rgb.ndim == 2 else (rgb[..., 0] + 2 * rgb[..., 1] + rgb[..., 2]) / 4
     valid = np.isfinite(lum) & (lum > 0)
@@ -231,7 +242,7 @@ def radial_residual(rgb: np.ndarray, geometry: EclipseGeometry) -> tuple[np.ndar
 
 
 def register(reference: np.ndarray, moving: np.ndarray, geometry: EclipseGeometry, *,
-             initial=None, half_resolution=True) -> dict:
+             initial=None, half_resolution=True, allow_rotation=False) -> dict:
     ref, ref_valid = radial_residual(reference, geometry)
     mov, mov_valid = radial_residual(moving, geometry)
     if not ref_valid.any() or not mov_valid.any():
@@ -260,17 +271,27 @@ def register(reference: np.ndarray, moving: np.ndarray, geometry: EclipseGeometr
                         warp = feature_warp.copy()
     iterations = 500 if initial is None else 120
     criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, iterations, 1e-8)
-    cc, warp = cv2.findTransformECC(ref, mov, warp, cv2.MOTION_AFFINE, criteria, None, 5)
-    if not np.isfinite(warp).all() or not math.isfinite(float(cc)):
+    motion = cv2.MOTION_AFFINE if allow_rotation else cv2.MOTION_TRANSLATION
+    selected = "ecc"
+    cc = None
+    if not allow_rotation and feature_warp is not None:
+        warp = feature_warp.copy()
+        selected = "sift_translation"
+    else:
+        cc, warp = cv2.findTransformECC(ref, mov, warp, motion, criteria, None, 5)
+    if not np.isfinite(warp).all() or (cc is not None and not math.isfinite(float(cc))):
         raise RuntimeError("Registration did not converge")
-    # The affine is only an estimator. Keep its translation but project the linear
-    # part to the nearest rotation: no scale or shear is allowed into the stack.
-    u, _, vt = np.linalg.svd(warp[:, :2].astype(np.float64))
+    if not allow_rotation:
+        warp[:, :2] = np.eye(2, dtype=np.float32)
     warp = np.asarray(warp, dtype=np.float64)
-    warp[:, :2] = u @ vt
-    if np.linalg.det(warp[:, :2]) < 0:
-        u[:, -1] *= -1
+    if allow_rotation:
+        # The affine is only an estimator. Keep its translation but project the linear
+        # part to the nearest rotation: no scale or shear is allowed into the stack.
+        u, _, vt = np.linalg.svd(warp[:, :2].astype(np.float64))
         warp[:, :2] = u @ vt
+        if np.linalg.det(warp[:, :2]) < 0:
+            u[:, -1] *= -1
+            warp[:, :2] = u @ vt
     # findTransformECC uses the same reference->input convention as AEL when
     # WARP_INVERSE_MAP aligns the moving image to the reference.
     full = stack.full_resolution_affine(warp) if half_resolution else warp
@@ -285,9 +306,10 @@ def register(reference: np.ndarray, moving: np.ndarray, geometry: EclipseGeometr
     correlation = float(np.corrcoef(ref[mask], aligned[mask])[0, 1])
     if not math.isfinite(correlation) or correlation < 0.25:
         raise RuntimeError(f"Registration rejected: correlation {correlation:.4f} < 0.25")
-    return {"estimator_matrix": warp.tolist(), "reference_to_input": full.tolist(), "selected": "ecc",
+    return {"estimator_matrix": warp.tolist(), "reference_to_input": full.tolist(), "selected": selected,
             "resolution": "half" if half_resolution else "full", "sift_inliers": sift_inliers,
-            "ecc": float(cc), "correlation": correlation, "overlap_pixels": int(mask.sum())}
+            "rotation_allowed": allow_rotation,
+            "ecc": None if cc is None else float(cc), "correlation": correlation, "overlap_pixels": int(mask.sum())}
 
 
 def run_master(cfg: dict) -> dict:
@@ -322,25 +344,51 @@ def run_master(cfg: dict) -> dict:
 
     registrations = []
     matrices = []
+    moon_geometries = []
     reference_proxy = proxies[reference_index][0]
     half_geometry = geometry.scaled(0.5)
+    luminances = [full_luminance(path, kind, black) for path, kind in zip(paths, kinds)]
+    reference_fit = fit_limb(luminances[reference_index], geometry.moon_xy, geometry.moon_radius_px,
+                             n_rays=720, search_frac=0.08, smooth_px=1.1, n_iter=4)
+    ref_residual, ref_valid = radial_residual(reference_proxy, half_geometry)
     for index, item in enumerate(proxies):
         if index == reference_index:
-            registrations.append({"ecc": 1.0, "correlation": 1.0, "identity": True})
-            matrices.append(np.eye(2, 3, dtype=np.float64))
+            matrix = np.eye(2, 3, dtype=np.float64)
+            registration = {"ecc": 1.0, "correlation": 1.0, "identity": True,
+                            "moon_fit": {key: reference_fit[key] for key in ("xy", "r", "rms", "n_used", "n_rays")},
+                            "selected": "reference_limb"}
         else:
-            registration = register(reference_proxy, item[0], half_geometry)
-            registrations.append(registration)
-            matrices.append(np.asarray(registration["reference_to_input"], dtype=np.float64))
+            coarse = register(reference_proxy, item[0], half_geometry, allow_rotation=True)
+            approximate = coarse["reference_to_input"] @ np.array([geometry.moon_xy[0], geometry.moon_xy[1], 1.0])
+            measured = fit_limb(luminances[index], approximate[:2], geometry.moon_radius_px,
+                                n_rays=720, search_frac=0.08, smooth_px=1.1, n_iter=4)
+            linear = np.asarray(coarse["reference_to_input"], dtype=np.float64)[:, :2] if cfg.get("allow_rotation", False) else np.eye(2)
+            translation = np.asarray(measured["xy"]) - linear @ np.asarray(reference_fit["xy"])
+            matrix = np.hstack([linear, translation[:, None]])
+            half = matrix.copy()
+            half[:, 2] = (matrix[:, 2] - 0.5 + matrix[:, :2] @ np.array([0.5, 0.5])) / 2
+            moving_residual, moving_valid = radial_residual(item[0], half_geometry)
+            aligned = cv2.warpAffine(moving_residual, half, (ref_residual.shape[1], ref_residual.shape[0]),
+                                     flags=cv2.INTER_LINEAR | cv2.WARP_INVERSE_MAP,
+                                     borderMode=cv2.BORDER_CONSTANT)
+            mask = ref_valid & moving_valid & np.isfinite(aligned)
+            correlation = float(np.corrcoef(ref_residual[mask], aligned[mask])[0, 1]) if mask.sum() >= 100 else -1
+            if not math.isfinite(correlation) or correlation < 0.25:
+                raise RuntimeError(f"Limb registration rejected by coronal correlation: {correlation:.4f}")
+            registration = dict(coarse)
+            registration.update({"selected": "limb_rigid" if cfg.get("allow_rotation", False) else "limb_translation",
+                "reference_to_input": matrix.tolist(),
+                "moon_fit": {key: measured[key] for key in ("xy", "r", "rms", "n_used", "n_rays")},
+                "correlation": correlation, "coarse_ecc": coarse["ecc"]})
+        registrations.append(registration)
+        matrices.append(matrix)
+        moon_geometries.append(registration["moon_fit"])
     frames = []
-    for index, (path, kind, info, matrix) in enumerate(zip(paths, kinds, meta, matrices)):
-        scale = math.sqrt(abs(float(np.linalg.det(matrix[:, :2]))))
-        moon = matrix @ np.array([geometry.moon_xy[0], geometry.moon_xy[1], 1.0])
+    for index, (path, kind, info, matrix, moon_fit) in enumerate(zip(paths, kinds, meta, matrices, moon_geometries)):
         frame = {"path": str(path), "kind": kind, "iso": info["iso"], "exposure_s": info["exposure_s"],
                  "black": black, "white": white, "linearity_fraction": fraction,
-                 "reference_to_input": matrix.tolist(), "moon_xy": moon[:2].tolist(),
-                 "moon_radius_px": geometry.moon_radius_px * scale,
-                 "train": profile.get("train", "one")}
+                 "reference_to_input": matrix.tolist(), "moon_xy": list(moon_fit["xy"]),
+                 "moon_radius_px": moon_fit["r"], "train": profile.get("train", "one")}
         for key in ("dark", "flat"):
             if cfg.get(key):
                 frame[key] = str(Path(cfg[key]).expanduser().resolve())

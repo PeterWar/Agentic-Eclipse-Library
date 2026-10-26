@@ -14,6 +14,7 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import traceback
 
 import cv2
 import numpy as np
@@ -145,6 +146,7 @@ def main() -> None:
             report["ok"] = report["filters_ok"] and report["master_ok"]
         except Exception as exc:
             report["error"] = f"{type(exc).__name__}: {exc}"
+            report["traceback"] = traceback.format_exc()
         args.output.mkdir(parents=True, exist_ok=True)
         (args.output / "WORKFLOW_VALIDATION.json").write_text(json.dumps(report, indent=1, ensure_ascii=False), encoding="utf-8")
         if result.get("ok") and (out / "filters/PIXELMATH.md").exists():

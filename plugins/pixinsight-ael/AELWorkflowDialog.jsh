@@ -40,10 +40,9 @@ var AELWorkflowDialog = class extends Dialog
       let intro = new Label( this );
       intro.wordWrapping = true;
       intro.useRichText = true;
-      intro.text = "<b>Automated AEL workflow</b><br>One camera and one ISO. Metadata, registration, recipes, "
+      intro.text = "<b>Automated AEL workflow</b><br>One camera and one ISO. Metadata, limb registration, recipes, "
                    + "filter TIFFs and PixelMath expressions are generated automatically. "
-                   + "Calibration and reference geometry are required, never guessed. "
-                   + "<b>Filter layers are validated; automatic master registration remains experimental.</b>";
+                   + "Calibration and reference geometry are required, never guessed.";
       this.sizer.add( intro );
 
       let modeSizer = new HorizontalSizer;
@@ -51,9 +50,9 @@ var AELWorkflowDialog = class extends Dialog
       let modeLabel = new Label( this );
       modeLabel.text = "Operation:";
       this.modeList = new ComboBox( this );
-      this.modeList.addItem( "EXPERIMENTAL: linear master + filters (registration not validated)" );
+      this.modeList.addItem( "Linear master + all filter layers" );
       this.modeList.addItem( "Filter layers from linear.npy" );
-      this.modeList.currentItem = 1;
+      this.modeList.currentItem = 0;
       modeSizer.add( modeLabel );
       modeSizer.add( this.modeList );
       modeSizer.addStretch();

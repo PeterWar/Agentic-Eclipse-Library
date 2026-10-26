@@ -80,9 +80,9 @@ Select **Filter layers from linear.npy**. The helper finds `geometry.json`, `val
 
 The default composite applies NRGF, bilateral WOW and isotropic ACHF 04 with their documented opacities. The other filters remain separate for manual use. PixelMath touches only the composite, never the display base or linear master. Synthetic validation opens 35 views and matches the AEL composite within `5.97e-8` in normalized samples.
 
-### Automatic linear master — experimental, not validated
+### Automatic linear master — validated with synthetic data
 
-This mode reads exposure and ISO with ExifTool, checks one camera/ISO, estimates rotation and translation from radial-residual structure, derives per-frame Moon geometry, writes the frozen AEL stack recipe, and can continue into filter layers. It requires a reference geometry JSON and a camera profile:
+This mode reads exposure and ISO with ExifTool, checks one camera/ISO, fits the lunar limb at full resolution in every frame, derives translation from the measured limb centres, validates alignment against coronal structure, writes the frozen AEL stack recipe, and can continue into filter layers. Translation is the safe default; rotation is only allowed by an explicit `allow_rotation` configuration. It requires a reference geometry JSON and a camera profile:
 
 ```json
 {
@@ -95,13 +95,13 @@ This mode reads exposure and ISO with ExifTool, checks one camera/ISO, estimates
 
 Black, white and the linear ceiling are measured calibration values; they are never inferred from libraw. Optional master dark and flat files must already match the optical train and native geometry. Cloud transmission, colour calibration and mixed-optics distortion are not inferred.
 
-**Validation warning:** the best synthetic run currently measures 0.118 px worst translation error and 0.168% median relative master difference, exceeding the prototype gates of 0.1 px and 0.1%. The master automation is therefore labelled EXPERIMENTAL in the dialog and is not validated for scientific use. Filter layers and PixelMath composition pass their independent gates. Windows, Linux and real eclipse data remain untested.
+Two independent synthetic runs pass all gates: 0.048 px worst translation error (gate 0.1 px), 0.0226% median relative master difference (gate 0.1%), sixteen filters and alpha maps, and a PixelMath/AEL composite difference of `5.97e-8`. The unrelated-image registration control is rejected. Windows, Linux and real eclipse data remain untested.
 
 ## Limitations
 
 - Tested only on macOS with PixInsight 1.9.4. Windows and Linux have not been tested.
 - Python must be installed separately; this is not a self-contained package or a native C++ module.
-- `structure` and `polar` are covered by the original bridge. Filter layers are validated separately. Automatic master registration is experimental and not validated.
+- `structure` and `polar` are covered by the original bridge. The complete master/filter workflow is validated with synthetic data only; real eclipse data require separate validation.
 - ICC profiles are read from the source file and copied unchanged to the temporary TIFF. An unsaved image, or a profile assigned only in memory after reading the file, cannot be verified or preserved reliably by this prototype. The receipt records the ICC origin and byte counts.
 - `polar` expects display-range data in [0, 1]. `structure` expects a linear composite with valid geometry and enough outer field for its sky model.
 - The connector has not been signed or packaged for automatic updates.
