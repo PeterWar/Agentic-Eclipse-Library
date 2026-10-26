@@ -64,11 +64,44 @@ The validation covers:
 
 `VALIDATION.json` contains the gates and exact commands. A missing PixInsight executable or a failed gate makes the complete validation fail. `--skip-pixinsight` runs only direct AEL checks and is not a complete bridge validation. `--skip-captures` omits only the visual captures.
 
+## Automated linear-master and filter workflow
+
+`AELWorkflow.js` adds **Utilities > AEL Linear Master and Filters**. Keep `AELWorkflowCore.jsh`, `AELWorkflowDialog.jsh` and `python/ael_workflow.py` beside the bridge files.
+
+### Filter layers from an existing linear stack — validated
+
+Select **Filter layers from linear.npy**. The helper finds `geometry.json`, `valid.npy`, `coverage.npy` and `alpha.npy` beside the input, measures a display scale from observed corona pixels, and generates all sixteen portable AEL filters by default. It writes:
+
+- float NPY layers and alpha arrays from AEL;
+- separate 16-bit TIFF views `AEL_L_<filter>` and `AEL_A_<filter>`;
+- `AEL_DISPLAY` and an independent `AEL_COMPOSITE` duplicate;
+- `pixelmath.json` and `PIXELMATH.md` with explicit symbols and expressions;
+- AEL and workflow receipts.
+
+The default composite applies NRGF, bilateral WOW and isotropic ACHF 04 with their documented opacities. The other filters remain separate for manual use. PixelMath touches only the composite, never the display base or linear master. Synthetic validation opens 35 views and matches the AEL composite within `5.97e-8` in normalized samples.
+
+### Automatic linear master — experimental, not validated
+
+This mode reads exposure and ISO with ExifTool, checks one camera/ISO, estimates rotation and translation from radial-residual structure, derives per-frame Moon geometry, writes the frozen AEL stack recipe, and can continue into filter layers. It requires a reference geometry JSON and a camera profile:
+
+```json
+{
+  "black": 512,
+  "white": 16000,
+  "linearity_fraction": 0.95,
+  "train": "camera and optics identifier"
+}
+```
+
+Black, white and the linear ceiling are measured calibration values; they are never inferred from libraw. Optional master dark and flat files must already match the optical train and native geometry. Cloud transmission, colour calibration and mixed-optics distortion are not inferred.
+
+**Validation warning:** the best synthetic run currently measures 0.118 px worst translation error and 0.168% median relative master difference, exceeding the prototype gates of 0.1 px and 0.1%. The master automation is therefore labelled EXPERIMENTAL in the dialog and is not validated for scientific use. Filter layers and PixelMath composition pass their independent gates. Windows, Linux and real eclipse data remain untested.
+
 ## Limitations
 
 - Tested only on macOS with PixInsight 1.9.4. Windows and Linux have not been tested.
 - Python must be installed separately; this is not a self-contained package or a native C++ module.
-- Only `structure` and `polar` are in scope. Other AEL commands are not exposed.
+- `structure` and `polar` are covered by the original bridge. Filter layers are validated separately. Automatic master registration is experimental and not validated.
 - ICC profiles are read from the source file and copied unchanged to the temporary TIFF. An unsaved image, or a profile assigned only in memory after reading the file, cannot be verified or preserved reliably by this prototype. The receipt records the ICC origin and byte counts.
 - `polar` expects display-range data in [0, 1]. `structure` expects a linear composite with valid geometry and enough outer field for its sky model.
 - The connector has not been signed or packaged for automatic updates.
