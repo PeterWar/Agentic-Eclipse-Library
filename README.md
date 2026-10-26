@@ -54,6 +54,10 @@ Details, and what the 2026 data taught (correlated noise, colour in linear light
 like coronal motion), in [`README_AEL.md`](README_AEL.md). The agent's instructions for the three products are
 the skill [`skills/corona-visualizations/`](skills/corona-visualizations/) (in English).
 
+## Optional desktop application
+
+[Eclipse Image Processor](apps/eclipse-image-processor/README.md), contributed by Francisco Bitto, provides a standalone PySide6 interface for independent corona-filter layers and TIFF/PSB export. It uses its own dependencies and bundled numerical implementations; AEL's command-line tools and defaults are unchanged. See [integration scope and validation limits](apps/eclipse-image-processor/UPSTREAM_CONTRIBUTION.md).
+
 ## Contributors
 
 Agentic Eclipse Library was created by Pere Guerra Serra, who maintains it and decides what enters `main` and

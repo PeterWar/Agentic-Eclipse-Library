@@ -1,0 +1,2 @@
+# Build-only dependencies; install after requirements.txt.
+pyinstaller==6.22.3

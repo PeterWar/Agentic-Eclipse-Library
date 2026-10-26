@@ -1,0 +1,112 @@
+# Python bytecode, environments and local tool caches
+__pycache__/
+*.py[codz]
+*$py.class
+.venv/
+.venv-*/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.Python
+__pypackages__/
+.uv-cache/
+.pixi/
+.pdm-python
+.pdm-build/
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.tox/
+.nox/
+
+# Build products and distribution archives
+/build/
+/dist/
+*.egg-info/
+.eggs/
+*.egg
+*.spec
+*.dmg
+*.app/
+*.zip
+*.so
+
+# Test/coverage output (keep test source and fixtures)
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+nosetests.xml
+
+# Local editor settings, scratch files and logs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.tmp
+*.log
+tempCodeRunnerFile.py
+/Medir_G_R.py
+/Hoja de iconos de eclipse solar.png
+
+# Local credentials; example configuration can be committed
+.env
+.env.*
+!.env.example
+.envrc
+.pypirc
+
+# macOS metadata
+.DS_Store
+.AppleDouble/
+.LSOverride
+._*
+
+# Local astronomical data and exported images/documents
+*.fits
+*.fit
+*.fts
+*.xisf
+*.tif
+*.tiff
+*.jpg
+*.jpeg
+*.psd
+*.psb
+*_PS_layers/
+*_PS_layers_*/
+.coronahdr-jobs/
+/artifacts/
+
+# Incomplete/temporary exports
+.layers-*/
+eip-psb-layers-*/
+*.json.tmp
+
+# Retain intentional repository resources and synthetic fixtures
+!assets/**/*.tif
+!assets/**/*.tiff
+!assets/**/*.jpg
+!assets/**/*.jpeg
+!docs/**/*.tif
+!docs/**/*.tiff
+!docs/**/*.jpg
+!docs/**/*.jpeg
+!tests/fixtures/**/*.fits
+!tests/fixtures/**/*.fit
+!tests/fixtures/**/*.fts
+!tests/fixtures/**/*.xisf
+!tests/fixtures/**/*.tif
+!tests/fixtures/**/*.tiff
+!tests/fixtures/**/*.jpg
+!tests/fixtures/**/*.jpeg
+!tests/fixtures/**/*.psd
+!tests/fixtures/**/*.psb
+
+# Generated documentation
+/docs/_build/
