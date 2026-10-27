@@ -7,6 +7,10 @@ from . import io, photoshop
 from .filterbank import DEFAULTS,NAMES,make_filter
 from .geometry import EclipseGeometry
 
+# Starting opacities of the default layers (the 2026 image's layers V96/V97). WOW: 0.37 gives the new default the
+# same fine contrast next to the limb (1.1–1.5 R☉) as WOW bilateral at 0.37 had (docs/VALIDATION_1.3.4.md).
+DEFAULT_OPACITY={'nrgf':.39,'wow':.37,'achf_iso_04':.08}
+
 
 def layer_alpha(base_alpha,observed,mode):
     """Multiply must use exactly the base's limb ramp; never an earlier fade."""
@@ -45,7 +49,8 @@ def filters_from_config(config_path,out_dir,*,progress=print):
     path=Path(config_path).resolve(); root=path.parent
     cfg=json.loads(path.read_text())
     allowed={'input','geometry','valid','exclude','coverage','min_coverage','alpha','white_balance',
-             'camera_to_linear_rgb','moon_margin_px','filters','display','photoshop','opacities','visible','icc','note'}
+             'camera_to_linear_rgb','moon_margin_px','filters','display','photoshop','opacities','visible','icc','note',
+             'achf_display'}
     if set(cfg)-allowed: raise ValueError(f'unknown recipe keys: {sorted(set(cfg)-allowed)}')
     def resolve(v):
         p=Path(v).expanduser(); return p if p.is_absolute() else root/p
@@ -95,6 +100,8 @@ def filters_from_config(config_path,out_dir,*,progress=print):
     if set(cfg.get('opacities',{}))-set(names): raise ValueError('opacities must name selected filters')
     if any(not np.isfinite(v) or not 0<=v<=1 for v in cfg.get('opacities',{}).values()):
         raise ValueError('opacities must be finite in [0,1]')
+    achf_display=cfg.get('achf_display','rings')
+    if achf_display not in ('rings','global'): raise ValueError("achf_display is 'rings' or 'global'")
     stretch=cfg['display']
     if set(stretch)-{'scale','asinh','highlight_ceiling'}: raise ValueError('unknown display parameter')
     scale=float(stretch['scale']); strength=float(stretch.get('asinh',10))
@@ -134,10 +141,10 @@ def filters_from_config(config_path,out_dir,*,progress=print):
     domain_checks=[]
     for i,name in enumerate(names):
         progress(f'filter {i+1}/{len(names)}: {name}')
-        image,mode,info=make_filter(name,lum,valid,geo)
+        image,mode,info=make_filter(name,lum,valid,geo,achf_display=achf_display)
         observed=valid & np.isfinite(image)
         al=layer_alpha(alpha,observed,mode)
-        opacity=float(cfg.get('opacities',{}).get(name,{'nrgf':.39,'wow_bilateral':.37,'achf_iso_04':.08}.get(name,1)))
+        opacity=float(cfg.get('opacities',{}).get(name,DEFAULT_OPACITY.get(name,1)))
         if not np.isfinite(opacity) or not 0<=opacity<=1: raise ValueError('opacity must be in [0,1]')
         visible=name in visible_names
         image=np.where(observed,image,np.nan)
