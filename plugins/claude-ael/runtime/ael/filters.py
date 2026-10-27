@@ -172,13 +172,45 @@ def _atrous(a: np.ndarray, step: int) -> np.ndarray:
     return _atrous_axis(_atrous_axis(a, step, 0), step, 1)
 
 
-def starlet(img: np.ndarray, valid: np.ndarray | None, n_scales: int = 6, min_support: float = 0.2):
+def _shifted(z: np.ndarray, dy: int, dx: int) -> np.ndarray:
+    """``out[y, x] = z[y + dy, x + dx]``, zero where that falls outside the array (no wrap, no reflection)."""
+    h, w = z.shape
+    out = np.zeros_like(z)
+    if abs(dy) >= h or abs(dx) >= w:
+        return out
+    out[max(0, -dy):min(h, h - dy), max(0, -dx):min(w, w - dx)] = z[max(0, dy):min(h, h + dy), max(0, dx):min(w, w + dx)]
+    return out
+
+
+def _atrous_pairs(c: np.ndarray, mf: np.ndarray, step: int):
+    """B3 à-trous smoothing over symmetric observed pairs: a tap counts only if the tap opposite it through the
+    centre is observed too, so a linear trend averages to the centre value even at an edge of the data.
+    Returns ``(numerator, denominator)``."""
+    k0 = _B3[2] * _B3[2]
+    num = k0 * mf * c
+    den = k0 * mf
+    for dy in range(0, 3):
+        for dx in range(-2, 3):
+            if dy == 0 and dx <= 0:
+                continue
+            k = _B3[dy + 2] * _B3[dx + 2]
+            sy, sx = dy * step, dx * step
+            pair = mf * _shifted(mf, sy, sx) * _shifted(mf, -sy, -sx)
+            num += k * pair * (_shifted(c, sy, sx) + _shifted(c, -sy, -sx))
+            den += 2 * k * pair
+    return num, den
+
+
+def starlet(img: np.ndarray, valid: np.ndarray | None, n_scales: int = 6, min_support: float = 0.2, *,
+            pairs: bool = False):
     """Masked isotropic undecimated wavelet (starlet, B3 spline) transform.
 
     Returns ``(details, coarse)`` where ``details[j]`` is scale ``j+1`` (``2**j`` px holes).  With a
     mask, each smoothing is a normalised convolution, so no invalid pixel leaks into the
     coefficients; outside the data every coefficient is ``NaN``.  ``sum(details) + coarse == img`` on
-    the valid pixels (exact reconstruction).
+    the valid pixels (exact reconstruction).  With ``pairs=True`` (since 1.3.4) each smoothing uses
+    symmetric observed pairs only: next to an edge of the data a one-sided kernel would tilt every
+    coefficient towards the side that has data.
     """
     a = np.asarray(img, np.float32)
     m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))
@@ -187,8 +219,11 @@ def starlet(img: np.ndarray, valid: np.ndarray | None, n_scales: int = 6, min_su
     details = []
     for j in range(n_scales):
         step = 2 ** j
-        num = _atrous(c * mf, step)
-        den = _atrous(mf, step)
+        if pairs:
+            num, den = _atrous_pairs(c, mf, step)
+        else:
+            num = _atrous(c * mf, step)
+            den = _atrous(mf, step)
         c_next = np.where(den > min_support, num / np.maximum(den, 1e-12), c).astype(np.float32)
         # (where support is too thin the smoothed value is the value itself: detail 0, no invention)
         d = np.where(m, c - c_next, np.nan).astype(np.float32)
@@ -217,10 +252,11 @@ def noise_factors(img: np.ndarray, valid: np.ndarray | None, region: np.ndarray,
     (a boolean mask where the noise dominates, e.g. the far field).
 
     Real stacks have *correlated* noise (registration, drizzle, warping, demosaicing): measured on the
-    2026 data, scales 2–4 carried 6–14× the noise that white noise would put there, and whitening them
-    with white-noise factors turned the outer corona into mottle.  Scales beyond ``trusted_scales``
-    already contain faint corona, so their factor is extrapolated with ``decay`` per scale.  Pass the
-    result as ``noise_factors`` to :func:`wow`.
+    2026 fusion, scales 1–3 (counted from 0; 2–8 px) carried 6–15× the noise that white noise would put
+    there, and whitening them with white-noise factors turned the outer corona into mottle.  Scale 0
+    defines the pixel noise (it is taken as white).  Scales from ``trusted_scales`` up already contain
+    faint corona, so their factor is extrapolated with ``decay`` per scale.  Pass the result as
+    ``noise_factors`` to :func:`wow`.
     """
     a = np.asarray(img, np.float32)
     m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))

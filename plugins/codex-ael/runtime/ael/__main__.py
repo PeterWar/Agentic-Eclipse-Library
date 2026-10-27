@@ -65,7 +65,10 @@ def main(argv=None):
         r = pipelines.polar_views(img, EclipseGeometry.from_json(a.geometry), a.out, r_max_rsun=a.rmax)
         print(json.dumps(r, indent=1))
     elif a.cmd == "motion":
-        r = pipelines.motion_from_config(a.config, a.out)
+        try:
+            r = pipelines.motion_from_config(a.config, a.out)
+        except (ValueError, FileExistsError, KeyError) as exc:
+            ap.error(str(exc))
         print(json.dumps({k: r[k] for k in ("classes", "confirmation", "detection_limit_km_s")}, indent=1, default=float))
         print(f"{len(r['candidates'])} candidates: check them by eye in candidates_visual_check.png")
     elif a.cmd == "demo-motion":

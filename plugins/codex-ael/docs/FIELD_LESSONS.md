@@ -236,14 +236,18 @@ validate the author's own chain.
   and brings the straight-edge band down to 0.10. A second, smaller mechanism shows on a purely radial corona:
   the profile pairs the median of ln I with the mean of ln r (taking the median of ln r there moves the limb
   ring metric from 0.051 to 0.001; with angular structure it changes little). Weighting the annuli by their
-  coverage or spacing the knots further apart did not cure it.
+  coverage or spacing the knots further apart did not cure it. With the defaults of 1.3.4 (a level and a spread per ring for ACHF, the new
+  WOW) the same scene gives ACHF 0.07 at 5 px from the lunar edge and 0.52 next to the straight edge (0.19 and 0.61
+  in 1.3.3), and WOW at most 0.04 near the limb and 0.09 next to the straight edge (WOW bilateral, the 1.3.3 default:
+  0.08 and 0.07; plain WOW: 0.03 and 0.34). The ACHF bands are smaller; along the straight edge the default WOW band
+  is a little larger than with WOW bilateral. Still open.
 - *WOW bilateral*
   ([issue #4](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/4)). It can return faint
   fine detail with the opposite sign: the pattern that plain WOW returns at +0.82 (+0.95 with 1 % noise) comes
   out at −0.27 (−0.16 with 1 % noise), and the inversion is already in the bilateral detail of the finest
   scales, before the whitening. On a smooth corona without noise it also draws lines and lobes along isophotes
-  that the input does not have (ring metric 0.0144 in one sector; the other filters reach at most 0.0040). It is
-  one of the three default filters.
+  that the input does not have (ring metric 0.0144 in one sector; the other filters reach at most 0.0040). It was
+  one of the three default filters up to 1.3.3; see the field case contributed by Edu below.
 
 **Not reproduced.** The case's own producer and configuration were not available. These checks test the
 package as it is today, not the version used for that case.
@@ -257,6 +261,64 @@ signal versus presentation support, and Canon operational geometry with an unfil
 34-pixel invalid-support hole and a later accepted clean presentation preset. These are private-data
 case observations, not library defaults or complete scientific certification. The study
 states which results cannot be reproduced from the public repository.
+
+## A field case contributed by Edu (issues #4, #9 and #10)
+
+Edu ([@edu27](https://github.com/edu27)) photographed the 2026 eclipse from northern Spain, very close to the central
+line, with an astronomy camera (Omegon veTec571c, IMX571, bin 2) on a Tamron 70–300 mm at 300 mm (about 5.4″/px,
+R☉ = 175 px): an exposure ladder from 1 ms to 2 s, captured to SER, calibrated and debayered in PIPP to 16-bit FITS,
+stacked with `ael stack` (49 inputs), corrected with `ael extinction` (k = 0.32) and filtered with `ael filters`.
+His photographs are not public; his numbers cannot be reproduced from this repository.
+
+**What he measured**
+
+- *WOW bilateral does not follow the fine detail* ([issue #4](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/4)).
+  He built a reference without any filter (a band-pass σ 1.5 → 6 px of ln L) and showed it was real with two
+  independent stacks (ramp-up frames against ramp-down frames, about 75 s apart): ρ 0.96–0.98 in sky coordinates,
+  0.20–0.46 in sensor coordinates, about 0 for a 30° rotation. Against it, WOW bilateral gave ρ 0.11–0.22 with 37–45 %
+  of the clear detail inverted, while plain WOW gave 0.64–0.82 and 0–1 %. In his composite a quarter of the clear fine
+  detail came out inverted; plain WOW turned a mottled, "wormy" inner corona into loops and rays.
+- *ACHF saturates next to the limb* ([issue #9](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/9)).
+  `display_detail` took one spread from all the observed pixels, mostly faint outer field, so the high-pass detail near
+  the limb came out in blocks of pure black and white (8.1 % at 0 and 7.0 % at 1 at 1.08–1.5 R☉, and a dark inner ring).
+  A level and a spread per ring cured it on his data.
+- *Mirrored frames* ([issue #10](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/10)). Nothing was flipped on
+  purpose, yet his frames were mirrored: against LASCO C2 the fine detail agreed at ρ 0.68–0.81 only with the mirror
+  state. The whole angular profile preferred the unmirrored image rotated to another angle, with a convincing rotation
+  null: a reflection plus a rotation can fit the broad two-lobed corona. Near the central line the Moon's track cannot
+  decide the mirror, because it is almost parallel to the offset between the Sun and the Moon. Registering a long ladder,
+  a band-pass correlation of the corona worked up to 125 ms and failed with 250 ms and longer exposures on his lens.
+
+**Checked in the package (1.3.4)**
+
+- On the author's 2026 data, with two independent stacks (the Sony's two pointings), his gate gives the same picture.
+  It is now `ael.gates.fine_detail_fidelity`, with the reference accredited ring by ring, the layer of one stack
+  compared with the reference of the other, and a worst-sector check; there WOW bilateral gives ρ 0.08–0.20 and
+  38–46 % inverted, plain WOW 0.71–0.81 and 1.2–3.0 % (`docs/VALIDATION_1.3.4.md`).
+- Plain WOW was not ready to become the default: on the author's fusion it whitened correlated noise into blotches in
+  the outer field, and it turned a residual of the radial curve into a dark ring at 4.75 R☉ that the author marked by
+  eye. The default WOW of 1.3.4 measures the noise of scales 1–3 in the far field (and extrapolates the coarser ones),
+  removes the local mean along circles around the Sun from 8 px up, and treats the edges of the data with symmetric
+  pairs. It passes the fine-detail gate, and at 4.3–5.1 R☉ its ring level stays within ±0.005 (the ring check flags no
+  ring on the author's fusion).
+- The ACHF layers take a level and a spread per ring by default. On the author's calibrated map with its sky model
+  added back (binned 2 × 2), the saturation at 1.08–1.2 R☉ fell from 27 % at 0 and 60 % at 1 to below 1 %; with the
+  sky subtracted, the display of 1.3.3 clipped only 3.8 % and 0.8 % there.
+
+**Lessons**
+
+- A gate on fine scales does not see coarse ones: look at the whole frame before changing a default.
+- A radially symmetric curve cannot follow a real corona exactly; a filter that whitens coarse scales must not turn
+  what is left into rings. More knots made it worse.
+- On a new camera, never assume the parity. Count the reflections in the optics first (an odd number mirrors the
+  image), remember that software can flip frames (a FITS file stores its first row at the bottom, and `ael` reads the
+  rows as stored), and decide on the fine detail.
+- The edges of the data need their own care: a coarse kernel cut by the Moon or by an excluded band sees one side
+  only. Found when the release was applied to the author's own final image.
+- A level removed along the circle must be wider than the features it passes: with a 10° window the circle went dark
+  beside compact knots and prominences; 45° keeps the rings out without those wings. Found by an independent review.
+- Checks that need more data (two independent stacks for the fine-detail gate, a second direction for the parity)
+  are optional: they make a result surer, and a user who has not got them still gets the quick result.
 
 ## Deliver and describe the actual file
 

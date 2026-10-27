@@ -31,6 +31,14 @@ Read the zero-rotation correlation, angular shift, null mean/spread/maximum and 
 Broad streamer patterns can correlate strongly even under null rotations. Require the fine-detail result
 to beat its own null. An optimum at the search boundary is not a measured orientation.
 
+The rotation null cannot see a mirrored image: a reflection plus a rotation can fit the broad two-lobed
+corona. Start from the optics (an odd number of reflections mirrors the image) and from the processing
+(some software writes bottom-up frames; `ael` reads FITS rows as stored). Without stars, a landscape or an
+annotated frame, scan both mirror states (`ael.coronagraph.scan_mirror`, or `"scan_mirror": true` in the
+recipe), decide on the fine detail and report the scan's margin. Without shared fine detail about 1 in 5
+decided answers was wrong in synthetic tests; a second, independent direction makes a decided parity surer
+and is optional. The scan has been validated against LASCO C2 only.
+
 Mask the occulter, labels, pylon and unsupported pixels; never fill them. A pylon mask follows a measured
 contiguous dark region rather than globally rejecting all dark coronal structure. Exclude cells touching
 the lunar-motion mixing band, gaps or prominences from a brightness analysis. Choose usable radii from

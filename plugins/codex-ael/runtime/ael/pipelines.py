@@ -149,27 +149,67 @@ def _band(e, s1, s2):
     return (a - normalized_gaussian(lg, m, s2, 0.5)).astype(np.float32)
 
 
+_MOTION_KEYS = {"frames", "epochs", "dark", "flat", "prnu", "white", "pedestal", "linear_frac", "full_raw",
+                "sun_radius_px", "moon_radius_px", "moon_margin_px", "arcsec_per_px", "sun_distance_au",
+                "north_deg", "mirrored", "canvas", "match_ring_rsun", "pairs", "nulls", "band_px", "r_range_rsun",
+                "window", "step", "search", "min_peak", "min_iso", "sensor_velocity_px_s", "moon_velocity_px_s",
+                "gif", "note", "_comment"}
+_MOTION_NEEDED = ("frames", "epochs", "sun_radius_px", "pairs", "nulls", "sensor_velocity_px_s")
+_MOTION_FRAME_KEYS = {"path", "t", "exposure", "sun_xy", "moon_xy", "_comment"}
+_MOTION_GIF_KEYS = {"feather_px", "out_size", "rsun_out_px", "rotation_deg", "labels", "force", "_comment"}
+
+
+def _motion_geometry(cfg) -> EclipseGeometry:
+    """Check every key of a motion recipe and return the geometry of its canvas (nothing is read or written).
+
+    ``mirrored`` reaches the geometry (the internal position angles of the vectors; no output depends on it yet).
+    """
+    if not isinstance(cfg, dict) or set(cfg) - _MOTION_KEYS:
+        raise ValueError(f"unknown recipe keys: {sorted(set(cfg) - _MOTION_KEYS) if isinstance(cfg, dict) else cfg}")
+    for key in _MOTION_NEEDED:
+        if key not in cfg:
+            raise ValueError(f"missing recipe key: {key!r} (nothing is assumed)")
+    if not isinstance(cfg["frames"], list):
+        raise ValueError("frames must be a list")
+    need = {"path", "t", "exposure", "sun_xy"}
+    for i, fr in enumerate(cfg["frames"]):
+        if not (isinstance(fr, dict) and need <= set(fr) and not set(fr) - _MOTION_FRAME_KEYS):
+            raise ValueError(f"frames[{i}] needs path, t, exposure and sun_xy, and may have moon_xy: "
+                             f"got {sorted(fr) if isinstance(fr, dict) else fr!r}")
+    g = cfg.get("gif")
+    if g is not None and (not isinstance(g, dict) or set(g) - _MOTION_GIF_KEYS):
+        raise ValueError(f"gif: unknown keys {sorted(set(g) - _MOTION_GIF_KEYS) if isinstance(g, dict) else g}")
+    mirrored = cfg.get("mirrored", False)
+    if not isinstance(mirrored, bool):
+        raise ValueError("mirrored is true or false")
+    H, W = cfg.get("canvas", [3000, 3000])
+    return EclipseGeometry(shape=(H, W), sun_xy=(W / 2, H / 2), sun_radius_px=cfg["sun_radius_px"],
+                           moon_radius_px=cfg.get("moon_radius_px"), north_deg=cfg.get("north_deg", 0.0),
+                           mirrored=mirrored, arcsec_per_px=cfg.get("arcsec_per_px"))
+
+
 def motion_from_config(config: str | Path | dict, out_dir: str | Path) -> dict:
-    """Coronal-motion analysis and animation from a JSON config (see ``examples/motion_config.json``).
+    """Coronal-motion analysis and animation from a JSON config (see ``examples/motion_config_template.json``).
 
     Config keys: ``frames`` (list of {path, t, exposure, sun_xy, moon_xy?}), ``epochs`` (dict name →
     list of frame paths, in time order), ``dark`` (dict exposure → master path) or ``pedestal``,
     ``flat`` (path, optional), ``prnu`` (path, optional, same geometry as the RAW), ``white``,
-    ``pedestal``, ``sun_radius_px``, ``moon_radius_px``, ``arcsec_per_px``, ``north_deg``,
-    ``canvas`` [h, w], ``pairs`` (A and B: [start epoch(s), end epoch(s)] with no frame in common),
-    ``nulls`` (two [epoch, epoch] pairs a few seconds apart), ``band_px`` [2, 12], ``r_range_rsun``.
-    Optional ``gif`` {``feather_px`` (60), ``out_size`` [1320, 1044], ``rsun_out_px`` (242), ``rotation_deg`` (0),
-    ``labels``, ``force``}: also writes the motion GIF without waves (:func:`motion_gif`), with every epoch given the
-    grain of the noisiest one through the same epoch without its longest exposure.
+    ``pedestal``, ``linear_frac``, ``full_raw``, ``sun_radius_px``, ``moon_radius_px``, ``moon_margin_px``,
+    ``arcsec_per_px``, ``sun_distance_au``, ``north_deg``, ``mirrored`` (default false: check it for a new
+    camera, see :mod:`ael.geometry`), ``canvas`` [h, w], ``match_ring_rsun``, ``pairs`` (A and B: [start
+    epoch(s), end epoch(s)] with no frame in common), ``nulls`` (two [epoch, epoch] pairs a few seconds
+    apart), ``band_px`` [2, 12], ``r_range_rsun``, ``window``, ``step``, ``search``, ``min_peak``, ``min_iso``,
+    ``sensor_velocity_px_s``, ``moon_velocity_px_s``.  Optional ``gif`` {``feather_px`` (60), ``out_size``
+    [1320, 1044], ``rsun_out_px`` (242), ``rotation_deg`` (0), ``labels``, ``force``}: also writes the motion
+    GIF without waves (:func:`motion_gif`), with every epoch given the grain of the noisiest one through the
+    same epoch without its longest exposure.  An unknown key is refused before anything is written.
     """
     cfg = json.loads(Path(config).read_text()) if not isinstance(config, dict) else config
+    geo_t = _motion_geometry(cfg)
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
-    H, W = cfg.get("canvas", [3000, 3000])
-    ref = (W / 2, H / 2)
-    geo_t = EclipseGeometry(shape=(H, W), sun_xy=ref, sun_radius_px=cfg["sun_radius_px"],
-                            moon_radius_px=cfg.get("moon_radius_px"), north_deg=cfg.get("north_deg", 0.0),
-                            arcsec_per_px=cfg.get("arcsec_per_px"))
+    H, W = geo_t.shape
+    ref = geo_t.sun_xy
     flat = calibrate.load_calibration_frame(cfg["flat"]) if cfg.get("flat") else None
     if cfg.get("prnu"):
         pr = calibrate.load_calibration_frame(cfg["prnu"])

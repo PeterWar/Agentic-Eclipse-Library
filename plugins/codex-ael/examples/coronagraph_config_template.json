@@ -1,10 +1,11 @@
 {
- "_comment": "Structure comparison with coronagraphs (python -m ael coronagraph --config this.json --out new_dir/). Paths are relative to this file. Each image has its own solar frame: 'geometry' + 'p_angle_deg' (an ael geometry; celestial north and the solar P angle), 'wcs' (a helioprojective FITS header: K-Cor level 2, AIA level 1.5; 'rsun_arcsec' overrides RSUN_OBS), or the explicit 'center_xy' + 'north_px' + 'east_px' (pixel offsets of 1 Rsun towards solar north and east; may be affine). For LASCO level 0.5 build the frame with sunpy (see skills/coronagraph-comparison) and write it explicitly. 'bin' averages b x b blocks first (a block with any missing pixel is missing); 'normalise' false for an image that is already an NRGF. 'dark_sector' masks the contiguous dark run that contains the seed (an occulter pylon), never a global threshold. Agreement in position angle only: nothing here measures brightness.",
+ "_comment": "Structure comparison with coronagraphs (python -m ael coronagraph --config this.json --out new_dir/). Paths are relative to this file. Each image has its own solar frame: 'geometry' + 'p_angle_deg' (an ael geometry; celestial north and the solar P angle), 'wcs' (a helioprojective FITS header: K-Cor level 2, AIA level 1.5; 'rsun_arcsec' overrides RSUN_OBS), or the explicit 'center_xy' + 'north_px' + 'east_px' (pixel offsets of 1 Rsun towards solar north and east; may be affine). For LASCO level 0.5 build the frame with sunpy (see skills/coronagraph-comparison) and write it explicitly. 'bin' averages b x b blocks first (a block with any missing pixel is missing); 'normalise' false for an image that is already an NRGF. 'dark_sector' masks the contiguous dark run that contains the seed (an occulter pylon), never a global threshold. Agreement in position angle only: nothing here measures brightness. 'scan_mirror' true also scans both mirror states on the fine detail (gate 'parity', informative, validated against LASCO C2 only): use it for a camera or a processing chain whose parity you have not checked.",
  "radii_rsun": {"min": 1.05, "max": 6.3, "n": 420, "spacing": "log"},
  "pa_step_deg": 0.5,
  "sigma_deg": 1.5,
  "highpass_sigma_deg": 12.0,
  "max_shift_deg": 10.0,
+ "scan_mirror": false,
  "ours": {
   "image": "linear_stack.npy",
   "channel": "luminance",

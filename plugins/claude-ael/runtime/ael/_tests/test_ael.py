@@ -199,6 +199,36 @@ def test_classify_negative_control():
     assert [v.cls for v in vs] == ["sensor", "lunar", "coronal", "aperture"], [v.cls for v in vs]
 
 
+def test_motion_recipe_keeps_mirrored_and_refuses_unknown_keys():
+    import json
+    import tempfile
+    from pathlib import Path
+    from ael import pipelines
+    base = dict(frames=[dict(path="a.CR3", t=0.0, exposure=0.001, sun_xy=[50.0, 60.0])], epochs={"E1": ["a.CR3"]},
+                sun_radius_px=40.0, canvas=[200, 240], north_deg=30.0, pairs={}, nulls=[],
+                sensor_velocity_px_s=[0.0, 0.0])
+    g0, g1 = pipelines._motion_geometry(base), pipelines._motion_geometry(dict(base, mirrored=True))
+    assert not g0.mirrored and g1.mirrored and g1.north_deg == 30.0 and g1.shape == (200, 240)
+    # the motion vectors take their PA from this geometry: a point right of the Sun, unmirrored and mirrored
+    p0, p1 = (float(position_angle(10.0, 0.0, g.north_deg, g.mirrored)) for g in (g0, g1))
+    assert abs(p0 - 300.0) < 1e-9 and abs(p1 - 60.0) < 1e-9
+    tpl = Path(pipelines.__file__).resolve().parents[1] / "examples" / "motion_config_template.json"
+    if tpl.is_file():                                  # the template stays valid (in the source tree)
+        assert not pipelines._motion_geometry(json.loads(tpl.read_text())).mirrored
+    bad = [dict(base, mirorred=True), dict(base, mirrored="true"), dict(base, gif=dict(feather=60)),
+           dict(base, frames=[dict(base["frames"][0], moonxy=[1.0, 2.0])]),
+           {k: v for k, v in base.items() if k != "sensor_velocity_px_s"}]
+    with tempfile.TemporaryDirectory() as td:
+        for i, cfg in enumerate(bad):
+            out = Path(td) / f"out{i}"
+            try:
+                pipelines.motion_from_config(cfg, out)
+                raise AssertionError(f"accepted {cfg}")
+            except ValueError:
+                pass
+            assert not out.exists(), cfg               # refused before anything is written
+
+
 # ------------------------------------------------------------------ Photoshop
 def test_photoshop_16bit_layers_roundtrip():
     import importlib.util

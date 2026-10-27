@@ -13,7 +13,7 @@ Use an already-stated goal. Otherwise ask whether the user wants to process phot
 2. Check Python dependencies with `scripts/run_ael.py --check`, then run `selftest`. For an exploration request, `demo-motion --out NEW_DIR` needs no private photographs and must be described as synthetic test data.
 3. For processing, read [the recipe guide](../../docs/DEVELOP.md). Measure black level, linearity/saturation, registration, solar geometry and colour response. Do not reuse the author's camera settings or guess them from filenames. Separate optical trains and correct distortion before fusion.
 4. Preserve the linear result, valid mask, coverage, geometry and receipt. Explain missing calibration and clipped regions. Keep missing data empty.
-5. Add requested filter layers or a full-canvas structure view. Explain the default filters and the unresolved ACHF/WOW boundary effects and WOW bilateral sign inversion in [field lessons](../../docs/FIELD_LESSONS.md); do not silently present these as proven fine structure. Show the result before adopting a change to an existing look.
+5. Add requested filter layers or a full-canvas structure view. Explain the default filters and the unresolved ACHF/WOW boundary effects in [field lessons](../../docs/FIELD_LESSONS.md), and that WOW bilateral, the default until 1.3.3, can invert faint fine detail; do not silently present these as proven fine structure. Show the result before adopting a change to an existing look.
 
 Choose the matching bundled skill for the stage: `eclipse-calibration-stacking`, `corona-filter-layers`, `eclipse-artefact-diagnosis`, `corona-views-motion`, or `coronagraph-comparison`. The package's synthetic tests do not replace validation of the user's observation.
 

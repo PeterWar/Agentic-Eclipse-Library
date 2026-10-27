@@ -286,3 +286,392 @@ def test_filters_keep_injected_fine_detail_with_its_sign_and_strength():
         corr=float(np.corrcoef(change[ok],signal[ok])[0,1])
         gain=float(np.sum(change[ok]*signal[ok])/np.sum(signal[ok]**2))
         assert corr>.5 and abs(gain/expected-1)<.25, (name,corr,gain)
+
+
+# ---- 1.3.4: lessons from Edu's reports (issues #4 and #9) and from the rings they led to -------------------------
+
+def test_default_layers_are_sign_tested_and_have_a_starting_opacity():
+    """Every default layer must be in the sign-and-strength test and have a declared starting opacity (an undeclared
+    one fell back to 1.00 without any warning). The 1.3.3 defaults fail the first condition: WOW bilateral was the
+    default and is not in the sign test."""
+    from ael.filterbank import DEFAULTS
+    from ael.develop import DEFAULT_OPACITY
+    assert set(DEFAULTS) <= set(_DETAIL_GAIN), DEFAULTS
+    assert set(DEFAULTS) <= set(DEFAULT_OPACITY), (DEFAULTS, DEFAULT_OPACITY)
+    assert DEFAULT_OPACITY['wow_bilateral'] == .37                         # a 1.3.3 recipe keeps its look
+    assert not {'nrgf', 'wow_bilateral', 'achf_iso_04'} <= set(_DETAIL_GAIN)
+
+
+def test_tangential_mean_removal_drops_a_ring_and_keeps_a_ray():
+    """The step that keeps the WOW of 1.3.4 from turning a radial-curve residual into a ring: along each circle around
+    the Sun it removes the local mean (here with a 10° window; the default is 45°). A ring is constant along its circle and goes; a ray varies along it and
+    stays. Negative control: removing an isotropic local mean of 32 px (as the coarse scales of 1.3.3 did) leaves
+    half of a 40 px ring."""
+    from ael.filterbank import _tangential_frame, _tangential_mean_removed
+    g = EclipseGeometry((401, 401), (200., 200.), 40, None, None)
+    r = g.radius_map(); yy, xx = np.mgrid[0:401, 0:401]; th = np.degrees(np.arctan2(yy - 200., xx - 200.))
+    m = r < 195
+    ring = ((r > 120) & (r < 160)).astype(np.float32)
+    dth = (th - 40 + 180) % 360 - 180; ray = (np.exp(-.5 * (dth / 2.) ** 2) * ((r > 50) & (r < 190))).astype(np.float32)
+    s = (ring + ray + .1 * np.random.default_rng(2).standard_normal(r.shape)).astype(np.float32)
+    out = _tangential_mean_removed(s, m, _tangential_frame(m, g), 10.)
+    iso = s - np.nan_to_num(filters.normalized_gaussian(np.where(m, s, np.nan), m, 32., .01))
+    on_ring = m & (ring > 0) & (np.abs(dth) > 30)
+    on_ray = m & (np.abs(dth) < 1) & (r > 125) & (r < 155); beside = m & (np.abs(dth) > 8) & (np.abs(dth) < 20) & (r > 125) & (r < 155)
+    assert abs(np.median(out[on_ring])) < .05
+    assert np.median(out[on_ray]) - np.median(out[beside]) > .7
+    assert np.median(iso[on_ring]) > .3                                    # the control keeps the ring
+
+
+def _knee_scene(sky=.011, noise=.01, seed=11, R=30):
+    """A small Sun on a wide frame and a sky that flattens the profile (a 'knee', as on real data): the fixed-knot
+    radial curve cannot follow it and leaves ring-shaped residuals."""
+    g = EclipseGeometry((640, 768), (310.3, 370.7), R, (310.3, 370.7), R + 1)
+    r = g.radius_map(); th = np.radians(g.pa_map()); m = g.radius_map('moon') > R + 3
+    a = ((np.maximum(r, 1) / R) ** -3 * (1 + .3 * np.cos(3 * th) + .1 * np.sin(7 * th)) + sky).astype(np.float32)
+    return g, m, a * (1 + noise * np.random.default_rng(seed).standard_normal(a.shape)).astype(np.float32)
+
+
+def _ring_levels(layer, g, m, r0=2., r1=9., w=.1, n=8):
+    rs = g.rsun_map(); pa = (g.pa_map() + 360) % 360; out = []
+    for a0 in np.arange(r0, r1, w):
+        vals = [np.median(layer[k]) - .5 for s in range(n)
+                for k in [m & np.isfinite(layer) & (rs >= a0) & (rs < a0 + w) & (pa >= s * 360 / n) & (pa < (s + 1) * 360 / n)]
+                if k.sum() > 30]
+        if len(vals) >= 6: out.append(float(np.median(vals)))
+    return np.array(out)
+
+
+def test_wow_does_not_turn_the_radial_curve_residual_into_rings():
+    """Issue #4 follow-up: on the author's 2026 data plain WOW made a dark ring at 4.75 R☉ out of a -0.5 % residual of
+    the radial curve. Here the same mechanism on a synthetic knee: the WOW of 1.3.4 must keep the ring levels (median
+    of 8 sectors in rings of 0.1 R☉, 2–9 R☉) well below those of the same WOW without the tangential step."""
+    from ael.filterbank import radial_log_residual, wow_measured
+    g, m, a = _knee_scene()
+    layer = make_filter('wow', a, m, g)[0]
+    res, _ = radial_log_residual(a, m, g); q, _ = wow_measured(res, m, g, tangential_from=99)
+    rs = g.rsun_map(); control = display_detail(q, m, scale_region=(rs >= 1.1) & (rs < 2.))[0]
+    rms = lambda x: float(np.sqrt(np.mean(_ring_levels(x, g, m) ** 2)))
+    assert rms(layer) < .8 * rms(control), (rms(layer), rms(control))
+
+
+def _tangent_radial_index(layer, g, m, r0, r1, lag):
+    from scipy.ndimage import map_coordinates
+    cx, cy = g.sun_xy; yy, xx = np.mgrid[0:layer.shape[0], 0:layer.shape[1]]
+    k = m & (g.radius_map() >= r0) & (g.radius_map() < r1) & np.isfinite(layer)
+    ys, xs = yy[k].astype(float), xx[k].astype(float)
+    ur = np.stack([xs - cx, ys - cy]); ur /= np.hypot(*ur); ut = np.stack([-ur[1], ur[0]])
+    a0 = layer[k]
+    ar = map_coordinates(layer, [ys + lag * ur[1], xs + lag * ur[0]], order=1, cval=np.nan)
+    at = map_coordinates(layer, [ys + lag * ut[1], xs + lag * ut[0]], order=1, cval=np.nan)
+    def rho(x, y):
+        o = np.isfinite(x) & np.isfinite(y); x = x[o] - x[o].mean(); y = y[o] - y[o].mean()
+        return float((x * y).sum() / np.sqrt((x * x).sum() * (y * y).sum()))
+    return rho(a0, ar) / rho(a0, at)
+
+
+def test_wow_leaves_the_noise_texture_isotropic():
+    """The tangential step must not leave radial streaks (or arcs) in the noise of the outer field: the correlation at
+    4 and 6 px along the radius and along the circle stay equal (index within 2.5 %). The controls are independent of
+    the layer: the same layer plus radial streaks, or plus arcs, made from another noise field (smoothed along the
+    radius over 3 px, or along the circle over 2°) with a third of the layer's spread, must both be caught. A
+    tangential step of 1° instead of 45° streaks the layer itself and fails."""
+    from scipy import ndimage as ndi
+    from ael.filterbank import _tangential_frame, _tangential_mean_removed
+    g = EclipseGeometry((640, 768), (310.3, 370.7), 60, (310.3, 370.7), 61)
+    r = g.radius_map(); th = np.radians(g.pa_map()); m = g.radius_map('moon') > 63
+    a = ((np.maximum(r, 1) / 60) ** -3 * (1 + .3 * np.cos(3 * th) + .1 * np.sin(7 * th))).astype(np.float32)
+    a = a * (1 + .05 * np.random.default_rng(3).standard_normal(a.shape)).astype(np.float32)
+    layer = make_filter('wow', a, m, g)[0]; fr = _tangential_frame(m, g)
+    n = np.where(m, np.random.default_rng(11).standard_normal(m.shape), 0).astype(np.float32)
+    p = ndi.gaussian_filter1d(ndi.map_coordinates(n, [fr['Y'], fr['X']], order=1, mode='constant'), 3., axis=0)
+    radial = ndi.map_coordinates(np.concatenate([p, p[:, :1]], 1), [fr['r'], fr['ti']], order=1, mode='nearest')
+    unit = lambda x: x / np.std(x[m])
+    k = np.std(layer[m & (g.radius_map() >= 200)]) / 3
+    streaks = np.where(m, layer + k * unit(radial), np.nan)
+    arcs = np.where(m, layer + k * unit(n - _tangential_mean_removed(n, m, fr, 2.)), np.nan)
+    for lag in (4, 6):
+        assert .975 <= _tangent_radial_index(layer, g, m, 200, 268, lag) <= 1.025, lag
+        for control in (streaks, arcs):
+            assert not .975 <= _tangent_radial_index(control, g, m, 200, 268, lag) <= 1.025, lag
+
+
+def test_achf_does_not_burn_the_limb_when_the_sky_is_in_the_frame():
+    """Issue #9 (Edu): with the sky in the frame most pixels are faint outer field, one whole-image spread is small
+    and the ACHF detail next to the limb saturates in blocks of pure black and white. The per-ring display of 1.3.4
+    keeps both tails under 1 % and the median at 0.5 from the limb to 2.5 R☉; the 1.3.3 display ('global') is the
+    negative control."""
+    g, m, a = _knee_scene(sky=.001, noise=.002, seed=5)
+    rs = g.rsun_map()
+    assert np.array_equal(make_filter('achf_iso_04', a, m, g)[0], make_filter('achf_iso_04', a, m, g, achf_display='rings')[0],
+                          equal_nan=True)                                       # 'rings' is the default
+    for disp, ok in (('rings', True), ('global', False)):
+        q = make_filter('achf_iso_04', a, m, g, achf_display=disp)[0]
+        for lo, hi in ((1.08, 1.5), (1.5, 2.5)):
+            k = m & np.isfinite(q) & (rs >= lo) & (rs < hi)
+            tails = max(np.mean(q[k] <= .01), np.mean(q[k] >= .99))
+            if ok: assert tails < .01 and abs(np.median(q[k]) - .5) < .02, (lo, tails)
+            else: assert tails > .1, (lo, tails)
+
+
+def test_fine_detail_gate_passes_wow_and_fails_bilateral_and_inverted_detail():
+    """The real-data gate Edu proposed in issue #4 (ael.gates.fine_detail_fidelity), on a synthetic eclipse with fine
+    angular structure and two independent noise realisations: the WOW of 1.3.4 passes; WOW bilateral and a WOW with
+    its detail inverted fail. Rings where the reference fails its own rotation null are not judged."""
+    from ael.gates import fine_detail_fidelity
+    g = EclipseGeometry((640, 768), (310.3, 370.7), 60, (310.3, 370.7), 61)
+    r = g.radius_map(); th = np.radians(g.pa_map()); m = g.radius_map('moon') > 63
+    rng = np.random.default_rng(1234)
+    fine = sum(rng.uniform(.004, .012) * np.sin(k * th + rng.uniform(0, 2 * np.pi)) for k in range(20, 140, 2))
+    a = ((np.maximum(r, 1) / 60) ** -3 * (1 + .3 * np.cos(3 * th)) * np.exp(fine)).astype(np.float32)
+    A, B = (a * (1 + .004 * np.random.default_rng(s).standard_normal(a.shape)).astype(np.float32) for s in (1, 2))
+    rings = ((1.3, 1.6), (1.6, 2.0))
+    wa, wb = make_filter('wow', A, m, g)[0], make_filter('wow', B, m, g)[0]
+    res = fine_detail_fidelity(wa, wb, A, B, m, g, rings=rings)
+    assert any(x['accredited'] for x in res['rings']) and res['passed'] is True, res
+    assert fine_detail_fidelity(1 - wa, 1 - wb, A, B, m, g, rings=rings)['passed'] is False
+    ba, bb = make_filter('wow_bilateral', A, m, g)[0], make_filter('wow_bilateral', B, m, g)[0]
+    assert fine_detail_fidelity(ba, bb, A, B, m, g, rings=rings)['passed'] is False
+
+
+def _offcentre_hole_scene(seed=4, R=40, offset=8., hole=50.):
+    """A power-law corona whose index changes with position angle (-3 ± 0.8 cos PA), the data excluded within
+    ``hole`` px of a Moon ``offset`` px off the Sun, 1 % noise: the radial curve leaves a residual that slopes in r
+    with the sign of cos PA, as a real corona does next to an excluded band."""
+    g = EclipseGeometry((512, 512), (256., 256.), R, (256. + offset, 256.), R + 4)
+    r = g.radius_map(); th = np.radians(g.pa_map())
+    a = ((np.maximum(r, 1) / R) ** (-3 + .8 * np.cos(th))).astype(np.float32)
+    a = a * (1 + .01 * np.random.default_rng(seed).standard_normal(a.shape)).astype(np.float32)
+    return g, g.radius_map('moon') > hole, a
+
+
+def _edge_level(layer, g, m, lo, hi, hole=50.):
+    """RMS over twelve 30° sectors of the median level (layer - 0.5) at lo–hi px from the edge of the hole."""
+    d = g.radius_map('moon') - hole; pa = (g.pa_map() + 360) % 360
+    v = [np.median(layer[k]) - .5 for s in range(12)
+         for k in [m & np.isfinite(layer) & (d >= lo) & (d < hi) & (pa >= 30 * s) & (pa < 30 * s + 30)] if k.sum() > 30]
+    return float(np.sqrt(np.mean(np.square(v))))
+
+
+def test_wow_draws_no_level_along_an_edge_of_the_data():
+    """On the author's 2026 data the WOW of 1.3.4 as first written drew a level of up to ±6.6 % in the first 24 px
+    outside the excluded lunar band, of either sign from sector to sector: a kernel cut by the edge sees one side
+    only. With symmetric observed pairs and the coarse scales weighted by the observed fraction of their kernel, the
+    level next to the edge (0–16 px) stays within 1.6 times the same statistic 40–72 px out. The same WOW without
+    either step is the negative control (about five times its own null here)."""
+    from ael.filterbank import radial_log_residual, wow_measured
+    g, m, a = _offcentre_hole_scene()
+    layer = make_filter('wow', a, m, g)[0]
+    res, _ = radial_log_residual(a, m, g); rs = g.rsun_map()
+    q, _ = wow_measured(res, m, g, pairs=False, edge_completeness=None)
+    control = display_detail(q, m, scale_region=(rs >= 1.1) & (rs < 2.))[0]
+    edge, null = _edge_level(layer, g, m, 0, 16), _edge_level(layer, g, m, 40, 72)
+    c_edge, c_null = _edge_level(control, g, m, 0, 16), _edge_level(control, g, m, 40, 72)
+    assert edge < 1.6 * null and edge < .5 * c_edge, (edge, null, c_edge)
+    assert c_edge > 3 * c_null, (c_edge, c_null)
+
+
+def test_starlet_with_symmetric_pairs_reconstructs_exactly_and_invents_nothing():
+    """The paired smoothing changes the coefficients next to an edge, never the sum: details + coarse = image on the
+    observed pixels, NaN elsewhere; away from every edge the coefficients are those of the plain starlet."""
+    rng = np.random.default_rng(0); img = rng.standard_normal((200, 240)).astype(np.float32)
+    m = np.ones(img.shape, bool); m[60:120, 80:150] = False; m[:, :7] = False
+    d1, c1 = filters.starlet(img, m, 6, .01, pairs=True); d0, _ = filters.starlet(img, m, 6, .01)
+    rec = sum(d1) + c1
+    assert np.nanmax(np.abs(rec - img)[m]) < 1e-5 and np.isnan(rec[~m]).all()
+    far = np.zeros_like(m); far[150:180, 170:220] = True                   # ≥ 20 px from the hole and from the frame;
+    assert np.allclose(d1[2][far], d0[2][far], atol=1e-6)                  # scale 3 reaches 14 px
+    assert not np.allclose(d1[2][m][:, None], d0[2][m][:, None], atol=1e-6)  # and next to an edge it does differ
+
+
+def test_a_recipe_written_for_the_old_defaults_keeps_its_look():
+    """A recipe written for 1.3.3 lists WOW bilateral, the default Overlay layer up to 1.3.3. Without 'opacities' or
+    'visible' it must still come out visible at 0.37, as it did then; listed next to the new WOW, it is a hidden layer
+    to compare with. Control: the opacity of a listed filter without a starting opacity is 1."""
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp); g = EclipseGeometry((120, 150), (71.3, 63.4), 18)
+        r = g.radius_map(); m = r > 22
+        a = (10000 * np.maximum(r / 18, 1) ** -3 * (1 + .3 * np.cos(np.radians(g.pa_map()) * 7))).astype(np.float32)
+        np.save(root / 'input.npy', np.stack([a, .7 * a, .4 * a], axis=-1)); np.save(root / 'valid.npy', m); g.to_json(root / 'g.json')
+        def layers(filters):
+            cfg = dict(input='input.npy', valid='valid.npy', geometry='g.json', display=dict(scale=10, asinh=20), filters=filters, photoshop=False)
+            p = root / 'f.json'; p.write_text(json.dumps(cfg))
+            res = filters_from_config(p, root / ('out_' + '_'.join(filters)), progress=lambda *_: None)
+            return {x['name']: x for x in json.loads(Path(res['receipt']).read_text())['parameters']['layers']}
+        old = layers(['nrgf', 'wow_bilateral', 'achf_iso_04'])
+        assert old['wow_bilateral']['visible'] and old['wow_bilateral']['opacity'] == .37, old['wow_bilateral']
+        both = layers(['nrgf', 'wow', 'wow_bilateral', 'mgn'])
+        assert both['wow']['visible'] and not both['wow_bilateral']['visible'] and both['wow_bilateral']['opacity'] == .37
+        assert both['mgn']['opacity'] == 1 and not both['mgn']['visible']
+
+
+def test_tangential_step_has_no_switch_where_the_frame_cuts_the_circles_and_keeps_a_gap_local():
+    """The tangential step of the new WOW is a normalised convolution along each circle around the Sun. A constant is
+    constant along every circle, also where the frame leaves only a short arc of it (the corners): it must go
+    everywhere, with no switch line where the observed share of the window crosses some threshold (a 0/1 switch at a
+    share of 0.2 drew an arc at each corner, the negative control: 382 pixels). Only a pixel whose circle has no
+    observed sample within reach on the polar grid keeps its value (here 2, in the very corner of the frame). And a
+    pixel without a value must stay a single pixel: its gap must not spread along its circle."""
+    from ael.filterbank import _tangential_frame, _tangential_mean_removed
+    g = EclipseGeometry((300, 420), (120.3, 140.7), 30, None, None)
+    m = g.radius_map() > 40; fr = _tangential_frame(m, g)
+    out = _tangential_mean_removed(np.ones(m.shape, np.float32), m, fr, 10.)
+    ys, xs = np.nonzero(m & (np.abs(out) > 1e-3))
+    assert len(ys) <= 4 and all(min(y, x, 299 - y, 419 - x) <= 2 for y, x in zip(ys, xs)), list(zip(ys, xs))
+    s = np.where(m, np.random.default_rng(4).standard_normal(m.shape), 0).astype(np.float32); s[200, 300] = np.nan
+    out = _tangential_mean_removed(s, m, fr, 10.)
+    assert np.isnan(out[m]).sum() <= 1, int(np.isnan(out[m]).sum())
+    from scipy import ndimage as ndi                                              # the control: a 0/1 switch at 0.2
+    pv = ndi.map_coordinates(np.where(m, 1., 0.).astype(np.float32), [fr['Y'], fr['X']], order=1, mode='constant')
+    pm = pv > .5; sig = 10 / 360 * fr['n_theta']
+    den = ndi.gaussian_filter1d(pm.astype(np.float32), sig, axis=1, mode='wrap')
+    assert ((den > 0) & (den <= .2) & pm).any()                                   # the scene has such arcs
+
+
+def test_wow_falls_back_to_white_noise_when_the_far_field_cannot_be_measured():
+    """With the sky subtracted (about 30 % of the pixels beyond 6 R☉ at or below zero, scattered), nothing is left of
+    the far field once it is eroded, and its noise cannot be measured: the new WOW must fall back to white-noise
+    factors, as 1.3.3 did, and say so in its parameters, instead of returning no layer. The control shows the
+    condition: measured on that field, the factors come out NaN."""
+    import warnings
+    from ael.filterbank import radial_log_residual
+    R = 30; g = EclipseGeometry((640, 768), (310.3, 370.7), R, (310.3, 370.7), R + 1)
+    r = g.radius_map(); th = np.radians(g.pa_map()); m = g.radius_map('moon') > R + 3
+    a = ((np.maximum(r, 1) / R) ** -3 * (1 + .3 * np.cos(3 * th))).astype(np.float32)
+    a = a + .002 * np.random.default_rng(9).standard_normal(a.shape).astype(np.float32)
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        q, _, info = make_filter('wow', a, m, g)
+        pos = m & (a > 0); res, _ = radial_log_residual(a, pos, g)
+        nf = filters.noise_factors(res, pos, pos & (g.rsun_map() > 6), n_scales=6)
+    assert info['noise_factors'] == 'white noise' and np.isfinite(q[pos]).mean() > .99, info['noise_factors']
+    assert not np.isfinite(nf).all()
+
+
+def test_fine_detail_gate_mechanisms_each_catch_their_case():
+    """Each mechanism of ael.gates.fine_detail_fidelity on a case that only it can catch. Layers are the data's own
+    band-pass (an ideal layer passes), then: (a) a smooth corona whose only 'detail' next to the Moon is the edge
+    bias, the same in both stacks: the rotation null must refuse to accredit the ring (control: without the null it
+    would pass); (b) stacks so noisy that a layer reproducing its own stack, noise included, follows it closely: it
+    must fail crosswise (control: compared with its own stack it passes); (c) inverted patches on 17 % of the area:
+    every rho stays above 0.5, so only the inversion count can fail it; (d) half a 45° sector inverted: the whole rings
+    pass, so only the worst sector can fail it."""
+    import warnings
+    from ael.gates import fine_detail_fidelity
+    g = EclipseGeometry((640, 768), (310.3, 370.7), 60, (310.3, 370.7), 61)
+    r = g.radius_map(); th = np.radians(g.pa_map()); pa = g.pa_map(); m = g.radius_map('moon') > 63
+    rng = np.random.default_rng(1234)
+    fine = sum(rng.uniform(.004, .012) * np.sin(k * th + rng.uniform(0, 2 * np.pi)) for k in range(20, 140, 2))
+    smooth = ((np.maximum(r, 1) / 60) ** -3 * (1 + .3 * np.cos(3 * th))).astype(np.float32)
+    a = (smooth * np.exp(fine)).astype(np.float32)
+    noisy = lambda img, sn, seed: (img * (1 + sn * np.random.default_rng(seed).standard_normal(img.shape))).astype(np.float32)
+
+    def layer(L, flip=None):
+        x = np.where(m, np.log(np.where(m, L, 1.)), np.nan).astype(np.float32); k = m & np.isfinite(x)
+        b = filters.normalized_gaussian(x, k, 1.5, .25) - filters.normalized_gaussian(x, k, 6., .25)
+        out = .5 + .1 * b / np.nanstd(b[m])
+        return np.where(m, np.where(flip, 1 - out, out) if flip is not None else out, np.nan).astype(np.float32)
+    rings = ((1.3, 1.6), (1.6, 2.0))
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        A, B = noisy(a, .004, 1), noisy(a, .004, 2)
+        assert fine_detail_fidelity(layer(A), layer(B), A, B, m, g, rings=rings)['passed'] is True
+        SA, SB = noisy(smooth, .004, 3), noisy(smooth, .004, 4)                                           # (a)
+        ra = fine_detail_fidelity(layer(SA), layer(SB), SA, SB, m, g, rings=((1.06, 1.12),), guard_px=0)
+        assert ra['rings'][0]['reference_rho'] > .9 and not ra['rings'][0]['accredited'] and ra['passed'] is None, ra['rings']
+        assert fine_detail_fidelity(layer(SA), layer(SB), SA, SB, m, g, rings=((1.06, 1.12),), guard_px=0,
+                                    rotation_null_max=1.)['passed'] is True
+        NA, NB = noisy(a, .09, 5), noisy(a, .09, 6)                                                       # (b)
+        rb = fine_detail_fidelity(layer(NA), layer(NB), NA, NB, m, g, rings=rings)
+        assert all(x['accredited'] for x in rb['rings']) and rb['passed'] is False, rb['rings']
+        assert fine_detail_fidelity(layer(NA), layer(NA), NA, NA, m, g, rings=rings)['passed'] is True
+        blob = filters.normalized_gaussian(np.random.default_rng(7).standard_normal(m.shape).astype(np.float32), None, 1.5, 0.)
+        flip = blob > np.quantile(blob[m], .83)                                                           # (c)
+        rc = fine_detail_fidelity(layer(A, flip), layer(B, flip), A, B, m, g, rings=rings)
+        assert rc['passed'] is False and min(min(x['rho_reference'], x['rho_ab'], x['worst_sector_rho']) for x in rc['rings']) > .5, rc['rings']
+        wedge = np.abs((pa - 112.5 + 180) % 360 - 180) < 11.25                                            # (d)
+        rd = fine_detail_fidelity(layer(A, wedge), layer(B, wedge), A, B, m, g, rings=rings)
+        assert rd['passed'] is False and all(x['rho_reference'] > .5 and x['inversions_pct'] < 10 and x['rho_ab'] > .5 for x in rd['rings']), rd['rings']
+
+
+def test_wow_tangential_step_leaves_no_dark_wings_beside_compact_structure():
+    """A local mean along the circle the size of a feature darkens the circle on both sides of it (the coarse
+    coefficient of a compact feature is a bright core in a dark ring). With the 10° window of the first draft a bright
+    knot at 1.4 R☉ (σ 12 px) left a mean change of −0.37 at 12–20° beside it, against −0.13 without any tangential step
+    (independent review, 27-10-2026). With the default window (45°) the wings must stay within 1.3 times those of the
+    same WOW without the step (plus 0.02); the 10° window is the negative control."""
+    import warnings
+    from ael.filterbank import radial_log_residual, wow_measured
+    g = EclipseGeometry((900, 1100), (550.3, 450.7), 80., (550.3, 450.7), 81.)
+    r = g.radius_map(); th = np.radians(g.pa_map()); pa = g.pa_map(); m = g.radius_map('moon') > 83; cx, cy = g.sun_xy
+    base = ((np.maximum(r, 1) / 80.) ** -3 * (1 + .3 * np.cos(2 * th)) + .002)
+    noise = 1 + .01 * np.random.default_rng(4).standard_normal(r.shape)
+    yy, xx = np.mgrid[0:900, 0:1100]; bx, by = cx + 112 * np.cos(np.radians(30)), cy - 112 * np.sin(np.radians(30))
+    knot = np.exp(-.5 * ((xx - bx) ** 2 + (yy - by) ** 2) / 12. ** 2)
+    pab = float(pa[int(round(by)), int(round(bx))]); rs = g.rsun_map()
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        R1 = radial_log_residual((base * (1 + knot) * noise).astype(np.float32), m, g)[0]
+        R0 = radial_log_residual((base * noise).astype(np.float32), m, g)[0]
+
+        def wing(**kw):
+            lay = lambda res: display_detail(wow_measured(res, m, g, **kw)[0], m, scale_region=(rs >= 1.1) & (rs < 2.))[0]
+            d = lay(R1) - lay(R0); off = np.abs((pa - pab + 180) % 360 - 180)
+            return float(np.nanmean(d[m & (np.abs(r - 112) < 4) & (off >= 12) & (off <= 20)]))
+        default, none, narrow = wing(), wing(tangential_from=99), wing(tangential_sigma_deg=10.)
+    assert default >= 1.3 * none - .02, (default, none)
+    assert narrow < 1.3 * none - .02, (narrow, none)
+
+
+def test_wow_measures_correlated_noise_and_does_not_whiten_it_into_blotches():
+    """The measured noise factors are the cure for the blotches of plain WOW in a real stack's outer field. With noise
+    correlated over a few pixels (as registration and fusion make it), the coarse texture of the layer in the outer
+    field (band-pass 4–16 px, 5–9 R☉) must stay below 0.85 of what the same WOW makes with white-noise factors (the
+    negative control: the factors of 1.3.3)."""
+    import warnings
+    from scipy import ndimage as ndi
+    from ael.filterbank import radial_log_residual, wow_measured
+    R = 30; g = EclipseGeometry((640, 768), (310.3, 370.7), R, (310.3, 370.7), R + 1)
+    r = g.radius_map(); th = np.radians(g.pa_map()); m = g.radius_map('moon') > R + 3; rs = g.rsun_map()
+    n = ndi.gaussian_filter(np.random.default_rng(12).standard_normal(m.shape), 1.5); n /= n.std()
+    a = (((np.maximum(r, 1) / R) ** -3 * (1 + .3 * np.cos(3 * th)) + .01) * (1 + .02 * n)).astype(np.float32)
+
+    def coarse(L):
+        ok = m & np.isfinite(L)
+        bp = filters.normalized_gaussian(L, ok, 4., .25) - filters.normalized_gaussian(L, ok, 16., .25)
+        return float(np.std(bp[ok & (rs > 5) & (rs < 9) & np.isfinite(bp)]))
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        measured, _, info = make_filter('wow', a, m, g)
+        res, _ = radial_log_residual(a, m, g); q, winfo = wow_measured(res, m, g, noise_region_rsun=1e9)
+        white = display_detail(q, m, scale_region=(rs >= 1.1) & (rs < 2.))[0]
+    assert info['noise_factors'] == 'measured' and winfo['noise_factors'] == 'white noise'
+    assert coarse(measured) < .85 * coarse(white), (coarse(measured), coarse(white))
+
+
+def test_wow_refuses_absurd_noise_factors_and_ring_display_falls_back_on_a_narrow_wedge():
+    """Two cases that must give a layer, as 1.3.3 did, and say how. (1) A far field clipped to a constant (8-bit data,
+    sky at 5 counts): the measured factors come out absurd (scale 0 has almost no spread), so the WOW uses white-noise
+    factors and gives the reason. (2) Data only in a wedge of 8°: no annulus holds 50 pixels, so the ACHF layer takes
+    the whole-image display and says so. Controls: the factors measured on that field are absurd; with a full disc the
+    ring display is used."""
+    import warnings
+    g = EclipseGeometry((600, 700), (350.3, 300.7), 40., (350.3, 300.7), 41.)
+    r = g.radius_map(); th = np.radians(g.pa_map()); m = g.radius_map('moon') > 43
+    a = (np.maximum(r, 1) / 40.) ** -3 * (1 + .3 * np.cos(3 * th)) * 1000 * (1 + .01 * np.random.default_rng(1).standard_normal(r.shape))
+    q8 = np.maximum(np.round(a), 5.).astype(np.float32)
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        _, _, info = make_filter('wow', q8, m, g)
+        from ael.filterbank import radial_log_residual
+        res, _ = radial_log_residual(q8, m, g)
+        nf = filters.noise_factors(res, m, m & (g.rsun_map() > 6), n_scales=6)
+    assert info['noise_factors'] == 'white noise' and 'not measurable' in info['white_noise_reason'], info
+    assert not (np.isfinite(nf).all() and (nf <= 50 * filters.STARLET_NOISE[:6]).all()), nf
+    g = EclipseGeometry((200, 300), (150.2, 100.1), 15., None, None)
+    r = g.radius_map(); th = np.radians(g.pa_map())
+    a = (((np.maximum(r, 1) / 15.) ** -3 * (1 + .3 * np.cos(3 * th)) + .01) * (1 + .01 * np.random.default_rng(2).standard_normal(r.shape))).astype(np.float32)
+    wedge = (r > 15.75) & (np.abs(g.pa_map() - 90) < 4)
+    q, _, info = make_filter('achf_iso_04', a, wedge, g)
+    assert np.isfinite(q[wedge]).all() and info['display'].startswith('one spread'), info['display']
+    assert make_filter('achf_iso_04', a, r > 15.75, g)[2]['display'] == 'level and spread per ring'

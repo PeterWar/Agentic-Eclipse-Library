@@ -7,6 +7,11 @@ from . import io, photoshop
 from .filterbank import DEFAULTS,NAMES,make_filter
 from .geometry import EclipseGeometry
 
+# Starting opacities of the default layers, from the author's 2026 image, where the Overlay layer was WOW bilateral at
+# 0.37. At 0.37 the new WOW has about the same fine contrast as WOW bilateral at 1.1–2 R☉ and less beyond 2 R☉
+# (docs/VALIDATION_1.3.4.md). WOW bilateral keeps its 0.37 for recipes that still list it.
+DEFAULT_OPACITY={'nrgf':.39,'wow':.37,'achf_iso_04':.08,'wow_bilateral':.37}
+
 
 def layer_alpha(base_alpha,observed,mode):
     """Multiply must use exactly the base's limb ramp; never an earlier fade."""
@@ -45,7 +50,8 @@ def filters_from_config(config_path,out_dir,*,progress=print):
     path=Path(config_path).resolve(); root=path.parent
     cfg=json.loads(path.read_text())
     allowed={'input','geometry','valid','exclude','coverage','min_coverage','alpha','white_balance',
-             'camera_to_linear_rgb','moon_margin_px','filters','display','photoshop','opacities','visible','icc','note'}
+             'camera_to_linear_rgb','moon_margin_px','filters','display','photoshop','opacities','visible','icc','note',
+             'achf_display'}
     if set(cfg)-allowed: raise ValueError(f'unknown recipe keys: {sorted(set(cfg)-allowed)}')
     def resolve(v):
         p=Path(v).expanduser(); return p if p.is_absolute() else root/p
@@ -89,12 +95,15 @@ def filters_from_config(config_path,out_dir,*,progress=print):
     if names=='all': names=list(NAMES)
     if not isinstance(names,list) or not names or len(set(names))!=len(names) or any(n not in NAMES for n in names):
         raise ValueError(f'filters must be a nonempty unique list from {NAMES}, or "all"')
-    visible_names=cfg.get('visible',[n for n in DEFAULTS if n in names])
+    # WOW bilateral was the default up to 1.3.3: a recipe that lists it without the new WOW keeps it visible
+    visible_names=cfg.get('visible',[n for n in names if n in DEFAULTS or (n=='wow_bilateral' and 'wow' not in names)])
     if not isinstance(visible_names,list) or set(visible_names)-set(names):
         raise ValueError('visible must be a subset of filters')
     if set(cfg.get('opacities',{}))-set(names): raise ValueError('opacities must name selected filters')
     if any(not np.isfinite(v) or not 0<=v<=1 for v in cfg.get('opacities',{}).values()):
         raise ValueError('opacities must be finite in [0,1]')
+    achf_display=cfg.get('achf_display','rings')
+    if achf_display not in ('rings','global'): raise ValueError("achf_display is 'rings' or 'global'")
     stretch=cfg['display']
     if set(stretch)-{'scale','asinh','highlight_ceiling'}: raise ValueError('unknown display parameter')
     scale=float(stretch['scale']); strength=float(stretch.get('asinh',10))
@@ -134,10 +143,10 @@ def filters_from_config(config_path,out_dir,*,progress=print):
     domain_checks=[]
     for i,name in enumerate(names):
         progress(f'filter {i+1}/{len(names)}: {name}')
-        image,mode,info=make_filter(name,lum,valid,geo)
+        image,mode,info=make_filter(name,lum,valid,geo,achf_display=achf_display)
         observed=valid & np.isfinite(image)
         al=layer_alpha(alpha,observed,mode)
-        opacity=float(cfg.get('opacities',{}).get(name,{'nrgf':.39,'wow_bilateral':.37,'achf_iso_04':.08}.get(name,1)))
+        opacity=float(cfg.get('opacities',{}).get(name,DEFAULT_OPACITY.get(name,1)))
         if not np.isfinite(opacity) or not 0<=opacity<=1: raise ValueError('opacity must be in [0,1]')
         visible=name in visible_names
         image=np.where(observed,image,np.nan)

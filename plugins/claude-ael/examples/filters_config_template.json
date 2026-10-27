@@ -3,8 +3,8 @@
   "coverage": "stack_run/coverage.npy", "min_coverage": 0.5,
   "alpha": "stack_run/alpha.npy", "geometry": "stack_run/geometry.json",
   "white_balance": [1,1,1], "display": {"scale": 10000, "asinh": 20, "highlight_ceiling": 0.9},
-  "filters": ["nrgf","wow_bilateral","achf_iso_04"],
-  "visible": ["nrgf","wow_bilateral","achf_iso_04"],
-  "opacities": {"nrgf": 0.39, "wow_bilateral": 0.37, "achf_iso_04": 0.08},
+  "filters": ["nrgf","wow","achf_iso_04"],
+  "visible": ["nrgf","wow","achf_iso_04"],
+  "opacities": {"nrgf": 0.39, "wow": 0.37, "achf_iso_04": 0.08},
   "photoshop": true
 }
