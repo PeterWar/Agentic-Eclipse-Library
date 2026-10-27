@@ -9,7 +9,8 @@ Two questions, kept apart because they fail in different ways:
    few degrees.  A null distribution comes from large rotations (30–330°), and a fine-detail version
    from an angular high-pass (< 12°), because whole profiles share the broad two-lobed shape of any
    corona.  The test compares *angles*: a radial tone curve ``a(r)·I + b(r)`` passes it unchanged, so it
-   says nothing about brightness.
+   says nothing about brightness.  The null holds rotations only and cannot see a mirrored image: the
+   mirror state is scanned apart, on the fine detail (:func:`scan_mirror`).
 
 2. **Brightness**, in mean solar brightness (MSB: B/B☉, the mean brightness of the solar disc).  The
    level is compared in 1° cells inside rings, as a ratio of medians and a median of ratios, and judged
@@ -55,7 +56,8 @@ from .geometry import EclipseGeometry, direction_of_pa
 
 __all__ = ["AU_KM", "RSUN_KM", "rsun_arcsec", "SolarFrame", "Unrolled", "sample", "unroll", "nrgf_rows",
            "subtract_low_harmonics", "dark_sector", "angular_profile", "angular_highpass",
-           "circular_correlation", "rotation_null", "compare_structure", "van_de_hulst_abcd", "DENSITY_MODELS",
+           "circular_correlation", "rotation_null", "compare_structure", "frame_for", "geometry_of_frame",
+           "scan_mirror", "van_de_hulst_abcd", "DENSITY_MODELS",
            "k_corona_tb_pb", "thomson_polarization", "f_corona_van_de_hulst_1950", "k_corona_van_de_hulst_1950",
            "kcor_total_msb", "k_band_transfer", "LASCO_C2_CALIBRATIONS", "mjd", "lasco_c2_summing",
            "lasco_c2_msb_per_dn",
@@ -525,6 +527,194 @@ def compare_structure(ours: Unrolled, ref: Unrolled, rings, *, normalise_ours: b
 
 
 # ------------------------------------------------------------------------------------------------
+# Mirror state (parity)
+# ------------------------------------------------------------------------------------------------
+def frame_for(frame0: SolarFrame, parity: int, rotation_deg: float) -> SolarFrame:
+    """The frame of one orientation hypothesis: ``frame_for(f0, s, c).to_pixels(r, ψ)`` is
+    ``f0.to_pixels(r, s·ψ + c)``.
+
+    ``parity`` s = +1 keeps the mirror state of ``frame0``, s = −1 takes the other one.  ``rotation_deg`` c is
+    the position angle, in ``frame0``, of the true solar north.
+    """
+    if parity not in (1, -1):
+        raise ValueError("parity is +1 (the mirror state of frame0) or -1 (the other one)")
+    s = int(parity)
+    n, e = frame0.M[:, 0], frame0.M[:, 1]
+    c = math.radians(float(rotation_deg))
+    return SolarFrame((frame0.cx, frame0.cy), n * math.cos(c) + e * math.sin(c),
+                      s * (e * math.cos(c) - n * math.sin(c)), observer=frame0.observer, time_utc=frame0.time_utc)
+
+
+def geometry_of_frame(frame: SolarFrame, p_angle_deg: float) -> dict:
+    """``north_deg`` and ``mirrored`` of a frame, as an :class:`ael.geometry.EclipseGeometry` takes them.
+
+    The inverse of :meth:`SolarFrame.from_geometry` for an orthogonal frame; ``p_angle_deg`` (the solar P
+    angle) is required.  ``mirrored`` is the sign of the frame: on a sky seen directly (x right, y down) east
+    lies 90° counter-clockwise from north.  On an affine plate ``north_deg`` follows the solar-north axis, and
+    ``north_east_angle_deg`` says how far the two axes are from 90°.
+    """
+    n, e = frame.M[:, 0], frame.M[:, 1]
+    mirrored = bool(n[0] * e[1] - n[1] * e[0] > 0)
+    a = math.degrees(math.atan2(n[0], -n[1]))          # image angle of solar north, clockwise from up
+    p = float(p_angle_deg)
+    return dict(north_deg=float(((a - p) if mirrored else (a + p)) % 360.0), mirrored=mirrored,
+                north_east_angle_deg=frame.axis_angle_deg)
+
+
+def _rho_rows(P, q, min_points):
+    """:func:`_pearson` of every row of ``P`` with ``q``, vectorised (same angles, same rule)."""
+    m = np.isfinite(P) & np.isfinite(q)[None, :]
+    k = m.sum(axis=1)
+    with np.errstate(all="ignore"):
+        x = np.where(m, P, 0.0)
+        y = np.where(m, q[None, :], 0.0)
+        x = np.where(m, x - x.sum(axis=1, keepdims=True) / k[:, None], 0.0)
+        y = np.where(m, y - y.sum(axis=1, keepdims=True) / k[:, None], 0.0)
+        d = np.sqrt((x * x).sum(axis=1) * (y * y).sum(axis=1))
+        r = (x * y).sum(axis=1) / d
+    r[(k < min_points) | ~(d > 0)] = np.nan
+    return r
+
+
+def _ring_brief(x) -> dict:
+    f = x["fine_detail"]
+    return dict(r_rsun=x["r_rsun"], rho_0=x["rho_0"], null_max=x["null_max"], shift_deg=x["shift_deg"],
+                fine_rho_0=f["rho_0"], fine_null_max=f["null_max"], fine_shift_deg=f["shift_deg"],
+                fine_at_search_edge=f["at_search_edge"])
+
+
+def scan_mirror(ours: Unrolled, ref: Unrolled, rings, *, frame0: SolarFrame | None = None,
+                p_angle_deg: float | None = None, normalise_ours: bool = True, normalise_ref: bool = True,
+                exclude_ours=None, exclude_ref=None, sigma_deg: float = 1.5, highpass_sigma_deg: float = 12.0,
+                max_shift_deg: float = 10.0, min_cover: float = 0.6, min_points: int = 60, null_shifts_deg=None,
+                min_margin: float = 0.15, min_unique: float = 0.15, unique_away_deg: float = 30.0,
+                max_residual_deg: float = 2.0) -> dict:
+    """Mirror state (parity) of OUR position angles against a reference: both states × every rotation.
+
+    ``ours`` is unrolled with a provisional frame (any north, either mirror state), ``ref`` in its own solar
+    coordinates, on the same grid.  A hypothesis (s, c) says that the provisional PA of a feature at true PA
+    ψ is s·ψ + c: s = +1 keeps the mirror state of the provisional frame, s = −1 takes the other one.  On the
+    PA grid a hypothesis is a permutation of columns, exact for the angular profiles (symmetric kernels).
+
+    For each state, F(c) is the mean over the rings of the fine-detail ρ at zero rotation (the angular
+    high-pass of ``highpass_sigma_deg``, as in :func:`compare_structure`) and W(c) the same for the whole
+    profile.  :func:`compare_structure` is run at the rotation c* that maximises F.  A state is kept only if
+
+    * its F(c*) beats the other state's by ≥ ``min_margin`` (both are the best of the same rotations);
+    * it beats its own best rotation ≥ ``unique_away_deg`` away by ≥ ``min_unique`` (a corona symmetric
+      under 180° gives two peaks);
+    * its fine-detail residual rotation stays within ±``max_residual_deg`` in every ring, never at the edge
+      of the search.
+
+    Otherwise ``parity`` is "undetermined", a frequent answer: take the mirror state from another direction
+    (stars, landscape, the side of the chromosphere at second or third contact).  The whole-profile scan is
+    reported and never used: a reflection plus a rotation can fit the broad two-lobed shape and beat the
+    rotation null in every ring (issue #10).  After a scan over all rotations the rotation null loses its
+    meaning too, because the best rotation is chosen among the rotations it is made of; it is reported and
+    never used.
+
+    Limits: the 12° high-pass also keeps 8 % of the m = 2 harmonic, 18 % of m = 3 and 42 % of m = 5, so the
+    broad shape takes part.  In synthetic tests without shared fine detail (asymmetric corona, ±20 %
+    extinction dipole) the rule chose the wrong state in 2 of 120 cases, both with a margin of 0.16, and
+    the decisions with the right state had rotations up to 8° off.  A decided parity still needs a second,
+    independent direction, and its rotation is only a hint: take the orientation from the declared frame.
+
+    Returns ``parity`` ("same", "opposite" or "undetermined"), ``rotation_deg`` (c* of the kept state, in
+    (−180°, 180°]), ``checks``, ``fine_margin`` and ``whole_profile_prefers`` (for the record).  ``states``
+    holds both states: ``by_fine`` at c* and ``by_whole`` at the best W, each with ``fine`` (F), ``whole`` (W)
+    and the rings of :func:`compare_structure`, and ``fine_second_peak``.  ``curves`` holds F and W over every
+    rotation (arrays).  With ``frame0`` (the provisional frame) each of them carries its frame
+    (:func:`frame_for`), and with ``p_angle_deg`` also its ``north_deg`` and ``mirrored``
+    (:func:`geometry_of_frame`); ``frame`` and ``geometry`` at the top are those of the kept state.
+    """
+    import warnings
+    if ours.data.shape != ref.data.shape or not (np.allclose(ours.r, ref.r) and np.allclose(ours.pa, ref.pa)):
+        raise ValueError("unroll both images on the same (r, PA) grid")
+    if p_angle_deg is not None and frame0 is None:
+        raise ValueError("p_angle_deg needs frame0 (the provisional frame of ours)")
+    A = nrgf_rows(ours) if normalise_ours else np.asarray(ours.data, np.float64)
+    B = nrgf_rows(ref) if normalise_ref else np.asarray(ref.data, np.float64)
+    xo = None if exclude_ours is None else np.asarray(exclude_ours, bool)
+    n = A.shape[1]
+    step = 360.0 / n
+    prof = []
+    for r1, r2 in rings:
+        pA = angular_profile(A, ours.r, r1, r2, sigma_deg=sigma_deg, min_cover=min_cover, exclude=xo)
+        pB = angular_profile(B, ref.r, r1, r2, sigma_deg=sigma_deg, min_cover=min_cover, exclude=exclude_ref)
+        prof.append((pA, pB, angular_highpass(pA, sigma_deg=highpass_sigma_deg, min_cover=min_cover),
+                     angular_highpass(pB, sigma_deg=highpass_sigma_deg, min_cover=min_cover)))
+    k = np.arange(n)
+    wrap = lambda d: float(180.0 - (180.0 - d) % 360.0)          # (−180°, 180°]
+    kw = dict(normalise_ours=False, normalise_ref=False, exclude_ref=exclude_ref, sigma_deg=sigma_deg,
+              highpass_sigma_deg=highpass_sigma_deg, max_shift_deg=max_shift_deg, min_cover=min_cover,
+              min_points=min_points, null_shifts_deg=null_shifts_deg)
+    states, curves = {}, {}
+    for s, label in ((1, "same"), (-1, "opposite")):
+        cols = (s * k[None, :] + k[:, None]) % n            # row j: the hypothesis (s, c = j·step)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            W = np.nanmean([_rho_rows(pA[cols], pB, min_points) for pA, pB, _, _ in prof], axis=0)
+            F = np.nanmean([_rho_rows(hA[cols], hB, min_points) for _, _, hA, hB in prof], axis=0)
+        curves[label] = dict(rotation_deg=k * step, fine=F, whole=W)
+        if not np.isfinite(F).any():
+            states[label] = None
+            continue
+        jF = int(np.nanargmax(F))
+        jW = int(np.nanargmax(W)) if np.isfinite(W).any() else jF
+
+        def at(j):
+            perm = (s * k + j) % n
+            res = compare_structure(Unrolled(A[:, perm], ours.r, ours.pa), Unrolled(B, ref.r, ref.pa), rings,
+                                    exclude_ours=None if xo is None else xo[perm], **kw)
+            out = dict(rotation_deg=wrap(j * step), fine=float(F[j]), whole=float(W[j]),
+                       rings=[_ring_brief(x) for x in res])
+            if frame0 is not None:
+                fr = frame_for(frame0, s, j * step)
+                out["frame"] = fr.to_dict()
+                if p_angle_deg is not None:
+                    out["geometry"] = geometry_of_frame(fr, p_angle_deg)
+            return out
+        far = np.abs((k - jF + n // 2) % n - n // 2) * step >= unique_away_deg
+        second = float(np.nanmax(F[far])) if np.isfinite(F[far]).any() else float("nan")
+        best = at(jF)
+        by_w = best if jW == jF else at(jW)
+        states[label] = dict(
+            by_fine=best, fine_second_peak=second,
+            fine_beats_rotation_null_every_ring=bool(all(np.isfinite(x["fine_rho_0"]) and
+                                                         x["fine_rho_0"] > x["fine_null_max"]
+                                                         for x in best["rings"])),
+            by_whole=by_w,
+            whole_beats_rotation_null_every_ring=bool(all(np.isfinite(x["rho_0"]) and x["rho_0"] > x["null_max"]
+                                                          for x in by_w["rings"])))
+    fine = {lab: (st["by_fine"]["fine"] if st else -np.inf) for lab, st in states.items()}
+    win = "same" if fine["same"] >= fine["opposite"] else "opposite"
+    other = "opposite" if win == "same" else "same"
+    margin = fine[win] - fine[other]
+    b = states[win]
+    checks = dict(margin=bool(np.isfinite(fine[win]) and margin >= min_margin),
+                  unique=bool(b is not None and b["by_fine"]["fine"] - b["fine_second_peak"] >= min_unique),
+                  stable=bool(b is not None and all(np.isfinite(x["fine_shift_deg"]) and
+                                                    abs(x["fine_shift_deg"]) <= max_residual_deg and
+                                                    not x["fine_at_search_edge"] for x in b["by_fine"]["rings"])))
+    decided = all(checks.values())
+    whole = {lab: (st["by_whole"]["whole"] if st else -np.inf) for lab, st in states.items()}
+    out = dict(parity=win if decided else "undetermined",
+               rotation_deg=b["by_fine"]["rotation_deg"] if decided else None,
+               checks=checks, fine_margin=float(margin) if np.isfinite(margin) else float("nan"),
+               whole_profile_prefers="same" if whole["same"] >= whole["opposite"] else "opposite",
+               states=states,
+               thresholds=dict(min_margin=min_margin, min_unique=min_unique, unique_away_deg=unique_away_deg,
+                               max_residual_deg=max_residual_deg, highpass_sigma_deg=highpass_sigma_deg,
+                               grid_step_deg=step, rings=[[float(r1), float(r2)] for r1, r2 in rings]),
+               curves=curves)
+    if frame0 is not None:
+        out["frame"] = b["by_fine"]["frame"] if decided else None
+        if p_angle_deg is not None:
+            out["geometry"] = b["by_fine"]["geometry"] if decided else None
+    return out
+
+
+# ------------------------------------------------------------------------------------------------
 # K corona, F corona and the polarisation of Thomson scattering
 # ------------------------------------------------------------------------------------------------
 def van_de_hulst_abcd(r):
@@ -809,7 +999,7 @@ _REF_KEYS = _SPEC_KEYS | {"name", "rings", "dark_sector"}
 _DARK_KEYS = {"r_range", "seed_pa_deg", "threshold", "dilate_deg", "_comment"}
 _RADII_KEYS = {"min", "max", "n", "spacing", "_comment"}
 _TOP_KEYS = {"ours", "references", "radii_rsun", "pa_step_deg", "sigma_deg", "highpass_sigma_deg", "max_shift_deg",
-             "note", "_comment"}
+             "scan_mirror", "note", "_comment"}
 
 
 def _is_fits(path: Path) -> bool:
@@ -920,6 +1110,11 @@ def structure_from_config(config_path, out_dir, *, progress=print) -> dict:
     before the output directory is created.  Writes ``coronagraph_structure.json`` (results, frames, gates
     and limits), ``receipt.json`` (inputs with SHA-256, the recipe included) and, per reference, an 8-bit PNG
     with the two unrolled, normalised images one above the other for the visual check.
+
+    With ``"scan_mirror": true`` each reference also gets :func:`scan_mirror` (both mirror states × every
+    rotation of ours, on that reference's rings and pylon mask), written as ``mirror_scan`` next to its rings,
+    and a gate ``parity``: "same" (the declared frame of ours has the right mirror state), "opposite" or
+    "undetermined".  The comparison itself always uses the declared frame.
     """
     from . import CREDIT, __version__, io as aio
 
@@ -951,6 +1146,9 @@ def structure_from_config(config_path, out_dir, *, progress=print) -> dict:
     radii = np.geomspace(r0, r1, nr) if spacing == "log" else np.linspace(r0, r1, nr)
     step = float(cfg.get("pa_step_deg", 0.5))
     _pa_grid(step)
+    scan = cfg.get("scan_mirror", False)
+    if not isinstance(scan, bool):
+        raise ValueError("scan_mirror is true or false")
 
     def check_spec(spec, label, allowed):
         if not isinstance(spec, dict):
@@ -1028,6 +1226,11 @@ def structure_from_config(config_path, out_dir, *, progress=print) -> dict:
     prepared = [(ref, prepare(ref, str(ref["name"]))) for ref in refs]
     N_o = nrgf_rows(ours["unrolled"]) if cfg["ours"].get("normalise", True) else ours["unrolled"].data
     pa = ours["unrolled"].pa
+    skw = dict(sigma_deg=float(cfg.get("sigma_deg", 1.5)),
+               highpass_sigma_deg=float(cfg.get("highpass_sigma_deg", 12.0)),
+               max_shift_deg=float(cfg.get("max_shift_deg", 10.0)))
+    fo = cfg["ours"]["frame"]
+    p_ours = float(fo["p_angle_deg"]) if "geometry" in fo else None     # only a geometry frame declares P
     results, sheets, gates = [], [], {}
     for ref, pr in prepared:
         name = str(ref["name"])
@@ -1037,11 +1240,9 @@ def structure_from_config(config_path, out_dir, *, progress=print) -> dict:
             ds = ref["dark_sector"]
             excl = dark_sector(N_r, radii, ds["r_range"], float(ds["seed_pa_deg"]),
                                threshold=float(ds.get("threshold", -0.3)), dilate_deg=float(ds.get("dilate_deg", 4.0)))
-        res = compare_structure(Unrolled(N_o, radii, pa), Unrolled(N_r, radii, pa), [tuple(x) for x in ref["rings"]],
-                                normalise_ours=False, normalise_ref=False, exclude_ref=excl,
-                                sigma_deg=float(cfg.get("sigma_deg", 1.5)),
-                                highpass_sigma_deg=float(cfg.get("highpass_sigma_deg", 12.0)),
-                                max_shift_deg=float(cfg.get("max_shift_deg", 10.0)))
+        rings = [tuple(x) for x in ref["rings"]]
+        res = compare_structure(Unrolled(N_o, radii, pa), Unrolled(N_r, radii, pa), rings,
+                                normalise_ours=False, normalise_ref=False, exclude_ref=excl, **skw)
         for x in res:
             progress(f"{name} r {x['r_rsun'][0]:.2f}–{x['r_rsun'][1]:.2f}: rho(0) {x['rho_0']:+.3f} "
                      f"(best {x['rho_best']:+.3f} at {x['shift_deg']:+.1f}°; null max {x['null_max']:+.2f}); "
@@ -1058,9 +1259,19 @@ def structure_from_config(config_path, out_dir, *, progress=print) -> dict:
             fine_detail_above_its_null=[bool(np.isfinite(x["fine_detail"]["rho_0"]) and
                                              x["fine_detail"]["rho_0"] > x["fine_detail"]["null_max"]) for x in res],
             best_rotation_at_search_edge=[bool(x["at_search_edge"]) for x in res])
-        results.append(dict(name=name, frame_native=pr["native"].to_dict(), bin=pr["bin"], frame_used=pr["frame"].to_dict(),
-                            excluded_pa_deg=None if excl is None else [float(pa[i]) for i in np.nonzero(excl)[0]],
-                            rings=res))
+        entry = dict(name=name, frame_native=pr["native"].to_dict(), bin=pr["bin"], frame_used=pr["frame"].to_dict(),
+                     excluded_pa_deg=None if excl is None else [float(pa[i]) for i in np.nonzero(excl)[0]], rings=res)
+        if scan:
+            ms = scan_mirror(Unrolled(N_o, radii, pa), Unrolled(N_r, radii, pa), rings, frame0=ours["native"],
+                             p_angle_deg=p_ours, normalise_ours=False, normalise_ref=False, exclude_ref=excl, **skw)
+            ms.pop("curves")
+            gates[name]["parity"] = ms["parity"]
+            entry["mirror_scan"] = ms
+            fs = {k: (v["by_fine"]["fine"] if v else float("nan")) for k, v in ms["states"].items()}
+            progress(f"{name} mirror state: {ms['parity']} (fine detail {fs['same']:+.3f} same, "
+                     f"{fs['opposite']:+.3f} opposite; checks {ms['checks']}; the whole profile, never used, "
+                     f"prefers {ms['whole_profile_prefers']})")
+        results.append(entry)
     out.mkdir(parents=True)
     files = {}
     for name, fname, sheet in sheets:
@@ -1073,6 +1284,11 @@ def structure_from_config(config_path, out_dir, *, progress=print) -> dict:
     limits = ("Agreement in position angle only. A radial tone curve a(r)*I + b(r) leaves every number unchanged; "
               "nothing here measures brightness or excludes local artefacts. A best rotation at the edge of the "
               "search window is not an orientation.")
+    if scan:
+        limits += (" The rotation null cannot see a mirrored image. The parity scan decides on the fine detail of "
+                   "each reference; in synthetic tests without shared fine detail it chose the wrong mirror state "
+                   "in 2 of 120 cases. Confirm a decided parity with a second, independent direction (stars, "
+                   "landscape, the side of the chromosphere at second or third contact).")
     rec = dict(product="coronagraph structure comparison", library=f"ael {__version__}", credit=CREDIT,
                recipe=str(path), radii_rsun=[float(radii[0]), float(radii[-1]), int(radii.size), spacing],
                pa_step_deg=step, ours=dict(frame_native=ours["native"].to_dict(), bin=ours["bin"],

@@ -4,12 +4,12 @@ description: >-
   Check a total-solar-eclipse image against independent instruments that saw the same corona — the K-Cor
   coronagraph (Mauna Loa), SOHO/LASCO C2 and C3, SDO/AIA — with the Agentic Eclipse Library's
   `ael.coronagraph`: STRUCTURE (are the rays and streamers where the instrument sees them? angular profiles
-  ring by ring, a null from large rotations, fine detail below 12°, orientation, prominences) and
+  ring by ring, a null from large rotations, fine detail below 12°, orientation, mirror state, prominences) and
   BRIGHTNESS in mean solar brightness (MSB, B/B☉) against K-Cor (K + F corona, never pB/p alone) and
   LASCO C2 (both published calibrations), judged against the photograph's own asymmetric uncertainty.
   Use it for "compare with SOHO / LASCO / SDO / K-Cor", "is my processing faithful?", "validate the
   corona", "absolute calibration", "mean solar brightness", "B/B☉", "radiometric calibration", "MSB map",
-  or to judge such a claim made by someone else.
+  "is my image mirrored?", or to judge such a claim made by someone else.
 ---
 
 # Comparing an eclipse image with coronagraphs
@@ -83,6 +83,8 @@ res_k = cg.compare_structure(ours, kcor, [(1.15, 1.30), (1.30, 1.50), (1.50, 1.7
 c2 = cg.unroll(c2_dn_per_s, frame_c2, radii)              # no vignetting correction here: the pylon stays dark
 pylon = cg.dark_sector(cg.nrgf_rows(c2), radii, (2.5, 6.0), seed_pa_deg=320)   # seed found by eye
 res_c2 = cg.compare_structure(ours, c2, [(2.4, 2.8), (2.8, 3.3), (3.3, 4.0), (4.0, 5.0), (5.0, 6.0)], exclude_ref=pylon)
+scan = cg.scan_mirror(ours, c2, [(2.4, 2.8), (2.8, 3.3), (3.3, 4.0), (4.0, 5.0)], exclude_ref=pylon,
+                      frame0=frame_ours, p_angle_deg=P)   # scan["parity"]: "same", "opposite" or "undetermined"
 ```
 
 - **Rings.** K-Cor from 1.15 R☉ (stay outside the lunar-motion band) to about 2; C2 from 2.4 to 6; C3 from 4,
@@ -90,6 +92,54 @@ res_c2 = cg.compare_structure(ours, c2, [(2.4, 2.8), (2.8, 3.3), (3.3, 4.0), (4.
 - **Read** `rho_0` (no rotation), `shift_deg` (orientation), the null (`null_mean`, `null_sd`, `null_max`) and
   `fine_detail`. Whole profiles share the broad two-lobed shape of any corona: far out the whole-profile null
   reaches 0.9, and only the fine detail discriminates. Agreement = `rho_0` above `null_max`, in the fine detail.
+- **Mirror state (parity) first.** The rotation null (30–330°) holds rotations only, so it cannot see a mirrored
+  image: a reflection plus a rotation can fit the broad two-lobed shape and beat that null in every ring. Camera
+  software can deliver bottom-up frames, so never take `mirrored=False` for granted on a new camera. Take the
+  parity from stars, a landscape or an annotated frame. Without them, run `scan_mirror` against C2, or add
+  `"scan_mirror": true` to the recipe (gate `parity`: "same", "opposite" or "undetermined"). It scans both mirror
+  states and every rotation and picks each state's rotation on the fine detail. It keeps a state only if its best
+  mean fine-detail ρ beats the other state's best by ≥ 0.15, beats its own best rotation ≥ 30° away by ≥ 0.15 (a
+  corona symmetric under 180° has two peaks), and its residual rotation stays within ±2° in every ring. Otherwise it
+  answers "undetermined", a frequent answer: find another direction. Never decide the parity on the whole profile.
+- **Evidence for the parity.** Field case, Edu (@edu27), 2026, frames from an astro camera that came out mirrored:
+  against C2 the whole profile preferred the unmirrored image at north 91° (ρ 0.83), and `compare_structure` there
+  gave `rho_0` 0.73–0.87 with a null fraction of 0.000 in every ring. Its fine detail was 0.36–0.40, with a
+  residual rotation drifting from −3° to +6°; the mirrored solution gave 0.68–0.81 at 0.0–0.5°. On the 2026 MSB
+  map the whole profile chose the right parity with the `dark_sector` pylon mask (0.94 against 0.69; 0.77 against
+  0.65 without the extinction correction). With a narrow pylon mask (±6°) and no extinction correction it chose
+  the mirror, 0.67 against 0.50, above its rotation null in all four rings (2.4–5 R☉). There the mirror's fine
+  detail was 0.43 / 0.25 / 0.19 / 0.30, with a residual rotation from +1° to +9°; the right parity gave 0.90 /
+  0.84 / 0.76 / 0.56 at −0.5° to +0.5°. The scan kept the parity of the star plate against both C2 images with
+  both masks, with and without the extinction correction (margin 0.41–0.53), and found the mirror when the map
+  was flipped (0.41–0.54).
+- **The scan can be wrong.** In synthetic nulls without shared fine detail (asymmetric corona, ±20 % uncorrected
+  extinction dipole) it chose the wrong parity once in 60 cases in an independent check, with a margin of 0.161,
+  just above the 0.15 threshold, and once in 60 more of the same kind (0.156). In 160 nulls of two other models it
+  never did. Count on an error of the order of 1–3 % when the fine detail is not shared, and confirm a decided
+  parity with a second, independent direction (stars, landscape, the contacts below, an annotated frame). In those
+  nulls the decisions with the right parity came from the broad shape, with the rotation up to 8° off: take the
+  orientation from the declared frame, and the scan's rotation as a hint.
+- **After a scan the rotation null is no longer a null.** The best rotation is chosen among the very rotations the
+  null is made of, so its fine detail beats that null almost by construction. The scan compares the two mirror
+  states with each other instead: each is the best of the same rotations.
+- **The fine detail is not only fine.** The 12° high-pass keeps 8 % of the m = 2 harmonic, 18 % of m = 3 and 42 %
+  of m = 5. On a synthetic corona without rays the right state still reached a median ρ of 0.97. Keep 12° for the
+  parity: narrower high-passes (6°, 4°) decided more often but chose the wrong parity in up to 2 of 40 synthetic
+  cases with weak shared detail.
+- **The Moon as a cross-check.** The lunar track gives one direction, the Moon's motion. With the Sun's position on
+  the sensor free, any constant offset of the track goes into it, and the track is straight (to 0.012″ during the
+  2026 totality), so a fit of the track alone cannot tell the parity. The contacts can, away from the central
+  line: at second and third contact the chromosphere appears on the side of the track where the Sun's centre
+  lies, 13.9° from the axis of the Moon's motion at the site of the 2026 map (impact parameter 7.8″, totality 107 s)
+  and 0.017° on the central line (110 s). A mirror puts it on the other side. Near the central line neither the
+  track nor the contacts tell the parity. These angles come from the DE421 ephemeris; the test has not been tried
+  on frames.
+- **The sky as a cross-check.** With the Sun low, the extinction dipole and the sky gradient point along the
+  vertical. In 2026 the zenith lay 70° from the Moon's motion (celestial PA 48° and 118°), so the two directions
+  together fix the parity: a mirror would put the zenith 139° from where the ephemeris puts it. This is geometry
+  only and has not been tested with data as a parity check. On the 2026 map, already oriented by stars, the
+  uncorrected ratio to C2 had its dipole towards solar PA 30–37° and the sky gradient towards 25°, with the zenith
+  at 33° (research note 185).
 - **Pylon.** Only the contiguous dark run that contains the seed; a global threshold would remove real coronal
   holes. Labels and occulter edges: mask them, never fill them.
 - **Prominences.** Overlay AIA 304 Å contours (outside the disc and the Moon) and say where they match *by eye*.
@@ -151,9 +201,9 @@ numbers within 0.003 (C2) and 0.009 (K-Cor) from the research's calibrated map, 
 ## 6 · What to hand over
 
 A JSON receipt (the command writes one) and a short text that keeps the two questions apart: structure per ring
-with its null and fine detail; brightness per ring with both C2 calibrations, the K-Cor model range and the band;
-what was excluded and why; what was *not* tested. Never write "validated" for a brightness that only agrees in
-structure, and never present a ratio without its band.
+with its null and fine detail, and what fixed the mirror state; brightness per ring with both C2 calibrations, the
+K-Cor model range and the band; what was excluded and why; what was *not* tested. Never write "validated" for a
+brightness that only agrees in structure, and never present a ratio without its band.
 
 Credit line for anything you produce with this: `Processed with Agentic Eclipse Library by Pere Guerra —
 https://github.com/PeterWar/Agentic-Eclipse-Library` (a courtesy, not a condition).

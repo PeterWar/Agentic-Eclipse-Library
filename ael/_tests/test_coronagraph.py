@@ -476,3 +476,157 @@ def test_coronagraph_command_uses_p_bin_valid_and_the_pylon():
         for i, cfg in enumerate(bad):
             _raises(ValueError, lambda: run(cfg, f"bad{i}"))
             assert not (td / f"bad{i}").exists()
+
+
+# ------------------------------------------------------------------ mirror state (parity), issue #10
+PRINGS = [(2.4, 2.8), (2.8, 3.3), (3.3, 4.0), (4.0, 5.0)]
+PR = np.geomspace(2.3, 5.2, 80)
+PPA = np.arange(720) * 0.5
+
+
+def _wrap(d):
+    return (d + 180.0) % 360.0 - 180.0
+
+
+def _rays(rng, n=70):
+    """Narrow radial rays: (PA, σ 0.7–3°, amplitude −0.15…+0.30)."""
+    return [(rng.uniform(0, 360), math.exp(rng.uniform(math.log(0.7), math.log(3.0))), rng.uniform(-0.15, 0.30))
+            for _ in range(n)]
+
+
+def _ray_field(psi, rays):
+    return sum((a * np.exp(-0.5 * (_wrap(psi - p) / w) ** 2) for p, w, a in rays), 0.0 * psi)
+
+
+def _parity_case(seed, s, *, null=False, symmetric=False, rays=None, twist=0.0):
+    """Ours seen with parity s and rotation c (provisional PA = s·ψ + c), and a C2-like reference.
+
+    Broad shape shared by both: two equatorial lobes, equal at 90° and 270° if ``symmetric``, else moved,
+    unequal and with 0–2 more.  Rays: 70 shared, plus 1.5 × 70 of the reference's own; with ``null`` the
+    reference has 70 independent rays instead of the shared ones.  Ours carries an uncorrected extinction
+    dipole (±20 % at 3.5 R☉ towards PA 33°) and 2 % noise; the reference 3 % noise and a pylon at 320°.
+    ``twist`` turns our rays by that many degrees per R☉.
+    """
+    rng = np.random.default_rng(seed)
+    if symmetric:
+        lobes = [(90.0, 1.0, 22.0), (270.0, 1.0, 22.0)]
+    else:
+        lobes = [(c + rng.uniform(-30, 30), rng.uniform(0.5, 1.5), rng.uniform(15, 30)) for c in (90.0, 270.0)]
+        lobes += [(rng.uniform(0, 360), rng.uniform(0.2, 0.7), rng.uniform(10, 25)) for _ in range(rng.integers(0, 3))]
+    shared, own, other = (_rays(rng) for _ in range(3)) if rays is None else (rays, [], [])
+    c = float(rng.uniform(0, 360))
+
+    def corona(psi, fine):
+        shape = 0.4 + sum(A * np.exp(-0.5 * (_wrap(psi - p) / w) ** 2) for p, A, w in lobes)
+        return PR[:, None] ** -3.0 * shape * (1.0 + np.maximum(fine, -0.9)) + 0.3 * PR[:, None] ** -2.3
+    p_ref = PPA[None, :]
+    ref = corona(p_ref, _ray_field(p_ref, other if null else shared) + 1.5 * _ray_field(p_ref, own))
+    ref *= 1.0 + 0.03 * rng.standard_normal(ref.shape)
+    ref[:, np.abs(_wrap(PPA - 320.0)) <= 5.0] *= 0.05          # occulter pylon
+    psi = (s * (PPA[None, :] - c)) % 360.0 + 0.0 * PR[:, None]  # true PA seen in each provisional column
+    ours = corona(psi, _ray_field(psi - twist * (PR[:, None] - 3.5), shared))
+    ours *= np.exp(math.log(1.2) / 3.5 * PR[:, None] * np.cos(np.radians(psi - 33.2))) * \
+        (1.0 + 0.02 * rng.standard_normal(ours.shape))
+    return cg.Unrolled(ours, PR, PPA), cg.Unrolled(ref, PR, PPA), np.abs(_wrap(PPA - 320.0)) <= 6.0, c
+
+
+def _parity_outcomes(seeds, **kw):
+    """(right / wrong / undetermined, |rotation error|, whole-profile trap) per seed; truth alternates −1, +1."""
+    out = []
+    for i, seed in enumerate(seeds):
+        s = 1 if i % 2 else -1
+        ours, ref, pylon, c = _parity_case(seed, s, **kw)
+        res = cg.scan_mirror(ours, ref, PRINGS, exclude_ref=pylon)
+        truth, other = ("same", "opposite") if s == 1 else ("opposite", "same")
+        got = "undetermined" if res["parity"] == "undetermined" else ("right" if res["parity"] == truth else "wrong")
+        trap = res["whole_profile_prefers"] == other and res["states"][other]["whole_beats_rotation_null_every_ring"]
+        out.append((got, None if res["rotation_deg"] is None else abs(_wrap(res["rotation_deg"] - c)), trap))
+    return out
+
+
+def test_scan_mirror_finds_the_mirror_on_the_fine_detail_where_the_whole_profile_is_fooled():
+    pos = _parity_outcomes(range(10))                 # asymmetric corona, extinction dipole, shared rays
+    got = [g for g, _, _ in pos]
+    assert got.count("wrong") == 0 and got.count("right") >= 5, pos
+    assert all(r <= 2.0 for g, r, _ in pos if g == "right"), pos
+    # two equal lobes: a reflection plus a rotation fits the broad shape, and the whole profile is fooled
+    sym = _parity_outcomes(range(200, 210), symmetric=True)
+    assert all(g != "wrong" for g, _, _ in sym), sym
+    traps = [g for g, _, t in pos + sym if t]          # whole profile on the wrong state, above its rotation null
+    assert len(traps) >= 1 and all(g == "right" for g in traps), (pos, sym)
+
+
+def test_scan_mirror_null_control_without_shared_fine_detail():
+    # the reference's rays are independent of ours (asymmetric corona, dipole), 12 seeds.  The rule is not
+    # error-free: in 60-case batches of this kind it chose the wrong state once, with a margin of 0.16.
+    res = _parity_outcomes(range(100, 112), null=True)
+    got = [g for g, _, _ in res]
+    assert got.count("wrong") <= 1 and got.count("undetermined") >= 8, res
+
+
+def test_scan_mirror_each_check_has_its_negative_control():
+    rng = np.random.default_rng(300)
+    base = _rays(rng)
+    reflected = base + [(-p % 360.0, w, a) for p, w, a in base]             # the corona is its own mirror image
+    half_turn = base + [((p + 180.0) % 360.0, w, a) for p, w, a in base]    # ... and here its own half turn
+    for seed, s, kw, check in ((301, 1, dict(rays=reflected, symmetric=True), "margin"),
+                               (302, -1, dict(rays=half_turn, symmetric=True), "unique"),
+                               (303, -1, dict(twist=4.0), "stable"),        # our rays turn 4° per R☉
+                               (304, -1, dict(rays=[], symmetric=True), None)):   # no fine detail at all
+        ours, ref, pylon, _ = _parity_case(seed, s, **kw)
+        res = cg.scan_mirror(ours, ref, PRINGS, exclude_ref=pylon)
+        assert res["parity"] == "undetermined" and res["rotation_deg"] is None, (seed, res["checks"])
+        assert check is None or not res["checks"][check], (seed, res["checks"])
+    _raises(ValueError, lambda: cg.scan_mirror(ours, cg.Unrolled(ref.data[:, ::2], PR, PPA[::2]), PRINGS))
+    _raises(ValueError, lambda: cg.scan_mirror(ours, ref, PRINGS, p_angle_deg=15.0))     # P needs frame0
+
+
+def test_frame_for_is_the_scanned_permutation_and_geometry_of_frame_inverts_from_geometry():
+    rng = np.random.default_rng(5)
+    img = rng.random((240, 260))
+    geo = EclipseGeometry(shape=img.shape, sun_xy=(130.2, 119.7), sun_radius_px=20.0, north_deg=33.0)
+    f0 = cg.SolarFrame.from_geometry(geo, 15.19)
+    r = np.geomspace(2.3, 5.2, 40)
+    u0 = cg.unroll(img, f0, r, supersample=2).data
+    n = u0.shape[1]
+    for s, k in ((1, 61), (-1, 61), (-1, 500)):       # a hypothesis is a permutation of PA columns, exactly
+        u = cg.unroll(img, cg.frame_for(f0, s, k * 0.5), r, supersample=2).data
+        want = u0[:, (s * np.arange(n) + k) % n]
+        ok = np.isfinite(want)
+        assert np.array_equal(ok, np.isfinite(u)) and np.abs(u[ok] - want[ok]).max() < 1e-12
+    for m in (False, True):
+        for north in (0.0, 47.3, 254.0):
+            g = EclipseGeometry(shape=(9, 9), sun_xy=(4, 4), sun_radius_px=50.0, north_deg=north, mirrored=m)
+            back = cg.geometry_of_frame(cg.SolarFrame.from_geometry(g, 15.19), 15.19)
+            assert back["mirrored"] == m and abs(_wrap(back["north_deg"] - north)) < 1e-9
+    _raises(ValueError, lambda: cg.frame_for(f0, 0, 10.0))
+
+
+def test_coronagraph_command_scans_the_mirror_state_of_a_bottom_up_frame():
+    ours, f_o, ref, f_r = _unrolled_pair(-35.0, -35.0)
+    H = ours.shape[0]
+    strict = lambda txt: json.loads(txt, parse_constant=lambda c: (_ for _ in ()).throw(ValueError(c)))
+    with tempfile.TemporaryDirectory() as td:
+        td = Path(td)
+        np.save(td / "ref.npy", ref.astype(np.float32))
+        # the same image as delivered bottom-up (rows reversed), with the geometry not told: north 20° → 160°
+        for name, img, cy, parity, north in (("as_is", ours, 255.1, "same", 20.0),
+                                             ("bottom_up", ours[::-1], H - 1 - 255.1, "opposite", 160.0)):
+            np.save(td / f"{name}.npy", np.ascontiguousarray(img).astype(np.float32))
+            EclipseGeometry(shape=img.shape, sun_xy=(283.4, cy), sun_radius_px=60.0,
+                            north_deg=20.0).to_json(td / f"{name}.json")
+            cfg = dict(radii_rsun=dict(min=1.1, max=3.6, n=60), scan_mirror=True,
+                       ours=dict(image=f"{name}.npy", supersample=2,
+                                 frame=dict(geometry=f"{name}.json", p_angle_deg=0.0)),
+                       references=[dict(name="C2", image="ref.npy", supersample=2, frame=f_r.to_dict(),
+                                        rings=[[1.6, 2.2], [2.2, 3.2]])])
+            (td / "r.json").write_text(json.dumps(cfg))
+            out = cg.structure_from_config(td / "r.json", td / name, progress=lambda *_: None)
+            ms = strict((td / name / "coronagraph_structure.json").read_text())["references"][0]["mirror_scan"]
+            assert out["gates"]["C2"]["parity"] == parity and ms["parity"] == parity, ms["checks"]
+            assert ms["geometry"]["mirrored"] is (parity == "opposite"), ms["geometry"]
+            assert abs(_wrap(ms["geometry"]["north_deg"] - north)) <= 1.0, ms["geometry"]
+            assert strict((td / name / "receipt.json").read_text())["gates"]["C2"]["parity"] == parity
+        (td / "bad.json").write_text(json.dumps(dict(cfg, scan_mirror="yes")))
+        _raises(ValueError, lambda: cg.structure_from_config(td / "bad.json", td / "bad"))
+        assert not (td / "bad").exists()
