@@ -24,11 +24,13 @@ package changes its default WOW layer and the display of its ACHF layers.
   author's data 27 % of the pixels at 0 and 60 % at 1 at 1.08–1.2 R☉). The ACHF layers now take a level and a spread
   per ring (`display_detail_rings`), which also evens their contrast across radius. `"achf_display": "global"` in a
   filters recipe, or `make_filter(..., achf_display='global')`, keeps the 1.3.3 display.
-- **`ael.gates.fine_detail_fidelity`**, the real-data gate Edu proposed: two independent stacks, a filter-free
-  band-pass reference accredited ring by ring with a rotation null, crosswise comparison and the worst sector.
+- **`ael.gates.fine_detail_fidelity`**, the real-data gate Edu proposed (optional, for anyone with two independent
+  stacks): a filter-free band-pass reference accredited ring by ring with a rotation null, crosswise comparison and the worst sector.
 - **Mirrored frames** (issue #10): `ael.coronagraph.scan_mirror` and the `"scan_mirror"` recipe key; `ael motion`
   recipes read `"mirrored"` and refuse unknown keys (a mirrored recipe was silently treated as unmirrored, and the
-  position angles of the motion vectors came out reflected); the coronagraph skill decides parity on the fine detail.
+  position angles of the motion vectors came out reflected); the coronagraph skill starts from the optics (an odd
+  number of reflections mirrors the image) and decides parity on the fine detail. A second check is recommended, not
+  required.
 - Tests: six new ones in `ael/_tests/test_lessons.py`, each with a negative control. Checks and limits:
   `docs/VALIDATION_1.3.4.md`. Edu's case: `docs/FIELD_LESSONS.md`.
 

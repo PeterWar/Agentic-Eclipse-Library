@@ -93,8 +93,11 @@ scan = cg.scan_mirror(ours, c2, [(2.4, 2.8), (2.8, 3.3), (3.3, 4.0), (4.0, 5.0)]
   `fine_detail`. Whole profiles share the broad two-lobed shape of any corona: far out the whole-profile null
   reaches 0.9, and only the fine detail discriminates. Agreement = `rho_0` above `null_max`, in the fine detail.
 - **Mirror state (parity) first.** The rotation null (30–330°) holds rotations only, so it cannot see a mirrored
-  image: a reflection plus a rotation can fit the broad two-lobed shape and beat that null in every ring. Camera
-  software can deliver bottom-up frames, so never take `mirrored=False` for granted on a new camera. Take the
+  image: a reflection plus a rotation can fit the broad two-lobed shape and beat that null in every ring. Start
+  from the optics: an odd number of reflections between the sky and the sensor mirrors the image (a star diagonal,
+  a prime-focus astrograph without a secondary mirror); none or two do not (a camera lens, a refractor, a Newtonian
+  or a Cassegrain straight through). Software can flip it as well: camera software can deliver bottom-up frames,
+  and FITS stores its first row at the bottom. So never take `mirrored=False` for granted on a new camera. Take the
   parity from stars, a landscape or an annotated frame. Without them, run `scan_mirror` against C2, or add
   `"scan_mirror": true` to the recipe (gate `parity`: "same", "opposite" or "undetermined"). It scans both mirror
   states and every rotation and picks each state's rotation on the fine detail. It keeps a state only if its best
@@ -115,8 +118,10 @@ scan = cg.scan_mirror(ours, c2, [(2.4, 2.8), (2.8, 3.3), (3.3, 4.0), (4.0, 5.0)]
 - **The scan can be wrong.** In synthetic nulls without shared fine detail (asymmetric corona, ±20 % uncorrected
   extinction dipole) it chose the wrong parity once in 60 cases in an independent check, with a margin of 0.161,
   just above the 0.15 threshold, and once in 60 more of the same kind (0.156). In 160 nulls of two other models it
-  never did. Count on an error of the order of 1–3 % when the fine detail is not shared, and confirm a decided
-  parity with a second, independent direction (stars, landscape, the contacts below, an annotated frame). In those
+  never did. Count on an error of the order of 1–3 % when the fine detail is not shared. A decided parity can be
+  used; say its margin, and confirm it with a second, independent direction (the optics, stars, landscape, the
+  contacts below, an annotated frame) when one is at hand or the margin is close to 0.15. That check is optional:
+  do not hold the user's result back waiting for it. In those
   nulls the decisions with the right parity came from the broad shape, with the rotation up to 8° off: take the
   orientation from the declared frame, and the scan's rotation as a hint.
 - **After a scan the rotation null is no longer a null.** The best rotation is chosen among the very rotations the

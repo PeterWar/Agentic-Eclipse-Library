@@ -8,9 +8,11 @@ from northern Spain and tested AEL 1.3.3 on his frames: a real-data check of
 public, so his numbers cannot be reproduced here. Everything below was measured again on the author's own data of
 the same eclipse: a Sony 300 mm train in two pointings, a Vixen refractor train, and their fusion.
 
-- `python -m ael selftest`: **90 of 90** (84 from 1.3.3 and 6 new). Each new test has a negative control, and each
+- `python -m ael selftest`: **96 of 96** (84 from 1.3.3 and 12 new). Each new test has a negative control, and each
   fix was removed in a copy to check that its test then fails: going back to WOW bilateral as a default, to the
-  WOW without its tangential step, or to one spread for the whole ACHF layer, fails 1, 3 and 1 tests.
+  WOW without its tangential step, or to one spread for the whole ACHF layer, fails 1, 3 and 1 tests; 8 of 9 mutants
+  of the mirror scan fail their test (the ninth picks the rotation on the whole profile but still decides on the fine
+  detail, and makes no parity error).
 - The detail-transfer regression of 1.3.0 (`test_filters_keep_injected_fine_detail_with_its_sign_and_strength`)
   passes unchanged with the new WOW and the per-ring ACHF display.
 
@@ -28,7 +30,10 @@ The logs, scripts and receipts named below are kept with the author
    The starting opacity stays at 0.37. `wow_bilateral` is still available; the plain WOW of 1.3.3 is replaced.
 2. **The ACHF layers get a level and a spread per ring** (`display_detail_rings`): medians and spreads in annuli of
    2 px, averaged over three annuli and interpolated in radius. `achf_display: "global"` keeps the 1.3.3 display.
-3. **`ael.gates.fine_detail_fidelity`**, the real-data gate Edu proposed for issue #4.
+3. **`ael.gates.fine_detail_fidelity`**, the real-data gate Edu proposed for issue #4. It is optional: it needs two
+   independent stacks, which most users will not have.
+4. **`ael.coronagraph.scan_mirror`** and the `"scan_mirror"` recipe key (issue #10); `ael motion` recipes read
+   `"mirrored"` and refuse unknown or missing keys.
 
 ## Issue #4: WOW bilateral and the new WOW
 
@@ -108,6 +113,30 @@ and 35 % at 1.2–1.5 R☉. With Edu's level and spread per ring, every ring has
 20–31 % at each end, the spread alone leaves the median at 0.58 next to the limb. The same global display made the
 angular ACHF layers fail in the same way; they also take the per-ring display. The per-ring display equalises the
 contrast across radius: on the author's data the outer corona comes out two to four times stronger in these layers.
+
+## Issue #10: the mirror state
+
+`compare_structure` searched rotations of ±10° and its null holds rotations only: it could not see a mirrored
+image. `scan_mirror` tries both mirror states and every rotation, picks each state's rotation on the fine detail
+(angular high-pass of 12°) and keeps a state only if its fine detail beats the other state's by ≥ 0.15, beats its own
+best rotation ≥ 30° away by ≥ 0.15, and its residual rotation stays within ±2° in every ring; otherwise it answers
+"undetermined". The whole profile and the rotation null are reported and never decide.
+
+- On the author's 2026 map against two LASCO C2 images: with the pylon mask of `dark_sector`, the whole profile chose
+  the right parity (0.94 against 0.69; 0.77 against 0.65 without the extinction correction). With a narrow pylon
+  mask (±6°) and no extinction correction it chose the mirror, 0.67 against 0.50, above its rotation null in all four
+  rings. The fine detail chose right every time, and the scan kept the parity of the star plate in all eight cases
+  (margin 0.41–0.53) and found the mirror when the map was flipped (0.41–0.54).
+- In synthetic nulls without shared fine detail (asymmetric corona, ±20 % extinction dipole) it chose the wrong parity
+  once in 60 cases (margin 0.161) and once in 60 more (0.156); in 160 nulls of two other models, never. The skill
+  says so, recommends a second direction when one is at hand and does not hold the result back for it.
+- `ael motion` ignored `"mirrored": true`, so the position angles of the motion vectors of a mirrored image came out
+  reflected; recipes now read it and refuse unknown keys before writing anything.
+- Two test thresholds were set after the first runs, and are declared: the residual rotation of the decided cases
+  (1.0° written first, 2.0° in the test, the rule's own tolerance; the largest in 60 more cases was 1.58°) and the
+  share of "undetermined" answers in the null control (10 of 12 written first, at least 8 in the test; 9 came out,
+  the other 3 decided right from the broad shape). The error limit of the null control (at most 1 of 12) was written
+  first and gave 0.
 
 ## Issue #3 with the new defaults
 

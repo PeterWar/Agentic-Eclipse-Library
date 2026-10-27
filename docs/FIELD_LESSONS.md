@@ -304,7 +304,10 @@ His photographs are not public; his numbers cannot be reproduced from this repos
 - A gate on fine scales does not see coarse ones: look at the whole frame before changing a default.
 - A radially symmetric curve cannot follow a real corona exactly; a filter that whitens coarse scales must not turn
   what is left into rings. More knots made it worse.
-- On a new camera, never assume the parity; decide it on the fine detail, never on the whole profile.
+- On a new camera, never assume the parity. Count the reflections in the optics first (an odd number mirrors the
+  image), remember that software can flip frames, and decide on the fine detail, never on the whole profile.
+- Checks that need more data (two independent stacks for the fine-detail gate, a second direction for the parity)
+  are optional: they make a result surer, and a user who has not got them still gets the quick result.
 
 ## Deliver and describe the actual file
 

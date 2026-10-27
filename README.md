@@ -220,7 +220,8 @@ In answer to Edu's reports (see [Contributors](#contributors)):
 - **ACHF layers that do not burn next to the limb** when the sky is in the frame: a level and a spread per ring
   instead of one for the whole image. It also evens their contrast across radius; `"achf_display": "global"` keeps the
   1.3.3 display.
-- **Edu's real-data gate** in the package: `ael.gates.fine_detail_fidelity`.
+- **Edu's real-data gate** in the package, optional: `ael.gates.fine_detail_fidelity`, for anyone with two
+  independent stacks.
 - **Mirrored frames**: `ael.coronagraph.scan_mirror` tries both mirror states against a coronagraph and decides on the
   fine detail; `ael motion` recipes now read `"mirrored"` (it was ignored without warning).
 - Checks and limits: [`docs/VALIDATION_1.3.4.md`](docs/VALIDATION_1.3.4.md).
