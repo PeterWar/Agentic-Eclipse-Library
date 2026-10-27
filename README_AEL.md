@@ -35,7 +35,7 @@ python -m ael filters --config filters.json --out filter_run/
 
 Start with [`docs/DEVELOP.md`](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.3.3/docs/DEVELOP.md) and the JSON templates in `examples/`.
 Registration and calibration must be measured and declared first. The default filters
-are NRGF, bilateral WOW and isotropic ACHF; all sixteen variants are available on request.
+are NRGF, WOW and isotropic ACHF; all sixteen variants are available on request.
 These are portable recipes, not an exact replay of the author's final Photoshop image.
 
 ## Differential extinction under a low Sun (1.3.0)

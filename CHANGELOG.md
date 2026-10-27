@@ -2,6 +2,36 @@
 
 ## Unreleased
 
+Prepared as 1.3.4. Three reports by Edu (@edu27): a real-data check of issue #4 and issues #9 and #10. The `ael`
+package changes its default WOW layer and the display of its ACHF layers.
+
+- **A new default WOW layer** (issue #4). WOW bilateral, the default Overlay layer, does not follow faint fine
+  detail: on two independent half-stacks of the author's 2026 data its fine detail (band-pass 1.5–6 px) correlated at
+  0.08–0.20 with the data's own and 38–47 % of the clear detail came out inverted, as Edu measured on his frames. The
+  default is now `wow`, made by `ael.filterbank.wow_measured`:
+  - the noise of each scale is measured beyond 6 R☉ (`ael.filters.noise_factors`); with the white-noise factors of
+    1.3.3, the correlated noise of a real stack (6–15 times white noise at scales 1–3 on the 2026 fusion) was whitened
+    into coarse blotches in the outer field;
+  - from scale 3 up, the local mean along each circle around the Sun is removed (10°): the radial curve subtracted
+    before the WOW leaves ring-shaped residuals (about ±0.5 % in ln L at 3–9 R☉ on the 2026 data) that plain WOW turned
+    into a dark ring at 4.75 R☉, marked by the author; a curve with denser knots made it worse;
+  - the display spread is measured at 1.1–2 R☉; the starting opacity stays at 0.37 (`ael.develop.DEFAULT_OPACITY`).
+  On the author's data it passes Edu's gate (ρ 0.82–0.86, 0.6–1.6 % inverted, also in the worst 45° sector) and keeps
+  the ring level per 0.05 R☉ within ±0.005 at 4.3–5.1 R☉. `wow_bilateral` is still available and documents its
+  limitation. The plain WOW of 1.3.3 is replaced.
+- **The ACHF layers no longer burn next to the limb** (issue #9). `display_detail` used one spread for the whole
+  image; with the sky in the frame it is set by the faint outer field and the detail near the limb saturates (on the
+  author's data 27 % of the pixels at 0 and 60 % at 1 at 1.08–1.2 R☉). The ACHF layers now take a level and a spread
+  per ring (`display_detail_rings`), which also evens their contrast across radius. `"achf_display": "global"` in a
+  filters recipe, or `make_filter(..., achf_display='global')`, keeps the 1.3.3 display.
+- **`ael.gates.fine_detail_fidelity`**, the real-data gate Edu proposed: two independent stacks, a filter-free
+  band-pass reference accredited ring by ring with a rotation null, crosswise comparison and the worst sector.
+- **Mirrored frames** (issue #10): `ael.coronagraph.scan_mirror` and the `"scan_mirror"` recipe key; `ael motion`
+  recipes read `"mirrored"` and refuse unknown keys (a mirrored recipe was silently treated as unmirrored, and the
+  position angles of the motion vectors came out reflected); the coronagraph skill decides parity on the fine detail.
+- Tests: six new ones in `ael/_tests/test_lessons.py`, each with a negative control. Checks and limits:
+  `docs/VALIDATION_1.3.4.md`. Edu's case: `docs/FIELD_LESSONS.md`.
+
 ## 1.3.3 — 2026-10-18
 
 A contribution from outside the project, merged as one, and a rule for all of AEL. The `ael` package does not

@@ -149,9 +149,13 @@ the asinh RGB ratios. It never changes the linear input. The receipt records eff
 parameters, negative RGB counts, clipping checks and the separate linear-reference scale.
 This changes the 1.2.0 display recipe: compare full canvases before adopting it for an existing image.
 
-The default visible layers are NRGF (Multiply, .39), bilateral WOW (Overlay, .37),
-and isotropic ACHF 04 (Overlay, .08). These opacities are starting points. Override
-`visible` and `opacities`, or request `"filters": "all"` for sixteen layers:
+The default visible layers are NRGF (Multiply, .39), WOW (Overlay, .37) and isotropic ACHF 04
+(Overlay, .08). Since 1.3.4 the WOW is `ael.filterbank.wow_measured` (measured noise per scale, rings of
+the radial curve removed along circles around the Sun) and the ACHF layers are shown with a level and a
+spread per ring; `"achf_display": "global"` keeps the single whole-image spread of 1.3.3. Bilateral WOW,
+the default until 1.3.3, can invert faint fine detail (issue #4); `ael.gates.fine_detail_fidelity` checks
+a layer against two independent stacks. The opacities are starting points (`ael.develop.DEFAULT_OPACITY`).
+Override `visible` and `opacities`, or request `"filters": "all"` for sixteen layers:
 
 | Family | Identifiers |
 | --- | --- |

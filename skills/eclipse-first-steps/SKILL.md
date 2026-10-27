@@ -5,7 +5,7 @@ description: >-
   Then take the lead when someone brings their own total-solar-eclipse photos — look at what they have,
   then propose the path step by step: calibrate (if there are calibration frames), linearise and stack,
   open a layered 16-bit Photoshop project, and start with the three most useful corona filters
-  (NRGF, WOW bilateral, isotropic ACHF). Use it whenever a user says they photographed an eclipse,
+  (NRGF, WOW, isotropic ACHF). Use it whenever a user says they photographed an eclipse,
   has eclipse RAW files, asks "where do I start", "help me process my eclipse", "what can I do with this
   library", or has just cloned the Agentic Eclipse Library without a precise task.
 ---
@@ -144,12 +144,12 @@ point, not a recipe.
 | Filter | What it does | Mode, starting opacity | Code |
 |---|---|---|---|
 | **NRGF** (Morgan, Habbal and Woo 2006) | Evens out the steep fall of brightness with radius, so the whole corona, from the limb to the outer streamers, is visible at once | Multiply, 39 % | `ael.filters.nrgf` (subtract a sky model first: `ael.render.sky_background`) |
-| **WOW, bilateral** (Auchère et al. 2023) | Equalises the contrast of structures of every size: the fine filaments that make the "Druckmüller look" | Overlay, 37 % | `ael.filterbank.make_filter("wow_bilateral", ...)`; the historical V95 operator remains in the research tree |
-| **ACHF, isotropic** (Druckmüller et al.) | Small-scale detail near the limb | Overlay, 8 % | `ael.filterbank.achf_isotropic`, **on log luminance after subtracting its radial spline, never channel by channel** |
+| **WOW** (Auchère et al. 2023) | Equalises the contrast of structures of every size: the fine filaments that make the "Druckmüller look". Since 1.3.4 the noise of each scale is measured and rings left by the radial curve are removed along circles around the Sun | Overlay, 37 % | `ael.filterbank.make_filter("wow", ...)` (`wow_measured`). WOW bilateral (`"wow_bilateral"`), the default until 1.3.3, can invert faint fine detail (issue #4) |
+| **ACHF, isotropic** (Druckmüller et al.) | Small-scale detail near the limb | Overlay, 8 % | `ael.filterbank.achf_isotropic`, **on log luminance after subtracting its radial spline, never channel by channel**; since 1.3.4 shown with a level and a spread per ring (`achf_display`), so it does not burn next to the limb when the sky is in the frame |
 
 Then, if the user wants more: the extended NRGF (Multiply, 14 %), RHEF (an alternative radial normalisation,
 Gilly and Cranmer 2025), local RHEF, MGN (Morgan and Druckmüller 2014), the angular ACHF
-(`ael.filters.tangential_highpass`) and plain WOW. Beyond the layered file, `ael` makes structure images,
+(`ael.filters.tangential_highpass`) and WOW bilateral (inspect its fine detail: `ael.gates.fine_detail_fidelity`). Beyond the layered file, `ael` makes structure images,
 unrolled polar views and coronal-motion animations (`skills/corona-visualizations/`).
 
 Rules for every filter:

@@ -42,7 +42,7 @@ large-scale contrast between directions has to come from another layer (the NRGF
 | Filter | Production (published layers) | Library |
 |---|---|---|
 | MGN (Morgan and Druckmüller 2014) | Green channel; sizes 1.25–40 px, k 0.7, γ 3.2, global weight 0.7; Multiply 5 % | The same parameters; display from the 1st–99th percentiles; **Overlay** |
-| WOW (Auchère et al. 2023) | Green channel; 8 scales, equal weights, no global noise threshold; edge-aware and standard; the edge-aware layer with a local preprocessing step from a fixed signal-to-noise map on its three finest scales; Overlay 37 % and 3 % | 6 scales on the residual of ln L about a smooth radial spline, a noise floor of 3× the measured noise; Overlay |
+| WOW (Auchère et al. 2023) | Green channel; 8 scales, equal weights, no global noise threshold; edge-aware and standard; the edge-aware layer with a local preprocessing step from a fixed signal-to-noise map on its three finest scales; Overlay 37 % and 3 % | 6 scales on the residual of ln L about a smooth radial spline, a noise floor of 3× the noise measured for each scale, the local mean along circles around the Sun removed from 8 px up (since 1.3.4); Overlay |
 | ACHF (Druckmüller et al. 2006, as published in Druckmüllerová's thesis) | Isotropic on ln of the luminance; along-the-arc variants on ln of the green of each instrument; Overlay 8 %, 2 % and 3 % | Isotropic on the residual of ln L about a smooth radial spline; along-the-arc on ln L; Overlay |
 
 ## Blending a layer centred on mid grey

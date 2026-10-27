@@ -105,8 +105,9 @@ def fine_detail_fidelity(layer_a: np.ndarray, layer_b: np.ndarray, lum_a: np.nda
     versa, so the noise of one stack cannot agree with itself): rho with the reference, % of sign inversions where the
     reference detail is clear (|ref| > 1 sigma), and rho between the two layers; in every accredited ring and in its
     worst ``sectors``-th sector. PASS if all of that holds; ``passed`` is None when no ring is accredited.
-    On 2026 data (Sony, two pointings): WOW bilateral rho 0.08–0.20, 38–47 % inverted (fails); the WOW of 1.3.4
-    rho 0.82–0.86, 0.6–1.6 % (passes). Fine scales only: coarse structure needs its own band (``sigmas``)."""
+    On 2026 data (Sony, two pointings, 1.2–2 R☉): WOW bilateral rho 0.08–0.20 with 38–46 % inverted (fails); the WOW of
+    1.3.4 rho 0.76–0.83 with 1.3–2.6 % inverted, worst sector 0.66 and 9.4 % (passes). Fine scales only by default:
+    coarse structure needs its own band (``sigmas``)."""
     from scipy import ndimage as ndi
     from .filters import normalized_gaussian
     m = np.asarray(valid, bool)

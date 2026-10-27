@@ -93,6 +93,17 @@ NRGF of 1.3.1 after the 1.3.2 release, and corrected them.
 **Oscar Maseda** (Sony) and **Carlos Oltra** (Nikon) photographed that eclipse and made their RAW frames available
 for the case study, as Raúl Hussein did with his Canon. The frames stay private.
 
+**Edu** ([@edu27](https://github.com/edu27)) photographed the 2026 eclipse from northern Spain with an astronomy
+camera and a 300 mm lens, and tested AEL 1.3.3 on his frames. His comment on
+[issue #4](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/4) brought a real-data gate, with two independent
+half-stacks and a reference without any filter, which showed that the default WOW bilateral layer does not follow the
+fine detail; the gate is now `ael.gates.fine_detail_fidelity`. His
+[issue #9](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/9) found why the ACHF layers saturate next to the
+limb, with a per-ring scale that cures it, and his field case in
+[issue #10](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/10) showed mirrored frames that a whole-profile
+comparison with LASCO C2 would have accepted. Version 1.3.4 answers them; his case is in the
+[field lessons](docs/FIELD_LESSONS.md#a-field-case-contributed-by-edu-issues-4-9-and-10).
+
 **Codex (OpenAI)** has contributed as an AI coding agent to implementation, documentation and validation
 under Pere Guerra's direction.
 
@@ -196,6 +207,23 @@ repository").
 
 [MIT](LICENSE) © 2026 Pere Guerra Serra. You may use, copy, modify and redistribute this work freely, including
 commercially; the licence only asks you to keep the copyright and permission notices with copies of the work.
+
+## What is new in 1.3.4
+
+In answer to Edu's reports (see [Contributors](#contributors)):
+- **A new default WOW layer.** WOW bilateral, the default Overlay layer until now, does not follow faint fine detail:
+  on two independent half-stacks of the author's 2026 data, 38–47 % of its clear fine detail came out inverted, as Edu
+  measured on his own frames. The default is now `wow`, a WOW that measures the noise of each scale (plain WOW whitened
+  the correlated noise of a real stack into blotches) and removes, from 8 px up, the local mean along circles around
+  the Sun (the radial curve subtracted before it leaves residuals that plain WOW turned into a dark ring at 4.75 R☉).
+  It passes Edu's gate on the author's data. WOW bilateral is still available.
+- **ACHF layers that do not burn next to the limb** when the sky is in the frame: a level and a spread per ring
+  instead of one for the whole image. It also evens their contrast across radius; `"achf_display": "global"` keeps the
+  1.3.3 display.
+- **Edu's real-data gate** in the package: `ael.gates.fine_detail_fidelity`.
+- **Mirrored frames**: `ael.coronagraph.scan_mirror` tries both mirror states against a coronagraph and decides on the
+  fine detail; `ael motion` recipes now read `"mirrored"` (it was ignored without warning).
+- Checks and limits: [`docs/VALIDATION_1.3.4.md`](docs/VALIDATION_1.3.4.md).
 
 ## What is new in 1.3.3
 
