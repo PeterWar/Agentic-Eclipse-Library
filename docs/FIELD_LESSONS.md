@@ -237,15 +237,17 @@ validate the author's own chain.
   the profile pairs the median of ln I with the mean of ln r (taking the median of ln r there moves the limb
   ring metric from 0.051 to 0.001; with angular structure it changes little). Weighting the annuli by their
   coverage or spacing the knots further apart did not cure it. With the defaults of 1.3.4 (a level and a spread per ring for ACHF, the new
-  WOW) the same scene gives ACHF 0.07 at 5 px from the lunar edge and 0.52 next to the straight edge, and WOW at most
-  −0.06 at the limb and 0.26 next to the straight edge: smaller, still open.
+  WOW) the same scene gives ACHF 0.07 at 5 px from the lunar edge and 0.52 next to the straight edge (0.19 and 0.61
+  in 1.3.3), and WOW at most 0.04 near the limb and 0.09 next to the straight edge (WOW bilateral, the 1.3.3 default:
+  0.08 and 0.07; plain WOW: 0.03 and 0.34). The ACHF bands are smaller; along the straight edge the default WOW band
+  is a little larger than with WOW bilateral. Still open.
 - *WOW bilateral*
   ([issue #4](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/4)). It can return faint
   fine detail with the opposite sign: the pattern that plain WOW returns at +0.82 (+0.95 with 1 % noise) comes
   out at −0.27 (−0.16 with 1 % noise), and the inversion is already in the bilateral detail of the finest
   scales, before the whitening. On a smooth corona without noise it also draws lines and lobes along isophotes
   that the input does not have (ring metric 0.0144 in one sector; the other filters reach at most 0.0040). It was
-  one of the three default filters until 1.3.4; see the field case contributed by Edu below.
+  one of the three default filters up to 1.3.3; see the field case contributed by Edu below.
 
 **Not reproduced.** The case's own producer and configuration were not available. These checks test the
 package as it is today, not the version used for that case.
@@ -289,15 +291,19 @@ His photographs are not public; his numbers cannot be reproduced from this repos
 
 **Checked in the package (1.3.4)**
 
-- On the author's 2026 data, with two independent stacks (the Sony's two pointings), his gate gives the same picture:
-  WOW bilateral ρ 0.08–0.20 and 38–47 % inverted, plain WOW 0.78–0.84 and 0.5–1.1 % (`docs/VALIDATION_1.3.4.md`).
-  The gate is now `ael.gates.fine_detail_fidelity`, with the reference accredited ring by ring and a worst-sector check.
+- On the author's 2026 data, with two independent stacks (the Sony's two pointings), his gate gives the same picture.
+  It is now `ael.gates.fine_detail_fidelity`, with the reference accredited ring by ring, the layer of one stack
+  compared with the reference of the other, and a worst-sector check; there WOW bilateral gives ρ 0.08–0.20 and
+  38–46 % inverted, plain WOW 0.71–0.81 and 1.2–3.0 % (`docs/VALIDATION_1.3.4.md`).
 - Plain WOW was not ready to become the default: on the author's fusion it whitened correlated noise into blotches in
   the outer field, and it turned a residual of the radial curve into a dark ring at 4.75 R☉ that the author marked by
-  eye. The default WOW of 1.3.4 measures the noise of each scale and removes the local mean along circles around the
-  Sun from 8 px up; it passes the fine-detail gate and keeps the ring level within ±0.005 there.
-- The ACHF layers take a level and a spread per ring by default; on the author's map the saturation at 1.08–1.2 R☉
-  fell from 27 % at 0 and 60 % at 1 to below 1 %.
+  eye. The default WOW of 1.3.4 measures the noise of scales 1–3 in the far field (and extrapolates the coarser ones),
+  removes the local mean along circles around the Sun from 8 px up, and treats the edges of the data with symmetric
+  pairs. It passes the fine-detail gate, and at 4.3–5.1 R☉ its ring level stays within ±0.005 (the ring check flags no
+  ring on the author's fusion).
+- The ACHF layers take a level and a spread per ring by default. On the author's calibrated map with its sky model
+  added back (binned 2 × 2), the saturation at 1.08–1.2 R☉ fell from 27 % at 0 and 60 % at 1 to below 1 %; with the
+  sky subtracted, the display of 1.3.3 clipped only 3.8 % and 0.8 % there.
 
 **Lessons**
 
@@ -305,7 +311,12 @@ His photographs are not public; his numbers cannot be reproduced from this repos
 - A radially symmetric curve cannot follow a real corona exactly; a filter that whitens coarse scales must not turn
   what is left into rings. More knots made it worse.
 - On a new camera, never assume the parity. Count the reflections in the optics first (an odd number mirrors the
-  image), remember that software can flip frames, and decide on the fine detail, never on the whole profile.
+  image), remember that software can flip frames (a FITS file stores its first row at the bottom, and `ael` reads the
+  rows as stored), and decide on the fine detail.
+- The edges of the data need their own care: a coarse kernel cut by the Moon or by an excluded band sees one side
+  only. Found when the release was applied to the author's own final image.
+- A level removed along the circle must be wider than the features it passes: with a 10° window the circle went dark
+  beside compact knots and prominences; 45° keeps the rings out without those wings. Found by an independent review.
 - Checks that need more data (two independent stacks for the fine-detail gate, a second direction for the parity)
   are optional: they make a result surer, and a user who has not got them still gets the quick result.
 

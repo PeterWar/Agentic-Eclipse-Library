@@ -607,17 +607,23 @@ def scan_mirror(ours: Unrolled, ref: Unrolled, rings, *, frame0: SolarFrame | No
       of the search.
 
     Otherwise ``parity`` is "undetermined", a frequent answer: take the mirror state from another direction
-    (stars, landscape, the side of the chromosphere at second or third contact).  The whole-profile scan is
-    reported and never used: a reflection plus a rotation can fit the broad two-lobed shape and beat the
-    rotation null in every ring (issue #10).  After a scan over all rotations the rotation null loses its
-    meaning too, because the best rotation is chosen among the rotations it is made of; it is reported and
-    never used.
+    (stars, a landscape, an annotated frame).  The whole-profile scan is reported only: a reflection plus a
+    rotation can fit the broad two-lobed shape and beat the rotation null in every ring (issue #10).  After a
+    scan over all rotations the rotation null loses its meaning too, because the best rotation is chosen among
+    the rotations it is made of; it is reported only.
 
     Limits: the 12° high-pass also keeps 8 % of the m = 2 harmonic, 18 % of m = 3 and 42 % of m = 5, so the
-    broad shape takes part.  In synthetic tests without shared fine detail (asymmetric corona, ±20 %
-    extinction dipole) the rule chose the wrong state in 2 of 120 cases, both with a margin of 0.16, and
-    the decisions with the right state had rotations up to 8° off.  A decided parity still needs a second,
-    independent direction, and its rotation is only a hint: take the orientation from the declared frame.
+    broad shape takes part.  In 600 synthetic nulls without shared fine detail (asymmetric corona, ±20 %
+    extinction dipole) the rule decided 65 times and 14 of those had the wrong state, with margins of
+    0.151–0.205; the right decisions came from the broad shape, with the rotation up to 15° off.  With shared
+    fine detail and a corona symmetric under 180°, 2 of 900 cases chose the wrong state with every check
+    passed, and one kept the right state 180° off.  A margin above 0.15 is therefore no assurance when the fine
+    detail may not be shared: report it.  A second, independent direction, when one is at hand, makes a decided
+    parity surer; it is optional.  The ``stable`` check guards against rays that turn with radius; in the
+    synthetic tests it rejected right answers and never stopped a wrong one.  The rotation is a hint: when the
+    answer is "same", keep the orientation of the declared frame; when it is "opposite", the declared frame is
+    the wrong one and ``geometry`` gives the north and mirror state of the kept state (check that north with
+    another direction when one is at hand).  Validated against LASCO C2 at 2.4–6 R☉, with the 12° high-pass.
 
     Returns ``parity`` ("same", "opposite" or "undetermined"), ``rotation_deg`` (c* of the kept state, in
     (−180°, 180°]), ``checks``, ``fine_margin`` and ``whole_profile_prefers`` (for the record).  ``states``
@@ -1229,6 +1235,7 @@ def structure_from_config(config_path, out_dir, *, progress=print) -> dict:
     skw = dict(sigma_deg=float(cfg.get("sigma_deg", 1.5)),
                highpass_sigma_deg=float(cfg.get("highpass_sigma_deg", 12.0)),
                max_shift_deg=float(cfg.get("max_shift_deg", 10.0)))
+    skw_scan = dict(skw, highpass_sigma_deg=12.0)       # the parity rule was validated with the 12° high-pass only
     fo = cfg["ours"]["frame"]
     p_ours = float(fo["p_angle_deg"]) if "geometry" in fo else None     # only a geometry frame declares P
     results, sheets, gates = [], [], {}
@@ -1263,9 +1270,12 @@ def structure_from_config(config_path, out_dir, *, progress=print) -> dict:
                      excluded_pa_deg=None if excl is None else [float(pa[i]) for i in np.nonzero(excl)[0]], rings=res)
         if scan:
             ms = scan_mirror(Unrolled(N_o, radii, pa), Unrolled(N_r, radii, pa), rings, frame0=ours["native"],
-                             p_angle_deg=p_ours, normalise_ours=False, normalise_ref=False, exclude_ref=excl, **skw)
+                             p_angle_deg=p_ours, normalise_ours=False, normalise_ref=False, exclude_ref=excl,
+                             **skw_scan)
             ms.pop("curves")
+            ms["highpass_sigma_deg"] = 12.0
             gates[name]["parity"] = ms["parity"]
+            gates[name]["parity_in_validated_range"] = bool(min(r1 for r1, _ in rings) >= 2.0)   # C2-like rings
             entry["mirror_scan"] = ms
             fs = {k: (v["by_fine"]["fine"] if v else float("nan")) for k, v in ms["states"].items()}
             progress(f"{name} mirror state: {ms['parity']} (fine detail {fs['same']:+.3f} same, "
@@ -1286,9 +1296,11 @@ def structure_from_config(config_path, out_dir, *, progress=print) -> dict:
               "search window is not an orientation.")
     if scan:
         limits += (" The rotation null cannot see a mirrored image. The parity scan decides on the fine detail of "
-                   "each reference; in synthetic tests without shared fine detail it chose the wrong mirror state "
-                   "in 2 of 120 cases. Confirm a decided parity with a second, independent direction (stars, "
-                   "landscape, the side of the chromosphere at second or third contact).")
+                   "each reference (high-pass of 12°) and reports its margin (mirror_scan.fine_margin). In "
+                   "synthetic nulls without shared fine detail, 14 of 65 decided answers had the wrong mirror state. "
+                   "A second, independent direction (stars, a landscape, an annotated frame), when one is at hand, "
+                   "makes a decided parity surer; it is optional. Validated against LASCO C2 (rings from 2.4 R☉) "
+                   "only: see gates.parity_in_validated_range.")
     rec = dict(product="coronagraph structure comparison", library=f"ael {__version__}", credit=CREDIT,
                recipe=str(path), radii_rsun=[float(radii[0]), float(radii[-1]), int(radii.size), spacing],
                pa_step_deg=step, ours=dict(frame_native=ours["native"].to_dict(), bin=ours["bin"],

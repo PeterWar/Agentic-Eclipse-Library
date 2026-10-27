@@ -162,7 +162,7 @@ _MOTION_GIF_KEYS = {"feather_px", "out_size", "rsun_out_px", "rotation_deg", "la
 def _motion_geometry(cfg) -> EclipseGeometry:
     """Check every key of a motion recipe and return the geometry of its canvas (nothing is read or written).
 
-    ``mirrored`` reaches the geometry, so the position angles of the motion vectors follow it.
+    ``mirrored`` reaches the geometry (the internal position angles of the vectors; no output depends on it yet).
     """
     if not isinstance(cfg, dict) or set(cfg) - _MOTION_KEYS:
         raise ValueError(f"unknown recipe keys: {sorted(set(cfg) - _MOTION_KEYS) if isinstance(cfg, dict) else cfg}")

@@ -5,34 +5,49 @@
 Prepared as 1.3.4. Three reports by Edu (@edu27): a real-data check of issue #4 and issues #9 and #10. The `ael`
 package changes its default WOW layer and the display of its ACHF layers.
 
-- **A new default WOW layer** (issue #4). WOW bilateral, the default Overlay layer, does not follow faint fine
-  detail: on two independent half-stacks of the author's 2026 data its fine detail (band-pass 1.5–6 px) correlated at
-  0.08–0.20 with the data's own and 38–47 % of the clear detail came out inverted, as Edu measured on his frames. The
-  default is now `wow`, made by `ael.filterbank.wow_measured`:
-  - the noise of each scale is measured beyond 6 R☉ (`ael.filters.noise_factors`); with the white-noise factors of
-    1.3.3, the correlated noise of a real stack (6–15 times white noise at scales 1–3 on the 2026 fusion) was whitened
-    into coarse blotches in the outer field;
-  - from scale 3 up, the local mean along each circle around the Sun is removed (10°): the radial curve subtracted
-    before the WOW leaves ring-shaped residuals (about ±0.5 % in ln L at 3–9 R☉ on the 2026 data) that plain WOW turned
-    into a dark ring at 4.75 R☉, marked by the author; a curve with denser knots made it worse;
-  - the display spread is measured at 1.1–2 R☉; the starting opacity stays at 0.37 (`ael.develop.DEFAULT_OPACITY`).
-  On the author's data it passes Edu's gate (ρ 0.82–0.86, 0.6–1.6 % inverted, also in the worst 45° sector) and keeps
-  the ring level per 0.05 R☉ within ±0.005 at 4.3–5.1 R☉. `wow_bilateral` is still available and documents its
-  limitation. The plain WOW of 1.3.3 is replaced.
+- **A new default WOW layer** (issue #4). WOW bilateral, the default Overlay layer up to 1.3.3, does not follow faint
+  fine detail: with two independent half-stacks of the author's 2026 data (the layer of one against the band-pass of
+  the other), its fine detail correlated at 0.08–0.20 with the data's own and 38–46 % of the clear detail came out
+  inverted, as Edu measured on his frames. The default is now `wow`, made by `ael.filterbank.wow_measured`:
+  - the noise of scales 1–3 is measured beyond 6 R☉ (`ael.filters.noise_factors`), relative to scale 0, and the coarser
+    scales are extrapolated, half per scale. With the white-noise factors of 1.3.3, the correlated noise of a real
+    stack (6–15 times white noise at scales 1–3, 2–8 px, on the 2026 fusion) was whitened into coarse blotches in the
+    outer field. With 20 000 observed pixels or fewer beyond 6 R☉, or nothing left to measure there, white-noise
+    factors are used and the parameters say so;
+  - from scale 3 up, the local mean along each circle around the Sun is removed (a Gaussian of 45°): the radial curve
+    subtracted before the WOW leaves ring-shaped residuals (up to about ±0.5–0.8 % in ln L at 3–9 R☉ on the 2026 data)
+    that plain WOW turned into a dark ring at 4.75 R☉, marked by the author; a curve with denser knots made it worse.
+    A narrower window (10°, in a first draft) darkened the circle beside compact bright features;
+  - at an edge of the data (the Moon, an excluded band, the frame) the starlet averages symmetric observed pairs only,
+    and each scale from 8 px up enters with the observed fraction of its kernel: a kernel cut by the edge sees one side
+    only, and drew a level of up to ±6.6 % in the first 24 px outside the excluded lunar band of the 2026 data (found
+    when this release was applied to the author's own final image);
+  - the display spread is measured at 1.1–2 R☉, and the starting opacity stays at 0.37 (`ael.develop.DEFAULT_OPACITY`).
+    At that opacity the new layer has about the fine contrast of WOW bilateral at 1.1–2 R☉ and less beyond (0.62 of it
+    at 2–4 R☉, 0.33–0.39 at 4–8 R☉ on the author's data): the default image is softer there.
+  On the author's data it passes Edu's gate (ρ 0.77–0.84 and 1.3–2.9 % inverted; in the worst 45° sector ρ ≥ 0.65 and
+  at most 9.2 %, against a limit of 10 %), and the ring check on the author's fusion flags no ring (its lowest ring
+  level at 4.3–5.1 R☉ is −0.004, where plain WOW made −0.036).
+  `wow_bilateral` is still available, documents its limitation and keeps its starting opacity of 0.37; a recipe that
+  lists it without the new WOW keeps it visible, as in 1.3.3. The plain WOW of 1.3.3 is replaced.
 - **The ACHF layers no longer burn next to the limb** (issue #9). `display_detail` used one spread for the whole
-  image; with the sky in the frame it is set by the faint outer field and the detail near the limb saturates (on the
-  author's data 27 % of the pixels at 0 and 60 % at 1 at 1.08–1.2 R☉). The ACHF layers now take a level and a spread
-  per ring (`display_detail_rings`), which also evens their contrast across radius. `"achf_display": "global"` in a
-  filters recipe, or `make_filter(..., achf_display='global')`, keeps the 1.3.3 display.
+  image. When the sky is left in the stack, that spread is set by the faint outer field and the detail near the limb
+  saturates: on the author's calibrated map with its sky model added back, 27 % of the pixels at 0 and 60 % at 1 at
+  1.08–1.2 R☉. The ACHF layers now take a level and a spread per ring (`display_detail_rings`), which also evens their
+  contrast across radius. `"achf_display": "global"` in a filters recipe, or `make_filter(..., achf_display='global')`,
+  keeps the 1.3.3 display. The per-ring display does not change the sign problems of the other ACHF variants.
 - **`ael.gates.fine_detail_fidelity`**, the real-data gate Edu proposed (optional, for anyone with two independent
-  stacks): a filter-free band-pass reference accredited ring by ring with a rotation null, crosswise comparison and the worst sector.
-- **Mirrored frames** (issue #10): `ael.coronagraph.scan_mirror` and the `"scan_mirror"` recipe key; `ael motion`
-  recipes read `"mirrored"` and refuse unknown keys (a mirrored recipe was silently treated as unmirrored, and the
-  position angles of the motion vectors came out reflected); the coronagraph skill starts from the optics (an odd
-  number of reflections mirrors the image) and decides parity on the fine detail. A second check is recommended, not
-  required.
-- Tests: six new ones in `ael/_tests/test_lessons.py`, each with a negative control. Checks and limits:
-  `docs/VALIDATION_1.3.4.md`. Edu's case: `docs/FIELD_LESSONS.md`.
+  stacks): a filter-free band-pass reference accredited ring by ring with a rotation null, the layer of one stack
+  compared with the reference of the other, and the worst sector. Its default rings leave out the ring next to the
+  Moon (1.12–1.2 R☉), where on the author's data the reference fails its own null.
+- **Mirrored frames** (issue #10): `ael.coronagraph.scan_mirror` and the `"scan_mirror"` recipe key (always with the
+  12° high-pass; validated against LASCO C2). `ael motion` recipes read `"mirrored"` and refuse unknown keys before
+  writing anything; it was ignored without warning, and since no output of `ael motion` carries a position angle, no
+  1.3.3 result changes. The coronagraph skill starts from the optics (an odd number of reflections mirrors the image)
+  and decides the parity on the fine detail. A second check is optional.
+- Tests: 22 new, each with a negative control (15 in `ael/_tests/test_lessons.py`, six in `test_coronagraph.py` and one
+  in `test_ael.py`); selftest 106 of 106. Checks and limits: `docs/VALIDATION_1.3.4.md`. Edu's case:
+  `docs/FIELD_LESSONS.md`.
 
 ## 1.3.3 — 2026-10-18
 

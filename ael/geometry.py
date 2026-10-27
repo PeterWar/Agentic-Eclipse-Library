@@ -10,9 +10,10 @@ Conventions (used everywhere in the package):
 * Position angle (PA) is measured from celestial north through east, as solar astronomers do.  On a
   normal (not mirrored) sky image east is 90° *counter-clockwise* from north; set ``mirrored=True``
   for images flipped by the optics or by software. An odd number of reflections mirrors the image (a star
-  diagonal, a prime-focus astrograph); none or two do not (a camera lens, a refractor, a Newtonian or a
-  Cassegrain straight through). Camera software can deliver bottom-up frames (rows in reverse order), and
-  nothing in the frame says so.  Never assume ``mirrored=False`` for a new
+  diagonal; a camera at the prime focus of a single mirror with no secondary); an even number does not (a camera
+  lens, a refractor or refractor astrograph, a Newtonian, a Cassegrain straight through). Camera software can
+  deliver bottom-up frames (rows in reverse order); a FITS header may say so with ``ROWORDER``, which
+  :func:`ael.io.load_array` does not read (it keeps the rows as stored).  Never assume ``mirrored=False`` for a new
   camera: take the mirror state from stars, a landscape or an annotated frame, or test it against a
   coronagraph with :func:`ael.coronagraph.scan_mirror`.
 """

@@ -179,10 +179,11 @@ multi-scale detail (WOW, Auchère et al. 2023) whose gain follows the signal-to-
 
 What the 2026 data taught (and the code now does by default):
 
-- **Measure the noise of every scale.** Real stacks have correlated noise (registration, drizzle,
-  warping). On the 2026 composite, starlet scales 2–4 carried 6–14× the noise that white noise would
-  put there; whitened with white-noise factors, the outer corona became mottle. `noise_factors` measures
-  them beyond 6 R☉.
+- **Measure the noise of the scales.** Real stacks have correlated noise (registration, drizzle,
+  warping). On the 2026 fusion, starlet scales 1–3 (counted from 0; 2–8 px) carried 6–15× the noise that
+  white noise would put there; whitened with white-noise factors, the outer corona became mottle.
+  `noise_factors` measures them beyond 6 R☉ (coarser scales, which carry faint corona there, are
+  extrapolated); since 1.3.4 the default WOW layer uses them.
 - **Apply colour in linear light.** Multiplying a display-encoded grey by linear colour ratios
   over-saturates by the display gamma (the golden corona came out bright orange). With the ratios
   converted (`chroma_gamma = 2.2`), the measured corona colour in display space was R/G 1.30, B/G 0.52
@@ -331,6 +332,8 @@ Contributors: Chris Gilly (NorthWest Research Associates), first author of the R
 of the author's paper *A Faithful Corona* and this library in October 2026; version 1.3.2 answers his review.
 Raúl Hussein contributed the `eclipse-astrophotography` skill and a three-camera case study, with RAW frames
 from Oscar Maseda and Carlos Oltra, and corrected the NRGF description in the field lessons (1.3.3).
+Edu (@edu27) tested 1.3.3 on his own frames; his reports led to the new default WOW, the per-ring ACHF display,
+`ael.gates.fine_detail_fidelity` and the mirror scan (1.3.4).
 Other contributions are listed in the repository [README](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.3.3/README.md#contributors).
 
 Version 1.3.0 adds `ael extinction` and `ael coronagraph`, corrects stepped radial statistics and
@@ -340,5 +343,7 @@ documents the limits of internal dust calibration. See [field lessons](https://g
 biased steep profiles, lets any RHEF layer made with `make_filter` use the Upsilon curve with an exponent for
 each side, and
 documents how the library's filters differ from the paper's published layers
-([`docs/PAPER_AND_LIBRARY.md`](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.3.3/docs/PAPER_AND_LIBRARY.md)). Existing images are not rewritten; compare the
-new numerical recipe before adopting it.
+([`docs/PAPER_AND_LIBRARY.md`](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.3.3/docs/PAPER_AND_LIBRARY.md)). Version 1.3.4 replaces the default
+WOW layer (WOW bilateral can invert faint fine detail), shows the ACHF layers with a level and a spread per ring,
+adds `ael.gates.fine_detail_fidelity` and `ael.coronagraph.scan_mirror`, and makes `ael motion` read `"mirrored"`.
+Existing images are not rewritten; compare the new numerical recipe before adopting it.

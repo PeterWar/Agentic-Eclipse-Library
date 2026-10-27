@@ -211,13 +211,15 @@ commercially; the licence only asks you to keep the copyright and permission not
 ## What is new in 1.3.4
 
 In answer to Edu's reports (see [Contributors](#contributors)):
-- **A new default WOW layer.** WOW bilateral, the default Overlay layer until now, does not follow faint fine detail:
-  on two independent half-stacks of the author's 2026 data, 38–47 % of its clear fine detail came out inverted, as Edu
-  measured on his own frames. The default is now `wow`, a WOW that measures the noise of each scale (plain WOW whitened
-  the correlated noise of a real stack into blotches) and removes, from 8 px up, the local mean along circles around
-  the Sun (the radial curve subtracted before it leaves residuals that plain WOW turned into a dark ring at 4.75 R☉).
-  It passes Edu's gate on the author's data. WOW bilateral is still available.
-- **ACHF layers that do not burn next to the limb** when the sky is in the frame: a level and a spread per ring
+- **A new default WOW layer.** WOW bilateral, the default Overlay layer up to 1.3.3, does not follow faint fine
+  detail: with two independent half-stacks of the author's 2026 data, 38–46 % of its clear fine detail came out
+  inverted, as Edu measured on his own frames. The default is now `wow`, a WOW that measures the noise of the fine
+  scales in the far field (plain WOW whitened the correlated noise of a real stack into blotches) and removes, from
+  8 px up, the local mean along circles around the Sun (the radial curve subtracted before it leaves residuals that
+  plain WOW turned into a dark ring at 4.75 R☉). Next to the Moon and other edges of the data it averages symmetric
+  pairs only. It passes Edu's gate on the author's data. At the same starting opacity it is softer than WOW bilateral
+  beyond 2 R☉. WOW bilateral is still available.
+- **ACHF layers that do not burn next to the limb** when the sky is left in the stack: a level and a spread per ring
   instead of one for the whole image. It also evens their contrast across radius; `"achf_display": "global"` keeps the
   1.3.3 display.
 - **Edu's real-data gate** in the package, optional: `ael.gates.fine_detail_fidelity`, for anyone with two

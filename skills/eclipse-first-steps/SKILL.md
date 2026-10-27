@@ -138,14 +138,15 @@ It offers sixteen portable filter variants; these are not an exact replay of the
 The default selection is the three filters below.
 
 The library has sixteen filter layers. Propose these three first, add them visible at the opacities below, and
-leave the decision to the user. These are the opacities in the author's published image, for his data: a starting
-point, not a recipe.
+leave the decision to the user. These are the opacities of the author's published image, for his data (there the
+37 % went to his edge-aware WOW layer and 3 % to his plain WOW): a starting point, not a recipe. At 37 % the default
+WOW of 1.3.4 is softer than WOW bilateral beyond 2 R☉.
 
 | Filter | What it does | Mode, starting opacity | Code |
 |---|---|---|---|
 | **NRGF** (Morgan, Habbal and Woo 2006) | Evens out the steep fall of brightness with radius, so the whole corona, from the limb to the outer streamers, is visible at once | Multiply, 39 % | `ael.filters.nrgf` (subtract a sky model first: `ael.render.sky_background`) |
-| **WOW** (Auchère et al. 2023) | Equalises the contrast of structures of every size: the fine filaments that make the "Druckmüller look". Since 1.3.4 the noise of each scale is measured and rings left by the radial curve are removed along circles around the Sun | Overlay, 37 % | `ael.filterbank.make_filter("wow", ...)` (`wow_measured`). WOW bilateral (`"wow_bilateral"`), the default until 1.3.3, can invert faint fine detail (issue #4) |
-| **ACHF, isotropic** (Druckmüller et al.) | Small-scale detail near the limb | Overlay, 8 % | `ael.filterbank.achf_isotropic`, **on log luminance after subtracting its radial spline, never channel by channel**; since 1.3.4 shown with a level and a spread per ring (`achf_display`), so it does not burn next to the limb when the sky is in the frame |
+| **WOW** (Auchère et al. 2023) | Equalises the contrast of structures of every size: the fine filaments that make the "Druckmüller look". Since 1.3.4 the noise of the fine scales is measured in the far field, rings left by the radial curve are removed along circles around the Sun, and the edges of the data are treated with symmetric pairs | Overlay, 37 % | `ael.filterbank.make_filter("wow", ...)` (`wow_measured`). WOW bilateral (`"wow_bilateral"`), the default up to 1.3.3, can invert faint fine detail (issue #4) |
+| **ACHF, isotropic** (Druckmüller et al.) | Small-scale detail near the limb | Overlay, 8 % | `ael.filterbank.achf_isotropic`, **on log luminance after subtracting its radial spline, never channel by channel**; since 1.3.4 shown with a level and a spread per ring (`achf_display`), so it does not burn next to the limb when the sky is left in the stack |
 
 Then, if the user wants more: the extended NRGF (Multiply, 14 %), RHEF (an alternative radial normalisation,
 Gilly and Cranmer 2025), local RHEF, MGN (Morgan and Druckmüller 2014), the angular ACHF

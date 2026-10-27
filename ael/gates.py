@@ -103,10 +103,11 @@ def fine_detail_fidelity(layer_a: np.ndarray, layer_b: np.ndarray, lum_a: np.nda
     fails is reported as not judgeable (next to the Moon an edge bias can fake agreement).
     The layer gets the same band-pass and is compared CROSSWISE (the layer from A with the reference from B and vice
     versa, so the noise of one stack cannot agree with itself): rho with the reference, % of sign inversions where the
-    reference detail is clear (|ref| > 1 sigma), and rho between the two layers; in every accredited ring and in its
-    worst ``sectors``-th sector. PASS if all of that holds; ``passed`` is None when no ring is accredited.
+    reference detail is clear (|ref| > 1 sigma) and rho between the two layers in every accredited ring, and the first
+    two also in its worst ``sectors``-th sector. PASS if all of that holds; ``passed`` is None when no ring is
+    accredited. The guard of ``guard_px`` keeps the band-pass away from every edge of the data, the frame included.
     On 2026 data (Sony, two pointings, 1.2–2 R☉): WOW bilateral rho 0.08–0.20 with 38–46 % inverted (fails); the WOW of
-    1.3.4 rho 0.76–0.83 with 1.3–2.6 % inverted, worst sector 0.66 and 9.4 % (passes). Fine scales only by default:
+    1.3.4 rho 0.77–0.84 with 1.3–2.9 % inverted, worst sector rho 0.65 and 9.2 % (passes). Fine scales only by default:
     coarse structure needs its own band (``sigmas``)."""
     from scipy import ndimage as ndi
     from .filters import normalized_gaussian
@@ -119,7 +120,7 @@ def fine_detail_fidelity(layer_a: np.ndarray, layer_b: np.ndarray, lum_a: np.nda
     ref_b = bp(np.where(mb, np.log(np.where(mb, lum_b, 1.0)), np.nan).astype(np.float32), mb)
     la = bp(np.asarray(layer_a, np.float32), np.isfinite(layer_a)); lb = bp(np.asarray(layer_b, np.float32), np.isfinite(layer_b))
     both = ma & mb & np.isfinite(layer_a) & np.isfinite(layer_b)
-    dom = both & (ndi.distance_transform_edt(both) >= guard_px)
+    dom = both & (ndi.distance_transform_edt(np.pad(both, 1))[1:-1, 1:-1] >= guard_px)   # the frame is an edge too
     rs = geometry.rsun_map(); pa = geometry.pa_map(); cx, cy = geometry.sun_xy
     h, w = m.shape; yy, xx = np.mgrid[0:h, 0:w].astype(np.float32); t_ = np.deg2rad(rotation_null_deg)
     xs = cx + np.cos(t_) * (xx - cx) + np.sin(t_) * (yy - cy); ys = cy - np.sin(t_) * (xx - cx) + np.cos(t_) * (yy - cy)

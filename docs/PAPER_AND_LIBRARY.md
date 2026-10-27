@@ -8,7 +8,7 @@ the code behind the published layers and the library described three different o
 RHEF. This page says what each one does, filter by filter.
 
 "Production" means the code that made the layers of the published image, under `3-RECERCA/tools/` (the paper's
-image is version V125 of the project). "Library" means `ael` 1.3.2.
+image is version V125 of the project). "Library" means `ael` 1.3.4; changes since 1.3.2 are marked.
 
 ## NRGF (Morgan, Habbal and Woo 2006)
 
@@ -42,8 +42,8 @@ large-scale contrast between directions has to come from another layer (the NRGF
 | Filter | Production (published layers) | Library |
 |---|---|---|
 | MGN (Morgan and Druckmüller 2014) | Green channel; sizes 1.25–40 px, k 0.7, γ 3.2, global weight 0.7; Multiply 5 % | The same parameters; display from the 1st–99th percentiles; **Overlay** |
-| WOW (Auchère et al. 2023) | Green channel; 8 scales, equal weights, no global noise threshold; edge-aware and standard; the edge-aware layer with a local preprocessing step from a fixed signal-to-noise map on its three finest scales; Overlay 37 % and 3 % | 6 scales on the residual of ln L about a smooth radial spline, a noise floor of 3× the noise measured for each scale, the local mean along circles around the Sun removed from 8 px up (since 1.3.4); Overlay |
-| ACHF (Druckmüller et al. 2006, as published in Druckmüllerová's thesis) | Isotropic on ln of the luminance; along-the-arc variants on ln of the green of each instrument; Overlay 8 %, 2 % and 3 % | Isotropic on the residual of ln L about a smooth radial spline; along-the-arc on ln L; Overlay |
+| WOW (Auchère et al. 2023) | Green channel; 8 scales, equal weights, no global noise threshold; edge-aware and standard; the edge-aware layer with a local preprocessing step from a fixed signal-to-noise map on its three finest scales; Overlay 37 % and 3 % | `wow` (the default since 1.3.4): 6 scales on the residual of ln L about a smooth radial spline; a noise floor of 3× the noise of each scale, measured at scales 1–3 beyond 6 R☉ and extrapolated above; the local mean along circles around the Sun removed from 8 px up; symmetric pairs at the edges of the data; display spread from 1.1–2 R☉; Overlay. `wow_bilateral` (the default up to 1.3.3): bilateral starlet with symmetric pairs, white-noise factors, an isotropic local mean removed from 8 px up; Overlay |
+| ACHF (Druckmüller et al. 2006, as published in Druckmüllerová's thesis) | Isotropic on ln of the luminance; along-the-arc variants on ln of the green of each instrument; Overlay 8 %, 2 % and 3 % | Isotropic on the residual of ln L about a smooth radial spline; along-the-arc on ln L; display: a level and a spread per ring (since 1.3.4); Overlay |
 
 ## Blending a layer centred on mid grey
 

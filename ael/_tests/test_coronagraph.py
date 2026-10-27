@@ -630,3 +630,35 @@ def test_coronagraph_command_scans_the_mirror_state_of_a_bottom_up_frame():
         (td / "bad.json").write_text(json.dumps(dict(cfg, scan_mirror="yes")))
         _raises(ValueError, lambda: cg.structure_from_config(td / "bad.json", td / "bad"))
         assert not (td / "bad").exists()
+
+
+def test_coronagraph_command_scan_takes_the_p_angle_and_works_in_native_pixels():
+    """The recipe path with a solar P angle and binning. The scan must receive P (with the wrong sign, the north it
+    returns turns by 2P) and the native frame (with the binned one, the centre comes out at half its pixel
+    coordinates). The images are those of the bottom-up test, declared with P = 15.19° and "bin": 2; the expected
+    north and mirror state are those of the true frame, read back with geometry_of_frame."""
+    ours, f_o, ref, f_r = _unrolled_pair(-35.0, -35.0)
+    H, P = ours.shape[0], 15.19
+    n, e = f_o.M[:, 0], f_o.M[:, 1]
+    flipped = cg.SolarFrame((f_o.cx, H - 1 - f_o.cy), (n[0], -n[1]), (e[0], -e[1]))
+    told = cg.geometry_of_frame(f_o, P)["north_deg"]                 # the celestial north that makes f_o with P
+    with tempfile.TemporaryDirectory() as td:
+        td = Path(td)
+        np.save(td / "ref.npy", ref.astype(np.float32))
+        for name, img, frame, parity in (("as_is", ours, f_o, "same"), ("bottom_up", ours[::-1], flipped, "opposite")):
+            want = cg.geometry_of_frame(frame, P)
+            np.save(td / f"{name}.npy", np.ascontiguousarray(img).astype(np.float32))
+            EclipseGeometry(shape=img.shape, sun_xy=(frame.cx, frame.cy), sun_radius_px=60.0,
+                            north_deg=told).to_json(td / f"{name}.json")
+            cfg = dict(radii_rsun=dict(min=1.1, max=3.6, n=60), scan_mirror=True,
+                       ours=dict(image=f"{name}.npy", supersample=2, bin=2,
+                                 frame=dict(geometry=f"{name}.json", p_angle_deg=P)),
+                       references=[dict(name="C2", image="ref.npy", supersample=2, frame=f_r.to_dict(),
+                                        rings=[[1.6, 2.2], [2.2, 3.2]])])
+            (td / "r.json").write_text(json.dumps(cfg))
+            cg.structure_from_config(td / "r.json", td / name, progress=lambda *_: None)
+            ms = json.loads((td / name / "coronagraph_structure.json").read_text())["references"][0]["mirror_scan"]
+            assert ms["parity"] == parity and ms["geometry"]["mirrored"] is want["mirrored"], (ms["parity"], ms["checks"])
+            assert abs(_wrap(ms["geometry"]["north_deg"] - want["north_deg"])) <= 1.0, (ms["geometry"], want)
+            cx, cy = ms["frame"]["center_xy"]
+            assert abs(cx - frame.cx) < .5 and abs(cy - frame.cy) < .5, (cx, cy, frame.cx, frame.cy)

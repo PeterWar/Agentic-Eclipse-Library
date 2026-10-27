@@ -7,9 +7,10 @@ from . import io, photoshop
 from .filterbank import DEFAULTS,NAMES,make_filter
 from .geometry import EclipseGeometry
 
-# Starting opacities of the default layers (the 2026 image's layers V96/V97). WOW: 0.37 gives the new default the
-# same fine contrast next to the limb (1.1–1.5 R☉) as WOW bilateral at 0.37 had (docs/VALIDATION_1.3.4.md).
-DEFAULT_OPACITY={'nrgf':.39,'wow':.37,'achf_iso_04':.08}
+# Starting opacities of the default layers, from the author's 2026 image, where the Overlay layer was WOW bilateral at
+# 0.37. At 0.37 the new WOW has about the same fine contrast as WOW bilateral at 1.1–2 R☉ and less beyond 2 R☉
+# (docs/VALIDATION_1.3.4.md). WOW bilateral keeps its 0.37 for recipes that still list it.
+DEFAULT_OPACITY={'nrgf':.39,'wow':.37,'achf_iso_04':.08,'wow_bilateral':.37}
 
 
 def layer_alpha(base_alpha,observed,mode):
@@ -94,7 +95,8 @@ def filters_from_config(config_path,out_dir,*,progress=print):
     if names=='all': names=list(NAMES)
     if not isinstance(names,list) or not names or len(set(names))!=len(names) or any(n not in NAMES for n in names):
         raise ValueError(f'filters must be a nonempty unique list from {NAMES}, or "all"')
-    visible_names=cfg.get('visible',[n for n in DEFAULTS if n in names])
+    # WOW bilateral was the default up to 1.3.3: a recipe that lists it without the new WOW keeps it visible
+    visible_names=cfg.get('visible',[n for n in names if n in DEFAULTS or (n=='wow_bilateral' and 'wow' not in names)])
     if not isinstance(visible_names,list) or set(visible_names)-set(names):
         raise ValueError('visible must be a subset of filters')
     if set(cfg.get('opacities',{}))-set(names): raise ValueError('opacities must name selected filters')
