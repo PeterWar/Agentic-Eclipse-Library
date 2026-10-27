@@ -27,6 +27,7 @@ import numpy as np
 import ael
 from ael import calibrate, develop, io, photoshop, stack
 from ael.filterbank import DEFAULTS, NAMES
+from ael.filters import normalized_gaussian
 from ael.geometry import EclipseGeometry, fit_limb
 
 CREDIT = ael.CREDIT
@@ -290,11 +291,66 @@ def _solve_translation(ref, ref_use, weight, mov, mov_use, t, *, iterations=100)
     raise RuntimeError("Solar registration did not converge")
 
 
-def _highpass(value, use, sigma):
-    num = cv2.GaussianBlur(np.where(use, value, 0).astype(np.float32), (0, 0), sigma)
-    den = cv2.GaussianBlur(use.astype(np.float32), (0, 0), sigma)
-    keep = use & (den > 0.9)
-    return np.where(keep, value - num / np.maximum(den, 1e-6), 0).astype(np.float32), keep
+def _log_positive(value: np.ndarray) -> np.ndarray:
+    return np.where(value > 0, np.log(np.where(value > 0, value, 1.0)), np.nan).astype(np.float32)
+
+
+def _inside(mask: np.ndarray, distance: float) -> np.ndarray:
+    """Pixels farther than ``distance`` from any pixel without data."""
+    padded = np.pad(mask.astype(np.uint8), 1)
+    return cv2.distanceTransform(padded, cv2.DIST_L2, 5)[1:-1, 1:-1] > distance
+
+
+def _pearson(a: np.ndarray, b: np.ndarray, mask: np.ndarray) -> float:
+    x, y = a[mask].astype(np.float64), b[mask].astype(np.float64)
+    x, y = x - x.mean(), y - y.mean()
+    return float((x * y).sum() / np.sqrt((x * x).sum() * (y * y).sum()))
+
+
+def structure_check(reference, moving, ref_valid, mov_valid, geometry: EclipseGeometry, t, *,
+                    rmax_rsun: float, small_px: float = 1.5) -> dict:
+    """Check a registration on coronal structure, against the frame turned about the Sun.
+
+    The corona is band-passed (linear smoothing, then logarithm, so noisy short exposures keep
+    their structure) and compared only where both filters saw data over their whole support.
+    A frame turned by 90° or 270° about the Sun keeps the radial statistics and loses the
+    structure; the score is the share of what the turn leaves unexplained that the structure
+    matches. 180° is left out: equatorial streamers can be symmetric.
+    """
+    large = max(3 * small_px, 0.1 * geometry.sun_radius_px)
+    # Only the corona within rmax_rsun is compared: work on that box (plus the filter's reach and
+    # the shift), in the same pixels of both frames.
+    sun = np.asarray(geometry.sun_xy, np.float64)
+    reach = rmax_rsun * geometry.sun_radius_px + 4 * large + float(np.hypot(*t)) + 2
+    height, width = ref_valid.shape
+    x0, x1 = max(0, int(sun[0] - reach)), min(width, int(np.ceil(sun[0] + reach)) + 1)
+    y0, y1 = max(0, int(sun[1] - reach)), min(height, int(np.ceil(sun[1] + reach)) + 1)
+    sun = sun - [x0, y0]
+    maps, cores = [], []
+    for (lum, _), valid in ((reference, ref_valid), (moving, mov_valid)):
+        lum, valid = lum[y0:y1, x0:x1], valid[y0:y1, x0:x1]
+        band = (_log_positive(normalized_gaussian(lum, valid, small_px, 0.5)) -
+                _log_positive(normalized_gaussian(lum, valid, large, 0.5)))
+        maps.append(band)
+        cores.append(_inside(valid, 2 * large) & np.isfinite(band))
+    h, w = maps[0].shape
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    seen = (np.hypot(xx - sun[0], yy - sun[1]) <= rmax_rsun * geometry.sun_radius_px) & cores[0]
+    filled = np.where(np.isfinite(maps[1]), maps[1], 0).astype(np.float32)
+    values = {}
+    for angle in (0, 90, 180, 270):
+        c, s = math.cos(math.radians(angle)), math.sin(math.radians(angle))
+        linear = np.array([[c, -s], [s, c]])
+        warp = np.hstack([linear, (sun + np.asarray(t) - linear @ sun)[:, None]]).astype(np.float32)
+        turned = cv2.warpAffine(filled, warp, (w, h), flags=cv2.INTER_LINEAR | cv2.WARP_INVERSE_MAP)
+        covered = cv2.warpAffine(cores[1].astype(np.uint8), warp, (w, h),
+                                 flags=cv2.INTER_NEAREST | cv2.WARP_INVERSE_MAP).astype(bool)
+        mask = seen & covered
+        values[str(angle)] = _pearson(maps[0], turned, mask) if mask.sum() >= 100 else float("nan")
+    null = max(values["90"], values["270"])
+    score = (values["0"] - null) / (1.0 - null) if null < 1 else float("nan")
+    return {"correlation": values["0"], "turned_correlation": {k: values[k] for k in ("90", "180", "270")},
+            "structure_score": score, "band_px": [small_px, large]}
 
 
 def register_on_sun(reference, moving, geometry: EclipseGeometry, reference_moon: dict, moving_moon: dict, *,
@@ -309,10 +365,13 @@ def register_on_sun(reference, moving, geometry: EclipseGeometry, reference_moon
     """
     def logged(lum, usable, moon):
         yy, xx = np.mgrid[:lum.shape[0], :lum.shape[1]]
-        use = usable & (np.hypot(xx - moon["xy"][0], yy - moon["xy"][1]) > moon["r"] + margin_px)
-        return np.where(use, np.log(np.where(use, lum, 1)), 0).astype(np.float32), use
-    ref, ref_use = logged(*reference, reference_moon)
-    mov, mov_use = logged(*moving, moving_moon)
+        free = np.hypot(xx - moon["xy"][0], yy - moon["xy"][1]) > moon["r"] + margin_px
+        use = usable & free
+        # The structure check smooths linearly, so it keeps the noise below zero.
+        linear = (usable | (np.isfinite(lum) & (lum <= 0))) & free
+        return np.where(use, np.log(np.where(use, lum, 1)), 0).astype(np.float32), use, linear
+    ref, ref_use, ref_linear = logged(*reference, reference_moon)
+    mov, mov_use, mov_linear = logged(*moving, moving_moon)
     ref_use &= geometry.rsun_map() <= rmax_rsun
     weight = np.where(ref_use, reference[0], 0).astype(np.float32)
     weight /= max(float(weight.max()), 1e-30)
@@ -323,18 +382,15 @@ def register_on_sun(reference, moving, geometry: EclipseGeometry, reference_moon
         w, _ = _shrink(weight, ref_use, factor)
         m, mu = _shrink(mov, mov_use, factor)
         t = _solve_translation(r, ru, w, m, mu, t / factor) * factor
-    # Independent check on fine structure: an unrelated image or a false optimum fails here.
-    sigma = max(2.0, 0.05 * geometry.sun_radius_px)
-    ref_hp, ref_hp_use = _highpass(ref, ref_use, sigma)
-    mov_hp, mov_hp_use = _highpass(mov, mov_use, sigma)
-    sample = _sampler(ref.shape, t)
-    mask = ref_hp_use & (sample(mov_hp_use) > 0.999)
-    structure = float(np.corrcoef(ref_hp[mask], sample(mov_hp)[mask])[0, 1]) if mask.sum() >= 100 else -1.0
-    if not math.isfinite(structure) or structure < min_structure:
-        raise RuntimeError(f"Solar registration rejected: coronal structure correlation {structure:.4f} "
-                           f"< {min_structure}")
-    return {"translation": t.tolist(), "correlation": structure, "overlap_pixels": int(mask.sum()),
-            "levels": factors, "margin_px": margin_px, "rmax_rsun": rmax_rsun}
+    # Independent check on coronal structure: an unrelated image or a false optimum fails here.
+    check = structure_check(reference, moving, ref_linear, mov_linear, geometry, t, rmax_rsun=rmax_rsun)
+    score = check["structure_score"]
+    if not math.isfinite(score) or score < min_structure:
+        raise RuntimeError(f"Solar registration rejected: coronal structure correlates {check['correlation']:.3f}, "
+                           f"the frame turned about the Sun up to "
+                           f"{max(check['turned_correlation']['90'], check['turned_correlation']['270']):.3f}; "
+                           f"structure score {score:.3f} < {min_structure}")
+    return dict(check, translation=t.tolist(), levels=factors, margin_px=margin_px, rmax_rsun=rmax_rsun)
 
 
 def register_frame(reference, moving, geometry: EclipseGeometry, reference_moon: dict, *, margin_px: float,
