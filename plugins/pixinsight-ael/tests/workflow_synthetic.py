@@ -127,9 +127,15 @@ def main() -> None:
             report["pixelmath_pjsr"] = pjsr
             composite = tifffile.imread(composite_path) if composite_path.exists() else None
             expected = tifffile.imread(out / "filters/ael/display.tif").astype(np.float32) / 65535.0
+            start = tifffile.imread(out / "filters/tiff/display.tif").astype(np.float32) / 65535.0
+            # The composite must be built from the display base. If the start already equals
+            # AEL's composite, a PixelMath that does nothing would pass the comparison.
+            report["pixelmath_start_vs_expected_max"] = float(np.max(np.abs(start - expected)))
+            report["pixelmath_start_differs"] = report["pixelmath_start_vs_expected_max"] > 1e-3
             report["pixelmath_max_abs_difference"] = (float(np.max(np.abs(composite - expected)))
                                                        if composite is not None else None)
-            report["pixelmath_equal"] = bool(pjsr.get("ok") and report["pixelmath_max_abs_difference"] <= 1 / 65535)
+            report["pixelmath_equal"] = bool(pjsr.get("ok") and report["pixelmath_start_differs"]
+                                             and report["pixelmath_max_abs_difference"] <= 1 / 65535)
             rng = np.random.default_rng(4)
             noise = rng.random(base.shape, dtype=np.float32)
             try:

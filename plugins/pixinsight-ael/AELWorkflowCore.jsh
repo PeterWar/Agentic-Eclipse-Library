@@ -76,14 +76,16 @@ function aelWorkflowOpenImages( result )
 
 function aelWorkflowExpression( operation, layerId, alphaId )
 {
-   let weight = alphaId + "*" + operation.opacity;
+   // PixelMath symbols take constants only; view identifiers go into the expression.
+   let weight = "(" + alphaId + "*" + operation.effective_opacity + ")";
    if ( operation.mode == "normal" )
-      return { symbols: "w=" + weight + ",L=" + layerId, expression: "$T*(1-w)+L*w" };
+      return { symbols: "", expression: "$T*(1-" + weight + ")+" + layerId + "*" + weight };
    if ( operation.mode == "multiply" )
-      return { symbols: "w=" + weight + ",L=" + layerId, expression: "$T*(1-w)+$T*L*w" };
+      return { symbols: "", expression: "$T*(1-" + weight + ")+$T*" + layerId + "*" + weight };
    if ( operation.mode == "overlay" )
-      return { symbols: "w=" + weight + ",L=" + layerId,
-               expression: "$T*(1-w)+iif($T<=0.5,2*$T*L,1-2*(1-$T)*(1-L))*w" };
+      return { symbols: "",
+               expression: "$T*(1-" + weight + ")+iif($T<=0.5,2*$T*" + layerId + ",1-2*(1-$T)*(1-"
+                           + layerId + "))*" + weight };
    throw new Error( "Unsupported PixelMath blend mode: " + operation.mode );
 }
 
@@ -96,9 +98,9 @@ function aelWorkflowBuildComposite( result )
       throw new Error( "The display base is not available for the composite" );
    let display = View.viewById( displayId );
    let compositeId = aelBridgeId( "AEL_COMPOSITE_" + aelBridgeTimestamp() );
+   // 32-bit float: a 16-bit integer target would round after every PixelMath step.
    let compositeWindow = new ImageWindow( display.image.width, display.image.height,
-      display.image.numberOfChannels, display.window.bitsPerSample,
-      display.window.isFloatSample, display.image.isColor, compositeId );
+      display.image.numberOfChannels, 32, true, display.image.isColor, compositeId );
    let composite = compositeWindow.mainView;
    composite.beginProcess( UndoFlag.NoSwapFile );
    composite.image.assign( display.image );
@@ -127,8 +129,9 @@ function aelWorkflowBuildComposite( result )
       process.rescale = false;
       process.truncate = false;
       process.createNewImage = false;
-      process.executeOn( composite );
-      Console.writeln( "PixelMath " + operation.filter + ": " + recipe.expression + " | " + recipe.symbols );
+      if ( !process.executeOn( composite ) )
+         throw new Error( "PixelMath failed for " + operation.filter + ": " + recipe.expression );
+      Console.writeln( "PixelMath " + operation.filter + ": " + recipe.expression );
    }
    return composite;
 }

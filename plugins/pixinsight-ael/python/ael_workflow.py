@@ -104,20 +104,24 @@ def automatic_scale(input_path: Path, geometry_path: Path, valid_path: Path | No
 
 
 def pixelmath_expression(name: str, mode: str, opacity: float) -> dict:
+    # PixelMath symbols take constants only: "L=<view id>" makes executeOn fail and leave
+    # the target untouched. View identifiers therefore go straight into the expression.
+    # AEL and Photoshop store opacity in 8 bits, so the effective weight is round(255*o)/255.
     layer = f"AEL_L_{name}"
     alpha = f"AEL_A_{name}"
-    weight = f"{alpha}*{opacity:.10g}"
+    effective = round(opacity * 255) / 255
+    weight = f"({alpha}*{effective:.10g})"
     if mode == "normal":
-        expression = "$T*(1-w)+L*w"
+        expression = f"$T*(1-{weight})+{layer}*{weight}"
     elif mode == "multiply":
-        expression = "$T*(1-w)+$T*L*w"
+        expression = f"$T*(1-{weight})+$T*{layer}*{weight}"
     elif mode == "overlay":
-        expression = "$T*(1-w)+iif($T<=0.5,2*$T*L,1-2*(1-$T)*(1-L))*w"
+        expression = f"$T*(1-{weight})+iif($T<=0.5,2*$T*{layer},1-2*(1-$T)*(1-{layer}))*{weight}"
     else:
         raise ValueError(f"Unsupported PixelMath blend mode: {mode}")
     return {"filter": name, "layer_view": layer, "alpha_view": alpha,
-            "symbols": f"w={weight},L={layer}", "expression": expression,
-            "mode": mode, "opacity": opacity}
+            "symbols": "", "expression": expression,
+            "mode": mode, "opacity": opacity, "effective_opacity": effective}
 
 
 def run_filters(cfg: dict) -> dict:
@@ -159,13 +163,22 @@ def run_filters(cfg: dict) -> dict:
     ael_receipt = json.loads(ael_receipt_path.read_text())
     if not all(ael_receipt["gates"].get(key) for key in ("nothing_outside_data", "positive_display_base_not_clipped")):
         raise RuntimeError(f"AEL filter gate failed: {ael_receipt['gates']}")
+    selected = recipe["filters"] if recipe["filters"] != "all" else list(NAMES)
+
+    # AEL's display.tif is the finished composite, filters included. PixelMath must start
+    # from the display base alone, so AEL renders it once more with no visible filter:
+    # the same scale and alpha, composited over black exactly as in the full product.
+    base_recipe = dict(recipe, filters=selected[:1], visible=[], opacities={},
+                       note="Display base only: no visible filter layer")
+    base_recipe_path = out / "display_base_recipe.json"
+    base_recipe_path.write_text(json.dumps(base_recipe, indent=1, ensure_ascii=False), encoding="utf-8")
+    base_result = develop.filters_from_config(base_recipe_path, out / "ael_display_base")
 
     tiff_dir = out / "tiff"
     tiff_dir.mkdir()
     images = [{"name": "display", "kind": "display", "path": str(tiff_dir / "display.tif"),
                "view": "AEL_DISPLAY"}]
-    shutil.copy2(result["files"]["display"], tiff_dir / "display.tif")
-    selected = recipe["filters"] if recipe["filters"] != "all" else list(NAMES)
+    shutil.copy2(base_result["files"]["display"], tiff_dir / "display.tif")
     layer_receipt = {entry["name"]: entry for entry in ael_receipt["parameters"]["layers"]}
     operations = []
     for name in selected:
@@ -181,15 +194,23 @@ def run_filters(cfg: dict) -> dict:
         if info["visible"]:
             operations.append(pixelmath_expression(name, info["mode"], float(info["opacity"])))
     (out / "pixelmath.json").write_text(json.dumps({"target_view": "AEL_COMPOSITE",
-        "source_view": "AEL_DISPLAY", "operations": operations}, indent=1), encoding="utf-8")
-    instructions = ["# PixelMath replay", "", "Open the TIFF images, duplicate `AEL_DISPLAY` as `AEL_COMPOSITE`,",
-                    "and execute these single expressions in order with the listed symbols.", ""]
+        "source_view": "AEL_DISPLAY", "reference_composite": result["files"]["display"],
+        "operations": operations}, indent=1), encoding="utf-8")
+    instructions = ["# PixelMath replay", "",
+                    "Open the TIFF images. `AEL_DISPLAY` is the display base before any filter.",
+                    "Duplicate it as `AEL_COMPOSITE`, convert the duplicate to 32-bit float (a 16-bit target",
+                    "rounds after every step), and execute these single expressions on it,",
+                    "in order, with no symbols. If a view was renamed on opening, change its identifier",
+                    "in the expression. The result should match AEL's composite `ael/display.tif`.", ""]
     for index, operation in enumerate(operations, 1):
-        instructions += [f"## {index}. {operation['filter']} — {operation['mode']}, opacity {operation['opacity']:g}",
-                         f"Symbols: `{operation['symbols']}`", "", f"```text\n{operation['expression']}\n```", ""]
+        instructions += [f"## {index}. {operation['filter']} — {operation['mode']}, opacity {operation['opacity']:g}"
+                         f" (8-bit effective {operation['effective_opacity']:.6g})",
+                         "", f"```text\n{operation['expression']}\n```", ""]
     (out / "PIXELMATH.md").write_text("\n".join(instructions), encoding="utf-8")
     receipt = {"product": "PixInsight AEL filter layers", "runtime": runtime(),
                "input": str(input_path), "recipe": str(recipe_path), "ael_receipt": str(ael_receipt_path),
+               "display_base_recipe": str(base_recipe_path), "display_base_receipt": base_result["receipt"],
+               "reference_composite": result["files"]["display"],
                "display_scale_measured": measured_scale, "images": images, "pixelmath": operations,
                "gates": ael_receipt["gates"], "credit": CREDIT}
     receipt_path = out / "AEL_WORKFLOW_RECEIPT.json"
@@ -334,6 +355,12 @@ def run_master(cfg: dict) -> dict:
         raise ValueError("Stack one ISO at a time")
     if len({(item["make"], item["model"]) for item in meta}) != 1:
         raise ValueError("Stack one camera/optical train at a time")
+    exposures = sorted({item["exposure_s"] for item in meta})
+    if cfg.get("dark") and len(exposures) > 1:
+        # AEL subtracts the dark as recorded, before dividing by each frame's exposure.
+        # One master dark can match one exposure only.
+        raise ValueError(f"One master dark cannot calibrate frames with different exposures {exposures}. "
+                         "Stack each exposure with its own matching dark, or leave the dark empty.")
     proxies = [proxy(path, kind, black) for path, kind in zip(paths, kinds)]
     shapes = [tuple(item[1]) for item in proxies]
     if shapes[reference_index] != tuple(geometry.shape):
