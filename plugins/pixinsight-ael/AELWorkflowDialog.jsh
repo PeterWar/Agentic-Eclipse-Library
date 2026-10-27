@@ -40,7 +40,7 @@ var AELWorkflowDialog = class extends Dialog
       let intro = new Label( this );
       intro.wordWrapping = true;
       intro.useRichText = true;
-      intro.text = "<b>Automated AEL workflow</b><br>One camera and one ISO. Metadata, limb registration, recipes, "
+      intro.text = "<b>Automated AEL workflow</b><br>One camera and one ISO. Metadata, registration on the Sun, recipes, "
                    + "filter TIFFs and PixelMath expressions are generated automatically. "
                    + "Calibration and reference geometry are required, never guessed.";
       this.sizer.add( intro );

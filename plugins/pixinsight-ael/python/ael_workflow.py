@@ -219,118 +219,137 @@ def run_filters(cfg: dict) -> dict:
             "pixelmath": operations, "receipt": str(receipt_path), "gates": ael_receipt["gates"]}
 
 
-def proxy(path: Path, kind: str, black: float):
+MOON_KEYS = ("xy", "r", "rms", "n_used", "n_rays")
+
+
+def frame_luminance(path: Path, kind: str, black: float, white: float, fraction: float):
+    """Full-resolution luminance above black, its usable pixels, native shape and CFA pattern.
+
+    The luminance keeps saturated samples (clipped) for the limb fit; the usable mask drops
+    them, together with non-positive samples, for the solar registration.
+    """
+    ceiling = fraction * (white - black)
     if kind == "raw":
         raw = calibrate.read_raw(path, full=False)
-        rgb = calibrate.superpixel_rgb(raw["bayer"].astype(np.float32) - black, raw["pattern"])
-        return rgb, raw["bayer"].shape, raw["pattern"]
-    array = io.load_array(path).astype(np.float32)
+        bayer = raw["bayer"].astype(np.float32) - black
+        green, _ = calibrate.green_plane(bayer, raw["pattern"])
+        _, bad = calibrate.green_plane(bayer, raw["pattern"], bayer >= ceiling)
+        return green, ~bad & (green > 0), bayer.shape, np.asarray(raw["pattern"]).tolist()
+    array = io.load_array(path).astype(np.float32) - black
     if array.ndim != 3 or array.shape[-1] != 3:
         raise ValueError(f"Linear RGB input must be HxWx3: {path}")
-    h, w = (array.shape[0] // 2) * 2, (array.shape[1] // 2) * 2
-    reduced = array[:h, :w].reshape(h // 2, 2, w // 2, 2, 3).mean(axis=(1, 3))
-    return reduced, array.shape[:2], None
+    lum = (array[..., 0] + 2 * array[..., 1] + array[..., 2]) / 4
+    usable = np.isfinite(lum) & (lum > 0) & ~(array >= ceiling).any(axis=-1)
+    return lum, usable, array.shape[:2], None
 
 
-def full_luminance(path: Path, kind: str, black: float) -> np.ndarray:
-    if kind == "raw":
-        raw = calibrate.read_raw(path, full=False)
-        green, _ = calibrate.green_plane(raw["bayer"].astype(np.float32) - black, raw["pattern"])
-        return green
-    array = io.load_array(path).astype(np.float32)
-    if array.ndim != 3 or array.shape[-1] != 3:
-        raise ValueError(f"Linear RGB input must be HxWx3: {path}")
-    return (array[..., 0] + 2 * array[..., 1] + array[..., 2]) / 4
+def measure_moon(lum: np.ndarray, approx_xy, radius: float) -> dict:
+    """Lunar limb of one frame: a wide search (±30 % of the radius), then a narrow one."""
+    wide = fit_limb(lum, approx_xy, radius, n_rays=720, search_frac=0.3, smooth_px=1.1, n_iter=4)
+    return fit_limb(lum, wide["xy"], wide["r"], n_rays=720, search_frac=0.08, smooth_px=1.1, n_iter=4)
 
 
-def radial_residual(rgb: np.ndarray, geometry: EclipseGeometry) -> tuple[np.ndarray, np.ndarray]:
-    lum = rgb if rgb.ndim == 2 else (rgb[..., 0] + 2 * rgb[..., 1] + rgb[..., 2]) / 4
-    valid = np.isfinite(lum) & (lum > 0)
-    if geometry.moon_xy is not None:
-        valid &= ~geometry.moon_mask(3)
-    r = geometry.rsun_map()
-    valid &= (r > 0.95) & (r < 6)
-    log = np.where(valid, np.log(np.where(valid, lum, 1)), np.nan)
-    radial = np.rint(r).astype(np.int16)
-    profile = np.zeros_like(log, dtype=np.float64)
-    for radius in np.unique(radial[valid]):
-        mask = valid & (radial == radius)
-        profile[mask] = np.median(log[mask])
-    residual = np.where(valid, log - profile, 0).astype(np.float32)
-    lo, hi = np.percentile(residual[valid], [2, 98]) if valid.any() else (0, 1)
-    scaled = np.clip((residual - lo) / max(float(hi - lo), 1e-6), 0, 1).astype(np.float32)
-    return scaled, valid
+def _shrink(value: np.ndarray, usable: np.ndarray, factor: int):
+    """Means of complete blocks; block pixel i is centred at factor*i + (factor-1)/2."""
+    if factor == 1:
+        return value, usable
+    h, w = (value.shape[0] // factor) * factor, (value.shape[1] // factor) * factor
+    blocks = (h // factor, factor, w // factor, factor)
+    count = usable[:h, :w].reshape(blocks).sum(axis=(1, 3))
+    total = np.where(usable, value, 0)[:h, :w].reshape(blocks).sum(axis=(1, 3))
+    full = count == factor * factor
+    return np.where(full, total / np.maximum(count, 1), 0).astype(np.float32), full
 
 
-def register(reference: np.ndarray, moving: np.ndarray, geometry: EclipseGeometry, *,
-             initial=None, half_resolution=True, allow_rotation=False) -> dict:
-    ref, ref_valid = radial_residual(reference, geometry)
-    mov, mov_valid = radial_residual(moving, geometry)
-    if not ref_valid.any() or not mov_valid.any():
-        raise ValueError("No valid corona pixels for registration")
-    warp = np.eye(2, 3, dtype=np.float32) if initial is None else np.asarray(initial, np.float32).copy()
-    sift_inliers = 0
-    feature_warp = None
-    if initial is None:
-        sift = cv2.SIFT_create(nfeatures=1500, contrastThreshold=0.01)
-        ref_u8 = np.round(ref * 255).astype(np.uint8)
-        mov_u8 = np.round(mov * 255).astype(np.uint8)
-        kp1, d1 = sift.detectAndCompute(ref_u8, ref_valid.astype(np.uint8))
-        kp2, d2 = sift.detectAndCompute(mov_u8, mov_valid.astype(np.uint8))
-        if d1 is not None and d2 is not None and len(kp1) >= 4 and len(kp2) >= 4:
-            pairs = cv2.BFMatcher().knnMatch(d1, d2, k=2)
-            good = [a for a, b in pairs if a.distance < 0.75 * b.distance]
-            if len(good) >= 6:
-                p1 = np.float32([kp1[m.queryIdx].pt for m in good])
-                p2 = np.float32([kp2[m.trainIdx].pt for m in good])
-                estimate, inliers = cv2.estimateAffinePartial2D(p1, p2, method=cv2.RANSAC,
-                    ransacReprojThreshold=1.0, maxIters=5000, confidence=0.999)
-                if estimate is not None and inliers is not None:
-                    sift_inliers = int(inliers.sum())
-                    if sift_inliers >= 6:
-                        feature_warp = estimate.astype(np.float32)
-                        warp = feature_warp.copy()
-    iterations = 500 if initial is None else 120
-    criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, iterations, 1e-8)
-    motion = cv2.MOTION_AFFINE if allow_rotation else cv2.MOTION_TRANSLATION
-    selected = "ecc"
-    cc = None
-    if not allow_rotation and feature_warp is not None:
-        warp = feature_warp.copy()
-        selected = "sift_translation"
-    else:
-        cc, warp = cv2.findTransformECC(ref, mov, warp, motion, criteria, None, 5)
-    if not np.isfinite(warp).all() or (cc is not None and not math.isfinite(float(cc))):
-        raise RuntimeError("Registration did not converge")
-    if not allow_rotation:
-        warp[:, :2] = np.eye(2, dtype=np.float32)
-    warp = np.asarray(warp, dtype=np.float64)
-    if allow_rotation:
-        # The affine is only an estimator. Keep its translation but project the linear
-        # part to the nearest rotation: no scale or shear is allowed into the stack.
-        u, _, vt = np.linalg.svd(warp[:, :2].astype(np.float64))
-        warp[:, :2] = u @ vt
-        if np.linalg.det(warp[:, :2]) < 0:
-            u[:, -1] *= -1
-            warp[:, :2] = u @ vt
-    # findTransformECC uses the same reference->input convention as AEL when
-    # WARP_INVERSE_MAP aligns the moving image to the reference.
-    full = stack.full_resolution_affine(warp) if half_resolution else warp
-    singular = np.linalg.svd(full[:, :2], compute_uv=False)
-    if singular[0] / singular[1] > 1.02 or not 0.5 < abs(np.linalg.det(full[:, :2])) < 2:
-        raise RuntimeError(f"Registration is not sufficiently similar to a rigid/similarity transform: {full.tolist()}")
-    aligned = cv2.warpAffine(mov, warp, (ref.shape[1], ref.shape[0]),
-                             flags=cv2.INTER_LINEAR | cv2.WARP_INVERSE_MAP, borderMode=cv2.BORDER_CONSTANT)
-    mask = ref_valid & mov_valid & np.isfinite(aligned)
-    if mask.sum() < 100:
-        raise RuntimeError("Insufficient overlap after registration")
-    correlation = float(np.corrcoef(ref[mask], aligned[mask])[0, 1])
-    if not math.isfinite(correlation) or correlation < 0.25:
-        raise RuntimeError(f"Registration rejected: correlation {correlation:.4f} < 0.25")
-    return {"estimator_matrix": warp.tolist(), "reference_to_input": full.tolist(), "selected": selected,
-            "resolution": "half" if half_resolution else "full", "sift_inliers": sift_inliers,
-            "rotation_allowed": allow_rotation,
-            "ecc": None if cc is None else float(cc), "correlation": correlation, "overlap_pixels": int(mask.sum())}
+def _sampler(shape, t):
+    yy, xx = np.mgrid[:shape[0], :shape[1]].astype(np.float32)
+    mx, my = (xx + t[0]).astype(np.float32), (yy + t[1]).astype(np.float32)
+    return lambda a: cv2.remap(np.ascontiguousarray(a, np.float32), mx, my, cv2.INTER_LINEAR,
+                               borderMode=cv2.BORDER_CONSTANT, borderValue=0)
+
+
+def _solve_translation(ref, ref_use, weight, mov, mov_use, t, *, iterations=100):
+    """Weighted Gauss-Newton for mov(x + t) = a*ref(x) + b over pixels usable in both frames."""
+    gy, gx = np.gradient(mov)
+    # A gradient counts only where its whole 3x3 neighbourhood is usable.
+    grad_use = cv2.erode(mov_use.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(np.float32)
+    t = np.asarray(t, np.float64).copy()
+    for _ in range(iterations):
+        sample = _sampler(ref.shape, t)
+        m = ref_use & (sample(grad_use) > 0.999)
+        n = int(m.sum())
+        if n < 100:
+            raise RuntimeError("Insufficient overlap for solar registration")
+        root = np.sqrt(weight[m]).astype(np.float64)
+        a = np.column_stack([sample(gx)[m], sample(gy)[m], -ref[m], -np.ones(n)]) * root[:, None]
+        step = np.linalg.lstsq(a, -sample(mov)[m] * root, rcond=None)[0][:2]
+        step *= min(1.0, 1.0 / max(float(np.hypot(*step)), 1e-12))  # at most one pixel per iteration
+        t += step
+        if np.hypot(*step) < 1e-4:
+            return t
+    raise RuntimeError("Solar registration did not converge")
+
+
+def _highpass(value, use, sigma):
+    num = cv2.GaussianBlur(np.where(use, value, 0).astype(np.float32), (0, 0), sigma)
+    den = cv2.GaussianBlur(use.astype(np.float32), (0, 0), sigma)
+    keep = use & (den > 0.9)
+    return np.where(keep, value - num / np.maximum(den, 1e-6), 0).astype(np.float32), keep
+
+
+def register_on_sun(reference, moving, geometry: EclipseGeometry, reference_moon: dict, moving_moon: dict, *,
+                    margin_px: float, rmax_rsun: float = 3.0, initial=(0.0, 0.0),
+                    min_structure: float = 0.25) -> dict:
+    """Translation reference->input measured on the corona, which is fixed on the Sun.
+
+    Each frame leaves out its own Moon, measured on its own limb, plus ``margin_px`` for the
+    blurred lunar edge; the Moon moves relative to the Sun during totality. Only unsaturated
+    pixels within ``rmax_rsun`` of the reference Sun count. Log intensity turns exposure into
+    an offset; weights follow the reference signal (Poisson). Coarse-to-fine block means.
+    """
+    def logged(lum, usable, moon):
+        yy, xx = np.mgrid[:lum.shape[0], :lum.shape[1]]
+        use = usable & (np.hypot(xx - moon["xy"][0], yy - moon["xy"][1]) > moon["r"] + margin_px)
+        return np.where(use, np.log(np.where(use, lum, 1)), 0).astype(np.float32), use
+    ref, ref_use = logged(*reference, reference_moon)
+    mov, mov_use = logged(*moving, moving_moon)
+    ref_use &= geometry.rsun_map() <= rmax_rsun
+    weight = np.where(ref_use, reference[0], 0).astype(np.float32)
+    weight /= max(float(weight.max()), 1e-30)
+    factors = [f for f in (16, 8, 4, 2) if geometry.sun_radius_px / f >= 8] + [1]
+    t = np.asarray(initial, np.float64)
+    for factor in factors:
+        r, ru = _shrink(ref, ref_use, factor)
+        w, _ = _shrink(weight, ref_use, factor)
+        m, mu = _shrink(mov, mov_use, factor)
+        t = _solve_translation(r, ru, w, m, mu, t / factor) * factor
+    # Independent check on fine structure: an unrelated image or a false optimum fails here.
+    sigma = max(2.0, 0.05 * geometry.sun_radius_px)
+    ref_hp, ref_hp_use = _highpass(ref, ref_use, sigma)
+    mov_hp, mov_hp_use = _highpass(mov, mov_use, sigma)
+    sample = _sampler(ref.shape, t)
+    mask = ref_hp_use & (sample(mov_hp_use) > 0.999)
+    structure = float(np.corrcoef(ref_hp[mask], sample(mov_hp)[mask])[0, 1]) if mask.sum() >= 100 else -1.0
+    if not math.isfinite(structure) or structure < min_structure:
+        raise RuntimeError(f"Solar registration rejected: coronal structure correlation {structure:.4f} "
+                           f"< {min_structure}")
+    return {"translation": t.tolist(), "correlation": structure, "overlap_pixels": int(mask.sum()),
+            "levels": factors, "margin_px": margin_px, "rmax_rsun": rmax_rsun}
+
+
+def register_frame(reference, moving, geometry: EclipseGeometry, reference_moon: dict, *, margin_px: float,
+                   rmax_rsun: float = 3.0, max_lunar_px: float | None = None) -> dict:
+    """Moon of the moving frame from its own limb; registration on the Sun from the corona."""
+    moon = measure_moon(moving[0], reference_moon["xy"], reference_moon["r"])
+    moon_shift = np.asarray(moon["xy"]) - np.asarray(reference_moon["xy"])
+    solar = register_on_sun(reference, moving, geometry, reference_moon, moon, margin_px=margin_px,
+                            rmax_rsun=rmax_rsun, initial=moon_shift)
+    lunar = moon_shift - np.asarray(solar["translation"])
+    if max_lunar_px is not None and np.hypot(*lunar) > max_lunar_px:
+        raise RuntimeError(f"Moon moved {np.hypot(*lunar):.2f} px relative to the Sun, above the "
+                           f"{max_lunar_px:.2f} px allowed; check the frames or the registration")
+    return dict(solar, selected="sun_translation", moon_fit={key: moon[key] for key in MOON_KEYS},
+                lunar_shift_px=lunar.tolist())
 
 
 def run_master(cfg: dict) -> dict:
@@ -361,52 +380,37 @@ def run_master(cfg: dict) -> dict:
         # One master dark can match one exposure only.
         raise ValueError(f"One master dark cannot calibrate frames with different exposures {exposures}. "
                          "Stack each exposure with its own matching dark, or leave the dark empty.")
-    proxies = [proxy(path, kind, black) for path, kind in zip(paths, kinds)]
-    shapes = [tuple(item[1]) for item in proxies]
+    if cfg.get("allow_rotation"):
+        raise ValueError("Rotation is not supported: registration is a translation measured on the Sun")
+    data = [frame_luminance(path, kind, black, white, fraction) for path, kind in zip(paths, kinds)]
+    shapes = [tuple(item[2]) for item in data]
     if shapes[reference_index] != tuple(geometry.shape):
         raise ValueError("Reference geometry shape does not match the reference frame")
-    patterns = [None if item[2] is None else np.asarray(item[2]).tolist() for item in proxies]
+    patterns = [item[3] for item in data]
     if any(pattern != patterns[0] for pattern in patterns):
         raise ValueError("CFA patterns must agree")
 
+    # The corona is fixed on the Sun and the Moon moves across it during totality, so frames
+    # are registered on the Sun; each frame keeps its own measured Moon for its mask.
+    margin = float(cfg.get("registration_margin_px", max(6.0, 0.015 * geometry.moon_radius_px)))
+    rmax = float(cfg.get("registration_rmax_rsun", 3.0))
+    max_lunar = float(cfg.get("max_lunar_shift_px", 0.1 * geometry.moon_radius_px + 2))
+    reference = data[reference_index][:2]
+    reference_fit = measure_moon(reference[0], geometry.moon_xy, geometry.moon_radius_px)
     registrations = []
     matrices = []
     moon_geometries = []
-    reference_proxy = proxies[reference_index][0]
-    half_geometry = geometry.scaled(0.5)
-    luminances = [full_luminance(path, kind, black) for path, kind in zip(paths, kinds)]
-    reference_fit = fit_limb(luminances[reference_index], geometry.moon_xy, geometry.moon_radius_px,
-                             n_rays=720, search_frac=0.08, smooth_px=1.1, n_iter=4)
-    ref_residual, ref_valid = radial_residual(reference_proxy, half_geometry)
-    for index, item in enumerate(proxies):
+    for index, item in enumerate(data):
         if index == reference_index:
             matrix = np.eye(2, 3, dtype=np.float64)
-            registration = {"ecc": 1.0, "correlation": 1.0, "identity": True,
-                            "moon_fit": {key: reference_fit[key] for key in ("xy", "r", "rms", "n_used", "n_rays")},
-                            "selected": "reference_limb"}
+            registration = {"selected": "reference", "translation": [0.0, 0.0], "correlation": 1.0,
+                            "moon_fit": {key: reference_fit[key] for key in MOON_KEYS},
+                            "lunar_shift_px": [0.0, 0.0]}
         else:
-            coarse = register(reference_proxy, item[0], half_geometry, allow_rotation=True)
-            approximate = coarse["reference_to_input"] @ np.array([geometry.moon_xy[0], geometry.moon_xy[1], 1.0])
-            measured = fit_limb(luminances[index], approximate[:2], geometry.moon_radius_px,
-                                n_rays=720, search_frac=0.08, smooth_px=1.1, n_iter=4)
-            linear = np.asarray(coarse["reference_to_input"], dtype=np.float64)[:, :2] if cfg.get("allow_rotation", False) else np.eye(2)
-            translation = np.asarray(measured["xy"]) - linear @ np.asarray(reference_fit["xy"])
-            matrix = np.hstack([linear, translation[:, None]])
-            half = matrix.copy()
-            half[:, 2] = (matrix[:, 2] - 0.5 + matrix[:, :2] @ np.array([0.5, 0.5])) / 2
-            moving_residual, moving_valid = radial_residual(item[0], half_geometry)
-            aligned = cv2.warpAffine(moving_residual, half, (ref_residual.shape[1], ref_residual.shape[0]),
-                                     flags=cv2.INTER_LINEAR | cv2.WARP_INVERSE_MAP,
-                                     borderMode=cv2.BORDER_CONSTANT)
-            mask = ref_valid & moving_valid & np.isfinite(aligned)
-            correlation = float(np.corrcoef(ref_residual[mask], aligned[mask])[0, 1]) if mask.sum() >= 100 else -1
-            if not math.isfinite(correlation) or correlation < 0.25:
-                raise RuntimeError(f"Limb registration rejected by coronal correlation: {correlation:.4f}")
-            registration = dict(coarse)
-            registration.update({"selected": "limb_rigid" if cfg.get("allow_rotation", False) else "limb_translation",
-                "reference_to_input": matrix.tolist(),
-                "moon_fit": {key: measured[key] for key in ("xy", "r", "rms", "n_used", "n_rays")},
-                "correlation": correlation, "coarse_ecc": coarse["ecc"]})
+            registration = register_frame(reference, item[:2], geometry, reference_fit, margin_px=margin,
+                                          rmax_rsun=rmax, max_lunar_px=max_lunar)
+            matrix = np.hstack([np.eye(2), np.asarray(registration["translation"])[:, None]])
+        registration["reference_to_input"] = matrix.tolist()
         registrations.append(registration)
         matrices.append(matrix)
         moon_geometries.append(registration["moon_fit"])

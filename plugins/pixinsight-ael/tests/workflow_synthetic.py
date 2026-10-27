@@ -23,7 +23,7 @@ import tifffile
 from ael.geometry import EclipseGeometry
 from ael.synthetic import SyntheticScene
 from ael import io
-from ael_workflow import register, radial_residual
+from ael_workflow import measure_moon, register_frame
 
 
 def main() -> None:
@@ -139,7 +139,11 @@ def main() -> None:
             rng = np.random.default_rng(4)
             noise = rng.random(base.shape, dtype=np.float32)
             try:
-                register(base[::2, ::2], noise[::2, ::2], geometry.scaled(0.5))
+                lum_base = (base[..., 0] + 2 * base[..., 1] + base[..., 2]) / 4
+                lum_noise = (noise[..., 0] + 2 * noise[..., 1] + noise[..., 2]) / 4
+                reference_moon = measure_moon(lum_base, geometry.moon_xy, geometry.moon_radius_px)
+                register_frame((lum_base, lum_base > 0), (lum_noise, lum_noise > 0), geometry, reference_moon,
+                               margin_px=6.0)
                 report["negative_registration"] = False
             except Exception:
                 report["negative_registration"] = True

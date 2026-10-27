@@ -80,9 +80,11 @@ Select **Filter layers from linear.npy**. The helper finds `geometry.json`, `val
 
 The default composite applies NRGF, bilateral WOW and isotropic ACHF 04 with their documented opacities, rounded to 8 bits as AEL and Photoshop store them. The other filters remain separate for manual use. PixelMath touches only the composite, never the display base or linear master, and a PixelMath run that fails stops the workflow. The synthetic validation starts from the display base and compares the PixelMath result with AEL's own composite (`ael/display.tif`); it also checks that the two starting images differ, so a PixelMath that changes nothing cannot pass.
 
-### Automatic linear master — synthetic data with a still Moon only
+### Automatic linear master — validated with synthetic data
 
-This mode reads exposure and ISO with ExifTool, checks one camera/ISO, fits the lunar limb at full resolution in every frame, derives translation from the measured limb centres, validates alignment against coronal structure, writes the frozen AEL stack recipe, and can continue into filter layers. Translation is the safe default; rotation is only allowed by an explicit `allow_rotation` configuration. It requires a reference geometry JSON and a camera profile:
+This mode reads exposure and ISO with ExifTool, checks one camera/ISO, registers every frame on the Sun, writes the frozen AEL stack recipe, and can continue into filter layers.
+
+The corona is fixed on the Sun, and during totality the Moon moves across it (28.5 px in 105 s on one 2026 train). Registration therefore measures a translation on the corona: the logarithm of the unsaturated corona within 3 solar radii, weighted by its signal, fitted coarse to fine with a free exposure offset. Each frame leaves out its own Moon, fitted on its own limb at full resolution, plus a margin for the blurred lunar edge (6 px or 1.5 % of the lunar radius). The limb gives only the starting point and each frame's lunar mask. Two gates follow: the fine coronal structure must correlate (high-pass correlation ≥ 0.25), and the Moon may not have moved more than 0.1 lunar radii + 2 px relative to the Sun. Rotation is not supported. It requires a reference geometry JSON and a camera profile:
 
 ```json
 {
@@ -95,15 +97,16 @@ This mode reads exposure and ISO with ExifTool, checks one camera/ISO, fits the 
 
 Black, white and the linear ceiling are measured calibration values; they are never inferred from libraw. Optional master dark and flat files must already match the optical train and native geometry. AEL subtracts the dark before dividing by each frame's exposure, so one dark matches one exposure: the workflow refuses a dark when the frames have different exposures. Cloud transmission, colour calibration and mixed-optics distortion are not inferred.
 
-**Open defect: registration follows the Moon, not the Sun.** The translation comes from the lunar limb. During totality the Moon moves relative to the Sun (28.5 px in 105 s on one 2026 train), and the corona is fixed on the Sun. `tests/workflow_lunar_motion.py` moves the synthetic Moon 1.6 and 3.2 px between three frames: the workflow still reports success, with errors of 1.2 and 2.1 px against the Sun, and the coronal-correlation gate (0.25) does not catch it. Until registration is measured on the Sun, do not use the automatic master on real totality frames; build the master elsewhere and use **Filter layers from linear.npy**.
+`tests/workflow_lunar_motion.py` is the gate for this registration. Between three frames the telescope drifts and the Moon moves another 1.6 and 3.2 px across the Sun (0.07 lunar radii, about one totality), always covering it. With a still Moon, a moving Moon, and a moving Moon with photon and read noise and a saturated inner corona, the worst error against the Sun is 0.016 px (gate 0.1 px). Another corona with the Moon in the same place is rejected. An earlier version registered on the lunar limb and failed this test with errors equal to the lunar motion.
 
-With the Moon fixed on the Sun, two independent synthetic runs pass all gates: 0.048 px worst translation error (gate 0.1 px), 0.0226% median relative master difference (gate 0.1%), sixteen filters and alpha maps, and a PixelMath composite within one 16-bit step of AEL's composite (gate `1/65535`). The unrelated-image registration control is rejected. `tests/workflow_dark_guard.py` checks the dark refusal. Windows, Linux and real eclipse data remain untested.
+Two independent runs of `tests/workflow_synthetic.py` pass all gates: 0.003 px worst translation error (gate 0.1 px), 0.0203% median relative master difference (gate 0.1%), sixteen filters and alpha maps, and a PixelMath composite within one 16-bit step of AEL's composite (gate `1/65535`). The unrelated-image registration control is rejected. `tests/workflow_dark_guard.py` checks the dark refusal. On a 24-megapixel synthetic frame, registration takes about 3 s. Windows, Linux and real eclipse data remain untested; real frames add seeing, lunar relief, prominences and sensor patterns that the synthetic scenes do not have.
 
 ## Limitations
 
 - Tested only on macOS with PixInsight 1.9.4. Windows and Linux have not been tested.
 - Python must be installed separately; this is not a self-contained package or a native C++ module.
-- `structure` and `polar` are covered by the original bridge. The filter workflow is validated with synthetic data only. The automatic master registers on the Moon and is not valid for real totality frames (see above); real eclipse data require separate validation.
+- `structure` and `polar` are covered by the original bridge. The complete master/filter workflow is validated with synthetic data only; real eclipse data require separate validation.
+- The automatic master holds every frame's luminance in memory at once: plan on several gigabytes for dozens of full-size RAW frames.
 - ICC profiles are read from the source file and copied unchanged to the temporary TIFF. An unsaved image, or a profile assigned only in memory after reading the file, cannot be verified or preserved reliably by this prototype. The receipt records the ICC origin and byte counts.
 - `polar` expects display-range data in [0, 1]. `structure` expects a linear composite with valid geometry and enough outer field for its sky model.
 - The connector has not been signed or packaged for automatic updates.
