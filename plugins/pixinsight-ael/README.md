@@ -105,6 +105,7 @@ Two independent runs of `tests/workflow_synthetic.py` pass all gates: 0.003 px w
 
 ## Limitations
 
+- **The registration on the Sun is not valid on real frames yet.** On real Vixen R6 III totality frames (2026-08-12, read without dark or flat), it lands 0.07–2.2 px from the reference registration (lunar limb plus the DE440s ephemeris, which an independent phase correlation of the corona confirms within 0.04–0.46 px), and up to 3.3 px at 10 s; the error grows with the time between frames. Frames of 1/500 s and shorter do not converge, and the structure check accepts frames registered 1–3 px wrong. The cause has not been found: neither the lunar margin, the outer radius, the weighting, pre-smoothing, a planar extinction term nor field rotation explains it. Do not use the automatic master on real frames.
 - Tested only on macOS with PixInsight 1.9.4. Windows and Linux have not been tested.
 - Python must be installed separately; this is not a self-contained package or a native C++ module.
 - `structure` and `polar` are covered by the original bridge. The complete master/filter workflow is validated with synthetic data only; real eclipse data require separate validation.
