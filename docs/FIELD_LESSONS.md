@@ -242,7 +242,7 @@ validate the author's own chain.
   in 1.3.3), and WOW at most 0.04 near the limb and 0.09 next to the straight edge (WOW bilateral, the 1.3.3 default:
   0.08 and 0.07; plain WOW: 0.03 and 0.34). The ACHF bands are smaller; along the straight edge the default WOW band
   is a little larger than with WOW bilateral. Still open.
-- *WOW bilateral*
+- *WOW bilateral* (called edge-aware since 1.3.5, and the default)
   ([issue #4](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/4)). It can return faint
   fine detail with the opposite sign: the pattern that plain WOW returns at +0.82 (+0.95 with 1 % noise) comes
   out at −0.27 (−0.16 with 1 % noise), and the inversion is already in the bilateral detail of the finest
@@ -309,7 +309,8 @@ His photographs are not public; his numbers cannot be reproduced from this repos
   concentric rings and a band of weaker texture along the limb, which the author marked; his own WOW bilateral layer
   did not. Its range weights come from the data being decomposed, the mechanism Edu measured, but mildly (7–9 % against
   the band-pass of the same data). WOW bilateral is now that operator with guided range weights: on the Sony it inverts
-  3.9–5.3 % per ring, but up to 17.9 % in the worst sector of his gate, so it is not the default.
+  3.9–5.3 % per ring, but up to 17.9 % in the worst sector of his gate, so it was not the default in 1.3.4. In 1.3.5
+  the author made it the default for its clean limb, renamed edge-aware, and declared the worst sector.
 - The ACHF layers take a level and a spread per ring by default. On the author's calibrated map with its sky model
   added back (binned 2 × 2), the saturation at 1.08–1.2 R☉ fell from 27 % at 0 and 60 % at 1 to below 1 %; with the
   sky subtracted, the display of 1.3.3 clipped only 3.8 % and 0.8 % there.
@@ -332,6 +333,8 @@ His photographs are not public; his numbers cannot be reproduced from this repos
   limb, and look at it, before adopting it; a statistic on 6 px bands missed rings that the eye saw.
 - Range weights taken from the data being decomposed invert faint detail. Taken from the same scale without range
   weights, most of the inversion goes; the rest of it, in the worst sectors, is still open.
+- A default is also a decision. In 1.3.5 the author chose the edge-aware WOW for its clean limb, although it fails the
+  worst sector of the gate, and the release says so.
 
 ## Deliver and describe the actual file
 

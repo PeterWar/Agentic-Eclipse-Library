@@ -1,5 +1,31 @@
 # Changelog
 
+## 1.3.5 — 2026-10-28
+
+The author's decision on the WOW layers. The `ael` operators do not change. The Codex plugin goes to 1.1.2; the Claude
+Code plugin of this repository's marketplace and the Claude plugin folder `plugins/claude-ael/` go to 1.3.5.
+
+- **The edge-aware WOW is the default WOW layer** (`wow_edge_aware`). It is the layer called WOW bilateral in 1.3.4: the
+  operator of the author's own WOW layer, with range weights taken from a guide. It takes the name Auchère et al. (2023)
+  give to their variant of WOW with a bilateral smoothing. `wow_bilateral` is still accepted as its old name, in recipes
+  and from Python. The author chose it after looking at his own 2026 image: there it keeps the lunar limb clean, and he
+  sees no rings. The choice is declared against the numbers of 1.3.4: on the author's Sony it fails the worst 45° sector
+  of Edu's gate (up to 18–20 % of the clear detail inverted, against a limit of 10 %) and the ring gate, which the plain
+  WOW passes. Under the rule fixed before those gates the default would not have changed; it changed by the author's
+  decision.
+- **The plain WOW (`wow`, the default of 1.3.4) is optional.** A recipe that lists it without the edge-aware WOW keeps it
+  visible at 0.37; listed next to it, it is a hidden layer to compare with.
+- **Recommendation** (the author's, from his 2026 image; it agrees with Auchère et al. 2023, who found that the
+  edge-aware variant gives better results with spikes or edges): where the corona data reach the lunar limb, use the
+  edge-aware WOW, because the plain WOW draws concentric rings and a band of weaker texture there. If you prefer the
+  plain WOW further out, where it keeps faint fine detail more faithfully, use both layers and blend them with a
+  feathered mask: the edge-aware WOW next to the limb, over at least the first 0.5 R☉ (in the author's image the rings
+  of the plain WOW reach about 200 px from the edge of the data, 0.45 R☉), the plain WOW beyond, and a feather of
+  several tenths of R☉, so that the change of texture leaves no radial frontier. Blend them as two layers with masks
+  in Photoshop, never inside one layer. This blend has not been measured yet.
+- Tests: the defaults, the old-recipe and the sign tests use the new name and default; selftest 107 of 107. Checks and
+  limits: `docs/VALIDATION_1.3.5.md`.
+
 ## 1.3.4 — 2026-10-28
 
 Three reports by Edu (@edu27): a real-data check of issue #4 and issues #9 and #10. The `ael` package changes its

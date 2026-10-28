@@ -13,8 +13,9 @@ from .geometry import EclipseGeometry
 ISO = {'achf_iso_01': ((2,4,8,16,32),3), 'achf_iso_04': ((1,2,4,8,16),1.5),
        'achf_iso_05': ((2,4,8,16,32,48),3), 'achf_iso_06': ((4,8,16,32,64),3)}
 NAMES = ('nrgf','nrgf_log','rhef','rhef_upsilon','rhef_local60','rhef_local30',
-         'achf_angular','achf_angular4','achf_angular8',*ISO,'mgn','wow','wow_bilateral')
-DEFAULTS = ('nrgf','wow','achf_iso_04')
+         'achf_angular','achf_angular4','achf_angular8',*ISO,'mgn','wow','wow_edge_aware')
+DEFAULTS = ('nrgf','wow_edge_aware','achf_iso_04')
+ALIASES = {'wow_bilateral': 'wow_edge_aware'}           # the name of the edge-aware WOW up to 1.3.4
 
 
 def radial_log_residual(luminance, valid, geometry):
@@ -159,9 +160,10 @@ def _paired_b3_step(c, m, step, bilateral=False, guide=None, rows=128):
     return out, compl, pair
 
 
-def wow_bilateral(img, valid, *, n_scales=8, guided=True, completeness=(.6, .995)):
-    """WOW bilateral (since 1.3.4): the operator of the WOW bilateral layer of the author's 2026 image, with the cure of
-    issue #4.
+def wow_edge_aware(img, valid, *, n_scales=8, guided=True, completeness=(.6, .995)):
+    """Edge-aware WOW, the default WOW layer since 1.3.5 (called WOW bilateral up to 1.3.4): the operator of the edge-aware
+    WOW layer of the author's 2026 image, with the cure of issue #4. Edge-aware is the name Auchère et al. (2023) give to the
+    variant of WOW whose smoothing uses range weights, a bilateral filter, to avoid halos at spikes and edges.
 
     Each B3 à-trous scale is smoothed over symmetric observed pairs with range weights (bilateral: taps across a strong
     edge count less), whitened by its local power, centred on its mean where its kernel is whole, and its local level is
@@ -172,7 +174,8 @@ def wow_bilateral(img, valid, *, n_scales=8, guided=True, completeness=(.6, .995
     Issue #4 (Edu): range weights computed from the data being decomposed can turn faint fine detail next to stronger
     structure into its opposite. With ``guided`` (the default), the range weights of each scale come from a guide that
     does not contain the detail of that scale (the same step without range weights) and the mean still comes from the
-    data. Measured: docs/VALIDATION_1.3.4.md. ``guided=False`` is the author's operator as it ran in 2026."""
+    data. Measured: docs/VALIDATION_1.3.4.md and docs/VALIDATION_1.3.5.md. ``guided=False`` is the author's operator as it
+    ran in 2026."""
     a = np.asarray(img, np.float32); m = valid & np.isfinite(a)
     c = np.where(m, a, 0).astype(np.float32); out = np.zeros_like(c); lo, hi = completeness
     for s in range(n_scales):
@@ -191,6 +194,9 @@ def wow_bilateral(img, valid, *, n_scales=8, guided=True, completeness=(.6, .995
         g = g - pair * _weighted_gaussian(g, w * pair, min(150., max(32., 4. * step)))
         out += w * g; c = nxt
     return np.where(m, out, np.nan).astype(np.float32)
+
+
+wow_bilateral = wow_edge_aware                           # the name up to 1.3.4
 
 
 def upsilon(q, low=.35, high=.35):
@@ -350,6 +356,7 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
 
     ``achf_display`` (since 1.3.4): ``'rings'`` (default) maps every ACHF layer with a level and a spread per ring
     (:func:`display_detail_rings`, issue #9); ``'global'`` keeps the single whole-image spread of 1.3.3."""
+    name=ALIASES.get(name,name)                         # 'wow_bilateral', the name up to 1.3.4
     a=np.asarray(luminance,np.float32)
     m=valid & np.isfinite(a)                          # the values NRGF needs no positive pixels (a subtracted sky)
     if name!='nrgf': m=m & (a>0)
@@ -399,7 +406,7 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
         if display['scale_region']=='given': display['display_scale_rsun']=[1.1,2.]
         return q,'overlay',dict(**info,**winfo,n_scales=6,noise_floor=3,**display)
     else:
-        q=wow_bilateral(a,m)
+        q=wow_edge_aware(a,m)
         rs=geometry.rsun_map()
         q,display=display_detail(q,m,scale_region=(rs>=1.1)&(rs<2.))
         if display['scale_region']=='given': display['display_scale_rsun']=[1.1,2.]

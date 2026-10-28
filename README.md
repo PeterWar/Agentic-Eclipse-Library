@@ -208,6 +208,15 @@ repository").
 [MIT](LICENSE) © 2026 Pere Guerra Serra. You may use, copy, modify and redistribute this work freely, including
 commercially; the licence only asks you to keep the copyright and permission notices with copies of the work.
 
+## What is new in 1.3.5
+
+- **The edge-aware WOW is the default WOW layer** (`wow_edge_aware`), by the author's decision: in his 2026 image it
+  keeps the lunar limb clean and shows no rings. It is the layer called WOW bilateral in 1.3.4, and the old name still
+  works. In its worst sector it inverts more faint fine detail than the plain WOW (up to 18–20 % on the author's Sony,
+  over the limit of Edu's gate): see [`docs/VALIDATION_1.3.5.md`](docs/VALIDATION_1.3.5.md).
+- **The plain WOW (`wow`) is optional.** Recommendation: next to a lunar limb that the data reach, use the edge-aware
+  WOW; to use the plain WOW further out, blend both layers with a feathered mask.
+
 ## What is new in 1.3.4
 
 In answer to Edu's reports (see [Contributors](#contributors)):
