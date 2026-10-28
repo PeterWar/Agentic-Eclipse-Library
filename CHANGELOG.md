@@ -28,8 +28,26 @@ package changes its default WOW layer and the display of its ACHF layers.
   On the author's data it passes Edu's gate (ρ 0.77–0.84 and 1.3–2.9 % inverted; in the worst 45° sector ρ ≥ 0.65 and
   at most 9.2 %, against a limit of 10 %), and the ring check on the author's fusion flags no ring (its lowest ring
   level at 4.3–5.1 R☉ is −0.004, where plain WOW made −0.036).
-  `wow_bilateral` is still available, documents its limitation and keeps its starting opacity of 0.37; a recipe that
-  lists it without the new WOW keeps it visible, as in 1.3.3. The plain WOW of 1.3.3 is replaced.
+  `wow_bilateral` is still available and keeps its starting opacity of 0.37; a recipe that lists it without the new
+  WOW keeps it visible, as in 1.3.3. The plain WOW of 1.3.3 is replaced.
+- **WOW bilateral, rebuilt with guided range weights** (issue #4). `wow_bilateral` is now the operator of the WOW
+  bilateral layer of the author's own 2026 image (B3 scales over symmetric observed pairs with range weights, eight
+  scales, linear input, the local level of each scale removed), with one change: the range weights of each scale come
+  from that scale smoothed without range weights, and the mean still comes from the data. In the scene of issue #4
+  (flat profile, no noise) the faint pattern now comes out at +0.35; with range weights from the data the same
+  operator gives −0.32, and WOW bilateral up to 1.3.3 −0.27. On the author's Sony, with Edu's gate, 3.9–5.3 % of the
+  clear detail comes out inverted per ring (1.3.3: 38–47 %), but up to 17.9 % in the worst 45° sector, over the limit
+  of 10 % (crosswise, one stack against the other: 5.3–8.3 % and up to 19.6 %), and the ring gate flags rings at 2.5
+  and 4.4–4.7 R☉ (up to 0.017). It is therefore not the default, and
+  issue #4 stays open for its worst sectors. It is the layer that keeps a lunar limb clean where the data reach it
+  (next item); the author chose it for his own image.
+- **The default WOW next to a lunar limb that the data reach** (not fixed). In the author's final image the corona data
+  reach the Moon's limb: the band the Moon swept during totality was rebuilt frame by frame from clean data. There the
+  default WOW draws concentric rings in the first 30 px from the edge of the data (2.9–3.4 times its own level far
+  from the limb, in 15° sectors; the author's WOW bilateral layer: 1.4) and a band of 20–30 px where its texture is
+  weaker (6 px from the edge, 0.4–0.55 of the texture far out; the author's layer: 0.7), with streaks along the limb.
+  Ablations point mainly to its noise floor (next to the limb the data are single-instant frames, noisier, and the
+  measured floor follows that noise) and to its log input. For such data, use `wow_bilateral`.
 - **The ACHF layers no longer burn next to the limb** (issue #9). `display_detail` used one spread for the whole
   image. When the sky is left in the stack, that spread is set by the faint outer field and the detail near the limb
   saturates: on the author's calibrated map with its sky model added back, 27 % of the pixels at 0 and 60 % at 1 at
@@ -45,8 +63,8 @@ package changes its default WOW layer and the display of its ACHF layers.
   writing anything; it was ignored without warning, and since no output of `ael motion` carries a position angle, no
   1.3.3 result changes. The coronagraph skill starts from the optics (an odd number of reflections mirrors the image)
   and decides the parity on the fine detail. A second check is optional.
-- Tests: 22 new, each with a negative control (15 in `ael/_tests/test_lessons.py`, six in `test_coronagraph.py` and one
-  in `test_ael.py`); selftest 106 of 106. Checks and limits: `docs/VALIDATION_1.3.4.md`. Edu's case:
+- Tests: 23 new, each with a negative control (16 in `ael/_tests/test_lessons.py`, six in `test_coronagraph.py` and one
+  in `test_ael.py`); selftest 107 of 107. Checks and limits: `docs/VALIDATION_1.3.4.md`. Edu's case:
   `docs/FIELD_LESSONS.md`.
 
 ## 1.3.3 — 2026-10-18

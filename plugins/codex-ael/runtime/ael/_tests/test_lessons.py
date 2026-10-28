@@ -221,8 +221,8 @@ def test_no_filter_makes_rings_on_a_ring_free_input():
     filters); the support of every filter band by band from the lunar limb and from the straight edge, and in
     every sector. The sectors are fixed by the input, so an output cannot avoid one by leaving it empty. Positive
     controls must be detected. Not checked here, because they are reported limitations (docs/FIELD_LESSONS.md):
-    the bands that an off-centre Moon or a straight edge make in ACHF and WOW, and the structure WOW bilateral
-    draws in sectors of a noise-free corona.
+    the bands that an off-centre Moon or a straight edge make in ACHF and WOW. Since 1.3.4 WOW bilateral is checked
+    in sectors too (with the range weights of 1.3.3 it drew up to 0.014 in a sector of this scene; now 0.004).
     """
     g,r,pa,theta,m,a=_ring_free_scene()
     rm=g.radius_map('moon'); yy,xx=np.mgrid[0:m.shape[0],0:m.shape[1]]
@@ -256,22 +256,21 @@ def test_no_filter_makes_rings_on_a_ring_free_input():
         assert _period2(layer,r,m)<.15*_period2(old2,r,m), name
         whole=[_ring_band(layer,r,m,lo,hi) for lo,hi in _ZONES]
         assert max(whole)<.005, (name,whole)
-        if name!='wow_bilateral':
-            values=[_ring_band(layer,r,m,lo,hi,pa,c) for lo,hi,c in sectors]
-            assert max(values)<.005, (name,max(values))
+        values=[_ring_band(layer,r,m,lo,hi,pa,c) for lo,hi,c in sectors]
+        assert max(values)<.005, (name,max(values))
 
 
 # Transfer of a faint injected pattern by each layer in 1.3.0 (display units per unit ln I), measured on this scene.
 _DETAIL_GAIN={'nrgf':.64,'nrgf_log':.62,'rhef':1.25,'rhef_upsilon':.92,'rhef_local60':2.83,'rhef_local30':5.47,
               'achf_angular':19.18,'achf_angular4':30.22,'achf_angular8':10.28,'achf_iso_01':6.72,'achf_iso_04':17.86,
-              'achf_iso_05':4.05,'achf_iso_06':3.31,'mgn':6.63,'wow':14.73}
+              'achf_iso_05':4.05,'achf_iso_06':3.31,'mgn':6.63,'wow':14.73,'wow_bilateral':19.41}
 
 
 def test_filters_keep_injected_fine_detail_with_its_sign_and_strength():
     """A faint angular pattern added to the corona must come out with its own sign and its 1.3.0 strength (±25 %).
 
-    WOW bilateral is left out on purpose: it can return faint fine detail with the opposite sign, a reported
-    limitation (docs/FIELD_LESSONS.md); its correction will have to bring it into this test.
+    WOW bilateral entered this test in 1.3.4, with the range weights of each scale taken from a guide (issue #4); its
+    strength is the one measured then. Up to 1.3.3 it could return faint fine detail with the opposite sign.
     """
     g,r,pa,theta,m,a=_ring_free_scene()
     rng=np.random.default_rng(20261005)
@@ -279,7 +278,7 @@ def test_filters_keep_injected_fine_detail_with_its_sign_and_strength():
     noise=(1+.003*np.random.default_rng(1).standard_normal(a.shape)).astype(np.float32)
     clean=(a*noise).astype(np.float32); injected=(a*np.exp(signal)*noise).astype(np.float32)
     sel=m & (r>90) & (r<260)
-    assert set(_DETAIL_GAIN)==set(NAMES)-{'wow_bilateral'}
+    assert set(_DETAIL_GAIN)==set(NAMES)
     for name,expected in _DETAIL_GAIN.items():
         change=make_filter(name,injected,m,g)[0]-make_filter(name,clean,m,g)[0]
         ok=sel & np.isfinite(change)
@@ -292,14 +291,12 @@ def test_filters_keep_injected_fine_detail_with_its_sign_and_strength():
 
 def test_default_layers_are_sign_tested_and_have_a_starting_opacity():
     """Every default layer must be in the sign-and-strength test and have a declared starting opacity (an undeclared
-    one fell back to 1.00 without any warning). The 1.3.3 defaults fail the first condition: WOW bilateral was the
-    default and is not in the sign test."""
+    one fell back to 1.00 without any warning). Up to 1.3.3 WOW bilateral, then the default, was not in the sign test."""
     from ael.filterbank import DEFAULTS
     from ael.develop import DEFAULT_OPACITY
     assert set(DEFAULTS) <= set(_DETAIL_GAIN), DEFAULTS
     assert set(DEFAULTS) <= set(DEFAULT_OPACITY), (DEFAULTS, DEFAULT_OPACITY)
-    assert DEFAULT_OPACITY['wow_bilateral'] == .37                         # a 1.3.3 recipe keeps its look
-    assert not {'nrgf', 'wow_bilateral', 'achf_iso_04'} <= set(_DETAIL_GAIN)
+    assert DEFAULT_OPACITY['wow_bilateral'] == .37                         # a 1.3.3 recipe keeps its opacity
 
 
 def test_tangential_mean_removal_drops_a_ring_and_keeps_a_ray():
@@ -414,10 +411,12 @@ def test_achf_does_not_burn_the_limb_when_the_sky_is_in_the_frame():
             else: assert tails > .1, (lo, tails)
 
 
-def test_fine_detail_gate_passes_wow_and_fails_bilateral_and_inverted_detail():
+def test_fine_detail_gate_passes_both_wows_and_fails_the_old_bilateral_and_inverted_detail():
     """The real-data gate Edu proposed in issue #4 (ael.gates.fine_detail_fidelity), on a synthetic eclipse with fine
-    angular structure and two independent noise realisations: the WOW of 1.3.4 passes; WOW bilateral and a WOW with
-    its detail inverted fail. Rings where the reference fails its own rotation null are not judged."""
+    angular structure and two independent noise realisations: the WOW of 1.3.4 and WOW bilateral with guided range
+    weights pass; WOW bilateral as it was up to 1.3.3 and a WOW with its detail inverted fail. Rings where the
+    reference fails its own rotation null are not judged. On real data the guided bilateral still fails the worst
+    45° sector (docs/VALIDATION_1.3.4.md)."""
     from ael.gates import fine_detail_fidelity
     g = EclipseGeometry((640, 768), (310.3, 370.7), 60, (310.3, 370.7), 61)
     r = g.radius_map(); th = np.radians(g.pa_map()); m = g.radius_map('moon') > 63
@@ -431,7 +430,39 @@ def test_fine_detail_gate_passes_wow_and_fails_bilateral_and_inverted_detail():
     assert any(x['accredited'] for x in res['rings']) and res['passed'] is True, res
     assert fine_detail_fidelity(1 - wa, 1 - wb, A, B, m, g, rings=rings)['passed'] is False
     ba, bb = make_filter('wow_bilateral', A, m, g)[0], make_filter('wow_bilateral', B, m, g)[0]
-    assert fine_detail_fidelity(ba, bb, A, B, m, g, rings=rings)['passed'] is False
+    assert fine_detail_fidelity(ba, bb, A, B, m, g, rings=rings)['passed'] is True
+    oa, ob = (_old_bilateral(X, m, g) for X in (A, B))
+    assert fine_detail_fidelity(oa, ob, A, B, m, g, rings=rings)['passed'] is False
+
+
+def _old_bilateral(a, m, g):
+    """The WOW bilateral layer as make_filter made it up to 1.3.3: range weights from the data, on the radial-curve residual."""
+    from ael.filterbank import radial_log_residual
+    from ._wow_bilateral_133 import wow_bilateral as old
+    m = m & np.isfinite(a) & (a > 0); res, _ = radial_log_residual(a, m, g)
+    return display_detail(old(res, m), m)[0]
+
+
+def test_guided_range_weights_keep_the_sign_where_the_old_range_weights_invert_it():
+    """Issue #4 (Edu): a faint angular pattern (0.5 %) added to a corona with stronger angular structure and a flat
+    radial profile, without noise. With range weights computed from the data being decomposed the change the pattern
+    makes in the layer correlates with the pattern at about -0.3 (the author's 2026 operator with guided=False, and the
+    1.3.3 operator): the faint detail comes out inverted. With the range weights of each scale taken from that scale
+    without range weights (the default since 1.3.4) it correlates at about +0.35."""
+    from ael.filterbank import wow_bilateral
+    g = EclipseGeometry((640, 768), (310.3, 370.7), 60, (310.3, 370.7), 61)
+    r, th = g.radius_map(), np.radians(g.pa_map()); m = g.radius_map('moon') > 63
+    pattern = .005 * np.sin(37 * th + np.random.default_rng(20261005).uniform(-np.pi, np.pi)) * np.exp(-((r - 160) / 65) ** 4)
+    corona = (1 + .3 * np.cos(3 * th) + .1 * np.sin(7 * th)).astype(np.float32)
+    rs = g.rsun_map(); sel = m & (r > 90) & (r < 260)
+    def unguided(a):
+        return display_detail(wow_bilateral(a, m, guided=False), m, scale_region=(rs >= 1.1) & (rs < 2.))[0]
+    def corr(f):
+        ch = f((corona * np.exp(pattern)).astype(np.float32)) - f(corona); ok = sel & np.isfinite(ch)
+        return float(np.corrcoef(ch[ok], pattern[ok])[0, 1])
+    layer = corr(lambda a: make_filter('wow_bilateral', a, m, g)[0])          # the layer as users get it
+    without, old = corr(unguided), corr(lambda a: _old_bilateral(a, m, g))
+    assert layer > .2 and without < -.2 and old < -.2, (layer, without, old)
 
 
 def _offcentre_hole_scene(seed=4, R=40, offset=8., hole=50.):

@@ -158,7 +158,7 @@ fewer beyond 6 R☉ (long focal lengths), or nothing left to measure there, the 
 factors and its parameters say `"white noise"`. Bilateral WOW, the default up to 1.3.3, can invert faint
 fine detail (issue #4); it keeps its starting opacity, and a recipe that lists it without `wow` keeps it
 visible. `ael.gates.fine_detail_fidelity` checks a layer against two independent stacks. The opacities are
-starting points (`ael.develop.DEFAULT_OPACITY`); at .37 the new WOW is softer than WOW bilateral beyond 2 R☉.
+starting points (`ael.develop.DEFAULT_OPACITY`); at .37 the new WOW is softer than the WOW bilateral of 1.3.3 beyond 2 R☉.
 Override `visible` and `opacities`, or request `"filters": "all"` for sixteen layers:
 
 | Family | Identifiers |

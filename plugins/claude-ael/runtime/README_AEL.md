@@ -344,6 +344,7 @@ biased steep profiles, lets any RHEF layer made with `make_filter` use the Upsil
 each side, and
 documents how the library's filters differ from the paper's published layers
 ([`docs/PAPER_AND_LIBRARY.md`](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.3.3/docs/PAPER_AND_LIBRARY.md)). Version 1.3.4 replaces the default
-WOW layer (WOW bilateral can invert faint fine detail), shows the ACHF layers with a level and a spread per ring,
+WOW layer (WOW bilateral could invert faint fine detail), rebuilds WOW bilateral with guided range weights for data
+that reach the lunar limb, shows the ACHF layers with a level and a spread per ring,
 adds `ael.gates.fine_detail_fidelity` and `ael.coronagraph.scan_mirror`, and makes `ael motion` read `"mirrored"`.
 Existing images are not rewritten; compare the new numerical recipe before adopting it.

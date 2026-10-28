@@ -7,7 +7,7 @@ description: Trace rings, seams, ghosts, striping or limb fringes in an eclipse 
 
 Read [setup and operating instructions](../../docs/USAGE.md) before running AEL. Resolve this plugin's root from this skill file and use its bundled launcher. Respond in the user's language. Work on user-selected inputs and write new output directories.
 
-Start from the user's marked defect and the available data lineage. Read [field lessons](../../docs/FIELD_LESSONS.md), especially unresolved ACHF/WOW boundary bands and WOW bilateral fine-detail sign inversion. A visible ring is not automatically a calibration problem.
+Start from the user's marked defect and the available data lineage. Read [field lessons](../../docs/FIELD_LESSONS.md), especially unresolved ACHF/WOW boundary bands, the rings of the default WOW next to a lunar limb that the data reach, and the fine-detail sign inversion that WOW bilateral keeps in its worst sectors. A visible ring is not automatically a calibration problem.
 
 1. Identify the source files, hashes, geometry, recipes, manual edits and first stage where the defect appears. Compare raw/calibrated data, stack, support/weights, operator output and final display with the same views and measurements.
 2. Use independent exposures or sensor positions where available. Shared sensor structure and witnesses fitted to the same total stack are not independent evidence. Check dark/flat response, saturation taper, spatial clouds, coverage edges and the operator's radial statistics as appropriate.

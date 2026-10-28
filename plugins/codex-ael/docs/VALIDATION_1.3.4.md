@@ -8,7 +8,7 @@ from northern Spain and tested AEL 1.3.3 on his frames: a real-data check of
 public, so his numbers cannot be reproduced here. Everything below was measured again on the author's own data of
 the same eclipse: a Sony 300 mm train in two pointings, a Vixen refractor train, and their fusion.
 
-- `python -m ael selftest`: **106 of 106** (84 from 1.3.3 and 22 new). Each new test has a negative control. Each fix
+- `python -m ael selftest`: **107 of 107** (84 from 1.3.3 and 23 new). Each new test has a negative control. Each fix
   was also removed in a copy, one at a time, and the whole suite run again: 27 of those 30 copies fail at least one test,
   and the other three are declared under [Mutations](#mutations).
 - The detail-transfer regression of 1.3.0 (`test_filters_keep_injected_fine_detail_with_its_sign_and_strength`)
@@ -17,9 +17,10 @@ the same eclipse: a Sony 300 mm train in two pointings, a Vixen refractor train,
   and the straight edge of that scene its coarse scales are held back by the edge rules.
 
 The logs, scripts and receipts named below are kept with the author (`3-AEL/proves/contribucio_edu27_20261027/`,
-mainly `portes_versio6_20261027/`, which holds the gates run with the code of this release, and `i10_paquet/` for the
-mirror scan). The gates were written down before the numbers they judge were computed (`PORTES_FIXADES.json`,
-`PORTES_FIXADES_v2.json`, `PORTES_FIXADES_v3.json` there); where a check came after looking, it says so.
+mainly `portes_versio6_20261027/` and `portes_versio7_20261027/`, which hold the gates run with the code of this release,
+`portes_versio8_20261028/` for WOW bilateral with guided range weights, and `i10_paquet/` for the mirror scan). The gates
+were written down before the numbers they judge were computed (`PORTES_FIXADES.json` to `PORTES_FIXADES_v5.json`
+there); where a check came after looking, it says so.
 
 ## What changed
 
@@ -37,13 +38,16 @@ mirror scan). The gates were written down before the numbers they judge were com
    - the display spread is measured at 1.1–2 R☉ instead of over the whole frame.
    The starting opacity stays at 0.37 (see [Fine contrast at the default opacity](#fine-contrast-at-the-default-opacity)).
    `wow_bilateral` is still available and keeps its starting opacity of 0.37; a recipe that lists it without the new
-   WOW keeps it visible, as in 1.3.3. The plain WOW of 1.3.3 is replaced.
+   WOW keeps it visible, as in 1.3.3. The plain WOW of 1.3.3 is replaced. WOW bilateral itself is rebuilt (item 5).
 2. **The ACHF layers get a level and a spread per ring** (`display_detail_rings`): medians and spreads in annuli of
    2 px, averaged over three annuli and interpolated in radius. `achf_display: "global"` keeps the 1.3.3 display.
 3. **`ael.gates.fine_detail_fidelity`**, the real-data gate Edu proposed for issue #4. It is optional: it needs two
    independent stacks, which most users will not have.
 4. **`ael.coronagraph.scan_mirror`** and the `"scan_mirror"` recipe key (issue #10); `ael motion` recipes read
    `"mirrored"` and refuse unknown or missing keys.
+5. **WOW bilateral with guided range weights** (`wow_bilateral`): the operator of the author's own WOW bilateral layer,
+   with the range weights of each scale taken from a guide. It is not the default: see
+   [WOW bilateral with guided range weights](#wow-bilateral-with-guided-range-weights).
 
 ## Issue #4: WOW bilateral and the new WOW
 
@@ -131,6 +135,57 @@ out. Robust spread of the fine band-pass (1.5 → 6 px) of the layer on the Sony
 WOW bilateral: 0.99 at 1.1–1.5 R☉, 0.94 at 1.5–2, 0.62 at 2–4, 0.39 at 4–6 and 0.33 at 6–8 (plain WOW: 1.26 to 0.93).
 The display spread of the new WOW comes from 1.1–2 R☉, where the detail is strongest, and its noise floor is the
 measured one; beyond 2 R☉ the default image is therefore softer than with WOW bilateral.
+
+## WOW bilateral with guided range weights
+
+**The default WOW next to a lunar limb that the data reach.** In the author's final image the corona data reach the
+Moon's limb: the band the Moon swept during totality was rebuilt frame by frame from clean data. Applied there, with
+the domain of the author's own layer, the default WOW draws concentric rings in the first 30 px from the edge of the
+data, 2.9–3.4 times its own level far from the limb in 15° sectors (the author's WOW bilateral layer: 1.4), and a band
+of 20–30 px where its texture is weaker (6 px from the edge, 0.4–0.55 of the texture far out; the author's layer: 0.7),
+with streaks along the limb (at 6 px the radial gradient is 1.8–1.9 times the tangential one; for the author's layer,
+1.0). The author marked them along the whole limb. With the coarse scales entering more gradually
+(`edge_completeness=(0.5, 0.995)`) the steps they made at 16, 30 and 60 px went and the rings stayed. Ablations on a box
+around the Moon, on a variant of the new WOW that smooths each scale as the author's operator does, point to two fixed
+choices: without the noise floor its rings fall from 2.7 to 2.2 times their null at 0–30 px and from 2.1 to 1.4 at
+30–100 px, and with a linear input as well, to 1.8 and 1.2. Next to the limb the data are single-instant frames with
+more noise, and the measured floor follows that noise. The edge gate below (levels in 6 px bands) does not see these
+rings: the new WOW passes it there (0.67–0.95). Not fixed in this release.
+
+**The author's operator with the cure of issue #4.** The WOW bilateral layer of the author's image comes from his own
+2026 chain: B3 à-trous scales smoothed over symmetric observed pairs with range weights, each scale whitened by its
+local power, centred on its mean where its kernel is whole, its local level removed with a weighted Gaussian of
+min(150, max(32, 4·2^j)) px, coarse scales entering with the observed share of their kernel (0.6 → 0.995), eight
+scales, linear input. Its range weights come from the data being decomposed: the mechanism of issue #4.
+`wow_bilateral` is now that operator with one change: the range weights of each scale come from a guide, the same
+scale smoothed without range weights, and the mean still comes from the data. With `guided=False` the library
+reproduces the author's chain to 4.6 × 10⁻⁵ of the spread of the layer (a synthetic scene with its data away from the
+frame: the chain reflects at the frame and the library does not).
+
+The gates were fixed before any number on the Sony was computed (`PORTES_FIXADES_v5.json`, which declares what was
+known before), and they are those of the new WOW:
+
+| Check | WOW bilateral, guided | Author's operator (no guide) | WOW bilateral 1.3.3 | New WOW |
+|---|---|---|---|---|
+| Issue #4 scene, flat profile, no noise: correlation with the pattern | +0.35 | −0.32 | −0.27 | — |
+| Edu's gate on the Sony: clear detail inverted per ring, 1.2–2 R☉ | 3.9–5.3 % | 7.1–8.7 % | 38–46 % | 0.6–2.4 % |
+| Edu's gate: worst 45° sector (limit 10 %) | 8.5–17.9 % (fails at 1.3–2 R☉) | 12.7–28.8 % | up to 56 % | 2.2–8.4 % |
+| Library gate, crosswise: per ring / worst sector | 5.3–8.3 % / 19.6 % (fails) | — | 38–46 % / 56 % (fails) | 1.3–2.9 % / 9.2 % |
+| Ring gate on the Sony | fails: 2.5 and 4.4–4.7 R☉, up to 0.017 | — | −0.014 to +0.033 at 4.4–5.1 R☉ | −0.007 to +0.006 |
+| Isotropy at 6–8 R☉, against version 4 (±15 %) | −1 % and −3 % | — | — | passes |
+| Author's image, edge of the data at the limb (6 px bands; limit 1.5) | 0.78 | 1.50 | — | 0.67–0.95 |
+| Author's image, rings at 0–30 px from the limb, 15° sectors (times their null) | 1.2 | 1.4 | — | 2.9–3.4 |
+| Author's image, texture 6 px from the edge of the data (times the texture far out) | 0.69 | 0.69 | — | 0.39–0.55 |
+| Author's image, streaks along the limb at 6 px (radial over tangential gradient; 1 = none) | 1.03 | 1.00 | — | 1.75–1.86 |
+| Author's image, clear detail inverted against the same data (not two stacks) | 5.6–6.3 % | 7.4–8.7 % | — | 0.4–1.4 % |
+
+It is therefore not the default: it fails the worst sector of Edu's gate, the crosswise library gate and the ring gate,
+which the new WOW passes. The guide removes most of the sign problem (without it the worst sector reaches 28.8 %).
+Removing the local level only from 8 px up, as the first version of the author's operator did, changes nothing (12.5 %
+and 18.1 % in the worst sectors); where the rest comes from is not known. Where the data reach a lunar limb it is the
+layer that keeps the limb clean, and the author chose it for his own image. Its isotropy holds. In a synthetic scene with
+an off-centre excluded hole (`_offcentre_hole_scene`), its level 0–16 px from the hole is 2.1 times that of 40–72 px
+(the new WOW: 1.4).
 
 ## The edges of the data
 
@@ -267,6 +322,9 @@ fail at least one test:
 | `"mirrored"` in the motion recipe / refusing unknown keys | 1 each |
 | the parity gate of the recipe / the mirror sign of `frame_for` | 1 / 3 |
 
+The guide of WOW bilateral came after this battery. Turning it off by default was checked once by hand: it fails
+`test_guided_range_weights_keep_the_sign_where_the_old_range_weights_invert_it`.
+
 Three copies pass every test, and are declared: the gate without its inversion limit per ring (the same limit in the
 worst sector implies it), the gate without its guard at the frame (no test reaches the frame), and the scan choosing its
 rotation on the whole profile (it still decides the parity on the fine detail and made no parity error). Two
@@ -281,13 +339,17 @@ log). `test_default_layers_are_sign_tested_and_have_a_starting_opacity` checks t
   Rings are not expected in the corona, but a long tangential arc at those scales would be weakened; the coarse
   correlation above changed by −0.02 to +0.03 against plain WOW.
 - The display spread of the new WOW comes from 1.1–2 R☉ (from every pixel when fewer than 1000 pixels are there), and
-  beyond 2 R☉ the default layer is softer than WOW bilateral at the same opacity.
+  beyond 2 R☉ the default layer is softer than the WOW bilateral of 1.3.3 at the same opacity.
 - With 20 000 observed pixels or fewer beyond 6 R☉ (long focal lengths: with about 800 mm on a full-frame sensor the
   corners barely reach 6 R☉), the noise of the scales is not measured: white-noise factors are used, as in 1.3.3, and
   the parameters say `"white noise"`.
 - The edge rules hold back the coarse scales within reach of an edge (up to 64 px for the coarsest): loops right at
   the limb come in a little later.
-- WOW bilateral keeps its sign problem; issue #4 stays open for it. Issue #3 stays open. The per-ring ACHF display does
+- WOW bilateral now keeps most faint fine detail with its sign, but in its worst 45° sector on the author's Sony it
+  inverts up to 18 % of the clear detail, and the ring gate flags rings; issue #4 stays open for it. The default WOW
+  draws rings and a band of weaker texture next to a lunar limb that the data reach; for such data use WOW bilateral.
+  A gate on levels in 6 px bands does not see those rings: rings of 1 px, the texture and the direction of the
+  gradient against the distance to the edge do. Issue #3 stays open. The per-ring ACHF display does
   not change the sign problems of the other ACHF variants.
 - The ring gate is coarse (0.01–0.03) and reads skewed detail as a level; a better null and a statistic that is not
   fooled by rays are still to be written.

@@ -208,12 +208,13 @@ validate the author's own chain.
   azimuthal-mean profile: it detects concentric structure, it is not a bound on every ring) stays below its
   threshold over whole rings at the limb, in the middle and in an outer zone, and in 45° sectors of the middle
   and outer zones, all inside the largest circle clear of the edges; WOW bilateral is the exception in sectors
-  (below). The old stepped NRGF and rings of 8–10 px added to a layer exceed the threshold. Every filter keeps
+  (below; since 1.3.4 it passes them). The old stepped NRGF and rings of 8–10 px added to a layer exceed the threshold. Every filter keeps
   at least 99 % of its support band by band from the lunar limb and from the straight edge (the angular ACHF
   from 2 px) and in every sector (`test_no_filter_makes_rings_on_a_ring_free_input`).
 - *Signed detail.* With 0.3 % noise, a faint angular pattern added to the corona comes out with its own sign
   (correlation 0.68–0.98) and within ±25 % of its 1.3.0 strength in fifteen filters
-  (`test_filters_keep_injected_fine_detail_with_its_sign_and_strength`). WOW bilateral is the exception below.
+  (`test_filters_keep_injected_fine_detail_with_its_sign_and_strength`). WOW bilateral is the exception below
+  (since 1.3.4 it is in the test too).
 - *Stacking.* `ael stack` lets saturated and empty samples not vote, finds hot pixels by their persistence on
   the sensor (and only on a sequence declared as dithered), and writes coverage, support and weights. It does
   not write a propagated variance: there is no formal uncertainty map. It registers with affine transforms:
@@ -247,7 +248,10 @@ validate the author's own chain.
   out at −0.27 (−0.16 with 1 % noise), and the inversion is already in the bilateral detail of the finest
   scales, before the whitening. On a smooth corona without noise it also draws lines and lobes along isophotes
   that the input does not have (ring metric 0.0144 in one sector; the other filters reach at most 0.0040). It was
-  one of the three default filters up to 1.3.3; see the field case contributed by Edu below.
+  one of the three default filters up to 1.3.3; see the field case contributed by Edu below. Since 1.3.4 it is the
+  operator of the author's own WOW bilateral layer with the range weights of each scale taken from a guide: the same
+  pattern comes out at +0.78 (+0.89 with 1 % noise), and the sector metric is 0.0036. On real data it still inverts
+  up to 18 % of the clear detail in its worst 45° sector (`docs/VALIDATION_1.3.4.md`).
 
 **Not reproduced.** The case's own producer and configuration were not available. These checks test the
 package as it is today, not the version used for that case.
@@ -301,6 +305,11 @@ His photographs are not public; his numbers cannot be reproduced from this repos
   removes the local mean along circles around the Sun from 8 px up, and treats the edges of the data with symmetric
   pairs. It passes the fine-detail gate, and at 4.3–5.1 R☉ its ring level stays within ±0.005 (the ring check flags no
   ring on the author's fusion).
+- Applied to the author's own final image, where the corona data reach the lunar limb, the default WOW drew
+  concentric rings and a band of weaker texture along the limb, which the author marked; his own WOW bilateral layer
+  did not. Its range weights come from the data being decomposed, the mechanism Edu measured, but mildly (7–9 % against
+  the band-pass of the same data). WOW bilateral is now that operator with guided range weights: on the Sony it inverts
+  3.9–5.3 % per ring, but up to 17.9 % in the worst sector of his gate, so it is not the default.
 - The ACHF layers take a level and a spread per ring by default. On the author's calibrated map with its sky model
   added back (binned 2 × 2), the saturation at 1.08–1.2 R☉ fell from 27 % at 0 and 60 % at 1 to below 1 %; with the
   sky subtracted, the display of 1.3.3 clipped only 3.8 % and 0.8 % there.
@@ -319,6 +328,10 @@ His photographs are not public; his numbers cannot be reproduced from this repos
   beside compact knots and prominences; 45° keeps the rings out without those wings. Found by an independent review.
 - Checks that need more data (two independent stacks for the fine-detail gate, a second direction for the parity)
   are optional: they make a result surer, and a user who has not got them still gets the quick result.
+- A gate measured away from the Moon does not see the limb. Apply a new default to a final image whose data reach the
+  limb, and look at it, before adopting it; a statistic on 6 px bands missed rings that the eye saw.
+- Range weights taken from the data being decomposed invert faint detail. Taken from the same scale without range
+  weights, most of the inversion goes; the rest of it, in the worst sectors, is still open.
 
 ## Deliver and describe the actual file
 

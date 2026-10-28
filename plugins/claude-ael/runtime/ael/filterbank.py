@@ -80,50 +80,116 @@ def radial_rank(img, valid, geometry, sector_deg=None, bin_px=2):
     return radial_quantile_rank(img, valid, geometry, sector_deg, bin_px)
 
 
-def wow_bilateral(img,valid,*,n_scales=6,noise_floor=3):
-    """B3 starlet with bilateral range weights and symmetric observed pairs.
+_B3K = np.array([1, 4, 6, 4, 1], np.float32) / 16
+_TAPS = [(dy, dx) for dy in range(-2, 3) for dx in range(-2, 3)]
 
-    Outside-image taps are absent. No reflected border and no copied missing
-    pixels. Whitening is regularised by measured local noise at every scale.
 
-    Known limitation (issue #4): the range weights are computed from the data being decomposed, so faint fine detail
-    next to stronger structure can come out with the opposite sign. On real 2026 data, with two independent
-    half-stacks (the layer of one against the band-pass of the other), its fine detail (1.5–6 px) correlated at only
-    0.08–0.20 with the data's own, with 38–46 % of the clear detail inverted; Edu (@edu27) measured the same on his own
-    frames. It is no longer a default layer (since 1.3.4); :func:`wow_measured` is.
-    """
-    a=np.asarray(img,np.float32); m=valid & np.isfinite(a)
-    c=np.where(m,a,0); out=np.zeros_like(c)
-    noise=np.nan_to_num(F.noise_map(a,m),nan=0)
-    h,w=a.shape; kernel=np.array([1,4,6,4,1])/16
-    def shifted(z,dy,dx):
-        dest=np.zeros_like(z)
-        if abs(dy)>=h or abs(dx)>=w: return dest
-        yd=slice(max(0,-dy),min(h,h-dy)); xd=slice(max(0,-dx),min(w,w-dx))
-        ys=slice(max(0,dy),min(h,h+dy)); xs=slice(max(0,dx),min(w,w+dx))
-        dest[yd,xd]=z[ys,xs]
-        return dest
-    for j in range(n_scales):
-        step=2**j
-        _,sd=F.local_mean_std(np.where(m,c,np.nan),m,max(1,step),min_support=.01)
-        variance=np.maximum(np.nan_to_num(sd)**2,noise**2+1e-12)
-        num=np.zeros_like(c); den=np.zeros_like(c)
-        for dy in range(-2,3):
-            for dx in range(-2,3):
-                pair=m & shifted(m,dy*step,dx*step) & shifted(m,-dy*step,-dx*step)
-                v=shifted(c,dy*step,dx*step)
-                wt=kernel[dy+2]*kernel[dx+2]*pair*np.exp(-.5*(v-c)**2/variance)
-                num+=wt*(v-c); den+=wt
-        nxt=c+num/np.maximum(den,1e-12)
-        detail=c-nxt
-        power=F.normalized_gaussian(np.where(m,detail**2,np.nan),m,max(1,2*step),min_support=.01)
-        factor=F.STARLET_NOISE[min(j,len(F.STARLET_NOISE)-1)]
-        scale=detail/np.sqrt(np.maximum(np.nan_to_num(power),0)+(noise_floor*noise*factor)**2+1e-12)
-        # Remove the smooth range-weight bias inside each coarse-scale operator.
-        if j>=3:
-            scale-=np.nan_to_num(F.normalized_gaussian(np.where(m,scale,np.nan),m,4*step,min_support=.01))
-        out+=scale; c=np.where(m,nxt,0)
-    return np.where(m,out,np.nan).astype(np.float32)
+def _rows_shifted(z, y0, y1, dy, dx, fill):
+    """Rows y0:y1 of ``z`` read at (y + dy, x + dx); ``fill`` where that falls outside the frame (no reflected border)."""
+    h, w = z.shape; out = np.full((y1 - y0, w), fill, z.dtype)
+    a, b = max(y0 + dy, 0), min(y1 + dy, h); c, d = max(dx, 0), min(w + dx, w)
+    if a < b and c < d: out[a - y0 - dy:b - y0 - dy, c - dx:d - dx] = z[a:b, c:d]
+    return out
+
+
+def _shifted(z, d, axis):
+    """``z`` read at index + d along ``axis``; zero outside the frame."""
+    out = np.zeros_like(z); n = z.shape[axis]
+    if abs(d) >= n: return out
+    src = [slice(None)] * 2; dst = [slice(None)] * 2
+    src[axis] = slice(max(d, 0), n + min(d, 0)); dst[axis] = slice(max(-d, 0), n - max(d, 0))
+    out[tuple(dst)] = z[tuple(src)]
+    return out
+
+
+def _b3_normalized(a, m, step):
+    """Normalised B3 convolution at ``step`` over the observed pixels: the local power used to whiten a scale (a variance
+    needs no symmetric taps)."""
+    def conv(z):
+        tmp = np.zeros_like(z)
+        for kk, kv in zip(range(-2, 3), _B3K): tmp += kv * _shifted(z, kk * step, 0)
+        out = np.zeros_like(z)
+        for kk, kv in zip(range(-2, 3), _B3K): out += kv * _shifted(tmp, kk * step, 1)
+        return out
+    return conv(np.where(m, a, 0).astype(np.float32)) / np.maximum(conv(m.astype(np.float32)), 1e-20)
+
+
+def _weighted_gaussian(x, w, sigma):
+    """Gaussian mean of ``x`` with weights ``w``, zero outside the frame."""
+    import cv2
+    num = cv2.GaussianBlur((x * w).astype(np.float32), (0, 0), sigma, borderType=cv2.BORDER_CONSTANT)
+    den = cv2.GaussianBlur(w.astype(np.float32), (0, 0), sigma, borderType=cv2.BORDER_CONSTANT)
+    return num / np.maximum(den, 1e-6)
+
+
+def _paired_b3_step(c, m, step, bilateral=False, guide=None, rows=128):
+    """One à-trous B3 step over symmetric observed pairs: a tap counts only if its mirror tap is observed too, so the
+    local mean never leans to one side of an edge of the data. With ``bilateral``, each tap is also weighted by
+    exp(-(v - c)² / 2σ²), σ² the local variance of the tap differences; with ``guide``, those range weights come from the
+    guide and the mean from ``c``. Returns (smoothed, observed share of the kernel, 1 where some pair is observed)."""
+    h, w = c.shape; out = np.zeros_like(c); compl = np.zeros_like(c); pair = np.zeros_like(c)
+    for y0 in range(0, h, rows):
+        y1 = min(h, y0 + rows); ctr = c[y0:y1]; mc = m[y0:y1]; ctg = ctr if guide is None else guide[y0:y1]
+        V, VG, VAL = {}, {}, {}
+        for dy, dx in _TAPS:
+            V[dy, dx] = _rows_shifted(c, y0, y1, dy * step, dx * step, 0)
+            VG[dy, dx] = V[dy, dx] if guide is None else _rows_shifted(guide, y0, y1, dy * step, dx * step, 0)
+            VAL[dy, dx] = _rows_shifted(m, y0, y1, dy * step, dx * step, False)
+        G = {}
+        for t in _TAPS:
+            u = (-t[0], -t[1])
+            G[t] = mc.astype(np.float32) if t == (0, 0) else G[u] if u in G else (VAL[t] & VAL[u] & mc).astype(np.float32)
+        if bilateral:
+            mo = np.zeros_like(ctr); mo2 = np.zeros_like(ctr); ma = np.zeros_like(ctr)
+            for dy, dx in _TAPS:
+                k = float(_B3K[dy + 2] * _B3K[dx + 2]); g = G[dy, dx]; dl = np.where(g > 0, VG[dy, dx] - ctg, 0)
+                mo += k * g * dl; mo2 += k * g * dl * dl; ma += k * g
+            mean = mo / np.maximum(ma, 1e-20); vv = np.maximum(mo2 / np.maximum(ma, 1e-20) - mean * mean, 1e-20).astype(np.float64)
+        num = np.zeros_like(ctr); den = np.zeros_like(ctr); ks = np.zeros_like(ctr); kn = np.zeros_like(ctr)
+        for dy, dx in _TAPS:
+            k = float(_B3K[dy + 2] * _B3K[dx + 2]); g = G[dy, dx]; v = np.where(g > 0, V[dy, dx], 0)
+            if (dy, dx) != (0, 0): kn += k * g
+            if bilateral:                                       # in double precision, as the author's chain computed it
+                vg = v if guide is None else np.where(g > 0, VG[dy, dx], 0)
+                wt = k * g.astype(np.float64) * np.exp(-.5 * (ctg.astype(np.float64) - vg) ** 2 / vv)
+            else:
+                wt = k * g
+            num += wt * (v - ctr); den += wt; ks += k * g
+        out[y0:y1] = ctr + num / np.maximum(den, 1e-20); compl[y0:y1] = ks; pair[y0:y1] = kn > 0
+    return out, compl, pair
+
+
+def wow_bilateral(img, valid, *, n_scales=8, guided=True, completeness=(.6, .995)):
+    """WOW bilateral (since 1.3.4): the operator of the P05 layer of the author's 2026 image, with the cure of issue #4.
+
+    Each B3 à-trous scale is smoothed over symmetric observed pairs with range weights (bilateral: taps across a strong
+    edge count less), whitened by its local power, centred on its mean where its kernel is whole, and its local level is
+    removed with a weighted Gaussian of min(150, max(32, 4·2^j)) px. From scale 3 up a scale enters with the observed
+    share of its kernel, smoothstep from ``completeness[0]`` to ``completeness[1]``. Outside-frame taps are absent; no
+    reflected border and no copied missing pixels.
+
+    Issue #4 (Edu): range weights computed from the data being decomposed can turn faint fine detail next to stronger
+    structure into its opposite. With ``guided`` (the default), the range weights of each scale come from a guide that
+    does not contain the detail of that scale (the same step without range weights) and the mean still comes from the
+    data. Measured: docs/VALIDATION_1.3.4.md. ``guided=False`` is the author's operator as it ran in 2026."""
+    a = np.asarray(img, np.float32); m = valid & np.isfinite(a)
+    c = np.where(m, a, 0).astype(np.float32); out = np.zeros_like(c); lo, hi = completeness
+    for s in range(n_scales):
+        step = 2 ** s
+        guide = np.where(m, _paired_b3_step(c, m, step)[0], 0).astype(np.float32) if guided else None
+        nxt, compl, pair = _paired_b3_step(c, m, step, True, guide); nxt = np.where(m, nxt, 0).astype(np.float32)
+        wave = np.where(m, c - nxt, 0).astype(np.float32)
+        wave[np.abs(wave) <= 8 * np.finfo(np.float32).eps * np.maximum(np.abs(c), np.abs(nxt))] = 0
+        g = np.where(m & (compl > 0), wave / np.sqrt(np.maximum(_b3_normalized(wave * wave, m, step), 1e-20)), 0).astype(np.float32)
+        if s >= 3:
+            q = np.clip((compl - lo) / (hi - lo), 0, 1); w = (q * q * (3 - 2 * q) * m).astype(np.float32)
+        else:
+            w = (m & (compl > 0)).astype(np.float32)
+        whole = m & (compl >= .999)
+        g = g - (float(np.mean(g[whole], dtype=np.float64)) if whole.any() else 0.)
+        g = g - pair * _weighted_gaussian(g, w * pair, min(150., max(32., 4. * step)))
+        out += w * g; c = nxt
+    return np.where(m, out, np.nan).astype(np.float32)
 
 
 def upsilon(q, low=.35, high=.35):
@@ -332,11 +398,12 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
         if display['scale_region']=='given': display['display_scale_rsun']=[1.1,2.]
         return q,'overlay',dict(**info,**winfo,n_scales=6,noise_floor=3,**display)
     else:
-        residual,info=radial_log_residual(a,m,geometry)
-        q=wow_bilateral(residual,m)
-        info.update(n_scales=6,noise_floor=3)
-        q,display=display_detail(q,m)
-        return q,'overlay',dict(**info,**display)
+        q=wow_bilateral(a,m)
+        rs=geometry.rsun_map()
+        q,display=display_detail(q,m,scale_region=(rs>=1.1)&(rs<2.))
+        if display['scale_region']=='given': display['display_scale_rsun']=[1.1,2.]
+        return q,'overlay',dict(input='linear luminance',n_scales=8,range_weights='guided (issue #4)',pairs='symmetric observed',
+                                completeness=[.6,.995],level_sigma_px='min(150, max(32, 4*2^j))',**display)
     if achf_display=='rings':
         q,display=display_detail_rings(q,m,geometry)
     else:
