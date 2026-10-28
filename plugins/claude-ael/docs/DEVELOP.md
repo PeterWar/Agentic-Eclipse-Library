@@ -149,17 +149,27 @@ the asinh RGB ratios. It never changes the linear input. The receipt records eff
 parameters, negative RGB counts, clipping checks and the separate linear-reference scale.
 This changes the 1.2.0 display recipe: compare full canvases before adopting it for an existing image.
 
-The default visible layers are NRGF (Multiply, .39), WOW (Overlay, .37) and isotropic ACHF 04
-(Overlay, .08). Since 1.3.4 the WOW is `ael.filterbank.wow_measured` (the noise of scales 1–3 measured
-beyond 6 R☉, coarser scales extrapolated; rings of the radial curve removed along circles around the Sun;
-symmetric pairs at the edges of the data) and the ACHF layers are shown with a level and a spread per ring;
-`"achf_display": "global"` keeps the single whole-image spread of 1.3.3. With 20 000 observed pixels or
-fewer beyond 6 R☉ (long focal lengths), or nothing left to measure there, the WOW falls back to white-noise
-factors and its parameters say `"white noise"`. Bilateral WOW, the default up to 1.3.3, could invert faint
-fine detail (issue #4); since 1.3.4 its range weights are guided, and it is the layer to use where the corona
-data reach the lunar limb (there the default WOW draws rings). It keeps its starting opacity, and a recipe that
-lists it without `wow` keeps it visible. `ael.gates.fine_detail_fidelity` checks a layer against two independent stacks. The opacities are
-starting points (`ael.develop.DEFAULT_OPACITY`); at .37 the new WOW is softer than the WOW bilateral of 1.3.3 beyond 2 R☉.
+The default visible layers are NRGF (Multiply, .39), the edge-aware WOW (Overlay, .37) and isotropic ACHF
+04 (Overlay, .08). Since 1.3.5 the default WOW is `wow_edge_aware` (`ael.filterbank.wow_edge_aware`: the
+operator of the author's own WOW layer, B3 scales smoothed over symmetric observed pairs with range
+weights taken from a guide, eight scales on linear input; called `wow_bilateral` up to 1.3.4, a name
+still accepted). The plain WOW of 1.3.4, `wow` (`ael.filterbank.wow_measured`: the noise of scales 1–3
+measured beyond 6 R☉, coarser scales extrapolated; rings of the radial curve removed along circles around
+the Sun; symmetric pairs at the edges of the data), is optional; a recipe that lists it without
+`wow_edge_aware` keeps it visible. With 20 000 observed pixels or fewer beyond 6 R☉ (long focal lengths),
+or nothing left to measure there, the plain WOW falls back to white-noise factors and its parameters say
+`"white noise"`. The ACHF layers are shown with a level and a spread per ring; `"achf_display": "global"`
+keeps the single whole-image spread of 1.3.3. **Recommendation** (the author's, from his 2026 image; it
+agrees with Auchère et al. 2023, who found that the edge-aware variant gives better results with spikes
+or edges): where the corona data reach the lunar limb, use the edge-aware WOW, because the plain WOW
+draws concentric rings and a band of weaker texture there. If you prefer the plain WOW further out, where
+it keeps faint fine detail more faithfully, use both layers and blend them with a feathered mask: the
+edge-aware WOW next to the limb, over at least the first 0.5 R☉ (in the author's image the rings of the
+plain WOW reach about 200 px from the edge of the data, 0.45 R☉), the plain WOW beyond, and a feather of
+several tenths of R☉, so that the change of texture leaves no radial frontier. Blend them as two layers
+with masks in Photoshop, never inside one layer. This blend has not been measured yet.
+`ael.gates.fine_detail_fidelity` checks a layer against two independent stacks. The opacities are
+starting points (`ael.develop.DEFAULT_OPACITY`).
 Override `visible` and `opacities`, or request `"filters": "all"` for sixteen layers:
 
 | Family | Identifiers |
@@ -168,7 +178,7 @@ Override `visible` and `opacities`, or request `"filters": "all"` for sixteen la
 | Radial histogram equalisation | `rhef`, `rhef_upsilon`, `rhef_local60`, `rhef_local30` (since 1.3.2, any of them with `make_filter(..., upsilon_curve=(low, high))` from Python; the command does not take it) |
 | Angular high-pass | `achf_angular`, `achf_angular4`, `achf_angular8` |
 | Isotropic multi-scale high-pass | `achf_iso_01`, `achf_iso_04`, `achf_iso_05`, `achf_iso_06` |
-| Local/wavelet normalisation | `mgn`, `wow`, `wow_bilateral` |
+| Local/wavelet normalisation | `mgn`, `wow`, `wow_edge_aware` |
 
 These are portable parameterisations, **not a byte-identical reproduction** of the
 historical sixteen-layer project. In particular `nrgf_log` uses only measured log

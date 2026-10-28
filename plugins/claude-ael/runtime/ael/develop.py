@@ -4,13 +4,12 @@ import json
 from pathlib import Path
 import numpy as np
 from . import io, photoshop
-from .filterbank import DEFAULTS,NAMES,make_filter
+from .filterbank import ALIASES,DEFAULTS,NAMES,make_filter
 from .geometry import EclipseGeometry
 
-# Starting opacities of the default layers, from the author's 2026 image, where the Overlay layer was WOW bilateral at
-# 0.37. At 0.37 the new WOW has about the same fine contrast as WOW bilateral at 1.1–2 R☉ and less beyond 2 R☉
-# (docs/VALIDATION_1.3.4.md). WOW bilateral keeps its 0.37 for recipes that still list it.
-DEFAULT_OPACITY={'nrgf':.39,'wow':.37,'achf_iso_04':.08,'wow_bilateral':.37}
+# Starting opacities of the default layers, from the author's 2026 image, where the Overlay layer was the edge-aware WOW
+# at 0.37. The plain WOW (`wow`, the default in 1.3.4) keeps 0.37 for recipes that list it (docs/VALIDATION_1.3.4.md).
+DEFAULT_OPACITY={'nrgf':.39,'wow_edge_aware':.37,'achf_iso_04':.08,'wow':.37}
 
 
 def layer_alpha(base_alpha,observed,mode):
@@ -93,14 +92,17 @@ def filters_from_config(config_path,out_dir,*,progress=print):
     alpha=layer_alpha(load('alpha') if 'alpha' in cfg else valid.astype(np.float32),valid,'normal')
     names=cfg.get('filters',list(DEFAULTS))
     if names=='all': names=list(NAMES)
+    if isinstance(names,list): names=[ALIASES.get(n,n) for n in names]          # 'wow_bilateral' up to 1.3.4
     if not isinstance(names,list) or not names or len(set(names))!=len(names) or any(n not in NAMES for n in names):
         raise ValueError(f'filters must be a nonempty unique list from {NAMES}, or "all"')
-    # WOW bilateral was the default up to 1.3.3: a recipe that lists it without the new WOW keeps it visible
-    visible_names=cfg.get('visible',[n for n in names if n in DEFAULTS or (n=='wow_bilateral' and 'wow' not in names)])
+    # The plain WOW was the default in 1.3.4: a recipe that lists it without the edge-aware WOW keeps it visible
+    visible_names=cfg.get('visible',[n for n in names if n in DEFAULTS or (n=='wow' and 'wow_edge_aware' not in names)])
+    if isinstance(visible_names,list): visible_names=[ALIASES.get(n,n) for n in visible_names]
     if not isinstance(visible_names,list) or set(visible_names)-set(names):
         raise ValueError('visible must be a subset of filters')
-    if set(cfg.get('opacities',{}))-set(names): raise ValueError('opacities must name selected filters')
-    if any(not np.isfinite(v) or not 0<=v<=1 for v in cfg.get('opacities',{}).values()):
+    opacities={ALIASES.get(k,k):v for k,v in cfg.get('opacities',{}).items()}
+    if set(opacities)-set(names): raise ValueError('opacities must name selected filters')
+    if any(not np.isfinite(v) or not 0<=v<=1 for v in opacities.values()):
         raise ValueError('opacities must be finite in [0,1]')
     achf_display=cfg.get('achf_display','rings')
     if achf_display not in ('rings','global'): raise ValueError("achf_display is 'rings' or 'global'")
@@ -146,7 +148,7 @@ def filters_from_config(config_path,out_dir,*,progress=print):
         image,mode,info=make_filter(name,lum,valid,geo,achf_display=achf_display)
         observed=valid & np.isfinite(image)
         al=layer_alpha(alpha,observed,mode)
-        opacity=float(cfg.get('opacities',{}).get(name,DEFAULT_OPACITY.get(name,1)))
+        opacity=float(opacities.get(name,DEFAULT_OPACITY.get(name,1)))
         if not np.isfinite(opacity) or not 0<=opacity<=1: raise ValueError('opacity must be in [0,1]')
         visible=name in visible_names
         image=np.where(observed,image,np.nan)

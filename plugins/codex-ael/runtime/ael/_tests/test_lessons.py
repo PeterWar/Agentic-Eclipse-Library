@@ -221,7 +221,7 @@ def test_no_filter_makes_rings_on_a_ring_free_input():
     filters); the support of every filter band by band from the lunar limb and from the straight edge, and in
     every sector. The sectors are fixed by the input, so an output cannot avoid one by leaving it empty. Positive
     controls must be detected. Not checked here, because they are reported limitations (docs/FIELD_LESSONS.md):
-    the bands that an off-centre Moon or a straight edge make in ACHF and WOW. Since 1.3.4 WOW bilateral is checked
+    the bands that an off-centre Moon or a straight edge make in ACHF and WOW. Since 1.3.4 the edge-aware WOW is checked
     in sectors too (with the range weights of 1.3.3 it drew up to 0.014 in a sector of this scene; now 0.004).
     """
     g,r,pa,theta,m,a=_ring_free_scene()
@@ -263,14 +263,15 @@ def test_no_filter_makes_rings_on_a_ring_free_input():
 # Transfer of a faint injected pattern by each layer in 1.3.0 (display units per unit ln I), measured on this scene.
 _DETAIL_GAIN={'nrgf':.64,'nrgf_log':.62,'rhef':1.25,'rhef_upsilon':.92,'rhef_local60':2.83,'rhef_local30':5.47,
               'achf_angular':19.18,'achf_angular4':30.22,'achf_angular8':10.28,'achf_iso_01':6.72,'achf_iso_04':17.86,
-              'achf_iso_05':4.05,'achf_iso_06':3.31,'mgn':6.63,'wow':14.73,'wow_bilateral':19.41}
+              'achf_iso_05':4.05,'achf_iso_06':3.31,'mgn':6.63,'wow':14.73,'wow_edge_aware':19.41}
 
 
 def test_filters_keep_injected_fine_detail_with_its_sign_and_strength():
     """A faint angular pattern added to the corona must come out with its own sign and its 1.3.0 strength (±25 %).
 
-    WOW bilateral entered this test in 1.3.4, with the range weights of each scale taken from a guide (issue #4); its
-    strength is the one measured then. Up to 1.3.3 it could return faint fine detail with the opposite sign.
+    The edge-aware WOW (called WOW bilateral up to 1.3.4) entered this test in 1.3.4, with the range weights of each scale
+    taken from a guide (issue #4); its strength is the one measured then. Up to 1.3.3 it could return faint fine detail
+    with the opposite sign.
     """
     g,r,pa,theta,m,a=_ring_free_scene()
     rng=np.random.default_rng(20261005)
@@ -291,12 +292,14 @@ def test_filters_keep_injected_fine_detail_with_its_sign_and_strength():
 
 def test_default_layers_are_sign_tested_and_have_a_starting_opacity():
     """Every default layer must be in the sign-and-strength test and have a declared starting opacity (an undeclared
-    one fell back to 1.00 without any warning). Up to 1.3.3 WOW bilateral, then the default, was not in the sign test."""
+    one fell back to 1.00 without any warning). Up to 1.3.3 WOW bilateral, then the default, was not in the sign test.
+    The plain WOW, the default in 1.3.4, keeps its starting opacity for the recipes that list it."""
     from ael.filterbank import DEFAULTS
     from ael.develop import DEFAULT_OPACITY
     assert set(DEFAULTS) <= set(_DETAIL_GAIN), DEFAULTS
     assert set(DEFAULTS) <= set(DEFAULT_OPACITY), (DEFAULTS, DEFAULT_OPACITY)
-    assert DEFAULT_OPACITY['wow_bilateral'] == .37                         # a 1.3.3 recipe keeps its opacity
+    assert DEFAULT_OPACITY['wow'] == .37                                   # a 1.3.4 recipe keeps its opacity
+    assert DEFAULTS == ('nrgf', 'wow_edge_aware', 'achf_iso_04')
 
 
 def test_tangential_mean_removal_drops_a_ring_and_keeps_a_ray():
@@ -413,9 +416,9 @@ def test_achf_does_not_burn_the_limb_when_the_sky_is_in_the_frame():
 
 def test_fine_detail_gate_passes_both_wows_and_fails_the_old_bilateral_and_inverted_detail():
     """The real-data gate Edu proposed in issue #4 (ael.gates.fine_detail_fidelity), on a synthetic eclipse with fine
-    angular structure and two independent noise realisations: the WOW of 1.3.4 and WOW bilateral with guided range
+    angular structure and two independent noise realisations: the plain WOW and the edge-aware WOW with guided range
     weights pass; WOW bilateral as it was up to 1.3.3 and a WOW with its detail inverted fail. Rings where the
-    reference fails its own rotation null are not judged. On real data the guided bilateral still fails the worst
+    reference fails its own rotation null are not judged. On real data the edge-aware WOW still fails the worst
     45° sector (docs/VALIDATION_1.3.4.md)."""
     from ael.gates import fine_detail_fidelity
     g = EclipseGeometry((640, 768), (310.3, 370.7), 60, (310.3, 370.7), 61)
@@ -429,7 +432,7 @@ def test_fine_detail_gate_passes_both_wows_and_fails_the_old_bilateral_and_inver
     res = fine_detail_fidelity(wa, wb, A, B, m, g, rings=rings)
     assert any(x['accredited'] for x in res['rings']) and res['passed'] is True, res
     assert fine_detail_fidelity(1 - wa, 1 - wb, A, B, m, g, rings=rings)['passed'] is False
-    ba, bb = make_filter('wow_bilateral', A, m, g)[0], make_filter('wow_bilateral', B, m, g)[0]
+    ba, bb = make_filter('wow_edge_aware', A, m, g)[0], make_filter('wow_edge_aware', B, m, g)[0]
     assert fine_detail_fidelity(ba, bb, A, B, m, g, rings=rings)['passed'] is True
     oa, ob = (_old_bilateral(X, m, g) for X in (A, B))
     assert fine_detail_fidelity(oa, ob, A, B, m, g, rings=rings)['passed'] is False
@@ -449,18 +452,18 @@ def test_guided_range_weights_keep_the_sign_where_the_old_range_weights_invert_i
     makes in the layer correlates with the pattern at about -0.3 (the author's 2026 operator with guided=False, and the
     1.3.3 operator): the faint detail comes out inverted. With the range weights of each scale taken from that scale
     without range weights (the default since 1.3.4) it correlates at about +0.35."""
-    from ael.filterbank import wow_bilateral
+    from ael.filterbank import wow_edge_aware
     g = EclipseGeometry((640, 768), (310.3, 370.7), 60, (310.3, 370.7), 61)
     r, th = g.radius_map(), np.radians(g.pa_map()); m = g.radius_map('moon') > 63
     pattern = .005 * np.sin(37 * th + np.random.default_rng(20261005).uniform(-np.pi, np.pi)) * np.exp(-((r - 160) / 65) ** 4)
     corona = (1 + .3 * np.cos(3 * th) + .1 * np.sin(7 * th)).astype(np.float32)
     rs = g.rsun_map(); sel = m & (r > 90) & (r < 260)
     def unguided(a):
-        return display_detail(wow_bilateral(a, m, guided=False), m, scale_region=(rs >= 1.1) & (rs < 2.))[0]
+        return display_detail(wow_edge_aware(a, m, guided=False), m, scale_region=(rs >= 1.1) & (rs < 2.))[0]
     def corr(f):
         ch = f((corona * np.exp(pattern)).astype(np.float32)) - f(corona); ok = sel & np.isfinite(ch)
         return float(np.corrcoef(ch[ok], pattern[ok])[0, 1])
-    layer = corr(lambda a: make_filter('wow_bilateral', a, m, g)[0])          # the layer as users get it
+    layer = corr(lambda a: make_filter('wow_edge_aware', a, m, g)[0])         # the layer as users get it
     without, old = corr(unguided), corr(lambda a: _old_bilateral(a, m, g))
     assert layer > .2 and without < -.2 and old < -.2, (layer, without, old)
 
@@ -516,9 +519,11 @@ def test_starlet_with_symmetric_pairs_reconstructs_exactly_and_invents_nothing()
 
 
 def test_a_recipe_written_for_the_old_defaults_keeps_its_look():
-    """A recipe written for 1.3.3 lists WOW bilateral, the default Overlay layer up to 1.3.3. Without 'opacities' or
-    'visible' it must still come out visible at 0.37, as it did then; listed next to the new WOW, it is a hidden layer
-    to compare with. Control: the opacity of a listed filter without a starting opacity is 1."""
+    """Recipes written for older defaults. A 1.3.3 recipe lists `wow_bilateral`, the name of the edge-aware WOW up to
+    1.3.4: it gets the edge-aware layer, visible at 0.37. A 1.3.4 recipe lists the plain WOW, its default: without the
+    edge-aware WOW listed it stays visible at 0.37; listed next to it, it is a hidden layer to compare with. The old and
+    the new name together are refused (the same layer twice). Control: the opacity of a listed filter without a starting
+    opacity is 1."""
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp); g = EclipseGeometry((120, 150), (71.3, 63.4), 18)
         r = g.radius_map(); m = r > 22
@@ -530,10 +535,18 @@ def test_a_recipe_written_for_the_old_defaults_keeps_its_look():
             res = filters_from_config(p, root / ('out_' + '_'.join(filters)), progress=lambda *_: None)
             return {x['name']: x for x in json.loads(Path(res['receipt']).read_text())['parameters']['layers']}
         old = layers(['nrgf', 'wow_bilateral', 'achf_iso_04'])
-        assert old['wow_bilateral']['visible'] and old['wow_bilateral']['opacity'] == .37, old['wow_bilateral']
-        both = layers(['nrgf', 'wow', 'wow_bilateral', 'mgn'])
-        assert both['wow']['visible'] and not both['wow_bilateral']['visible'] and both['wow_bilateral']['opacity'] == .37
+        assert 'wow_bilateral' not in old and old['wow_edge_aware']['visible'] and old['wow_edge_aware']['opacity'] == .37, old
+        plain = layers(['nrgf', 'wow', 'achf_iso_04'])
+        assert plain['wow']['visible'] and plain['wow']['opacity'] == .37, plain['wow']
+        both = layers(['nrgf', 'wow', 'wow_edge_aware', 'mgn'])
+        assert both['wow_edge_aware']['visible'] and not both['wow']['visible'] and both['wow']['opacity'] == .37
         assert both['mgn']['opacity'] == 1 and not both['mgn']['visible']
+        try:
+            layers(['wow_bilateral', 'wow_edge_aware'])
+        except ValueError:
+            pass
+        else:
+            raise AssertionError('the old and the new name of the edge-aware WOW were accepted together')
 
 
 def test_tangential_step_has_no_switch_where_the_frame_cuts_the_circles_and_keeps_a_gap_local():

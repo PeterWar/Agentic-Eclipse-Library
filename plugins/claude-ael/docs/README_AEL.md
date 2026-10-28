@@ -347,4 +347,5 @@ documents how the library's filters differ from the paper's published layers
 WOW layer (WOW bilateral could invert faint fine detail), rebuilds WOW bilateral with guided range weights for data
 that reach the lunar limb, shows the ACHF layers with a level and a spread per ring,
 adds `ael.gates.fine_detail_fidelity` and `ael.coronagraph.scan_mirror`, and makes `ael motion` read `"mirrored"`.
-Existing images are not rewritten; compare the new numerical recipe before adopting it.
+Version 1.3.5 makes that edge-aware WOW (called WOW bilateral in 1.3.4) the default WOW layer, by decision of the
+author, and the plain WOW optional. Existing images are not rewritten; compare the new numerical recipe before adopting it.

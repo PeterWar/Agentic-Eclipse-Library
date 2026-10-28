@@ -1,4 +1,4 @@
-# Validation of 1.3.5 (28 October 2026)
+# Validation of the next release (prepared as 1.3.5)
 
 This release changes no operator. By decision of the author it makes the edge-aware WOW the default WOW layer, gives it
 the name Auchère et al. (2023) use for their variant of WOW with a bilateral smoothing, and makes the plain WOW of 1.3.4
@@ -49,7 +49,7 @@ Photoshop, never inside one layer. This blend has not been measured yet.
   WOW), the recipes written for older defaults (a 1.3.3 recipe gets the edge-aware layer under its old name, a 1.3.4
   recipe keeps the plain WOW, and both names together are refused), the sign test and the synthetic fine-detail gate
   (with the new name).
-- The plugins carry the new defaults (Codex plugin 1.1.2, Claude plugin 1.3.5).
+- The plugins carry the new defaults.
 
 ## Limits
 

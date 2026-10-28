@@ -1,9 +1,8 @@
 # Changelog
 
-## 1.3.5 — 2026-10-28
+## Unreleased
 
-The author's decision on the WOW layers. The `ael` operators do not change. The Codex plugin goes to 1.1.2; the Claude
-Code plugin of this repository's marketplace and the Claude plugin folder `plugins/claude-ael/` go to 1.3.5.
+Prepared as 1.3.5. The author's decision on the WOW layers. The `ael` operators do not change.
 
 - **The edge-aware WOW is the default WOW layer** (`wow_edge_aware`). It is the layer called WOW bilateral in 1.3.4: the
   operator of the author's own WOW layer, with range weights taken from a guide. It takes the name Auchère et al. (2023)
