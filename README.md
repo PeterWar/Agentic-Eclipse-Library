@@ -113,8 +113,8 @@ limb, with a per-ring scale that cures it, and his field case in
 comparison with LASCO C2 would have accepted. Version 1.3.4 answers them; his case is in the
 [field lessons](docs/FIELD_LESSONS.md#a-field-case-contributed-by-eduardo-piñas-issues-4-9-and-10).
 
-**Codex (OpenAI)** has contributed as an AI coding agent to implementation, documentation and validation
-under Pere Guerra's direction.
+**Claude (Anthropic)** and **Codex (OpenAI)** have contributed as AI coding agents to implementation,
+documentation and validation under Pere Guerra's direction.
 
 Contributions are welcome through public pull requests. Only [PeterWar](https://github.com/PeterWar)
 can update or merge changes into `main`.
