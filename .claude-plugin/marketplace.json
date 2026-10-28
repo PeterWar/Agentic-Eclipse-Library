@@ -10,7 +10,7 @@
       "name": "agentic-eclipse-library",
       "source": "./",
       "description": "Eclipse corona processing skills: first steps with your own photos (English); calibration and stacking, post-processing, artefact repair (Catalan); structure images, unrolled views and coronal motion with the ael package, and checks against coronagraphs (K-Cor, SOHO/LASCO, SDO/AIA) in structure and in mean solar brightness (English); a whole case to an editable master the photographer accepts, contributed by Raúl Hussein (English).",
-      "version": "1.3.4",
+      "version": "1.3.5",
       "author": {
         "name": "Pere Guerra Serra"
       },

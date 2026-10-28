@@ -5,7 +5,7 @@ create corona filter layers, investigate artefacts, make polar views and motion 
 observations with coronagraphs, and take a whole case to an editable master the photographer accepts
 (contributed by Raúl Hussein). Created by Pere Guerra Serra. MIT licensed.
 
-This desktop plugin bundles the AEL 1.3.4 Python processing engine, its known-truth tests, recipe
+This desktop plugin bundles the AEL 1.3.5 Python processing engine, its known-truth tests, recipe
 templates and practical documentation. It runs on the user's computer with Python 3.10 or later.
 The host AI plans the work and explains the results; AEL performs the numerical processing.
 
@@ -28,8 +28,8 @@ polar views, motion check sheets and animations. A photograph is not an absolute
 Calibration, registration, geometry and any spatial cloud correction require measured inputs; AEL does
 not infer all of these from a folder of RAWs. Photoshop itself is optional.
 
-Known limitations in 1.3.4 include bands near data boundaries in ACHF/WOW, rings of the default WOW next
-to a lunar limb that the data reach, and some fine-detail sign inversion in the worst sectors of WOW bilateral. See [field lessons](docs/FIELD_LESSONS.md). Passing the bundled tests does
+Known limitations in 1.3.5 include bands near data boundaries in ACHF/WOW, some fine-detail sign inversion
+in the worst sectors of the default edge-aware WOW, and rings of the plain WOW next to a lunar limb that the data reach. See [field lessons](docs/FIELD_LESSONS.md). Passing the bundled tests does
 not validate a new astronomical observation. Missing data stays missing. Synthetic examples are labelled
 and must never be used as pixels in an observed image.
 

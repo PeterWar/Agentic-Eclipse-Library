@@ -1,4 +1,4 @@
-# Validation of the next release (prepared as 1.3.5)
+# Validation of 1.3.5 (28 October 2026)
 
 This release changes no operator. By decision of the author it makes the edge-aware WOW the default WOW layer, gives it
 the name Auchère et al. (2023) use for their variant of WOW with a bilateral smoothing, and makes the plain WOW of 1.3.4

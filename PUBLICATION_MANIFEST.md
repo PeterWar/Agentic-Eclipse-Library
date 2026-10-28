@@ -12,14 +12,16 @@ Version 1.3.3 (18 October) adds the contribution of Raúl Hussein (the skill `ec
 three-camera case study and a correction to the field lessons) and rule 11 of `AGENTS.md`; the `ael` code does not change.
 Version 1.3.4 (28 October) answers three reports by Eduardo Piñas: a new default WOW layer, WOW bilateral rebuilt with guided range
 weights, ACHF layers with a level and a spread per ring, an optional fine-detail gate and a mirror scan.
+Version 1.3.5 (same day) makes the edge-aware WOW the default WOW layer, by decision of the author, and names the layers
+of the Photoshop files by filter family.
 
 | Included | Files | Notes |
 |---|---:|---|
 | `skills/` — seven Agent Skills | 39 | Snapshot of the working skills on 30 Sep 2026 (`eclipse-first-steps` revised and `coronagraph-comparison` added on 13 Oct), with their reference files and helper scripts; `corona-visualizations` (English) is new in 1.1.0, `eclipse-first-steps` (English) in 1.1.1, `coronagraph-comparison` (English) in 1.3.0; `eclipse-astrophotography` (English), contributed by Raúl Hussein, in 1.3.3 |
 | `3-RECERCA/` — research notes | 187 | 180 numbered notes plus indexes, sources, prompts and reports of consultations with other models, small data tables |
 | `3-RECERCA/tools/` — processing code | 4,352 | Python, shell and Photoshop JSX scripts, and the small JSON/CSV parameter files they read |
-| `ael/`, `tests/`, `examples/`, `pyproject.toml`, `README_AEL.md` — the runnable package | 40 | Stacking, extinction, filter layers, structure images, unrolled views, coronal motion, coronagraph checks and layered Photoshop files from anyone's data; 107 tests with known truth (1.3.4) |
-| `docs/` | 18 | Recipes, field lessons, validation records, two community case studies, the plugin guide, privacy and terms, and the paper's layers against the library (English); lessons for model developers (English); record of the author's contributions (Catalan) |
+| `ael/`, `tests/`, `examples/`, `pyproject.toml`, `README_AEL.md` — the runnable package | 40 | Stacking, extinction, filter layers, structure images, unrolled views, coronal motion, coronagraph checks and layered Photoshop files from anyone's data; 108 tests with known truth (1.3.5) |
+| `docs/` | 19 | Recipes, field lessons, validation records, two community case studies, the plugin guide, privacy and terms, and the paper's layers against the library (English); lessons for model developers (English); record of the author's contributions (Catalan) |
 | `AGENTS.md`, `README.md`, `LICENSE` (MIT), `CITATION.cff`, `.claude-plugin/` | — | Entry points, licence, citation and plugin manifest |
 
 | Left out | Why |

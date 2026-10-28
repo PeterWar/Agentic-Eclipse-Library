@@ -148,7 +148,7 @@ need to publish your photos to contribute.
   codex plugin add agentic-eclipse-library@pere-guerra-eclipse
   ```
   Python and its dependencies are checked separately. The plugin runs locally and includes the maintained
-  AEL 1.3.4 engine. See the guide for desktop-app installation and supported workflows.
+  AEL 1.3.5 engine. See the guide for desktop-app installation and supported workflows.
 - **Other agents:** point the agent at [`AGENTS.md`](AGENTS.md). Each skill is a plain `SKILL.md` with
   `references/` and `scripts/`.
 - Most text is in Catalan. Current models read and translate it without trouble; ask your agent to answer in your

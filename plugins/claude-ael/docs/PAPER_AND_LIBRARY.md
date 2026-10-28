@@ -8,7 +8,7 @@ the code behind the published layers and the library described three different o
 RHEF. This page says what each one does, filter by filter.
 
 "Production" means the code that made the layers of the published image, under `3-RECERCA/tools/` (the paper's
-image is version V125 of the project). "Library" means `ael` 1.3.4; changes since 1.3.2 are marked.
+image is version V125 of the project). "Library" means `ael` 1.3.5; changes since 1.3.2 are marked.
 
 ## NRGF (Morgan, Habbal and Woo 2006)
 
