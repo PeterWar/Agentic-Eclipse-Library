@@ -160,7 +160,8 @@ def _paired_b3_step(c, m, step, bilateral=False, guide=None, rows=128):
 
 
 def wow_bilateral(img, valid, *, n_scales=8, guided=True, completeness=(.6, .995)):
-    """WOW bilateral (since 1.3.4): the operator of the P05 layer of the author's 2026 image, with the cure of issue #4.
+    """WOW bilateral (since 1.3.4): the operator of the WOW bilateral layer of the author's 2026 image, with the cure of
+    issue #4.
 
     Each B3 à-trous scale is smoothed over symmetric observed pairs with range weights (bilateral: taps across a strong
     edge count less), whitened by its local power, centred on its mean where its kernel is whole, and its local level is

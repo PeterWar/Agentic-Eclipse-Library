@@ -148,7 +148,7 @@ need to publish your photos to contribute.
   codex plugin add agentic-eclipse-library@pere-guerra-eclipse
   ```
   Python and its dependencies are checked separately. The plugin runs locally and includes the maintained
-  AEL 1.3.3 engine. See the guide for desktop-app installation and supported workflows.
+  AEL 1.3.4 engine. See the guide for desktop-app installation and supported workflows.
 - **Other agents:** point the agent at [`AGENTS.md`](AGENTS.md). Each skill is a plain `SKILL.md` with
   `references/` and `scripts/`.
 - Most text is in Catalan. Current models read and translate it without trouble; ask your agent to answer in your
@@ -217,8 +217,14 @@ In answer to Edu's reports (see [Contributors](#contributors)):
   scales in the far field (plain WOW whitened the correlated noise of a real stack into blotches) and removes, from
   8 px up, the local mean along circles around the Sun (the radial curve subtracted before it leaves residuals that
   plain WOW turned into a dark ring at 4.75 R☉). Next to the Moon and other edges of the data it averages symmetric
-  pairs only. It passes Edu's gate on the author's data. At the same starting opacity it is softer than WOW bilateral
-  beyond 2 R☉. WOW bilateral is still available.
+  pairs only. It passes Edu's gate on the author's data. At the same starting opacity it is softer than the WOW
+  bilateral of 1.3.3 beyond 2 R☉.
+- **WOW bilateral, rebuilt with guided range weights.** It is now the operator of the WOW bilateral layer of the
+  author's own image, with the range weights of each scale taken from that scale smoothed without range weights: it
+  keeps the sign of faint detail where the old range weights inverted it. It is an option and the default does not
+  change: on the author's data it still inverts up to 18 % of the clear detail in its worst sector, over the limit of
+  Edu's gate. Where the corona data reach the lunar limb, use it: there the default WOW draws rings and a band of
+  weaker texture along the limb, which the author found applying this release to his own final image.
 - **ACHF layers that do not burn next to the limb** when the sky is left in the stack: a level and a spread per ring
   instead of one for the whole image. It also evens their contrast across radius; `"achf_display": "global"` keeps the
   1.3.3 display.

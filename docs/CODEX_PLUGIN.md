@@ -1,7 +1,7 @@
 # AEL for Codex
 
 Agentic Eclipse Library is available as a desktop plugin with seven guided workflows and the bundled
-AEL 1.3.3 numerical engine. Plugin version 1.1.0 is independently versioned from the Python library.
+AEL 1.3.4 numerical engine. Plugin version 1.1.1 is independently versioned from the Python library.
 The repository marketplace works independently of OpenAI's public directory review.
 
 ![AEL synthetic workflow demonstration](../plugins/codex-ael/assets/synthetic-workflow.png)
@@ -58,8 +58,13 @@ three-camera case study and the corrected NRGF description in the field lessons.
 integration checks, including the 84 bundled AEL tests, and the new skill's twelve packaging checks
 (`tools/test_astro_skill_integration.py`). The numerical code is that of 1.3.2.
 
-AEL 1.3.3 retains documented ACHF/WOW boundary bands and possible fine-detail sign inversion in WOW
-bilateral. See [field lessons](FIELD_LESSONS.md). The plugin's structure launcher preserves the full
+Version 1.1.1 bundles AEL 1.3.4, with the lessons from Edu's reports: a new default WOW layer, WOW bilateral rebuilt
+with guided range weights for data that reach the lunar limb, ACHF layers with a level and a spread per ring, the
+optional fine-detail gate and the mirror scan. Its ZIP passed the seventeen integration checks, including the 107
+bundled AEL tests.
+
+AEL 1.3.4 retains documented ACHF/WOW boundary bands, rings of the default WOW next to a lunar limb that the data
+reach, and some fine-detail sign inversion in the worst sectors of WOW bilateral. See [field lessons](FIELD_LESSONS.md). The plugin's structure launcher preserves the full
 canvas and defaults to mono; the underlying historical CLI has different display defaults.
 
 ## Privacy, licence and support

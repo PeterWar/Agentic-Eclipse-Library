@@ -1,4 +1,4 @@
-# Validation of the next release (prepared as 1.3.4)
+# Validation of 1.3.4 (28 October 2026)
 
 This release answers three reports by Edu ([@edu27](https://github.com/edu27)), who photographed the 2026 eclipse
 from northern Spain and tested AEL 1.3.3 on his frames: a real-data check of
@@ -168,8 +168,8 @@ known before), and they are those of the new WOW:
 | Check | WOW bilateral, guided | Author's operator (no guide) | WOW bilateral 1.3.3 | New WOW |
 |---|---|---|---|---|
 | Issue #4 scene, flat profile, no noise: correlation with the pattern | +0.35 | −0.32 | −0.27 | — |
-| Edu's gate on the Sony: clear detail inverted per ring, 1.2–2 R☉ | 3.9–5.3 % | 7.1–8.7 % | 38–46 % | 0.6–2.4 % |
-| Edu's gate: worst 45° sector (limit 10 %) | 8.5–17.9 % (fails at 1.3–2 R☉) | 12.7–28.8 % | up to 56 % | 2.2–8.4 % |
+| Edu's gate on the Sony: clear detail inverted per ring, 1.2–2 R☉ | 3.9–5.3 % | 7.1–8.7 % | 38–47 % | 0.6–2.4 % |
+| Edu's gate: worst 45° sector (limit 10 %) | 8.5–17.9 % (fails at 1.3–2 R☉) | 12.7–28.8 % | — | 2.2–8.4 % |
 | Library gate, crosswise: per ring / worst sector | 5.3–8.3 % / 19.6 % (fails) | — | 38–46 % / 56 % (fails) | 1.3–2.9 % / 9.2 % |
 | Ring gate on the Sony | fails: 2.5 and 4.4–4.7 R☉, up to 0.017 | — | −0.014 to +0.033 at 4.4–5.1 R☉ | −0.007 to +0.006 |
 | Isotropy at 6–8 R☉, against version 4 (±15 %) | −1 % and −3 % | — | — | passes |

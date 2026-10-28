@@ -1,4 +1,4 @@
-# Validation of the next release (prepared as 1.3.4)
+# Validation of 1.3.4 (28 October 2026)
 
 This release answers three reports by Edu ([@edu27](https://github.com/edu27)), who photographed the 2026 eclipse
 from northern Spain and tested AEL 1.3.3 on his frames: a real-data check of

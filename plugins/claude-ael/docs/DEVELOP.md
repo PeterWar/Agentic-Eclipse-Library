@@ -155,9 +155,10 @@ beyond 6 R☉, coarser scales extrapolated; rings of the radial curve removed al
 symmetric pairs at the edges of the data) and the ACHF layers are shown with a level and a spread per ring;
 `"achf_display": "global"` keeps the single whole-image spread of 1.3.3. With 20 000 observed pixels or
 fewer beyond 6 R☉ (long focal lengths), or nothing left to measure there, the WOW falls back to white-noise
-factors and its parameters say `"white noise"`. Bilateral WOW, the default up to 1.3.3, can invert faint
-fine detail (issue #4); it keeps its starting opacity, and a recipe that lists it without `wow` keeps it
-visible. `ael.gates.fine_detail_fidelity` checks a layer against two independent stacks. The opacities are
+factors and its parameters say `"white noise"`. Bilateral WOW, the default up to 1.3.3, could invert faint
+fine detail (issue #4); since 1.3.4 its range weights are guided, and it is the layer to use where the corona
+data reach the lunar limb (there the default WOW draws rings). It keeps its starting opacity, and a recipe that
+lists it without `wow` keeps it visible. `ael.gates.fine_detail_fidelity` checks a layer against two independent stacks. The opacities are
 starting points (`ael.develop.DEFAULT_OPACITY`); at .37 the new WOW is softer than the WOW bilateral of 1.3.3 beyond 2 R☉.
 Override `visible` and `opacities`, or request `"filters": "all"` for sixteen layers:
 

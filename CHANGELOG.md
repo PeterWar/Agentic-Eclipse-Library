@@ -1,9 +1,10 @@
 # Changelog
 
-## Unreleased
+## 1.3.4 — 2026-10-28
 
-Prepared as 1.3.4. Three reports by Edu (@edu27): a real-data check of issue #4 and issues #9 and #10. The `ael`
-package changes its default WOW layer and the display of its ACHF layers.
+Three reports by Edu (@edu27): a real-data check of issue #4 and issues #9 and #10. The `ael` package changes its
+default WOW layer and the display of its ACHF layers, and rebuilds WOW bilateral. The Codex plugin goes to 1.1.1; the
+Claude Code plugin of this repository's marketplace and the Claude plugin folder `plugins/claude-ael/` go to 1.3.4.
 
 - **A new default WOW layer** (issue #4). WOW bilateral, the default Overlay layer up to 1.3.3, does not follow faint
   fine detail: with two independent half-stacks of the author's 2026 data (the layer of one against the band-pass of

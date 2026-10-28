@@ -33,7 +33,7 @@ python -m ael stack --config stack.json --out stack_run/
 python -m ael filters --config filters.json --out filter_run/
 ```
 
-Start with [`docs/DEVELOP.md`](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.3.3/docs/DEVELOP.md) and the JSON templates in `examples/`.
+Start with [`docs/DEVELOP.md`](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.3.4/docs/DEVELOP.md) and the JSON templates in `examples/`.
 Registration and calibration must be measured and declared first. The default filters
 are NRGF, WOW and isotropic ACHF; all sixteen variants are available on request.
 These are portable recipes, not an exact replay of the author's final Photoshop image.
@@ -116,7 +116,7 @@ that the same gate rejects with the same thresholds.
 Two questions, kept apart because they fail differently. **Structure:** are the rays and streamers where
 an independent instrument sees them? **Brightness:** how bright is the corona in mean solar brightness
 (MSB, B/B☉)? The agent's recipe, with the data to ask for and the traps, is the skill
-[`skills/coronagraph-comparison/`](https://github.com/PeterWar/Agentic-Eclipse-Library/tree/v1.3.3/skills/coronagraph-comparison/).
+[`skills/coronagraph-comparison/`](https://github.com/PeterWar/Agentic-Eclipse-Library/tree/v1.3.4/skills/coronagraph-comparison/).
 
 ```sh
 python -m ael coronagraph --config coronagraph.json --out cmp_run/   # see examples/coronagraph_config_template.json
@@ -334,16 +334,16 @@ Raúl Hussein contributed the `eclipse-astrophotography` skill and a three-camer
 from Oscar Maseda and Carlos Oltra, and corrected the NRGF description in the field lessons (1.3.3).
 Edu (@edu27) tested 1.3.3 on his own frames; his reports led to the new default WOW, the per-ring ACHF display,
 `ael.gates.fine_detail_fidelity` and the mirror scan (1.3.4).
-Other contributions are listed in the repository [README](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.3.3/README.md#contributors).
+Other contributions are listed in the repository [README](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.3.4/README.md#contributors).
 
 Version 1.3.0 adds `ael extinction` and `ael coronagraph`, corrects stepped radial statistics and
 clipped display highlights (prepared as 1.2.1), adds an explicit native-reference canvas option and
-documents the limits of internal dust calibration. See [field lessons](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.3.3/docs/FIELD_LESSONS.md) and
-[recipe details](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.3.3/docs/DEVELOP.md). Version 1.3.2 replaces the smoothed ring profile of the NRGF, which
+documents the limits of internal dust calibration. See [field lessons](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.3.4/docs/FIELD_LESSONS.md) and
+[recipe details](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.3.4/docs/DEVELOP.md). Version 1.3.2 replaces the smoothed ring profile of the NRGF, which
 biased steep profiles, lets any RHEF layer made with `make_filter` use the Upsilon curve with an exponent for
 each side, and
 documents how the library's filters differ from the paper's published layers
-([`docs/PAPER_AND_LIBRARY.md`](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.3.3/docs/PAPER_AND_LIBRARY.md)). Version 1.3.4 replaces the default
+([`docs/PAPER_AND_LIBRARY.md`](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.3.4/docs/PAPER_AND_LIBRARY.md)). Version 1.3.4 replaces the default
 WOW layer (WOW bilateral could invert faint fine detail), rebuilds WOW bilateral with guided range weights for data
 that reach the lunar limb, shows the ACHF layers with a level and a spread per ring,
 adds `ael.gates.fine_detail_fidelity` and `ael.coronagraph.scan_mirror`, and makes `ael motion` read `"mirrored"`.
