@@ -6,7 +6,7 @@ import numpy as np
 from ael import filters
 from ael.stack import full_resolution_affine, union_canvas, resample_frame, hot_pixel_mask, stack_from_config
 from ael.filterbank import achf_isotropic, make_filter, NAMES
-from ael.develop import filters_from_config, layer_alpha
+from ael.develop import LAYER_LABELS, filters_from_config, layer_alpha, layer_names
 from ael.geometry import EclipseGeometry
 
 
@@ -152,8 +152,26 @@ def test_filters_command_psb_roundtrip_relative_paths_and_immutable_output():
         rec=json.loads(Path(result['receipt']).read_text())
         assert rec['gates']['photoshop_roundtrip']['ok']
         assert rec['gates']['photoshop_roundtrip']['layers']==6
+        assert [x['layer'] for x in rec['parameters']['layers']]==['01 NRGF','05 WOW edge-aware','04 ACHF iso 1–16 px']
+        assert [x['name'] for x in rec['parameters']['layers']]==['nrgf','wow_edge_aware','achf_iso_04']
         assert rec['gates']['photoshop_native'].startswith('not checked')
         raises(FileExistsError,lambda:filters_from_config(p,root/'out',progress=lambda *_:None))
+
+
+def test_layer_names_number_the_family_and_letter_the_variants():
+    # The scheme of the author's own files (1.3.5): '01a NRGF interior · V120', '05b WOW edge-aware · V120'.
+    assert set(LAYER_LABELS)==set(NAMES)
+    assert layer_names(['nrgf','wow_edge_aware','achf_iso_04'])==['01 NRGF','05 WOW edge-aware','04 ACHF iso 1–16 px']
+    assert layer_names(['nrgf','wow_bilateral','achf_iso_04','wow'])==['01 NRGF','05a WOW edge-aware',
+                                                                        '04 ACHF iso 1–16 px','05b WOW']
+    every=layer_names(list(NAMES))
+    assert every[:6]==['01a NRGF','01b NRGF log','02a RHEF','02b RHEF Upsilon','02c RHEF local 60°','02d RHEF local 30°']
+    assert every[6:]==['04a ACHF angular','04b ACHF angular smoothed 4 px','04c ACHF angular smoothed 8 px',
+                       '04d ACHF iso 2–32 px','04e ACHF iso 1–16 px','04f ACHF iso 2–48 px','04g ACHF iso 4–64 px',
+                       '03 MGN','05a WOW','05b WOW edge-aware']
+    assert len(set(every))==len(every)
+    for label in every:                     # at most 9 words; the legacy Pascal name (31 bytes, Mac Roman) is whole
+        assert len(label.split())<=9 and len(label.encode('mac_roman'))<=31,label
 
 
 def test_two_band_cirrus_weighting_preserves_fine_detail():

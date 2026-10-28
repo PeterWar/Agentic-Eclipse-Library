@@ -13,7 +13,7 @@ def wow_bilateral(img,valid,*,n_scales=6,noise_floor=3):
     Known limitation (issue #4): the range weights are computed from the data being decomposed, so faint fine detail
     next to stronger structure can come out with the opposite sign. On real 2026 data, with two independent
     half-stacks (the layer of one against the band-pass of the other), its fine detail (1.5–6 px) correlated at only
-    0.08–0.20 with the data's own, with 38–46 % of the clear detail inverted; Edu (@edu27) measured the same on his own
+    0.08–0.20 with the data's own, with 38–46 % of the clear detail inverted; Eduardo Piñas (@edu27) measured the same on his own
     frames. It is no longer a default layer (since 1.3.4); :func:`wow_measured` is.
     """
     a=np.asarray(img,np.float32); m=valid & np.isfinite(a)

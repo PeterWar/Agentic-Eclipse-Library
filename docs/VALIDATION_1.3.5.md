@@ -2,7 +2,8 @@
 
 This release changes no operator. By decision of the author it makes the edge-aware WOW the default WOW layer, gives it
 the name Auchère et al. (2023) use for their variant of WOW with a bilateral smoothing, and makes the plain WOW of 1.3.4
-optional. The measurements are those of 1.3.4, where this layer is called WOW bilateral
+optional. It also gives the Photoshop layers the names the author uses in his own files. The measurements are those
+of 1.3.4, where this layer is called WOW bilateral
 ([`VALIDATION_1.3.4.md`](VALIDATION_1.3.4.md#wow-bilateral-with-guided-range-weights)).
 
 ## What changed
@@ -14,6 +15,13 @@ optional. The measurements are those of 1.3.4, where this layer is called WOW bi
    ...)` makes the edge-aware layer). A recipe that lists both names is refused: it would be the same layer twice.
 3. The plain WOW (`wow`, `ael.filterbank.wow_measured`), the default of 1.3.4, is optional. A recipe that lists it
    without the edge-aware WOW keeps it visible at 0.37; listed next to the edge-aware WOW, it is a hidden layer.
+4. The layers of `corona.psb` take the names of the author's own files: the number is the family, in the order of his
+   stack (00 for the display base, then 01 NRGF, 02 RHEF, 03 MGN, 04 ACHF and 05 WOW), a letter tells the variants of
+   one family apart from the bottom up, and the name ends with the parameter that distinguishes the layer. The
+   defaults give `01 NRGF`, `05 WOW edge-aware` and `04 ACHF iso 1–16 px`; with both WOW layers, `05a WOW edge-aware`
+   and `05b WOW`. The receipt keeps the code name of every layer (`parameters.layers[].name`, with the Photoshop name
+   in `.layer`), and so do the file names of the arrays. The order of the layers does not change.
+   `ael.develop.layer_names` returns the names.
 
 ## Why, and what it costs
 
@@ -44,8 +52,10 @@ Photoshop, never inside one layer. This blend has not been measured yet.
 
 ## Checks
 
-- `python -m ael selftest`: **107 of 107**, in the source tree and from the installed wheel, with and without network.
-  No test is new. Four tests follow the change: the table of defaults (now including the starting opacity of the plain
+- `python -m ael selftest`: **108 of 108**, in the source tree and from the installed wheel, with and without network.
+  One test is new: the layer names of the defaults, of both WOW layers and of all sixteen filters (unique, at most nine
+  words, and whole in the 31-byte legacy name of a Photoshop layer); the PSB roundtrip test also checks them in the
+  receipt. Four tests follow the change of default: the table of defaults (now including the starting opacity of the plain
   WOW), the recipes written for older defaults (a 1.3.3 recipe gets the edge-aware layer under its old name, a 1.3.4
   recipe keeps the plain WOW, and both names together are refused), the sign test and the synthetic fine-detail gate
   (with the new name).

@@ -10,7 +10,7 @@ issue #1 to the field lessons and two tests. Version 1.3.2 (16 October) answers 
 draft of the paper *A Faithful Corona*: a new NRGF, Upsilon for any RHEF layer, `docs/PAPER_AND_LIBRARY.md` and fifteen controls.
 Version 1.3.3 (18 October) adds the contribution of Raúl Hussein (the skill `eclipse-astrophotography`, a
 three-camera case study and a correction to the field lessons) and rule 11 of `AGENTS.md`; the `ael` code does not change.
-Version 1.3.4 (28 October) answers three reports by Edu: a new default WOW layer, WOW bilateral rebuilt with guided range
+Version 1.3.4 (28 October) answers three reports by Eduardo Piñas: a new default WOW layer, WOW bilateral rebuilt with guided range
 weights, ACHF layers with a level and a spread per ring, an optional fine-detail gate and a mirror scan.
 
 | Included | Files | Notes |

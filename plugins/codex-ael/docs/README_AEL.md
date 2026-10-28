@@ -332,7 +332,7 @@ Contributors: Chris Gilly (NorthWest Research Associates), first author of the R
 of the author's paper *A Faithful Corona* and this library in October 2026; version 1.3.2 answers his review.
 Raúl Hussein contributed the `eclipse-astrophotography` skill and a three-camera case study, with RAW frames
 from Oscar Maseda and Carlos Oltra, and corrected the NRGF description in the field lessons (1.3.3).
-Edu (@edu27) tested 1.3.3 on his own frames; his reports led to the new default WOW, the per-ring ACHF display,
+Eduardo Piñas (@edu27) tested 1.3.3 on his own frames; his reports led to the new default WOW, the per-ring ACHF display,
 `ael.gates.fine_detail_fidelity` and the mirror scan (1.3.4).
 Other contributions are listed in the repository [README](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.3.4/README.md#contributors).
 

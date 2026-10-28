@@ -207,6 +207,12 @@ preventing the earlier disappearance of darkening from making a bright rim.
 Outputs: float layers with NaN outside observed data, their alpha arrays, a full
 canvas preview, display TIFF, and a receipt of actual operator/display parameters.
 `photoshop: true` adds a new layered 16-bit `corona.psb` and pixel-by-pixel verification.
+Its layers take the names of the author's own files (since 1.3.5): the number is the family, in the order of his
+stack (00 for the display base, then 01 NRGF, 02 RHEF, 03 MGN, 04 ACHF and 05 WOW), a letter tells the variants of
+one family apart from the bottom up, and the name ends with the parameter that distinguishes the layer
+(`02c RHEF local 60°`, `05b WOW edge-aware`). The layers keep the order of the recipe. The receipt keeps the code
+name of every layer (`parameters.layers[].name`, with the Photoshop name in `.layer`), and so do the file names of
+the arrays; `ael.develop.layer_names` returns the names.
 The hidden linear-reference layer has its own recorded scale, with the positive
 observed maximum at .98. Negative colour-matrix values are clipped only for 16-bit
 representation; the signed float input remains the HDR authority. The application is **never opened automatically**. The

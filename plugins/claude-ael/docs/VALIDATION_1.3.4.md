@@ -1,6 +1,6 @@
 # Validation of 1.3.4 (28 October 2026)
 
-This release answers three reports by Edu ([@edu27](https://github.com/edu27)), who photographed the 2026 eclipse
+This release answers three reports by Eduardo Piñas ([@edu27](https://github.com/edu27)), who photographed the 2026 eclipse
 from northern Spain and tested AEL 1.3.3 on his frames: a real-data check of
 [issue #4](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/4) (WOW bilateral),
 [issue #9](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/9) (ACHF next to the limb) and

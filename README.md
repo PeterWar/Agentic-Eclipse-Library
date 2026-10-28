@@ -93,7 +93,7 @@ NRGF of 1.3.1 after the 1.3.2 release, and corrected them.
 **Oscar Maseda** (Sony) and **Carlos Oltra** (Nikon) photographed that eclipse and made their RAW frames available
 for the case study, as Raúl Hussein did with his Canon. The frames stay private.
 
-**Edu** ([@edu27](https://github.com/edu27)) photographed the 2026 eclipse from northern Spain with an astronomy
+**Eduardo Piñas** ([@edu27](https://github.com/edu27)) photographed the 2026 eclipse from northern Spain with an astronomy
 camera and a 300 mm lens, and tested AEL 1.3.3 on his frames. His comment on
 [issue #4](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/4) brought a real-data gate, with two independent
 half-stacks and a reference without any filter, which showed that the default WOW bilateral layer does not follow the
@@ -102,7 +102,7 @@ fine detail; the gate is now `ael.gates.fine_detail_fidelity`. His
 limb, with a per-ring scale that cures it, and his field case in
 [issue #10](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/10) showed mirrored frames that a whole-profile
 comparison with LASCO C2 would have accepted. Version 1.3.4 answers them; his case is in the
-[field lessons](docs/FIELD_LESSONS.md#a-field-case-contributed-by-edu-issues-4-9-and-10).
+[field lessons](docs/FIELD_LESSONS.md#a-field-case-contributed-by-eduardo-piñas-issues-4-9-and-10).
 
 **Codex (OpenAI)** has contributed as an AI coding agent to implementation, documentation and validation
 under Pere Guerra's direction.
@@ -216,6 +216,9 @@ commercially; the licence only asks you to keep the copyright and permission not
   over the limit of Edu's gate): see [`docs/VALIDATION_1.3.5.md`](docs/VALIDATION_1.3.5.md).
 - **The plain WOW (`wow`) is optional.** Recommendation: next to a lunar limb that the data reach, use the edge-aware
   WOW; to use the plain WOW further out, blend both layers with a feathered mask.
+- **The Photoshop layers take the names of the author's own files.** The number is the family (01 NRGF to 05 WOW), a
+  letter tells the variants of one family apart, and the name ends with the parameter that distinguishes the layer, as
+  in `05 WOW edge-aware` or `04 ACHF iso 1–16 px`. The receipt keeps the code names.
 
 ## What is new in 1.3.4
 

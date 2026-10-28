@@ -2,7 +2,8 @@
 
 ## Unreleased
 
-Prepared as 1.3.5. The author's decision on the WOW layers. The `ael` operators do not change.
+Prepared as 1.3.5. The author's decision on the WOW layers, and the names of the Photoshop layers. The `ael` operators
+do not change.
 
 - **The edge-aware WOW is the default WOW layer** (`wow_edge_aware`). It is the layer called WOW bilateral in 1.3.4: the
   operator of the author's own WOW layer, with range weights taken from a guide. It takes the name Auchère et al. (2023)
@@ -22,12 +23,19 @@ Prepared as 1.3.5. The author's decision on the WOW layers. The `ael` operators 
   of the plain WOW reach about 200 px from the edge of the data, 0.45 R☉), the plain WOW beyond, and a feather of
   several tenths of R☉, so that the change of texture leaves no radial frontier. Blend them as two layers with masks
   in Photoshop, never inside one layer. This blend has not been measured yet.
-- Tests: the defaults, the old-recipe and the sign tests use the new name and default; selftest 107 of 107. Checks and
-  limits: `docs/VALIDATION_1.3.5.md`.
+- **Photoshop layer names.** The layers of `corona.psb` take the names of the author's own files: the number is the
+  family, in the order of his stack (00 for the display base, then 01 NRGF, 02 RHEF, 03 MGN, 04 ACHF and 05 WOW), a
+  letter tells the variants of one family apart from the bottom up, and the name ends with the parameter that
+  distinguishes the layer. The defaults give `01 NRGF`, `05 WOW edge-aware` and `04 ACHF iso 1–16 px`. The layers keep
+  the order of the recipe. The receipt keeps the code name of every layer (`parameters.layers[].name`, with the
+  Photoshop name in `.layer`), and so do the file names of the arrays. `ael.develop.layer_names` returns the names.
+- **Contributors.** Eduardo Piñas (@edu27) is credited with his full name, at his request (issue #4).
+- Tests: the defaults, the old-recipe and the sign tests use the new name and default, and a new test checks the layer
+  names; selftest 108 of 108. Checks and limits: `docs/VALIDATION_1.3.5.md`.
 
 ## 1.3.4 — 2026-10-28
 
-Three reports by Edu (@edu27): a real-data check of issue #4 and issues #9 and #10. The `ael` package changes its
+Three reports by Eduardo Piñas (@edu27): a real-data check of issue #4 and issues #9 and #10. The `ael` package changes its
 default WOW layer and the display of its ACHF layers, and rebuilds WOW bilateral. The Codex plugin goes to 1.1.1; the
 Claude Code plugin of this repository's marketplace and the Claude plugin folder `plugins/claude-ael/` go to 1.3.4.
 

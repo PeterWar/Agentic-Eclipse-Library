@@ -248,7 +248,7 @@ validate the author's own chain.
   out at −0.27 (−0.16 with 1 % noise), and the inversion is already in the bilateral detail of the finest
   scales, before the whitening. On a smooth corona without noise it also draws lines and lobes along isophotes
   that the input does not have (ring metric 0.0144 in one sector; the other filters reach at most 0.0040). It was
-  one of the three default filters up to 1.3.3; see the field case contributed by Edu below. Since 1.3.4 it is the
+  one of the three default filters up to 1.3.3; see the field case contributed by Eduardo Piñas below. Since 1.3.4 it is the
   operator of the author's own WOW bilateral layer with the range weights of each scale taken from a guide: the same
   pattern comes out at +0.78 (+0.89 with 1 % noise), and the sector metric is 0.0036. On real data it still inverts
   up to 18 % of the clear detail in its worst 45° sector (`docs/VALIDATION_1.3.4.md`).
@@ -266,9 +266,9 @@ signal versus presentation support, and Canon operational geometry with an unfil
 case observations, not library defaults or complete scientific certification. The study
 states which results cannot be reproduced from the public repository.
 
-## A field case contributed by Edu (issues #4, #9 and #10)
+## A field case contributed by Eduardo Piñas (issues #4, #9 and #10)
 
-Edu ([@edu27](https://github.com/edu27)) photographed the 2026 eclipse from northern Spain, very close to the central
+Eduardo Piñas ([@edu27](https://github.com/edu27)) photographed the 2026 eclipse from northern Spain, very close to the central
 line, with an astronomy camera (Omegon veTec571c, IMX571, bin 2) on a Tamron 70–300 mm at 300 mm (about 5.4″/px,
 R☉ = 175 px): an exposure ladder from 1 ms to 2 s, captured to SER, calibrated and debayered in PIPP to 16-bit FITS,
 stacked with `ael stack` (49 inputs), corrected with `ael extinction` (k = 0.32) and filtered with `ael filters`.

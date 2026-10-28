@@ -92,7 +92,7 @@ def fine_detail_fidelity(layer_a: np.ndarray, layer_b: np.ndarray, lum_a: np.nda
                          rings=((1.2, 1.3), (1.3, 1.5), (1.5, 2.0)), sigmas=(1.5, 6.0), guard_px: float = 6.0,
                          rho_min: float = 0.5, inversions_max_pct: float = 10.0, reference_rho_min: float = 0.5,
                          rotation_null_deg: float = 30.0, rotation_null_max: float = 0.1, sectors: int = 8) -> dict:
-    """Real-data gate for a detail layer, proposed by Edu (@edu27) in issue #4: does the layer follow the fine detail
+    """Real-data gate for a detail layer, proposed by Eduardo Piñas (@edu27) in issue #4: does the layer follow the fine detail
     of the data, with its sign?
 
     Needs two INDEPENDENT stacks of the same eclipse (``lum_a``, ``lum_b``: for example the frames of two pointings,

@@ -11,6 +11,29 @@ from .geometry import EclipseGeometry
 # at 0.37. The plain WOW (`wow`, the default in 1.3.4) keeps 0.37 for recipes that list it (docs/VALIDATION_1.3.4.md).
 DEFAULT_OPACITY={'nrgf':.39,'wow_edge_aware':.37,'achf_iso_04':.08,'wow':.37}
 
+# Photoshop layer names (since 1.3.5), the scheme of the author's own files: the number is the family, in the order
+# of his stack (00 display base, 01 NRGF, 02 RHEF, 03 MGN, 04 ACHF, 05 WOW); a letter tells the variants of one family
+# apart from the bottom up; then the filter and the parameter that distinguishes it. The receipt keeps the code names.
+LAYER_LABELS={'nrgf':('01','NRGF'),'nrgf_log':('01','NRGF log'),'rhef':('02','RHEF'),
+              'rhef_upsilon':('02','RHEF Upsilon'),'rhef_local60':('02','RHEF local 60°'),
+              'rhef_local30':('02','RHEF local 30°'),'mgn':('03','MGN'),'achf_angular':('04','ACHF angular'),
+              'achf_angular4':('04','ACHF angular smoothed 4 px'),'achf_angular8':('04','ACHF angular smoothed 8 px'),
+              'achf_iso_01':('04','ACHF iso 2–32 px'),'achf_iso_04':('04','ACHF iso 1–16 px'),
+              'achf_iso_05':('04','ACHF iso 2–48 px'),'achf_iso_06':('04','ACHF iso 4–64 px'),
+              'wow':('05','WOW'),'wow_edge_aware':('05','WOW edge-aware')}
+
+
+def layer_names(names):
+    """Photoshop layer names of the filters ``names``, listed from the bottom up: ``['01 NRGF', '05 WOW edge-aware',
+    '04 ACHF iso 1–16 px']`` for the defaults, ``'05a WOW'`` and ``'05b WOW edge-aware'`` when both WOW layers are listed."""
+    names=[ALIASES.get(n,n) for n in names]
+    families=[LAYER_LABELS[n][0] for n in names]
+    out=[]
+    for i,(n,family) in enumerate(zip(names,families)):
+        letter='abcdefghijklmnop'[families[:i].count(family)] if families.count(family)>1 else ''
+        out.append(f'{family}{letter} {LAYER_LABELS[n][1]}')
+    return out
+
 
 def layer_alpha(base_alpha,observed,mode):
     """Multiply must use exactly the base's limb ramp; never an earlier fade."""
@@ -141,9 +164,9 @@ def filters_from_config(config_path,out_dir,*,progress=print):
     add('Background',np.zeros_like(base),np.ones(valid.shape))
     # Signed floating input remains authoritative; 16-bit reference retains positive range.
     add('Linear reference / receipt scale',reference,alpha,visible=False)
-    add('Display base',base,alpha)
+    add('00 Display base',base,alpha)
     domain_checks=[]
-    for i,name in enumerate(names):
+    for i,(name,label) in enumerate(zip(names,layer_names(names))):
         progress(f'filter {i+1}/{len(names)}: {name}')
         image,mode,info=make_filter(name,lum,valid,geo,achf_display=achf_display)
         observed=valid & np.isfinite(image)
@@ -155,8 +178,8 @@ def filters_from_config(config_path,out_dir,*,progress=print):
         domain_checks.append(bool(np.isnan(image[~valid]).all() and (al[~valid]==0).all()))
         for suffix,arr in (('layer',image),('alpha',al)):
             p=out/f'{name}_{suffix}.npy'; np.save(p,arr); outputs[f'{name}_{suffix}']=p
-        add(name,image,al,mode,opacity,visible)
-        params.append(dict(name=name,mode=mode,opacity=opacity,visible=visible,parameters=info,
+        add(label,image,al,mode,opacity,visible)
+        params.append(dict(name=name,layer=label,mode=mode,opacity=opacity,visible=visible,parameters=info,
                            observed_pixels=int(observed.sum()),alpha='same as display base on observed domain'))
     outputs['preview']=io.save_png(out/'preview.png',np.round(np.clip(comp,0,1)*255).astype(np.uint8))
     outputs['display']=io.save_tiff(out/'display.tif',photoshop.to_u16(comp),description='Display only; not linear photometry')

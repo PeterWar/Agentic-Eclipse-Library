@@ -109,7 +109,7 @@ scan = cg.scan_mirror(ours, c2, [(2.4, 2.8), (2.8, 3.3), (3.3, 4.0), (4.0, 5.0)]
   answers "undetermined", a frequent answer: find another direction. Decide the parity on the fine detail. The
   recipe always scans with the 12° high-pass, and the scan has been validated against LASCO C2 only (rings from
   2.4 R☉): `gates.parity_in_validated_range` says whether a reference's rings are in that range.
-- **Evidence for the parity.** Field case, Edu (@edu27), 2026, frames from an astro camera that came out mirrored:
+- **Evidence for the parity.** Field case, Eduardo Piñas (@edu27), 2026, frames from an astro camera that came out mirrored:
   against C2 the whole profile preferred the unmirrored image at north 91° (ρ 0.83), and `compare_structure` there
   gave `rho_0` 0.73–0.87 with a null fraction of 0.000 in every ring. Its fine detail was 0.36–0.40, with a
   residual rotation drifting from −3° to +6°; the mirrored solution gave 0.68–0.81 at 0.0–0.5°. On the 2026 MSB
