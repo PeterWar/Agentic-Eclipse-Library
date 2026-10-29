@@ -1,9 +1,10 @@
 # Changelog
 
-## Unreleased
+## 1.3.6 — 2026-10-29
 
 Two corrections found by Francisco Bitto in his review of the AEL code (pull request #8). Values that were already
-right do not change.
+right do not change. The Codex plugin goes to 1.1.3; the Claude Code plugin of this repository's marketplace and the
+Claude plugin folder `plugins/claude-ael/` go to 1.3.6.
 
 - **`ael.render.soft_log` no longer returns −∞ for strongly negative values.** In float32 the sum
   `S/2 + sqrt(S²/4 + ε²)` cancels: −∞ for S = −10⁴ and ε = 1. Negative values now use the same function written
@@ -13,8 +14,10 @@ right do not change.
 - **`ael.filters.mgn` no longer depends on the units of the input.** An absolute floor of 1e-12 on the local spread
   changed the layer by up to 0.40 when the input was multiplied by 1e-8. The floors are gone; in ordinary units the
   MGN is bit-identical to 1.3.5, and at 1e-8, 1e-4 and 1e4 times the input it agrees within 1e-4.
-- **Contributors:** Francisco Bitto and his Eclipse Image Processor, which stays in his own repository.
-- The plugin runtimes (`plugins/*/runtime/ael/`) still carry the 1.3.5 files; they are synchronised at release.
+- **Contributors:** Francisco Bitto and his Eclipse Image Processor, which stays in his own repository. Eduardo Piñas
+  and Codex are co-authors of a commit, so that GitHub lists them among the contributors; the README names Claude next
+  to Codex.
+- Measurements and tests: [`docs/VALIDATION_1.3.6.md`](docs/VALIDATION_1.3.6.md).
 
 ## 1.3.5 — 2026-10-28
 

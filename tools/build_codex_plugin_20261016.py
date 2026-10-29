@@ -10,7 +10,8 @@ import zipfile
 REPO = Path(__file__).resolve().parents[1]
 PLUGIN = REPO / "plugins" / "codex-ael"
 DOCS = ("DEVELOP.md", "FIELD_LESSONS.md", "PAPER_AND_LIBRARY.md", "EXISTING_EDIT_CASE_STUDY.md",
-        "VALIDATION_1.3.2.md", "VALIDATION_1.3.4.md", "VALIDATION_1.3.5.md", "ASTRO_THREE_CAMERA_CASE_STUDY.md")
+        "VALIDATION_1.3.2.md", "VALIDATION_1.3.4.md", "VALIDATION_1.3.5.md", "VALIDATION_1.3.6.md",
+        "ASTRO_THREE_CAMERA_CASE_STUDY.md")
 
 
 def digest(path):

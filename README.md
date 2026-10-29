@@ -157,7 +157,7 @@ need to publish your photos to contribute.
   codex plugin add agentic-eclipse-library@pere-guerra-eclipse
   ```
   Python and its dependencies are checked separately. The plugin runs locally and includes the maintained
-  AEL 1.3.5 engine. See the guide for desktop-app installation and supported workflows.
+  AEL 1.3.6 engine. See the guide for desktop-app installation and supported workflows.
 - **Other agents:** point the agent at [`AGENTS.md`](AGENTS.md). Each skill is a plain `SKILL.md` with
   `references/` and `scripts/`.
 - Most text is in Catalan. Current models read and translate it without trouble; ask your agent to answer in your
@@ -216,6 +216,18 @@ repository").
 
 [MIT](LICENSE) © 2026 Pere Guerra Serra. You may use, copy, modify and redistribute this work freely, including
 commercially; the licence only asks you to keep the copyright and permission notices with copies of the work.
+
+## What is new in 1.3.6
+
+Two corrections that Francisco Bitto found in his review of the AEL code (see [Contributors](#contributors)). Values
+that were already right do not change.
+
+- **`ael.render.soft_log` no longer returns −∞** for strongly negative values after sky subtraction.
+- **The MGN no longer depends on the units of the input.** Multiplied by 1e-8, it changed by up to 0.40. See
+  [`docs/VALIDATION_1.3.6.md`](docs/VALIDATION_1.3.6.md).
+- **Contributors:** Francisco Bitto and his Eclipse Image Processor, which stays in his own repository. Eduardo Piñas
+  and Codex are co-authors in the history, so GitHub lists them among the contributors, and Claude is named next to
+  Codex.
 
 ## What is new in 1.3.5
 

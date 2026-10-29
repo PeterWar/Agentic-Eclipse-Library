@@ -412,3 +412,64 @@ def test_motion_gif_pipeline_refuses_waves():
         assert r["gates"]["grain_uniformity"]["passed"] and r["gates"]["no_concentric_bands"]["passed"]
         import os
         assert os.path.getsize(r["files"]["gif"]) > 1000
+
+
+# ------------------------------------------------------------------------------------------------
+# Francisco Bitto's review of the AEL code (pull request #8, October 2026)
+# ------------------------------------------------------------------------------------------------
+def test_soft_log_has_no_cancellation_below_the_noise():
+    """The sum ``S/2 + sqrt(S²/4 + ε²)`` cancels in float32 for strongly negative S: −∞ for S = −10⁴, ε = 1.
+    Negative values now go through the same function written without the cancellation; values at or above zero
+    are computed exactly as in 1.3.5."""
+    from ael.render import soft_log
+    s = np.array([-1e6, -1e4, -1e3, -10, -1, -1e-3, 0, 1e-3, 1, 10, 1e4, 1e6], np.float32)
+    for floor in (1.0, 3.0, 1e-3):
+        v = soft_log(s, floor)
+        exact = np.log(floor) + np.arcsinh(s.astype(np.float64) / (2 * floor))
+        assert v.dtype == np.float32 and np.isfinite(v).all(), (floor, v)
+        assert np.all(np.abs(v - exact) <= 2e-6 * np.maximum(1, np.abs(exact))), (floor, v - exact)
+        with np.errstate(divide='ignore'):
+            old = np.log(0.5 * s + np.sqrt(0.25 * s * s + np.float32(floor) ** 2)).astype(np.float32)
+        assert np.array_equal(v[s >= 0], old[s >= 0])
+    with np.errstate(divide='ignore'):     # negative control: the 1.3.5 formula on the case of the report
+        s = np.float32(-1e4)
+        assert np.isneginf(np.log(0.5 * s + np.sqrt(0.25 * s * s + np.float32(1.0))))
+
+
+def _mgn_135(a, m, sigmas=(1.25, 2.5, 5, 10, 20, 40), k=.7, h=.7, gamma=3.2, min_support=.01):
+    """The MGN of 1.3.5, with its absolute floors of 1e-12: the negative control."""
+    w = np.ones(len(sigmas)); acc = np.zeros(a.shape, np.float32)
+    for s, wi in zip(sigmas, w):
+        mu, sd = filters.local_mean_std(a, m, s, min_support)
+        c = np.where(np.isfinite(mu) & (sd > 0), (a - mu) / np.maximum(sd, 1e-12), np.nan)
+        acc += wi * np.arctan(k * c).astype(np.float32)
+    acc /= float(np.sum(w)); acc[~m] = np.nan
+    lo, hi = np.nanmin(a[m]), np.nanmax(a[m])
+    g = np.clip((a - lo) / max(hi - lo, 1e-12), 0, 1) ** (1.0 / gamma)
+    return (h * g + (1 - h) * acc).astype(np.float32)
+
+
+def test_mgn_does_not_depend_on_the_units_of_the_input():
+    """An absolute floor of 1e-12 on the local spread made the MGN change when the input was multiplied by 1e-8
+    (up to 0.40 here). Without the floors the layer is the same at any scale, up to float32 rounding, and in
+    ordinary units it is bit-identical to 1.3.5."""
+    from ael.filterbank import make_filter
+    H, W, cx, cy, R = 200, 260, 130.3, 99.7, 20.0
+    g = EclipseGeometry((H, W), (cx, cy), R, (cx + 1, cy), R + 1)
+    r, th = g.radius_map() / R, np.radians(g.pa_map())
+    rng = np.random.default_rng(3)
+    img = (r ** -3 * (1 + .2 * np.cos(9 * th)) * (1 + .01 * rng.standard_normal((H, W)))).astype(np.float32)
+    m = g.radius_map('moon') > 1.03 * (R + 1)
+    base = filters.mgn(img, m, h=.7, min_support=.01)
+    assert np.array_equal(base, _mgn_135(img, m), equal_nan=True)
+    layer = make_filter('mgn', img, m, g)[0]
+    for scale in (1e-8, 1e-4, 1e4):
+        scaled = (img * np.float32(scale)).astype(np.float32)
+        q = filters.mgn(scaled, m, h=.7, min_support=.01)
+        assert np.array_equal(np.isfinite(q), np.isfinite(base))
+        ok = np.isfinite(q)
+        assert np.max(np.abs(q[ok] - base[ok])) < 1e-4, (scale, np.max(np.abs(q[ok] - base[ok])))
+        lq = make_filter('mgn', scaled, m, g)[0]; ok = np.isfinite(lq) & np.isfinite(layer)
+        assert np.max(np.abs(lq[ok] - layer[ok])) < 1e-4, scale
+    old = _mgn_135((img * np.float32(1e-8)).astype(np.float32), m); ok = np.isfinite(old) & np.isfinite(base)
+    assert np.max(np.abs(old[ok] - base[ok])) > .05      # the 1.3.5 floors fail where the new MGN passes

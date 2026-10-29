@@ -126,11 +126,21 @@ def stretch01(x: np.ndarray, lo: float, hi: float, gamma: float = 1.0) -> np.nda
 
 
 def soft_log(signal: np.ndarray, floor: float) -> np.ndarray:
-    """``log(S/2 + sqrt(S²/4 + ε²))``: equal to ``log S`` where ``S ≫ ε``, flat at ``log ε`` where the
-    signal is at or below the noise (also for negative values after sky subtraction).  No holes, no
-    clipping, and the noise-dominated sky stays dark and smooth."""
+    """``log(S/2 + sqrt(S²/4 + ε²))``: equal to ``log S`` where ``S ≫ ε`` and close to ``log ε`` where the
+    signal is within the noise. Below the noise (negative values after sky subtraction) it falls slowly, as
+    ``log(ε²/|S|)``.  No holes, no clipping, and the noise-dominated sky stays dark and smooth.
+
+    For negative values the sum cancels in float32 (−∞ for S = −10⁴ and ε = 1, found by Francisco Bitto), so
+    there it is computed as ``log(ε² / (sqrt(S²/4 + ε²) − S/2))``, the same function without the cancellation.
+    Values at or above zero are computed as before."""
     s = np.asarray(signal, np.float32)
-    return np.log(0.5 * s + np.sqrt(0.25 * s * s + np.float32(floor) ** 2)).astype(np.float32)
+    floor2 = np.float32(floor) ** 2
+    root = np.sqrt(0.25 * s * s + floor2)
+    negative = s < 0
+    out = np.log(0.5 * s + root, where=~negative, out=np.empty(s.shape, np.float32))
+    ratio = np.divide(floor2, root - 0.5 * s, where=negative, out=np.ones(s.shape, np.float32))
+    np.log(ratio, where=negative, out=out)
+    return out
 
 
 def structure_image(lum: np.ndarray, valid: np.ndarray | None, geometry: EclipseGeometry, *,
