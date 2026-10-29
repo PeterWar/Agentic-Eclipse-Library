@@ -122,7 +122,8 @@ def mgn(img: np.ndarray, valid: np.ndarray | None = None, *, sigmas=(1.25, 2.5, 
     averaged over scales (optionally weighted).  With ``h > 0`` it is mixed with a global
     gamma-transformed image, as in the paper; pass ``global_image`` (already in [0, 1]) to use your own
     tone-mapped base instead.  Returns an image in radians-like units (local part in [−π/2, π/2]) if
-    ``h == 0``.
+    ``h == 0``.  The result does not depend on the units of the input (until 1.3.5 an absolute floor of 1e-12
+    on the local spread changed it when the input was scaled by 1e-8; found by Francisco Bitto).
     """
     a = np.asarray(img, np.float32)
     m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))
@@ -130,7 +131,8 @@ def mgn(img: np.ndarray, valid: np.ndarray | None = None, *, sigmas=(1.25, 2.5, 
     acc = np.zeros(a.shape, np.float32)
     for s, wi in zip(sigmas, w):
         mu, sd = local_mean_std(a, m, s, min_support)
-        c = np.where(np.isfinite(mu) & (sd > 0), (a - mu) / np.maximum(sd, 1e-12), np.nan)
+        c = np.full(a.shape, np.nan, np.float32)    # no absolute floor: the result must not depend on the units
+        np.divide(a - mu, sd, out=c, where=np.isfinite(mu) & (sd > 0))
         acc += wi * np.arctan(k * c).astype(np.float32)
     acc /= float(np.sum(w))
     acc[~m] = np.nan
@@ -139,7 +141,7 @@ def mgn(img: np.ndarray, valid: np.ndarray | None = None, *, sigmas=(1.25, 2.5, 
     if global_image is None:
         lo = np.nanmin(a[m]) if a0 is None else a0
         hi = np.nanmax(a[m]) if a1 is None else a1
-        g = np.clip((a - lo) / max(hi - lo, 1e-12), 0, 1) ** (1.0 / gamma)
+        g = np.clip((a - lo) / (hi - lo if hi > lo else 1.0), 0, 1) ** (1.0 / gamma)
     else:
         g = np.asarray(global_image, np.float32)
     return (h * g + (1 - h) * acc).astype(np.float32)

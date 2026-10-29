@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased
+
+Two corrections found by Francisco Bitto in his review of the AEL code (pull request #8). Values that were already
+right do not change.
+
+- **`ael.render.soft_log` no longer returns −∞ for strongly negative values.** In float32 the sum
+  `S/2 + sqrt(S²/4 + ε²)` cancels: −∞ for S = −10⁴ and ε = 1. Negative values now use the same function written
+  without the cancellation, `log(ε² / (sqrt(S²/4 + ε²) − S/2))`; values at or above zero are computed as before, bit
+  for bit. The docstring said the curve stays flat at `log ε` below the noise; it falls slowly, as `log(ε²/|S|)`, and
+  now says so.
+- **`ael.filters.mgn` no longer depends on the units of the input.** An absolute floor of 1e-12 on the local spread
+  changed the layer by up to 0.40 when the input was multiplied by 1e-8. The floors are gone; in ordinary units the
+  MGN is bit-identical to 1.3.5, and at 1e-8, 1e-4 and 1e4 times the input it agrees within 1e-4.
+- **Contributors:** Francisco Bitto and his Eclipse Image Processor, which stays in his own repository.
+- The plugin runtimes (`plugins/*/runtime/ael/`) still carry the 1.3.5 files; they are synchronised at release.
+
 ## 1.3.5 — 2026-10-28
 
 The author's decision on the WOW layers, and the names of the Photoshop layers. The `ael` operators do not change. The

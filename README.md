@@ -93,6 +93,15 @@ NRGF of 1.3.1 after the 1.3.2 release, and corrected them.
 **Oscar Maseda** (Sony) and **Carlos Oltra** (Nikon) photographed that eclipse and made their RAW frames available
 for the case study, as Raúl Hussein did with his Canon. The frames stay private.
 
+**Francisco Bitto** ([@fbitto](https://github.com/fbitto)) wrote the
+[Eclipse Image Processor](https://github.com/fbitto/Eclipse-Image-Processor), a desktop application with adjustable
+controls and a layered Photoshop export. It applies AEL's NRGF, edge-aware WOW and ACHF variants next to filters of
+his own, each as an independent layer. He offered it in
+[pull request #8](https://github.com/PeterWar/Agentic-Eclipse-Library/pull/8); it lives in his repository, where he
+maintains it. His review of the AEL code for that work found two problems in the library: the soft logarithm of
+`ael.render` returned −∞ for strongly negative values, and the MGN changed when the input was multiplied by 1e-8.
+Both are corrected.
+
 **Eduardo Piñas** ([@edu27](https://github.com/edu27)) photographed the 2026 eclipse from northern Spain with an astronomy
 camera and a 300 mm lens, and tested AEL 1.3.3 on his frames. His comment on
 [issue #4](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/4) brought a real-data gate, with two independent
