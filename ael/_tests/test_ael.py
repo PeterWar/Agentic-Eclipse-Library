@@ -8,7 +8,7 @@ from __future__ import annotations
 import numpy as np
 
 from ael import filters, gates, motion, polar, render
-from ael.geometry import EclipseGeometry, fit_limb, position_angle
+from ael.geometry import EclipseGeometry, find_disc, fit_limb, measure_geometry, position_angle
 from ael.synthetic import SyntheticScene, render_scene
 
 
@@ -31,6 +31,60 @@ def test_fit_limb_recovers_moon():
     res = fit_limb(img, (180, 150), 62.0)
     assert abs(res["xy"][0] - 183.1) < 0.3 and abs(res["xy"][1] - 148.7) < 0.3, res
     assert abs(res["r"] - 62.0) < 0.6, res
+
+
+
+def _disc_scene(R=60.0, ratio=1.05, shape=(330, 450), sun=(231.3, 162.6), angle=40.0):
+    """A synthetic totality: the Moon off the Sun by the whole difference of the radii, in a random direction."""
+    Rm = ratio * R
+    a = np.radians(angle)
+    moon = (sun[0] + (Rm - R) * np.cos(a), sun[1] + (Rm - R) * np.sin(a))
+    img = SyntheticScene(R, seed=5, moon_radius_px=Rm, psf_sigma_px=1.2, n_rays=80).radiance(shape, sun, moon)
+    return img, moon, Rm
+
+
+def test_find_disc_measures_the_moon_with_no_input():
+    img, moon, Rm = _disc_scene()
+    d = find_disc(img)                                           # a dark Moon with data: the limb
+    assert d["method"] == "lunar limb", d
+    assert np.hypot(d["xy"][0] - moon[0], d["xy"][1] - moon[1]) < 0.5 and abs(d["r"] - Rm) < 0.6, d
+    yy, xx = np.mgrid[:img.shape[0], :img.shape[1]]
+    disc = np.hypot(xx - moon[0], yy - moon[1]) <= Rm
+    for fill in (np.nan, 0.0):                                   # AEL stacks: NaN; other stacks: 0
+        hole = img.copy(); hole[disc] = fill
+        d = find_disc(hole)
+        assert d["method"] == "region without data", d
+        assert np.hypot(d["xy"][0] - moon[0], d["xy"][1] - moon[1]) < 0.5 and abs(d["r"] - Rm) < 1.0, d
+    rgba = np.dstack([img, img, img, (~disc).astype(np.float32)])   # an alpha channel marks the observed pixels
+    d = find_disc(rgba)
+    assert d["method"] == "region without data" and abs(d["r"] - Rm) < 1.0, d
+    rgb = np.dstack([1.1 * img, img, 0.8 * img])                    # colour, half of the disc outside the frame
+    part = rgb[:, int(moon[0]) - 10:]
+    d = find_disc(part)
+    assert np.hypot(d["xy"][0] - (moon[0] - int(moon[0]) + 10), d["xy"][1] - moon[1]) < 1.0, d
+
+
+def test_find_disc_refuses_an_image_without_a_moon():
+    rng = np.random.default_rng(3)
+    yy, xx = np.mgrid[:300, :400]
+    for blob in (0.0, 5000.0):
+        img = 300 * (1 + 0.2 * xx / 400) + rng.normal(0, 3, (300, 400)) + blob * np.exp(-((xx - 200) ** 2 + (yy - 150) ** 2) / 8000.0)
+        try:
+            d = find_disc(img.astype(np.float32))
+        except RuntimeError:
+            continue
+        raise AssertionError(f"a disc was found where there is none: {d}")
+
+
+def test_measure_geometry_says_what_it_assumed():
+    img, moon, Rm = _disc_scene()
+    geo, report = measure_geometry(img)
+    assert geo.sun_xy == geo.moon_xy and geo.sun_radius_px == geo.moon_radius_px, geo
+    assert geo.north_deg == 0.0 and geo.mirrored is False and geo.arcsec_per_px is None, geo
+    assert "Assumed" in geo.note and "north unknown" in geo.note, geo.note
+    geo, report = measure_geometry(img, north_deg=30.0, mirrored=True, sun_radius_px=60.0)
+    assert geo.north_deg == 30.0 and geo.mirrored and geo.sun_radius_px == 60.0, geo
+    assert "north unknown" not in geo.note and "parity" not in geo.note, geo.note
 
 
 # ------------------------------------------------------------------ polar
