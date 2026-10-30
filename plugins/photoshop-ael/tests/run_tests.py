@@ -91,27 +91,38 @@ def compare_products(direct_result: dict, bridge_root: Path, operation: str) -> 
     return comparisons
 
 
+def psb_layers_u16(psb: Path) -> list:
+    """The layers of AEL's PSB as psd-tools reads them: 16-bit colour and alpha (None when opaque)."""
+    from psd_tools import PSDImage
+
+    layers = []
+    for layer in PSDImage.open(str(psb)):
+        shape_channel = layer.numpy("shape")
+        layers.append({"name": layer.name, "visible": bool(layer.visible), "opacity": int(layer.opacity),
+                       "mode": str(layer.blend_mode).split(".")[-1].lower(),
+                       "rgb16": np.round(np.asarray(layer.numpy("color"), np.float64) * 65535).astype(np.int64),
+                       "alpha16": None if shape_channel is None else
+                       np.round(np.asarray(shape_channel, np.float64)[..., 0] * 65535).astype(np.int64)})
+    return layers
+
+
 def photoshop_15bit_model(psb: Path, shape) -> np.ndarray:
     """The visible layers of AEL's PSB composited as Photoshop holds 16-bit images: layers and alphas on the
     15-bit grid (0–32768), the blend and the opacity mix rounded to it after every layer, exported to 16 bits.
     The blends are AEL's (develop.py, add()); the opacity is the stored byte."""
-    from psd_tools import PSDImage
-
     def q15(value):
         return np.round(np.asarray(value, np.float64) * 32768) / 32768
 
     comp = np.zeros(shape, np.float64)
-    for layer in PSDImage.open(str(psb)):
-        if not layer.visible:
+    for layer in psb_layers_u16(psb):
+        if not layer["visible"]:
             continue
-        x = q15(np.round(np.asarray(layer.numpy("color"), np.float64) * 65535) / 65535)
-        shape_channel = layer.numpy("shape")
-        alpha = np.ones(shape[:2]) if shape_channel is None else np.asarray(shape_channel, np.float64)[..., 0]
-        alpha = q15(np.round(alpha * 65535) / 65535)
-        mode = str(layer.blend_mode).split(".")[-1].lower()
+        x = q15(layer["rgb16"] / 65535)
+        alpha = q15((np.full(shape[:2], 65535) if layer["alpha16"] is None else layer["alpha16"]) / 65535)
+        mode = layer["mode"]
         blend = x if mode == "normal" else comp * x if mode == "multiply" else \
             np.where(comp <= .5, 2 * comp * x, 1 - 2 * (1 - comp) * (1 - x))
-        weight = alpha[..., None] * (int(layer.opacity) / 255)
+        weight = alpha[..., None] * (layer["opacity"] / 255)
         comp = q15(comp * (1 - weight) + q15(blend) * weight)
     return np.round(np.clip(comp, 0, 1) * 65535).astype(np.int64)
 
@@ -178,6 +189,7 @@ def main() -> None:
                 after_structure = root / "after_structure.tif"
                 after_polar = root / "after_polar.tif"
                 after_untagged = root / "after_untagged.tif"
+                (root / "photoshop_layers").mkdir()
                 jsx = f'''#include {json.dumps(str(core))}
 var REPORT = {{ok:false}};
 var OWNED = {{}};
@@ -219,6 +231,38 @@ function exportComposite(result, target) {{
         return {{bits:String(copy.bitsPerChannel), source_layers:doc.layers.length}};
     }}
     return null;
+}}
+// Each layer of the PSB alone on its black Background, in normal mode at full opacity, as Photoshop holds it. The
+// other layers are removed, not hidden: flattening hidden layers would ask in a dialog.
+function exportLayers(result, folder) {{
+    var done=[];
+    for (var i=0; i<result.opened_documents.length; i++) {{
+        if (result.opened_documents[i].kind !== 'psb') continue;
+        var doc=documentByID(result.opened_documents[i].id);
+        for (var k=0; k<doc.layers.length; k++) {{
+            var name=doc.layers[k].name;
+            if (name === 'Background') continue;
+            app.activeDocument=doc;
+            var copy=doc.duplicate('AEL layer test', false);
+            remember(copy.id);
+            for (var j=copy.layers.length-1; j>=0; j--) {{
+                var layer=copy.layers[j];
+                if (layer.name !== name && layer.name !== 'Background') layer.remove();
+            }}
+            for (j=0; j<copy.layers.length; j++) {{
+                copy.layers[j].visible=true;
+                if (copy.layers[j].name === name) {{ copy.layers[j].blendMode=BlendMode.NORMAL; copy.layers[j].opacity=100; }}
+            }}
+            copy.flatten();
+            var options=new TiffSaveOptions(); options.embedColorProfile=false; options.imageCompression=TIFFEncoding.NONE;
+            options.layers=false; options.alphaChannels=false; options.transparency=false;
+            var file=new File(folder+'/layer_'+k+'.tif');
+            copy.saveAs(file, options, true, Extension.LOWERCASE);
+            copy.close(SaveOptions.DONOTSAVECHANGES);
+            done.push({{name:name, path:file.fsName}});
+        }}
+    }}
+    return done;
 }}
 function imageOperation(operation, afterPath) {{
     REPORT.stage=operation+'_open'; AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT);
@@ -309,6 +353,7 @@ try {{
         images:filters.images.length,receipt:filters.bridge_receipt,native_check:filters.native_check}};
     REPORT.filters.composite=exportComposite(filters,{json.dumps(str(root / "photoshop_composite.tif"))});
     REPORT.filters.psb=filters.psb;
+    REPORT.filters.layers=exportLayers(filters,{json.dumps(str(root / "photoshop_layers"))});
     closeOwned();
     REPORT.stage='filters_documents'; AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT);
     var separate=AELPhotoshop.run({{operation:'filters',outputParent:{json.dumps(str(root))},open_mode:'documents',
@@ -339,7 +384,7 @@ try {{
 }} catch(e) {{ REPORT.error=String(e.message); REPORT.stack=String(e.stack); }}
 finally {{ closeOwned(); AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT); }}
 'PHOTOSHOP_AEL_TEST_DONE';'''
-                completed = do_javascript(jsx, timeout=240)
+                completed = do_javascript(jsx, timeout=600)
                 report["photoshop_command"] = "osascript: tell com.adobe.Photoshop to do javascript <generated synthetic test>"
                 report["photoshop_stdout"] = completed.stdout
                 report["photoshop_stderr"] = completed.stderr
@@ -409,6 +454,17 @@ finally {{ closeOwned(); AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_rep
                         report["photoshop_composite"][name] = {"max_steps": int(steps.max()),
                             "p999_steps": float(np.percentile(steps, 99.9)), "mean_steps": float(steps.mean()),
                             "exact": float(np.mean(steps == 0)), "over_2_steps": float(np.mean(steps > 2))}
+                # Each layer as Photoshop holds it, against the layer AEL wrote, where AEL's alpha is opaque. Declared
+                # before the first run: at most one 16-bit step, the round trip through Photoshop's 15-bit grid.
+                written = {layer["name"]: layer for layer in psb_layers_u16(Path(jsx_result["filters"]["psb"]))}
+                report["photoshop_layers"] = {}
+                for item in jsx_result["filters"].get("layers") or []:
+                    layer = written[item["name"]]
+                    opaque = np.ones(layer["rgb16"].shape[:2], bool) if layer["alpha16"] is None else layer["alpha16"] == 65535
+                    held = tifffile.imread(item["path"]).astype(np.int64)
+                    steps = np.abs(held - layer["rgb16"])[opaque] if held.shape == layer["rgb16"].shape else np.array([99])
+                    report["photoshop_layers"][item["name"]] = {"opaque_pixels": int(opaque.sum()),
+                        "max_steps": int(steps.max()) if steps.size else None, "exact": float(np.mean(steps == 0)) if steps.size else None}
 
             report["gates"] = {
                 "direct_structure": bool(direct_structure.get("ok")),
@@ -452,6 +508,9 @@ finally {{ closeOwned(); AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_rep
                     "photoshop_composite_is_15bit_arithmetic":
                         report["photoshop_composite"].get("vs_15bit_model", {}).get("mean_steps", 99) <= 0.2 and
                         report["photoshop_composite"].get("vs_15bit_model", {}).get("over_2_steps", 1) <= 0.005,
+                    "photoshop_layers_within_1_step": len(report["photoshop_layers"]) == 18 and all(
+                        value["opaque_pixels"] > 0 and value["max_steps"] is not None and value["max_steps"] <= 1
+                        for value in report["photoshop_layers"].values()),
                     # Separate documents: Photoshop has no Overlay at 32 bits, so every one must be 16-bit.
                     "documents_16bit": report["jsx"]["filters_documents"]["bits"] ==
                         ["BitsPerChannelType.SIXTEEN"] * 33,

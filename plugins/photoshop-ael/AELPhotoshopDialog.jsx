@@ -41,6 +41,12 @@ var AELPhotoshopDialog = function () {
         "master — EXPERIMENTAL: registration not validated on real frames", "filters — from linear.npy"]);
     operation.selection = 0;
     operation.preferredSize.width = 410;
+    // The same notice as the PixInsight connector's workflow dialog.
+    var experimental = win.add("statictext", undefined, "Experimental. The filter layers from linear.npy operation is " +
+        "validated with synthetic data. The linear master registers every frame on the Sun, and on real eclipse " +
+        "frames that registration is not valid yet: it lands 0.07-2.2 px from the reference registration. " +
+        "Do not use it on real frames.", {multiline: true});
+    experimental.preferredSize = [610, 48];
 
     var output = row("Output parent", Folder.myDocuments.fsName, folder);
     var geometry = row("Geometry JSON", "", function (field) { file(field, "EclipseGeometry JSON"); });

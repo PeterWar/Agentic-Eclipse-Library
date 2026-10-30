@@ -27,7 +27,7 @@ import tifffile
 
 import ael
 from ael import calibrate, develop, io, photoshop, stack
-from ael.filterbank import DEFAULTS, NAMES
+from ael.filterbank import ALIASES, DEFAULTS, NAMES
 from ael.filters import normalized_gaussian
 from ael.geometry import EclipseGeometry, fit_limb
 
@@ -145,8 +145,15 @@ def run_filters(cfg: dict) -> dict:
         display["scale"] = measured_scale
     display.setdefault("asinh", 20)
     display.setdefault("highlight_ceiling", 0.9)
+    # "all" (the default), "defaults" (AEL's own default layers, read from ael.filterbank) or a list of names; the
+    # names AEL still accepts for renamed filters (ael.filterbank.ALIASES) are turned into the current ones.
+    requested = cfg.get("filters", "all")
+    if requested == "defaults":
+        requested = list(DEFAULTS)
+    elif isinstance(requested, list):
+        requested = [ALIASES.get(name, name) for name in requested]
     recipe = {"input": str(input_path), "geometry": str(geometry),
-              "min_coverage": minimum, "filters": cfg.get("filters", "all"),
+              "min_coverage": minimum, "filters": requested,
               "visible": cfg.get("visible", list(DEFAULTS)),
               "opacities": cfg.get("opacities", {}), "display": display,
               "photoshop": bool(cfg.get("photoshop_layers", False)),

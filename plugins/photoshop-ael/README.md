@@ -43,7 +43,7 @@ The bridge exports the merged visible document through a temporary duplicate. It
 
 ### Filter layers from an existing linear master
 
-Choose `filters` and select `linear.npy`. The helper finds `geometry.json`, `valid.npy`, `coverage.npy` and `alpha.npy` beside it, measures a display scale from observed corona pixels, and generates all sixteen portable AEL filters by default.
+Choose `filters` and select `linear.npy`. The helper finds `geometry.json`, `valid.npy`, `coverage.npy` and `alpha.npy` beside it, measures a display scale from observed corona pixels, and generates all sixteen portable AEL filters by default. A Python configuration may ask for `"filters": "defaults"`, AEL's own default layers read from `ael.filterbank` (NRGF, WOW edge-aware and isotropic ACHF 04), or for a list of names; a name AEL still accepts for a renamed filter, such as `wow_bilateral`, becomes the current one.
 
 It writes the authoritative NPY products, sixteen 16-bit filter TIFFs, sixteen alpha TIFFs and a display TIFF. `display.tif` is the display base alone over black with its alpha, as a 32-bit float image: exactly where AEL starts its own composite, rendered with the same scale and no visible filter, so the filter layers can be stacked on it with the blend mode and opacity listed for each one; AEL's finished display, filters included, stays in `ael/display.tif`. `pixelmath.json` and `PIXELMATH.md` are the same recipe written for PixInsight's PixelMath.
 
@@ -62,7 +62,7 @@ Choose `master`, select the input frames, reference geometry, and a measured cam
 }
 ```
 
-The workflow reads exposure and ISO with ExifTool, rejects mixed cameras or ISO values, registers every frame on the Sun, runs the frozen AEL stack recipe, and continues into filter layers. The dialog marks it EXPERIMENTAL: see the limitations.
+The workflow reads exposure and ISO with ExifTool, rejects mixed cameras or ISO values, registers every frame on the Sun, runs the frozen AEL stack recipe, and continues into filter layers. The dialog marks it EXPERIMENTAL and shows the same notice as the PixInsight connector: see the limitations.
 
 The corona is fixed on the Sun, and during totality the Moon moves across it (about 0.5″ per second). Registration therefore measures a translation on the corona: the logarithm of the unsaturated corona within 3 solar radii, weighted by its signal, fitted coarse to fine with a free exposure offset. Each frame leaves out its own Moon, fitted on its own limb, plus a margin for the blurred lunar edge (6 px or 1.5 % of the lunar radius); the limb gives only the starting point and each frame's lunar mask. Two gates follow. The coronal structure must match: a band-pass of the corona (linear smoothing first, so short noisy exposures keep their structure) is correlated where both frames have data over the filter's whole support, and compared with the same frame turned 90° and 270° about the Sun; the structure score `(c − c_turned) / (1 − c_turned)` must reach 0.25. And the Moon may not have moved more than 0.1 lunar radii + 2 px relative to the Sun. Rotation is refused. Mixed-optics distortion, cloud transmission, colour calibration and absolute photometry are not inferred. This registration is the same code as the PixInsight connector's.
 
@@ -90,12 +90,15 @@ The test uses only synthetic data and paths containing spaces and accented chara
 - synthetic master registration on the Sun and comparison with known truth;
 - sixteen filter TIFFs and sixteen alpha TIFFs;
 - the layered PSB opened natively for `master` and `filters`, with its nineteen layers matching what AEL wrote, and the layer check failing on a stand-in document with one opacity byte too many or too few, or another blend mode;
+- each of the eighteen layers above the Background as Photoshop holds it (alone, normal mode, full opacity) against the layer AEL wrote, where AEL's alpha is opaque: at most one 16-bit step, the round trip through Photoshop's 15-bit grid, declared before the first run;
 - Photoshop's own composite of the PSB (a merged copy of the visible layers) against AEL's composite `ael/display.tif`: at most 8 16-bit steps, because Photoshop holds 16-bit images as 15-bit and rounds at each of the four visible blends; and against a model of that arithmetic (15-bit layers and alphas, rounding after every blend), which it must follow to a mean of 0.2 steps with at most 0.5 % of pixels beyond 2. On the demonstration image Photoshop lands up to 5 steps from AEL (4 at the 99.9th percentile, mean 0.9) and matches the model exactly at 95.8 % of its pixels. A 99.9th-percentile bound of 3, declared before the first run, failed at 4.0 and was replaced by the model once it reproduced Photoshop;
 - every separate document 16-bit;
 - the expected number of newly opened result documents, for the layered PSB and for separate documents;
 - cleanup of only documents created by the test.
 
 `run_package_tests.py --package FOLDER --output NEW_FOLDER` tests a folder written by `tools/build_package.py` in Photoshop the way a person uses it: the package's own entry script and dialog, with only the ScriptUI window, the file choosers and `alert()` replaced by test doubles so that no modal window appears; Python and AEL folder left empty, so the package must find a Python and use its bundled engine; the four operations on the demonstration files, with fields of other operations filled in to check that the dialog leaves them out and a comma as decimal separator; a master without frames that must be refused; only the test's documents closed; and the package byte for byte unchanged.
+
+After the Photoshop part, the same test makes every product again with `python -m ael` from a terminal (same Python, the package's AEL, the bridge's own command or recipe) and compares every file by SHA-256, receipts aside because they record their own paths and times: `structure` and `polar` on the TIFF that Photoshop exported, whose pixels must equal the demonstration file's; `stack` for the master; `filters` for the filter layers, the PSB and the display base of both operations; and the 16-bit TIFFs the bridge writes, which must equal AEL's arrays through `ael.photoshop.to_u16`. The report lists the SHA-256 of every input and output.
 
 `--skip-photoshop` checks only the direct Python/AEL operations and is not a complete bridge validation. `probe_jsx.py` is a minimal JSX-to-Python diagnostic. `test_runner_inputs.py` checks, without Photoshop, that a transparent or planar export stops before AEL runs, and that the probe refuses a Python without psd-tools or with a psd-tools that cannot be imported.
 

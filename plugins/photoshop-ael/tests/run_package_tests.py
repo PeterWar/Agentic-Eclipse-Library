@@ -10,7 +10,8 @@ ScriptUI window, the file and folder choosers, and alert() are replaced by test 
 dialog and keep the messages, so that no modal window can appear. Python and AEL are left empty in the
 dialog: the package must find a Python and use its bundled runtime/ael. The four operations run on the
 package's demonstration files, plus a master without frames that must be refused. Only documents opened
-by this test are closed, and the package must come out byte for byte unchanged.
+by this test are closed, and the package must come out byte for byte unchanged. Then every product is made
+again with `python -m ael` from a terminal, on the same inputs, and compared file by file by SHA-256.
 
     python run_package_tests.py --package /path/to/package --output /path/to/new/folder
 """
@@ -43,6 +44,38 @@ def digest(folder: Path) -> dict:
     for path in sorted(p for p in folder.rglob("*") if p.is_file() or p.is_symlink()):
         answer[str(path.relative_to(folder))] = hashlib.sha256(path.read_bytes()).hexdigest()
     return answer
+
+
+def sha256(path: Path) -> str:
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def terminal(python: str, runtime: Path, words: list, out: Path) -> dict:
+    """The same AEL command from a terminal: same Python, the package's AEL, a new output folder."""
+    env = dict(os.environ, PYTHONPATH=str(runtime), PYTHONDONTWRITEBYTECODE="1")
+    done = subprocess.run([python, "-m", "ael", *[str(w) for w in words], "--out", str(out)], capture_output=True,
+                          text=True, env=env, timeout=1800, check=False)
+    return {"command": ["python", "-m", "ael", *[str(w) for w in words], "--out", str(out)],
+            "exit": done.returncode, "stderr": done.stderr[-800:] if done.returncode else ""}
+
+
+def identity(connector: Path, other: Path) -> dict:
+    """SHA-256 of every file the connector's AEL wrote against the terminal's twin. Receipts record their own paths
+    and times, so they are listed but not compared."""
+    files, receipts = {}, []
+    for path in sorted(p for p in connector.rglob("*") if p.is_file()):
+        name = str(path.relative_to(connector))
+        twin = other / name
+        files[name] = {"connector": sha256(path), "terminal": sha256(twin) if twin.is_file() else None}
+        if "receipt" in name.lower():
+            receipts.append(name)
+    only_terminal = sorted(str(p.relative_to(other)) for p in other.rglob("*")
+                           if p.is_file() and not (connector / p.relative_to(other)).exists())
+    compared = [name for name in files if name not in receipts]
+    return {"identical": bool(compared) and not only_terminal and
+                         all(files[name]["connector"] == files[name]["terminal"] for name in compared),
+            "compared": len(compared), "receipts_not_compared": receipts, "only_terminal": only_terminal,
+            "files": files}
 
 
 def swapped(text: str, swaps) -> str:
@@ -246,6 +279,73 @@ finally {{
             checks["source_unchanged"] = run.get("source_saved_before") == run.get("source_saved_after")
         report[name] = {"checks": checks, "alert": alert, "ael_file": ael_file, "python": receipt.get("runtime", {}).get("python")}
         gates.update({f"{name}_{key}": value for key, value in checks.items()})
+    # Identity with AEL run from a terminal on the same inputs: every output file by SHA-256, and every input's SHA.
+    import sys
+    import numpy as np
+    import tifffile
+    sys.path.insert(0, str(plugin / "runtime"))
+    from ael.photoshop import to_u16
+    side = output / "terminal"
+    side.mkdir()
+    ident = report["identity"] = {}
+
+    def receipt_of(name: str) -> dict:
+        result = (runs_by_name.get(name) or {}).get("result") or {}
+        return json.loads(Path(result["receipt"]).read_text(encoding="utf-8")) if result.get("receipt") else {}
+
+    def inputs(paths) -> dict:
+        return {str(Path(p).relative_to(package)) if package in Path(p).parents else str(p): sha256(p)
+                for p in paths if p}
+
+    def from_recipe(label: str, command: str, recipe: Path, product: Path, python: str) -> dict:
+        entry = {"run": terminal(python, plugin / "runtime", [command, "--config", recipe], side / label)}
+        entry.update(identity(product, side / label))
+        return entry
+
+    for name in ("structure", "polar"):
+        receipt = receipt_of(name)
+        command = (receipt.get("result") or {}).get("command") or []
+        if "--out" not in command:
+            ident[name] = {"identical": False, "error": "no AEL command in the bridge receipt"}
+            continue
+        cut = command.index("--out")
+        entry = {"run": terminal(command[0], plugin / "runtime", command[3:cut] + command[cut + 2:], side / name)}
+        entry.update(identity(Path(command[cut + 1]), side / name))
+        source, demo_file = Path(command[command.index("--input") + 1]), Path(plans[0 if name == "structure" else 1]["open"])
+        entry["inputs"] = {"demo": inputs([demo_file]), "exported_by_photoshop": {source.name: sha256(source)},
+                           "geometry": inputs([command[command.index("--geometry") + 1]])}
+        entry["exported_pixels_equal_demo"] = bool(np.array_equal(tifffile.imread(source), tifffile.imread(demo_file)))
+        ident[name] = entry
+
+    for name, folder in (("filters", "filters"), ("master", "master/filters")):
+        receipt = receipt_of(name)
+        root = Path(((runs_by_name.get(name) or {}).get("result") or {}).get("run_root") or output / "missing")
+        python = (receipt.get("runtime") or {}).get("python") or "python3"
+        out = root / folder
+        if not (out / "filters_recipe.json").is_file():
+            ident[name] = {"identical": False, "error": f"no filters recipe in {out}"}
+            continue
+        recipe = json.loads((out / "filters_recipe.json").read_text(encoding="utf-8"))
+        if name == "master":
+            stack = json.loads((root / "master" / "stack_recipe.json").read_text(encoding="utf-8"))
+            ident["master_stack"] = from_recipe("master_stack", "stack", root / "master" / "stack_recipe.json",
+                                                root / "master" / "master", python)
+            ident["master_stack"]["inputs"] = inputs([frame["path"] for frame in stack["frames"]] +
+                                                     [plans[2]["camera"], plans[2]["geometry"]])
+        ident[f"{name}_layers"] = from_recipe(f"{name}_layers", "filters", out / "filters_recipe.json", out / "ael", python)
+        ident[f"{name}_layers"]["inputs"] = inputs([recipe.get(key) for key in ("input", "geometry", "valid", "coverage", "alpha")])
+        ident[f"{name}_display_base"] = from_recipe(f"{name}_display_base", "filters", out / "display_base_recipe.json",
+                                                    out / "ael_display_base", python)
+        # The 16-bit TIFFs the connector opens or hands on are AEL's arrays through ael.photoshop.to_u16.
+        tiffs = sorted((out / "tiff").glob("*_layer.tif")) + sorted((out / "tiff").glob("*_alpha.tif"))
+        ident[f"{name}_tiffs_equal_terminal"] = bool(tiffs) and all(
+            np.array_equal(tifffile.imread(path), to_u16(np.load(side / f"{name}_layers" / (path.stem + ".npy"))))
+            for path in tiffs)
+    for key, value in ident.items():
+        gates[f"identity_{key}"] = value if isinstance(value, bool) else \
+            bool(value.get("identical")) and (value.get("run") or {}).get("exit") == 0
+    gates["exported_source_pixels_equal_demo"] = all(ident.get(name, {}).get("exported_pixels_equal_demo")
+                                                     for name in ("structure", "polar"))
     refused = runs_by_name.get("master_without_frames", {})
     gates["master_without_frames_refused"] = (refused.get("alerts") or [""])[0].startswith(
         "AEL could not complete:\nSelect the master frames") and not refused.get("result")
