@@ -628,17 +628,17 @@ def solve_gains(grids: list[dict], reference: int) -> dict:
     shared = np.isfinite(logf).sum(axis=0) >= 2
     logf[:, ~shared] = np.nan
     a = np.zeros(len(grids))
-    for _ in range(50):
-        with np.errstate(all="ignore"):
+    with np.errstate(all="ignore"):
+        for _ in range(50):
             sky = np.nanmedian(logf - a[:, None], axis=0)
             new = np.nanmedian(logf - sky[None, :], axis=1)
-        new = np.where(np.isfinite(new), new, 0.0)
-        new -= new[reference]
-        moved = float(np.max(np.abs(new - a)))
-        a = new
-        if moved < 1e-5:
-            break
-    residual = logf - a[:, None] - sky[None, :]
+            new = np.where(np.isfinite(new), new, 0.0)
+            new -= new[reference]
+            moved = float(np.max(np.abs(new - a)))
+            a = new
+            if moved < 1e-5:
+                break
+        residual = logf - a[:, None] - sky[None, :]
     finite = np.isfinite(residual)
     lonely = [n for n in range(len(grids)) if not finite[n].any()]
     spread = float(1.4826 * np.median(np.abs(residual[finite]))) if finite.any() else None
@@ -1143,15 +1143,22 @@ def measure_photometry(analysis: dict, decision: dict, progress=Progress(None)) 
                                f"{100 * (r or 0):.0f} %): sunlight scattered near a contact, or a cloud")
             analysis["excluded"].append(dict(file=row["file"], reason=row["excluded"]))
             kept.remove(row)
+    # The gains go to the stack only when the sky changed during the totality (thin clouds or haze: frames more than
+    # 3 % apart once their gains are fitted): there they remove the steps where each exposure saturates. Under a clear
+    # sky the nominal exposure times are kept: the gain fit then carries more of its own bias (the blur of the inner
+    # corona, the faint sky of the long exposures) than the shutter carries error.
+    cloudy = solved.get("residual") is not None and solved["residual"] > 0.03
     for row, gain in zip(kept, solved["gains"]):
-        row["gain"] = gain
+        row["gain_measured"] = gain
+        row["gain"] = gain if cloudy else 1.0
     for row in rows:
         row.pop("grid", None)
     decision["used"] = kept
     photometry = {k: v for k, v in solved.items() if k not in ("gains", "residual_per_frame")}
     photometry["frames_without_overlap"] = [kept[n]["file"] for n in solved["frames_without_overlap"]]
     photometry["residual_per_frame"] = {kept[n]["file"]: v for n, v in enumerate(solved.get("residual_per_frame") or [])}
-    photometry["gains"] = {row["file"]: row["gain"] for row in kept}
+    photometry["gains"] = {row["file"]: row["gain_measured"] for row in kept}
+    photometry["gains_applied"] = cloudy
     return photometry
 
 
