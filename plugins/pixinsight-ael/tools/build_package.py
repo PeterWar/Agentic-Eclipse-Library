@@ -45,14 +45,13 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def source_commit(version: str) -> str:
-    """The AEL commit that the runtime copy comes from: the release commit of this version when the checkout's ael/
-    (and LICENSE) are exactly its, otherwise the checkout's own HEAD, marked."""
-    release = git("rev-parse", "--short", f"v{version}^{{commit}}")
-    if release and subprocess.run(["git", "-C", str(REPO), "diff", "--quiet", f"v{version}", "--", "ael", "LICENSE"],
-                                  check=False).returncode == 0:
-        return release
-    return (git("rev-parse", "--short", "HEAD") or "unknown") + "+modified"
+def provenance() -> dict:
+    """Where the package comes from, with the same keys in the PixInsight and Photoshop connectors: the last commit
+    that changed ael/ or LICENSE, the commit of the checkout, and whether either part had uncommitted changes."""
+    dirty = bool(git("status", "--porcelain", "--", "ael", "LICENSE", f"plugins/{PLUGIN.name}"))
+    head = git("rev-parse", "--short", "HEAD") or "unknown"
+    return {"ael_commit": git("log", "-1", "--format=%h", "--", "ael", "LICENSE") or "unknown",
+            "connector_commit": head + ("+modified" if dirty else ""), "uncommitted_changes": dirty}
 
 
 def write_zip(folder: Path, target: Path) -> str:
@@ -98,9 +97,9 @@ def main() -> None:
         shutil.copy2(PLUGIN / name, target / name)
     shutil.copytree(REPO / "ael", target / "runtime" / "ael", ignore=SKIP)
     shutil.copy2(REPO / "LICENSE", target / "runtime" / "LICENSE")
-    commit = source_commit(ael.__version__)
-    (target / "runtime" / "VERSION.json").write_text(json.dumps({"ael_version": ael.__version__,
-        "source_commit": commit, "source": "Agentic Eclipse Library, ael/ of this checkout"}, indent=1),
+    origin = provenance()
+    (target / "runtime" / "VERSION.json").write_text(json.dumps({"ael_version": ael.__version__, **origin,
+        "source": f"Agentic Eclipse Library, ael/ and plugins/{PLUGIN.name}/ of this checkout"}, indent=1),
         encoding="utf-8")
 
     # the copy must be the checkout's, byte by byte, and nothing else
@@ -114,7 +113,7 @@ def main() -> None:
         subprocess.run([sys.executable, str(PLUGIN / "tools" / "make_demo.py"), "--out", str(out / "demo")], check=True,
                        env={**os.environ, "PYTHONPATH": str(REPO), "PYTHONDONTWRITEBYTECODE": "1"})
     zip_sha = write_zip(out, args.zip.resolve()) if args.zip else None
-    print(json.dumps({"out": str(out), "ael_version": ael.__version__, "source_commit": commit,
+    print(json.dumps({"out": str(out), "ael_version": ael.__version__, **origin,
                       "runtime_files": len(expected), "zip": str(args.zip) if args.zip else None, "zip_sha256": zip_sha}))
 
 

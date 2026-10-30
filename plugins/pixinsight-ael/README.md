@@ -21,7 +21,7 @@ Leave **Python executable** empty and the connector looks for one, in this order
 3. Click **Add** (it asks for a folder), choose the folder `pixinsight-ael/`, and the dialog lists `AELBridge.js` and `AELWorkflow.js`, enabled. Click **Done**.
 4. Open **Utilities > Agentic Eclipse Library** (the bridge) and **Utilities > AEL Linear Master and Filters** (the workflow).
 
-This is a local build for testing, not a signed update repository. `tools/build_package.py --out FOLDER [--zip FILE]` assembles the folder, with `runtime/ael` copied from the checkout and checked byte by byte, `runtime/VERSION.json` (AEL version and source commit) and the synthetic files of `demo/`.
+This is a local build for testing, not a signed update repository. `tools/build_package.py --out FOLDER [--zip FILE]` assembles the folder, with `runtime/ael` copied from the checkout and checked byte by byte, `runtime/VERSION.json` (AEL version, the last commit of `ael/`, the commit of the connector and whether either had uncommitted changes, with the same keys as the Photoshop connector's) and the synthetic files of `demo/`.
 
 ## Use
 

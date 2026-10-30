@@ -49,13 +49,22 @@ def probe(python: str, helper: Path, repo: Path, hidden: tuple = ()) -> dict:
             "import ael_photoshop\n"
             "print(json.dumps(ael_photoshop.execute({'operation': 'probe'})))\n")
     env = dict(os.environ, PYTHONPATH=str(repo), PYTHONDONTWRITEBYTECODE="1")
+    # from the same folder: ``python -c`` puts the working folder before PYTHONPATH
     completed = subprocess.run([python, "-c", code], capture_output=True, text=True, env=env, timeout=300,
-                               check=False)
+                               check=False, cwd=str(repo))
     try:
         answer = json.loads(completed.stdout.strip().splitlines()[-1])
     except Exception:
         answer = {"ok": False, "kind": "no_answer", "message": completed.stderr[-500:]}
     return {"ok": bool(answer.get("ok")), "kind": answer.get("kind"), "message": answer.get("message")}
+
+
+def probe_with_ael(python: str, helper: Path, root: Path, version: str) -> dict:
+    """The runner's probe with a stand-in ael package of the given version first on the path."""
+    stub = root / f"stub_ael_{version}"
+    (stub / "ael").mkdir(parents=True)
+    (stub / "ael" / "__init__.py").write_text(f"__version__ = {version!r}\n", encoding="utf-8")
+    return probe(python, helper, stub)
 
 
 def main() -> None:
@@ -88,6 +97,9 @@ def main() -> None:
                                               photometric="rgb", extrasamples=["assocalpha"])
         report["planar_rgb"] = run_case(args.python, helper, repo, root, "planar", rgb,
                                         photometric="rgb", planarconfig="separate")
+        # the same AEL floor as the PixInsight connector: 1.3.3 and an unreadable version are refused
+        report["probe_ael_1.3.3"] = probe_with_ael(args.python, helper, root, "1.3.3")
+        report["probe_ael_unreadable"] = probe_with_ael(args.python, helper, root, "dev")
     report["probe"] = probe(args.python, helper, repo)
     report["probe_without_psd_tools"] = probe(args.python, helper, repo, hidden=("psd_tools",))
     # psd-tools installed but broken: one of its own dependencies cannot be imported.
@@ -98,6 +110,8 @@ def main() -> None:
         "probe_ready": report["probe"]["ok"] and report["probe"]["kind"] == "ready",
         "probe_refuses_missing_psd_tools": refused["probe_without_psd_tools"],
         "probe_refuses_broken_psd_tools": refused["probe_without_attrs"],
+        "probe_refuses_ael_1.3.3": report["probe_ael_1.3.3"]["kind"] == "old_ael",
+        "probe_refuses_unreadable_ael": report["probe_ael_unreadable"]["kind"] == "old_ael",
         "control_runs": report["control_rgb"]["ok"] and report["control_rgb"]["ael_ran"],
         "transparent_refused_before_ael": not report["transparent_rgba"]["ok"] and
             "transparent" in (report["transparent_rgba"]["message"] or "") and

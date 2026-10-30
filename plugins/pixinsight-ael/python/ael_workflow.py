@@ -156,7 +156,8 @@ def run_filters(cfg: dict) -> dict:
               "min_coverage": minimum, "filters": requested,
               "visible": cfg.get("visible", list(DEFAULTS)),
               "opacities": cfg.get("opacities", {}), "display": display,
-              "photoshop": False, "note": "PixInsight workflow; portable AEL filters, not historical layer replay"}
+              "photoshop": bool(cfg.get("photoshop_layers", False)),
+              "note": "PixInsight workflow; portable AEL filters, not historical layer replay"}
     for key, value in (("valid", valid), ("coverage", coverage), ("alpha", alpha)):
         if value:
             recipe[key] = str(value)
@@ -182,7 +183,7 @@ def run_filters(cfg: dict) -> dict:
     # is then the 0/1 valid mask, so its display.tif is the 16-bit base layer itself. The start is then formed
     # in float32 as AEL forms it, base/65535 * alpha/65535 over black, and written as a 32-bit TIFF.
     base_recipe = {key: value for key, value in recipe.items() if key != "alpha"}
-    base_recipe.update(filters=selected[:1], visible=[], opacities={},
+    base_recipe.update(filters=selected[:1], visible=[], opacities={}, photoshop=False,
                        note="Display base layer only (alpha = valid mask): no visible filter layer")
     base_recipe_path = out / "display_base_recipe.json"
     base_recipe_path.write_text(json.dumps(base_recipe, indent=1, ensure_ascii=False), encoding="utf-8")
@@ -242,8 +243,19 @@ def run_filters(cfg: dict) -> dict:
                "gates": ael_receipt["gates"], "credit": CREDIT}
     receipt_path = out / "AEL_WORKFLOW_RECEIPT.json"
     receipt_path.write_text(json.dumps(receipt, indent=1, ensure_ascii=False), encoding="utf-8")
-    return {"ok": True, "operation": "filters", "out": str(out), "images": images,
-            "pixelmath": operations, "receipt": str(receipt_path), "gates": ael_receipt["gates"]}
+    answer = {"ok": True, "operation": "filters", "out": str(out), "images": images,
+              "pixelmath": operations, "receipt": str(receipt_path), "gates": ael_receipt["gates"]}
+    if recipe["photoshop"]:
+        # AEL wrote one layered 16-bit PSB and verified it by reading it back. These are its layers from the
+        # bottom up, as develop.filters_from_config adds them, for the check inside Photoshop itself.
+        answer["psb"] = result["files"]["psb"]
+        answer["psb_layers"] = [{"name": "Background", "mode": "normal", "opacity": 1.0, "visible": True},
+                                {"name": "Linear reference / receipt scale", "mode": "normal", "opacity": 1.0,
+                                 "visible": False},
+                                {"name": "00 Display base", "mode": "normal", "opacity": 1.0, "visible": True}]
+        answer["psb_layers"] += [{"name": entry["layer"], "mode": entry["mode"], "opacity": float(entry["opacity"]),
+                                  "visible": bool(entry["visible"])} for entry in ael_receipt["parameters"]["layers"]]
+    return answer
 
 
 MOON_KEYS = ("xy", "r", "rms", "n_used", "n_rays")
@@ -525,6 +537,7 @@ def run_master(cfg: dict) -> dict:
     filter_result = None
     if cfg.get("run_filters", True):
         filter_cfg = dict(cfg.get("filter_options") or {})
+        filter_cfg.setdefault("photoshop_layers", cfg.get("photoshop_layers", False))
         filter_cfg.update({"input": result["files"]["linear"], "geometry": result["files"]["geometry"],
                            "valid": result["files"]["valid"], "coverage": result["files"]["coverage"],
                            "alpha": result["files"]["alpha"], "out": str(out / "filters")})
@@ -540,7 +553,9 @@ def run_master(cfg: dict) -> dict:
     return {"ok": True, "operation": "master", "out": str(out), "images": images,
             "pixelmath": filter_result["pixelmath"] if filter_result else [],
             "receipt": str(receipt_path), "gates": ael_receipt["gates"],
-            "registrations": registrations}
+            "registrations": registrations,
+            "psb": filter_result.get("psb") if filter_result else None,
+            "psb_layers": filter_result.get("psb_layers") if filter_result else None}
 
 
 def main() -> None:

@@ -25,7 +25,7 @@ The scripts name no interpreter. With **Python (optional)** empty, the bridge lo
 
 Keep `AELPhotoshop.jsx`, `AELPhotoshopCore.jsx`, `AELPhotoshopDialog.jsx`, `python/` and, when present, `runtime/` together with their relative paths.
 
-`tools/build_package.py --out NEW_FOLDER` writes such a folder: the scripts, the runner, the `ael` package of this checkout under `runtime/ael` (with `runtime/VERSION.json`), and synthetic demonstration files for the four operations made by `tools/make_demo.py`.
+`tools/build_package.py --out NEW_FOLDER [--zip FILE]` writes such a folder: the scripts, the runner, the `ael` package of this checkout under `runtime/ael` (checked byte by byte), `runtime/VERSION.json` (AEL version, the last commit of `ael/`, the commit of the connector and whether either had uncommitted changes), and synthetic demonstration files for the four operations made by `tools/make_demo.py`. `--zip` adds a deterministic ZIP of the whole folder; `--pack FOLDER --zip FILE` makes it from a folder already built. The PixInsight connector's builder is the same program.
 
 In Photoshop, choose **File > Scripts > Browse…** and select `AELPhotoshop.jsx`. You can also copy the complete folder into Photoshop's Scripts folder and restart Photoshop. This is a local prototype, not a signed UXP plugin or an auto-updating package.
 

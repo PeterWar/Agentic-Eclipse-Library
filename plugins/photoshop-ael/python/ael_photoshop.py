@@ -26,6 +26,25 @@ CREDIT = ("Processed with Agentic Eclipse Library by Pere Guerra — "
 NEEDED = ("numpy", "scipy", "cv2", "tifffile", "PIL", "imageio", "psd_tools", "psd_tools.api.layers",
           "psd_tools.constants", "psd_tools.psd.image_resources", "psd_tools.psd.layer_and_mask",
           "psd_tools.psd.tagged_blocks")
+# The connector is validated against this AEL: the edge-aware WOW and the per-family layer names (1.3.5), and the
+# soft-log and MGN corrections (1.3.6), which the structure image and the filter layers depend on. The PixInsight
+# connector refuses an older AEL with the same floor.
+MINIMUM_AEL = (1, 3, 6)
+
+
+def version_tuple(text) -> tuple:
+    """'1.3.6' -> (1, 3, 6); anything unreadable -> () which compares below every release."""
+    numbers = []
+    for piece in str(text).split("."):
+        digits = ""
+        for char in piece:
+            if not char.isdigit():
+                break
+            digits += char
+        if not digits:
+            break
+        numbers.append(int(digits))
+    return tuple(numbers)
 
 
 def runtime() -> dict:
@@ -159,6 +178,13 @@ def execute(cfg: dict) -> dict:
         except Exception as exc:
             return {"ok": False, "kind": "missing_ael", "message": f"Cannot import ael: {exc}",
                     "runtime": runtime()}
+        found = getattr(ael, "__version__", "unknown")
+        if version_tuple(found) < MINIMUM_AEL:
+            minimum = ".".join(str(n) for n in MINIMUM_AEL)
+            return {"ok": False, "kind": "old_ael", "runtime": runtime(),
+                    "message": f"AEL {found} was found at {getattr(ael, '__file__', 'unknown')}, but this connector "
+                               f"needs AEL {minimum} or later. Use the AEL folder that comes with the connector (its "
+                               f"runtime folder) or a current source checkout."}
         # ael imports psd_tools only when it writes the PSB, so a Python without it, or with a broken one, would
         # pass and fail at the end of a run. Imported here, Photoshop moves on to the next Python instead.
         missing, failed = [], []
