@@ -137,8 +137,7 @@ var AELWorkflowDialog = class extends Dialog
 
       let saved = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "pythonPath", DataType.UTF8String );
       if ( saved ) this.pythonEdit.text = saved;
-      saved = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "aelRoot", DataType.UTF8String );
-      if ( saved ) this.aelRootEdit.text = saved;
+      this.aelRootEdit.text = aelBridgeInitialRoot();
       saved = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "workflowOutput", DataType.UTF8String );
       if ( saved ) this.outputEdit.text = saved;
       saved = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "workflowGeometry", DataType.UTF8String );

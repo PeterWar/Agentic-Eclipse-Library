@@ -134,6 +134,69 @@ function aelBridgeProbe( pythonPath, aelRoot )
    return result;
 }
 
+// Files, links and folders that match a wildcard in the last component of ``pattern``; none if the folder does
+// not exist. (searchDirectory() lists files only, so it would never see a virtual-environment folder.)
+function aelBridgeMatches( pattern )
+{
+   let found = [];
+   let finder = new FileFind;
+   try
+   {
+      let directory = File.extractDrive( pattern ) + File.extractDirectory( pattern );
+      if ( finder.begin( pattern ) )
+         do
+         {
+            if ( finder.name != "." && finder.name != ".." )
+               found.push( directory + "/" + finder.name );
+         }
+         while ( finder.next() );
+   }
+   catch ( error )
+   {
+   }
+   finally
+   {
+      try { finder.end(); } catch ( error ) {}
+   }
+   return found;
+}
+
+// python3, then python3.N from the newest minor version to the oldest, in one folder.
+function aelBridgeVersionedPythons( directory )
+{
+   function minor( path )
+   {
+      let match = /python3\.([0-9]+)$/.exec( path );
+      return match ? parseInt( match[1] ) : 1000;
+   }
+   let list = aelBridgeMatches( directory + "/python3*" ).filter(
+      function( path ) { return /\/python3(\.[0-9]+)?$/.test( path ); } );
+   list.sort( function( a, b ) { return minor( b ) - minor( a ); } );
+   return list;
+}
+
+// The folder that holds the ``ael`` package that comes with the connector: ``runtime`` beside the scripts (the ZIP),
+// or the root of the repository that contains ``plugins/pixinsight-ael`` (a source checkout). Empty if neither.
+function aelBridgeDefaultRoot()
+{
+   let runtime = AEL_BRIDGE_CORE_DIR + "/runtime";
+   if ( File.exists( runtime + "/ael/__init__.py" ) )
+      return runtime;
+   let repository = File.extractDrive( AEL_BRIDGE_CORE_DIR ) + File.extractDirectory( File.extractDirectory( AEL_BRIDGE_CORE_DIR ) );
+   if ( File.exists( repository + "/ael/__init__.py" ) )
+      return repository;
+   return "";
+}
+
+// The AEL folder a dialog starts with: the one saved last time if it still holds ``ael``, else the default.
+function aelBridgeInitialRoot()
+{
+   let saved = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "aelRoot", DataType.UTF8String );
+   if ( saved && saved.length > 0 && File.exists( saved + "/ael/__init__.py" ) )
+      return saved;
+   return aelBridgeDefaultRoot();
+}
+
 function aelBridgeCandidates( preferred, aelRoot )
 {
    let candidates = [];
@@ -142,26 +205,52 @@ function aelBridgeCandidates( preferred, aelRoot )
       if ( path && path.trim().length > 0 && candidates.indexOf( path ) < 0 )
          candidates.push( path );
    }
+   function addAll( paths )
+   {
+      for ( let i = 0; i < paths.length; ++i )
+         add( paths[i] );
+   }
    add( preferred );
    let saved = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "pythonPath", DataType.UTF8String );
    if ( saved )
       add( saved );
+   try
+   {
+      add( getEnvironmentVariable( "AEL_PYTHON" ) );
+   }
+   catch ( error )
+   {
+   }
 #ifeq __PI_PLATFORM__ MACOSX
-   add( "/opt/homebrew/bin/python3" );
-   add( "/usr/local/bin/python3" );
+   addAll( aelBridgeVersionedPythons( "/opt/homebrew/bin" ) );
+   addAll( aelBridgeVersionedPythons( "/usr/local/bin" ) );
 #endif
 #ifeq __PI_PLATFORM__ LINUX
-   add( "/usr/local/bin/python3" );
-   add( "/usr/bin/python3" );
+   addAll( aelBridgeVersionedPythons( "/usr/local/bin" ) );
+   addAll( aelBridgeVersionedPythons( "/usr/bin" ) );
 #endif
 #ifeq __PI_PLATFORM__ MSWINDOWS
    add( "python" );
 #endif
+   // Virtual environments, one folder per environment: ~/.venvs/<name>/bin/python and the like.
+   let environments = [ File.homeDirectory + "/.venvs", File.homeDirectory + "/.virtualenvs", File.homeDirectory + "/venvs" ];
+   for ( let i = 0; i < environments.length; ++i )
+   {
+      let folders = aelBridgeMatches( environments[i] + "/*" );
+      folders.sort();
+      for ( let j = 0; j < folders.length; ++j )
+         add( folders[j] + "/bin/python" );
+   }
+   add( File.homeDirectory + "/venv/bin/python" );
+   add( File.homeDirectory + "/.venv/bin/python" );
    add( File.homeDirectory + "/.pyenv/shims/python" );
    add( File.homeDirectory + "/miniconda3/bin/python" );
    add( File.homeDirectory + "/anaconda3/bin/python" );
    add( File.homeDirectory + "/miniforge3/bin/python" );
    add( File.homeDirectory + "/mambaforge/bin/python" );
+#ifeq __PI_PLATFORM__ MACOSX
+   add( "/usr/bin/python3" );
+#endif
 
    let diagnostics = [];
    for ( let i = 0; i < candidates.length; ++i )
@@ -174,10 +263,11 @@ function aelBridgeCandidates( preferred, aelRoot )
       }
       diagnostics.push( candidates[i] + ": " + probe.message );
    }
-   throw new Error( "No Python 3.10+ interpreter with AEL was found. Select the Python executable and, "
-                    + "if AEL is a source checkout, its repository folder.\n\n"
-                    + "Install AEL with: python -m pip install agentic-eclipse-library\n\n"
-                    + diagnostics.join( "\n" ) );
+   throw new Error( "No Python 3.10+ interpreter with AEL " + "1.3.6 or later and its dependencies was found. Select the "
+                    + "Python executable and the AEL folder (the connector's runtime folder, or a source checkout).\n\n"
+                    + "AEL is not on PyPI. Its dependencies are installed with: python -m pip install numpy scipy "
+                    + "opencv-python-headless pillow tifffile imageio\n\n"
+                    + "Tried:\n" + diagnostics.join( "\n" ) );
 }
 
 function aelBridgeReadSourceICC( view )

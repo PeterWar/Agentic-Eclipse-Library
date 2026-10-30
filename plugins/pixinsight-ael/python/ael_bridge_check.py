@@ -18,6 +18,25 @@ from pathlib import Path
 CREDIT = ("Processed with Agentic Eclipse Library by Pere Guerra — "
           "https://github.com/PeterWar/Agentic-Eclipse-Library")
 
+# The connector is validated against this AEL: the edge-aware WOW and the per-family layer names (1.3.5), and the
+# soft-log and MGN corrections (1.3.6), which the structure image and the filter layers depend on.
+MINIMUM_AEL = (1, 3, 6)
+
+
+def version_tuple(text) -> tuple:
+    """'1.3.6' -> (1, 3, 6); anything unreadable -> () which compares below every release."""
+    numbers = []
+    for piece in str(text).split("."):
+        digits = ""
+        for char in piece:
+            if not char.isdigit():
+                break
+            digits += char
+        if not digits:
+            break
+        numbers.append(int(digits))
+    return tuple(numbers)
+
 
 def emit(**payload) -> None:
     print(json.dumps(payload, ensure_ascii=False))
@@ -35,8 +54,17 @@ def probe() -> None:
         emit(ok=False, kind="missing_ael", python=sys.executable, version=version,
              message=f"Cannot import ael: {exc}")
         return
+    found = getattr(ael, "__version__", "unknown")
+    if version_tuple(found) < MINIMUM_AEL:
+        minimum = ".".join(str(n) for n in MINIMUM_AEL)
+        emit(ok=False, kind="old_ael", python=sys.executable, version=version, ael_version=str(found),
+             ael_file=getattr(ael, "__file__", "unknown"),
+             message=f"AEL {found} was found at {getattr(ael, '__file__', 'unknown')}, but this connector needs AEL "
+                     f"{minimum} or later. Use the AEL folder that comes with the connector (its runtime folder) "
+                     f"or a current source checkout.")
+        return
     emit(ok=True, kind="ready", python=sys.executable, version=version,
-         ael_version=getattr(ael, "__version__", "unknown"), ael_file=getattr(ael, "__file__", "unknown"),
+         ael_version=found, ael_file=getattr(ael, "__file__", "unknown"),
          credit=CREDIT)
 
 

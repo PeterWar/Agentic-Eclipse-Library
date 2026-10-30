@@ -129,9 +129,7 @@ var AELBridgeDialog = class extends Dialog
    let savedPython = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "pythonPath", DataType.UTF8String );
    if ( savedPython )
       this.pythonEdit.text = savedPython;
-   let savedRoot = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "aelRoot", DataType.UTF8String );
-   if ( savedRoot )
-      this.aelRootEdit.text = savedRoot;
+   this.aelRootEdit.text = aelBridgeInitialRoot();
    let savedOutput = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "outputDirectory", DataType.UTF8String );
    if ( savedOutput )
       this.outputEdit.text = savedOutput;

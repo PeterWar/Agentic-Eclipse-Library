@@ -124,6 +124,17 @@ try
       REPORT.errors.too_old = aelBridgeProbe( CFG.oldPython, CFG.repo );
    else
       REPORT.errors.too_old = { not_tested: "No pre-3.10 Python executable was available" };
+   REPORT.errors.old_ael = aelBridgeProbe( CFG.python, CFG.staleAel );
+
+   // Detection with nothing chosen: an empty Python field, no saved path and no AEL_PYTHON (the launcher drops it from
+   // the environment of this instance). The scan of the standard folders and the virtual environments must find an
+   // interpreter that holds the AEL of the connector. The settings of this instance may hold a path saved by an
+   // earlier run, which would hide the scan, so it is removed first.
+   Settings.remove( AEL_BRIDGE_SETTINGS_KEY + "pythonPath" );
+   let detected = aelBridgeCandidates( "", CFG.repo );
+   REPORT.autodetect = { python: detected.python, ael_version: detected.ael_version, ael_file: detected.ael_file,
+                         tried_before: detected.diagnostics };
+   REPORT.default_root = aelBridgeDefaultRoot();
 
    let sceneWindows = ImageWindow.open( CFG.scene );
    if ( sceneWindows == null || sceneWindows.length != 1 )
@@ -223,9 +234,15 @@ catch ( error )
 '''
 
 
+def pixinsight_environment() -> dict:
+    """The environment of the PixInsight instances: without AEL_PYTHON, so that the interpreter detection is tested."""
+    return {key: value for key, value in os.environ.items() if key != "AEL_PYTHON"}
+
+
 def run_pixinsight(executable: Path, script: Path, log: Path, timeout: int = 900) -> dict:
     command = [str(executable), "-n", "--automation-mode", f"-r={script}", "--force-exit"]
-    completed = subprocess.run(command, text=True, capture_output=True, timeout=timeout, check=False)
+    completed = subprocess.run(command, text=True, capture_output=True, timeout=timeout, check=False,
+                               env=pixinsight_environment())
     log.write_text("COMMAND: " + shlex.join(command) + "\n\nSTDOUT/STDERR:\n" + completed.stdout + completed.stderr,
                    encoding="utf-8")
     return {"command": command, "exit_code": completed.returncode, "log": str(log)}
@@ -233,7 +250,8 @@ def run_pixinsight(executable: Path, script: Path, log: Path, timeout: int = 900
 
 def capture(executable: Path, script: Path, screenshot: Path, log: Path, hold: int = 12) -> dict:
     command = [str(executable), "-n", "--automation-mode", f"-r={script}", "--force-exit"]
-    process = subprocess.Popen(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    process = subprocess.Popen(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                               env=pixinsight_environment())
     try:
         output, _ = process.communicate(timeout=hold + 45)
     except subprocess.TimeoutExpired:
@@ -293,6 +311,25 @@ def main() -> None:
             report["inputs"] = {p.name: {"sha256": sha256(p), "bytes": p.stat().st_size}
                                 for p in (rgb_path, mono_path, scene_path, geometry_path)}
 
+            # Stand-ins for the `ael` package that carry only a version: the connector must refuse an AEL older than 1.3.6
+            # (or one whose version cannot be read) and accept a later one, comparing numbers and not text (1.10.0 > 1.3.6).
+            stubs = {}
+            for label, version in (("stale", "1.3.3"), ("newer", "1.10.0"), ("unreadable", "development")):
+                stub_root = root / f"{label} ael"
+                (stub_root / "ael").mkdir(parents=True)
+                (stub_root / "ael" / "__init__.py").write_text(f'__version__ = "{version}"\n', encoding="utf-8")
+                stubs[label] = stub_root
+            stale_root = stubs["stale"]
+            helper_check = args.repo / "plugins/pixinsight-ael/python/ael_bridge_check.py"
+            versions = {}
+            for label, stub_root in stubs.items():
+                probe_run = subprocess.run([args.python, str(helper_check), "probe"], text=True, capture_output=True,
+                                           env=dict(os.environ, PYTHONPATH=str(stub_root), PYTHONDONTWRITEBYTECODE="1"),
+                                           timeout=60, check=False)
+                info = json.loads(probe_run.stdout[probe_run.stdout.find("{"):probe_run.stdout.rfind("}") + 1])
+                versions[label] = {"ok": info.get("ok"), "kind": info.get("kind"), "ael_version": info.get("ael_version")}
+            report["tests"]["ael_version_floor"] = versions
+
             direct = {}
             for mode in ("structure", "polar"):
                 out = root / f"direct_{mode}"
@@ -322,7 +359,7 @@ def main() -> None:
                     "bridgeStructure": str(root / "bridge_structure"),
                     "bridgePolar": str(root / "bridge_polar"),
                     "report": str(root / "pjsr_report.json"),
-                    "badPython": str(root / "no-such-python"),
+                    "badPython": str(root / "no-such-python"), "staleAel": str(stale_root),
                     "oldPython": "/usr/bin/python3" if Path("/usr/bin/python3").is_file() else ""
                 }
                 config_path = root / "pjsr_config.json"
@@ -359,6 +396,8 @@ def main() -> None:
                 report["tests"]["source_unchanged"] = pjsr["source_unchanged"]
                 report["tests"]["roundtrip_source_unchanged"] = {
                     key: pjsr["roundtrip"][key]["source_unchanged"] for key in ("rgb", "mono")}
+                report["tests"]["old_ael_kind"] = pjsr["errors"]["old_ael"].get("kind")
+                report["tests"]["autodetect_python"] = {"detected": pjsr["autodetect"], "default_root": pjsr["default_root"]}
                 report["tests"]["clear_errors"] = {
                     "bad_path": pjsr["errors"]["bad_path"].get("kind") == "bad_path",
                     "missing_ael": pjsr["errors"]["missing_ael"].get("kind") == "missing_ael",
@@ -408,9 +447,12 @@ def main() -> None:
                 else:
                     report["captures"]["status"] = "not tested: captures skipped"
 
+            floor = report["tests"]["ael_version_floor"]
             gates = {
                 "negative_rotated": report["tests"]["negative_rotated"],
-                "direct_structure_and_polar": report["tests"]["direct_structure_and_polar"]}
+                "direct_structure_and_polar": report["tests"]["direct_structure_and_polar"],
+                "old_ael_refused": floor["stale"]["kind"] == "old_ael" and floor["unreadable"]["kind"] == "old_ael",
+                "newer_ael_accepted": bool(floor["newer"]["ok"]) and floor["newer"]["ael_version"] == "1.10.0"}
             if not args.skip_pixinsight:
                 gates.update({
                     "roundtrip_rgb": report["tests"]["roundtrip_rgb"]["passed"],
@@ -422,6 +464,9 @@ def main() -> None:
                     "roundtrip_source_unchanged": all(report["tests"]["roundtrip_source_unchanged"].values()),
                     "clear_errors": all(value is True or isinstance(value, dict)
                                         for value in report["tests"]["clear_errors"].values()),
+                    "old_ael_refused_in_pixinsight": report["tests"]["old_ael_kind"] == "old_ael",
+                    "python_autodetected": bool(Path(report["tests"]["autodetect_python"]["detected"]["python"]).is_file())
+                                           and report["tests"]["autodetect_python"]["detected"]["ael_version"] == ael.__version__,
                     "structure_pixels_equal": all(item["equal"] for item in report["tests"]["bridge_equals_direct_structure"].values()),
                     "polar_pixels_equal": all(item["equal"] for item in report["tests"]["bridge_equals_direct_polar"].values()),
                     "runtime_receipts_match": all(report["tests"][f"runtime_receipt_{mode}"]["matches_direct"]
