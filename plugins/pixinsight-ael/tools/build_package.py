@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 """Build a self-contained folder of the PixInsight connector: scripts, Python helpers, the AEL engine of this
-checkout under runtime/ael, and the synthetic demonstration files. Optionally a deterministic ZIP of the connector.
+checkout under runtime/ael, and the synthetic demonstration files. Then a deterministic ZIP of the whole folder.
 
 MIT License — Copyright (c) 2026 Pere Guerra Serra.
 Processed with Agentic Eclipse Library by Pere Guerra —
 https://github.com/PeterWar/Agentic-Eclipse-Library
 
-    python plugins/pixinsight-ael/tools/build_package.py --out /path/to/new/folder [--zip /path/to/AEL-PixInsight.zip]
+    python plugins/pixinsight-ael/tools/build_package.py --out /path/to/new/folder [--zip /path/to/folder.zip]
+    python plugins/pixinsight-ael/tools/build_package.py --pack /path/to/folder --zip /path/to/folder.zip
 
 The folder has the same form as the one of the Photoshop connector: pixinsight-ael/ (scripts, python/, runtime/ael and
-runtime/VERSION.json) and demo/. Everything under runtime/ael is checked byte by byte against the checkout.
+runtime/VERSION.json) and demo/. Everything under runtime/ael is checked byte by byte against the checkout. A guide
+(LLEGEIX-ME.md) is added to the folder by hand once the tests are done; --pack then makes the ZIP of the finished
+folder, with the folder as its root: sorted names, fixed times and modes, no build date inside.
 """
 from __future__ import annotations
 
@@ -52,12 +55,14 @@ def source_commit(version: str) -> str:
     return (git("rev-parse", "--short", "HEAD") or "unknown") + "+modified"
 
 
-def write_zip(package: Path, target: Path) -> str:
-    """Deterministic: sorted names, fixed times and modes, no build date inside."""
-    files = sorted(p for p in package.rglob("*") if p.is_file())
+def write_zip(folder: Path, target: Path) -> str:
+    """Deterministic: sorted names, fixed times and modes, no build date inside; the folder is the root of the ZIP."""
+    if folder in target.resolve().parents:
+        raise SystemExit("the ZIP cannot go inside the folder it packs")
+    files = sorted(p for p in folder.rglob("*") if p.is_file() and p.name != ".DS_Store")
     with zipfile.ZipFile(target, "x", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
         for path in files:
-            info = zipfile.ZipInfo(f"{package.name}/{path.relative_to(package).as_posix()}", (2026, 10, 30, 0, 0, 0))
+            info = zipfile.ZipInfo(f"{folder.name}/{path.relative_to(folder).as_posix()}", (2026, 10, 30, 0, 0, 0))
             info.external_attr = 0o100644 << 16
             info.compress_type = zipfile.ZIP_DEFLATED
             archive.writestr(info, path.read_bytes())
@@ -66,15 +71,24 @@ def write_zip(package: Path, target: Path) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--out", type=Path, required=True)
-    parser.add_argument("--zip", type=Path, help="also write a deterministic ZIP of pixinsight-ael/ here")
+    parser.add_argument("--out", type=Path, help="build a new folder here")
+    parser.add_argument("--pack", type=Path, help="make the ZIP of a folder that is already built (needs --zip)")
+    parser.add_argument("--zip", type=Path, help="write a deterministic ZIP of the whole folder here")
     parser.add_argument("--no-demo", action="store_true")
     args = parser.parse_args()
+    if args.zip and args.zip.exists():
+        raise SystemExit(f"{args.zip} exists: choose a new file")
+    if args.pack:
+        if not args.zip:
+            raise SystemExit("--pack needs --zip")
+        print(json.dumps({"packed": str(args.pack.resolve()), "zip": str(args.zip),
+                          "zip_sha256": write_zip(args.pack.resolve(), args.zip.resolve())}))
+        return
+    if not args.out:
+        raise SystemExit("give --out (build) or --pack (make the ZIP of a built folder)")
     out = args.out.resolve()
     if out.exists():
         raise SystemExit(f"{out} exists: choose a new folder")
-    if args.zip and args.zip.exists():
-        raise SystemExit(f"{args.zip} exists: choose a new file")
     sys.path.insert(0, str(REPO))
     import ael
 
@@ -96,10 +110,10 @@ def main() -> None:
     if expected != found or any(sha256(REPO / "ael" / r) != sha256(target / "runtime" / "ael" / r) for r in expected):
         raise SystemExit("the runtime copy differs from the checkout's ael/: nothing was packaged")
 
-    zip_sha = write_zip(target, args.zip.resolve()) if args.zip else None
     if not args.no_demo:
         subprocess.run([sys.executable, str(PLUGIN / "tools" / "make_demo.py"), "--out", str(out / "demo")], check=True,
                        env={**os.environ, "PYTHONPATH": str(REPO), "PYTHONDONTWRITEBYTECODE": "1"})
+    zip_sha = write_zip(out, args.zip.resolve()) if args.zip else None
     print(json.dumps({"out": str(out), "ael_version": ael.__version__, "source_commit": commit,
                       "runtime_files": len(expected), "zip": str(args.zip) if args.zip else None, "zip_sha256": zip_sha}))
 
