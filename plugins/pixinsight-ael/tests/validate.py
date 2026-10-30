@@ -58,7 +58,7 @@ def write_generated(path: Path, core: Path, config: Path, body: str, extra_inclu
 
 def pjsr_validation_body() -> str:
     return r'''
-var REPORT = { ok: false, roundtrip: {}, errors: {}, bridge: {}, source_unchanged: {} };
+var REPORT = { ok: false, roundtrip: {}, errors: {}, bridge: {}, source_unchanged: {}, file_mode: {} };
 function saveReport()
 {
    File.writeTextFile( CFG.report, JSON.stringify( REPORT, null, 1 ) );
@@ -156,57 +156,33 @@ try
       REPORT.errors.too_old = { not_tested: "No pre-3.10 Python executable was available" };
    REPORT.errors.old_ael = aelBridgeProbe( CFG.python, CFG.staleAel );
 
-   // PixInsight rescales a float file whose values leave 0-1 to exactly 0-1 when it opens it. The bridge must refuse
-   // such a view, before exporting anything, and say why; the files that stay inside 0-1 are run below.
-   try
+   // PixInsight rescales a float file whose values leave 0-1 to exactly 0-1 when it opens it, so the view is not the file.
+   // The bridge must see it and run AEL on the file itself, leaving the file as it was.
+   function runOnFile( key, input, id, output, resultKey )
    {
-      let wide = ImageWindow.open( CFG.outOfRange, "fora_de_rang" )[0];
+      let window = ImageWindow.open( input, id )[0];
       try
       {
-         REPORT.errors.out_of_range = { view_maximum: wide.mainView.image.maximum() };
-         aelBridgeRunOnView( { view: wide.mainView, mode: "structure", geometry: CFG.geometry,
-            outputDirectoryExact: CFG.bridgeRange, pythonPath: CFG.python, aelRoot: CFG.repo,
+         let seen = aelBridgeScanView( window.mainView );
+         REPORT.file_mode[key] = { view_nonfinite: seen.nonFinite, view_finite: seen.finite, view_minimum: seen.minimum,
+                                   view_maximum: seen.maximum, view_maximum_by_pixinsight: window.mainView.image.maximum() };
+         let ran = aelBridgeRunOnView( { view: window.mainView, mode: "structure", geometry: CFG.geometry,
+            outputDirectoryExact: output, pythonPath: CFG.python, aelRoot: CFG.repo,
             runtime: runtime, validMask: "", timeoutMs: 600000 } );
-         REPORT.errors.out_of_range.refused = false;
+         REPORT.bridge[resultKey] = { output: ran.outputDirectory, receipt: ran.receipt, result: ran.result, runtime: ran.runtime };
+         for ( let i = 0; i < ran.windows.length; ++i )
+            ran.windows[i].forceClose();
       }
       catch ( error )
       {
-         REPORT.errors.out_of_range.refused = true;
-         REPORT.errors.out_of_range.message = String( error );
+         REPORT.file_mode[key].error = String( error );
       }
-      wide.forceClose();
+      window.forceClose();
    }
-   catch ( error )
-   {
-      REPORT.errors.out_of_range = { error: String( error ) };
-   }
+   runOnFile( "out_of_range", CFG.outOfRange, "fora_de_rang", CFG.bridgeRange, "structure_out_of_range" );
 
-   // PixInsight reads a float TIFF whose last sample is NaN as a black image. The view is then not the file, and the
-   // bridge must refuse, before exporting anything, and say why.
-   {
-      let black = ImageWindow.open( CFG.lastSampleNan, "ultima_mostra_nan" )[0];
-      try
-      {
-         let seen = aelBridgeScanView( black.mainView );
-         REPORT.errors.last_sample_nan = { view_nonfinite: seen.nonFinite, view_finite: seen.finite, view_maximum: seen.maximum };
-         try
-         {
-            aelBridgeRunOnView( { view: black.mainView, mode: "structure", geometry: CFG.geometry,
-               outputDirectoryExact: CFG.bridgeLastNan, pythonPath: CFG.python, aelRoot: CFG.repo,
-               runtime: runtime, validMask: "", timeoutMs: 600000 } );
-            REPORT.errors.last_sample_nan.refused = false;
-         }
-         catch ( error )
-         {
-            REPORT.errors.last_sample_nan.refused = true;
-            REPORT.errors.last_sample_nan.message = String( error );
-         }
-      }
-      finally
-      {
-         black.forceClose();
-      }
-   }
+   // PixInsight reads a float TIFF whose last sample is NaN as a black image: the view is not the file either.
+   runOnFile( "last_sample_nan", CFG.lastSampleNan, "ultima_mostra_nan", CFG.bridgeLastNan, "structure_last_nan" );
 
    // Detection with nothing chosen: an empty Python field, no saved path and no AEL_PYTHON (the launcher drops it from
    // the environment of this instance). The scan of the standard folders and the virtual environments must find an
@@ -462,7 +438,9 @@ def main() -> None:
 
             direct = {}
             for key, mode, source in (("structure", "structure", scene_path), ("polar", "polar", scene_path),
-                                      ("structure_no_data", "structure", scene_no_data_path)):
+                                      ("structure_no_data", "structure", scene_no_data_path),
+                                      ("structure_out_of_range", "structure", wide_path),
+                                      ("structure_last_nan", "structure", last_nan_path)):
                 out = root / f"direct_{key}"
                 command = [args.python, "-m", "ael", mode, "--input", str(source),
                            "--geometry", str(geometry_path), "--out", str(out)]
@@ -483,6 +461,8 @@ def main() -> None:
                 if not args.pixinsight.is_file():
                     raise FileNotFoundError(f"PixInsight not found: {args.pixinsight}")
                 core = args.repo / "plugins/pixinsight-ael/AELBridgeCore.jsh"
+                # the files PixInsight opens: the bridge may run AEL on them, and must leave them as they are
+                files_before = {p.name: sha256(p) for p in (wide_path, last_nan_path, scene_path, scene_no_data_path, nonfinite_path)}
                 config = {
                     "repo": str(args.repo), "python": args.python, "temp": str(root),
                     "rgb": str(rgb_path), "mono": str(mono_path), "scene": str(scene_path),
@@ -564,9 +544,18 @@ def main() -> None:
                 report["tests"]["roundtrip_source_unchanged"] = {
                     key: pjsr["roundtrip"][key]["source_unchanged"] for key in ("rgb", "mono")}
                 report["tests"]["old_ael_kind"] = pjsr["errors"]["old_ael"].get("kind")
-                report["tests"]["out_of_range"] = {**pjsr["errors"]["out_of_range"],
-                                                   "output_written": (root / "bridge_out_of_range").exists()
-                                                                     and any((root / "bridge_out_of_range").iterdir())}
+                report["tests"]["input_files_untouched"] = {
+                    name: sha256(root / name) == digest for name, digest in files_before.items()}
+                for key, resultKey, path in (("out_of_range", "structure_out_of_range", wide_path),
+                                             ("last_sample_nan", "structure_last_nan", last_nan_path)):
+                    entry = dict(pjsr["file_mode"][key])
+                    if "error" not in entry:
+                        receipt = json.loads(Path(pjsr["bridge"][resultKey]["receipt"]).read_text())
+                        entry.update({"ael_input": receipt["source"]["ael_input"], "file_path": receipt["source"]["file_path"],
+                                      "reasons": receipt["source"]["file_reasons"], "temporary_input": receipt["temporary_input"],
+                                      "input_file_sha256": (receipt["input_file"] or {}).get("sha256"),
+                                      "input_file_is_the_one_opened": (receipt["input_file"] or {}).get("sha256") == sha256(path)})
+                    report["tests"][f"file_mode_{key}"] = entry
                 # control: AEL on the file as PixInsight's writer makes it (NaN written as 1.0) must NOT give the products
                 # of the file; if it did, the equality above would not show whether the NaN are put back
                 control_out = root / "direct_control_unrestored"
@@ -579,9 +568,6 @@ def main() -> None:
                 report["tests"]["control_unrestored_export"] = {key: bool(not np.array_equal(
                     load_pixels(Path(direct["structure_no_data"]["result"]["files"][key])), load_pixels(Path(control_files[key]))))
                     for key in ("mono", "cool", "measured")}
-                report["tests"]["last_sample_nan"] = {**pjsr["errors"]["last_sample_nan"],
-                                                      "output_written": (root / "bridge_last_nan").exists()
-                                                                        and any((root / "bridge_last_nan").iterdir())}
                 report["tests"]["autodetect_python"] = {"detected": pjsr["autodetect"], "default_root": pjsr["default_root"]}
                 report["tests"]["clear_errors"] = {
                     "bad_path": pjsr["errors"]["bad_path"].get("kind") == "bad_path",
@@ -589,7 +575,7 @@ def main() -> None:
                     "too_old": pjsr["errors"]["too_old"].get("kind") == "too_old"
                     if "kind" in pjsr["errors"]["too_old"] else pjsr["errors"]["too_old"]}
 
-                for mode in ("structure", "polar", "structure_no_data"):
+                for mode in ("structure", "polar", "structure_no_data", "structure_out_of_range", "structure_last_nan"):
                     expected = direct[mode]["result"]["files"]
                     actual = pjsr["bridge"][mode]["result"]["files"]
                     comparison = {}
@@ -652,10 +638,13 @@ def main() -> None:
                     "old_ael_refused_in_pixinsight": report["tests"]["old_ael_kind"] == "old_ael",
                     "accented_install_path_found": bool(report["tests"]["accented_install_path"].get("helper_exists"))
                                                    and report["tests"]["accented_install_path"]["same_folder"],
-                    "out_of_range_file_refused": report["tests"]["out_of_range"].get("refused") is True
-                                                 and "rescaled" in report["tests"]["out_of_range"].get("message", "")
-                                                 and report["tests"]["out_of_range"].get("view_maximum") == 1.0
-                                                 and not report["tests"]["out_of_range"]["output_written"],
+                    "out_of_range_runs_on_the_file": (lambda t: "error" not in t and t["view_maximum"] == 1.0
+                                                      and t["ael_input"] == "the file the image was opened from"
+                                                      and any("rescaled" in reason for reason in t["reasons"])
+                                                      and t["temporary_input"] is None and t["input_file_is_the_one_opened"]
+                                                      and all(item["equal"] for item in
+                                                              report["tests"]["bridge_equals_direct_structure_out_of_range"].values())
+                                                      )(report["tests"]["file_mode_out_of_range"]),
                     "python_autodetected": bool(Path(report["tests"]["autodetect_python"]["detected"]["python"]).is_file())
                                            and report["tests"]["autodetect_python"]["detected"]["ael_version"] == ael.__version__,
                     "structure_pixels_equal": all(item["equal"] for item in report["tests"]["bridge_equals_direct_structure"].values()),
@@ -668,10 +657,15 @@ def main() -> None:
                                                          and t["source_unchanged"] and t["samples_without_data"] > 0
                                                          and t["samples_without_data"] == t["positions_found_by_the_bridge"]
                                                          == t["restored_by_the_helper"])(report["tests"]["nonfinite_roundtrip"]),
-                    "nan_last_sample_read_as_black_and_refused": (lambda t: t["view_maximum"] == 0 and t["view_nonfinite"] == 0
-                                                                  and t["refused"] is True and "last sample" in t["message"]
-                                                                  and "did not read this file" in t["message"]
-                                                                  and not t["output_written"])(report["tests"]["last_sample_nan"]),
+                    "nan_last_sample_read_as_black_and_run_on_the_file": (lambda t: "error" not in t and t["view_maximum"] == 0
+                                                      and t["view_nonfinite"] == 0 and t["view_minimum"] == 0
+                                                      and t["ael_input"] == "the file the image was opened from"
+                                                      and any("last sample" in reason for reason in t["reasons"])
+                                                      and t["temporary_input"] is None and t["input_file_is_the_one_opened"]
+                                                      and all(item["equal"] for item in
+                                                              report["tests"]["bridge_equals_direct_structure_last_nan"].values())
+                                                      )(report["tests"]["file_mode_last_sample_nan"]),
+                    "input_files_untouched": all(report["tests"]["input_files_untouched"].values()),
                     "control_export_without_restore_differs": any(report["tests"]["control_unrestored_export"].values()),
                     "structure_with_no_data_pixels_equal": all(item["equal"] for item in
                                                                report["tests"]["bridge_equals_direct_structure_no_data"].values())})

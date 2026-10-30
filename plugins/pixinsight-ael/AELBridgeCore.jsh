@@ -502,6 +502,15 @@ function aelBridgeFileDifferences( file, scan )
    return differences;
 }
 
+// The size of the file against the size of the view; an empty text when they agree.
+function aelBridgeFileShapeDifference( file, view )
+{
+   let image = view.image;
+   let seen = image.numberOfChannels == 1 ? [ image.height, image.width ] : [ image.height, image.width, image.numberOfChannels ];
+   let stored = file.shape.length == 3 && file.shape[2] == 1 ? [ file.shape[0], file.shape[1] ] : file.shape;
+   return seen.join( "x" ) == stored.join( "x" ) ? "" : "the file is " + stored.join( "x" ) + " and the view " + seen.join( "x" );
+}
+
 function aelBridgeInspectInput( runtime, aelRoot, path, view, sourceICCBytes, iccSidecar, nonFinitePath )
 {
    let arguments = [ AEL_BRIDGE_CHECK_SCRIPT, "inspect", path,
@@ -600,52 +609,67 @@ function aelBridgeRunOnView( parameters )
       throw new Error( runtime.message || "Python preflight failed." );
    Settings.write( AEL_BRIDGE_SETTINGS_KEY + "pythonPath", DataType.UTF8String, runtime.python );
 
-   // A view that the user has processed since opening it is theirs; one that is still the file is checked against it.
+   // A view that the user has processed since opening it is theirs, and it is exported. One that is still its file must
+   // hold what the file holds, and PixInsight does not always read a floating-point TIFF faithfully: a file with values
+   // outside 0-1 is rescaled to 0-1 (the zero and the scale are lost), and one whose last sample is NaN (no data in the
+   // bottom-right corner, which a registered stack often has) is read as a completely black image. AEL does not give the
+   // result it gives on the file on either of those, so then AEL reads the file itself, as `python -m ael` does.
+   let sourcePath = view.window.filePath;
    let sourceRange = view.window.isModified ? null : aelBridgeSourceRange( runtime, parameters.aelRoot, view );
-   if ( sourceRange && sourceRange.outside_unit_range )
-      throw new Error( "PixInsight rescaled this image when it opened its file: the file holds values from "
-                       + sourceRange.minimum + " to " + sourceRange.maximum + ", and PixInsight maps that range to 0-1. "
-                       + "The view is therefore not the data in the file (the zero and the scale are lost), and AEL does not "
-                       + "give the same result on the rescaled numbers as on the file, so nothing was run.\n\n"
-                       + "Save the image as a TIFF whose values are inside 0-1 (divide by one constant), open that file and "
-                       + "run the bridge on it. If you have processed the image since opening it, this check does not apply." );
-
    let scan = aelBridgeScanView( view );
+   let fileReasons = [];
    if ( sourceRange )
    {
-      let differences = aelBridgeFileDifferences( sourceRange, scan );
-      if ( differences.length > 0 )
-         throw new Error( "PixInsight did not read this file as it is stored: " + differences.join( "; " ) + ".\n\n"
-                          + ( sourceRange.last_sample_is_nan
-                              ? "The last sample of this file is NaN (no data in the bottom-right corner), and PixInsight reads a "
-                                + "floating-point TIFF whose last sample is NaN as a black image.\n\n" : "" )
-                          + "The view is therefore not the data in the file, and AEL would not give the result it gives on the "
-                          + "file, so nothing was run. Run AEL on the file itself from the terminal (python -m ael structure "
-                          + "--input FILE --geometry FILE --out FOLDER). If you have processed the image since opening it, this "
-                          + "check does not apply." );
+      let shape = aelBridgeFileShapeDifference( sourceRange, view );
+      if ( shape.length > 0 )
+         throw new Error( "The file this image was opened from does not have the size of the image (" + shape
+                          + "), so nothing was run. If you have processed the image since opening it, this check does not apply." );
+      if ( sourceRange.outside_unit_range )
+         fileReasons.push( "PixInsight rescaled the file when it opened it: the file holds values from " + sourceRange.minimum
+                           + " to " + sourceRange.maximum + " and PixInsight maps that range to 0-1" );
+      else
+         fileReasons = aelBridgeFileDifferences( sourceRange, scan );
+      if ( fileReasons.length > 0 && sourceRange.last_sample_is_nan )
+         fileReasons.push( "the last sample of the file is NaN, and PixInsight reads a floating-point TIFF whose last sample is NaN "
+                           + "as a black image" );
    }
+   let onFile = fileReasons.length > 0;
 
    let tempDir = File.systemTempDirectory + "/pixinsight-ael-" + aelBridgeTimestamp();
    File.createDirectory( tempDir, false );
-   let inputPath = tempDir + "/input_float32.tif";
    let geometryPath = tempDir + "/geometry.json";
-   let temporaryFiles = [ inputPath, inputPath + ".icc", geometryPath ];
+   let temporaryFiles = [ geometryPath ];            // never the file the image was opened from
    let openedWindows = [];
    let outputDirectory = "";
 
    try
    {
-      let exported = aelBridgeExportFloat32( view, inputPath );
-      let nonFinitePath = tempDir + "/nonfinite_positions.u32";
-      temporaryFiles.push( nonFinitePath );
-      let nonFinite = scan.nonFinite;
-      aelBridgeWriteNonFinite( scan, nonFinitePath );
-      if ( nonFinite > 0 )
-         Console.writeln( "AEL bridge: " + nonFinite + " samples hold no data (NaN); PixInsight writes them to a TIFF as 1.0, "
-                          + "so they are put back as NaN for AEL, as in the file." );
-      let inspected = aelBridgeInspectInput( runtime, parameters.aelRoot, inputPath, view,
-                                             exported.sourceICCBytes, exported.iccSidecar,
-                                             nonFinite > 0 ? nonFinitePath : "" );
+      let inputPath, exported = null, inspected, nonFinite = 0;
+      if ( onFile )
+      {
+         inputPath = sourcePath;
+         nonFinite = sourceRange.nonfinite_samples;
+         Console.writeln( "AEL bridge: the view is not the file it was opened from (" + fileReasons.join( "; " ) + "). "
+                          + "AEL reads the file itself: " + sourcePath );
+         inspected = { dtype: sourceRange.dtype, shape: sourceRange.shape, planar: 1, icc_bytes: 0, icc_repaired: false,
+                       nonfinite_restored: 0, nonfinite_written_as: [], sha256: sourceRange.sha256, bytes: sourceRange.bytes };
+      }
+      else
+      {
+         inputPath = tempDir + "/input_float32.tif";
+         temporaryFiles.push( inputPath, inputPath + ".icc" );
+         exported = aelBridgeExportFloat32( view, inputPath );
+         let nonFinitePath = tempDir + "/nonfinite_positions.u32";
+         temporaryFiles.push( nonFinitePath );
+         nonFinite = scan.nonFinite;
+         aelBridgeWriteNonFinite( scan, nonFinitePath );
+         if ( nonFinite > 0 )
+            Console.writeln( "AEL bridge: " + nonFinite + " samples hold no data (NaN); PixInsight writes them to a TIFF as 1.0, "
+                             + "so they are put back as NaN for AEL, as in the file." );
+         inspected = aelBridgeInspectInput( runtime, parameters.aelRoot, inputPath, view,
+                                            exported.sourceICCBytes, exported.iccSidecar,
+                                            nonFinite > 0 ? nonFinitePath : "" );
+      }
       File.writeTextFile( geometryPath, JSON.stringify( parameters.geometry, null, 1 ) );
       outputDirectory = parameters.outputDirectoryExact || aelBridgeUniqueOutput( parameters.outputDirectory, mode );
       if ( parameters.outputDirectoryExact && !File.directoryExists( outputDirectory ) )
@@ -684,15 +708,21 @@ function aelBridgeRunOnView( parameters )
          runtime: { python: runtime.python, python_version: runtime.version,
                     ael_version: runtime.ael_version, ael_file: runtime.ael_file },
          source: { view_id: view.id, width: view.image.width, height: view.image.height,
-                   channels: view.image.numberOfChannels, icc_bytes: exported.sourceICCBytes,
-                   icc_origin: exported.iccOrigin, non_finite_samples: nonFinite,
-                   file_range: sourceRange ? { minimum: sourceRange.minimum, maximum: sourceRange.maximum } : null },
-         temporary_input: { format: "TIFF", dtype: inspected.dtype, shape: inspected.shape,
+                   channels: view.image.numberOfChannels,
+                   icc_bytes: exported ? exported.sourceICCBytes : 0,
+                   icc_origin: exported ? exported.iccOrigin : "not used: AEL read the file itself",
+                   non_finite_samples: nonFinite,
+                   file_range: sourceRange ? { minimum: sourceRange.minimum, maximum: sourceRange.maximum } : null,
+                   ael_input: onFile ? "the file the image was opened from" : "the view, exported to a temporary TIFF",
+                   file_path: onFile ? sourcePath : null, file_reasons: fileReasons },
+         temporary_input: onFile ? null : { format: "TIFF", dtype: inspected.dtype, shape: inspected.shape,
                             planar: inspected.planar, icc_bytes: inspected.icc_bytes,
                             icc_repaired: inspected.icc_repaired == true,
                             nonfinite_restored: inspected.nonfinite_restored || 0,
                             nonfinite_written_by_pixinsight_as: inspected.nonfinite_written_as || [],
                             sha256: inspected.sha256, bytes: inspected.bytes },
+         input_file: onFile ? { path: sourcePath, dtype: inspected.dtype, shape: inspected.shape,
+                                sha256: inspected.sha256, bytes: inspected.bytes } : null,
          geometry: "input_geometry.json",
          ael_receipt: result.receipt || null,
          gate: result.gate || { passed: true, reason: "AEL polar completed; declared image files checked by the bridge" },

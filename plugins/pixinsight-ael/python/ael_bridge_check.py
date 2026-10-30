@@ -87,12 +87,18 @@ def source_range(path: Path) -> None:
         return
     values = array[finite]
     low, high = float(values.min()), float(values.max())
-    # what the view must hold too: the bridge compares these numbers with its own count of the view's samples
-    emit(ok=True, kind="range", dtype=str(array.dtype), minimum=low, maximum=high,
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1 << 20), b""):
+            digest.update(block)
+    # what the view must hold too: the bridge compares these numbers with its own count of the view's samples. When it
+    # does not, AEL is run on the file itself, and the receipt names the file by its size and SHA-256.
+    emit(ok=True, kind="range", dtype=str(array.dtype), shape=list(array.shape), minimum=low, maximum=high,
          outside_unit_range=bool(low < 0.0 or high > 1.0),
          finite_samples=int(values.size), nonfinite_samples=int(array.size - values.size),
          finite_sum=float(values.sum(dtype=np.float64)),
-         last_sample_is_nan=bool(not np.isfinite(array.reshape(-1)[-1])))
+         last_sample_is_nan=bool(not np.isfinite(array.reshape(-1)[-1])),
+         sha256=digest.hexdigest(), bytes=path.stat().st_size)
 
 
 def inspect(path: Path, width: int, height: int, channels: int, require_icc: bool,
