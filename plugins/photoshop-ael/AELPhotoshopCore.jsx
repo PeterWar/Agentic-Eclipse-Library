@@ -302,6 +302,16 @@ var AELPhotoshop = AELPhotoshop || {};
         return opened;
     };
 
+    // The check inside Photoshop decides the run: a PSB that Photoshop reads differently from what AEL wrote is an
+    // error, with its documents left open to look at and the differences in AEL_PHOTOSHOP_NATIVE_CHECK.json.
+    ns.requireNativeCheck = function (result) {
+        var check = result.native_check;
+        if (check && !check.ok) {
+            throw new Error("The layered PSB that Photoshop opened is not what AEL wrote: " + check.problems.join("; ") +
+                ". Its documents stay open." + (result.native_check_file ? " Details: " + result.native_check_file : ""));
+        }
+    };
+
     ns.run = function (options) {
         if (!ns.runner.exists) throw new Error("Missing Python runner: " + ns.runner.fsName);
         var probe = ns.probe(options.python, options.aelFolder);
@@ -340,6 +350,7 @@ var AELPhotoshop = AELPhotoshop || {};
                 result.native_check_file = root.fsName + "/AEL_PHOTOSHOP_NATIVE_CHECK.json";
                 ns.writeJSON(new File(result.native_check_file), result.native_check);
             }
+            ns.requireNativeCheck(result);
             return result;
         } finally {
             app.displayDialogs = oldDialogs;

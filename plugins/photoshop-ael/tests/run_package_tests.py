@@ -255,6 +255,8 @@ finally {{
     expected = {"structure": (3, None, {"geometry"}), "polar": (8, None, {"geometry", "rmax"}),
                 "master": (2, 19, {"geometry", "camera"}), "filters": (1, 19, {"input"})}
     common = {"operation", "outputParent", "python", "aelFolder", "open_mode", "frames"}
+    # the AEL version the package says it carries (runtime/VERSION.json, written by tools/build_package.py)
+    bundled_version = json.loads((Path(runtime).parent / "VERSION.json").read_text(encoding="utf-8"))["ael_version"]
     for name, (opened, layers, keys) in expected.items():
         run = runs_by_name.get(name, {})
         answer, result = run.get("answer") or {}, run.get("result") or {}
@@ -265,8 +267,8 @@ finally {{
             "dialog_fields": set(answer) == common | keys and answer.get("operation") == name and
                 answer.get("python") == "" and answer.get("aelFolder") == "" and answer.get("open_mode") == "layered",
             "opened": result.get("opened") == opened,
-            "alert": alert.startswith(f"AEL 1.3.6 completed. {opened} result document(s) opened."),
-            "bundled_ael": receipt.get("runtime", {}).get("ael_version") == "1.3.6" and
+            "alert": alert.startswith(f"AEL {bundled_version} completed. {opened} result document(s) opened."),
+            "bundled_ael": receipt.get("runtime", {}).get("ael_version") == bundled_version and
                 os.path.realpath(ael_file).startswith(runtime + os.sep),
         }
         if layers:

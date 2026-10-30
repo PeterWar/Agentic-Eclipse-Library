@@ -22,6 +22,7 @@ import cv2
 import numpy as np
 import tifffile
 
+import ael
 from ael.geometry import EclipseGeometry
 from ael.synthetic import SyntheticScene
 
@@ -441,6 +442,12 @@ try {{
         byte_below:AELPhotoshop.checkLayers(standIn(50,'OVERLAY'),wanted).ok,
         byte_above:AELPhotoshop.checkLayers(standIn(52,'OVERLAY'),wanted).ok,
         other_mode:AELPhotoshop.checkLayers(standIn(51,'MULTIPLY'),wanted).ok}};
+    // A PSB that Photoshop reads differently from what AEL wrote must stop the run, not only be reported.
+    function tryRequire(result) {{ try {{ AELPhotoshop.requireNativeCheck(result); return 'passed'; }}
+        catch(e) {{ return 'refused'; }} }}
+    REPORT.native_check_binding={{same:tryRequire({{native_check:{{ok:true,layers:19,problems:[]}}}}),
+        different:tryRequire({{native_check:{{ok:false,layers:19,problems:['01a NRGF: opacity 20.4 %, expected 51/255']}}}}),
+        no_psb:tryRequire({{}})}};
     REPORT.stage='done'; REPORT.ok=true;
 }} catch(e) {{ REPORT.error=String(e.message); REPORT.stack=String(e.stack); }}
 finally {{ closeOwned(); AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT); }}
@@ -584,6 +591,10 @@ finally {{ closeOwned(); AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_rep
                         x["same_shape"] and x["max_abs_difference"] == 0 for x in report["nan"]["products"].values()),
                     "check_layers_exact": report["jsx"]["check_layers"] == {"exact": True, "byte_below": False,
                                                                             "byte_above": False, "other_mode": False},
+                    "native_check_stops_the_run": report["jsx"]["native_check_binding"] ==
+                        {"same": "passed", "different": "refused", "no_psb": "passed"} and bool(re.search(
+                            r"ns\.openResults\(result\);.*?ns\.requireNativeCheck\(result\);\s*return result;",
+                            (repo / "plugins/photoshop-ael/AELPhotoshopCore.jsx").read_text(encoding="utf-8"), re.S)),
                     "photoshop_composite_within_8_steps": report["photoshop_composite"]["dtype"] == "uint16" and
                         report["photoshop_composite"].get("vs_ael", {}).get("max_steps", 99) <= 8,
                     "photoshop_composite_is_15bit_arithmetic":
@@ -599,7 +610,7 @@ finally {{ closeOwned(); AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_rep
                                                     .startswith(str(repo)),
                     # Python field empty and nothing kept from earlier runs: the search finds one by itself.
                     "automatic_python_found": bool(report["jsx"]["automatic_python"].get("python")) and
-                                              report["jsx"]["automatic_python"].get("ael_version") == "1.3.6",
+                                              report["jsx"]["automatic_python"].get("ael_version") == ael.__version__,
                     "no_python_error_lists_tried": report["jsx"]["no_python"].get("refused") is True and
                         "Tried:" in report["jsx"]["no_python"].get("message", "") and
                         all(name in report["jsx"]["no_python"]["message"] for name in ("fake python one", "fake python two"))})
