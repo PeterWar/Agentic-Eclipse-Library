@@ -8,14 +8,15 @@ Claude plugin folder `plugins/claude-ael/` go to 1.4.0.
 
 - **`plugins/pixinsight-ael/`, for PixInsight 1.9.** The bridge runs `structure` and `polar` on the active image and
   opens every product in a new window. The workflow makes AEL's filter layers from a linear stack and writes the
-  PixelMath expressions that compose them, starting from the same floating-point values AEL starts from (within half
-  a 16-bit step of AEL's composite). When PixInsight does not hold an image as its file stores it (it rescales a
-  floating-point TIFF with values outside 0–1, writes NaN as 1.0 and reads a TIFF whose last sample is NaN as black),
-  the bridge has AEL read the file itself, so the products stay those of `python -m ael`.
+  PixelMath expressions that compose them, starting from the same floating-point values AEL starts from (0.504 of a
+  16-bit step from AEL's composite, against a gate of one step). When PixInsight does not hold an image as its file
+  stores it (it rescales a floating-point TIFF with values outside 0–1, writes NaN as 1.0 and reads a TIFF whose last
+  sample is NaN as black), the bridge has AEL read the file itself, so the files it writes stay those of
+  `python -m ael`.
 - **`plugins/photoshop-ael/`, for Photoshop 2026.** The same operations. The filter layers arrive as one layered
   16-bit PSB written and verified by `ael.photoshop`; Photoshop reads it again and compares every layer's name, mode,
-  opacity byte and visibility with what AEL wrote. Photoshop's own composite of that file stays within 5 of 65,535
-  of AEL's, the effect of its 15-bit arithmetic.
+  opacity byte and visibility with what AEL wrote, and a difference stops the run. Photoshop's own composite of that
+  file stays within 5 of 65,535 of AEL's (99.9th percentile 4), the effect of its 15-bit arithmetic.
 - **Packages.** Each connector's `tools/build_package.py` writes a folder with the AEL engine inside (`runtime/ael`,
   checked byte by byte), synthetic demonstration files and a deterministic ZIP. Neither connector names an
   interpreter: each finds a Python that can import the AEL it carries and its dependencies, and both refuse an AEL
@@ -23,7 +24,8 @@ Claude plugin folder `plugins/claude-ael/` go to 1.4.0.
 - **The linear master is experimental.** It registers every frame on the Sun; on real eclipse frames that
   registration lands 0.07–2.2 px from the reference registration, and the cause has not been found. Both dialogs say
   so.
-- **`tools/check_connectors.py`** fails when the shared parts of the two connectors drift apart.
+- **`tools/check_connectors.py`** fails when the shared parts of the two connectors drift apart, and runs both probes
+  against stand-in AEL packages to check that each refuses an AEL older than 1.3.6.
 - Measurements and tests: [`docs/VALIDATION_1.4.0.md`](docs/VALIDATION_1.4.0.md).
 
 ## 1.3.6 — 2026-10-29
