@@ -91,6 +91,31 @@ def compare_products(direct_result: dict, bridge_root: Path, operation: str) -> 
     return comparisons
 
 
+def photoshop_15bit_model(psb: Path, shape) -> np.ndarray:
+    """The visible layers of AEL's PSB composited as Photoshop holds 16-bit images: layers and alphas on the
+    15-bit grid (0–32768), the blend and the opacity mix rounded to it after every layer, exported to 16 bits.
+    The blends are AEL's (develop.py, add()); the opacity is the stored byte."""
+    from psd_tools import PSDImage
+
+    def q15(value):
+        return np.round(np.asarray(value, np.float64) * 32768) / 32768
+
+    comp = np.zeros(shape, np.float64)
+    for layer in PSDImage.open(str(psb)):
+        if not layer.visible:
+            continue
+        x = q15(np.round(np.asarray(layer.numpy("color"), np.float64) * 65535) / 65535)
+        shape_channel = layer.numpy("shape")
+        alpha = np.ones(shape[:2]) if shape_channel is None else np.asarray(shape_channel, np.float64)[..., 0]
+        alpha = q15(np.round(alpha * 65535) / 65535)
+        mode = str(layer.blend_mode).split(".")[-1].lower()
+        blend = x if mode == "normal" else comp * x if mode == "multiply" else \
+            np.where(comp <= .5, 2 * comp * x, 1 - 2 * (1 - comp) * (1 - x))
+        weight = alpha[..., None] * (int(layer.opacity) / 255)
+        comp = q15(comp * (1 - weight) + q15(blend) * weight)
+    return np.round(np.clip(comp, 0, 1) * 65535).astype(np.int64)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[3])
@@ -167,8 +192,37 @@ function closeOwned() {{
     }}
     OWNED={{}};
 }}
+function documentByID(id) {{
+    for (var i=0; i<app.documents.length; i++) if (app.documents[i].id === id) return app.documents[i];
+    return null;
+}}
+function openedBits(result) {{
+    var bits=[];
+    for (var i=0; i<result.opened_documents.length; i++) {{
+        var doc=documentByID(result.opened_documents[i].id);
+        bits.push(doc ? String(doc.bitsPerChannel) : 'missing');
+    }}
+    return bits;
+}}
+// Photoshop's own composite of the PSB it opened: a merged copy of the visible layers, saved as a 16-bit TIFF.
+function exportComposite(result, target) {{
+    for (var i=0; i<result.opened_documents.length; i++) {{
+        if (result.opened_documents[i].kind !== 'psb') continue;
+        var doc=documentByID(result.opened_documents[i].id);
+        app.activeDocument=doc;
+        var copy=doc.duplicate('AEL composite test', true);
+        remember(copy.id);
+        copy.flatten();
+        var options=new TiffSaveOptions(); options.embedColorProfile=false; options.imageCompression=TIFFEncoding.NONE;
+        options.layers=false; options.alphaChannels=false; options.transparency=false;
+        copy.saveAs(new File(target), options, true, Extension.LOWERCASE);
+        return {{bits:String(copy.bitsPerChannel), source_layers:doc.layers.length}};
+    }}
+    return null;
+}}
 function imageOperation(operation, afterPath) {{
     REPORT.stage=operation+'_open'; AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT);
+    if (AELPhotoshop.isOpen({json.dumps(str(source))})) throw new Error('Already open, not touched');
     var oldDialogs=app.displayDialogs; app.displayDialogs=DialogModes.NO;
     var source;
     try {{ source=app.open(new File({json.dumps(str(source))})); }}
@@ -244,19 +298,43 @@ try {{
         aelFolder:{json.dumps(str(repo))},run_filters:true,filter_options:{{filters:'all'}}}});
     rememberResults(master);
     REPORT.master={{run_root:master.run_root,opened:master.opened_documents.length,
-        registrations:master.registrations,linear:master.images[0].path,receipt:master.bridge_receipt}};
+        registrations:master.registrations,linear:master.images[0].path,receipt:master.bridge_receipt,
+        native_check:master.native_check,ael_version:master.ael_version}};
     closeOwned();
     REPORT.stage='filters'; AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT);
     var filters=AELPhotoshop.run({{operation:'filters',outputParent:{json.dumps(str(root))},
         input:REPORT.master.linear,python:{json.dumps(python)},aelFolder:{json.dumps(str(repo))},filters:'all'}});
     rememberResults(filters);
     REPORT.filters={{run_root:filters.run_root,opened:filters.opened_documents.length,
-        images:filters.images.length,receipt:filters.bridge_receipt}};
+        images:filters.images.length,receipt:filters.bridge_receipt,native_check:filters.native_check}};
+    REPORT.filters.composite=exportComposite(filters,{json.dumps(str(root / "photoshop_composite.tif"))});
+    REPORT.filters.psb=filters.psb;
     closeOwned();
+    REPORT.stage='filters_documents'; AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT);
+    var separate=AELPhotoshop.run({{operation:'filters',outputParent:{json.dumps(str(root))},open_mode:'documents',
+        input:REPORT.master.linear,python:{json.dumps(python)},aelFolder:{json.dumps(str(repo))},filters:'all'}});
+    rememberResults(separate);
+    REPORT.filters_documents={{opened:separate.opened_documents.length,native_check:separate.native_check||null,
+        bits:openedBits(separate)}};
+    closeOwned();
+    REPORT.stage='default_ael'; AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT);
+    REPORT.default_ael={{folder:AELPhotoshop.defaultAELFolder(),
+        runtime:AELPhotoshop.probe({json.dumps(python)},'').runtime}};
     REPORT.stage='transparent'; AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT);
     REPORT.transparent=transparentRefusal();
     REPORT.stage='untagged'; AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT);
     REPORT.untagged=untaggedExport();
+    REPORT.stage='check_layers'; AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT);
+    // checkLayers on a stand-in document (no document opened): one byte of opacity off, or another mode, fails.
+    function standIn(opacityByte, mode) {{
+        return {{bitsPerChannel:'BitsPerChannelType.SIXTEEN', layers:[{{name:'01a NRGF', blendMode:'BlendMode.'+mode,
+            opacity:opacityByte/255*100, visible:true, typename:'ArtLayer'}}]}};
+    }}
+    var wanted=[{{name:'01a NRGF', mode:'overlay', opacity:0.2, opacity_byte:51, visible:true}}];
+    REPORT.check_layers={{exact:AELPhotoshop.checkLayers(standIn(51,'OVERLAY'),wanted).ok,
+        byte_below:AELPhotoshop.checkLayers(standIn(50,'OVERLAY'),wanted).ok,
+        byte_above:AELPhotoshop.checkLayers(standIn(52,'OVERLAY'),wanted).ok,
+        other_mode:AELPhotoshop.checkLayers(standIn(51,'MULTIPLY'),wanted).ok}};
     REPORT.stage='done'; REPORT.ok=true;
 }} catch(e) {{ REPORT.error=String(e.message); REPORT.stack=String(e.stack); }}
 finally {{ closeOwned(); AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT); }}
@@ -310,6 +388,27 @@ finally {{ closeOwned(); AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_rep
                                               if (root / name / "structure").exists()]
                 report["transparent"] = transparent
                 report["untagged"] = dict(jsx_result["untagged"], exported=after_untagged.exists())
+                # Photoshop's composite of the PSB against AEL's own composite (ael/display.tif), in 16-bit steps.
+                # Photoshop holds 16-bit images as 15-bit (one 15-bit step = two 16-bit steps) and rounds at each
+                # of the four visible blends: up to 8 steps. Declared with it before the first run, a 99.9th
+                # percentile of 3 failed (4.0, run of 30-10). A model of that arithmetic (15-bit layers and alphas,
+                # rounding after every blend) gave the same distance to AEL on another image and matched Photoshop
+                # exactly at 95.8 % of its pixels (mean 0.09 steps, 0.18 % beyond 2), so the percentile was an
+                # estimate of mine, not Photoshop's behaviour. The gate is now that model, declared from that image.
+                composite = root / "photoshop_composite.tif"
+                ael_display = Path(jsx_result["filters"]["run_root"]) / "filters" / "ael" / "display.tif"
+                seen = tifffile.imread(composite).astype(np.int64) if composite.exists() else np.zeros(0)
+                wanted = tifffile.imread(ael_display).astype(np.int64)
+                report["photoshop_composite"] = {"photoshop": jsx_result["filters"].get("composite"),
+                    "shape": list(seen.shape), "ael_shape": list(wanted.shape), "dtype": "uint16" if
+                    composite.exists() and tifffile.imread(composite).dtype == np.uint16 else "other"}
+                if seen.shape == wanted.shape:
+                    model = photoshop_15bit_model(Path(jsx_result["filters"]["psb"]), seen.shape)
+                    for name, other in (("vs_ael", wanted), ("vs_15bit_model", model)):
+                        steps = np.abs(seen - other)
+                        report["photoshop_composite"][name] = {"max_steps": int(steps.max()),
+                            "p999_steps": float(np.percentile(steps, 99.9)), "mean_steps": float(steps.mean()),
+                            "exact": float(np.mean(steps == 0)), "over_2_steps": float(np.mean(steps > 2))}
 
             report["gates"] = {
                 "direct_structure": bool(direct_structure.get("ok")),
@@ -337,10 +436,27 @@ finally {{ closeOwned(); AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_rep
                     "master_translation": max(report["translation_errors_px"]) < 0.1,
                     "master_pixels": report["master"]["median_relative_difference"] < 0.001,
                     "sixteen_filters": report["filter_counts"] == {"layers": 16, "alphas": 16},
+                    # Layered by default: the linear master and one PSB; "documents" opens every TIFF.
                     "results_opened": report["jsx"]["structure"]["opened"] == 3 and
                                       report["jsx"]["polar"]["opened"] == 8 and
-                                      report["jsx"]["master"]["opened"] == 34 and
-                                      report["jsx"]["filters"]["opened"] == 33})
+                                      report["jsx"]["master"]["opened"] == 2 and
+                                      report["jsx"]["filters"]["opened"] == 1 and
+                                      report["jsx"]["filters_documents"]["opened"] == 33,
+                    # The PSB as Photoshop itself reads it: every layer, mode, opacity and visibility.
+                    "psb_native": all((report["jsx"][key].get("native_check") or {}).get("ok") and
+                                      report["jsx"][key]["native_check"]["layers"] == 19 for key in ("master", "filters")),
+                    "check_layers_exact": report["jsx"]["check_layers"] == {"exact": True, "byte_below": False,
+                                                                            "byte_above": False, "other_mode": False},
+                    "photoshop_composite_within_8_steps": report["photoshop_composite"]["dtype"] == "uint16" and
+                        report["photoshop_composite"].get("vs_ael", {}).get("max_steps", 99) <= 8,
+                    "photoshop_composite_is_15bit_arithmetic":
+                        report["photoshop_composite"].get("vs_15bit_model", {}).get("mean_steps", 99) <= 0.2 and
+                        report["photoshop_composite"].get("vs_15bit_model", {}).get("over_2_steps", 1) <= 0.005,
+                    # Separate documents: Photoshop has no Overlay at 32 bits, so every one must be 16-bit.
+                    "documents_16bit": report["jsx"]["filters_documents"]["bits"] ==
+                        ["BitsPerChannelType.SIXTEEN"] * 33,
+                    "default_ael_is_this_checkout": str(report["jsx"]["default_ael"]["runtime"].get("ael_file", ""))
+                                                    .startswith(str(repo))})
             report["ok"] = all(report["gates"].values())
     except Exception as exc:
         report["error"] = f"{type(exc).__name__}: {exc}"

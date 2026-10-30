@@ -23,6 +23,7 @@ import sys
 
 import cv2
 import numpy as np
+import tifffile
 
 import ael
 from ael import calibrate, develop, io, photoshop, stack
@@ -148,7 +149,8 @@ def run_filters(cfg: dict) -> dict:
               "min_coverage": minimum, "filters": cfg.get("filters", "all"),
               "visible": cfg.get("visible", list(DEFAULTS)),
               "opacities": cfg.get("opacities", {}), "display": display,
-              "photoshop": False, "note": "Photoshop workflow; portable AEL filters, not historical layer replay"}
+              "photoshop": bool(cfg.get("photoshop_layers", False)),
+              "note": "Photoshop workflow; portable AEL filters, not historical layer replay"}
     for key, value in (("valid", valid), ("coverage", coverage), ("alpha", alpha)):
         if value:
             recipe[key] = str(value)
@@ -166,11 +168,16 @@ def run_filters(cfg: dict) -> dict:
         raise RuntimeError(f"AEL filter gate failed: {ael_receipt['gates']}")
     selected = recipe["filters"] if recipe["filters"] != "all" else list(NAMES)
 
-    # AEL's display.tif is the finished composite, filters included. PixelMath must start
-    # from the display base alone, so AEL renders it once more with no visible filter:
-    # the same scale and alpha, composited over black exactly as in the full product.
-    base_recipe = dict(recipe, filters=selected[:1], visible=[], opacities={},
-                       note="Display base only: no visible filter layer")
+    # AEL's display.tif is the finished composite, filters included. PixelMath must start from the display
+    # base alone, and from exactly what AEL starts from. AEL composites in floating point from the 16-bit layer
+    # images and the 16-bit alpha (develop.py, add()) and rounds once, at the very end. Starting PixelMath from a
+    # base composite already rounded to 16 bits would round twice and could drift by one 16-bit step (half a step
+    # at the start, half at the end). AEL therefore renders the base once more without its alpha file: the alpha
+    # is then the 0/1 valid mask, so its display.tif is the 16-bit base layer itself. The start is then formed
+    # in float32 as AEL forms it, base/65535 * alpha/65535 over black, and written as a 32-bit TIFF.
+    base_recipe = {key: value for key, value in recipe.items() if key != "alpha"}
+    base_recipe.update(filters=selected[:1], visible=[], opacities={}, photoshop=False,
+                       note="Display base layer only (alpha = valid mask): no visible filter layer")
     base_recipe_path = out / "display_base_recipe.json"
     base_recipe_path.write_text(json.dumps(base_recipe, indent=1, ensure_ascii=False), encoding="utf-8")
     base_result = develop.filters_from_config(base_recipe_path, out / "ael_display_base")
@@ -179,7 +186,17 @@ def run_filters(cfg: dict) -> dict:
     tiff_dir.mkdir()
     images = [{"name": "display", "kind": "display", "path": str(tiff_dir / "display.tif"),
                "view": "AEL_DISPLAY"}]
-    shutil.copy2(base_result["files"]["display"], tiff_dir / "display.tif")
+    base_u16 = tifffile.imread(base_result["files"]["display"])
+    if base_u16.dtype != np.uint16 or base_u16.ndim != 3 or base_u16.shape[-1] != 3:
+        raise RuntimeError(f"AEL display base is not a 16-bit RGB image: {base_u16.dtype} {base_u16.shape}")
+    start = base_u16.astype(np.float32) / 65535           # develop.add(): x = u.astype(np.float32) / 65535
+    if alpha:
+        # outside the valid domain the base is 0, so the alpha there cannot change the product
+        weight = photoshop.to_u16(np.asarray(io.load_array(alpha))).astype(np.float32)[..., None] / 65535
+        weight = weight * (round(1 * 255) / 255)           # opacity 1, stored in 8 bits as AEL does
+        start = np.zeros_like(start) * (1 - weight) + start * weight
+    io.save_tiff(tiff_dir / "display.tif", start.astype(np.float32),
+                 description="AEL display base over black with its alpha, float32, the start of AEL's own composite")
     layer_receipt = {entry["name"]: entry for entry in ael_receipt["parameters"]["layers"]}
     operations = []
     for name in selected:
@@ -198,11 +215,13 @@ def run_filters(cfg: dict) -> dict:
         "source_view": "AEL_DISPLAY", "reference_composite": result["files"]["display"],
         "operations": operations}, indent=1), encoding="utf-8")
     instructions = ["# PixelMath replay", "",
-                    "Open the TIFF images. `AEL_DISPLAY` is the display base before any filter.",
-                    "Duplicate it as `AEL_COMPOSITE`, convert the duplicate to 32-bit float (a 16-bit target",
+                    "Open the TIFF images. `AEL_DISPLAY` is the display base over black with its alpha, as a",
+                    "32-bit float image: exactly where AEL starts its own composite, before any filter.",
+                    "Duplicate it as `AEL_COMPOSITE`, make sure the duplicate is 32-bit float (a 16-bit target",
                     "rounds after every step), and execute these single expressions on it,",
                     "in order, with no symbols. If a view was renamed on opening, change its identifier",
-                    "in the expression. The result should match AEL's composite `ael/display.tif`.", ""]
+                    "in the expression. The result matches AEL's composite `ael/display.tif` to its final",
+                    "rounding to 16 bits (half a step), which is the only rounding AEL applies.", ""]
     for index, operation in enumerate(operations, 1):
         instructions += [f"## {index}. {operation['filter']} — {operation['mode']}, opacity {operation['opacity']:g}"
                          f" (8-bit effective {operation['effective_opacity']:.6g})",
@@ -211,13 +230,25 @@ def run_filters(cfg: dict) -> dict:
     receipt = {"product": "Photoshop AEL filter layers", "runtime": runtime(),
                "input": str(input_path), "recipe": str(recipe_path), "ael_receipt": str(ael_receipt_path),
                "display_base_recipe": str(base_recipe_path), "display_base_receipt": base_result["receipt"],
+               "display_start": "float32, base/65535 * alpha/65535 over black, formed as AEL starts its composite",
                "reference_composite": result["files"]["display"],
                "display_scale_measured": measured_scale, "images": images, "pixelmath": operations,
                "gates": ael_receipt["gates"], "credit": CREDIT}
     receipt_path = out / "AEL_WORKFLOW_RECEIPT.json"
     receipt_path.write_text(json.dumps(receipt, indent=1, ensure_ascii=False), encoding="utf-8")
-    return {"ok": True, "operation": "filters", "out": str(out), "images": images,
-            "pixelmath": operations, "receipt": str(receipt_path), "gates": ael_receipt["gates"]}
+    answer = {"ok": True, "operation": "filters", "out": str(out), "images": images,
+              "pixelmath": operations, "receipt": str(receipt_path), "gates": ael_receipt["gates"]}
+    if recipe["photoshop"]:
+        # AEL wrote one layered 16-bit PSB and verified it by reading it back. These are its layers from the
+        # bottom up, as develop.filters_from_config adds them, for the check inside Photoshop itself.
+        answer["psb"] = result["files"]["psb"]
+        answer["psb_layers"] = [{"name": "Background", "mode": "normal", "opacity": 1.0, "visible": True},
+                                {"name": "Linear reference / receipt scale", "mode": "normal", "opacity": 1.0,
+                                 "visible": False},
+                                {"name": "00 Display base", "mode": "normal", "opacity": 1.0, "visible": True}]
+        answer["psb_layers"] += [{"name": entry["layer"], "mode": entry["mode"], "opacity": float(entry["opacity"]),
+                                  "visible": bool(entry["visible"])} for entry in ael_receipt["parameters"]["layers"]]
+    return answer
 
 
 MOON_KEYS = ("xy", "r", "rms", "n_used", "n_rays")
@@ -499,6 +530,7 @@ def run_master(cfg: dict) -> dict:
     filter_result = None
     if cfg.get("run_filters", True):
         filter_cfg = dict(cfg.get("filter_options") or {})
+        filter_cfg.setdefault("photoshop_layers", cfg.get("photoshop_layers", False))
         filter_cfg.update({"input": result["files"]["linear"], "geometry": result["files"]["geometry"],
                            "valid": result["files"]["valid"], "coverage": result["files"]["coverage"],
                            "alpha": result["files"]["alpha"], "out": str(out / "filters")})
@@ -514,7 +546,9 @@ def run_master(cfg: dict) -> dict:
     return {"ok": True, "operation": "master", "out": str(out), "images": images,
             "pixelmath": filter_result["pixelmath"] if filter_result else [],
             "receipt": str(receipt_path), "gates": ael_receipt["gates"],
-            "registrations": registrations}
+            "registrations": registrations,
+            "psb": filter_result.get("psb") if filter_result else None,
+            "psb_layers": filter_result.get("psb_layers") if filter_result else None}
 
 
 def main() -> None:

@@ -38,7 +38,7 @@ var AELPhotoshopDialog = function () {
     operationGroup.add("statictext", undefined, "Operation");
     var operation = operationGroup.add("dropdownlist", undefined, [
         "structure — active document", "polar — active document",
-        "master — linear master and filters", "filters — from linear.npy"]);
+        "master — EXPERIMENTAL: registration not validated on real frames", "filters — from linear.npy"]);
     operation.selection = 0;
     operation.preferredSize.width = 410;
 
@@ -46,6 +46,7 @@ var AELPhotoshopDialog = function () {
     var geometry = row("Geometry JSON", "", function (field) { file(field, "EclipseGeometry JSON"); });
     var python = row("Python (optional)", "", function (field) { file(field, "Python 3.10+ executable"); });
     var ael = row("AEL folder (optional)", "", folder);
+    ael.helpTip = "Empty: the AEL bundled with this script (runtime/ael), or the repository that contains it.";
     var linear = row("linear.npy (filters)", "", function (field) { file(field, "Existing linear.npy"); });
     var camera = row("Camera profile (master)", "", function (field) { file(field, "Measured camera profile JSON"); });
     var valid = row("Valid mask (structure)", "", function (field) { file(field, "Optional boolean valid.npy"); });
@@ -62,6 +63,10 @@ var AELPhotoshopDialog = function () {
         }
     };
 
+    var separate = win.add("checkbox", undefined,
+        "Open every filter layer as a separate document (default: one layered 16-bit PSB)");
+    separate.value = false;
+
     var note = win.add("statictext", undefined,
         "The source is never edited. Results open as new documents and previous runs are not overwritten.", {multiline: true});
     note.preferredSize.width = 610;
@@ -73,11 +78,19 @@ var AELPhotoshopDialog = function () {
     var answer = null;
     run.onClick = function () {
         var operations = ["structure", "polar", "master", "filters"];
-        answer = {operation: operations[operation.selection.index], outputParent: output.text,
-            geometry: geometry.text, python: python.text, aelFolder: ael.text,
-            input: linear.text, camera: camera.text, valid: valid.text,
-            rmax: parseFloat(rmax.text), frames: []};
-        for (var i = 0; i < frames.length; i++) answer.frames.push(frames[i].fsName);
+        var chosen = operations[operation.selection.index];
+        var radius = parseFloat(String(rmax.text).replace(",", "."));
+        // Each operation receives only the fields it uses: a field filled in for another operation stays out.
+        answer = {operation: chosen, outputParent: output.text, python: python.text, aelFolder: ael.text,
+            open_mode: separate.value ? "documents" : "layered", frames: []};
+        if (chosen !== "filters" || geometry.text) answer.geometry = geometry.text;
+        if (chosen === "structure" && valid.text) answer.valid = valid.text;
+        if (chosen === "polar") answer.rmax = isFinite(radius) && radius > 0 ? radius : 4.0;
+        if (chosen === "filters") answer.input = linear.text;
+        if (chosen === "master") {
+            answer.camera = camera.text;
+            for (var i = 0; i < frames.length; i++) answer.frames.push(frames[i].fsName);
+        }
         win.close(1);
     };
     cancel.onClick = function () { win.close(0); };

@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib
 import json
 import os
 from pathlib import Path
@@ -20,6 +21,11 @@ import traceback
 
 CREDIT = ("Processed with Agentic Eclipse Library by Pere Guerra — "
           "https://github.com/PeterWar/Agentic-Eclipse-Library")
+# What the four operations import besides AEL (rawpy only for RAW frames), and the psd-tools modules that
+# ael.photoshop loads to write the layered PSB.
+NEEDED = ("numpy", "scipy", "cv2", "tifffile", "PIL", "imageio", "psd_tools", "psd_tools.api.layers",
+          "psd_tools.constants", "psd_tools.psd.image_resources", "psd_tools.psd.layer_and_mask",
+          "psd_tools.psd.tagged_blocks")
 
 
 def runtime() -> dict:
@@ -103,9 +109,43 @@ def direct_ael(cfg: dict) -> dict:
 def workflow(cfg: dict) -> dict:
     from ael_workflow import run_filters, run_master
 
+    # By default the filter layers come as one layered 16-bit PSB written and verified by AEL: the display base
+    # and every filter with its blend mode, opacity, visibility and alpha. "documents" opens every TIFF instead.
+    layered = cfg.get("open_mode", "layered") != "documents"
+    cfg = dict(cfg, photoshop_layers=layered)
+    if cfg["operation"] == "master":
+        cfg["filter_options"] = dict(cfg.get("filter_options") or {}, photoshop_layers=layered)
     result = run_master(cfg) if cfg["operation"] == "master" else run_filters(cfg)
     result["operation"] = cfg["operation"]
+    if layered:
+        if not result.get("psb"):
+            raise RuntimeError("AEL did not write the layered PSB")
+        linear = [image for image in result["images"] if image.get("kind") == "linear"]
+        result["open"] = linear + [{"name": "layers", "kind": "psb", "path": result["psb"]}]
+        # The opacity byte exactly as ael.photoshop writes it (Python's round), for Photoshop's own reading.
+        result["psb_expected"] = [dict(layer, opacity_byte=int(round(float(layer["opacity"]) * 255)))
+                                  for layer in result.pop("psb_layers")]
+    else:
+        result["open"] = [display_16(image) if image.get("view") == "AEL_DISPLAY" else image
+                          for image in result["images"]]
     return result
+
+
+def display_16(image: dict) -> dict:
+    """AEL_DISPLAY is the PixelMath start, a 32-bit float TIFF. Photoshop has no Overlay at 32 bits per channel,
+    so the separate documents get a copy rounded once to 16 bits to stack the filter layers on."""
+    import numpy as np
+    import tifffile
+    from ael import io, photoshop
+
+    path = Path(image["path"])
+    data = tifffile.imread(path)
+    if data.dtype == np.uint16:
+        return image
+    target = path.with_name(path.stem + "_16bit.tif")
+    io.save_tiff(target, photoshop.to_u16(data),
+                 description="AEL display start rounded once to 16 bits, for Photoshop's 16-bit blend modes")
+    return dict(image, path=str(target))
 
 
 def execute(cfg: dict) -> dict:
@@ -119,9 +159,38 @@ def execute(cfg: dict) -> dict:
         except Exception as exc:
             return {"ok": False, "kind": "missing_ael", "message": f"Cannot import ael: {exc}",
                     "runtime": runtime()}
+        # ael imports psd_tools only when it writes the PSB, so a Python without it, or with a broken one, would
+        # pass and fail at the end of a run. Imported here, Photoshop moves on to the next Python instead.
+        missing, failed = [], []
+        for name in NEEDED:
+            if any(name.startswith(parent + ".") for parent in failed):
+                continue
+            try:
+                importlib.import_module(name)
+            except Exception as exc:
+                failed.append(name)
+                missing.append(f"{name} ({type(exc).__name__}: {exc})")
+        if not missing:
+            try:
+                import ael_workflow  # noqa: F401
+            except Exception as exc:
+                missing.append(f"ael_workflow ({type(exc).__name__}: {exc})")
+        if missing:
+            return {"ok": False, "kind": "missing_dependency",
+                    "message": f"AEL {ael.__version__} found, but this Python lacks {', '.join(missing)}",
+                    "runtime": runtime()}
         return {"ok": True, "kind": "ready", "runtime": runtime(), "credit": CREDIT}
     if operation not in ("structure", "polar", "master", "filters"):
         raise ValueError(f"Unsupported operation: {operation}")
+    missing = []
+    if operation == "master":
+        missing += [label for key, label in (("frames", "the master frames"),
+                                             ("camera", "the measured camera profile JSON"),
+                                             ("geometry", "the reference EclipseGeometry JSON")) if not cfg.get(key)]
+    if operation == "filters" and not cfg.get("input"):
+        missing.append("an existing linear.npy")
+    if missing:
+        raise ValueError("Select " + ", ".join(missing))
     # The exported layout is checked before AEL runs, not after its products exist.
     inspection = inspect_tiff(Path(cfg["input"]).expanduser().resolve(), cfg["source"]) if cfg.get("source") else None
     result = direct_ael(cfg) if operation in ("structure", "polar") else workflow(cfg)

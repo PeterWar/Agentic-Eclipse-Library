@@ -96,11 +96,21 @@ var AELPhotoshop = AELPhotoshop || {};
         return answer;
     };
 
+    // AEL used when the dialog names no folder: the engine bundled with this script, then the checkout
+    // that contains it (plugins/photoshop-ael inside the repository), then whatever Python has installed.
+    ns.defaultAELFolder = function () {
+        var bundled = new File(ns.pluginFolder.fsName + "/runtime/ael/__init__.py");
+        if (bundled.exists) return bundled.parent.parent.fsName;
+        var checkout = new File(ns.pluginFolder.parent.parent.fsName + "/ael/__init__.py");
+        if (checkout.exists) return checkout.parent.parent.fsName;
+        return "";
+    };
+
     ns.runPython = function (python, cfg, runRoot, aelFolder) {
         var config = new File(runRoot.fsName + "/config.json");
         var result = new File(runRoot.fsName + "/result.json");
         ns.writeJSON(config, cfg);
-        var env = aelFolder ? new Folder(aelFolder).fsName : "";
+        var env = aelFolder ? new Folder(aelFolder).fsName : ns.defaultAELFolder();
         var command = "/usr/bin/env " + ns.shellQuote("PYTHONDONTWRITEBYTECODE=1") + " " +
             ns.shellQuote("PYTHONPATH=" + env) + " " + ns.shellQuote(python) + " " +
             ns.shellQuote(ns.runner.fsName) + " " + ns.shellQuote(config.fsName) + " " +
@@ -173,22 +183,62 @@ var AELPhotoshop = AELPhotoshop || {};
         return ids;
     };
 
+    // The layered PSB as Photoshop itself reads it, against the layers AEL wrote (bottom up): name, blend
+    // mode, opacity (AEL stores it in 8 bits) and visibility. AEL's own check reads the file back with
+    // psd-tools only.
+    ns.checkLayers = function (doc, expected) {
+        var found = [], problems = [], i, k;
+        for (i = doc.layers.length - 1; i >= 0; i--) {
+            var layer = doc.layers[i];
+            found.push({name: layer.name, mode: String(layer.blendMode), opacity: layer.opacity,
+                visible: layer.visible, type: layer.typename});
+        }
+        if (found.length !== expected.length) problems.push(found.length + " layers, expected " + expected.length);
+        for (k = 0; k < Math.min(found.length, expected.length); k++) {
+            var want = expected[k], got = found[k];
+            if (got.name !== want.name) problems.push("layer " + (k + 1) + " is " + got.name + ", expected " + want.name);
+            if (got.mode !== "BlendMode." + String(want.mode).toUpperCase()) problems.push(want.name + ": " + got.mode);
+            // Photoshop reports byte b as b / 255 × 100 %: compare the byte itself, as AEL rounded it in Python.
+            var stored = want.opacity_byte !== undefined ? want.opacity_byte : Math.round(want.opacity * 255);
+            if (Math.round(got.opacity * 255 / 100) !== stored) {
+                problems.push(want.name + ": opacity " + got.opacity + " %, expected " + stored + "/255");
+            }
+            if (Boolean(got.visible) !== Boolean(want.visible)) problems.push(want.name + ": visible " + got.visible);
+        }
+        return {ok: problems.length === 0, layers: found.length, expected: expected.length,
+            bits: String(doc.bitsPerChannel), problems: problems, found: found};
+    };
+
+    // app.open() of a file that is already open returns that document, with whatever is unsaved in it.
+    ns.isOpen = function (file) {
+        var target = new File(file).fsName;
+        for (var i = 0; i < app.documents.length; i++) {
+            try {
+                if (app.documents[i].fullName.fsName === target) return true;
+            } catch (unsaved) {}
+        }
+        return false;
+    };
+
     ns.openResults = function (result) {
         var opened = [], known = ns.documentIDs();
-        for (var i = 0; i < result.images.length; i++) {
-            var file = new File(result.images[i].path);
+        var list = result.open || result.images;
+        for (var i = 0; i < list.length; i++) {
+            var file = new File(list[i].path);
             var doc;
+            if (ns.isOpen(file)) throw new Error("Already open in Photoshop, not touched: " + file.fsName +
+                ". Opened " + opened.length + " of " + list.length + " result documents.");
             try {
                 doc = app.open(file);
             } catch (error) {
-                throw new Error("Opened " + opened.length + " of " + result.images.length +
+                throw new Error("Opened " + opened.length + " of " + list.length +
                     " result documents, then failed on " + file.fsName + ": " + error.message +
                     ". The opened results stay open; no other document was touched.");
             }
             if (known[String(doc.id)]) throw new Error("Refusing to reuse an already open document: " + file.fsName);
             known[String(doc.id)] = true;
-            doc.name = "AEL " + result.images[i].name;
-            opened.push({id: doc.id, name: doc.name, path: file.fsName});
+            opened.push({id: doc.id, name: doc.name, path: file.fsName, kind: list[i].kind || ""});
+            if (list[i].kind === "psb" && result.psb_expected) result.native_check = ns.checkLayers(doc, result.psb_expected);
         }
         result.opened_documents = opened;
         return opened;
@@ -227,6 +277,11 @@ var AELPhotoshop = AELPhotoshop || {};
             ns.openResults(result);
             result.run_root = root.fsName;
             result.source_document = source;
+            result.ael_version = probe.runtime ? probe.runtime.ael_version : null;
+            if (result.native_check) {
+                result.native_check_file = root.fsName + "/AEL_PHOTOSHOP_NATIVE_CHECK.json";
+                ns.writeJSON(new File(result.native_check_file), result.native_check);
+            }
             return result;
         } finally {
             app.displayDialogs = oldDialogs;
