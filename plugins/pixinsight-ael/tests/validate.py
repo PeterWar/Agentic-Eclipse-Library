@@ -417,10 +417,12 @@ def main() -> None:
             tifffile.imwrite(wide_path, (scene_rgb * 8.0).astype(np.float32), photometric="rgb")
             assert float(tifffile.imread(wide_path).max()) > 1.0
 
-            # Stand-ins for the `ael` package that carry only a version: the connector must refuse an AEL older than 1.3.6
-            # (or one whose version cannot be read) and accept a later one, comparing numbers and not text (1.10.0 > 1.3.6).
+            # Stand-ins for the `ael` package that carry only a version: the connector must refuse an AEL older than 1.4.0,
+            # the first that measures the geometry on the image (or one whose version cannot be read), and accept a later
+            # one, comparing numbers and not text (1.10.0 > 1.4.0).
             stubs = {}
-            for label, version in (("stale", "1.3.3"), ("newer", "1.10.0"), ("unreadable", "development")):
+            for label, version in (("stale", "1.3.3"), ("previous", "1.3.6"), ("newer", "1.10.0"),
+                                   ("unreadable", "development")):
                 stub_root = root / f"{label} ael"
                 (stub_root / "ael").mkdir(parents=True)
                 (stub_root / "ael" / "__init__.py").write_text(f'__version__ = "{version}"\n', encoding="utf-8")
@@ -622,7 +624,7 @@ def main() -> None:
             gates = {
                 "negative_rotated": report["tests"]["negative_rotated"],
                 "direct_structure_and_polar": report["tests"]["direct_structure_and_polar"],
-                "old_ael_refused": floor["stale"]["kind"] == "old_ael" and floor["unreadable"]["kind"] == "old_ael",
+                "old_ael_refused": all(floor[key]["kind"] == "old_ael" for key in ("stale", "previous", "unreadable")),
                 "newer_ael_accepted": bool(floor["newer"]["ok"]) and floor["newer"]["ael_version"] == "1.10.0"}
             if not args.skip_pixinsight:
                 gates.update({

@@ -144,6 +144,15 @@ function aelWorkflowRunAndOpen( operation, configPath, runtime, aelRoot, buildCo
       aelWorkflowOpenImages( result );
       if ( buildComposite )
          aelWorkflowBuildComposite( result );
+      // A geometry that AEL measured is shown for checking: its circles drawn over the display base, in a new window.
+      if ( result.geometry && result.geometry_source && result.geometry_source != "given" )
+      {
+         Console.writeln( "AEL workflow: geometry " + result.geometry_source + ": " + result.geometry.note );
+         let displayId = result.idMap["AEL_DISPLAY"];
+         if ( displayId )
+            result.windows.push( aelBridgeShowGeometryCheck( View.viewById( displayId ), result.geometry,
+                                                             { low: 0, high: 1 } ) );
+      }
       Console.writeln( "AEL workflow receipt: " + result.receipt );
       Console.writeln( File.readTextFile( result.receipt ) );
       return result;

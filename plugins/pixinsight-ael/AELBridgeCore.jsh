@@ -309,7 +309,7 @@ function aelBridgeCandidates( preferred, aelRoot )
       }
       diagnostics.push( candidates[i] + ": " + probe.message );
    }
-   throw new Error( "No Python 3.10+ interpreter with AEL " + "1.3.6 or later and its dependencies was found. Select the "
+   throw new Error( "No Python 3.10+ interpreter with AEL " + "1.4.0 or later and its dependencies was found. Select the "
                     + "Python executable and the AEL folder (the connector's runtime folder, or a source checkout).\n\n"
                     + "AEL is not on PyPI. Its dependencies are installed with: python -m pip install numpy scipy "
                     + "opencv-python-headless pillow tifffile imageio\n\n"
@@ -596,26 +596,18 @@ function aelBridgeCleanup( directory, files )
       try { File.removeDirectory( directory ); } catch ( error ) { Console.warningln( "Could not remove temporary directory: " + directory ); }
 }
 
-function aelBridgeRunOnView( parameters )
+// What AEL reads for this view: the view exported to a temporary 32-bit TIFF (samples without data put back as NaN), or
+// the file the view was opened from when PixInsight does not hold it as it is stored. Temporary files are added to
+// temporaryFiles; the user's file never is.
+function aelBridgePrepareInput( view, runtime, aelRoot, tempDir, temporaryFiles )
 {
-   let view = parameters.view;
-   let mode = parameters.mode;
-   if ( mode != "structure" && mode != "polar" )
-      throw new Error( "Mode must be 'structure' or 'polar'." );
-   aelBridgeValidateGeometry( parameters.geometry, view );
-
-   let runtime = parameters.runtime || aelBridgeCandidates( parameters.pythonPath, parameters.aelRoot );
-   if ( !runtime.ok )
-      throw new Error( runtime.message || "Python preflight failed." );
-   Settings.write( AEL_BRIDGE_SETTINGS_KEY + "pythonPath", DataType.UTF8String, runtime.python );
-
    // A view that the user has processed since opening it is theirs, and it is exported. One that is still its file must
    // hold what the file holds, and PixInsight does not always read a floating-point TIFF faithfully: a file with values
    // outside 0-1 is rescaled to 0-1 (the zero and the scale are lost), and one whose last sample is NaN (no data in the
    // bottom-right corner, which a registered stack often has) is read as a completely black image. AEL does not give the
    // result it gives on the file on either of those, so then AEL reads the file itself, as `python -m ael` does.
    let sourcePath = view.window.filePath;
-   let sourceRange = view.window.isModified ? null : aelBridgeSourceRange( runtime, parameters.aelRoot, view );
+   let sourceRange = view.window.isModified ? null : aelBridgeSourceRange( runtime, aelRoot, view );
    let scan = aelBridgeScanView( view );
    let fileReasons = [];
    if ( sourceRange )
@@ -634,6 +626,142 @@ function aelBridgeRunOnView( parameters )
                            + "as a black image" );
    }
    let onFile = fileReasons.length > 0;
+   let inputPath, exported = null, inspected, nonFinite = 0;
+   if ( onFile )
+   {
+      inputPath = sourcePath;
+      nonFinite = sourceRange.nonfinite_samples;
+      Console.writeln( "AEL bridge: the view is not the file it was opened from (" + fileReasons.join( "; " ) + "). "
+                       + "AEL reads the file itself: " + sourcePath );
+      inspected = { dtype: sourceRange.dtype, shape: sourceRange.shape, planar: 1, icc_bytes: 0, icc_repaired: false,
+                    nonfinite_restored: 0, nonfinite_written_as: [], sha256: sourceRange.sha256, bytes: sourceRange.bytes };
+   }
+   else
+   {
+      inputPath = tempDir + "/input_float32.tif";
+      temporaryFiles.push( inputPath, inputPath + ".icc" );
+      exported = aelBridgeExportFloat32( view, inputPath );
+      let nonFinitePath = tempDir + "/nonfinite_positions.u32";
+      temporaryFiles.push( nonFinitePath );
+      nonFinite = scan.nonFinite;
+      aelBridgeWriteNonFinite( scan, nonFinitePath );
+      if ( nonFinite > 0 )
+         Console.writeln( "AEL bridge: " + nonFinite + " samples hold no data (NaN); PixInsight writes them to a TIFF as 1.0, "
+                          + "so they are put back as NaN for AEL, as in the file." );
+      inspected = aelBridgeInspectInput( runtime, aelRoot, inputPath, view,
+                                         exported.sourceICCBytes, exported.iccSidecar,
+                                         nonFinite > 0 ? nonFinitePath : "" );
+   }
+   return { inputPath: inputPath, exported: exported, inspected: inspected, nonFinite: nonFinite, onFile: onFile,
+            sourcePath: sourcePath, sourceRange: sourceRange, fileReasons: fileReasons };
+}
+
+// The geometry measured on the image by AEL (ael.geometry.measure_geometry): the lunar disc, or the region without data
+// around it, with what was assumed written in its note. Throws with AEL's reason when there is no disc to measure.
+function aelBridgeMeasureGeometry( runtime, aelRoot, inputPath, validMask, outPath, workDir )
+{
+   let arguments = [ "-m", "ael", "geometry", "--input", inputPath, "--out", outPath ];
+   if ( validMask && validMask.trim().length > 0 )
+      arguments.push( "--valid", validMask.trim() );
+   let run = aelBridgeRun( runtime.python, arguments, aelRoot && aelRoot.length ? aelRoot : workDir,
+                           aelBridgeEnvironment( aelRoot ), 600000 );
+   if ( run.timedOut )
+      throw new Error( "AEL exceeded the time limit while measuring the geometry and was stopped." );
+   if ( !run.ok )
+      throw new Error( "AEL could not measure the Sun and the Moon on this image, so nothing was run:\n" + run.stderr
+                       + "\nEnter the geometry in the dialog or load a geometry JSON." );
+   let result = aelBridgeParseJson( run.stdout, "AEL geometry" );
+   if ( !result.geometry )
+      throw new Error( "AEL returned no geometry." );
+   return result;
+}
+
+// A new window, never the image itself: the image stretched for display (asinh between the given levels) with the
+// Sun drawn in red and, when it is a different circle, the Moon in cyan. Drawn by PixelMath on the whole canvas.
+function aelBridgeShowGeometryCheck( view, geometry, stretch )
+{
+   let low = stretch && isFinite( stretch.low ) ? stretch.low : 0;
+   let high = stretch && isFinite( stretch.high ) ? stretch.high : 1;
+   if ( !( high > low ) )
+   {
+      low = 0;
+      high = 1;
+   }
+   let luminance = view.image.isColor ? "($T[0]+$T[1]+$T[2])/3" : "$T";
+   let shown = "asinh(10*min(max((" + luminance + "-(" + low + "))/(" + ( high - low ) + "),0),1))/asinh(10)";
+   let t = Math.max( 1.5, 0.004 * geometry.sun_radius_px );
+   function circle( centre, radius )
+   {
+      return "abs(sqrt((x()-(" + centre[0] + "))^2+(y()-(" + centre[1] + "))^2)-" + radius + ")<=" + t;
+   }
+   let cx = geometry.sun_xy[0], cy = geometry.sun_xy[1], arm = 10*t;
+   let sun = "(" + circle( geometry.sun_xy, geometry.sun_radius_px ) + ")||(abs(x()-(" + cx + "))<=" + t
+             + "&&abs(y()-(" + cy + "))<=" + arm + ")||(abs(y()-(" + cy + "))<=" + t + "&&abs(x()-(" + cx + "))<=" + arm + ")";
+   let moon = "0";
+   if ( geometry.moon_xy != null && ( Math.abs( geometry.moon_xy[0] - cx ) > 0.5 || Math.abs( geometry.moon_xy[1] - cy ) > 0.5
+                                      || Math.abs( geometry.moon_radius_px - geometry.sun_radius_px ) > 0.5 ) )
+      moon = circle( geometry.moon_xy, geometry.moon_radius_px );
+   let id = aelBridgeId( "AEL_geometry_check_" + aelBridgeTimestamp() );
+   let process = new PixelMath;
+   process.useSingleExpression = false;
+   process.expression = "iif(" + sun + ",1,iif(" + moon + ",0.1," + shown + "))";
+   process.expression1 = "iif(" + sun + ",0.15,iif(" + moon + ",1," + shown + "))";
+   process.expression2 = process.expression1;
+   process.symbols = "";
+   process.generateOutput = true;
+   process.singleThreaded = false;
+   process.rescale = false;
+   process.truncate = true;
+   process.createNewImage = true;
+   process.showNewImage = true;
+   process.newImageId = id;
+   process.newImageWidth = 0;
+   process.newImageHeight = 0;
+   process.newImageAlpha = false;
+   process.newImageColorSpace = PixelMath.prototype.RGB;
+   process.newImageSampleFormat = PixelMath.prototype.i8;
+   if ( !process.executeOn( view, false ) )
+      throw new Error( "PixelMath could not draw the geometry check." );
+   let check = View.viewById( id );
+   if ( check.isNull )
+      throw new Error( "The geometry check window was not created." );
+   Console.writeln( "AEL bridge: geometry check in " + id + " (Sun in red" + ( moon != "0" ? ", Moon in cyan" : "" ) + ")." );
+   return check.window;
+}
+
+// Measure the geometry of a view without running a product: for the dialog's Detect button.
+function aelBridgeDetectGeometry( view, runtime, aelRoot, validMask )
+{
+   let tempDir = File.systemTempDirectory + "/pixinsight-ael-" + aelBridgeTimestamp();
+   File.createDirectory( tempDir, false );
+   let geometryPath = tempDir + "/geometry_measured.json";
+   let temporaryFiles = [ geometryPath ];
+   try
+   {
+      let prepared = aelBridgePrepareInput( view, runtime, aelRoot, tempDir, temporaryFiles );
+      return aelBridgeMeasureGeometry( runtime, aelRoot, prepared.inputPath, validMask, geometryPath, tempDir );
+   }
+   finally
+   {
+      aelBridgeCleanup( tempDir, temporaryFiles );
+   }
+}
+
+function aelBridgeRunOnView( parameters )
+{
+   let view = parameters.view;
+   let mode = parameters.mode;
+   if ( mode != "structure" && mode != "polar" )
+      throw new Error( "Mode must be 'structure' or 'polar'." );
+   // No geometry: AEL measures it on the image itself, after the input is ready.
+   let geometry = parameters.geometry;
+   if ( geometry != null )
+      aelBridgeValidateGeometry( geometry, view );
+
+   let runtime = parameters.runtime || aelBridgeCandidates( parameters.pythonPath, parameters.aelRoot );
+   if ( !runtime.ok )
+      throw new Error( runtime.message || "Python preflight failed." );
+   Settings.write( AEL_BRIDGE_SETTINGS_KEY + "pythonPath", DataType.UTF8String, runtime.python );
 
    let tempDir = File.systemTempDirectory + "/pixinsight-ael-" + aelBridgeTimestamp();
    File.createDirectory( tempDir, false );
@@ -644,33 +772,20 @@ function aelBridgeRunOnView( parameters )
 
    try
    {
-      let inputPath, exported = null, inspected, nonFinite = 0;
-      if ( onFile )
+      let prepared = aelBridgePrepareInput( view, runtime, parameters.aelRoot, tempDir, temporaryFiles );
+      let inputPath = prepared.inputPath, exported = prepared.exported, inspected = prepared.inspected;
+      let nonFinite = prepared.nonFinite, onFile = prepared.onFile, sourcePath = prepared.sourcePath;
+      let sourceRange = prepared.sourceRange, fileReasons = prepared.fileReasons;
+      let measured = null;
+      if ( geometry == null )
       {
-         inputPath = sourcePath;
-         nonFinite = sourceRange.nonfinite_samples;
-         Console.writeln( "AEL bridge: the view is not the file it was opened from (" + fileReasons.join( "; " ) + "). "
-                          + "AEL reads the file itself: " + sourcePath );
-         inspected = { dtype: sourceRange.dtype, shape: sourceRange.shape, planar: 1, icc_bytes: 0, icc_repaired: false,
-                       nonfinite_restored: 0, nonfinite_written_as: [], sha256: sourceRange.sha256, bytes: sourceRange.bytes };
+         measured = aelBridgeMeasureGeometry( runtime, parameters.aelRoot, inputPath, parameters.validMask,
+                                              tempDir + "/geometry_measured.json", tempDir );
+         temporaryFiles.push( tempDir + "/geometry_measured.json" );
+         geometry = aelBridgeValidateGeometry( measured.geometry, view );
+         Console.writeln( "AEL bridge: geometry measured on the image: " + geometry.note );
       }
-      else
-      {
-         inputPath = tempDir + "/input_float32.tif";
-         temporaryFiles.push( inputPath, inputPath + ".icc" );
-         exported = aelBridgeExportFloat32( view, inputPath );
-         let nonFinitePath = tempDir + "/nonfinite_positions.u32";
-         temporaryFiles.push( nonFinitePath );
-         nonFinite = scan.nonFinite;
-         aelBridgeWriteNonFinite( scan, nonFinitePath );
-         if ( nonFinite > 0 )
-            Console.writeln( "AEL bridge: " + nonFinite + " samples hold no data (NaN); PixInsight writes them to a TIFF as 1.0, "
-                             + "so they are put back as NaN for AEL, as in the file." );
-         inspected = aelBridgeInspectInput( runtime, parameters.aelRoot, inputPath, view,
-                                            exported.sourceICCBytes, exported.iccSidecar,
-                                            nonFinite > 0 ? nonFinitePath : "" );
-      }
-      File.writeTextFile( geometryPath, JSON.stringify( parameters.geometry, null, 1 ) );
+      File.writeTextFile( geometryPath, JSON.stringify( geometry, null, 1 ) );
       outputDirectory = parameters.outputDirectoryExact || aelBridgeUniqueOutput( parameters.outputDirectory, mode );
       if ( parameters.outputDirectoryExact && !File.directoryExists( outputDirectory ) )
          File.createDirectory( outputDirectory, true );
@@ -724,6 +839,8 @@ function aelBridgeRunOnView( parameters )
          input_file: onFile ? { path: sourcePath, dtype: inspected.dtype, shape: inspected.shape,
                                 sha256: inspected.sha256, bytes: inspected.bytes } : null,
          geometry: "input_geometry.json",
+         geometry_source: measured ? "measured on the image by AEL (ael.geometry.measure_geometry)" : "given in the dialog",
+         geometry_measurement: measured ? measured.report : null,
          ael_receipt: result.receipt || null,
          gate: result.gate || { passed: true, reason: "AEL polar completed; declared image files checked by the bridge" },
          files: result.files,
@@ -731,6 +848,8 @@ function aelBridgeRunOnView( parameters )
       };
       File.writeTextFile( receiptPath, JSON.stringify( bridgeReceipt, null, 1 ) );
       aelBridgeOpenResults( result.files, mode, openedWindows );
+      if ( measured && !parameters.noGeometryCheck )
+         openedWindows.push( aelBridgeShowGeometryCheck( view, geometry, measured.report.display_stretch ) );
 
       Console.writeln( "AEL bridge receipt: " + receiptPath );
       Console.writeln( File.readTextFile( receiptPath ) );
@@ -740,7 +859,8 @@ function aelBridgeRunOnView( parameters )
          Console.writeln( File.readTextFile( result.receipt ) );
       }
       return { outputDirectory: outputDirectory, receipt: receiptPath, result: result,
-               runtime: runtime, input: inspected, windows: openedWindows };
+               runtime: runtime, input: inspected, windows: openedWindows, geometry: geometry,
+               geometryMeasured: measured != null };
    }
    catch ( error )
    {

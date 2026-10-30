@@ -29,7 +29,7 @@ import ael
 from ael import calibrate, develop, io, photoshop, stack
 from ael.filterbank import ALIASES, DEFAULTS, NAMES
 from ael.filters import normalized_gaussian
-from ael.geometry import EclipseGeometry, fit_limb
+from ael.geometry import EclipseGeometry, fit_limb, measure_geometry
 
 CREDIT = ael.CREDIT
 
@@ -61,6 +61,16 @@ def number(value) -> float:
 
 
 def metadata(path: Path) -> dict:
+    if path.suffix.lower() in (".fits", ".fit", ".fts"):
+        # Astronomical cameras write exposure and gain in the FITS header, not in EXIF.
+        from astropy.io import fits
+        header = fits.getheader(path)
+        exposure = next((header[k] for k in ("EXPTIME", "EXPOSURE") if k in header), None)
+        if exposure is None:
+            raise ValueError(f"Missing EXPTIME/EXPOSURE in the FITS header: {path}")
+        gain = next((header[k] for k in ("ISOSPEED", "ISO", "GAIN") if k in header), 0)
+        return {"exposure_s": number(exposure), "iso": number(gain),
+                "make": str(header.get("INSTRUME", "")), "model": str(header.get("TELESCOP", ""))}
     run = subprocess.run([exiftool_path(), "-json", "-ExposureTime", "-ISO", "-Make", "-Model", str(path)],
                          text=True, capture_output=True, timeout=30, check=False)
     if run.returncode != 0:
@@ -70,6 +80,50 @@ def metadata(path: Path) -> dict:
         raise ValueError(f"Missing exposure or ISO metadata: {path}")
     return {"exposure_s": number(values["ExposureTime"]), "iso": number(values["ISO"]),
             "make": values.get("Make", ""), "model": values.get("Model", "")}
+
+
+RAW_EXTENSIONS = {".cr2", ".cr3", ".nef", ".arw", ".dng", ".raf", ".orf", ".rw2"}
+
+
+def raw_levels(path: Path) -> dict:
+    """Black and white levels as the RAW file declares them (LibRaw, through rawpy)."""
+    import rawpy
+    with rawpy.imread(str(path)) as raw:
+        black = [float(v) for v in raw.black_level_per_channel]
+        white = float(raw.white_level)
+    return {"black": float(np.median(black)), "white": white, "black_per_channel": black,
+            "source": "the RAW file's own black and white levels"}
+
+
+def data_levels(path: Path) -> dict:
+    """Black and saturation of a calibrated linear frame (TIFF, FITS, NPY), measured on its data.
+
+    Black is 0: the frame is taken as calibrated. A channel is saturated where its highest value is a plateau that
+    many samples share; the lowest such plateau is the white level. Without a plateau nothing is marked saturated.
+    """
+    array = np.asarray(io.load_array(path))
+    if array.ndim == 3 and array.shape[-1] == 4:
+        array = array[..., :3]
+    channels = [array] if array.ndim == 2 else [array[..., c] for c in range(array.shape[-1])]
+    plateaus = []
+    for channel in channels:
+        finite = channel[np.isfinite(channel)] if channel.dtype.kind == "f" else channel.ravel()
+        if finite.size == 0:
+            raise ValueError(f"No finite samples in {path}")
+        top = finite.max()
+        count = int(np.count_nonzero(finite == top))
+        if count >= max(25, 1e-6 * finite.size):
+            plateaus.append((float(top), count))
+    highest = float(max(np.nanmax(c) if c.dtype.kind == "f" else c.max() for c in channels))
+    if not highest > 0:
+        raise ValueError(f"The frame has no positive samples: {path}")
+    if plateaus:
+        white, count = min(plateaus)
+        return {"black": 0.0, "white": white,
+                "source": f"black 0 (calibrated frame); saturation at {white:g}, where {count} samples of one channel "
+                          "share the highest value"}
+    return {"black": 0.0, "white": 2.0 * highest,
+            "source": "black 0 (calibrated frame); no saturation plateau, so nothing is marked as saturated"}
 
 
 def sibling(input_path: Path, name: str) -> Path | None:
@@ -132,10 +186,32 @@ def run_filters(cfg: dict) -> dict:
     if out.exists():
         raise FileExistsError(f"Output directory already exists: {out}")
     out.mkdir(parents=True)
-    geometry = Path(cfg.get("geometry") or sibling(input_path, "geometry.json") or "").resolve()
-    if not geometry.is_file():
-        raise FileNotFoundError("geometry.json is required beside linear.npy or explicitly in the configuration")
     valid = Path(cfg["valid"]).resolve() if cfg.get("valid") else sibling(input_path, "valid.npy")
+    source = np.asarray(io.load_array(input_path))
+    if source.ndim == 3 and source.shape[-1] == 4:
+        # An alpha channel marks the observed pixels: AEL takes the colour and that mask.
+        alpha_valid = source[..., 3] > 0
+        if valid:
+            alpha_valid &= np.asarray(io.load_array(valid)).astype(bool)
+        np.save(out / "input_rgb.npy", np.ascontiguousarray(source[..., :3], np.float32))
+        np.save(out / "valid_from_alpha.npy", alpha_valid)
+        input_path, valid = out / "input_rgb.npy", out / "valid_from_alpha.npy"
+    given = cfg.get("geometry")
+    beside = sibling(Path(cfg["input"]).expanduser().resolve(), "geometry.json")
+    geometry_report = None
+    if given and given != "auto":
+        geometry = Path(given).expanduser().resolve()
+        if not geometry.is_file():
+            raise FileNotFoundError(f"Geometry file not found: {geometry}")
+    elif beside and given != "auto":
+        geometry = beside
+    else:
+        # No geometry: AEL measures it on the image (the lunar disc, or the region without data around it).
+        mask = np.asarray(io.load_array(valid)).astype(bool) if valid else None
+        measured, geometry_report = measure_geometry(source, mask)
+        geometry = out / "geometry_measured.json"
+        measured.to_json(geometry)
+    del source
     coverage = Path(cfg["coverage"]).resolve() if cfg.get("coverage") else sibling(input_path, "coverage.npy")
     alpha = Path(cfg["alpha"]).resolve() if cfg.get("alpha") else sibling(input_path, "alpha.npy")
     minimum = float(cfg.get("min_coverage", 0.5))
@@ -236,6 +312,9 @@ def run_filters(cfg: dict) -> dict:
     (out / "PIXELMATH.md").write_text("\n".join(instructions), encoding="utf-8")
     receipt = {"product": "Photoshop AEL filter layers", "runtime": runtime(),
                "input": str(input_path), "recipe": str(recipe_path), "ael_receipt": str(ael_receipt_path),
+               "geometry": str(geometry),
+               "geometry_source": "measured on the image" if geometry_report else "given",
+               "geometry_measurement": geometry_report,
                "display_base_recipe": str(base_recipe_path), "display_base_receipt": base_result["receipt"],
                "display_start": "float32, base/65535 * alpha/65535 over black, formed as AEL starts its composite",
                "reference_composite": result["files"]["display"],
@@ -244,6 +323,8 @@ def run_filters(cfg: dict) -> dict:
     receipt_path = out / "AEL_WORKFLOW_RECEIPT.json"
     receipt_path.write_text(json.dumps(receipt, indent=1, ensure_ascii=False), encoding="utf-8")
     answer = {"ok": True, "operation": "filters", "out": str(out), "images": images,
+              "geometry": json.loads(Path(geometry).read_text(encoding="utf-8")),
+              "geometry_source": "measured on the image" if geometry_report else "given",
               "pixelmath": operations, "receipt": str(receipt_path), "gates": ael_receipt["gates"]}
     if recipe["photoshop"]:
         # AEL wrote one layered 16-bit PSB and verified it by reading it back. These are its layers from the
@@ -450,19 +531,28 @@ def run_master(cfg: dict) -> dict:
     paths = [Path(value).expanduser().resolve() for value in cfg["frames"]]
     if not paths:
         raise ValueError("No input frames")
-    profile = cfg["camera"]
-    if isinstance(profile, (str, Path)):
-        profile = json.loads(Path(profile).expanduser().read_text())
-    black, white = float(profile["black"]), float(profile["white"])
-    fraction = float(profile.get("linearity_fraction", 0.95))
-    if not white > black or not 0 < fraction <= 1:
-        raise ValueError("Invalid camera black/white/linearity profile")
     reference_index = int(cfg.get("reference", 0))
     if reference_index < 0 or reference_index >= len(paths):
         raise ValueError("Invalid reference index")
-    geometry = EclipseGeometry.from_json(cfg["geometry"])
-    raw_extensions = {".cr2", ".cr3", ".nef", ".arw", ".dng", ".raf", ".orf", ".rw2"}
-    kinds = ["raw" if path.suffix.lower() in raw_extensions else "rgb" for path in paths]
+    kinds = ["raw" if path.suffix.lower() in RAW_EXTENSIONS else "rgb" for path in paths]
+    profile = cfg.get("camera")
+    if isinstance(profile, (str, Path)) and str(profile).strip() and str(profile) != "auto":
+        profile = json.loads(Path(profile).expanduser().read_text())
+    if isinstance(profile, dict):
+        # A camera profile given by the user holds for every frame.
+        levels = [{"black": float(profile["black"]), "white": float(profile["white"]),
+                   "source": "camera profile given"} for _ in paths]
+        fraction = float(profile.get("linearity_fraction", 0.95))
+    else:
+        # Not given: each RAW file declares its own black and white levels; a calibrated TIFF/FITS frame is measured.
+        profile = {}
+        levels = [raw_levels(path) if kind == "raw" else data_levels(path) for path, kind in zip(paths, kinds)]
+        fraction = 0.95
+    for path, level in zip(paths, levels):
+        if not level["white"] > level["black"]:
+            raise ValueError(f"Invalid black/white levels for {path}: {level}")
+    if not 0 < fraction <= 1:
+        raise ValueError("Invalid linearity fraction")
     meta = [metadata(path) for path in paths]
     if len({item["iso"] for item in meta}) != 1:
         raise ValueError("Stack one ISO at a time")
@@ -476,8 +566,32 @@ def run_master(cfg: dict) -> dict:
                          "Stack each exposure with its own matching dark, or leave the dark empty.")
     if cfg.get("allow_rotation"):
         raise ValueError("Rotation is not supported: registration is a translation measured on the Sun")
-    data = [frame_luminance(path, kind, black, white, fraction) for path, kind in zip(paths, kinds)]
+    data = [frame_luminance(path, kind, level["black"], level["white"], fraction)
+            for path, kind, level in zip(paths, kinds, levels)]
     shapes = [tuple(item[2]) for item in data]
+    given = cfg.get("geometry")
+    geometry_report = None
+    if given and given != "auto":
+        geometry = EclipseGeometry.from_json(given if isinstance(given, dict) else Path(given).expanduser())
+    else:
+        # Not given: measured on the reference frame (the lunar limb, or the region without data around it). On a long
+        # exposure the lunar disc itself can be saturated, with no limb to measure: then the first frame whose limb
+        # holds becomes the reference, and the receipt says so.
+        failures = {}
+        for index in [reference_index] + [i for i in range(len(paths)) if i != reference_index]:
+            try:
+                geometry, geometry_report = measure_geometry(data[index][0])
+            except RuntimeError as exc:
+                failures[str(paths[index].name)] = str(exc)
+                continue
+            if index != reference_index:
+                geometry_report["reference_changed"] = {"from": paths[reference_index].name, "to": paths[index].name,
+                                                        "reason": failures[paths[reference_index].name]}
+                reference_index = index
+            break
+        else:
+            raise RuntimeError("The Moon could not be measured on any frame; give the reference geometry. " +
+                               "; ".join(f"{name}: {message}" for name, message in failures.items()))
     if shapes[reference_index] != tuple(geometry.shape):
         raise ValueError("Reference geometry shape does not match the reference frame")
     patterns = [item[3] for item in data]
@@ -488,7 +602,9 @@ def run_master(cfg: dict) -> dict:
     # are registered on the Sun; each frame keeps its own measured Moon for its mask.
     margin = float(cfg.get("registration_margin_px", max(6.0, 0.015 * geometry.moon_radius_px)))
     rmax = float(cfg.get("registration_rmax_rsun", 3.0))
-    max_lunar = float(cfg.get("max_lunar_shift_px", 0.1 * geometry.moon_radius_px + 2))
+    # During totality the Moon crosses at most twice the difference of the radii, and the Moon never looks more than
+    # about 8 % larger than the Sun: 0.16 lunar radii holds for every total eclipse, short or long.
+    max_lunar = float(cfg.get("max_lunar_shift_px", 0.16 * geometry.moon_radius_px + 2))
     reference = data[reference_index][:2]
     reference_fit = measure_moon(reference[0], geometry.moon_xy, geometry.moon_radius_px)
     registrations = []
@@ -509,16 +625,17 @@ def run_master(cfg: dict) -> dict:
         matrices.append(matrix)
         moon_geometries.append(registration["moon_fit"])
     frames = []
-    for index, (path, kind, info, matrix, moon_fit) in enumerate(zip(paths, kinds, meta, matrices, moon_geometries)):
+    for index, (path, kind, info, matrix, moon_fit, level) in enumerate(
+            zip(paths, kinds, meta, matrices, moon_geometries, levels)):
         frame = {"path": str(path), "kind": kind, "iso": info["iso"], "exposure_s": info["exposure_s"],
-                 "black": black, "white": white, "linearity_fraction": fraction,
+                 "black": level["black"], "white": level["white"], "linearity_fraction": fraction,
                  "reference_to_input": matrix.tolist(), "moon_xy": list(moon_fit["xy"]),
                  "moon_radius_px": moon_fit["r"], "train": profile.get("train", "one")}
         for key in ("dark", "flat"):
             if cfg.get(key):
                 frame[key] = str(Path(cfg[key]).expanduser().resolve())
         frames.append(frame)
-    recipe = {"geometry": cfg["geometry"] if isinstance(cfg["geometry"], dict) else json.loads(Path(cfg["geometry"]).read_text()),
+    recipe = {"geometry": json.loads(geometry.to_json()),
               "frames": frames, "stack": {"canvas": "reference", "taper_start": 0.8,
               "moon_guard_px": 2, "limb_fade_px": 4, "band_sigma_px": 0,
               "hot_pixels": {"enabled": False}}, "note": "Photoshop automated metadata and measured registration"}
@@ -545,12 +662,17 @@ def run_master(cfg: dict) -> dict:
         images += filter_result["images"]
     receipt = {"product": "Photoshop AEL linear master workflow", "runtime": runtime(),
                "recipe": str(recipe_path), "ael_receipt": result["receipt"], "metadata": meta,
+               "camera_levels": [dict(level, path=str(path)) for path, level in zip(paths, levels)],
+               "geometry_source": "measured on the reference frame" if geometry_report else "given",
+               "geometry_measurement": geometry_report,
                "registrations": registrations, "images": images,
                "filters_receipt": filter_result["receipt"] if filter_result else None,
                "gates": ael_receipt["gates"], "credit": CREDIT}
     receipt_path = out / "AEL_WORKFLOW_RECEIPT.json"
     receipt_path.write_text(json.dumps(receipt, indent=1, ensure_ascii=False), encoding="utf-8")
     return {"ok": True, "operation": "master", "out": str(out), "images": images,
+            "geometry": json.loads(Path(result["files"]["geometry"]).read_text(encoding="utf-8")),
+            "geometry_source": "measured on the reference frame" if geometry_report else "given",
             "pixelmath": filter_result["pixelmath"] if filter_result else [],
             "receipt": str(receipt_path), "gates": ael_receipt["gates"],
             "registrations": registrations,

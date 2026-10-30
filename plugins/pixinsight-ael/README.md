@@ -8,7 +8,7 @@ The source view is never edited. Each resulting image opens in a new PixInsight 
 
 - PixInsight 1.9.4 or later.
 - Python 3.10 or later with AEL's dependencies: `python -m pip install numpy scipy opencv-python-headless pillow tifffile imageio`. AEL itself is not on PyPI.
-- **AEL 1.3.6 or later.** The package built by `tools/build_package.py` carries it under `runtime/ael` and the connector uses it with no setting at all. In a source checkout the repository root, which holds `ael/`, is used the same way. An older AEL, or one whose version cannot be read, is refused before anything is processed: 1.3.6 has the soft-log and MGN corrections that the structure image and the filter layers depend on, and 1.3.5 the edge-aware WOW and the layer names per family.
+- **AEL 1.4.0 or later.** The package built by `tools/build_package.py` carries it under `runtime/ael` and the connector uses it with no setting at all. In a source checkout the repository root, which holds `ael/`, is used the same way. An older AEL, or one whose version cannot be read, is refused before anything is processed: 1.4.0 measures the geometry on the image, which the dialogs use when no geometry is given; 1.3.6 has the soft-log and MGN corrections that the structure image and the filter layers depend on, and 1.3.5 the edge-aware WOW and the layer names per family.
 
 ### Finding Python
 
@@ -30,7 +30,7 @@ This is a local build for testing, not a signed update repository. `tools/build_
 3. Choose an output folder. Each run creates a new timestamped subfolder, so previous runs are not overwritten.
 4. Leave **Python executable** empty to have one found (see above), or select one. The interpreter that worked is saved in PixInsight settings.
 5. **AEL folder** starts with the AEL that comes with the connector, whatever an earlier run saved. Select another folder only to use another AEL for that run; it is passed through `PYTHONPATH`, no shell is used.
-6. Type the path of an `EclipseGeometry` JSON file, or click **Load JSON** to see its values, or complete the geometry fields. Image shape is taken from the selected view. Pixel coordinates are x-right and y-down.
+6. The geometry is optional. Leave it empty and AEL measures it on the image when you run (`ael.geometry.measure_geometry`), or click **Detect** to see the measured values in the fields first. Either way a new window, `AEL_geometry_check_…`, shows the image with the Sun drawn in red (and the Moon in cyan when it is a different circle); the image itself is not changed. AEL finds the lunar disc, or the closed region without data that AEL stacks leave around the Moon, and places the Sun at its centre with its radius; north, parity and scale stay unknown (position angles are counted from the top of the image) unless you enter them. The note field and the receipt say what was measured and what was assumed. An image without a lunar disc is refused: then type the values, type the path of an `EclipseGeometry` JSON file, or click **Load JSON** to see its values. Image shape is taken from the selected view. Pixel coordinates are x-right and y-down.
 7. For `structure`, optionally select a boolean `.npy` valid-data mask. For `polar`, set the outer radius in solar radii.
 8. Click **Run AEL**.
 
@@ -93,7 +93,7 @@ AEL marks a pixel without data as NaN, and every stack that AEL writes has them 
 
 ### Filter layers from an existing linear stack — validated
 
-Select **Filter layers from linear.npy**. The helper finds `geometry.json`, `valid.npy`, `coverage.npy` and `alpha.npy` beside the input, measures a display scale from observed corona pixels, and generates all sixteen portable AEL filters by default (the box **Generate all 16 filters** unticked makes only AEL's default layers, read from `ael.filterbank.DEFAULTS`: NRGF, the edge-aware WOW and ACHF 04). It writes:
+Select **Filter layers from a linear stack** and add one linear stack: an AEL `linear.npy`, or a TIFF or FITS file from any program (an alpha channel marks the observed pixels). The helper finds `geometry.json`, `valid.npy`, `coverage.npy` and `alpha.npy` beside the input; without a geometry it measures one on the stack, as the bridge does, and a window shows its circles. It measures a display scale from observed corona pixels, and generates all sixteen portable AEL filters by default (the box **Generate all 16 filters** unticked makes only AEL's default layers, read from `ael.filterbank.DEFAULTS`: NRGF, the edge-aware WOW and ACHF 04). It writes:
 
 - float NPY layers and alpha arrays from AEL;
 - separate 16-bit TIFF views `AEL_L_<filter>` and `AEL_A_<filter>`;
@@ -105,9 +105,11 @@ The default composite applies NRGF, the edge-aware WOW and isotropic ACHF 04 wit
 
 ### Automatic linear master — validated with synthetic data
 
-This mode reads exposure and ISO with ExifTool, checks one camera/ISO, registers every frame on the Sun, writes the frozen AEL stack recipe, and can continue into filter layers.
+This mode reads exposure and ISO with ExifTool (from the header for FITS frames), checks one camera/ISO, registers every frame on the Sun, writes the frozen AEL stack recipe, and can continue into filter layers.
 
-The corona is fixed on the Sun, and during totality the Moon moves across it (28.5 px in 105 s on one 2026 train). Registration therefore measures a translation on the corona: the logarithm of the unsaturated corona within 3 solar radii, weighted by its signal, fitted coarse to fine with a free exposure offset. Each frame leaves out its own Moon, fitted on its own limb at full resolution, plus a margin for the blurred lunar edge (6 px or 1.5 % of the lunar radius). The limb gives only the starting point and each frame's lunar mask. Two gates follow. The coronal structure must match: a band-pass of the corona (linear smoothing first, so short noisy exposures keep their structure) is correlated where both frames have data over the filter's whole support, and compared with the same frame turned 90° and 270° about the Sun, which keeps the radial statistics and loses the structure; the structure score `(c − c_turned) / (1 − c_turned)` must reach 0.25. And the Moon may not have moved more than 0.1 lunar radii + 2 px relative to the Sun. Rotation is not supported. It requires a reference geometry JSON and a camera profile:
+The corona is fixed on the Sun, and during totality the Moon moves across it (28.5 px in 105 s on one 2026 train). Registration therefore measures a translation on the corona: the logarithm of the unsaturated corona within 3 solar radii, weighted by its signal, fitted coarse to fine with a free exposure offset. Each frame leaves out its own Moon, fitted on its own limb at full resolution, plus a margin for the blurred lunar edge (6 px or 1.5 % of the lunar radius). The limb gives only the starting point and each frame's lunar mask. Two gates follow. The coronal structure must match: a band-pass of the corona (linear smoothing first, so short noisy exposures keep their structure) is correlated where both frames have data over the filter's whole support, and compared with the same frame turned 90° and 270° about the Sun, which keeps the radial statistics and loses the structure; the structure score `(c − c_turned) / (1 − c_turned)` must reach 0.25. And the Moon may not have moved more than 0.16 lunar radii + 2 px relative to the Sun, a bound that holds for every total eclipse: during totality the Moon crosses at most twice the difference of the radii, and it never looks more than about 8 % larger than the Sun. Rotation is not supported.
+
+Neither a geometry nor a camera profile is needed. Without a geometry, AEL measures the lunar limb on the reference frame (the first one; when its lunar disc cannot be measured, for example because a long exposure saturated it, the first frame where it can becomes the reference, and the receipt says so). Without a camera profile, each RAW file gives its own black and white levels (LibRaw, through rawpy), and a calibrated TIFF or FITS frame is measured: black 0, and saturation where many samples of a channel share its highest value (none when no value is shared). Either can still be given, a geometry JSON and a camera profile such as:
 
 ```json
 {
@@ -118,7 +120,7 @@ The corona is fixed on the Sun, and during totality the Moon moves across it (28
 }
 ```
 
-Black, white and the linear ceiling are measured calibration values; they are never inferred from libraw. Optional master dark and flat files must already match the optical train and native geometry. AEL subtracts the dark before dividing by each frame's exposure, so one dark matches one exposure: the workflow refuses a dark when the frames have different exposures. Cloud transmission, colour calibration and mixed-optics distortion are not inferred.
+A camera profile that is given holds for every frame. Optional master dark and flat files must already match the optical train and native geometry. AEL subtracts the dark before dividing by each frame's exposure, so one dark matches one exposure: the workflow refuses a dark when the frames have different exposures. Cloud transmission, colour calibration and mixed-optics distortion are not inferred.
 
 `tests/workflow_lunar_motion.py` is the gate for this registration. Between three frames the telescope drifts and the Moon moves another 1.6 and 3.2 px across the Sun (0.07 lunar radii, about one totality), always covering it. With a still Moon, a moving Moon, and a moving Moon with photon and read noise and a saturated inner corona, the worst error against the Sun is 0.016 px (gate 0.1 px). Another corona with the Moon in the same place is rejected. An earlier version registered on the lunar limb and failed this test with errors equal to the lunar motion.
 
@@ -129,7 +131,8 @@ Black, white and the linear ceiling are measured calibration values; they are ne
 ## Limitations
 
 - **The registration on the Sun is not valid on real frames yet.** On real Vixen R6 III totality frames (2026-08-12, read without dark or flat), it lands 0.07–2.2 px from the reference registration (lunar limb plus the DE440s ephemeris, which an independent phase correlation of the corona confirms within 0.04–0.46 px), and up to 3.3 px at 10 s; the error grows with the time between frames. Frames of 1/500 s and shorter do not converge, and the structure check accepts frames registered 1–3 px wrong. The cause has not been found: neither the lunar margin, the outer radius, the weighting, pre-smoothing, a planar extinction term nor field rotation explains it. Do not use the automatic master on real frames.
-- Tested only on macOS (Apple silicon) with PixInsight 1.9.4 and AEL 1.3.6. Windows and Linux have not been tested; the interpreter search lists Unix-style folders.
+- The geometry measured on the image places the Sun at the centre of the measured circle, with its radius. On a single frame that circle is the Moon, and the true Sun can be off by up to the difference of the radii (29 px on the 2026 frames); its radius is the Moon's, 3–8 % larger than the Sun's. Type the Sun's values when you know them. The detection was measured on real stacks and RAW frames of 2024 and 2026 and on 660 synthetic eclipses; it misses some Moons of 25 px radius (wide-angle frames) and every frame whose lunar disc is saturated.
+- Tested only on macOS (Apple silicon) with PixInsight 1.9.4 and AEL 1.4.0. Windows and Linux have not been tested; the interpreter search lists Unix-style folders.
 - Python must be installed separately (the package carries AEL, not Python or its dependencies); this is not a native C++ module.
 - `structure` and `polar` are covered by the original bridge. The complete master/filter workflow is validated with synthetic data only; real eclipse data require separate validation.
 - The automatic master holds every frame's luminance in memory at once: plan on several gigabytes for dozens of full-size RAW frames.

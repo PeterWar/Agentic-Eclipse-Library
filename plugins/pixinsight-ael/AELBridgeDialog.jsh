@@ -41,7 +41,9 @@ var AELBridgeDialog = class extends Dialog
    intro.wordWrapping = true;
    intro.useRichText = true;
    intro.text = "<b>AEL bridge</b><br>Runs the fixed <i>structure</i> or <i>polar</i> recipe in Python. "
-                + "The source image is read only; every result opens in a new window and is saved with its receipt.";
+                + "The source image is read only; every result opens in a new window and is saved with its receipt. "
+                + "Leave the geometry empty, or press <i>Detect</i>: AEL measures the Sun and the Moon on the image, "
+                + "and a new window shows the circles it found.";
    this.sizer = new VerticalSizer;
    this.sizer.margin = 10;
    this.sizer.spacing = 8;
@@ -135,7 +137,7 @@ var AELBridgeDialog = class extends Dialog
       this.outputEdit.text = savedOutput;
 
    let geometryBox = new GroupBox( this );
-   geometryBox.title = "Geometry (image coordinates: x right, y down)";
+   geometryBox.title = "Geometry (optional; image coordinates: x right, y down)";
    geometryBox.sizer = new VerticalSizer;
    geometryBox.sizer.margin = 8;
    geometryBox.sizer.spacing = 5;
@@ -173,6 +175,52 @@ var AELBridgeDialog = class extends Dialog
    let noteLabel = new Label( geometryBox );
    noteLabel.text = "Note:";
    this.noteEdit = new Edit( geometryBox );
+   let detectButton = new PushButton( geometryBox );
+   detectButton.text = "Detect";
+   detectButton.toolTip = "<p>Measure the Sun and the Moon on the selected image with AEL and fill the fields. "
+                          + "A new window shows the circles; the image itself is not changed.</p>";
+   // Fills the geometry fields with what AEL measures on the image. Throws if there is no disc to measure.
+   this.fillGeometry = function( geometry )
+   {
+      let edits = this.geometryEdits;
+      edits.sunX.text = geometry.sun_xy[0].toFixed( 2 );
+      edits.sunY.text = geometry.sun_xy[1].toFixed( 2 );
+      edits.sunRadius.text = geometry.sun_radius_px.toFixed( 2 );
+      edits.moonX.text = geometry.moon_xy == null ? "" : geometry.moon_xy[0].toFixed( 2 );
+      edits.moonY.text = geometry.moon_xy == null ? "" : geometry.moon_xy[1].toFixed( 2 );
+      edits.moonRadius.text = geometry.moon_radius_px == null ? "" : geometry.moon_radius_px.toFixed( 2 );
+      edits.north.text = String( geometry.north_deg == null ? 0 : geometry.north_deg );
+      edits.arcsec.text = geometry.arcsec_per_px == null ? "" : String( geometry.arcsec_per_px );
+      this.mirroredCheck.checked = geometry.mirrored == true;
+      this.noteEdit.text = geometry.note || "";
+   };
+   this.detectGeometry = function()
+   {
+      if ( !this.targetView )
+         throw new Error( "Select an image." );
+      let runtime = aelBridgeCandidates( this.pythonEdit.text.trim(), this.aelRootEdit.text.trim() );
+      if ( !runtime.ok )
+         throw new Error( runtime.message || "Python preflight failed." );
+      this.pythonEdit.text = runtime.python;
+      let measured = aelBridgeDetectGeometry( this.targetView, runtime, this.aelRootEdit.text.trim(),
+                                              this.validMaskEdit.text.trim() );
+      this.fillGeometry( measured.geometry );
+      Console.writeln( "AEL bridge: geometry measured on the image: " + measured.geometry.note );
+      this.geometryCheck = aelBridgeShowGeometryCheck( this.targetView, measured.geometry, measured.report.display_stretch );
+      return measured;
+   };
+   detectButton.onClick = function()
+   {
+      try
+      {
+         this.dialog.detectGeometry();
+      }
+      catch ( error )
+      {
+         Console.criticalln( "AEL bridge: " + error );
+         new MessageBox( String( error ), "AEL bridge", StdIcon.Error, StdButton.Ok ).execute();
+      }
+   };
    let loadButton = new PushButton( geometryBox );
    loadButton.text = "Load JSON";
    // Fills the geometry fields from an AEL geometry JSON. Throws if the file cannot be read.
@@ -218,6 +266,7 @@ var AELBridgeDialog = class extends Dialog
    geometryOptions.addSpacing( 12 );
    geometryOptions.add( noteLabel );
    geometryOptions.add( this.noteEdit, 100 );
+   geometryOptions.add( detectButton );
    geometryOptions.add( loadButton );
    geometryBox.sizer.add( geometryOptions );
 
@@ -235,9 +284,17 @@ var AELBridgeDialog = class extends Dialog
    buttons.add( cancelButton );
    this.sizer.add( buttons );
 
+   // null when every Sun and Moon field is empty: AEL then measures the geometry on the image.
    this.geometryFromDialog = function()
    {
       let edits = this.geometryEdits;
+      let keys = [ "sunX", "sunY", "sunRadius", "moonX", "moonY", "moonRadius" ];
+      let empty = true;
+      for ( let i = 0; i < keys.length; ++i )
+         if ( edits[keys[i]].text.trim().length > 0 )
+            empty = false;
+      if ( empty )
+         return null;
       function required( value, name )
       {
          let number = parseFloat( value );

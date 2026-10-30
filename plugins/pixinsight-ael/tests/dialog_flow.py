@@ -20,6 +20,10 @@ when no folder is given), the same files a person opens:
   `python -m ael filters` on the recipe the dialog wrote;
 * workflow dialog, «Linear master + all filter layers» (experimental): three frames, the master equals the one
   the helper makes from the terminal;
+* with no geometry at all: the bridge measures it on the image (structure equal to `python -m ael structure
+  --geometry auto`) and opens a check window; «Detect» fills the fields and opens the check, and the run then uses
+  the filled fields; the filter layers of a stack without geometry.json and the linear master without geometry or
+  camera profile measure what they need and say so in their receipts;
 * a message box never appears on the way (a box would wait for a click that does not come in automation).
 
 To test a built package instead of the checkout: --plugin PACKAGE/pixinsight-ael --ael-root PACKAGE/pixinsight-ael/runtime
@@ -147,6 +151,41 @@ try
    REPORT.steps.bridge_python_saved = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "pythonPath", DataType.UTF8String );
    save();
 
+   // ---- bridge dialog with no geometry: AEL measures it on the image, and a check window opens
+   let linearAuto = openActive( CFG.structureImage, "corona_linear" );
+   start = ids();
+   let autoDialog = new AELBridgeDialog;
+   autoDialog.outputEdit.text = CFG.bridgeAutoOut;
+   autoDialog.pythonEdit.text = "";
+   autoDialog.geometryFileEdit.text = "";
+   autoDialog.modeList.currentItem = 0;
+   autoDialog.runButton.onClick();
+   REPORT.steps.auto_structure_windows = fresh( start );
+   closeFresh( start );
+   linearAuto.forceClose();
+   save();
+
+   // ---- «Detect»: fills the fields and opens the check; the polar run then uses the filled fields
+   let displayDetect = openActive( CFG.polarImage, "corona_display" );
+   start = ids();
+   let detectDialog = new AELBridgeDialog;
+   detectDialog.outputEdit.text = CFG.bridgeDetectOut;
+   detectDialog.pythonEdit.text = "";
+   detectDialog.geometryFileEdit.text = "";
+   detectDialog.detectGeometry();
+   let edits = detectDialog.geometryEdits;
+   REPORT.steps.detect_fields = { sunX: edits.sunX.text, sunY: edits.sunY.text, sunRadius: edits.sunRadius.text,
+                                  moonX: edits.moonX.text, moonY: edits.moonY.text, moonRadius: edits.moonRadius.text,
+                                  north: edits.north.text, note: detectDialog.noteEdit.text };
+   REPORT.steps.detect_windows = fresh( start );
+   detectDialog.rmaxEdit.text = "4.0";
+   detectDialog.modeList.currentItem = 1;
+   detectDialog.runButton.onClick();
+   REPORT.steps.detect_polar_windows = fresh( start );
+   closeFresh( start );
+   displayDetect.forceClose();
+   save();
+
    // ---- workflow dialog: filter layers from an existing linear stack, then a linear master (experimental)
    function workflowRound( key, setup )
    {
@@ -181,6 +220,19 @@ try
       d.modeList.currentItem = 0; d.frames = CFG.masterFrames; d.updateFiles();
       d.geometryEdit.text = CFG.masterGeometry; d.cameraEdit.text = CFG.masterCamera;
       d.outputEdit.text = CFG.out.master; d.allFiltersCheck.checked = false;
+   } );
+   // with no geometry and no camera profile: both measured
+   workflowRound( "filters_auto", function( d )
+   {
+      d.modeList.currentItem = 1; d.frames = [ CFG.linearStackAuto ]; d.updateFiles();
+      d.geometryEdit.text = ""; d.cameraEdit.text = "";
+      d.outputEdit.text = CFG.out.filters_auto; d.allFiltersCheck.checked = false;
+   } );
+   workflowRound( "master_auto", function( d )
+   {
+      d.modeList.currentItem = 0; d.frames = CFG.masterFrames; d.updateFiles();
+      d.geometryEdit.text = ""; d.cameraEdit.text = "";
+      d.outputEdit.text = CFG.out.master_auto; d.allFiltersCheck.checked = false;
    } );
    REPORT.ok = true;
 }
@@ -226,9 +278,15 @@ def main() -> None:
                            check=True, env=env, capture_output=True, text=True)
         report["demo"] = str(demo)
         structure_dir, filters_dir, master_dir = demo / "1_structure_polar", demo / "2_filters/linear_master", demo / "3_master"
-        out = {key: str(root / key) for key in ("filters_defaults", "filters_all", "master")}
+        out = {key: str(root / key) for key in ("filters_defaults", "filters_all", "master", "filters_auto", "master_auto")}
+        # an AEL stack without its geometry.json beside it: the filter layers must measure the geometry themselves
+        bare = root / "stack without geometry"
+        bare.mkdir()
+        (bare / "linear.npy").write_bytes((filters_dir / "linear.npy").read_bytes())
         config = {"structureImage": str(structure_dir / "corona_linear.tif"), "polarImage": str(structure_dir / "corona_display.tif"),
                   "structureGeometry": str(structure_dir / "geometry.json"), "bridgeOut": str(root / "bridge out"),
+                  "bridgeAutoOut": str(root / "bridge auto out"), "bridgeDetectOut": str(root / "bridge detect out"),
+                  "linearStackAuto": str(bare / "linear.npy"),
                   "linearStack": str(filters_dir / "linear.npy"), "masterFrames": [str(master_dir / f"frame_{i}.tif") for i in (1, 2, 3)],
                   "masterGeometry": str(master_dir / "geometry.json"), "masterCamera": str(master_dir / "camera.json"),
                   "out": out, "report": str(root / "pjsr_report.json")}
@@ -240,6 +298,11 @@ def main() -> None:
                                   "config": json.dumps(str(config_path))}, encoding="utf-8")
 
         # the terminal runs that the dialogs must equal
+        truth = json.loads((structure_dir / "geometry.json").read_text())
+        auto_direct = json.loads(subprocess.run(
+            [args.python, "-m", "ael", "structure", "--input", config["structureImage"], "--geometry", "auto",
+             "--out", str(root / "direct_structure_auto"), "--name", "structure"],
+            text=True, capture_output=True, env=env, timeout=600, check=True).stdout)
         direct = {}
         for mode, source in (("structure", config["structureImage"]), ("polar", config["polarImage"])):
             target = root / f"direct_{mode}"
@@ -364,6 +427,47 @@ def main() -> None:
                                      "linear_sha256_terminal": sha256(terminal_master / "master/linear.npy") if a is not None else None,
                                      "reference_to_input": [f["reference_to_input"] for f in stack_recipe["frames"]],
                                      "frame_sha256": {Path(p).name: sha256(Path(p)) for p in config["masterFrames"]}}
+        # no geometry and no camera profile anywhere: what was measured, and that it is what the terminal measures
+        def near(xy, r, reference_xy, reference_r, tolerance=1.0):
+            return (abs(xy[0] - reference_xy[0]) <= tolerance and abs(xy[1] - reference_xy[1]) <= tolerance
+                    and abs(r - reference_r) <= tolerance)
+        auto_runs = sorted((root / "bridge auto out").glob("*"))
+        gates["auto_bridge_one_output_folder"] = len(auto_runs) == 1
+        if auto_runs:
+            receipt = json.loads((auto_runs[0] / "AEL_BRIDGE_RECEIPT.json").read_text())
+            measured = json.loads((auto_runs[0] / "input_geometry.json").read_text())
+            gates["auto_bridge_says_measured"] = str(receipt.get("geometry_source", "")).startswith("measured")
+            gates["auto_bridge_finds_the_moon"] = near(measured["moon_xy"], measured["moon_radius_px"],
+                                                      truth["moon_xy"], truth["moon_radius_px"])
+            compared = {}
+            for key, direct_file in auto_direct["files"].items():
+                if Path(direct_file).suffix.lower() in (".tif", ".png"):
+                    compared[key] = bool(np.array_equal(pixels(Path(direct_file)), pixels(Path(receipt["files"][key]))))
+            gates["auto_bridge_pixels_equal_terminal_auto"] = bool(compared) and all(compared.values())
+            report["steps"]["auto_bridge"] = {"folder": str(auto_runs[0]), "measured": measured, "equal": compared,
+                                              "measurement": receipt.get("geometry_measurement")}
+        gates["auto_bridge_opens_a_geometry_check"] = any(i.startswith("AEL_geometry_check") for i in steps["auto_structure_windows"])
+        fields = steps["detect_fields"]
+        gates["detect_fills_the_fields"] = all(fields[k] for k in ("sunX", "sunY", "sunRadius")) and near(
+            (float(fields["moonX"]), float(fields["moonY"])), float(fields["moonRadius"]), truth["moon_xy"], truth["moon_radius_px"])
+        gates["detect_opens_a_geometry_check"] = any(i.startswith("AEL_geometry_check") for i in steps["detect_windows"])
+        detect_runs = sorted((root / "bridge detect out").glob("*"))
+        gates["detect_then_run_uses_the_fields"] = len(detect_runs) == 1 and json.loads(
+            (detect_runs[0] / "AEL_BRIDGE_RECEIPT.json").read_text()).get("geometry_source") == "given in the dialog"
+        for key, expected in (("filters_auto", "measured on the image"), ("master_auto", "measured on the reference frame")):
+            folders = sorted(Path(out[key]).glob("ael_*"))
+            info = steps[key]
+            gates[f"{key}_made"] = len(folders) == 1 and info["layers"] == len(DEFAULTS)
+            if folders:
+                receipt = json.loads((folders[0] / "AEL_WORKFLOW_RECEIPT.json").read_text())
+                gates[f"{key}_says_measured"] = receipt.get("geometry_source") == expected
+                report["steps"][key] = {"folder": str(folders[0]), "geometry_source": receipt.get("geometry_source"),
+                                        "measurement": receipt.get("geometry_measurement"),
+                                        "camera_levels": receipt.get("camera_levels")}
+                if key == "master_auto":
+                    gates["master_auto_reads_camera_levels"] = all(
+                        level.get("source") and "given" not in level["source"] for level in receipt.get("camera_levels", []))
+            gates[f"{key}_opens_a_geometry_check"] = any(i.startswith("AEL_geometry_check") for i in info["windows"])
         gates["package_unchanged_by_the_run"] = tree_sha256(plugin) == before_tree
         report["gates"] = gates
         report["ok"] = all(gates.values())

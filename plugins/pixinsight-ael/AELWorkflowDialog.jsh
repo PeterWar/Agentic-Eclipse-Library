@@ -42,7 +42,9 @@ var AELWorkflowDialog = class extends Dialog
       intro.useRichText = true;
       intro.text = "<b>Automated AEL workflow</b><br>One camera and one ISO. Metadata, registration on the Sun, recipes, "
                    + "filter TIFFs and PixelMath expressions are generated automatically. "
-                   + "Calibration and reference geometry are required, never guessed.";
+                   + "The geometry and the camera profile are optional: AEL measures the Sun and the Moon on the image, "
+                   + "each RAW file gives its own black and white levels, and a calibrated TIFF or FITS frame is measured. "
+                   + "The receipt says what was measured and what was assumed.";
       this.sizer.add( intro );
 
       let notice = new Label( this );
@@ -59,7 +61,7 @@ var AELWorkflowDialog = class extends Dialog
       modeLabel.text = "Operation:";
       this.modeList = new ComboBox( this );
       this.modeList.addItem( "Linear master + all filter layers" );
-      this.modeList.addItem( "Filter layers from linear.npy" );
+      this.modeList.addItem( "Filter layers from a linear stack (TIFF, FITS or AEL linear.npy)" );
       this.modeList.currentItem = 0;
       modeSizer.add( modeLabel );
       modeSizer.add( this.modeList );
@@ -67,7 +69,7 @@ var AELWorkflowDialog = class extends Dialog
       this.sizer.add( modeSizer );
 
       let filesLabel = new Label( this );
-      filesLabel.text = "Totality frames (or one linear.npy for filter-only mode):";
+      filesLabel.text = "Totality frames (or one linear stack for filter-only mode):";
       this.sizer.add( filesLabel );
       this.filesText = new TextBox( this );
       this.filesText.readOnly = true;
@@ -80,7 +82,7 @@ var AELWorkflowDialog = class extends Dialog
       addButton.onClick = function()
       {
          let chooser = new OpenFileDialog;
-         chooser.caption = "Select totality frames or linear.npy";
+         chooser.caption = "Select totality frames or a linear stack";
          chooser.multipleSelections = true;
          if ( chooser.execute() )
          {
@@ -135,8 +137,8 @@ var AELWorkflowDialog = class extends Dialog
          return edit;
       }
 
-      this.geometryEdit = pathRow( this, "Reference geometry JSON:", false );
-      this.cameraEdit = pathRow( this, "Camera profile JSON:", false );
+      this.geometryEdit = pathRow( this, "Geometry JSON (optional):", false );
+      this.cameraEdit = pathRow( this, "Camera profile JSON (optional):", false );
       this.darkEdit = pathRow( this, "Master dark (optional):", false );
       this.flatEdit = pathRow( this, "Master flat (optional):", false );
       this.outputEdit = pathRow( this, "Output folder:", true );
@@ -188,13 +190,9 @@ var AELWorkflowDialog = class extends Dialog
          {
             let master = this.dialog.modeList.currentItem == 0;
             if ( this.dialog.frames.length == 0 )
-               throw new Error( master ? "Add at least one totality frame." : "Select linear.npy." );
+               throw new Error( master ? "Add at least one totality frame." : "Select a linear stack." );
             if ( !this.dialog.outputEdit.text.trim() )
                throw new Error( "Select an output folder." );
-            if ( master && !this.dialog.geometryEdit.text.trim() )
-               throw new Error( "Reference geometry is required; it is not guessed." );
-            if ( master && !this.dialog.cameraEdit.text.trim() )
-               throw new Error( "Camera profile is required; black and white levels are not guessed." );
             let outputRoot = this.dialog.outputEdit.text.trim();
             if ( !File.directoryExists( outputRoot ) )
                File.createDirectory( outputRoot, true );
@@ -205,15 +203,20 @@ var AELWorkflowDialog = class extends Dialog
                output = base + "_" + String( ++suffix );
             // "defaults" is read by the helper from ael.filterbank.DEFAULTS; without it the helper would make all 16.
             let filterOptions = { filters: this.dialog.allFiltersCheck.checked ? "all" : "defaults" };
+            // An empty field is "auto": AEL measures the geometry and the camera levels and says so in the receipt.
+            let geometry = this.dialog.geometryEdit.text.trim() || "auto";
             let config = master ? {
                frames: this.dialog.frames, reference: 0,
-               camera: this.dialog.cameraEdit.text.trim(),
-               geometry: this.dialog.geometryEdit.text.trim(),
+               camera: this.dialog.cameraEdit.text.trim() || "auto",
+               geometry: geometry,
                out: output, run_filters: true, filter_options: filterOptions
             } : {
                input: this.dialog.frames[0], out: output,
                filters: filterOptions.filters
             };
+            // Filter-only mode: a geometry.json beside an AEL stack is used; a JSON named here wins; otherwise measured.
+            if ( !master && this.dialog.geometryEdit.text.trim() )
+               config.geometry = this.dialog.geometryEdit.text.trim();
             if ( master && this.dialog.darkEdit.text.trim() ) config.dark = this.dialog.darkEdit.text.trim();
             if ( master && this.dialog.flatEdit.text.trim() ) config.flat = this.dialog.flatEdit.text.trim();
             configPath = File.systemTempDirectory + "/ael-workflow-" + aelBridgeTimestamp() + ".json";

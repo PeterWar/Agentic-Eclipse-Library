@@ -18,9 +18,10 @@ from pathlib import Path
 CREDIT = ("Processed with Agentic Eclipse Library by Pere Guerra — "
           "https://github.com/PeterWar/Agentic-Eclipse-Library")
 
-# The connector is validated against this AEL: the edge-aware WOW and the per-family layer names (1.3.5), and the
-# soft-log and MGN corrections (1.3.6), which the structure image and the filter layers depend on.
-MINIMUM_AEL = (1, 3, 6)
+# The connector is validated against this AEL: the edge-aware WOW and the per-family layer names (1.3.5), the
+# soft-log and MGN corrections (1.3.6), which the structure image and the filter layers depend on, and the geometry
+# measured on the image (1.4.0), which the dialogs use when no geometry is given.
+MINIMUM_AEL = (1, 4, 0)
 
 
 def version_tuple(text) -> tuple:

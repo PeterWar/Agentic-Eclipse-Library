@@ -2,10 +2,22 @@
 
 ## 1.4.0 — 2026-10-30
 
-Two experimental connectors run `ael` from inside PixInsight and Photoshop. The `ael` package does not change (its
-version number only). The Codex plugin goes to 1.1.4; the Claude Code plugin of this repository's marketplace and the
+Two experimental connectors run `ael` from inside PixInsight and Photoshop, and `ael` measures the geometry of an
+eclipse image on the image itself, so that nobody has to write a geometry file to start. The Codex plugin goes to 1.1.4; the Claude Code plugin of this repository's marketplace and the
 Claude plugin folder `plugins/claude-ael/` go to 1.4.0.
 
+- **Geometry measured on the image** (`ael.geometry.find_disc` and `measure_geometry`, `python -m ael geometry`, and
+  `--geometry auto` for `structure` and `polar`). It finds the lunar disc with no input, after the lunar detection of
+  Francisco Bitto's *Eclipse Image Processor*: a closed, nearly round region without data (NaN, an alpha channel or
+  exactly zero), or else the darkest disc inside a bright ring among the circles of a Hough search, refined on the full
+  image with `fit_limb`. There is never a default circle: an image without a lunar disc is refused. The Sun is placed
+  at the centre of the measured circle with its radius, and north, parity and plate scale stay unknown unless they
+  are given; the geometry's note says what was measured and what was assumed. On real stacks of 2024 and 2026 the
+  circle lands within 0.4–1.2 px of the measured Moon (or 4 px of the Sun, where only the region the Moon covered all
+  along was left without data); on single RAW frames of both eclipses it holds from 1/8000 s to 2 s, unless the lunar
+  disc itself is saturated; on 660 synthetic eclipses (lunar radius 25–420 px, Moon 1.00–1.08 times the Sun, off by
+  up to the difference of the radii, partly outside the frame, saturated, colour or mono) it is within max(1 px, 1 %
+  of the radius) in 631, and every failure is a Moon of 25 px.
 - **`plugins/pixinsight-ael/`, for PixInsight 1.9.** The bridge runs `structure` and `polar` on the active image and
   opens every product in a new window. The workflow makes AEL's filter layers from a linear stack and writes the
   PixelMath expressions that compose them, starting from the same floating-point values AEL starts from (0.504 of a
@@ -20,12 +32,20 @@ Claude plugin folder `plugins/claude-ael/` go to 1.4.0.
 - **Packages.** Each connector's `tools/build_package.py` writes a folder with the AEL engine inside (`runtime/ael`,
   checked byte by byte), synthetic demonstration files and a deterministic ZIP. Neither connector names an
   interpreter: each finds a Python that can import the AEL it carries and its dependencies, and both refuse an AEL
-  older than 1.3.6.
+  older than 1.4.0.
+- **No geometry or camera file needed.** In both connectors the geometry and the camera profile are optional: AEL
+  measures the geometry on the image (PixInsight: an empty geometry, or the *Detect* button, and a new window draws
+  the circles found), each RAW file gives its own black and white levels, and a calibrated TIFF or FITS frame is
+  measured (black 0; saturation where many samples share the highest value). The linear master takes a frame whose
+  lunar limb can be measured as its reference when the first one cannot (a long exposure can saturate the lunar disc).
+  A FITS frame gives its exposure and gain from its header. The lunar drift allowed between frames is 0.16 lunar
+  radii, which holds for every total eclipse (the Moon crosses at most twice the difference of the radii, and it never
+  looks more than about 8 % larger than the Sun); it was 0.1 radii, which a long totality such as 2027's exceeds.
 - **The linear master is experimental.** It registers every frame on the Sun; on real eclipse frames that
   registration lands 0.07–2.2 px from the reference registration, and the cause has not been found. Both dialogs say
   so.
 - **`tools/check_connectors.py`** fails when the shared parts of the two connectors drift apart, and runs both probes
-  against stand-in AEL packages to check that each refuses an AEL older than 1.3.6.
+  against stand-in AEL packages to check that each refuses an AEL older than 1.4.0.
 - Measurements and tests: [`docs/VALIDATION_1.4.0.md`](docs/VALIDATION_1.4.0.md).
 
 ## 1.3.6 — 2026-10-29
