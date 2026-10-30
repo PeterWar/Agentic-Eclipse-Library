@@ -29,7 +29,7 @@ This is a local build for testing, not a signed update repository. `tools/build_
 2. Choose `structure` or `polar`.
 3. Choose an output folder. Each run creates a new timestamped subfolder, so previous runs are not overwritten.
 4. Leave **Python executable** empty to have one found (see above), or select one. The interpreter that worked is saved in PixInsight settings.
-5. **AEL folder** starts with the AEL that comes with the connector. Select another folder only to use another AEL; it is passed through `PYTHONPATH`, no shell is used.
+5. **AEL folder** starts with the AEL that comes with the connector, whatever an earlier run saved. Select another folder only to use another AEL for that run; it is passed through `PYTHONPATH`, no shell is used.
 6. Type the path of an `EclipseGeometry` JSON file, or click **Load JSON** to see its values, or complete the geometry fields. Image shape is taken from the selected view. Pixel coordinates are x-right and y-down.
 7. For `structure`, optionally select a boolean `.npy` valid-data mask. For `polar`, set the outer radius in solar radii.
 8. Click **Run AEL**.

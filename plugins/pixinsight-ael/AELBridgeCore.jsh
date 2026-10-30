@@ -228,13 +228,19 @@ function aelBridgeDefaultRoot()
    return "";
 }
 
-// The AEL folder a dialog starts with: the one saved last time if it still holds ``ael``, else the default.
+// The AEL folder a dialog starts with. The AEL that comes with the connector wins: a package is self-contained, and a
+// folder saved by an earlier run (another package, an older checkout) would make a new package start with an AEL that
+// is not its own. Only when the connector carries none, the one saved last time is used if it still holds ``ael``.
+// Choosing another folder in the dialog still works for that run.
 function aelBridgeInitialRoot()
 {
+   let packaged = aelBridgeDefaultRoot();
+   if ( packaged.length > 0 )
+      return packaged;
    let saved = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "aelRoot", DataType.UTF8String );
    if ( saved && saved.length > 0 && File.exists( saved + "/ael/__init__.py" ) )
       return saved;
-   return aelBridgeDefaultRoot();
+   return "";
 }
 
 function aelBridgeCandidates( preferred, aelRoot )
