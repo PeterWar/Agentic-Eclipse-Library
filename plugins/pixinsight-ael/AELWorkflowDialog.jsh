@@ -31,8 +31,13 @@ var AELWorkflowDialog = class extends Dialog
       super();
       this.windowTitle = "AEL Linear Master and Filter Layers";
       this.userResizable = true;
-      this.scaledMinWidth = 760;
+      this.scaledMinWidth = 620;
       this.frames = [];
+      // Not shown: the Python is found by the connector, AEL is the one that comes with it, and the PixelMath composite
+      // is always built. A script or a test may set them before Run.
+      this.pythonPath = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "pythonPath", DataType.UTF8String ) || "";
+      this.aelRoot = aelBridgeInitialRoot();
+      this.buildComposite = true;
       this.sizer = new VerticalSizer;
       this.sizer.margin = 10;
       this.sizer.spacing = 7;
@@ -40,18 +45,15 @@ var AELWorkflowDialog = class extends Dialog
       let intro = new Label( this );
       intro.wordWrapping = true;
       intro.useRichText = true;
-      intro.text = "<b>Automated AEL workflow</b><br>One camera and one ISO. Metadata, registration on the Sun, recipes, "
-                   + "filter TIFFs and PixelMath expressions are generated automatically. "
-                   + "The geometry and the camera profile are optional: AEL measures the Sun and the Moon on the image, "
-                   + "each RAW file gives its own black and white levels, and a calibrated TIFF or FITS frame is measured. "
-                   + "The receipt says what was measured and what was assumed.";
+      intro.text = "<b>AEL filter layers</b><br>AEL's filter layers and an adjustable PixelMath composite, made from a "
+                   + "linear stack (TIFF, FITS or AEL's linear.npy). AEL finds the Moon on the image by itself.";
       this.sizer.add( intro );
 
       let notice = new Label( this );
       notice.wordWrapping = true;
       notice.useRichText = true;
-      notice.text = "<b>Experimental.</b> The <i>filter layers from linear.npy</i> operation is validated with synthetic data. "
-                    + "The <i>linear master</i> registers every frame on the Sun, and on real eclipse frames that registration "
+      notice.text = "<b>Experimental.</b> The filter layers are validated with synthetic data. "
+                    + "The linear master registers every frame on the Sun, and on real eclipse frames that registration "
                     + "is not valid yet: it lands 0.07-2.2 px from the reference registration. Do not use it on real frames.";
       this.sizer.add( notice );
 
@@ -60,8 +62,8 @@ var AELWorkflowDialog = class extends Dialog
       let modeLabel = new Label( this );
       modeLabel.text = "Operation:";
       this.modeList = new ComboBox( this );
-      this.modeList.addItem( "Linear master + all filter layers" );
-      this.modeList.addItem( "Filter layers from a linear stack (TIFF, FITS or AEL linear.npy)" );
+      this.modeList.addItem( "Filter layers from a linear stack" );
+      this.modeList.addItem( "Linear master from totality frames (experimental)" );
       this.modeList.currentItem = 0;
       modeSizer.add( modeLabel );
       modeSizer.add( this.modeList );
@@ -69,11 +71,10 @@ var AELWorkflowDialog = class extends Dialog
       this.sizer.add( modeSizer );
 
       let filesLabel = new Label( this );
-      filesLabel.text = "Totality frames (or one linear stack for filter-only mode):";
       this.sizer.add( filesLabel );
       this.filesText = new TextBox( this );
       this.filesText.readOnly = true;
-      this.filesText.setScaledFixedHeight( 74 );
+      this.filesText.setScaledFixedHeight( 64 );
       this.sizer.add( this.filesText );
       let fileButtons = new HorizontalSizer;
       fileButtons.spacing = 6;
@@ -82,8 +83,8 @@ var AELWorkflowDialog = class extends Dialog
       addButton.onClick = function()
       {
          let chooser = new OpenFileDialog;
-         chooser.caption = "Select totality frames or a linear stack";
-         chooser.multipleSelections = true;
+         chooser.caption = this.dialog.modeList.currentItem == 0 ? "Select a linear stack" : "Select totality frames";
+         chooser.multipleSelections = this.dialog.modeList.currentItem == 1;
          if ( chooser.execute() )
          {
             for ( let i = 0; i < chooser.fileNames.length; ++i )
@@ -100,16 +101,17 @@ var AELWorkflowDialog = class extends Dialog
       fileButtons.addStretch();
       this.sizer.add( fileButtons );
 
+      let rows = [];
       function pathRow( parent, label, directory )
       {
          let row = new HorizontalSizer;
          row.spacing = 6;
          let caption = new Label( parent );
          caption.text = label;
-         caption.setScaledFixedWidth( 160 );
+         caption.setScaledFixedWidth( 150 );
          let edit = new Edit( parent );
          let button = new ToolButton( parent );
-         button.icon = parent.scaledResource( ":/icons/select-file.png" );
+         button.icon = parent.scaledResource( directory ? ":/icons/select-folder.png" : ":/icons/select-file.png" );
          button.setScaledFixedSize( 24, 24 );
          button.onClick = function()
          {
@@ -134,35 +136,21 @@ var AELWorkflowDialog = class extends Dialog
          row.add( edit, 100 );
          row.add( button );
          parent.sizer.add( row );
+         rows.push( [ caption, edit, button ] );
          return edit;
       }
-
-      this.geometryEdit = pathRow( this, "Geometry JSON (optional):", false );
-      this.cameraEdit = pathRow( this, "Camera profile JSON (optional):", false );
+      // Dark and flat belong to the linear master only.
       this.darkEdit = pathRow( this, "Master dark (optional):", false );
       this.flatEdit = pathRow( this, "Master flat (optional):", false );
+      let calibrationRows = rows.slice();
       this.outputEdit = pathRow( this, "Output folder:", true );
-      this.pythonEdit = pathRow( this, "Python executable:", false );
-      this.aelRootEdit = pathRow( this, "AEL folder (optional):", true );
-
-      let saved = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "pythonPath", DataType.UTF8String );
-      if ( saved ) this.pythonEdit.text = saved;
-      this.aelRootEdit.text = aelBridgeInitialRoot();
-      saved = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "workflowOutput", DataType.UTF8String );
+      let saved = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "workflowOutput", DataType.UTF8String );
       if ( saved ) this.outputEdit.text = saved;
-      saved = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "workflowGeometry", DataType.UTF8String );
-      if ( saved ) this.geometryEdit.text = saved;
-      saved = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "workflowCamera", DataType.UTF8String );
-      if ( saved ) this.cameraEdit.text = saved;
 
       this.allFiltersCheck = new CheckBox( this );
-      this.allFiltersCheck.text = "Generate all 16 filters (otherwise only AEL's default layers: NRGF, edge-aware WOW and ACHF 04)";
+      this.allFiltersCheck.text = "All 16 filters (otherwise AEL's three default layers: NRGF, edge-aware WOW and ACHF 04)";
       this.allFiltersCheck.checked = true;
       this.sizer.add( this.allFiltersCheck );
-      this.compositeCheck = new CheckBox( this );
-      this.compositeCheck.text = "Build an adjustable PixelMath composite on a duplicate of the display base";
-      this.compositeCheck.checked = true;
-      this.sizer.add( this.compositeCheck );
 
       let buttons = new HorizontalSizer;
       buttons.spacing = 8;
@@ -182,15 +170,28 @@ var AELWorkflowDialog = class extends Dialog
       {
          this.filesText.text = this.frames.join( "\n" );
       };
+      this.updateOperation = function()
+      {
+         let master = this.modeList.currentItem == 1;
+         filesLabel.text = master ? "Totality frames (RAW, TIFF or FITS; one camera and one ISO):"
+                                  : "Linear stack (one file):";
+         for ( let i = 0; i < calibrationRows.length; ++i )
+            for ( let j = 0; j < calibrationRows[i].length; ++j )
+               calibrationRows[i][j].visible = master;
+         notice.visible = master;
+      };
+      this.modeList.onItemSelected = function() { this.dialog.updateOperation(); this.dialog.adjustToContents(); };
 
       runButton.onClick = function()
       {
          let configPath = "";
          try
          {
-            let master = this.dialog.modeList.currentItem == 0;
+            let master = this.dialog.modeList.currentItem == 1;
             if ( this.dialog.frames.length == 0 )
-               throw new Error( master ? "Add at least one totality frame." : "Select a linear stack." );
+               throw new Error( master ? "Add at least one totality frame." : "Add a linear stack." );
+            if ( !master && this.dialog.frames.length > 1 )
+               throw new Error( "Add one linear stack only." );
             if ( !this.dialog.outputEdit.text.trim() )
                throw new Error( "Select an output folder." );
             let outputRoot = this.dialog.outputEdit.text.trim();
@@ -203,32 +204,22 @@ var AELWorkflowDialog = class extends Dialog
                output = base + "_" + String( ++suffix );
             // "defaults" is read by the helper from ael.filterbank.DEFAULTS; without it the helper would make all 16.
             let filterOptions = { filters: this.dialog.allFiltersCheck.checked ? "all" : "defaults" };
-            // An empty field is "auto": AEL measures the geometry and the camera levels and says so in the receipt.
-            let geometry = this.dialog.geometryEdit.text.trim() || "auto";
+            // No geometry and no camera profile: AEL measures them and the receipt says what was measured and assumed.
             let config = master ? {
-               frames: this.dialog.frames, reference: 0,
-               camera: this.dialog.cameraEdit.text.trim() || "auto",
-               geometry: geometry,
+               frames: this.dialog.frames, reference: 0, camera: "auto", geometry: "auto",
                out: output, run_filters: true, filter_options: filterOptions
             } : {
-               input: this.dialog.frames[0], out: output,
-               filters: filterOptions.filters
+               input: this.dialog.frames[0], out: output, filters: filterOptions.filters
             };
-            // Filter-only mode: a geometry.json beside an AEL stack is used; a JSON named here wins; otherwise measured.
-            if ( !master && this.dialog.geometryEdit.text.trim() )
-               config.geometry = this.dialog.geometryEdit.text.trim();
             if ( master && this.dialog.darkEdit.text.trim() ) config.dark = this.dialog.darkEdit.text.trim();
             if ( master && this.dialog.flatEdit.text.trim() ) config.flat = this.dialog.flatEdit.text.trim();
             configPath = File.systemTempDirectory + "/ael-workflow-" + aelBridgeTimestamp() + ".json";
             File.writeTextFile( configPath, JSON.stringify( config, null, 1 ) );
-            let runtime = aelBridgeCandidates( this.dialog.pythonEdit.text.trim(), this.dialog.aelRootEdit.text.trim() );
+            let runtime = aelBridgeCandidates( this.dialog.pythonPath, this.dialog.aelRoot );
             Settings.write( AEL_BRIDGE_SETTINGS_KEY + "workflowOutput", DataType.UTF8String, outputRoot );
-            Settings.write( AEL_BRIDGE_SETTINGS_KEY + "workflowGeometry", DataType.UTF8String, this.dialog.geometryEdit.text.trim() );
-            Settings.write( AEL_BRIDGE_SETTINGS_KEY + "workflowCamera", DataType.UTF8String, this.dialog.cameraEdit.text.trim() );
-            Settings.write( AEL_BRIDGE_SETTINGS_KEY + "aelRoot", DataType.UTF8String, this.dialog.aelRootEdit.text.trim() );
             this.dialog.ok();
-            aelWorkflowRunAndOpen( master ? "master" : "filters", configPath, runtime,
-                                   this.dialog.aelRootEdit.text.trim(), this.dialog.compositeCheck.checked );
+            aelWorkflowRunAndOpen( master ? "master" : "filters", configPath, runtime, this.dialog.aelRoot,
+                                   this.dialog.buildComposite );
          }
          catch ( error )
          {
@@ -241,6 +232,7 @@ var AELWorkflowDialog = class extends Dialog
                File.remove( configPath );
          }
       };
+      this.updateOperation();
       this.adjustToContents();
    }
 };

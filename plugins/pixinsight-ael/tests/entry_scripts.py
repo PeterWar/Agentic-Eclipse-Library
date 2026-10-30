@@ -30,12 +30,13 @@ import tempfile
 
 ENTRIES = {
     "bridge": {"file": "AELBridge.js", "title": "Agentic Eclipse Library", "run": "Run AEL",
-               "controls": ["imageList", "modeList", "outputEdit", "pythonEdit", "aelRootEdit", "geometryFileEdit",
-                            "rmaxEdit"]},
+               "controls": ["imageList", "modeList", "outputEdit", "rmaxEdit"]},
     "workflow": {"file": "AELWorkflow.js", "title": "AEL Linear Master and Filter Layers", "run": "Run workflow",
-                 "controls": ["modeList", "outputEdit", "pythonEdit", "aelRootEdit", "geometryEdit", "cameraEdit",
-                              "allFiltersCheck", "compositeCheck"]},
+                 "controls": ["modeList", "outputEdit", "allFiltersCheck", "darkEdit", "flatEdit"]},
 }
+# What a person who does not know the technology should not have to fill in (Pere, 30-10): none of these fields exists.
+TECHNICAL = ["pythonEdit", "aelRootEdit", "geometryFileEdit", "geometryEdits", "validMaskEdit", "geometryEdit",
+             "cameraEdit", "compositeCheck", "noteEdit", "mirroredCheck"]
 
 PJSR = r'''
 #engine v8
@@ -72,8 +73,12 @@ timer.onTimeout = function()
       info.runEnabled = dialog.runButton ? dialog.runButton.enabled : null;
       for ( let i = 0; i < CFG.controls.length; ++i )
          info.controls[CFG.controls[i]] = dialog[CFG.controls[i]] !== undefined && dialog[CFG.controls[i]] !== null;
-      info.aelRoot = dialog.aelRootEdit ? dialog.aelRootEdit.text : null;
-      info.python = dialog.pythonEdit ? dialog.pythonEdit.text : null;
+      info.technical = [];
+      for ( let i = 0; i < CFG.technical.length; ++i )
+         if ( dialog[CFG.technical[i]] !== undefined )
+            info.technical.push( CFG.technical[i] );
+      info.aelRoot = dialog.aelRoot !== undefined ? dialog.aelRoot : null;
+      info.python = dialog.pythonPath !== undefined ? dialog.pythonPath : null;
       if ( dialog.modeList )
          for ( let i = 0; i < dialog.modeList.numberOfItems; ++i )
             info.operations.push( dialog.modeList.itemText( i ) );
@@ -116,7 +121,7 @@ def run_entry(name: str, plugin: Path, work: Path, pixinsight: Path, timeout: fl
     spec = ENTRIES[name]
     work.mkdir(parents=True, exist_ok=True)
     report_path = work / "pjsr_report.json"
-    config = {"report": str(report_path), "controls": spec["controls"]}
+    config = {"report": str(report_path), "controls": spec["controls"], "technical": TECHNICAL}
     (work / "entry_config.json").write_text(json.dumps(config, indent=1), encoding="utf-8")
     script = work / f"entry_{name}.js"
     script.write_text(PJSR % {"config": json.dumps(str(work / "entry_config.json")), "entry": plugin / spec["file"]},
@@ -151,6 +156,7 @@ def judge(name: str, recorded: dict, expect_root: Path | None) -> dict[str, bool
         f"{name}_dialog_shown": bool(dialogs) and first.get("title") == spec["title"] and first.get("visible") is True,
         f"{name}_run_button": first.get("runText") == spec["run"] and first.get("runEnabled") is True,
         f"{name}_fields": bool(first) and all(first.get("controls", {}).get(key) for key in spec["controls"]),
+        f"{name}_no_technical_fields": bool(first) and first.get("technical") == [],
         f"{name}_closed_and_finished": recorded.get("finished") is True and not recorded.get("stopped_by_timeout"),
         f"{name}_no_message_box": recorded.get("messages") == [],
     }

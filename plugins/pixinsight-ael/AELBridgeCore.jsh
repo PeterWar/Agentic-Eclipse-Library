@@ -309,10 +309,10 @@ function aelBridgeCandidates( preferred, aelRoot )
       }
       diagnostics.push( candidates[i] + ": " + probe.message );
    }
-   throw new Error( "No Python 3.10+ interpreter with AEL " + "1.4.0 or later and its dependencies was found. Select the "
-                    + "Python executable and the AEL folder (the connector's runtime folder, or a source checkout).\n\n"
-                    + "AEL is not on PyPI. Its dependencies are installed with: python -m pip install numpy scipy "
-                    + "opencv-python-headless pillow tifffile imageio\n\n"
+   throw new Error( "No Python 3.10 or later with AEL's dependencies was found. Install Python 3, and then, in the "
+                    + "Terminal: python3 -m pip install numpy scipy opencv-python-headless pillow tifffile imageio\n"
+                    + "AEL " + "1.4.0 itself comes with the connector. To use one particular Python, set the environment "
+                    + "variable AEL_PYTHON to it.\n\n"
                     + "Tried:\n" + diagnostics.join( "\n" ) );
 }
 

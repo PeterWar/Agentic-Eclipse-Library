@@ -33,10 +33,11 @@ Claude plugin folder `plugins/claude-ael/` go to 1.4.0.
   checked byte by byte), synthetic demonstration files and a deterministic ZIP. Neither connector names an
   interpreter: each finds a Python that can import the AEL it carries and its dependencies, and both refuse an AEL
   older than 1.4.0.
-- **No geometry or camera file needed.** In both connectors the geometry and the camera profile are optional: AEL
-  measures the geometry on the image (PixInsight: an empty geometry, or the *Detect* button, and a new window draws
-  the circles found), each RAW file gives its own black and white levels, and a calibrated TIFF or FITS frame is
-  measured (black 0; saturation where many samples share the highest value). The linear master takes a frame whose
+- **No geometry or camera file needed.** The PixInsight dialogs ask only for the image (or the files), the
+  operation and the output folder: no Python, AEL folder, geometry or camera profile. AEL measures the geometry on the
+  image and a new window draws the circle it found; each RAW file gives its own black and white levels, and a
+  calibrated TIFF or FITS frame is measured (black 0; saturation where many samples share the highest value). The
+  shared helper takes the same "auto" for the Photoshop connector, whose dialog still asks for a geometry file. The linear master takes a frame whose
   lunar limb can be measured as its reference when the first one cannot (a long exposure can saturate the lunar disc).
   A FITS frame gives its exposure and gain from its header. The lunar drift allowed between frames is 0.16 lunar
   radii, which holds for every total eclipse (the Moon crosses at most twice the difference of the radii, and it never
