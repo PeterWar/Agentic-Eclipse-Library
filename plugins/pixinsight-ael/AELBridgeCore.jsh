@@ -34,7 +34,45 @@
 var AEL_BRIDGE_SETTINGS_KEY = "AELBridge/";
 var AEL_BRIDGE_CREDIT = "Processed with Agentic Eclipse Library by Pere Guerra — https://github.com/PeterWar/Agentic-Eclipse-Library";
 
-var AEL_BRIDGE_CORE_DIR = File.extractDrive( #__FILE__ ) + File.extractDirectory( #__FILE__ );
+// PixInsight expands #__FILE__ with every non-ASCII character of the path replaced by U+FFFD, so File.exists() fails for a
+// connector installed under, say, "Descàrregues" or "Música". The real path is recovered by listing each folder whose name
+// is damaged and taking the entry that fits it, each U+FFFD standing for one to three characters (an accent can be one
+// character or two). If nothing fits, the damaged path is kept and the error that follows says what happened.
+function aelBridgeRepairPath( damaged )
+{
+   let broken = String.fromCharCode( 0xFFFD );
+   if ( damaged.indexOf( broken ) < 0 )
+      return damaged;
+   let parts = damaged.split( "/" );
+   let repaired = parts[0];
+   for ( let i = 1; i < parts.length; ++i )
+   {
+      if ( parts[i].indexOf( broken ) < 0 )
+      {
+         repaired += "/" + parts[i];
+         continue;
+      }
+      let source = "^";
+      for ( let j = 0; j < parts[i].length; ++j )
+      {
+         let character = parts[i].charAt( j );
+         source += character == broken ? ".{1,3}" : character.replace( /[.*+?^${}()|[\]\\]/g, "\\$&" );
+      }
+      let pattern = new RegExp( source + "$" );
+      let fitting = [];
+      let entries = aelBridgeMatches( repaired + "/*" );
+      for ( let k = 0; k < entries.length; ++k )
+         if ( pattern.test( File.extractName( entries[k] ) + File.extractExtension( entries[k] ) ) )
+            fitting.push( entries[k] );
+      if ( fitting.length == 0 )
+         return damaged;
+      fitting.sort();
+      repaired = fitting[0];
+   }
+   return repaired;
+}
+
+var AEL_BRIDGE_CORE_DIR = aelBridgeRepairPath( File.extractDrive( #__FILE__ ) + File.extractDirectory( #__FILE__ ) );
 var AEL_BRIDGE_CHECK_SCRIPT = AEL_BRIDGE_CORE_DIR + "/python/ael_bridge_check.py";
 
 function aelBridgeTimestamp()
@@ -122,7 +160,9 @@ function aelBridgeProbe( pythonPath, aelRoot )
    if ( !File.exists( pythonPath ) )
       return { ok: false, kind: "bad_path", message: "Python executable not found: " + pythonPath };
    if ( !File.exists( AEL_BRIDGE_CHECK_SCRIPT ) )
-      throw new Error( "Bridge preflight helper not found: " + AEL_BRIDGE_CHECK_SCRIPT );
+      throw new Error( "Bridge preflight helper not found: " + AEL_BRIDGE_CHECK_SCRIPT + "\n\nKeep the connector's folder "
+                       + "together. If the path of the folder holds accented or special characters that PixInsight cannot "
+                       + "read in a script's location, move the folder to a plain path." );
 
    let run = aelBridgeRun( pythonPath, [ AEL_BRIDGE_CHECK_SCRIPT, "probe" ],
                            aelRoot && aelRoot.length ? aelRoot : File.systemTempDirectory,

@@ -406,6 +406,26 @@ def main() -> None:
                 if not pjsr.get("ok"):
                     raise RuntimeError("PixInsight validation failed: " + str(pjsr.get("error")))
 
+                # A connector installed under a folder with accents ("Música", "Descàrregues"): PixInsight expands #__FILE__
+                # with U+FFFD in place of each non-ASCII character, and the connector must find its own files all the same.
+                accented = root / "instal·lació àè" / "pixinsight-ael"
+                shutil.copytree(args.repo / "plugins/pixinsight-ael", accented,
+                                ignore=shutil.ignore_patterns("__pycache__", "tests", "tools"))
+                accented_report = root / "accented_install.json"
+                accented_script = root / "accented_install.js"
+                accented_script.write_text(
+                    "#engine v8\n"
+                    # an #include takes the text as it is: JSON would write each accent as \\u00e0, which it does not read
+                    f'#include "{accented / "AELBridgeCore.jsh"}"\n'
+                    f"File.writeTextFile({json.dumps(str(accented_report))}, JSON.stringify("
+                    "{core_dir: AEL_BRIDGE_CORE_DIR, helper_exists: File.exists(AEL_BRIDGE_CHECK_SCRIPT)}));\n",
+                    encoding="utf-8")
+                report["commands"].append(run_pixinsight(args.pixinsight, accented_script, root / "accented_install.log"))
+                found = json.loads(accented_report.read_text()) if accented_report.is_file() else {}
+                report["tests"]["accented_install_path"] = {**found, "path": str(accented),
+                    "same_folder": bool(found.get("core_dir")) and Path(found["core_dir"]).exists()
+                                   and os.path.samefile(found["core_dir"], accented)}
+
                 for key, original in (("rgb", rgb), ("mono", mono)):
                     exported = tifffile.imread(pjsr["roundtrip"][key]["output"])
                     difference = float(np.max(np.abs(exported - original)))
@@ -498,6 +518,8 @@ def main() -> None:
                     "clear_errors": all(value is True or isinstance(value, dict)
                                         for value in report["tests"]["clear_errors"].values()),
                     "old_ael_refused_in_pixinsight": report["tests"]["old_ael_kind"] == "old_ael",
+                    "accented_install_path_found": bool(report["tests"]["accented_install_path"].get("helper_exists"))
+                                                   and report["tests"]["accented_install_path"]["same_folder"],
                     "out_of_range_file_refused": report["tests"]["out_of_range"].get("refused") is True
                                                  and "rescaled" in report["tests"]["out_of_range"].get("message", "")
                                                  and report["tests"]["out_of_range"].get("view_maximum") == 1.0
