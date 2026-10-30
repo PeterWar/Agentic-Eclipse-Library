@@ -35,7 +35,8 @@ Claude plugin folder `plugins/claude-ael/` go to 1.4.0.
   older than 1.4.0.
 - **No geometry or camera file needed.** The PixInsight dialogs ask only for the image (or the files), the
   operation and the output folder: no Python, AEL folder, geometry or camera profile. AEL measures the geometry on the
-  image and a new window draws the circle it found; each RAW file gives its own black and white levels, and a
+  image and a new window draws the circle it found; each RAW file gives its levels (the black measured on the sensor's covered
+  border, which LibRaw misreports for the Canon EOS R6 Mark III, and 85 % of the range counted as linear), and a
   calibrated TIFF or FITS frame is measured (black 0; saturation where many samples share the highest value). The
   shared helper takes the same "auto" for the Photoshop connector, whose dialog still asks for a geometry file. The linear master takes a frame whose
   lunar limb can be measured as its reference when the first one cannot (a long exposure can saturate the lunar disc).

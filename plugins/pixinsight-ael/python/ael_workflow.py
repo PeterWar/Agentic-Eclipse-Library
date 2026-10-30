@@ -86,13 +86,31 @@ RAW_EXTENSIONS = {".cr2", ".cr3", ".nef", ".arw", ".dng", ".raf", ".orf", ".rw2"
 
 
 def raw_levels(path: Path) -> dict:
-    """Black and white levels as the RAW file declares them (LibRaw, through rawpy)."""
+    """Black, white and linear ceiling of a RAW frame.
+
+    Black is measured on the sensor's covered border (the raw samples outside the visible area) when it has one: LibRaw
+    declares [0, 32, 96, 64] for a Canon EOS R6 Mark III whose covered border reads 512 (507-518), and the declared value
+    is used only without a border (a Sony declares 512, which its border confirms). White is the level LibRaw declares
+    (where the sensor clips). The sensor stops being linear before it clips (about 85 % of the range on the R6 Mark
+    III), so only 85 % of the range from black to white counts as linear.
+    """
     import rawpy
     with rawpy.imread(str(path)) as raw:
-        black = [float(v) for v in raw.black_level_per_channel]
+        declared = [float(v) for v in raw.black_level_per_channel]
         white = float(raw.white_level)
-    return {"black": float(np.median(black)), "white": white, "black_per_channel": black,
-            "source": "the RAW file's own black and white levels"}
+        full = raw.raw_image
+        sizes = raw.sizes
+        covered = np.ones(full.shape, bool)
+        covered[sizes.top_margin:sizes.top_margin + sizes.height, sizes.left_margin:sizes.left_margin + sizes.width] = False
+        border = full[covered]
+    if border.size >= 10000:
+        black = float(np.median(border))
+        source = (f"black {black:g} measured on the covered border of the sensor ({border.size} samples; LibRaw declares "
+                  f"{declared}); white {white:g} as LibRaw declares it; linear up to 85 % of the range")
+    else:
+        black = float(np.median(declared))
+        source = f"black {black:g} and white {white:g} as LibRaw declares them (no covered border); linear up to 85 % of the range"
+    return {"black": black, "white": white, "linearity_fraction": 0.85, "black_declared": declared, "source": source}
 
 
 def data_levels(path: Path) -> dict:
@@ -119,10 +137,10 @@ def data_levels(path: Path) -> dict:
         raise ValueError(f"The frame has no positive samples: {path}")
     if plateaus:
         white, count = min(plateaus)
-        return {"black": 0.0, "white": white,
+        return {"black": 0.0, "white": white, "linearity_fraction": 0.95,
                 "source": f"black 0 (calibrated frame); saturation at {white:g}, where {count} samples of one channel "
                           "share the highest value"}
-    return {"black": 0.0, "white": 2.0 * highest,
+    return {"black": 0.0, "white": 2.0 * highest, "linearity_fraction": 0.95,
             "source": "black 0 (calibrated frame); no saturation plateau, so nothing is marked as saturated"}
 
 
@@ -540,19 +558,18 @@ def run_master(cfg: dict) -> dict:
         profile = json.loads(Path(profile).expanduser().read_text())
     if isinstance(profile, dict):
         # A camera profile given by the user holds for every frame.
-        levels = [{"black": float(profile["black"]), "white": float(profile["white"]),
-                   "source": "camera profile given"} for _ in paths]
         fraction = float(profile.get("linearity_fraction", 0.95))
+        levels = [{"black": float(profile["black"]), "white": float(profile["white"]), "linearity_fraction": fraction,
+                   "source": "camera profile given"} for _ in paths]
     else:
         # Not given: each RAW file declares its own black and white levels; a calibrated TIFF/FITS frame is measured.
         profile = {}
         levels = [raw_levels(path) if kind == "raw" else data_levels(path) for path, kind in zip(paths, kinds)]
-        fraction = 0.95
     for path, level in zip(paths, levels):
         if not level["white"] > level["black"]:
             raise ValueError(f"Invalid black/white levels for {path}: {level}")
-    if not 0 < fraction <= 1:
-        raise ValueError("Invalid linearity fraction")
+        if not 0 < level["linearity_fraction"] <= 1:
+            raise ValueError(f"Invalid linearity fraction for {path}: {level}")
     meta = [metadata(path) for path in paths]
     if len({item["iso"] for item in meta}) != 1:
         raise ValueError("Stack one ISO at a time")
@@ -566,7 +583,7 @@ def run_master(cfg: dict) -> dict:
                          "Stack each exposure with its own matching dark, or leave the dark empty.")
     if cfg.get("allow_rotation"):
         raise ValueError("Rotation is not supported: registration is a translation measured on the Sun")
-    data = [frame_luminance(path, kind, level["black"], level["white"], fraction)
+    data = [frame_luminance(path, kind, level["black"], level["white"], level["linearity_fraction"])
             for path, kind, level in zip(paths, kinds, levels)]
     shapes = [tuple(item[2]) for item in data]
     given = cfg.get("geometry")
@@ -628,7 +645,7 @@ def run_master(cfg: dict) -> dict:
     for index, (path, kind, info, matrix, moon_fit, level) in enumerate(
             zip(paths, kinds, meta, matrices, moon_geometries, levels)):
         frame = {"path": str(path), "kind": kind, "iso": info["iso"], "exposure_s": info["exposure_s"],
-                 "black": level["black"], "white": level["white"], "linearity_fraction": fraction,
+                 "black": level["black"], "white": level["white"], "linearity_fraction": level["linearity_fraction"],
                  "reference_to_input": matrix.tolist(), "moon_xy": list(moon_fit["xy"]),
                  "moon_radius_px": moon_fit["r"], "train": profile.get("train", "one")}
         for key in ("dark", "flat"):
