@@ -1,0 +1,349 @@
+/*
+MIT License
+Copyright (c) 2026 Pere Guerra Serra
+Processed with Agentic Eclipse Library by Pere Guerra —
+https://github.com/PeterWar/Agentic-Eclipse-Library
+*/
+
+var AELPhotoshop = AELPhotoshop || {};
+
+(function (ns) {
+    ns.pluginFolder = new File($.fileName).parent;
+    ns.runner = new File(ns.pluginFolder.fsName + "/python/ael_photoshop.py");
+
+    ns.jsonString = function (value) {
+        var i, parts, key;
+        if (value === null || value === undefined) return "null";
+        if (typeof value === "number") return isFinite(value) ? String(value) : "null";
+        if (typeof value === "boolean") return value ? "true" : "false";
+        if (typeof value === "string") {
+            return '"' + value.replace(/\\/g, "\\\\").replace(/"/g, '\\"')
+                .replace(/\r/g, "\\r").replace(/\n/g, "\\n").replace(/\t/g, "\\t") + '"';
+        }
+        if (value instanceof Array) {
+            parts = [];
+            for (i = 0; i < value.length; i++) parts.push(ns.jsonString(value[i]));
+            return "[" + parts.join(",") + "]";
+        }
+        if (value instanceof File || value instanceof Folder) return ns.jsonString(value.fsName);
+        if (typeof value === "object") {
+            parts = [];
+            for (key in value) {
+                if (value.hasOwnProperty(key) && typeof value[key] !== "function") {
+                    parts.push(ns.jsonString(String(key)) + ":" + ns.jsonString(value[key]));
+                }
+            }
+            return "{" + parts.join(",") + "}";
+        }
+        return "null";
+    };
+
+    ns.readJSON = function (file) {
+        file.encoding = "UTF8";
+        if (!file.open("r")) throw new Error("Cannot read " + file.fsName);
+        var text = file.read();
+        file.close();
+        // ExtendScript has no reliable JSON.parse; only plain JSON (json2.js test, plus the
+        // NaN/Infinity that Python writes) may reach eval.
+        if (!/^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, "@")
+                .replace(/"[^"\\\n\r]*"|true|false|null|NaN|-?Infinity|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, "]")
+                .replace(/(?:^|:|,)(?:\s*\[)+/g, ""))) {
+            throw new Error("Refusing a result that is not plain JSON: " + file.fsName);
+        }
+        return eval("(" + text + ")");
+    };
+
+    ns.writeJSON = function (file, value) {
+        file.encoding = "UTF8";
+        file.lineFeed = "Unix";
+        if (!file.open("w")) throw new Error("Cannot write " + file.fsName);
+        file.write(ns.jsonString(value));
+        file.close();
+    };
+
+    ns.shellQuote = function (value) {
+        return "'" + String(value).replace(/'/g, "'\\''") + "'";
+    };
+
+    ns.uniqueFolder = function (parent, prefix) {
+        var now = new Date();
+        function two(n) { return n < 10 ? "0" + n : String(n); }
+        var stamp = now.getFullYear() + two(now.getMonth() + 1) + two(now.getDate()) + "_" +
+            two(now.getHours()) + two(now.getMinutes()) + two(now.getSeconds()) + "_" + now.getMilliseconds();
+        var folder = new Folder(parent.fsName + "/" + prefix + stamp);
+        var suffix = 0;
+        while (folder.exists) {
+            suffix++;
+            folder = new Folder(parent.fsName + "/" + prefix + stamp + "_" + suffix);
+        }
+        if (!folder.create()) throw new Error("Cannot create output folder " + folder.fsName);
+        return folder;
+    };
+
+    // The Python that worked last time, kept in Photoshop's custom options: the first candidate of the next run.
+    ns.settingsKey = "AELPhotoshop-python-e3b1c7a2";
+    ns.savedPython = function () {
+        try {
+            return app.getCustomOptions(ns.settingsKey).getString(stringIDToTypeID("python"));
+        } catch (missing) {
+            return "";
+        }
+    };
+    ns.savePython = function (path) {
+        try {
+            var settings = new ActionDescriptor();
+            settings.putString(stringIDToTypeID("python"), path);
+            app.putCustomOptions(ns.settingsKey, settings, true);
+        } catch (ignored) {}
+    };
+
+    // python3, then python3.N from the newest minor version to the oldest, in one folder.
+    ns.versionedPythons = function (directory) {
+        var files = new Folder(directory).getFiles("python3*") || [], found = [], i;
+        function minor(path) {
+            var match = /python3\.([0-9]+)$/.exec(path);
+            return match ? parseInt(match[1], 10) : 1000;
+        }
+        for (i = 0; i < files.length; i++) {
+            if (files[i] instanceof File && /\/python3(\.[0-9]+)?$/.test(files[i].fsName)) found.push(files[i].fsName);
+        }
+        found.sort(function (a, b) { return minor(b) - minor(a); });
+        return found;
+    };
+
+    // The script names no interpreter. A Python chosen in the dialog is the only candidate; otherwise, in this order:
+    // the one that worked last time, AEL_PYTHON, python3 and python3.N (newest first) in /opt/homebrew/bin and
+    // /usr/local/bin, virtual environments (~/.venvs/*, ~/.virtualenvs/*, ~/venvs/*, ~/venv, ~/.venv), pyenv, conda
+    // and /usr/bin/python3. Each existing one is tried in turn; the first that runs AEL with its dependencies wins.
+    ns.pythonCandidates = function (selected) {
+        var home = Folder("~").fsName, candidates = [], i, j;
+        if (selected) {
+            candidates.push(selected);
+        } else {
+            candidates.push(ns.savedPython(), $.getenv("AEL_PYTHON"));
+            candidates = candidates.concat(ns.versionedPythons("/opt/homebrew/bin"), ns.versionedPythons("/usr/local/bin"));
+            var environments = [home + "/.venvs", home + "/.virtualenvs", home + "/venvs"];
+            for (i = 0; i < environments.length; i++) {
+                var entries = new Folder(environments[i]).getFiles() || [], folders = [];
+                for (j = 0; j < entries.length; j++) if (entries[j] instanceof Folder) folders.push(entries[j].fsName);
+                folders.sort();
+                for (j = 0; j < folders.length; j++) candidates.push(folders[j] + "/bin/python");
+            }
+            candidates.push(home + "/venv/bin/python", home + "/.venv/bin/python", home + "/.pyenv/shims/python",
+                home + "/miniconda3/bin/python", home + "/anaconda3/bin/python", home + "/miniforge3/bin/python",
+                home + "/mambaforge/bin/python", "/usr/bin/python3");
+        }
+        var answer = [], seen = {}, path;
+        for (i = 0; i < candidates.length; i++) {
+            path = candidates[i] ? new File(candidates[i]).fsName : "";
+            if (path && !seen[path] && new File(path).exists) {
+                seen[path] = true;
+                answer.push(path);
+            }
+        }
+        return answer;
+    };
+
+    // AEL used when the dialog names no folder: the engine bundled with this script, then the checkout
+    // that contains it (plugins/photoshop-ael inside the repository), then whatever Python has installed.
+    ns.defaultAELFolder = function () {
+        var bundled = new File(ns.pluginFolder.fsName + "/runtime/ael/__init__.py");
+        if (bundled.exists) return bundled.parent.parent.fsName;
+        var checkout = new File(ns.pluginFolder.parent.parent.fsName + "/ael/__init__.py");
+        if (checkout.exists) return checkout.parent.parent.fsName;
+        return "";
+    };
+
+    ns.runPython = function (python, cfg, runRoot, aelFolder) {
+        var config = new File(runRoot.fsName + "/config.json");
+        var result = new File(runRoot.fsName + "/result.json");
+        ns.writeJSON(config, cfg);
+        var env = aelFolder ? new Folder(aelFolder).fsName : ns.defaultAELFolder();
+        var command = "/usr/bin/env " + ns.shellQuote("PYTHONDONTWRITEBYTECODE=1") + " " +
+            ns.shellQuote("PYTHONPATH=" + env) + " " + ns.shellQuote(python) + " " +
+            ns.shellQuote(ns.runner.fsName) + " " + ns.shellQuote(config.fsName) + " " +
+            ns.shellQuote(result.fsName);
+        var code = app.system(command);
+        if (!result.exists) throw new Error("Python returned no result (exit " + code + ")");
+        var answer = ns.readJSON(result);
+        if (!answer.ok) throw new Error(answer.message || ("AEL failed with exit " + code));
+        answer.python_exit = code;
+        return answer;
+    };
+
+    ns.probe = function (selected, aelFolder) {
+        var candidates = ns.pythonCandidates(selected);
+        if (selected && !candidates.length) throw new Error("bad_path: select an existing Python 3.10+ executable");
+        var answer = ns.firstWorking(candidates, aelFolder);
+        ns.savePython(answer.selected_python);
+        return answer;
+    };
+
+    // The first candidate that answers the runner's probe; the ones that failed before it are kept in ``tried``.
+    ns.firstWorking = function (candidates, aelFolder) {
+        var errors = [];
+        for (var i = 0; i < candidates.length; i++) {
+            var root = ns.uniqueFolder(Folder.temp, "AEL_PS_probe_");
+            try {
+                var answer = ns.runPython(candidates[i], {operation: "probe"}, root, aelFolder);
+                answer.selected_python = candidates[i];
+                answer.tried = errors;
+                return answer;
+            } catch (error) {
+                errors.push(candidates[i] + ": " + error.message);
+            } finally {
+                var files = root.getFiles();
+                for (var j = 0; j < files.length; j++) if (files[j] instanceof File) files[j].remove();
+                root.remove();
+            }
+        }
+        throw new Error("No Python 3.10+ with AEL and its dependencies was found. Select the Python executable in the " +
+            "dialog, or install the dependencies: python -m pip install numpy scipy opencv-python-headless pillow " +
+            "tifffile imageio psd-tools. Tried: " + (errors.length ? errors.join(" | ") : "no Python in the usual folders"));
+    };
+
+    ns.exportDocument = function (doc, target) {
+        if (target.exists) throw new Error("Refusing to overwrite " + target.fsName);
+        if (doc.mode !== DocumentMode.RGB && doc.mode !== DocumentMode.GRAYSCALE) {
+            throw new Error("Convert a copy to RGB or grayscale before running AEL");
+        }
+        var temporary = null;
+        var beforeSaved = doc.saved;
+        try {
+            temporary = doc.duplicate("AEL temporary export", true);
+            var options = new TiffSaveOptions();
+            options.imageCompression = TIFFEncoding.NONE;
+            options.layers = false;
+            options.alphaChannels = false;
+            // Without transparency Photoshop fills transparent pixels with white. With it,
+            // Photoshop adds an alpha sample only when such pixels exist, and the runner refuses them.
+            options.transparency = true;
+            options.embedColorProfile = true;
+            options.byteOrder = ByteOrder.IBM;
+            temporary.saveAs(target, options, true, Extension.LOWERCASE);
+        } finally {
+            if (temporary) temporary.close(SaveOptions.DONOTSAVECHANGES);
+            app.activeDocument = doc;
+        }
+        if (doc.saved !== beforeSaved) throw new Error("Source document saved-state changed unexpectedly");
+        var profile = null;
+        if (doc.colorProfileType !== ColorProfile.NONE) profile = doc.colorProfileName;
+        return {name: doc.name, id: doc.id, width: doc.width.as("px"), height: doc.height.as("px"),
+            channels: doc.mode === DocumentMode.RGB ? 3 : 1,
+            bits_per_channel: doc.bitsPerChannel.toString(), color_profile: profile,
+            color_profile_type: doc.colorProfileType.toString(),
+            saved_before: beforeSaved, saved_after: doc.saved};
+    };
+
+    ns.documentIDs = function () {
+        var ids = {};
+        for (var i = 0; i < app.documents.length; i++) ids[String(app.documents[i].id)] = true;
+        return ids;
+    };
+
+    // The layered PSB as Photoshop itself reads it, against the layers AEL wrote (bottom up): name, blend
+    // mode, opacity (AEL stores it in 8 bits) and visibility. AEL's own check reads the file back with
+    // psd-tools only.
+    ns.checkLayers = function (doc, expected) {
+        var found = [], problems = [], i, k;
+        for (i = doc.layers.length - 1; i >= 0; i--) {
+            var layer = doc.layers[i];
+            found.push({name: layer.name, mode: String(layer.blendMode), opacity: layer.opacity,
+                visible: layer.visible, type: layer.typename});
+        }
+        if (found.length !== expected.length) problems.push(found.length + " layers, expected " + expected.length);
+        for (k = 0; k < Math.min(found.length, expected.length); k++) {
+            var want = expected[k], got = found[k];
+            if (got.name !== want.name) problems.push("layer " + (k + 1) + " is " + got.name + ", expected " + want.name);
+            if (got.mode !== "BlendMode." + String(want.mode).toUpperCase()) problems.push(want.name + ": " + got.mode);
+            // Photoshop reports byte b as b / 255 × 100 %: compare the byte itself, as AEL rounded it in Python.
+            var stored = want.opacity_byte !== undefined ? want.opacity_byte : Math.round(want.opacity * 255);
+            if (Math.round(got.opacity * 255 / 100) !== stored) {
+                problems.push(want.name + ": opacity " + got.opacity + " %, expected " + stored + "/255");
+            }
+            if (Boolean(got.visible) !== Boolean(want.visible)) problems.push(want.name + ": visible " + got.visible);
+        }
+        return {ok: problems.length === 0, layers: found.length, expected: expected.length,
+            bits: String(doc.bitsPerChannel), problems: problems, found: found};
+    };
+
+    // app.open() of a file that is already open returns that document, with whatever is unsaved in it.
+    ns.isOpen = function (file) {
+        var target = new File(file).fsName;
+        for (var i = 0; i < app.documents.length; i++) {
+            try {
+                if (app.documents[i].fullName.fsName === target) return true;
+            } catch (unsaved) {}
+        }
+        return false;
+    };
+
+    ns.openResults = function (result) {
+        var opened = [], known = ns.documentIDs();
+        var list = result.open || result.images;
+        for (var i = 0; i < list.length; i++) {
+            var file = new File(list[i].path);
+            var doc;
+            if (ns.isOpen(file)) throw new Error("Already open in Photoshop, not touched: " + file.fsName +
+                ". Opened " + opened.length + " of " + list.length + " result documents.");
+            try {
+                doc = app.open(file);
+            } catch (error) {
+                throw new Error("Opened " + opened.length + " of " + list.length +
+                    " result documents, then failed on " + file.fsName + ": " + error.message +
+                    ". The opened results stay open; no other document was touched.");
+            }
+            if (known[String(doc.id)]) throw new Error("Refusing to reuse an already open document: " + file.fsName);
+            known[String(doc.id)] = true;
+            opened.push({id: doc.id, name: doc.name, path: file.fsName, kind: list[i].kind || ""});
+            if (list[i].kind === "psb" && result.psb_expected) result.native_check = ns.checkLayers(doc, result.psb_expected);
+        }
+        result.opened_documents = opened;
+        return opened;
+    };
+
+    ns.run = function (options) {
+        if (!ns.runner.exists) throw new Error("Missing Python runner: " + ns.runner.fsName);
+        var probe = ns.probe(options.python, options.aelFolder);
+        options.python = probe.selected_python;
+        var parent = new Folder(options.outputParent);
+        if (!parent.exists) throw new Error("Output parent does not exist: " + parent.fsName);
+        var root = ns.uniqueFolder(parent, "AEL_");
+        var oldDialogs = app.displayDialogs;
+        var oldUnits = app.preferences.rulerUnits;
+        var source = null;
+        try {
+            app.displayDialogs = DialogModes.NO;
+            app.preferences.rulerUnits = Units.PIXELS;
+            options.run_root = root.fsName;
+            options.out = root.fsName + "/" + options.operation;
+            if (options.operation === "structure" || options.operation === "polar") {
+                if (!app.documents.length) throw new Error("Open an RGB or grayscale source document first");
+                var geometry = new File(options.geometry);
+                if (!geometry.exists) throw new Error("Select an EclipseGeometry JSON file");
+                var doc = app.activeDocument;
+                var input = new File(root.fsName + "/source.tif");
+                source = ns.exportDocument(doc, input);
+                options.input = input.fsName;
+                options.source = {width: source.width, height: source.height, channels: source.channels};
+                options.source_document = source;
+                var geometryCopy = new File(root.fsName + "/input_geometry.json");
+                geometry.copy(geometryCopy);
+                options.geometry = geometryCopy.fsName;
+            }
+            var result = ns.runPython(options.python, options, root, options.aelFolder);
+            ns.openResults(result);
+            result.run_root = root.fsName;
+            result.source_document = source;
+            result.ael_version = probe.runtime ? probe.runtime.ael_version : null;
+            if (result.native_check) {
+                result.native_check_file = root.fsName + "/AEL_PHOTOSHOP_NATIVE_CHECK.json";
+                ns.writeJSON(new File(result.native_check_file), result.native_check);
+            }
+            return result;
+        } finally {
+            app.displayDialogs = oldDialogs;
+            app.preferences.rulerUnits = oldUnits;
+        }
+    };
+}(AELPhotoshop));
