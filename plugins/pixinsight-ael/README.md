@@ -18,7 +18,7 @@ Leave **Python executable** empty and the connector looks for one, in this order
 
 1. Keep the folder `pixinsight-ael/` together: the scripts, `python/` and `runtime/` with their relative paths.
 2. In PixInsight, choose **Script > Feature Scripts…**.
-3. Add the folder `pixinsight-ael/` and click **Done**, or add `AELBridge.js` and `AELWorkflow.js` one by one.
+3. Click **Add** (it asks for a folder), choose the folder `pixinsight-ael/`, and the dialog lists `AELBridge.js` and `AELWorkflow.js`, enabled. Click **Done**.
 4. Open **Utilities > Agentic Eclipse Library** (the bridge) and **Utilities > AEL Linear Master and Filters** (the workflow).
 
 This is a local build for testing, not a signed update repository. `tools/build_package.py --out FOLDER [--zip FILE]` assembles the folder, with `runtime/ael` copied from the checkout and checked byte by byte, `runtime/VERSION.json` (AEL version and source commit) and the synthetic files of `demo/`.
@@ -39,6 +39,8 @@ The bridge writes a 32-bit floating-point, interleaved TIFF in a unique temporar
 The output folder contains the AEL products, `input_geometry.json` and `AEL_BRIDGE_RECEIPT.json`. The bridge receipt records the command, Python and AEL paths and versions, input TIFF SHA-256, layout, ICC information, files and gate result. `structure` also writes AEL's own `structure_RECEIPT.json`; because `polar` does not currently write an AEL receipt, the bridge receipt is the run record for that command. Receipts are printed to the Process Console.
 
 ## Validation
+
+The tests and tools are in the repository (`plugins/pixinsight-ael/tests` and `tools`); the delivered package does not carry them.
 
 The test launcher detects a suitable interpreter; `AEL_PYTHON` can select one explicitly. It uses only synthetic data and starts new PixInsight instances with `-n --automation-mode` and `--force-exit`, which never send a script to an instance that is already open (without `-n`, PixInsight yields the command to a running instance). A test that is stopped by its timeout stops only its own instance.
 
@@ -64,6 +66,10 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. python plugins/pixinsight-ael/tests/dialo
 `dialog_flow.py` builds both dialogs in PixInsight, fills their fields, presses **Run** and checks the windows and files each one leaves, the pixels against `python -m ael` and `python -m ael filters` from the terminal, the PixelMath composite, and that no message box appears. The same test on the previous dialog code fails: a geometry file typed but not loaded stopped the run, and the box "Generate all 16 filters" had no effect.
 
 `VALIDATION.json` contains the gates and exact commands. A missing PixInsight executable or a failed gate makes the complete validation fail. `--skip-pixinsight` runs only direct AEL checks and is not a complete bridge validation. `--skip-captures` omits only the visual captures.
+
+### Size and memory
+
+`structure` was run through the bridge on a synthetic corona of 7,506 × 10,551 pixels (80 million, the size of the 2026 composites): 49 s from the click to the three result windows on an Apple-silicon Mac with 64 GB, and the three outputs equal those of `python -m ael` on the same file bit by bit (SHA-256). The peak was **30 GB of memory** (PixInsight with the image, plus the Python process that runs AEL; the terminal run alone peaks at 29 GB), so plan on that for images of this size. The filter workflow was not run at that size.
 
 ### Images outside 0–1
 
