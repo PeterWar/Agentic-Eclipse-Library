@@ -175,6 +175,23 @@ var AELBridgeDialog = class extends Dialog
    this.noteEdit = new Edit( geometryBox );
    let loadButton = new PushButton( geometryBox );
    loadButton.text = "Load JSON";
+   // Fills the geometry fields from an AEL geometry JSON. Throws if the file cannot be read.
+   this.loadGeometry = function( path )
+   {
+      let geometry = JSON.parse( File.readTextFile( path ) );
+      let edits = this.geometryEdits;
+      edits.sunX.text = String( geometry.sun_xy[0] );
+      edits.sunY.text = String( geometry.sun_xy[1] );
+      edits.sunRadius.text = String( geometry.sun_radius_px );
+      edits.moonX.text = geometry.moon_xy == null ? "" : String( geometry.moon_xy[0] );
+      edits.moonY.text = geometry.moon_xy == null ? "" : String( geometry.moon_xy[1] );
+      edits.moonRadius.text = geometry.moon_radius_px == null ? "" : String( geometry.moon_radius_px );
+      edits.north.text = String( geometry.north_deg == null ? 0 : geometry.north_deg );
+      edits.arcsec.text = geometry.arcsec_per_px == null ? "" : String( geometry.arcsec_per_px );
+      this.mirroredCheck.checked = geometry.mirrored == true;
+      this.noteEdit.text = geometry.note || "";
+   };
+
    loadButton.onClick = function()
    {
       let path = this.dialog.geometryFileEdit.text.trim();
@@ -190,18 +207,7 @@ var AELBridgeDialog = class extends Dialog
       }
       try
       {
-         let geometry = JSON.parse( File.readTextFile( path ) );
-         let edits = this.dialog.geometryEdits;
-         edits.sunX.text = String( geometry.sun_xy[0] );
-         edits.sunY.text = String( geometry.sun_xy[1] );
-         edits.sunRadius.text = String( geometry.sun_radius_px );
-         edits.moonX.text = geometry.moon_xy == null ? "" : String( geometry.moon_xy[0] );
-         edits.moonY.text = geometry.moon_xy == null ? "" : String( geometry.moon_xy[1] );
-         edits.moonRadius.text = geometry.moon_radius_px == null ? "" : String( geometry.moon_radius_px );
-         edits.north.text = String( geometry.north_deg == null ? 0 : geometry.north_deg );
-         edits.arcsec.text = geometry.arcsec_per_px == null ? "" : String( geometry.arcsec_per_px );
-         this.dialog.mirroredCheck.checked = geometry.mirrored == true;
-         this.dialog.noteEdit.text = geometry.note || "";
+         this.dialog.loadGeometry( path );
       }
       catch ( error )
       {
@@ -218,6 +224,7 @@ var AELBridgeDialog = class extends Dialog
    let buttons = new HorizontalSizer;
    buttons.spacing = 8;
    let runButton = new PushButton( this );
+   this.runButton = runButton;
    runButton.text = "Run AEL";
    runButton.defaultButton = true;
    let cancelButton = new PushButton( this );
@@ -272,6 +279,9 @@ var AELBridgeDialog = class extends Dialog
       {
          if ( !this.dialog.targetView )
             throw new Error( "Select an image." );
+         // A geometry file named but not loaded: load it now, so that typing the path is enough.
+         if ( this.dialog.geometryFileEdit.text.trim().length > 0 && this.dialog.geometryEdits.sunX.text.trim().length == 0 )
+            this.dialog.loadGeometry( this.dialog.geometryFileEdit.text.trim() );
          let parameters = {
             view: this.dialog.targetView,
             mode: this.dialog.modeList.currentItem == 0 ? "structure" : "polar",

@@ -45,6 +45,14 @@ var AELWorkflowDialog = class extends Dialog
                    + "Calibration and reference geometry are required, never guessed.";
       this.sizer.add( intro );
 
+      let notice = new Label( this );
+      notice.wordWrapping = true;
+      notice.useRichText = true;
+      notice.text = "<b>Experimental.</b> The <i>filter layers from linear.npy</i> operation is validated with synthetic data. "
+                    + "The <i>linear master</i> registers every frame on the Sun, and on real eclipse frames that registration "
+                    + "is not valid yet: it lands 0.07-2.2 px from the reference registration. Do not use it on real frames.";
+      this.sizer.add( notice );
+
       let modeSizer = new HorizontalSizer;
       modeSizer.spacing = 6;
       let modeLabel = new Label( this );
@@ -146,7 +154,7 @@ var AELWorkflowDialog = class extends Dialog
       if ( saved ) this.cameraEdit.text = saved;
 
       this.allFiltersCheck = new CheckBox( this );
-      this.allFiltersCheck.text = "Generate all 16 filters (otherwise only NRGF, bilateral WOW and ACHF 04)";
+      this.allFiltersCheck.text = "Generate all 16 filters (otherwise only AEL's default layers: NRGF, edge-aware WOW and ACHF 04)";
       this.allFiltersCheck.checked = true;
       this.sizer.add( this.allFiltersCheck );
       this.compositeCheck = new CheckBox( this );
@@ -157,6 +165,7 @@ var AELWorkflowDialog = class extends Dialog
       let buttons = new HorizontalSizer;
       buttons.spacing = 8;
       let runButton = new PushButton( this );
+      this.runButton = runButton;
       runButton.text = "Run workflow";
       runButton.defaultButton = true;
       let cancelButton = new PushButton( this );
@@ -194,9 +203,8 @@ var AELWorkflowDialog = class extends Dialog
             let suffix = 1;
             while ( File.exists( output ) || File.directoryExists( output ) )
                output = base + "_" + String( ++suffix );
-            let filterOptions = { filters: this.dialog.allFiltersCheck.checked ? "all" : null };
-            if ( filterOptions.filters == null )
-               delete filterOptions.filters;
+            // "defaults" is read by the helper from ael.filterbank.DEFAULTS; without it the helper would make all 16.
+            let filterOptions = { filters: this.dialog.allFiltersCheck.checked ? "all" : "defaults" };
             let config = master ? {
                frames: this.dialog.frames, reference: 0,
                camera: this.dialog.cameraEdit.text.trim(),
@@ -204,10 +212,8 @@ var AELWorkflowDialog = class extends Dialog
                out: output, run_filters: true, filter_options: filterOptions
             } : {
                input: this.dialog.frames[0], out: output,
-               filters: this.dialog.allFiltersCheck.checked ? "all" : undefined
+               filters: filterOptions.filters
             };
-            if ( !master && config.filters == undefined )
-               delete config.filters;
             if ( master && this.dialog.darkEdit.text.trim() ) config.dark = this.dialog.darkEdit.text.trim();
             if ( master && this.dialog.flatEdit.text.trim() ) config.flat = this.dialog.flatEdit.text.trim();
             configPath = File.systemTempDirectory + "/ael-workflow-" + aelBridgeTimestamp() + ".json";
