@@ -136,7 +136,10 @@ var AELBridgeDialog = class extends Dialog
             let chooser = new OpenFileDialog;
             chooser.caption = caption;
             chooser.multipleSelections = true;
-            chooser.filters = [ [ "RAW, TIFF and FITS files" ].concat( extensions ), [ "All files", "*" ] ];
+            // the cameras write upper-case names (_MG_9502.CR2): both cases are listed, whatever the file dialog does
+            chooser.filters = [ [ "RAW, TIFF and FITS files" ].concat( extensions,
+                                  extensions.map( function( pattern ) { return pattern.toUpperCase(); } ) ),
+                                [ "All files", "*" ] ];
             if ( chooser.execute() )
             {
                for ( let i = 0; i < chooser.fileNames.length; ++i )

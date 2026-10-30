@@ -357,8 +357,9 @@ def main() -> None:
                  "each_operation_shows_only_what_it_needs": all(steps[f"{key}_shown"] == expected
                                                                 for key, expected in EXPECTED_SHOWN.items()),
                  "file_lists_take_several_files": len(lists) == 4 and all(c["multiple"] is True for c in lists),
+                 # in both cases: cameras write upper-case names (_MG_9502.CR2)
                  "file_lists_take_raw_tiff_and_fits": len(lists) == 4 and all(
-                     all(t in c["filters"][0] for t in REQUIRED_TYPES) for c in lists),
+                     all(t in c["filters"][0] and t.upper() in c["filters"][0] for t in REQUIRED_TYPES) for c in lists),
                  "darks_and_flats_take_a_master_npy": len(lists) == 4 and all("*.npy" in c["filters"][0] for c in lists[2:]),
                  "a_file_added_twice_is_listed_once": steps["master_lists"]["frames"] == config["masterFrames"],
                  "darks_and_flats_listed": steps["master_lists"]["darks"] == darks and steps["master_lists"]["flats"] == flats,
