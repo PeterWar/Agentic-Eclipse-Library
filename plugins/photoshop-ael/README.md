@@ -84,6 +84,7 @@ The test uses only synthetic data and paths containing spaces and accented chara
 - exact float32 RGB round trips and a negative orientation control;
 - identical `structure` and `polar` pixels from direct AEL and Photoshop bridge executions;
 - unchanged source pixels and saved state;
+- NaN, as real AEL stacks carry outside their coverage, also at the first and the last sample: Photoshop opens them, holds them at 32 bits and exports them unchanged, and `structure` matches direct AEL;
 - a refused run, before AEL, for a document with transparent pixels;
 - export of a document without a colour profile;
 - a result file that is not plain JSON is refused instead of evaluated;

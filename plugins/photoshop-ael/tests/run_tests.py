@@ -181,6 +181,15 @@ def main() -> None:
             tifffile.imwrite(source, base, photometric="rgb")
             direct_structure = direct(repo, python, "structure", source, geometry_path, root)
             direct_polar = direct(repo, python, "polar", source, geometry_path, root)
+            # Real AEL stacks carry NaN outside their coverage. Here the first and the last samples are NaN as well:
+            # that is where the PixInsight reader failed (f1dc893 of the PixInsight bridge).
+            source_nan = root / "source_nan.tif"
+            with_nan = base.copy()
+            with_nan[:10] = np.nan
+            with_nan[-10:] = np.nan
+            tifffile.imwrite(source_nan, with_nan, photometric="rgb")
+            (root / "nan").mkdir()
+            direct_nan = direct(repo, python, "structure", source_nan, geometry_path, root / "nan")
             report["direct"] = {"structure": direct_structure["out"], "polar": direct_polar["out"]}
 
             matrices = [np.array([[1, 0, 0], [0, 1, 0]], np.float32),
@@ -306,6 +315,20 @@ function imageOperation(operation, afterPath) {{
     closeOwned();
     return answer;
 }}
+function nanOperation() {{
+    if (AELPhotoshop.isOpen({json.dumps(str(source_nan))})) throw new Error('Already open, not touched');
+    var oldDialogs=app.displayDialogs; app.displayDialogs=DialogModes.NO;
+    var doc;
+    try {{ doc=app.open(new File({json.dumps(str(source_nan))})); }}
+    finally {{ app.displayDialogs=oldDialogs; }}
+    remember(doc.id);
+    var result=AELPhotoshop.run({{operation:'structure',outputParent:{json.dumps(str(root / "nan"))},
+        geometry:{json.dumps(str(geometry_path))},python:{json.dumps(python)},aelFolder:{json.dumps(str(repo))}}});
+    rememberResults(result);
+    var answer={{run_root:result.run_root, opened:result.opened_documents.length, bits:String(doc.bitsPerChannel)}};
+    closeOwned();
+    return answer;
+}}
 function newOwned(name, fill, bits) {{
     var oldUnits=app.preferences.rulerUnits; app.preferences.rulerUnits=Units.PIXELS;
     try {{ var d=app.documents.add(400,320,72,name,NewDocumentMode.RGB,fill,1,bits); remember(d.id); return d; }}
@@ -357,6 +380,8 @@ try {{
     REPORT.structure=imageOperation('structure',{json.dumps(str(after_structure))});
     REPORT.stage='polar'; AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT);
     REPORT.polar=imageOperation('polar',{json.dumps(str(after_polar))});
+    REPORT.stage='nan'; AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT);
+    REPORT.nan=nanOperation();
     REPORT.stage='master'; AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT);
     var master=AELPhotoshop.run({{operation:'master',outputParent:{json.dumps(str(root))},
         geometry:{json.dumps(str(geometry_path))},camera:{json.dumps(str(camera))},
@@ -435,6 +460,15 @@ finally {{ closeOwned(); AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_rep
                     Path(jsx_result["structure"]["run_root"]), "structure")
                 report["polar_products"] = compare_products(direct_polar,
                     Path(jsx_result["polar"]["run_root"]), "polar")
+                # What Photoshop did with the NaN: opened, held at 32 bits and exported to AEL.
+                nan_root = Path(jsx_result["nan"]["run_root"])
+                original, exported = tifffile.imread(source_nan), tifffile.imread(nan_root / "source.tif")
+                mask = np.isnan(original)
+                report["nan"] = {"nan_samples": int(mask.sum()), "nan_exported": int(np.isnan(exported).sum()),
+                                 "first_and_last_sample_nan": bool(np.isnan(original.flat[0]) and np.isnan(original.flat[-1])),
+                                 "same_nan_mask": exported.shape == original.shape and bool(np.array_equal(np.isnan(exported), mask)),
+                                 "finite_equal": exported.shape == original.shape and bool(np.array_equal(exported[~mask], original[~mask])),
+                                 "products": compare_products(direct_nan, nan_root, "structure")}
                 report["source_roundtrip"] = {}
                 for name, after in (("structure", after_structure), ("polar", after_polar)):
                     restored = tifffile.imread(after)
@@ -544,6 +578,10 @@ finally {{ closeOwned(); AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_rep
                     # The PSB as Photoshop itself reads it: every layer, mode, opacity and visibility.
                     "psb_native": all((report["jsx"][key].get("native_check") or {}).get("ok") and
                                       report["jsx"][key]["native_check"]["layers"] == 19 for key in ("master", "filters")),
+                    "nan_kept_through_photoshop": report["nan"]["nan_samples"] > 0 and report["nan"]["first_and_last_sample_nan"] and
+                                                  report["nan"]["same_nan_mask"] and report["nan"]["finite_equal"],
+                    "nan_structure_matches_direct": bool(report["nan"]["products"]) and all(
+                        x["same_shape"] and x["max_abs_difference"] == 0 for x in report["nan"]["products"].values()),
                     "check_layers_exact": report["jsx"]["check_layers"] == {"exact": True, "byte_below": False,
                                                                             "byte_above": False, "other_mode": False},
                     "photoshop_composite_within_8_steps": report["photoshop_composite"]["dtype"] == "uint16" and
