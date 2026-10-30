@@ -69,8 +69,9 @@ def probe() -> None:
 
 
 def source_range(path: Path) -> None:
-    """Range of a floating-point TIFF file as stored. PixInsight maps a float file whose values leave 0-1 to exactly 0-1
-    when it opens it, (x - min) / (max - min), so the view is not the data in the file."""
+    """What a floating-point TIFF file holds, as stored: its range and the count and sum of its finite samples.
+    PixInsight maps a float file whose values leave 0-1 to exactly 0-1 when it opens it, (x - min) / (max - min), and
+    reads as black a file whose last sample is NaN; in both cases the view is not the data in the file."""
     import numpy as np
     import tifffile
 
@@ -84,13 +85,19 @@ def source_range(path: Path) -> None:
     if not finite.any():
         emit(ok=False, kind="no_finite_samples", message="The file holds no finite samples.")
         return
-    low, high = float(array[finite].min()), float(array[finite].max())
+    values = array[finite]
+    low, high = float(values.min()), float(values.max())
+    # what the view must hold too: the bridge compares these numbers with its own count of the view's samples
     emit(ok=True, kind="range", dtype=str(array.dtype), minimum=low, maximum=high,
-         outside_unit_range=bool(low < 0.0 or high > 1.0))
+         outside_unit_range=bool(low < 0.0 or high > 1.0),
+         finite_samples=int(values.size), nonfinite_samples=int(array.size - values.size),
+         finite_sum=float(values.sum(dtype=np.float64)),
+         last_sample_is_nan=bool(not np.isfinite(array.reshape(-1)[-1])))
 
 
 def inspect(path: Path, width: int, height: int, channels: int, require_icc: bool,
-            icc_source: Path | None) -> None:
+            icc_source: Path | None, nonfinite: Path | None = None) -> None:
+    import numpy as np
     import tifffile
 
     original_icc = icc_source.read_bytes() if icc_source is not None else b""
@@ -125,19 +132,36 @@ def inspect(path: Path, width: int, height: int, channels: int, require_icc: boo
              message="The source ICC profile was not preserved in the temporary TIFF.")
         return
 
+    # PixInsight writes a NaN sample to a TIFF as 1.0, and AEL takes NaN as "no data" (every stack it writes has it
+    # outside the coverage). The bridge sends the positions of the view's non-finite samples and they are put back here,
+    # so that AEL reads what the view holds. An index is (row * width + column) * channels + channel.
+    restored = 0
+    written_as: list[float] = []
+    if nonfinite is not None:
+        positions = np.fromfile(nonfinite, dtype="<u4")
+        if positions.size and int(positions.max()) >= array.size:
+            emit(ok=False, kind="invalid_nonfinite", message="The list of samples without data points outside the image.")
+            return
+        restored = int(positions.size)
+        written_as = [float(value) for value in np.unique(array.flat[positions])[:4]]
+        array.flat[positions] = np.nan
+
     icc_repaired = bool(original_icc and current_icc != original_icc)
-    if icc_repaired:
-        repaired = path.with_name(path.stem + ".icc-repaired.tif")
-        tifffile.imwrite(repaired, array, photometric="rgb" if channels == 3 else "minisblack",
-                         metadata=None, extratags=[(34675, "B", len(original_icc), original_icc, True)])
-        repaired.replace(path)
+    if icc_repaired or restored:
+        wanted_icc = original_icc if icc_repaired else current_icc
+        rewritten = path.with_name(path.stem + ".rewritten.tif")
+        tifffile.imwrite(rewritten, array, photometric="rgb" if channels == 3 else "minisblack", metadata=None,
+                         extratags=[(34675, "B", len(wanted_icc), wanted_icc, True)] if wanted_icc else None)
+        rewritten.replace(path)
         with tifffile.TiffFile(path) as tf:
             verified = tf.pages[0].asarray()
-            verified_icc = bytes(tf.pages[0].tags[34675].value)
+            verified_tag = tf.pages[0].tags.get(34675)
+            verified_icc = bytes(verified_tag.value) if verified_tag is not None else b""
         if verified.shape != array.shape or verified.dtype != array.dtype or verified.tobytes() != array.tobytes():
-            emit(ok=False, kind="icc_repair_changed_pixels", message="ICC restoration changed the image samples.")
+            emit(ok=False, kind="icc_repair_changed_pixels" if icc_repaired else "nonfinite_restore_changed_pixels",
+                 message="Rewriting the temporary TIFF changed the image samples.")
             return
-        if verified_icc != original_icc:
+        if verified_icc != wanted_icc:
             emit(ok=False, kind="icc_lost", message="The original ICC profile could not be restored exactly.")
             return
         current_icc = verified_icc
@@ -148,6 +172,7 @@ def inspect(path: Path, width: int, height: int, channels: int, require_icc: boo
             digest.update(block)
     emit(ok=True, kind="ready", shape=shape, dtype=dtype, planar=planar,
          icc_bytes=len(current_icc), icc_repaired=icc_repaired,
+         nonfinite_restored=restored, nonfinite_written_as=written_as,
          sha256=digest.hexdigest(), bytes=path.stat().st_size)
 
 
@@ -164,6 +189,7 @@ def main() -> None:
     check.add_argument("--channels", type=int, required=True)
     check.add_argument("--require-icc", action="store_true")
     check.add_argument("--icc-source", type=Path)
+    check.add_argument("--nonfinite", type=Path, help="uint32 positions of the samples that hold no data (NaN)")
     args = parser.parse_args()
     try:
         if args.command == "probe":
@@ -171,7 +197,7 @@ def main() -> None:
         elif args.command == "source-range":
             source_range(args.path)
         else:
-            inspect(args.path, args.width, args.height, args.channels, args.require_icc, args.icc_source)
+            inspect(args.path, args.width, args.height, args.channels, args.require_icc, args.icc_source, args.nonfinite)
     except Exception as exc:
         emit(ok=False, kind="preflight_error", message=str(exc))
 

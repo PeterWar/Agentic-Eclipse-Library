@@ -424,7 +424,85 @@ function aelBridgeExportFloat32( view, path )
             sourceICCHex: icc.profile ? icc.profile.toHex() : "" };
 }
 
-function aelBridgeInspectInput( runtime, aelRoot, path, view, sourceICCBytes, iccSidecar )
+// One pass over the samples of a view: the positions of the non-finite ones (NaN and infinities) and the count, range
+// and sum of the finite ones. A position is (row * width + column) * channels + channel, as numpy counts them in a
+// (height, width, channels) array.
+function aelBridgeScanView( view )
+{
+   let image = view.image;
+   let width = image.width, height = image.height, channels = image.numberOfChannels;
+   let rows = Math.max( 1, Math.floor( 4000000 / width ) );
+   let buffer = new Float32Array( width * rows );
+   let positions = new Uint32Array( 1 << 16 );
+   let count = 0, finite = 0, minimum = Infinity, maximum = -Infinity, sum = 0;
+   for ( let c = 0; c < channels; ++c )
+      for ( let y = 0; y < height; y += rows )
+      {
+         let n = Math.min( rows, height - y );
+         image.getSamples( buffer, new Rect( 0, y, width, y + n ), c );
+         let base = y * width;
+         for ( let i = 0, k = width * n; i < k; ++i )
+         {
+            let v = buffer[i];
+            if ( v - v !== 0 )
+            {
+               if ( count == positions.length )
+               {
+                  let larger = new Uint32Array( positions.length * 2 );
+                  larger.set( positions );
+                  positions = larger;
+               }
+               positions[count++] = ( base + i ) * channels + c;
+            }
+            else
+            {
+               ++finite;
+               sum += v;
+               if ( v < minimum ) minimum = v;
+               if ( v > maximum ) maximum = v;
+            }
+         }
+      }
+   return { nonFinite: count, positions: positions.slice( 0, count ), finite: finite,
+            minimum: minimum, maximum: maximum, sum: sum };
+}
+
+// PixInsight keeps a NaN in the view but writes it to a TIFF as 1.0 (measured on a real stack of 12 million pixels:
+// 253,851 NaN samples came out as 1.0 and every AEL product then differed from the one made from the file). AEL takes
+// NaN as "no data", so the positions of the view's non-finite samples go to the helper, which puts them back as NaN
+// in the temporary TIFF.
+function aelBridgeWriteNonFinite( scan, path )
+{
+   if ( scan.nonFinite > 0 )
+      File.writeFile( path, new ByteArray( scan.positions ) );
+}
+
+// A view that is still its file must hold what the file holds. PixInsight does not always read a floating-point TIFF
+// faithfully: when its last sample is NaN (no data in the bottom-right corner, which a registered stack often has) it
+// reads the whole image as zeros, and a file with values outside 0-1 is rescaled. Compares the count of the samples
+// with and without data, the range and the sum, with the numbers the helper read from the file. Returns the
+// differences, or an empty list.
+function aelBridgeFileDifferences( file, scan )
+{
+   function close( a, b ) { return Math.abs( a - b ) <= 1e-5 * Math.max( Math.abs( a ), Math.abs( b ) ) + 1e-12; }
+   let differences = [];
+   if ( scan.nonFinite != file.nonfinite_samples )
+      differences.push( "the file has " + file.nonfinite_samples + " samples without data (NaN) and the view has " + scan.nonFinite );
+   if ( scan.finite != file.finite_samples )
+      differences.push( "the file has " + file.finite_samples + " finite samples and the view has " + scan.finite );
+   if ( scan.finite > 0 && file.finite_samples > 0 )
+   {
+      if ( !close( scan.minimum, file.minimum ) )
+         differences.push( "the smallest value is " + file.minimum + " in the file and " + scan.minimum + " in the view" );
+      if ( !close( scan.maximum, file.maximum ) )
+         differences.push( "the largest value is " + file.maximum + " in the file and " + scan.maximum + " in the view" );
+      if ( !close( scan.sum, file.finite_sum ) )
+         differences.push( "the sum of the finite values is " + file.finite_sum + " in the file and " + scan.sum + " in the view" );
+   }
+   return differences;
+}
+
+function aelBridgeInspectInput( runtime, aelRoot, path, view, sourceICCBytes, iccSidecar, nonFinitePath )
 {
    let arguments = [ AEL_BRIDGE_CHECK_SCRIPT, "inspect", path,
                      "--width", String( view.image.width ), "--height", String( view.image.height ),
@@ -433,6 +511,8 @@ function aelBridgeInspectInput( runtime, aelRoot, path, view, sourceICCBytes, ic
       arguments.push( "--require-icc" );
    if ( iccSidecar && iccSidecar.length > 0 )
       arguments.push( "--icc-source", iccSidecar );
+   if ( nonFinitePath && nonFinitePath.length > 0 )
+      arguments.push( "--nonfinite", nonFinitePath );
    let run = aelBridgeRun( runtime.python, arguments,
                            aelRoot && aelRoot.length ? aelRoot : File.systemTempDirectory,
                            aelBridgeEnvironment( aelRoot ), 60000 );
@@ -530,6 +610,21 @@ function aelBridgeRunOnView( parameters )
                        + "Save the image as a TIFF whose values are inside 0-1 (divide by one constant), open that file and "
                        + "run the bridge on it. If you have processed the image since opening it, this check does not apply." );
 
+   let scan = aelBridgeScanView( view );
+   if ( sourceRange )
+   {
+      let differences = aelBridgeFileDifferences( sourceRange, scan );
+      if ( differences.length > 0 )
+         throw new Error( "PixInsight did not read this file as it is stored: " + differences.join( "; " ) + ".\n\n"
+                          + ( sourceRange.last_sample_is_nan
+                              ? "The last sample of this file is NaN (no data in the bottom-right corner), and PixInsight reads a "
+                                + "floating-point TIFF whose last sample is NaN as a black image.\n\n" : "" )
+                          + "The view is therefore not the data in the file, and AEL would not give the result it gives on the "
+                          + "file, so nothing was run. Run AEL on the file itself from the terminal (python -m ael structure "
+                          + "--input FILE --geometry FILE --out FOLDER). If you have processed the image since opening it, this "
+                          + "check does not apply." );
+   }
+
    let tempDir = File.systemTempDirectory + "/pixinsight-ael-" + aelBridgeTimestamp();
    File.createDirectory( tempDir, false );
    let inputPath = tempDir + "/input_float32.tif";
@@ -541,8 +636,16 @@ function aelBridgeRunOnView( parameters )
    try
    {
       let exported = aelBridgeExportFloat32( view, inputPath );
+      let nonFinitePath = tempDir + "/nonfinite_positions.u32";
+      temporaryFiles.push( nonFinitePath );
+      let nonFinite = scan.nonFinite;
+      aelBridgeWriteNonFinite( scan, nonFinitePath );
+      if ( nonFinite > 0 )
+         Console.writeln( "AEL bridge: " + nonFinite + " samples hold no data (NaN); PixInsight writes them to a TIFF as 1.0, "
+                          + "so they are put back as NaN for AEL, as in the file." );
       let inspected = aelBridgeInspectInput( runtime, parameters.aelRoot, inputPath, view,
-                                             exported.sourceICCBytes, exported.iccSidecar );
+                                             exported.sourceICCBytes, exported.iccSidecar,
+                                             nonFinite > 0 ? nonFinitePath : "" );
       File.writeTextFile( geometryPath, JSON.stringify( parameters.geometry, null, 1 ) );
       outputDirectory = parameters.outputDirectoryExact || aelBridgeUniqueOutput( parameters.outputDirectory, mode );
       if ( parameters.outputDirectoryExact && !File.directoryExists( outputDirectory ) )
@@ -582,11 +685,13 @@ function aelBridgeRunOnView( parameters )
                     ael_version: runtime.ael_version, ael_file: runtime.ael_file },
          source: { view_id: view.id, width: view.image.width, height: view.image.height,
                    channels: view.image.numberOfChannels, icc_bytes: exported.sourceICCBytes,
-                   icc_origin: exported.iccOrigin,
+                   icc_origin: exported.iccOrigin, non_finite_samples: nonFinite,
                    file_range: sourceRange ? { minimum: sourceRange.minimum, maximum: sourceRange.maximum } : null },
          temporary_input: { format: "TIFF", dtype: inspected.dtype, shape: inspected.shape,
                             planar: inspected.planar, icc_bytes: inspected.icc_bytes,
                             icc_repaired: inspected.icc_repaired == true,
+                            nonfinite_restored: inspected.nonfinite_restored || 0,
+                            nonfinite_written_by_pixinsight_as: inspected.nonfinite_written_as || [],
                             sha256: inspected.sha256, bytes: inspected.bytes },
          geometry: "input_geometry.json",
          ael_receipt: result.receipt || null,

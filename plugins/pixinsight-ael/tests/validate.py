@@ -84,7 +84,7 @@ function unchanged( view, before )
       if ( after[c].length != before[c].length )
          return false;
       for ( let i = 0; i < after[c].length; ++i )
-         if ( after[c][i] != before[c][i] )
+         if ( after[c][i] != before[c][i] && !( after[c][i] !== after[c][i] && before[c][i] !== before[c][i] ) )
             return false;
    }
    return true;
@@ -109,6 +109,35 @@ function roundtrip( input, key, runtime )
       windows[0].forceClose();
    }
 }
+// PixInsight writes a NaN to a TIFF as 1.0. The raw copy keeps what its writer made; the file the bridge hands to AEL
+// must hold the NaN again.
+function nonfiniteRoundtrip( input, runtime )
+{
+   let windows = ImageWindow.open( input );
+   if ( windows == null || windows.length != 1 )
+      throw new Error( "Could not open synthetic input with samples without data: " + input );
+   try
+   {
+      let view = windows[0].mainView;
+      let before = snapshot( view );
+      let output = CFG.temp + "/roundtrip_nonfinite.tif";
+      let exported = aelBridgeExportFloat32( view, output );
+      let raw = CFG.temp + "/roundtrip_nonfinite_as_written_by_pixinsight.tif";
+      File.copyFile( raw, output );
+      let positions = CFG.temp + "/roundtrip_nonfinite.u32";
+      let scan = aelBridgeScanView( view );
+      aelBridgeWriteNonFinite( scan, positions );
+      let count = scan.nonFinite;
+      let inspected = aelBridgeInspectInput( runtime, CFG.repo, output, view, exported.sourceICCBytes, exported.iccSidecar,
+                                             count > 0 ? positions : "" );
+      REPORT.roundtrip.nonfinite = { output: output, raw: raw, count: count, input: inspected,
+                                     source_unchanged: unchanged( view, before ) };
+   }
+   finally
+   {
+      windows[0].forceClose();
+   }
+}
 try
 {
    let runtime = aelBridgeProbe( CFG.python, CFG.repo );
@@ -117,6 +146,7 @@ try
    REPORT.runtime = runtime;
    roundtrip( CFG.rgb, "rgb", runtime );
    roundtrip( CFG.mono, "mono", runtime );
+   nonfiniteRoundtrip( CFG.nonfinite, runtime );
 
    REPORT.errors.bad_path = aelBridgeProbe( CFG.badPython, CFG.repo );
    REPORT.errors.missing_ael = aelBridgeProbe( CFG.python, "" );
@@ -149,6 +179,33 @@ try
    catch ( error )
    {
       REPORT.errors.out_of_range = { error: String( error ) };
+   }
+
+   // PixInsight reads a float TIFF whose last sample is NaN as a black image. The view is then not the file, and the
+   // bridge must refuse, before exporting anything, and say why.
+   {
+      let black = ImageWindow.open( CFG.lastSampleNan, "ultima_mostra_nan" )[0];
+      try
+      {
+         let seen = aelBridgeScanView( black.mainView );
+         REPORT.errors.last_sample_nan = { view_nonfinite: seen.nonFinite, view_finite: seen.finite, view_maximum: seen.maximum };
+         try
+         {
+            aelBridgeRunOnView( { view: black.mainView, mode: "structure", geometry: CFG.geometry,
+               outputDirectoryExact: CFG.bridgeLastNan, pythonPath: CFG.python, aelRoot: CFG.repo,
+               runtime: runtime, validMask: "", timeoutMs: 600000 } );
+            REPORT.errors.last_sample_nan.refused = false;
+         }
+         catch ( error )
+         {
+            REPORT.errors.last_sample_nan.refused = true;
+            REPORT.errors.last_sample_nan.message = String( error );
+         }
+      }
+      finally
+      {
+         black.forceClose();
+      }
    }
 
    // Detection with nothing chosen: an empty Python field, no saved path and no AEL_PYTHON (the launcher drops it from
@@ -190,6 +247,27 @@ try
    finally
    {
       sceneWindows[0].forceClose();
+   }
+
+   // The same scene with a band, a block and one channel of a patch without data (NaN), as in every stack AEL writes.
+   let noDataWindows = ImageWindow.open( CFG.sceneNoData );
+   if ( noDataWindows == null || noDataWindows.length != 1 )
+      throw new Error( "Could not open synthetic AEL scene with samples without data" );
+   try
+   {
+      // control: the file as PixInsight's writer makes it, without the NaN put back
+      aelBridgeExportFloat32( noDataWindows[0].mainView, CFG.temp + "/scene_no_data_as_written_by_pixinsight.tif" );
+      let noData = aelBridgeRunOnView( { view: noDataWindows[0].mainView, mode: "structure", geometry: CFG.geometry,
+         outputDirectoryExact: CFG.bridgeStructureNoData, pythonPath: CFG.python, aelRoot: CFG.repo,
+         runtime: runtime, validMask: "", timeoutMs: 600000 } );
+      REPORT.bridge.structure_no_data = { output: noData.outputDirectory, receipt: noData.receipt,
+                                          result: noData.result, runtime: noData.runtime };
+      for ( let i = 0; i < noData.windows.length; ++i )
+         noData.windows[i].forceClose();
+   }
+   finally
+   {
+      noDataWindows[0].forceClose();
    }
    REPORT.ok = true;
 }
@@ -333,8 +411,31 @@ def main() -> None:
             geometry_path = root / "geometry.json"
             tifffile.imwrite(scene_path, scene_rgb, photometric="rgb")
             geometry.to_json(geometry_path)
+            # Samples without data (NaN), which every stack AEL writes has outside its coverage. PixInsight keeps them in
+            # the view but writes them to a TIFF as 1.0; the bridge has to hand AEL what the view holds.
+            nan_rgb = rgb.copy()
+            nan_rgb[5:10, 10:20, :] = np.nan        # a block, all channels
+            nan_rgb[20, 30, 1] = np.nan             # one channel of one pixel
+            nan_rgb[0, 0, :] = np.nan               # the first sample of the array
+            nan_rgb[0, -1, :] = np.nan              # the end of the first row
+            nan_rgb[-1, 0, :] = np.nan              # the start of the last row (not the last sample: see last_sample_nan.tif)
+            nonfinite_path = root / "samples_without_data.tif"
+            tifffile.imwrite(nonfinite_path, nan_rgb, photometric="rgb")
+            scene_no_data = scene_rgb.copy()
+            scene_no_data[:, :14, :] = np.nan       # a band of columns
+            scene_no_data[:30, :50, :] = np.nan     # a block
+            scene_no_data[100:110, 300:320, 1] = np.nan   # one channel of a patch
+            scene_no_data_path = root / "synthetic_corona_no_data.tif"
+            tifffile.imwrite(scene_no_data_path, scene_no_data, photometric="rgb")
+            # PixInsight reads a floating-point TIFF whose LAST sample is NaN as a black image (found on a registered stack
+            # whose bottom-right corner has no data); the view is then not the file and the bridge must refuse.
+            last_nan = scene_rgb.copy()
+            last_nan[-1, -1, :] = np.nan
+            last_nan_path = root / "last_sample_nan.tif"
+            tifffile.imwrite(last_nan_path, last_nan, photometric="rgb")
             report["inputs"] = {p.name: {"sha256": sha256(p), "bytes": p.stat().st_size}
-                                for p in (rgb_path, mono_path, scene_path, geometry_path)}
+                                for p in (rgb_path, mono_path, scene_path, geometry_path, nonfinite_path, scene_no_data_path,
+                                          last_nan_path)}
             # the same scene at eight times the level: values above 1, which PixInsight rescales when it opens the file
             wide_path = root / "out_of_range.tif"
             tifffile.imwrite(wide_path, (scene_rgb * 8.0).astype(np.float32), photometric="rgb")
@@ -360,9 +461,10 @@ def main() -> None:
             report["tests"]["ael_version_floor"] = versions
 
             direct = {}
-            for mode in ("structure", "polar"):
-                out = root / f"direct_{mode}"
-                command = [args.python, "-m", "ael", mode, "--input", str(scene_path),
+            for key, mode, source in (("structure", "structure", scene_path), ("polar", "polar", scene_path),
+                                      ("structure_no_data", "structure", scene_no_data_path)):
+                out = root / f"direct_{key}"
+                command = [args.python, "-m", "ael", mode, "--input", str(source),
                            "--geometry", str(geometry_path), "--out", str(out)]
                 if mode == "structure":
                     command += ["--name", "structure"]
@@ -372,7 +474,7 @@ def main() -> None:
                                            env=dict(os.environ, PYTHONPATH=str(args.repo), PYTHONDONTWRITEBYTECODE="1"),
                                            timeout=600, check=True)
                 result = json.loads(completed.stdout)
-                direct[mode] = {"output": str(out), "command": command, "result": result}
+                direct[key] = {"output": str(out), "command": command, "result": result}
             report["direct"] = direct
             report["tests"]["negative_rotated"] = bool(not np.array_equal(rgb, np.rot90(rgb, 2)))
             report["tests"]["direct_structure_and_polar"] = True
@@ -387,6 +489,9 @@ def main() -> None:
                     "geometry": json.loads(geometry_path.read_text()), "rmax": 3.0,
                     "bridgeStructure": str(root / "bridge_structure"),
                     "bridgePolar": str(root / "bridge_polar"),
+                    "nonfinite": str(nonfinite_path), "sceneNoData": str(scene_no_data_path),
+                    "lastSampleNan": str(last_nan_path), "bridgeLastNan": str(root / "bridge_last_nan"),
+                    "bridgeStructureNoData": str(root / "bridge_structure_no_data"),
                     "report": str(root / "pjsr_report.json"),
                     "badPython": str(root / "no-such-python"), "staleAel": str(stale_root),
                     "outOfRange": str(wide_path), "bridgeRange": str(root / "bridge_out_of_range"),
@@ -433,6 +538,18 @@ def main() -> None:
                         "dtype": str(exported.dtype), "max_abs_difference": difference,
                         "passed": exported.shape == original.shape and exported.dtype == np.float32 and difference == 0.0}
                     report["tests"][f"negative_{key}"] = bool(not np.array_equal(exported, np.flipud(original)))
+                nan_where = np.isnan(nan_rgb)
+                final_nan = tifffile.imread(pjsr["roundtrip"]["nonfinite"]["output"])
+                raw_nan = tifffile.imread(pjsr["roundtrip"]["nonfinite"]["raw"])
+                report["tests"]["nonfinite_roundtrip"] = {
+                    "samples_without_data": int(nan_where.sum()),
+                    "positions_found_by_the_bridge": pjsr["roundtrip"]["nonfinite"]["count"],
+                    "restored_by_the_helper": pjsr["roundtrip"]["nonfinite"]["input"].get("nonfinite_restored"),
+                    "pixinsight_wrote_them_as": sorted({float(value) for value in np.unique(raw_nan[nan_where])}),
+                    "the_raw_file_differs_from_the_source": bool(not np.array_equal(raw_nan, nan_rgb, equal_nan=True)),
+                    "restored_as_nan": bool(np.isnan(final_nan[nan_where]).all()),
+                    "equals_the_source_file": bool(np.array_equal(final_nan, nan_rgb, equal_nan=True)),
+                    "source_unchanged": pjsr["roundtrip"]["nonfinite"]["source_unchanged"]}
                 with tifffile.TiffFile(pjsr["roundtrip"]["rgb"]["output"]) as exported_tiff:
                     exported_icc = exported_tiff.pages[0].tags[34675].value
                 report["tests"]["icc_preserved_exactly"] = bytes(exported_icc) == icc
@@ -450,6 +567,21 @@ def main() -> None:
                 report["tests"]["out_of_range"] = {**pjsr["errors"]["out_of_range"],
                                                    "output_written": (root / "bridge_out_of_range").exists()
                                                                      and any((root / "bridge_out_of_range").iterdir())}
+                # control: AEL on the file as PixInsight's writer makes it (NaN written as 1.0) must NOT give the products
+                # of the file; if it did, the equality above would not show whether the NaN are put back
+                control_out = root / "direct_control_unrestored"
+                control_run = subprocess.run([args.python, "-m", "ael", "structure", "--input",
+                                              str(root / "scene_no_data_as_written_by_pixinsight.tif"),
+                                              "--geometry", str(geometry_path), "--out", str(control_out), "--name", "structure"],
+                                             text=True, capture_output=True, timeout=600, check=True,
+                                             env=dict(os.environ, PYTHONPATH=str(args.repo), PYTHONDONTWRITEBYTECODE="1"))
+                control_files = json.loads(control_run.stdout)["files"]
+                report["tests"]["control_unrestored_export"] = {key: bool(not np.array_equal(
+                    load_pixels(Path(direct["structure_no_data"]["result"]["files"][key])), load_pixels(Path(control_files[key]))))
+                    for key in ("mono", "cool", "measured")}
+                report["tests"]["last_sample_nan"] = {**pjsr["errors"]["last_sample_nan"],
+                                                      "output_written": (root / "bridge_last_nan").exists()
+                                                                        and any((root / "bridge_last_nan").iterdir())}
                 report["tests"]["autodetect_python"] = {"detected": pjsr["autodetect"], "default_root": pjsr["default_root"]}
                 report["tests"]["clear_errors"] = {
                     "bad_path": pjsr["errors"]["bad_path"].get("kind") == "bad_path",
@@ -457,7 +589,7 @@ def main() -> None:
                     "too_old": pjsr["errors"]["too_old"].get("kind") == "too_old"
                     if "kind" in pjsr["errors"]["too_old"] else pjsr["errors"]["too_old"]}
 
-                for mode in ("structure", "polar"):
+                for mode in ("structure", "polar", "structure_no_data"):
                     expected = direct[mode]["result"]["files"]
                     actual = pjsr["bridge"][mode]["result"]["files"]
                     comparison = {}
@@ -529,7 +661,20 @@ def main() -> None:
                     "structure_pixels_equal": all(item["equal"] for item in report["tests"]["bridge_equals_direct_structure"].values()),
                     "polar_pixels_equal": all(item["equal"] for item in report["tests"]["bridge_equals_direct_polar"].values()),
                     "runtime_receipts_match": all(report["tests"][f"runtime_receipt_{mode}"]["matches_direct"]
-                                                   for mode in ("structure", "polar"))})
+                                                   for mode in ("structure", "polar")),
+                    "pixinsight_writes_nan_as_one": report["tests"]["nonfinite_roundtrip"]["pixinsight_wrote_them_as"] == [1.0]
+                                                    and report["tests"]["nonfinite_roundtrip"]["the_raw_file_differs_from_the_source"],
+                    "samples_without_data_kept_as_nan": (lambda t: t["equals_the_source_file"] and t["restored_as_nan"]
+                                                         and t["source_unchanged"] and t["samples_without_data"] > 0
+                                                         and t["samples_without_data"] == t["positions_found_by_the_bridge"]
+                                                         == t["restored_by_the_helper"])(report["tests"]["nonfinite_roundtrip"]),
+                    "nan_last_sample_read_as_black_and_refused": (lambda t: t["view_maximum"] == 0 and t["view_nonfinite"] == 0
+                                                                  and t["refused"] is True and "last sample" in t["message"]
+                                                                  and "did not read this file" in t["message"]
+                                                                  and not t["output_written"])(report["tests"]["last_sample_nan"]),
+                    "control_export_without_restore_differs": any(report["tests"]["control_unrestored_export"].values()),
+                    "structure_with_no_data_pixels_equal": all(item["equal"] for item in
+                                                               report["tests"]["bridge_equals_direct_structure_no_data"].values())})
                 if not args.skip_captures:
                     gates["captures_created"] = all(report["captures"][key]["created"] for key in ("dialog", "results"))
             report["gates"] = gates
@@ -543,7 +688,8 @@ def main() -> None:
                 (destination / "VALIDATION.json").write_text(json.dumps(report, indent=1, ensure_ascii=False), encoding="utf-8")
                 inputs_destination = destination / "synthetic_inputs"
                 inputs_destination.mkdir(exist_ok=True)
-                for name in ("asymmetric_rgb.tif", "asymmetric_mono.tif", "synthetic_corona.tif", "geometry.json"):
+                for name in ("asymmetric_rgb.tif", "asymmetric_mono.tif", "synthetic_corona.tif", "geometry.json",
+                             "samples_without_data.tif", "synthetic_corona_no_data.tif", "last_sample_nan.tif"):
                     if (root / name).exists():
                         shutil.copy2(root / name, inputs_destination / name)
                 for pattern in ("*.log", "*.js", "*_config.json", "*.error", "dialog.png", "results.png", "pjsr_report.json"):

@@ -63,6 +63,8 @@ PYTHONDONTWRITEBYTECODE=1 python plugins/pixinsight-ael/tests/entry_scripts.py \
 - clear errors for a missing executable, missing AEL, an old Python and an old AEL (1.3.3 and an unreadable version are refused, 1.10.0 is accepted: versions compare as numbers);
 - the interpreter detection with nothing chosen, from a clean saved-settings state and without `AEL_PYTHON`;
 - paths containing spaces and accented characters;
+- samples without data (NaN): the file PixInsight's writer makes has them as 1.0 (the control), the file the bridge hands to AEL has them as NaN again, and the structure image of a scene with a band, a block and a patch without data equals the one `python -m ael` makes from the file, while AEL on the file as PixInsight writes it gives three different images;
+- a file whose last sample is NaN, which PixInsight reads as black: the bridge refuses it before exporting anything;
 - dialog and result images rendered by PixInsight.
 
 `dialog_flow.py` builds both dialogs in PixInsight, fills their fields, presses **Run** and checks the windows and files each one leaves, the pixels against `python -m ael` and `python -m ael filters` from the terminal, the PixelMath composite, and that no message box appears. The same test on the previous dialog code fails: a geometry file typed but not loaded stopped the run, and the box "Generate all 16 filters" had no effect.
@@ -78,6 +80,14 @@ PYTHONDONTWRITEBYTECODE=1 python plugins/pixinsight-ael/tests/entry_scripts.py \
 ### Images outside 0–1
 
 PixInsight rescales a floating-point file whose values leave 0–1 to exactly 0–1 when it opens it, `(x − min) / (max − min)`: the view then holds numbers that are not in the file. AEL does not give the same result on rescaled numbers (its structure image depends on the scale and on the zero: a plain ×0.5 changes 30,924 of the 786,816 samples of a test image). The bridge exports what the view holds, so it first reads the range of the view's own TIFF file; if the file leaves 0–1 and the view has not been processed since opening, it stops before exporting anything and says why. Save the image as a TIFF whose values are inside 0–1 (divide by one constant) and open that one; then the result is the one `python -m ael` gives on that file, which the tests check pixel by pixel. Other formats are not checked. The workflow dialog is not affected: it reads its files from Python.
+
+### Pixels without data (NaN)
+
+AEL marks a pixel without data as NaN, and every stack that AEL writes has them outside its coverage. PixInsight keeps a NaN in the view but writes it to a TIFF as 1.0, so AEL would read a bright area where the file has none: on a real stack of 12 million pixels with 253,851 NaN samples, every sample of the three structure images differed from those that `python -m ael` makes from the file. The bridge therefore reads the positions of the view's non-finite samples and gives them to the helper, which puts them back as NaN in the temporary TIFF before AEL runs. The bridge receipt records how many there were and that PixInsight had written them as 1.0. With this, the same stack gives three structure images equal, sample by sample, to those of `python -m ael` on the file. Infinities are put back as NaN too (AEL takes both as no data).
+
+### When PixInsight does not read the file as it is
+
+PixInsight reads a floating-point TIFF whose last sample is NaN (no data in the bottom-right corner, which a registered stack often has) as a completely black image, with no message. A view that is still its file is therefore compared with it before anything is exported: the count of samples with and without data, the smallest and largest value and the sum of the finite values must agree. If they do not, the bridge stops and says what differs, and what to do: run AEL on the file itself from the terminal. The same comparison catches a file that PixInsight rescaled. It does not apply to an image that has been processed since it was opened.
 
 ## Automated linear-master and filter workflow
 
