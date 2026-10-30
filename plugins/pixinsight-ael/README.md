@@ -1,40 +1,36 @@
 # PixInsight bridge for Agentic Eclipse Library
 
-This prototype runs the Agentic Eclipse Library (AEL) `structure` and `polar` commands from PixInsight. It applies AEL's fixed recipes, gates and receipts; it does not make agent decisions and does not change the AEL algorithms.
+This experimental connector runs the Agentic Eclipse Library (AEL) `structure` and `polar` commands from PixInsight (the bridge) and builds AEL's filter layers, with an adjustable PixelMath composite, from a linear stack (the workflow). It applies AEL's fixed recipes, gates and receipts; it does not make agent decisions and does not change the AEL algorithms.
 
 The source view is never edited. Each resulting image opens in a new PixInsight window and is also written to disk.
 
 ## Requirements
 
 - PixInsight 1.9.4 or later.
-- Python 3.10 or later with AEL and its dependencies.
-- AEL installed in that Python environment, or a source checkout containing the `ael` package.
+- Python 3.10 or later with AEL's dependencies: `python -m pip install numpy scipy opencv-python-headless pillow tifffile imageio`. AEL itself is not on PyPI.
+- **AEL 1.3.6 or later.** The package built by `tools/build_package.py` carries it under `runtime/ael` and the connector uses it with no setting at all. In a source checkout the repository root, which holds `ael/`, is used the same way. An older AEL, or one whose version cannot be read, is refused before anything is processed: 1.3.6 has the soft-log and MGN corrections that the structure image and the filter layers depend on, and 1.3.5 the edge-aware WOW and the layer names per family.
 
-Install AEL in the selected Python environment:
+### Finding Python
 
-```bash
-python -m pip install agentic-eclipse-library
-```
-
-For a source checkout, select the checkout's root directory as **AEL folder (optional)** instead. Do not install a shared environment in editable mode just for this bridge.
+Leave **Python executable** empty and the connector looks for one, in this order: the path saved by the last successful run, `AEL_PYTHON`, `python3` and `python3.N` (newest first) in the Homebrew and system folders, the virtual environments in `~/.venvs`, `~/.virtualenvs` and `~/venvs` (and `~/venv`, `~/.venv`), pyenv, conda and Apple's `python3`. Each one is probed before it is used: Python 3.10 or later, and `import ael` works with the selected AEL folder, which needs NumPy and the rest. The first that passes is used and saved. If none does, the message lists every interpreter that was tried and why it failed. A Python without the dependencies is skipped, not used.
 
 ## Local installation
 
-1. Keep `AELBridge.js`, `AELBridgeCore.jsh`, `AELBridgeDialog.jsh` and `python/ael_bridge_check.py` together with their relative paths.
+1. Keep the folder `pixinsight-ael/` together: the scripts, `python/` and `runtime/` with their relative paths.
 2. In PixInsight, choose **Script > Feature Scripts…**.
-3. Add `AELBridge.js` and click **Install**.
-4. Open **Utilities > Agentic Eclipse Library**.
+3. Add the folder `pixinsight-ael/` and click **Done**, or add `AELBridge.js` and `AELWorkflow.js` one by one.
+4. Open **Utilities > Agentic Eclipse Library** (the bridge) and **Utilities > AEL Linear Master and Filters** (the workflow).
 
-This is a local prototype, not a signed update repository.
+This is a local build for testing, not a signed update repository. `tools/build_package.py --out FOLDER [--zip FILE]` assembles the folder, with `runtime/ael` copied from the checkout and checked byte by byte, `runtime/VERSION.json` (AEL version and source commit) and the synthetic files of `demo/`.
 
 ## Use
 
-1. Open a monochrome or three-channel RGB image and select it in the dialog.
+1. Open a monochrome or three-channel RGB image whose values are inside 0–1 (see **Images outside 0–1** below) and select it in the dialog.
 2. Choose `structure` or `polar`.
 3. Choose an output folder. Each run creates a new timestamped subfolder, so previous runs are not overwritten.
-4. Select a Python executable. The bridge checks that it is Python 3.10+ and can import AEL before processing. The selected path is saved in PixInsight settings.
-5. If necessary, select the AEL source checkout folder. It is passed through `PYTHONPATH`; no shell is used.
-6. Load an `EclipseGeometry` JSON file or complete the geometry fields. Image shape is taken from the selected view. Pixel coordinates are x-right and y-down.
+4. Leave **Python executable** empty to have one found (see above), or select one. The interpreter that worked is saved in PixInsight settings.
+5. **AEL folder** starts with the AEL that comes with the connector. Select another folder only to use another AEL; it is passed through `PYTHONPATH`, no shell is used.
+6. Type the path of an `EclipseGeometry` JSON file, or click **Load JSON** to see its values, or complete the geometry fields. Image shape is taken from the selected view. Pixel coordinates are x-right and y-down.
 7. For `structure`, optionally select a boolean `.npy` valid-data mask. For `polar`, set the outer radius in solar radii.
 8. Click **Run AEL**.
 
@@ -44,25 +40,34 @@ The output folder contains the AEL products, `input_geometry.json` and `AEL_BRID
 
 ## Validation
 
-The test launcher detects a suitable interpreter; `AEL_PYTHON` can select one explicitly. It uses only synthetic data and starts new PixInsight instances with `--automation-mode` and `--force-exit`. It never sends scripts to an existing instance.
+The test launcher detects a suitable interpreter; `AEL_PYTHON` can select one explicitly. It uses only synthetic data and starts new PixInsight instances with `-n --automation-mode` and `--force-exit`, which never send a script to an instance that is already open (without `-n`, PixInsight yields the command to a running instance). A test that is stopped by its timeout stops only its own instance.
 
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python plugins/pixinsight-ael/tests/run_tests.py \
   --output /path/to/validation-output
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. python plugins/pixinsight-ael/tests/dialog_flow.py \
+  --repo . --python "$(which python)" --output /path/to/dialog-output
 ```
 
-The validation covers:
+`run_tests.py` covers:
 
 - exact float32 RGB and monochrome TIFF round trips, shape and orientation;
 - negative orientation tests;
 - exact ICC preservation from a source TIFF;
 - identical output pixels from direct AEL and bridge executions of both commands;
 - unchanged source pixels;
-- clear errors for a missing executable, missing AEL and an old Python;
+- clear errors for a missing executable, missing AEL, an old Python and an old AEL (1.3.3 and an unreadable version are refused, 1.10.0 is accepted: versions compare as numbers);
+- the interpreter detection with nothing chosen, from a clean saved-settings state and without `AEL_PYTHON`;
 - paths containing spaces and accented characters;
 - dialog and result images rendered by PixInsight.
 
+`dialog_flow.py` builds both dialogs in PixInsight, fills their fields, presses **Run** and checks the windows and files each one leaves, the pixels against `python -m ael` and `python -m ael filters` from the terminal, the PixelMath composite, and that no message box appears. The same test on the previous dialog code fails: a geometry file typed but not loaded stopped the run, and the box "Generate all 16 filters" had no effect.
+
 `VALIDATION.json` contains the gates and exact commands. A missing PixInsight executable or a failed gate makes the complete validation fail. `--skip-pixinsight` runs only direct AEL checks and is not a complete bridge validation. `--skip-captures` omits only the visual captures.
+
+### Images outside 0–1
+
+PixInsight rescales a floating-point file whose values leave 0–1 to exactly 0–1 when it opens it, `(x − min) / (max − min)`: the view then holds numbers that are not in the file. AEL does not give the same result on rescaled numbers (its structure image depends on the scale and on the zero: a plain ×0.5 changes 30,924 of the 786,816 samples of a test image). The bridge exports what the view holds, so it first reads the range of the view's own TIFF file; if the file leaves 0–1 and the view has not been processed since opening, it stops before exporting anything and says why. Save the image as a TIFF whose values are inside 0–1 (divide by one constant) and open that one; then the result is the one `python -m ael` gives on that file, which the tests check pixel by pixel. Other formats are not checked. The workflow dialog is not affected: it reads its files from Python.
 
 ## Automated linear-master and filter workflow
 
@@ -70,15 +75,15 @@ The validation covers:
 
 ### Filter layers from an existing linear stack — validated
 
-Select **Filter layers from linear.npy**. The helper finds `geometry.json`, `valid.npy`, `coverage.npy` and `alpha.npy` beside the input, measures a display scale from observed corona pixels, and generates all sixteen portable AEL filters by default. It writes:
+Select **Filter layers from linear.npy**. The helper finds `geometry.json`, `valid.npy`, `coverage.npy` and `alpha.npy` beside the input, measures a display scale from observed corona pixels, and generates all sixteen portable AEL filters by default (the box **Generate all 16 filters** unticked makes only AEL's default layers, read from `ael.filterbank.DEFAULTS`: NRGF, the edge-aware WOW and ACHF 04). It writes:
 
 - float NPY layers and alpha arrays from AEL;
 - separate 16-bit TIFF views `AEL_L_<filter>` and `AEL_A_<filter>`;
-- `AEL_DISPLAY`, the display base before any filter, and an independent `AEL_COMPOSITE` duplicate;
+- `AEL_DISPLAY`, the display base over black with its alpha as a 32-bit float image, which is exactly where AEL starts its own composite, and an independent `AEL_COMPOSITE` duplicate;
 - `pixelmath.json` and `PIXELMATH.md` with the expressions, which name the layer and alpha views directly (PixelMath symbols accept constants only);
 - AEL and workflow receipts.
 
-The default composite applies NRGF, bilateral WOW and isotropic ACHF 04 with their documented opacities, rounded to 8 bits as AEL and Photoshop store them. The other filters remain separate for manual use. PixelMath touches only the composite, never the display base or linear master, and a PixelMath run that fails stops the workflow. The synthetic validation starts from the display base and compares the PixelMath result with AEL's own composite (`ael/display.tif`); it also checks that the two starting images differ, so a PixelMath that changes nothing cannot pass.
+The default composite applies NRGF, the edge-aware WOW and isotropic ACHF 04 with their documented opacities, rounded to 8 bits as AEL and Photoshop store them. (Up to AEL 1.3.4 the default WOW layer was the bilateral one; `wow_bilateral` is still accepted as a name for the edge-aware WOW.) The other filters remain separate for manual use. PixelMath touches only the composite, never the display base or linear master, and a PixelMath run that fails stops the workflow. The synthetic validation starts from the display base and compares the PixelMath result with AEL's own composite (`ael/display.tif`); it also checks that the two starting images differ, so a PixelMath that changes nothing cannot pass. AEL composites in floating point from the 16-bit layer images and alpha and rounds once, at the end; the replay starts from the same float32 and so differs from `display.tif` only by that final rounding: 0.50 of a 16-bit step measured, gate one step. A layer with the wrong opacity (one 8-bit step) or the wrong blend mode, built in PixInsight, differs by about 150 and about 11,000 steps and fails the gate.
 
 ### Automatic linear master — validated with synthetic data
 
@@ -101,15 +106,15 @@ Black, white and the linear ceiling are measured calibration values; they are ne
 
 `tests/workflow_lunar_noise.py` is a second, separately written judge with shorter exposures (0.01–0.04 s), where the outer corona of the reference is close to the read noise, a Moon moving 4 px, and a frame of an unrelated corona with other streamers and orientation. Its noisy gate is three times the noise floor measured in the same run. The structure check of an earlier version (high-pass correlation of the fine structure ≥ 0.25) refused every good frame of this test, even frames that did not move, because at these exposures the fine structure is mostly noise; the turned-frame score passes them and still refuses the unrelated corona.
 
-Two independent runs of `tests/workflow_synthetic.py` pass all gates: 0.003 px worst translation error (gate 0.1 px), 0.0203% median relative master difference (gate 0.1%), sixteen filters and alpha maps, and a PixelMath composite within one 16-bit step of AEL's composite (gate `1/65535`). The unrelated-image registration control is rejected. `tests/workflow_dark_guard.py` checks the dark refusal. On a 24-megapixel synthetic frame, registration takes about 3 s without noise and about 10 s with short noisy exposures, a 26 px drift and a Moon moved 12.6 px (error 0.023 px; the structure check takes 0.5 s of it). Windows, Linux and real eclipse data remain untested; real frames add seeing, lunar relief, prominences and sensor patterns that the synthetic scenes do not have.
+`tests/workflow_synthetic.py` passes all gates on AEL 1.3.6: 0.003 px worst translation error (gate 0.1 px), 0.0203% median relative master difference (gate 0.1%), sixteen filters and alpha maps, and a PixelMath composite within one 16-bit step of AEL's composite (gate `1/65535`; 0.50 steps measured). The unrelated-image registration control is rejected. `tests/workflow_dark_guard.py` checks the dark refusal. On a 24-megapixel synthetic frame, registration takes about 3 s without noise and about 10 s with short noisy exposures, a 26 px drift and a Moon moved 12.6 px (error 0.023 px; the structure check takes 0.5 s of it). Windows, Linux and real eclipse data remain untested; real frames add seeing, lunar relief, prominences and sensor patterns that the synthetic scenes do not have.
 
 ## Limitations
 
 - **The registration on the Sun is not valid on real frames yet.** On real Vixen R6 III totality frames (2026-08-12, read without dark or flat), it lands 0.07–2.2 px from the reference registration (lunar limb plus the DE440s ephemeris, which an independent phase correlation of the corona confirms within 0.04–0.46 px), and up to 3.3 px at 10 s; the error grows with the time between frames. Frames of 1/500 s and shorter do not converge, and the structure check accepts frames registered 1–3 px wrong. The cause has not been found: neither the lunar margin, the outer radius, the weighting, pre-smoothing, a planar extinction term nor field rotation explains it. Do not use the automatic master on real frames.
-- Tested only on macOS with PixInsight 1.9.4. Windows and Linux have not been tested.
-- Python must be installed separately; this is not a self-contained package or a native C++ module.
+- Tested only on macOS (Apple silicon) with PixInsight 1.9.4 and AEL 1.3.6. Windows and Linux have not been tested; the interpreter search lists Unix-style folders.
+- Python must be installed separately (the package carries AEL, not Python or its dependencies); this is not a native C++ module.
 - `structure` and `polar` are covered by the original bridge. The complete master/filter workflow is validated with synthetic data only; real eclipse data require separate validation.
 - The automatic master holds every frame's luminance in memory at once: plan on several gigabytes for dozens of full-size RAW frames.
 - ICC profiles are read from the source file and copied unchanged to the temporary TIFF. An unsaved image, or a profile assigned only in memory after reading the file, cannot be verified or preserved reliably by this prototype. The receipt records the ICC origin and byte counts.
-- `polar` expects display-range data in [0, 1]. `structure` expects a linear composite with valid geometry and enough outer field for its sky model.
+- `polar` expects display-range data in [0, 1]. `structure` expects a linear composite with valid geometry and enough outer field for its sky model, scaled into [0, 1] before PixInsight opens it (see above).
 - The connector has not been signed or packaged for automatic updates.
