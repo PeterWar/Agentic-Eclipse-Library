@@ -1090,6 +1090,27 @@ def decide(analysis: dict) -> dict:
         report.update(method=f"registration on the corona only ({why})")
         report["sun"] = dict(xy=list(reference["moon_full"]["xy"]),
                              how="the Moon's centre of the reference frame (no lunar motion could be fitted)")
+    # A mount re-pointed during the totality leaves photos that cover another part of the sky: where their edges
+    # cross the image, the number of photos changes and so does the noise, and the filters draw that edge. Only the
+    # pointing of the reference frame is stacked: a jump of more than 2 % of the sensor's diagonal between photos
+    # taken one after the other starts another pointing (a drift during the totality does not).
+    placed_rows = sorted([row for row in report["frames"] if not row.get("excluded")],
+                         key=lambda row: row.get("seconds", 0.0))
+    jump_limit = 0.02 * math.hypot(*analysis["shape"])
+    pointing, group = {}, 0
+    for k, row in enumerate(placed_rows):
+        if k and float(np.hypot(*(np.asarray(row["shift"]) - np.asarray(placed_rows[k - 1]["shift"])))) > jump_limit:
+            group += 1
+        pointing[row["file"]] = group
+    if group:
+        mine = pointing[reference["name"]]
+        for row in placed_rows:
+            if pointing[row["file"]] != mine:
+                moved = float(np.hypot(*(np.asarray(row["shift"]) - np.asarray(
+                    next(r for r in placed_rows if r["file"] == reference["name"])["shift"]))))
+                row["excluded"] = (f"another pointing of the mount ({moved:.0f} px from the reference's): one pointing "
+                                   "is stacked, so that no edge of a photo crosses the image")
+        report["pointings"] = group + 1
     for row in report["frames"]:
         if row.get("excluded"):
             analysis["excluded"].append(dict(file=row["file"], reason=row["excluded"]))
