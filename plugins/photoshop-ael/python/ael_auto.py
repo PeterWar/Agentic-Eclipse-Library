@@ -1297,11 +1297,13 @@ def run_auto(cfg: dict) -> dict:
         stack_geometry = EclipseGeometry(shape=shape, sun_xy=tuple(decision["sun"]["xy"]),
                                          sun_radius_px=float(decision["sun"]["radius_px"]),
                                          moon_xy=tuple(canvas_moons[0]), moon_radius_px=moon_r, note=note)
-        # Frames that disagree beyond their gains (thin clouds or haze changing during the totality) would leave a
-        # step where each exposure saturates: their weights then fade over the top half of the range, not the top fifth.
+        # Two exposures never agree exactly where the longer one saturates (shutter times, the sky changing, the
+        # blur of the inner corona), and an abrupt hand-over leaves a step that the filters draw as a ring. Each
+        # photo's weight therefore fades over the top half of its range, not the top fifth: the hand-over spreads over
+        # about 15 % of the radius, and the shorter exposure covers what the longer one gives up.
         photometry = analysis["photometry"]
         cloudy = photometry.get("residual") is not None and photometry["residual"] > 0.03
-        taper = 0.5 if cloudy else 0.8
+        taper = 0.5
         recipe = {"geometry": json.loads(stack_geometry.to_json()), "frames": frames,
                   "stack": {"canvas": "reference", "taper_start": taper, "moon_guard_px": 2, "limb_fade_px": 4,
                             "band_sigma_px": 0, "hot_pixels": {"enabled": False}},
