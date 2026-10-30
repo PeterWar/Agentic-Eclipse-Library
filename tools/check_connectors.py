@@ -5,7 +5,8 @@ shared parts. This script fails when those copies drift apart:
 
 - python/ael_workflow.py, tools/make_demo.py and tools/build_package.py are the same file once the program
   names are set aside (and, for the builder, its list of files), so both packages carry the same demonstration;
-- both dialogs show the same experimental notice about the linear master;
+- the PixInsight dialog shows the experimental notice about the linear master of the shared helper; the Photoshop
+  dialog offers no such master (its RAW workflow, python/ael_auto.py, measures its own registration);
 - both probes refuse an AEL older than the same version: each probe runs against stand-in `ael` packages that
   carry only a version (1.3.3 and an unreadable one) and must refuse both, and the floor they print must match;
 - neither connector names a private interpreter or a home folder.
@@ -84,8 +85,9 @@ def main() -> None:
                                 ("tools/build_package.py", lambda t: without_file_list(neutral(t)))):
         a, b = (normalise((root / relative).read_text(encoding="utf-8")) for root in (PI, PS))
         checks[f"{relative} is the same in both"] = a == b
-    checks["same experimental notice in both dialogs"] = all(
-        NOTICE in literal_text(path) for path in (PI / "AELWorkflowDialog.jsh", PS / "AELPhotoshopDialog.jsx"))
+    checks["the PixInsight dialog shows the experimental notice"] = NOTICE in literal_text(PI / "AELWorkflowDialog.jsh")
+    checks["the Photoshop dialog offers no experimental master"] = (
+        "master" not in literal_text(PS / "AELPhotoshopDialog.jsx").lower())
     floors = (minimum(PI / "python/ael_bridge_check.py"), minimum(PS / "python/ael_photoshop.py"))
     checks[f"same AEL floor in both probes {floors}"] = floors[0] == floors[1] != "none"
     answers = refusals()

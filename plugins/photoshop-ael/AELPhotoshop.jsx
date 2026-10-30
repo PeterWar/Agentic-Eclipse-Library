@@ -14,14 +14,10 @@ Run from File > Scripts > Browse, or install in Photoshop's Scripts folder.
     try {
         var options = AELPhotoshopDialog();
         if (options) {
-            var result = AELPhotoshop.run(options);
-            var message = "AEL " + (result.ael_version || "") + " completed. " + result.opened_documents.length +
-                " result document(s) opened.";
-            // A PSB that Photoshop reads differently from what AEL wrote stops the run (requireNativeCheck).
-            if (result.native_check) message += "\nLayered PSB checked in Photoshop: OK, " + result.native_check.layers + " layers.";
-            alert(message + "\nReceipt: " + result.bridge_receipt);
+            var result = AELPhotoshop.runRaw(options);
+            alert(AELPhotoshop.doneMessage(result));
         }
     } catch (error) {
-        alert("AEL could not complete:\n" + error.message);
+        alert("AEL could not make the image.\n\n" + error.message);
     }
 }());

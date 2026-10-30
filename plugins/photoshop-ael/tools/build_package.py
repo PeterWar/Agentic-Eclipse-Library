@@ -29,7 +29,7 @@ import zipfile
 PLUGIN = Path(__file__).resolve().parents[1]
 REPO = PLUGIN.parents[1]
 FILES = ["AELPhotoshop.jsx", "AELPhotoshopCore.jsx", "AELPhotoshopDialog.jsx", "README.md", "LICENSE",
-         "python/ael_photoshop.py", "python/ael_workflow.py"]
+         "python/ael_photoshop.py", "python/ael_workflow.py", "python/ael_auto.py"]
 SKIP = shutil.ignore_patterns("__pycache__", "*.pyc", ".DS_Store")
 
 
