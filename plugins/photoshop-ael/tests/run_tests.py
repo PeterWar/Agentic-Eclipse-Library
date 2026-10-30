@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -25,18 +26,36 @@ from ael.geometry import EclipseGeometry
 from ael.synthetic import SyntheticScene
 
 
-def detect_python() -> str:
-    candidates = [os.environ.get("AEL_PYTHON"), sys.executable,
-                  str(Path.home() / ".venvs/eines-ia-py312/bin/python"),
-                  "/opt/homebrew/bin/python3.12", "/opt/homebrew/bin/python3"]
+def detect_python(repo: Path) -> str:
+    """A Python 3.10+ that imports this checkout's AEL, found the way the bridge finds one, never named: AEL_PYTHON,
+    this interpreter, python3 and python3.N (newest first) in /opt/homebrew/bin and /usr/local/bin, virtual
+    environments, pyenv, conda and /usr/bin/python3."""
+    home = Path.home()
+
+    def minor(path: Path) -> int:
+        return int(path.name.split(".")[1]) if "." in path.name else 1000
+
+    candidates = [os.environ.get("AEL_PYTHON"), sys.executable]
+    for folder in ("/opt/homebrew/bin", "/usr/local/bin"):
+        found = [path for path in Path(folder).glob("python3*") if re.fullmatch(r"python3(\.\d+)?", path.name)]
+        candidates += [str(path) for path in sorted(found, key=minor, reverse=True)]
+    for folder in (".venvs", ".virtualenvs", "venvs"):
+        candidates += [str(path / "bin/python") for path in sorted((home / folder).glob("*")) if path.is_dir()]
+    candidates += [str(home / name) for name in ("venv/bin/python", ".venv/bin/python", ".pyenv/shims/python",
+                   "miniconda3/bin/python", "anaconda3/bin/python", "miniforge3/bin/python", "mambaforge/bin/python")]
+    candidates.append("/usr/bin/python3")
+    tried = []
     for candidate in candidates:
-        if not candidate:
+        if not candidate or not Path(candidate).exists() or candidate in tried:
             continue
         run = subprocess.run([candidate, "-c", "import sys, ael; assert sys.version_info >= (3, 10)"],
-                             capture_output=True, check=False)
+                             capture_output=True, check=False,
+                             env=dict(os.environ, PYTHONPATH=str(repo), PYTHONDONTWRITEBYTECODE="1"))
         if run.returncode == 0:
             return candidate
-    raise RuntimeError("Select a Python 3.10+ with AEL using --python or AEL_PYTHON")
+        tried.append(candidate)
+    raise RuntimeError(f"No Python 3.10+ that imports AEL was found (tried {', '.join(tried) or 'none'}); "
+                       "select one with --python or AEL_PYTHON")
 
 
 def photoshop_running() -> bool:
@@ -138,7 +157,7 @@ def main() -> None:
     args.output = args.output.resolve()
     args.output.mkdir(parents=True, exist_ok=True)
     repo = args.repo.resolve()
-    python = args.python or detect_python()
+    python = args.python or detect_python(repo)
     helper = repo / "plugins/photoshop-ael/python/ael_photoshop.py"
     core = repo / "plugins/photoshop-ael/AELPhotoshopCore.jsx"
     report = {"ok": False, "synthetic": True, "python": python, "repo": str(repo),
@@ -190,6 +209,9 @@ def main() -> None:
                 after_polar = root / "after_polar.tif"
                 after_untagged = root / "after_untagged.tif"
                 (root / "photoshop_layers").mkdir()
+                for name in ("fake python one", "fake python two"):  # candidates that never answer the probe
+                    (root / name).write_text("#!/bin/sh\nexit 3\n", encoding="utf-8")
+                    (root / name).chmod(0o755)
                 jsx = f'''#include {json.dumps(str(core))}
 var REPORT = {{ok:false}};
 var OWNED = {{}};
@@ -365,6 +387,20 @@ try {{
     REPORT.stage='default_ael'; AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT);
     REPORT.default_ael={{folder:AELPhotoshop.defaultAELFolder(),
         runtime:AELPhotoshop.probe({json.dumps(python)},'').runtime}};
+    REPORT.stage='automatic_python'; AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT);
+    // The automatic search from scratch: the Python kept from earlier runs is set aside and put back afterwards.
+    var keptPython=AELPhotoshop.savedPython();
+    try {{ app.eraseCustomOptions(AELPhotoshop.settingsKey); }} catch(e) {{}}
+    try {{
+        var automatic=AELPhotoshop.probe('',{json.dumps(str(repo))});
+        REPORT.automatic_python={{python:automatic.selected_python, ael_version:automatic.runtime.ael_version,
+            tried:automatic.tried, saved_after:AELPhotoshop.savedPython()}};
+    }} catch(e) {{ REPORT.automatic_python={{error:String(e.message)}}; }}
+    finally {{ if (keptPython) AELPhotoshop.savePython(keptPython); }}
+    REPORT.stage='no_python'; AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT);
+    try {{ AELPhotoshop.firstWorking({json.dumps([str(root / "fake python one"), str(root / "fake python two")])},
+        {json.dumps(str(repo))}); REPORT.no_python={{refused:false}}; }}
+    catch(e) {{ REPORT.no_python={{refused:true, message:String(e.message)}}; }}
     REPORT.stage='transparent'; AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT);
     REPORT.transparent=transparentRefusal();
     REPORT.stage='untagged'; AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_report))}),REPORT);
@@ -466,9 +502,16 @@ finally {{ closeOwned(); AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_rep
                     report["photoshop_layers"][item["name"]] = {"opaque_pixels": int(opaque.sum()),
                         "max_steps": int(steps.max()) if steps.size else None, "exact": float(np.mean(steps == 0)) if steps.size else None}
 
+            # AGENTS §7: no script names an interpreter; the private environment name never reaches the code.
+            plugin = repo / "plugins/photoshop-ael"
+            report["named_interpreter_in"] = sorted(
+                str(path.relative_to(plugin)) for path in plugin.rglob("*")
+                if path.suffix in (".jsx", ".py") and "__pycache__" not in path.parts and
+                re.search("eines" + "-ia|python3\\.1[0-9]", path.read_text(encoding="utf-8")))
             report["gates"] = {
                 "direct_structure": bool(direct_structure.get("ok")),
-                "direct_polar": bool(direct_polar.get("ok"))}
+                "direct_polar": bool(direct_polar.get("ok")),
+                "no_named_interpreter": not report["named_interpreter_in"]}
             if not args.skip_photoshop:
                 report["gates"].update({
                     "bad_path_clear": "bad_path" in report["jsx"].get("bad_path_error", ""),
@@ -515,7 +558,13 @@ finally {{ closeOwned(); AELPhotoshop.writeJSON(new File({json.dumps(str(jsx_rep
                     "documents_16bit": report["jsx"]["filters_documents"]["bits"] ==
                         ["BitsPerChannelType.SIXTEEN"] * 33,
                     "default_ael_is_this_checkout": str(report["jsx"]["default_ael"]["runtime"].get("ael_file", ""))
-                                                    .startswith(str(repo))})
+                                                    .startswith(str(repo)),
+                    # Python field empty and nothing kept from earlier runs: the search finds one by itself.
+                    "automatic_python_found": bool(report["jsx"]["automatic_python"].get("python")) and
+                                              report["jsx"]["automatic_python"].get("ael_version") == "1.3.6",
+                    "no_python_error_lists_tried": report["jsx"]["no_python"].get("refused") is True and
+                        "Tried:" in report["jsx"]["no_python"].get("message", "") and
+                        all(name in report["jsx"]["no_python"]["message"] for name in ("fake python one", "fake python two"))})
             report["ok"] = all(report["gates"].values())
     except Exception as exc:
         report["error"] = f"{type(exc).__name__}: {exc}"

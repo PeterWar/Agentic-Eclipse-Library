@@ -80,12 +80,60 @@ var AELPhotoshop = AELPhotoshop || {};
         return folder;
     };
 
+    // The Python that worked last time, kept in Photoshop's custom options: the first candidate of the next run.
+    ns.settingsKey = "AELPhotoshop-python-e3b1c7a2";
+    ns.savedPython = function () {
+        try {
+            return app.getCustomOptions(ns.settingsKey).getString(stringIDToTypeID("python"));
+        } catch (missing) {
+            return "";
+        }
+    };
+    ns.savePython = function (path) {
+        try {
+            var settings = new ActionDescriptor();
+            settings.putString(stringIDToTypeID("python"), path);
+            app.putCustomOptions(ns.settingsKey, settings, true);
+        } catch (ignored) {}
+    };
+
+    // python3, then python3.N from the newest minor version to the oldest, in one folder.
+    ns.versionedPythons = function (directory) {
+        var files = new Folder(directory).getFiles("python3*") || [], found = [], i;
+        function minor(path) {
+            var match = /python3\.([0-9]+)$/.exec(path);
+            return match ? parseInt(match[1], 10) : 1000;
+        }
+        for (i = 0; i < files.length; i++) {
+            if (files[i] instanceof File && /\/python3(\.[0-9]+)?$/.test(files[i].fsName)) found.push(files[i].fsName);
+        }
+        found.sort(function (a, b) { return minor(b) - minor(a); });
+        return found;
+    };
+
+    // The script names no interpreter. A Python chosen in the dialog is the only candidate; otherwise, in this order:
+    // the one that worked last time, AEL_PYTHON, python3 and python3.N (newest first) in /opt/homebrew/bin and
+    // /usr/local/bin, virtual environments (~/.venvs/*, ~/.virtualenvs/*, ~/venvs/*, ~/venv, ~/.venv), pyenv, conda
+    // and /usr/bin/python3. Each existing one is tried in turn; the first that runs AEL with its dependencies wins.
     ns.pythonCandidates = function (selected) {
-        var home = Folder("~").fsName;
-        var candidates = selected ? [selected] : [home + "/.venvs/eines-ia-py312/bin/python",
-            home + "/.venvs/eines-ia-py312/bin/python3", "/opt/homebrew/bin/python3.12",
-            "/opt/homebrew/bin/python3", "/usr/local/bin/python3"];
-        var answer = [], seen = {}, i, path;
+        var home = Folder("~").fsName, candidates = [], i, j;
+        if (selected) {
+            candidates.push(selected);
+        } else {
+            candidates.push(ns.savedPython(), $.getenv("AEL_PYTHON"));
+            candidates = candidates.concat(ns.versionedPythons("/opt/homebrew/bin"), ns.versionedPythons("/usr/local/bin"));
+            var environments = [home + "/.venvs", home + "/.virtualenvs", home + "/venvs"];
+            for (i = 0; i < environments.length; i++) {
+                var entries = new Folder(environments[i]).getFiles() || [], folders = [];
+                for (j = 0; j < entries.length; j++) if (entries[j] instanceof Folder) folders.push(entries[j].fsName);
+                folders.sort();
+                for (j = 0; j < folders.length; j++) candidates.push(folders[j] + "/bin/python");
+            }
+            candidates.push(home + "/venv/bin/python", home + "/.venv/bin/python", home + "/.pyenv/shims/python",
+                home + "/miniconda3/bin/python", home + "/anaconda3/bin/python", home + "/miniforge3/bin/python",
+                home + "/mambaforge/bin/python", "/usr/bin/python3");
+        }
+        var answer = [], seen = {}, path;
         for (i = 0; i < candidates.length; i++) {
             path = candidates[i] ? new File(candidates[i]).fsName : "";
             if (path && !seen[path] && new File(path).exists) {
@@ -125,13 +173,21 @@ var AELPhotoshop = AELPhotoshop || {};
 
     ns.probe = function (selected, aelFolder) {
         var candidates = ns.pythonCandidates(selected);
-        if (!candidates.length) throw new Error("bad_path: select an existing Python 3.10+ executable");
+        if (selected && !candidates.length) throw new Error("bad_path: select an existing Python 3.10+ executable");
+        var answer = ns.firstWorking(candidates, aelFolder);
+        ns.savePython(answer.selected_python);
+        return answer;
+    };
+
+    // The first candidate that answers the runner's probe; the ones that failed before it are kept in ``tried``.
+    ns.firstWorking = function (candidates, aelFolder) {
         var errors = [];
         for (var i = 0; i < candidates.length; i++) {
             var root = ns.uniqueFolder(Folder.temp, "AEL_PS_probe_");
             try {
                 var answer = ns.runPython(candidates[i], {operation: "probe"}, root, aelFolder);
                 answer.selected_python = candidates[i];
+                answer.tried = errors;
                 return answer;
             } catch (error) {
                 errors.push(candidates[i] + ": " + error.message);
@@ -141,7 +197,9 @@ var AELPhotoshop = AELPhotoshop || {};
                 root.remove();
             }
         }
-        throw new Error("No suitable Python/AEL runtime. " + errors.join(" | "));
+        throw new Error("No Python 3.10+ with AEL and its dependencies was found. Select the Python executable in the " +
+            "dialog, or install the dependencies: python -m pip install numpy scipy opencv-python-headless pillow " +
+            "tifffile imageio psd-tools. Tried: " + (errors.length ? errors.join(" | ") : "no Python in the usual folders"));
     };
 
     ns.exportDocument = function (doc, target) {

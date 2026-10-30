@@ -17,7 +17,9 @@ Install the dependencies, or AEL itself from a checkout, in the selected Python 
 python -m pip install "/path/to/Agentic-Eclipse-Library[photoshop]"
 ```
 
-A folder chosen as **AEL folder (optional)** must contain the `ael` package. The bridge passes it through `PYTHONPATH`; it does not install or modify AEL. Before each run the bridge asks every candidate Python for AEL and for the modules above, and moves on to the next candidate when something is missing.
+A folder chosen as **AEL folder (optional)** must contain the `ael` package. The bridge passes it through `PYTHONPATH`; it does not install or modify AEL.
+
+The scripts name no interpreter. With **Python (optional)** empty, the bridge looks, in this order, at the Python that worked last time (kept in Photoshop's custom options), `AEL_PYTHON`, `python3` and `python3.N` (newest first) in `/opt/homebrew/bin` and `/usr/local/bin`, virtual environments (`~/.venvs/*`, `~/.virtualenvs/*`, `~/venvs/*`, `~/venv`, `~/.venv`), pyenv, conda and `/usr/bin/python3`. It asks each existing one for Python 3.10+, AEL and the modules above, and uses the first that answers; when none does, the error lists every Python tried and why it failed. A Python chosen in the dialog is the only candidate.
 
 ## Local installation
 
@@ -86,6 +88,8 @@ The test uses only synthetic data and paths containing spaces and accented chara
 - export of a document without a colour profile;
 - a result file that is not plain JSON is refused instead of evaluated;
 - a clear error for an explicitly invalid Python path;
+- the automatic Python search from scratch, which must find one by itself, and its error listing every Python tried when none answers;
+- no interpreter named in the scripts or the tests;
 - with the AEL folder empty, the engine found is the one of this checkout;
 - synthetic master registration on the Sun and comparison with known truth;
 - sixteen filter TIFFs and sixteen alpha TIFFs;

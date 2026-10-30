@@ -190,6 +190,10 @@ function AEL_TEST_ENTRY() {{
 }}
 var AEL_TEST_REAL_RUN = AELPhotoshop.run;
 var PLANS = {json.dumps(plans, ensure_ascii=False)};
+// The Python search starts from scratch: the one kept from earlier runs is set aside and put back at the end.
+var AEL_TEST_KEPT_PYTHON = AELPhotoshop.savedPython();
+REPORT.kept_python_before = Boolean(AEL_TEST_KEPT_PYTHON);
+try {{ app.eraseCustomOptions(AELPhotoshop.settingsKey); }} catch (missing) {{}}
 try {{
     AELPhotoshop.run = function (options) {{ AEL_TEST.result = AEL_TEST_REAL_RUN(options); return AEL_TEST.result; }};
     for (var p = 0; p < PLANS.length; p++) {{
@@ -231,6 +235,8 @@ try {{
     REPORT.ok = true;
 }} catch (e) {{ REPORT.error = String(e.message); REPORT.line = e.line; }}
 finally {{
+    REPORT.python_found = AELPhotoshop.savedPython();
+    if (AEL_TEST_KEPT_PYTHON) AELPhotoshop.savePython(AEL_TEST_KEPT_PYTHON);
     AELPhotoshop.run = AEL_TEST_REAL_RUN;
     REPORT.documents_after = app.documents.length;
     AELPhotoshop.writeJSON(new File({json.dumps(str(progress))}), REPORT);
@@ -350,6 +356,9 @@ finally {{
     gates["master_without_frames_refused"] = (refused.get("alerts") or [""])[0].startswith(
         "AEL could not complete:\nSelect the master frames") and not refused.get("result")
     gates["default_output_documents"] = all(run.get("default_output") for run in runs_by_name.values())
+    # Python field empty and nothing kept: every run used the Python the search found, and it is the one saved.
+    gates["python_found_by_search"] = bool(jsx_report.get("python_found")) and all(
+        report.get(name, {}).get("python") == jsx_report.get("python_found") for name in expected)
     gates["photoshop_documents_restored"] = jsx_report.get("documents_after") == jsx_report.get("documents_before")
     gates["package_unchanged"] = digest(package) == before
     report["gates"] = gates
