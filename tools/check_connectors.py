@@ -3,8 +3,8 @@
 plugins/pixinsight-ael/ and plugins/photoshop-ael/ are self-contained, so each carries its own copy of the
 shared parts. This script fails when those copies drift apart:
 
-- python/ael_workflow.py and tools/build_package.py are the same file once the program names are set aside
-  (and, for the builder, its list of files);
+- python/ael_workflow.py, tools/make_demo.py and tools/build_package.py are the same file once the program
+  names are set aside (and, for the builder, its list of files), so both packages carry the same demonstration;
 - both dialogs show the same experimental notice about the linear master;
 - both probes refuse an AEL older than the same version;
 - neither connector names a private interpreter or a home folder.
@@ -48,7 +48,7 @@ def minimum(path: Path) -> str:
 
 def main() -> None:
     checks = {}
-    for relative, normalise in (("python/ael_workflow.py", neutral),
+    for relative, normalise in (("python/ael_workflow.py", neutral), ("tools/make_demo.py", neutral),
                                 ("tools/build_package.py", lambda t: without_file_list(neutral(t)))):
         a, b = (normalise((root / relative).read_text(encoding="utf-8")) for root in (PI, PS))
         checks[f"{relative} is the same in both"] = a == b

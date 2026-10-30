@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Synthetic demonstration files for the operations of the PixInsight bridge.
+"""Synthetic demonstration files for the operations of the PixInsight and Photoshop connectors (the same files for both).
 
 MIT License — Copyright (c) 2026 Pere Guerra Serra.
 Processed with Agentic Eclipse Library by Pere Guerra —
@@ -40,7 +40,8 @@ def rgb(mono: np.ndarray) -> np.ndarray:
 def rgb_unit(mono: np.ndarray) -> np.ndarray:
     """The same colour ratios with the brightest channel at the scale of `mono`, inside 0-1. A float TIFF with a value
     above 1 is rescaled to 0-1 by PixInsight when it opens it (the file is no longer what the view holds), so the two
-    images that are opened in PixInsight stay inside 0-1. The master frames are read by Python and keep `rgb`."""
+    images that are opened in PixInsight or Photoshop stay inside 0-1. The master frames are read by Python and keep
+    `rgb`."""
     return np.clip(rgb(mono) / max(COLOUR), 0.0, 1.0).astype(np.float32)
 
 

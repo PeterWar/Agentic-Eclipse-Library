@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Synthetic demonstration files for the four operations of the Photoshop bridge.
+"""Synthetic demonstration files for the operations of the PixInsight and Photoshop connectors (the same files for both).
 
 MIT License — Copyright (c) 2026 Pere Guerra Serra.
 Processed with Agentic Eclipse Library by Pere Guerra —
@@ -37,6 +37,14 @@ def rgb(mono: np.ndarray) -> np.ndarray:
     return np.stack([mono * k for k in COLOUR], axis=-1).astype(np.float32)
 
 
+def rgb_unit(mono: np.ndarray) -> np.ndarray:
+    """The same colour ratios with the brightest channel at the scale of `mono`, inside 0-1. A float TIFF with a value
+    above 1 is rescaled to 0-1 by PixInsight when it opens it (the file is no longer what the view holds), so the two
+    images that are opened in PixInsight or Photoshop stay inside 0-1. The master frames are read by Python and keep
+    `rgb`."""
+    return np.clip(rgb(mono) / max(COLOUR), 0.0, 1.0).astype(np.float32)
+
+
 def geometry(moon_xy, note: str) -> EclipseGeometry:
     return EclipseGeometry(shape=SHAPE, sun_xy=tuple(SUN), sun_radius_px=SUN_R, moon_xy=tuple(moon_xy),
                            moon_radius_px=MOON_R, north_deg=17, arcsec_per_px=8, note=note)
@@ -54,14 +62,14 @@ def main() -> None:
 
     one = out / "1_structure_polar"
     one.mkdir(parents=True)
-    # Scaled to 0-1 so that Photoshop's 32-bit view shows the inner corona instead of a white frame.
+    # Scaled to 0-1 so that a 32-bit view shows the inner corona instead of a white frame.
     linear = scene.radiance(SHAPE, tuple(SUN), tuple(SUN))
     linear = linear / float(linear.max())
-    tifffile.imwrite(one / "corona_linear.tif", rgb(linear), photometric="rgb", metadata=None,
+    tifffile.imwrite(one / "corona_linear.tif", rgb_unit(linear), photometric="rgb", metadata=None,
                      description="Synthetic linear corona (ael.synthetic), float32 RGB, scaled to 0-1")
     level = float(np.percentile(linear[linear > 0], 99.5))
     display = np.arcsinh(20 * np.clip(linear, 0, None) / level) / np.arcsinh(20)
-    tifffile.imwrite(one / "corona_display.tif", rgb(np.clip(display, 0, 1)), photometric="rgb", metadata=None,
+    tifffile.imwrite(one / "corona_display.tif", rgb_unit(np.clip(display, 0, 1)), photometric="rgb", metadata=None,
                      description="Synthetic corona, asinh display range 0-1, float32 RGB")
     geometry(SUN, "Synthetic demonstration: structure and polar").to_json(one / "geometry.json")
 
@@ -83,7 +91,7 @@ def main() -> None:
                                                    "train": "synthetic demonstration"}, indent=1), encoding="utf-8")
     geometry(SUN + lunar[0], "Synthetic demonstration: reference frame of the master").to_json(three / "geometry.json")
 
-    # A linear master for the filters operation: the same frames stacked by the bridge's own workflow.
+    # A linear master for the filters operation: the same frames stacked by the connector's own workflow.
     two = out / "2_filters" / "linear_master"
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "python"))
     from ael_workflow import run_master
