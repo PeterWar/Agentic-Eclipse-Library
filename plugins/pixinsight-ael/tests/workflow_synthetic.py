@@ -115,6 +115,13 @@ def main() -> None:
                 "  aelWorkflowOpenImages(RESULT);\n"
                 "  aelWorkflowBuildComposite(RESULT);\n"
                 f"  aelBridgeExportFloat32(RESULT.composite,{json.dumps(str(composite_path))});\n"
+                # Negative controls, in PixInsight itself: a layer with the wrong opacity (one 8-bit step) or the wrong
+                # blend mode must not reproduce AEL's composite, so the comparison below can fail.
+                "  var variant=function(tweak){ let r={idMap:RESULT.idMap,windows:RESULT.windows,"
+                "pixelmath:JSON.parse(JSON.stringify(RESULT.pixelmath))}; tweak(r.pixelmath);"
+                " return aelWorkflowBuildComposite(r); };\n"
+                f"  aelBridgeExportFloat32(variant(function(ops){{ ops[0].effective_opacity=Math.min(1,ops[0].effective_opacity+1/255); }}),{json.dumps(str(root / 'negative_opacity.tif'))});\n"
+                f"  aelBridgeExportFloat32(variant(function(ops){{ let last=ops[ops.length-1]; last.mode=(last.mode=='overlay')?'multiply':'overlay'; }}),{json.dumps(str(root / 'negative_mode.tif'))});\n"
                 "  REPORT.ok=true; REPORT.windows=RESULT.windows.length;\n"
                 "  for(let i=0;i<RESULT.windows.length;++i) RESULT.windows[i].forceClose();\n"
                 "} catch(error) { REPORT.error=String(error); }\n"
@@ -127,7 +134,10 @@ def main() -> None:
             report["pixelmath_pjsr"] = pjsr
             composite = tifffile.imread(composite_path) if composite_path.exists() else None
             expected = tifffile.imread(out / "filters/ael/display.tif").astype(np.float32) / 65535.0
-            start = tifffile.imread(out / "filters/tiff/display.tif").astype(np.float32) / 65535.0
+            # AEL_DISPLAY is a 32-bit float TIFF: the display base over black with its alpha, exactly where AEL starts
+            # its own floating-point composite. The only rounding left between the replay and display.tif is the final
+            # one of AEL (half a 16-bit step), so the gate below is one step.
+            start = tifffile.imread(out / "filters/tiff/display.tif").astype(np.float32)
             # The composite must be built from the display base. If the start already equals
             # AEL's composite, a PixelMath that does nothing would pass the comparison.
             report["pixelmath_start_vs_expected_max"] = float(np.max(np.abs(start - expected)))
@@ -136,6 +146,12 @@ def main() -> None:
                                                        if composite is not None else None)
             report["pixelmath_equal"] = bool(pjsr.get("ok") and report["pixelmath_start_differs"]
                                              and report["pixelmath_max_abs_difference"] <= 1 / 65535)
+            negatives = {}
+            for key in ("negative_opacity", "negative_mode"):
+                wrong = root / f"{key}.tif"
+                negatives[key] = float(np.max(np.abs(tifffile.imread(wrong) - expected))) if wrong.exists() else None
+            report["pixelmath_negative_max_abs_difference"] = negatives
+            report["pixelmath_negative_rejected"] = all(v is not None and v > 1 / 65535 for v in negatives.values())
             rng = np.random.default_rng(4)
             noise = rng.random(base.shape, dtype=np.float32)
             try:
@@ -148,7 +164,8 @@ def main() -> None:
             except Exception:
                 report["negative_registration"] = True
             report["filters_ok"] = (len(tiffs) == 16 and len(alphas) == 16
-                                    and len(pixelmath["operations"]) == 3 and report["pixelmath_equal"])
+                                    and len(pixelmath["operations"]) == 3 and report["pixelmath_equal"]
+                                    and report["pixelmath_negative_rejected"])
             report["master_ok"] = (report["negative_registration"]
                                    and report["master"]["median_relative_difference"] < 0.001
                                    and max(report["translation_errors_px"]) < 0.1
