@@ -21,8 +21,9 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 PI, PS = REPO / "plugins/pixinsight-ael", REPO / "plugins/photoshop-ael"
-NOTICE = ("The linear master registers every frame on the Sun, and on real eclipse frames that registration is not "
-          "valid yet: it has landed from 0.07 px to more than 10 px off. Do not use it on real frames.")
+NOTICE = ("The linear master places the Sun of every frame from its own Moon and its corona; on real frames of 2024 "
+          "and 2026 they lie within 0.5-0.9 px of the Moon's straight path, but it has not been checked frame by frame "
+          "against an independent registration.")
 PRIVATE = re.compile(r"/Users/|eines-ia|\.venvs/[A-Za-z0-9_-]+/bin")
 
 

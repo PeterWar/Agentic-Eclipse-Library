@@ -455,7 +455,7 @@ def main() -> None:
         gates["master_one_output_folder"] = len(master_folders) == 1
         master_folder = master_folders[0]
         terminal_master = root / "terminal_master"
-        terminal_config = {"frames": config["masterFrames"], "reference": 0, "camera": "auto", "geometry": "auto",
+        terminal_config = {"frames": config["masterFrames"], "reference": "auto", "camera": "auto", "geometry": "auto",
                            "dark": darks, "flat": flats, "out": str(terminal_master), "run_filters": True,
                            "filter_options": {"filters": "defaults"}}
         (root / "terminal_master_config.json").write_text(json.dumps(terminal_config), encoding="utf-8")

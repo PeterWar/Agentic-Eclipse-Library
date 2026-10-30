@@ -65,12 +65,8 @@ PixInsight ran in its own instances (`-n --automation-mode`); Photoshop with no 
 
 ## Limits
 
-- **The linear master is not valid on real eclipse frames.** It registers every frame on the Sun; on real frames that
-  registration lands 0.07–2.2 px from the reference registration on 2026 frames, and on three Canon EOS 6D frames of
-  2024 (1/80–1/15 s, 4–7 s apart) it landed 13 and 33 px from where the Moon puts the Sun; on three Sony α7 III frames
-  of 2024 a registration that passed the structure check made the Moon cross 15 px in 5 s with 95 % of the range
-  counted as linear, and with 85 % it does not converge. The cause has not been found. When the frames record when they were taken, the master now stops there: the Moon crosses the Sun at most
-  0.65″ a second. Both dialogs say the master is not valid on real frames. Its tests use synthetic frames.
+- **The linear master's registration has not been compared frame by frame with an independent one.** It places
+  every frame's Sun from its own Moon and the corona (see below). Its synthetic tests hold to 0.035 px.
 - Tested on macOS only, with the programs driven by scripts: no installation through PixInsight's Feature Scripts
   dialog and no mouse clicks. The filter workflow was not run at 80 megapixels.
 - The Photoshop PSB carries no colour profile; Photoshop assigns its working profile when it opens it.
@@ -100,3 +96,12 @@ their masters or are taken as masters.
   taken 1 s apart and passes in frames taken 100 s apart (0.008 px against the Sun).
 - **The frames were registered uncalibrated**: a dark signal that does not grow with the exposure made the registration
   on the logarithm fail to converge in the synthetic test. The frames are now registered calibrated, as they are stacked.
+- **The registration, rewritten.** Judge: with the time of every frame, the Moon's shift relative to the Sun must lie
+  on a straight line, because the Moon crosses the Sun at a constant velocity. The Gauss-Newton fit of the logarithm put it 4–6 px (rms) off
+  that line on 15 Canon EOS 6D frames of 2024, up to 12 px, with the same result started only at full resolution. The
+  corona correlated within the window the Moon allows, band-passed at the Moon's scale, puts the frames whose corona
+  holds within 0.45 px of the line on 15 Vixen R6 III frames of 2026 (velocity 0.2713 px/s; the ephemeris gives
+  0.271), 0.9 px on the 6D frames and 0.55 px on 13 Sony α7 III frames of 2024. The 1/3200 s frames have too little
+  corona to correlate (peak 0.01–0.03) and are placed by their Moon and the velocity. With the times of the 6D frames
+  shuffled, the run is refused. The Sony frames of 0.4 s, whose Moon is veiled by cirrus, leave 13–14 px in their limb
+  fit against 0.6–0.8 px and are refused. The three CR2 frames that stopped earlier in the evening now make a master.

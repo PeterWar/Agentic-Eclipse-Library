@@ -53,10 +53,17 @@ Claude plugin folder `plugins/claude-ael/` go to 1.4.0.
   master flat (`ael.calibrate.master_flat` for RAW flats). One file is taken as the master itself. The frames are
   registered calibrated, as they are stacked. Where a flat has no value (a dead pixel, a sensor side with an odd
   number of pixels) the stack leaves the pixel without data: `ael.stack` accepts NaN in a flat for that.
-- **The linear master is experimental.** It registers every frame on the Sun; on real eclipse frames that
-  registration has landed 0.07–2.2 px from the reference registration on 2026 frames, and 13 and 33 px off on three
-  Canon EOS 6D frames of 2024, where the time between the frames now stops it; on three Sony α7 III frames of 2024 it
-  does not converge. The cause has not been found. Both dialogs say so.
+- **The linear master registers on the Moon and the corona.** Each frame's Moon, fitted on its limb, places its Sun
+  within the distance the Moon can have moved since the reference frame, and the corona, band-passed at scales that
+  follow the Moon's size, is correlated within that window (a masked normalised cross-correlation in the Fourier
+  domain). With the frames' times, the lunar velocity from the frames whose corona holds places every frame's Sun from
+  its own Moon, the 1/3200 s frames included. The reference frame is chosen at the middle of the exposure ladder. On
+  real frames of three cameras the frames lie within 0.45–0.9 px of the Moon's straight path, and on the Vixen the
+  lunar velocity is the ephemeris's within 0.1 %; the Gauss-Newton fit of the logarithm it replaces put the Moon up to
+  33 px off on Canon EOS 6D frames of 2024. A frame whose limb fit fails, or whose corona disagrees with its Moon by
+  more than 3 px, stops the run with its name, and so do shuffled times.
+- **The linear master is experimental.** Its registration has not been compared frame by frame with an independent
+  one. Both dialogs say so.
 - **`tools/check_connectors.py`** fails when the shared parts of the two connectors drift apart, and runs both probes
   against stand-in AEL packages to check that each refuses an AEL older than 1.4.0.
 - Measurements and tests: [`docs/VALIDATION_1.4.0.md`](docs/VALIDATION_1.4.0.md).

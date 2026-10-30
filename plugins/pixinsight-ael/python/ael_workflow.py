@@ -660,51 +660,6 @@ def measure_moon(lum: np.ndarray, approx_xy, radius: float) -> dict:
     return fit_limb(lum, wide["xy"], wide["r"], n_rays=720, search_frac=0.08, smooth_px=1.1, n_iter=4)
 
 
-def _shrink(value: np.ndarray, usable: np.ndarray, factor: int):
-    """Means of complete blocks; block pixel i is centred at factor*i + (factor-1)/2."""
-    if factor == 1:
-        return value, usable
-    h, w = (value.shape[0] // factor) * factor, (value.shape[1] // factor) * factor
-    blocks = (h // factor, factor, w // factor, factor)
-    count = usable[:h, :w].reshape(blocks).sum(axis=(1, 3))
-    total = np.where(usable, value, 0)[:h, :w].reshape(blocks).sum(axis=(1, 3))
-    full = count == factor * factor
-    return np.where(full, total / np.maximum(count, 1), 0).astype(np.float32), full
-
-
-def _sampler(shape, t):
-    yy, xx = np.mgrid[:shape[0], :shape[1]].astype(np.float32)
-    mx, my = (xx + t[0]).astype(np.float32), (yy + t[1]).astype(np.float32)
-    return lambda a: cv2.remap(np.ascontiguousarray(a, np.float32), mx, my, cv2.INTER_LINEAR,
-                               borderMode=cv2.BORDER_CONSTANT, borderValue=0)
-
-
-def _solve_translation(ref, ref_use, weight, mov, mov_use, t, *, iterations=100):
-    """Weighted Gauss-Newton for mov(x + t) = a*ref(x) + b over pixels usable in both frames."""
-    gy, gx = np.gradient(mov)
-    # A gradient counts only where its whole 3x3 neighbourhood is usable.
-    grad_use = cv2.erode(mov_use.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(np.float32)
-    t = np.asarray(t, np.float64).copy()
-    for _ in range(iterations):
-        sample = _sampler(ref.shape, t)
-        m = ref_use & (sample(grad_use) > 0.999)
-        n = int(m.sum())
-        if n < 100:
-            raise RuntimeError("Insufficient overlap for solar registration")
-        root = np.sqrt(weight[m]).astype(np.float64)
-        a = np.column_stack([sample(gx)[m], sample(gy)[m], -ref[m], -np.ones(n)]) * root[:, None]
-        step = np.linalg.lstsq(a, -sample(mov)[m] * root, rcond=None)[0][:2]
-        step *= min(1.0, 1.0 / max(float(np.hypot(*step)), 1e-12))  # at most one pixel per iteration
-        t += step
-        if np.hypot(*step) < 1e-4:
-            return t
-    raise RuntimeError("Solar registration did not converge")
-
-
-def _log_positive(value: np.ndarray) -> np.ndarray:
-    return np.where(value > 0, np.log(np.where(value > 0, value, 1.0)), np.nan).astype(np.float32)
-
-
 def _inside(mask: np.ndarray, distance: float) -> np.ndarray:
     """Pixels farther than ``distance`` from any pixel without data."""
     padded = np.pad(mask.astype(np.uint8), 1)
@@ -717,107 +672,240 @@ def _pearson(a: np.ndarray, b: np.ndarray, mask: np.ndarray) -> float:
     return float((x * y).sum() / np.sqrt((x * x).sum() * (y * y).sum()))
 
 
-def structure_check(reference, moving, ref_valid, mov_valid, geometry: EclipseGeometry, t, *,
-                    rmax_rsun: float, small_px: float = 1.5) -> dict:
+def corona_band(lum: np.ndarray, usable: np.ndarray, moon: dict, margin_px: float, small: float, large: float, box):
+    """The corona band-pass of one frame inside box (y0, y1, x0, x1) of its own pixels, and where it holds.
+
+    Isolated hot pixels are fixed on the sensor and would pull a correlation towards no shift, so a 3x3 median removes
+    them first. The linear image is smoothed at two scales (keeping the noise below zero of a short exposure) and the
+    logarithm of their ratio is the band-pass, so the exposure drops out. It holds where both smoothings saw data,
+    farther than twice the larger scale from the frame's own Moon (plus margin), from saturation and from the edge.
+    """
+    y0, y1, x0, x1 = box
+    lum, usable = lum[y0:y1, x0:x1], usable[y0:y1, x0:x1]
+    yy, xx = np.mgrid[y0:y1, x0:x1]
+    free = np.hypot(xx - moon["xy"][0], yy - moon["xy"][1]) > moon["r"] + margin_px
+    linear = (usable | (np.isfinite(lum) & (lum <= 0))) & free
+    clean = cv2.medianBlur(np.where(np.isfinite(lum), lum, 0).astype(np.float32), 3)
+    fine = normalized_gaussian(clean, linear, small, 0.5)
+    coarse = normalized_gaussian(clean, linear, large, 0.5)
+    holds = linear & np.isfinite(fine) & np.isfinite(coarse) & (fine > 0) & (coarse > 0)
+    band = np.zeros(lum.shape, np.float32)
+    band[holds] = np.log(fine[holds] / coarse[holds])
+    return band, holds & _inside(linear, 2 * large)
+
+
+def masked_correlation(f: np.ndarray, f_holds: np.ndarray, g: np.ndarray, g_holds: np.ndarray, pad: int,
+                       min_overlap: float) -> np.ndarray:
+    """Normalised cross-correlation of f(x) and g(x + s) over the pixels where both hold, for every shift with
+    |s_x|, |s_y| <= pad, as an array indexed [s_y + pad, s_x + pad] (masked correlation in the Fourier domain,
+    Padfield 2012). Shifts whose overlap is under min_overlap pixels are -inf."""
+    size = (f.shape[0] + 2 * pad, f.shape[1] + 2 * pad)
+    mf, mg = f_holds.astype(np.float64), g_holds.astype(np.float64)
+    f, g = np.where(f_holds, f, 0).astype(np.float64), np.where(g_holds, g, 0).astype(np.float64)
+    fixed = [np.conj(np.fft.rfft2(x, size)) for x in (mf, f, f * f)]
+    moved = [np.fft.rfft2(x, size) for x in (mg, g, g * g)]
+    rows = np.r_[size[0] - pad:size[0], 0:pad + 1]
+    cols = np.r_[size[1] - pad:size[1], 0:pad + 1]
+
+    def correlate(a, b):
+        return np.fft.irfft2(a * b, size)[np.ix_(rows, cols)]
+    n = correlate(fixed[0], moved[0])
+    sf, sg = correlate(fixed[1], moved[0]), correlate(fixed[0], moved[1])
+    sfg = correlate(fixed[1], moved[1])
+    sff, sgg = correlate(fixed[2], moved[0]), correlate(fixed[0], moved[2])
+    with np.errstate(invalid="ignore", divide="ignore"):
+        ncc = (sfg - sf * sg / n) / np.sqrt(np.maximum(sff - sf * sf / n, 0) * np.maximum(sgg - sg * sg / n, 0))
+    ncc[(n < min_overlap) | ~np.isfinite(ncc)] = -np.inf
+    return ncc
+
+
+def band_scales(reference_moon: dict) -> tuple[float, float]:
+    """The corona band-pass scales: the structure of a corona sits at a fixed fraction of the Moon's size, whatever
+    the optics (4 and 12 px for a Moon of 220 px, 8 and 25 px for one of 450 px)."""
+    small = max(1.5, reference_moon["r"] / 55)
+    return small, 3 * small
+
+
+def corona_shift(reference, moving, reference_moon: dict, moving_moon: dict, geometry: EclipseGeometry, centre,
+                 window_px: float, *, margin_px: float, rmax_rsun: float = 3.0):
+    """Translation reference->input, moving(x + t) showing what reference(x) shows, measured on the corona within
+    window_px of centre (the frame's own lunar shift: the Sun is there, give or take how far the Moon can have moved).
+
+    The corona band-pass of both frames is correlated within rmax_rsun of the Sun over every shift the window allows
+    at once, and the peak is placed between pixels by a parabola on each axis.
+    """
+    small, large = band_scales(reference_moon)
+    radius = geometry.sun_radius_px
+    sun = np.asarray(geometry.sun_xy, np.float64)
+    half = rmax_rsun * radius + 4 * large + 2
+    height, width = reference[0].shape
+    cx, cy = int(round(centre[0])), int(round(centre[1]))
+    # the box around the reference Sun, and the same box moved by the whole pixels of the centre, both in their frames
+    x0, x1 = max(0, int(sun[0] - half), -cx), min(width, int(sun[0] + half) + 1, width - cx)
+    y0, y1 = max(0, int(sun[1] - half), -cy), min(height, int(sun[1] + half) + 1, height - cy)
+    if x1 - x0 < 8 * large or y1 - y0 < 8 * large:
+        raise RuntimeError("the two frames share too little corona around the Sun")
+    fixed, fixed_holds = corona_band(*reference, reference_moon, margin_px, small, large, (y0, y1, x0, x1))
+    moved, moved_holds = corona_band(*moving, moving_moon, margin_px, small, large, (y0 + cy, y1 + cy, x0 + cx, x1 + cx))
+    yy, xx = np.mgrid[y0:y1, x0:x1]
+    fixed_holds &= np.hypot(xx - sun[0], yy - sun[1]) <= rmax_rsun * radius
+    pad = int(math.ceil(window_px)) + 2
+    ncc = masked_correlation(fixed, fixed_holds, moved, moved_holds, pad, 0.3 * fixed_holds.sum())
+    sy, sx = np.mgrid[-pad:pad + 1, -pad:pad + 1]
+    rest = (centre[0] - cx, centre[1] - cy)
+    search = np.where(np.hypot(sx - rest[0], sy - rest[1]) <= window_px, ncc, -np.inf)
+    iy, ix = np.unravel_index(np.argmax(search), search.shape)
+    peak = float(search[iy, ix])
+    if not math.isfinite(peak):
+        raise RuntimeError("the frames share no corona within the window the Moon allows")
+
+    def vertex(before, at, after):
+        curve = before - 2 * at + after
+        return 0.5 * (before - after) / curve if math.isfinite(curve) and curve < 0 else 0.0
+    dx = vertex(ncc[iy, ix - 1], ncc[iy, ix], ncc[iy, ix + 1]) if 0 < ix < 2 * pad else 0.0
+    dy = vertex(ncc[iy - 1, ix], ncc[iy, ix], ncc[iy + 1, ix]) if 0 < iy < 2 * pad else 0.0
+    t = np.array([cx + ix - pad + dx, cy + iy - pad + dy])
+    # The best shift inside the window is the corona's own peak only if no neighbour, inside or outside the window,
+    # correlates more; otherwise the window cut it, and the corona puts the Sun where the Moon cannot have gone.
+    around = ncc[max(iy - 1, 0):iy + 2, max(ix - 1, 0):ix + 2]
+    cut = bool(np.max(around[np.isfinite(around)]) > peak) or iy in (0, 2 * pad) or ix in (0, 2 * pad)
+    return t, {"correlation_peak": peak, "window_px": float(window_px), "band_px": [small, large],
+               "on_window_edge": cut}
+
+
+def structure_check(reference, moving, reference_moon: dict, moving_moon: dict, geometry: EclipseGeometry, t, *,
+                    margin_px: float, rmax_rsun: float) -> dict:
     """Check a registration on coronal structure, against the frame turned about the Sun.
 
-    The corona is band-passed (linear smoothing, then logarithm, so noisy short exposures keep
-    their structure) and compared only where both filters saw data over their whole support.
-    A frame turned by 90° or 270° about the Sun keeps the radial statistics and loses the
-    structure; the score is the share of what the turn leaves unexplained that the structure
-    matches. 180° is left out: equatorial streamers can be symmetric.
+    The corona band-pass (corona_band) of both frames is compared where both hold, at the translation t and with the
+    moving frame turned by 90° or 270° about the Sun, which keeps the radial statistics and loses the structure; the
+    score is the share of what the turn leaves unexplained that the structure matches. 180° is left out: equatorial
+    streamers can be symmetric.
     """
-    large = max(3 * small_px, 0.1 * geometry.sun_radius_px)
-    # Only the corona within rmax_rsun is compared: work on that box (plus the filter's reach and
-    # the shift), in the same pixels of both frames.
+    small, large = band_scales(reference_moon)
     sun = np.asarray(geometry.sun_xy, np.float64)
     reach = rmax_rsun * geometry.sun_radius_px + 4 * large + float(np.hypot(*t)) + 2
-    height, width = ref_valid.shape
+    height, width = reference[0].shape
     x0, x1 = max(0, int(sun[0] - reach)), min(width, int(np.ceil(sun[0] + reach)) + 1)
     y0, y1 = max(0, int(sun[1] - reach)), min(height, int(np.ceil(sun[1] + reach)) + 1)
+    box = (y0, y1, x0, x1)
+    maps, holds = zip(corona_band(*reference, reference_moon, margin_px, small, large, box),
+                      corona_band(*moving, moving_moon, margin_px, small, large, box))
     sun = sun - [x0, y0]
-    maps, cores = [], []
-    for (lum, _), valid in ((reference, ref_valid), (moving, mov_valid)):
-        lum, valid = lum[y0:y1, x0:x1], valid[y0:y1, x0:x1]
-        band = (_log_positive(normalized_gaussian(lum, valid, small_px, 0.5)) -
-                _log_positive(normalized_gaussian(lum, valid, large, 0.5)))
-        maps.append(band)
-        cores.append(_inside(valid, 2 * large) & np.isfinite(band))
     h, w = maps[0].shape
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
-    seen = (np.hypot(xx - sun[0], yy - sun[1]) <= rmax_rsun * geometry.sun_radius_px) & cores[0]
-    filled = np.where(np.isfinite(maps[1]), maps[1], 0).astype(np.float32)
+    seen = (np.hypot(xx - sun[0], yy - sun[1]) <= rmax_rsun * geometry.sun_radius_px) & holds[0]
     values = {}
     for angle in (0, 90, 180, 270):
         c, s = math.cos(math.radians(angle)), math.sin(math.radians(angle))
         linear = np.array([[c, -s], [s, c]])
         warp = np.hstack([linear, (sun + np.asarray(t) - linear @ sun)[:, None]]).astype(np.float32)
-        turned = cv2.warpAffine(filled, warp, (w, h), flags=cv2.INTER_LINEAR | cv2.WARP_INVERSE_MAP)
-        covered = cv2.warpAffine(cores[1].astype(np.uint8), warp, (w, h),
+        turned = cv2.warpAffine(maps[1], warp, (w, h), flags=cv2.INTER_LINEAR | cv2.WARP_INVERSE_MAP)
+        covered = cv2.warpAffine(holds[1].astype(np.uint8), warp, (w, h),
                                  flags=cv2.INTER_NEAREST | cv2.WARP_INVERSE_MAP).astype(bool)
         mask = seen & covered
         values[str(angle)] = _pearson(maps[0], turned, mask) if mask.sum() >= 100 else float("nan")
     null = max(values["90"], values["270"])
     score = (values["0"] - null) / (1.0 - null) if null < 1 else float("nan")
     return {"correlation": values["0"], "turned_correlation": {k: values[k] for k in ("90", "180", "270")},
-            "structure_score": score, "band_px": [small_px, large]}
+            "structure_score": score, "band_px": [small, large]}
 
 
-def register_on_sun(reference, moving, geometry: EclipseGeometry, reference_moon: dict, moving_moon: dict, *,
-                    margin_px: float, rmax_rsun: float = 3.0, initial=(0.0, 0.0),
-                    min_structure: float = 0.25) -> dict:
-    """Translation reference->input measured on the corona, which is fixed on the Sun.
+CORONA_MIN_PEAK = 0.4      # below it the corona of a frame is too faint to align it (a 1/3200 s frame)
+STRUCTURE_MIN_SCORE = 0.25
+MOON_FIT_LIMIT = 3.0       # a limb fit this many times worse than the reference's (and over 2 px) is refused
+CORONA_MOON_DISAGREEMENT_PX = 3.0  # a frame whose strong corona lies farther than this from its Moon's prediction
 
-    Each frame leaves out its own Moon, measured on its own limb, plus ``margin_px`` for the
-    blurred lunar edge; the Moon moves relative to the Sun during totality. Only unsaturated
-    pixels within ``rmax_rsun`` of the reference Sun count. Log intensity turns exposure into
-    an offset; weights follow the reference signal (Poisson). Coarse-to-fine block means.
-    """
-    def logged(lum, usable, moon):
-        yy, xx = np.mgrid[:lum.shape[0], :lum.shape[1]]
-        free = np.hypot(xx - moon["xy"][0], yy - moon["xy"][1]) > moon["r"] + margin_px
-        use = usable & free
-        # The structure check smooths linearly, so it keeps the noise below zero.
-        linear = (usable | (np.isfinite(lum) & (lum <= 0))) & free
-        return np.where(use, np.log(np.where(use, lum, 1)), 0).astype(np.float32), use, linear
-    ref, ref_use, ref_linear = logged(*reference, reference_moon)
-    mov, mov_use, mov_linear = logged(*moving, moving_moon)
-    ref_use &= geometry.rsun_map() <= rmax_rsun
-    weight = np.where(ref_use, reference[0], 0).astype(np.float32)
-    weight /= max(float(weight.max()), 1e-30)
-    factors = [f for f in (16, 8, 4, 2) if geometry.sun_radius_px / f >= 8] + [1]
-    t = np.asarray(initial, np.float64)
-    for factor in factors:
-        r, ru = _shrink(ref, ref_use, factor)
-        w, _ = _shrink(weight, ref_use, factor)
-        m, mu = _shrink(mov, mov_use, factor)
-        t = _solve_translation(r, ru, w, m, mu, t / factor) * factor
-    # Independent check on coronal structure: an unrelated image or a false optimum fails here.
-    check = structure_check(reference, moving, ref_linear, mov_linear, geometry, t, rmax_rsun=rmax_rsun)
-    score = check["structure_score"]
-    if not math.isfinite(score) or score < min_structure:
-        raise RuntimeError(f"Solar registration rejected: coronal structure correlates {check['correlation']:.3f}, "
-                           f"the frame turned about the Sun up to "
-                           f"{max(check['turned_correlation']['90'], check['turned_correlation']['270']):.3f}; "
-                           f"structure score {score:.3f} < {min_structure}")
-    return dict(check, translation=t.tolist(), levels=factors, margin_px=margin_px, rmax_rsun=rmax_rsun)
+
+def measure_frame(reference, moving, geometry: EclipseGeometry, reference_moon: dict, *, margin_px: float,
+                  window_px: float, rmax_rsun: float = 3.0) -> dict:
+    """What a frame says about where its Sun is: its own Moon, fitted on its limb (shift from the reference Moon), and
+    its corona, correlated within window_px of that shift; with the structure check at the corona's translation."""
+    moon = measure_moon(moving[0], reference_moon["xy"], reference_moon["r"])
+    limit = max(2.0, MOON_FIT_LIMIT * reference_moon["rms"])
+    if not moon["rms"] <= limit:
+        raise RuntimeError(f"its lunar limb could not be measured: the fit leaves {moon['rms']:.1f} px against "
+                           f"{reference_moon['rms']:.1f} px on the reference frame (a saturated or veiled Moon)")
+    moon_shift = np.asarray(moon["xy"]) - np.asarray(reference_moon["xy"])
+    t, corona = corona_shift(reference, moving, reference_moon, moon, geometry, moon_shift, window_px,
+                             margin_px=margin_px, rmax_rsun=rmax_rsun)
+    check = structure_check(reference, moving, reference_moon, moon, geometry, t, margin_px=margin_px,
+                            rmax_rsun=rmax_rsun)
+    return {"moon": moon, "moon_shift": moon_shift, "corona_translation": t, "corona": corona, "check": check,
+            "corona_holds": corona["correlation_peak"] >= CORONA_MIN_PEAK
+                            and check["structure_score"] >= STRUCTURE_MIN_SCORE}
+
+
+def corona_refusal(found: dict, max_lunar_px: float, lunar_basis: str) -> str | None:
+    """Why a frame aligned by its corona alone is not accepted, or None."""
+    lunar = found["moon_shift"] - found["corona_translation"]
+    check = found["check"]
+    if found["corona"]["on_window_edge"]:
+        return (f"aligned on the Sun, the Moon would have moved at least {np.hypot(*lunar):.1f} px across it, and it "
+                f"can move at most {max_lunar_px:.1f} px {lunar_basis}: the alignment on the Sun is wrong, or the "
+                "frames are not of one totality")
+    if found["corona"]["correlation_peak"] < CORONA_MIN_PEAK:
+        return (f"its corona is too faint to align it on the Sun (correlation {found['corona']['correlation_peak']:.2f},"
+                f" at least {CORONA_MIN_PEAK} needed)")
+    if not check["structure_score"] >= STRUCTURE_MIN_SCORE:
+        return (f"Solar registration rejected: coronal structure correlates {check['correlation']:.3f}, the frame "
+                f"turned about the Sun up to {max(check['turned_correlation']['90'], check['turned_correlation']['270']):.3f}; "
+                f"structure score {check['structure_score']:.3f} < {STRUCTURE_MIN_SCORE}")
+    return None
+
+
+def registration_record(found: dict, t, selected: str, max_lunar_px, lunar_basis) -> dict:
+    moon = found["moon"]
+    return dict(found["check"], translation=np.asarray(t, float).tolist(), selected=selected,
+                corona_translation=np.asarray(found["corona_translation"]).tolist(), corona=found["corona"],
+                moon_fit={key: moon[key] for key in MOON_KEYS},
+                lunar_shift_px=(found["moon_shift"] - np.asarray(t, float)).tolist(),
+                lunar_bound_px=max_lunar_px, lunar_bound_basis=lunar_basis)
 
 
 def register_frame(reference, moving, geometry: EclipseGeometry, reference_moon: dict, *, margin_px: float,
                    rmax_rsun: float = 3.0, max_lunar_px: float | None = None,
                    lunar_basis: str = "during a totality") -> dict:
-    """Moon of the moving frame from its own limb; registration on the Sun from the corona."""
-    moon = measure_moon(moving[0], reference_moon["xy"], reference_moon["r"])
-    moon_shift = np.asarray(moon["xy"]) - np.asarray(reference_moon["xy"])
-    solar = register_on_sun(reference, moving, geometry, reference_moon, moon, margin_px=margin_px,
-                            rmax_rsun=rmax_rsun, initial=moon_shift)
-    lunar = moon_shift - np.asarray(solar["translation"])
-    if max_lunar_px is not None and np.hypot(*lunar) > max_lunar_px:
-        raise RuntimeError(f"aligned on the Sun, the Moon would have moved {np.hypot(*lunar):.1f} px across it, and "
-                           f"it can move at most {max_lunar_px:.1f} px {lunar_basis}: the alignment on the Sun is "
-                           "wrong, or the frames are not of one totality")
-    return dict(solar, selected="sun_translation", moon_fit={key: moon[key] for key in MOON_KEYS},
-                lunar_shift_px=lunar.tolist(), lunar_bound_px=max_lunar_px, lunar_bound_basis=lunar_basis)
+    """One frame aligned on the Sun by its corona, searched within the window the Moon allows; refused when the
+    corona is too faint, does not match the structure of the reference, or would make the Moon jump."""
+    window = max_lunar_px if max_lunar_px is not None else 0.16 * geometry.moon_radius_px + 2
+    found = measure_frame(reference, moving, geometry, reference_moon, margin_px=margin_px, window_px=window,
+                          rmax_rsun=rmax_rsun)
+    refusal = corona_refusal(found, window, lunar_basis)
+    if refusal:
+        raise RuntimeError(refusal)
+    return registration_record(found, found["corona_translation"], "corona", window, lunar_basis)
+
+
+def lunar_velocity(found: dict, meta: list[dict], reference_index: int) -> dict | None:
+    """The Moon's velocity across the Sun, in px per second, from the frames whose corona aligns them, or None.
+
+    During totality the Moon crosses the Sun at a constant velocity, so the lunar shift of every frame whose corona
+    holds lies on a line through the reference (zero shift at its time). A least-squares line, leaving out the frames
+    farther than max(1 px, 3 rms) from it, gives the velocity. It needs the times of all the frames and two frames
+    whose corona holds.
+    """
+    if any(item.get("time_s") is None for item in meta):
+        return None
+    t0 = meta[reference_index]["time_s"]
+    points = [(meta[i]["time_s"] - t0, f["moon_shift"] - f["corona_translation"], i) for i, f in sorted(found.items())
+              if f["corona_holds"] and not f["corona"]["on_window_edge"]]
+    if len(points) < 2:
+        return None
+    dt = np.array([p[0] for p in points])
+    shift = np.array([p[1] for p in points])
+    keep = np.ones(len(points), bool)
+    for _ in range(5):
+        velocity = np.linalg.lstsq(dt[keep, None], shift[keep], rcond=None)[0][0]
+        off = np.hypot(*(shift - dt[:, None] * velocity).T)
+        rms = float(np.sqrt(np.mean(off[keep] ** 2)))
+        again = off <= max(1.0, 3 * rms)
+        if again.sum() < 2 or np.array_equal(again, keep):
+            break
+        keep = again
+    return {"px_per_s": velocity.tolist(), "speed_px_per_s": float(np.hypot(*velocity)),
+            "frames": [p[2] for p in points], "kept": [p[2] for p, k in zip(points, keep) if k],
+            "residual_rms_px": rms, "residual_px": {str(p[2]): float(o) for p, o in zip(points, off)}}
 
 
 # The Moon crosses the Sun at most about 0.6"/s (its own motion at perigee less the Sun's; the Earth's rotation only
@@ -843,12 +931,28 @@ def lunar_bound(geometry: EclipseGeometry, reference: dict, frame: dict) -> tupl
     return bound, f"in the {seconds:.1f} s between the two frames"
 
 
+def automatic_reference(meta: list[dict]) -> int:
+    """The reference frame: the exposure nearest the middle of the ladder on a logarithmic scale, whose corona is
+    neither noise nor saturated, so that the frames above and below it correlate with it; of the frames of that
+    exposure, the one nearest the middle of the sequence in time (or in the list, without times)."""
+    exposures = [item["exposure_s"] for item in meta]
+    middle = math.sqrt(min(exposures) * max(exposures))
+    nearest = min(abs(math.log(e / middle)) for e in exposures)
+    candidates = [i for i, e in enumerate(exposures) if abs(math.log(e / middle)) <= nearest + 1e-9]
+    if all(item.get("time_s") is not None for item in meta):
+        centre = (min(item["time_s"] for item in meta) + max(item["time_s"] for item in meta)) / 2
+        return min(candidates, key=lambda i: abs(meta[i]["time_s"] - centre))
+    return candidates[len(candidates) // 2]
+
+
 def run_master(cfg: dict) -> dict:
     paths = [Path(value).expanduser().resolve() for value in cfg["frames"]]
     if not paths:
         raise ValueError("No input frames")
-    reference_index = int(cfg.get("reference", 0))
-    if reference_index < 0 or reference_index >= len(paths):
+    # A geometry that is given describes the first frame, unless the configuration names another; without one, AEL
+    # chooses the reference and measures the geometry on it.
+    chosen = cfg.get("reference", "auto" if cfg.get("geometry") in (None, "", "auto") else 0)
+    if chosen != "auto" and not 0 <= int(chosen) < len(paths):
         raise ValueError("Invalid reference index")
     kinds = ["raw" if path.suffix.lower() in RAW_EXTENSIONS else "rgb" for path in paths]
     profile = cfg.get("camera")
@@ -869,6 +973,9 @@ def run_master(cfg: dict) -> dict:
         if not 0 < level["linearity_fraction"] <= 1:
             raise ValueError(f"Invalid linearity fraction for {path}: {level}")
     meta = [metadata(path) for path in paths]
+    reference_index = automatic_reference(meta) if chosen == "auto" else int(chosen)
+    reference_reason = ("chosen: the exposure nearest the middle of the ladder (logarithmically), and the frame of it "
+                        "nearest the middle in time" if chosen == "auto" else "given")
     if len({item["iso"] for item in meta}) != 1:
         raise ValueError("Stack one ISO at a time")
     if len({(item["make"], item["model"]) for item in meta}) != 1:
@@ -926,39 +1033,78 @@ def run_master(cfg: dict) -> dict:
     if any(pattern != patterns[0] for pattern in patterns):
         raise ValueError("CFA patterns must agree")
 
-    # The corona is fixed on the Sun and the Moon moves across it during totality, so frames
-    # are registered on the Sun; each frame keeps its own measured Moon for its mask.
+    # The corona is fixed on the Sun and the Moon moves across it during totality, so frames are registered on the
+    # Sun; each frame keeps its own measured Moon for its mask. Each frame's Moon, fitted on its limb, says where its
+    # Sun is, give or take how far the Moon can have moved since the reference frame; its corona is correlated within
+    # that window.
     margin = float(cfg.get("registration_margin_px", max(6.0, 0.015 * geometry.moon_radius_px)))
     rmax = float(cfg.get("registration_rmax_rsun", 3.0))
     reference = data[reference_index][:2]
     reference_fit = measure_moon(reference[0], geometry.moon_xy, geometry.moon_radius_px)
+    found, bounds = {}, {}
+    for index, item in enumerate(data):
+        if index == reference_index:
+            continue
+        if cfg.get("max_lunar_shift_px") is not None:
+            bounds[index] = (float(cfg["max_lunar_shift_px"]), "as the configuration allows")
+        else:
+            bounds[index] = lunar_bound(geometry, meta[reference_index], meta[index])
+        try:
+            found[index] = measure_frame(reference, item[:2], geometry, reference_fit, margin_px=margin,
+                                         window_px=bounds[index][0], rmax_rsun=rmax)
+        except RuntimeError as exc:
+            raise RuntimeError(f"{paths[index].name} could not be aligned with {paths[reference_index].name}, so "
+                               f"no master was made: {exc}") from exc
+    # With the times of the frames, the Moon's velocity across the Sun, from the frames whose corona holds, places the
+    # Sun of every frame from its own Moon, the frames too short for their corona included; one frame's error then
+    # weighs little. Without the times, each frame is placed by its own corona.
+    velocity = lunar_velocity(found, meta, reference_index)
+    if velocity is not None:
+        fastest = LUNAR_RATE_ARCSEC_PER_S * geometry.moon_radius_px / MOON_RADIUS_MIN_ARCSEC
+        if velocity["speed_px_per_s"] > fastest:
+            raise RuntimeError(f"The coronas of the frames make the Moon cross the Sun at "
+                               f"{velocity['speed_px_per_s']:.3f} px/s, faster than it can ({fastest:.3f} px/s): the "
+                               "frames do not align on their corona, so no master was made.")
     registrations = []
     matrices = []
     moon_geometries = []
-    for index, item in enumerate(data):
+    for index in range(len(data)):
         if index == reference_index:
-            matrix = np.eye(2, 3, dtype=np.float64)
             registration = {"selected": "reference", "translation": [0.0, 0.0], "correlation": 1.0,
                             "moon_fit": {key: reference_fit[key] for key in MOON_KEYS},
                             "lunar_shift_px": [0.0, 0.0]}
+            t = np.zeros(2)
         else:
-            # How far the Moon can cross the Sun: since the reference frame when both record when they were taken,
-            # otherwise in a whole totality (or as the configuration gives it).
-            if cfg.get("max_lunar_shift_px") is not None:
-                bound, basis = float(cfg["max_lunar_shift_px"]), "as the configuration allows"
+            item, (bound, basis) = found[index], bounds[index]
+            name = f"{paths[index].name} could not be aligned with {paths[reference_index].name}, so no master was made"
+            if velocity is None:
+                refusal = corona_refusal(item, bound, basis)
+                if refusal:
+                    raise RuntimeError(f"{name}: {refusal}")
+                t, selected = item["corona_translation"], "corona"
             else:
-                bound, basis = lunar_bound(geometry, meta[reference_index], meta[index])
-            try:
-                registration = register_frame(reference, item[:2], geometry, reference_fit, margin_px=margin,
-                                              rmax_rsun=rmax, max_lunar_px=bound, lunar_basis=basis)
-            except RuntimeError as exc:
-                raise RuntimeError(f"{paths[index].name} could not be aligned with {paths[reference_index].name}, so "
-                                   f"no master was made: {exc}") from exc
-            matrix = np.hstack([np.eye(2), np.asarray(registration["translation"])[:, None]])
+                if item["corona_holds"] and item["corona"]["on_window_edge"]:
+                    raise RuntimeError(f"{name}: {corona_refusal(item, bound, basis)}")
+                elapsed = meta[index]["time_s"] - meta[reference_index]["time_s"]
+                t = item["moon_shift"] - np.asarray(velocity["px_per_s"]) * elapsed
+                selected = "own Moon and the lunar velocity"
+                disagreement = float(np.hypot(*(item["corona_translation"] - t)))
+                if item["corona_holds"] and disagreement > CORONA_MOON_DISAGREEMENT_PX:
+                    raise RuntimeError(f"{name}: its corona and its Moon disagree by {disagreement:.1f} px, with the "
+                                       "Moon moving as the other frames show; leave this frame out")
+            registration = registration_record(item, t, selected, bound, basis)
+            if velocity is not None:
+                registration["corona_disagreement_px"] = float(np.hypot(*(item["corona_translation"] - t)))
+        matrix = np.hstack([np.eye(2), np.asarray(t, np.float64)[:, None]])
         registration["reference_to_input"] = matrix.tolist()
         registrations.append(registration)
         matrices.append(matrix)
         moon_geometries.append(registration["moon_fit"])
+    if velocity is not None:
+        velocity = dict(velocity, frames=[paths[i].name for i in velocity["frames"]],
+                        kept=[paths[i].name for i in velocity["kept"]],
+                        residual_px={paths[int(i)].name: v for i, v in velocity["residual_px"].items()},
+                        lunar_radii_per_ks=1000 * velocity["speed_px_per_s"] / reference_fit["r"])
     out.mkdir(parents=True, exist_ok=True)
     frames = []
     for index, (path, kind, info, matrix, moon_fit, level) in enumerate(
@@ -998,7 +1144,8 @@ def run_master(cfg: dict) -> dict:
                "calibration": calibration,
                "geometry_source": "measured on the reference frame" if geometry_report else "given",
                "geometry_measurement": geometry_report,
-               "registrations": registrations, "images": images,
+               "reference": {"frame": paths[reference_index].name, "how": reference_reason},
+               "registrations": registrations, "lunar_velocity": velocity, "images": images,
                "filters_receipt": filter_result["receipt"] if filter_result else None,
                "gates": ael_receipt["gates"], "credit": CREDIT}
     receipt_path = out / "AEL_WORKFLOW_RECEIPT.json"

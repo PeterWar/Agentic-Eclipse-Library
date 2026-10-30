@@ -213,8 +213,9 @@ var AELBridgeDialog = class extends Dialog
       notice.wordWrapping = true;
       notice.useRichText = true;
       notice.text = "<b>Experimental.</b> The filter layers are validated with synthetic data. "
-                    + "The linear master registers every frame on the Sun, and on real eclipse frames that registration "
-                    + "is not valid yet: it has landed from 0.07 px to more than 10 px off. Do not use it on real frames.";
+                    + "The linear master places the Sun of every frame from its own Moon and its corona; on real frames "
+                    + "of 2024 and 2026 they lie within 0.5-0.9 px of the Moon's straight path, but it has not been checked "
+                    + "frame by frame against an independent registration.";
       this.sizer.add( notice );
 
       let buttons = new HorizontalSizer;
@@ -284,7 +285,7 @@ var AELBridgeDialog = class extends Dialog
             {
                // No geometry and no camera profile: AEL measures them and the receipt says what was measured and assumed.
                // Several darks or flats make their masters (a master dark for each exposure); one file is the master.
-               let config = { frames: d.frames, reference: 0, camera: "auto", geometry: "auto",
+               let config = { frames: d.frames, reference: "auto", camera: "auto", geometry: "auto",
                               out: aelWorkflowNewOutput( outputRoot, "master" ), run_filters: true,
                               filter_options: { filters: filters } };
                if ( d.darks.length > 0 ) config.dark = d.darks;
