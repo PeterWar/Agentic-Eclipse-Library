@@ -22,7 +22,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 PI, PS = REPO / "plugins/pixinsight-ael", REPO / "plugins/photoshop-ael"
 NOTICE = ("The linear master registers every frame on the Sun, and on real eclipse frames that registration is not "
-          "valid yet: it lands 0.07-2.2 px from the reference registration. Do not use it on real frames.")
+          "valid yet: it has landed from 0.07 px to more than 10 px off. Do not use it on real frames.")
 PRIVATE = re.compile(r"/Users/|eines-ia|\.venvs/[A-Za-z0-9_-]+/bin")
 
 
@@ -85,7 +85,7 @@ def main() -> None:
         a, b = (normalise((root / relative).read_text(encoding="utf-8")) for root in (PI, PS))
         checks[f"{relative} is the same in both"] = a == b
     checks["same experimental notice in both dialogs"] = all(
-        NOTICE in literal_text(path) for path in (PI / "AELWorkflowDialog.jsh", PS / "AELPhotoshopDialog.jsx"))
+        NOTICE in literal_text(path) for path in (PI / "AELBridgeDialog.jsh", PS / "AELPhotoshopDialog.jsx"))
     floors = (minimum(PI / "python/ael_bridge_check.py"), minimum(PS / "python/ael_photoshop.py"))
     checks[f"same AEL floor in both probes {floors}"] = floors[0] == floors[1] != "none"
     answers = refusals()

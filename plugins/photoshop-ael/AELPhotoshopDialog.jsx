@@ -44,7 +44,7 @@ var AELPhotoshopDialog = function () {
     // The same notice as the PixInsight connector's workflow dialog.
     var experimental = win.add("statictext", undefined, "Experimental. The filter layers from linear.npy operation is " +
         "validated with synthetic data. The linear master registers every frame on the Sun, and on real eclipse " +
-        "frames that registration is not valid yet: it lands 0.07-2.2 px from the reference registration. " +
+        "frames that registration is not valid yet: it has landed from 0.07 px to more than 10 px off. " +
         "Do not use it on real frames.", {multiline: true});
     experimental.preferredSize = [610, 48];
 

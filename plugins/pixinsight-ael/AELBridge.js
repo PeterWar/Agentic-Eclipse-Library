@@ -26,9 +26,9 @@
 
 #engine v8
 #feature-id AELBridge : Utilities > Agentic Eclipse Library
-#feature-info Run AEL structure and polar products through Python without changing the source image.
+#feature-info Structure images, unrolled views and filter layers of the corona from an open image, or a linear master from totality frames (experimental), made by the Agentic Eclipse Library.
 
-#include "AELBridgeCore.jsh"
+#include "AELWorkflowCore.jsh"
 #include "AELBridgeDialog.jsh"
 
 CoreApplication.ensureMinimumVersion( 1, 9, 4 );
@@ -42,8 +42,8 @@ function main()
    }
    catch ( error )
    {
-      Console.criticalln( "AEL bridge dialog: " + error );
-      new MessageBox( String( error ), "AEL bridge", StdIcon.Error, StdButton.Ok ).execute();
+      Console.criticalln( "Agentic Eclipse Library: " + error );
+      new MessageBox( String( error ), "Agentic Eclipse Library", StdIcon.Error, StdButton.Ok ).execute();
    }
 }
 main();

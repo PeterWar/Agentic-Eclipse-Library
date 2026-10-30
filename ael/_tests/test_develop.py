@@ -98,6 +98,25 @@ def test_stack_linear_hdr_support_two_bands_and_receipts():
         assert not (root/'bad_iso').exists()
 
 
+def test_stack_flat_without_a_value_leaves_no_data():
+    with tempfile.TemporaryDirectory() as tmp:
+        root=Path(tmp)
+        p,cfg,truth=_recipe(root)
+        flat=np.full((70,90,3),2.0,np.float32); flat[40,60,1]=np.nan   # the flat saw no light at one pixel
+        np.save(root/'flat.npy',flat)
+        for f in cfg['frames']: f['flat']='flat.npy'
+        p.write_text(json.dumps(cfg))
+        stack_from_config(p,root/'flat',progress=lambda *_:None)
+        image=np.load(root/'flat/linear.npy'); valid=np.load(root/'flat/valid.npy')
+        assert not valid[40,60] and np.isnan(image[40,60]).all()
+        keep=valid.copy(); keep[40,60]=False
+        assert np.max(np.abs(image[keep]-truth[keep]/2))<.002          # the flat divides everywhere else
+        flat[40,60,1]=0.0; np.save(root/'flat.npy',flat)                # a zero is a value, and not a positive one
+        raises(ValueError,lambda:stack_from_config(p,root/'zero',progress=lambda *_:None))
+        flat[40,60,1]=np.inf; np.save(root/'flat.npy',flat)
+        raises(ValueError,lambda:stack_from_config(p,root/'inf',progress=lambda *_:None))
+
+
 def test_isotropic_radial_null_offcentre_moon_and_negative_control():
     geo=EclipseGeometry((360,430),(198.2,185.3),65,(211.2,177.3),67)
     r=geo.radius_map(); m=~geo.moon_mask(4)

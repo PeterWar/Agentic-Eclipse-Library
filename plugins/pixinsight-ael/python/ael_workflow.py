@@ -13,10 +13,12 @@ writes declared recipes, and exports filter layers for PixInsight/PixelMath.
 from __future__ import annotations
 
 import argparse
+import calendar
 import json
 import math
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -60,6 +62,16 @@ def number(value) -> float:
     return float(text.split()[0])
 
 
+def capture_time(text) -> tuple[float | None, float]:
+    """Seconds on the camera's clock when a frame was taken, and how finely that time is known (EXIF or FITS)."""
+    match = re.match(r"(\d{4})[:-](\d\d)[:-](\d\d)[ T](\d\d):(\d\d):(\d\d)(\.\d+)?", str(text or "").strip())
+    if not match:
+        return None, 1.0
+    seconds = calendar.timegm(tuple(int(v) for v in match.groups()[:6]) + (0, 0, 0))
+    fraction = match.group(7)
+    return seconds + (float(fraction) if fraction else 0.0), 0.01 if fraction else 1.0
+
+
 def metadata(path: Path) -> dict:
     if path.suffix.lower() in (".fits", ".fit", ".fts"):
         # Astronomical cameras write exposure and gain in the FITS header, not in EXIF.
@@ -69,17 +81,21 @@ def metadata(path: Path) -> dict:
         if exposure is None:
             raise ValueError(f"Missing EXPTIME/EXPOSURE in the FITS header: {path}")
         gain = next((header[k] for k in ("ISOSPEED", "ISO", "GAIN") if k in header), 0)
+        time_s, resolution = capture_time(header.get("DATE-OBS"))
         return {"exposure_s": number(exposure), "iso": number(gain),
-                "make": str(header.get("INSTRUME", "")), "model": str(header.get("TELESCOP", ""))}
-    run = subprocess.run([exiftool_path(), "-json", "-ExposureTime", "-ISO", "-Make", "-Model", str(path)],
-                         text=True, capture_output=True, timeout=30, check=False)
+                "make": str(header.get("INSTRUME", "")), "model": str(header.get("TELESCOP", "")),
+                "time_s": time_s, "time_resolution_s": resolution}
+    run = subprocess.run([exiftool_path(), "-json", "-ExposureTime", "-ISO", "-Make", "-Model", "-DateTimeOriginal",
+                          "-SubSecDateTimeOriginal", str(path)], text=True, capture_output=True, timeout=30, check=False)
     if run.returncode != 0:
         raise RuntimeError(f"ExifTool failed for {path}: {run.stderr.strip()}")
     values = json.loads(run.stdout)[0]
     if "ExposureTime" not in values or "ISO" not in values:
         raise ValueError(f"Missing exposure or ISO metadata: {path}")
+    time_s, resolution = capture_time(values.get("SubSecDateTimeOriginal") or values.get("DateTimeOriginal"))
     return {"exposure_s": number(values["ExposureTime"]), "iso": number(values["ISO"]),
-            "make": values.get("Make", ""), "model": values.get("Model", "")}
+            "make": values.get("Make", ""), "model": values.get("Model", ""),
+            "time_s": time_s, "time_resolution_s": resolution}
 
 
 RAW_EXTENSIONS = {".cr2", ".cr3", ".nef", ".arw", ".dng", ".raf", ".orf", ".rw2"}
@@ -142,6 +158,258 @@ def data_levels(path: Path) -> dict:
                           "share the highest value"}
     return {"black": 0.0, "white": 2.0 * highest, "linearity_fraction": 0.95,
             "source": "black 0 (calibrated frame); no saturation plateau, so nothing is marked as saturated"}
+
+
+def listed(value) -> list[Path]:
+    """One file or several, as a configuration names them."""
+    if not value:
+        return []
+    values = [value] if isinstance(value, (str, Path)) else list(value)
+    return [Path(item).expanduser().resolve() for item in values if str(item).strip()]
+
+
+def same_exposure(a: float, b: float) -> bool:
+    return abs(a - b) <= 1e-3 * max(a, b)
+
+
+def exposure_text(seconds: float) -> str:
+    return f"1/{1 / seconds:.0f} s" if seconds < 0.5 else f"{seconds:g} s"
+
+
+def recorded_metadata(path: Path) -> dict | None:
+    """Exposure, ISO and camera of a calibration file, or None when it records none (a master made elsewhere)."""
+    if path.suffix.lower() == ".npy":
+        return None
+    try:
+        return metadata(path)
+    except (ValueError, KeyError, OSError):
+        return None
+
+
+def calibration_plan(paths: list[Path], kinds: list[str], meta: list[dict], dark_value, flat_value) -> dict:
+    """Which master dark and which master flat calibrate each frame, checked before anything is computed.
+
+    Darks: one file is a master dark (a single dark frame is a master of one); several are combined into one master
+    dark for each exposure, because a dark holds the dark current of its own exposure and ISO. Each frame takes the
+    master of its own exposure, and a frame whose exposure has no dark stops the run. A master dark whose file records
+    no exposure is taken only when all the frames have one exposure. Flats: one file is a master flat (or a single flat
+    frame); several are combined into one master flat for every frame.
+    """
+    darks, flats = listed(dark_value), listed(flat_value)
+    for path in darks + flats:
+        if not path.is_file():
+            raise FileNotFoundError(f"Calibration file not found: {path}")
+    raw_frames = kinds[0] == "raw"
+    for label, files in (("dark", darks), ("flat", flats)):
+        raw = [path.suffix.lower() in RAW_EXTENSIONS for path in files]
+        if any(raw) and not raw_frames:
+            raise ValueError(f"The frames are TIFF or FITS files and a {label} is a RAW file; give the {label}s converted "
+                             "as the frames were, or as one master.")
+        if any(raw) and not all(raw):
+            raise ValueError(f"Give the {label}s either as RAW files or as one master, not both.")
+    cameras = {(item["make"], item["model"]) for item in meta}
+    plan = {"darks": [], "frame_dark": [None] * len(paths), "flat": None}
+    if darks:
+        recorded = [recorded_metadata(path) for path in darks]
+        unknown = [path.name for path, item in zip(darks, recorded) if item is None]
+        if unknown and len(darks) > 1:
+            raise ValueError("These darks record no exposure, so AEL cannot tell which frames each one calibrates: "
+                             f"{', '.join(unknown)}. Give the dark frames as the camera wrote them, or one master dark.")
+        if unknown:
+            exposures = sorted({item["exposure_s"] for item in meta})
+            if len(exposures) > 1:
+                raise ValueError(f"{darks[0].name} records no exposure, and the frames have {len(exposures)} exposures "
+                                 f"({', '.join(exposure_text(e) for e in exposures)}); a master dark holds the dark "
+                                 "current of one exposure. Give the dark frames as the camera wrote them (AEL makes "
+                                 "a master dark for each exposure), or leave the darks empty.")
+            plan["darks"] = [{"exposure_s": None, "iso": None, "files": [str(darks[0])],
+                              "note": "master dark given; its file records no exposure, so it was not checked "
+                                      "against the frames"}]
+            plan["frame_dark"] = [0] * len(paths)
+        else:
+            for path, item in zip(darks, recorded):
+                if (item["make"], item["model"]) not in cameras:
+                    raise ValueError(f"The dark {path.name} was taken with {item['make']} {item['model']}, not with "
+                                     "the camera of the frames.")
+                if item["iso"] != meta[0]["iso"]:
+                    raise ValueError(f"The dark {path.name} is at ISO {item['iso']:g} and the frames at ISO "
+                                     f"{meta[0]['iso']:g}; a dark must have the ISO of the frames.")
+                group = next((g for g in plan["darks"] if same_exposure(g["exposure_s"], item["exposure_s"])), None)
+                if group is None:
+                    group = {"exposure_s": item["exposure_s"], "iso": item["iso"], "files": []}
+                    plan["darks"].append(group)
+                group["files"].append(str(path))
+            missing = []
+            for index, (path, item) in enumerate(zip(paths, meta)):
+                match = next((i for i, g in enumerate(plan["darks"]) if same_exposure(g["exposure_s"], item["exposure_s"])),
+                             None)
+                if match is None:
+                    missing.append(f"{path.name} ({exposure_text(item['exposure_s'])})")
+                plan["frame_dark"][index] = match
+            if missing:
+                raise ValueError(f"No dark has the exposure of {'; '.join(missing)}. The darks have "
+                                 f"{', '.join(exposure_text(g['exposure_s']) for g in plan['darks'])}. A dark holds the "
+                                 "dark current of its own exposure: add darks with every exposure of the frames, or "
+                                 "leave the darks empty.")
+    if flats:
+        for path in flats:
+            item = recorded_metadata(path)
+            if item and (item["make"], item["model"]) not in cameras:
+                raise ValueError(f"The flat {path.name} was taken with {item['make']} {item['model']}, not with the "
+                                 "camera of the frames.")
+        plan["flat"] = {"files": [str(path) for path in flats],
+                        "kind": "raw" if flats[0].suffix.lower() in RAW_EXTENSIONS else "data"}
+    return plan
+
+
+def _visible_raw(path: Path) -> np.ndarray:
+    import rawpy
+    with rawpy.imread(str(path)) as raw:
+        return raw.raw_image_visible.copy()
+
+
+MEDIAN_UP_TO = 25
+
+
+def _combine(files: list[Path], load) -> tuple[np.ndarray, str]:
+    """One master from calibration files: the file itself, the per-pixel median of up to 25 files, or, from more, the
+    mean without the values beyond 3 standard deviations, in two passes that read one file at a time (a long series of
+    darks does not fit in memory)."""
+    if len(files) == 1:
+        return np.asarray(load(files[0]), np.float32), "the file itself"
+    if len(files) <= MEDIAN_UP_TO:
+        arrays = [load(path) for path in files]
+        out = np.empty(np.shape(arrays[0]), np.float32)
+        for start in range(0, out.shape[0], 256):
+            out[start:start + 256] = np.median(np.stack([a[start:start + 256] for a in arrays]), axis=0)
+        return out, f"per-pixel median of {len(files)} files"
+    total = squares = None
+    for path in files:
+        array = np.asarray(load(path), np.float64)
+        total = array.copy() if total is None else total + array
+        squares = array * array if squares is None else squares + array * array
+    mean = total / len(files)
+    spread = 3 * np.maximum(np.sqrt(np.maximum(squares / len(files) - mean ** 2, 0)), 1e-6)
+    del total, squares
+    kept_sum, kept = np.zeros_like(mean), np.zeros(mean.shape, np.uint32)
+    for path in files:
+        array = np.asarray(load(path), np.float64)
+        keep = np.abs(array - mean) <= spread
+        kept_sum += np.where(keep, array, 0)
+        kept += keep
+    return (kept_sum / np.maximum(kept, 1)).astype(np.float32), \
+        f"per-pixel mean of {len(files)} files without the values beyond 3 standard deviations (two passes)"
+
+
+def _flat_planes(array: np.ndarray, pattern) -> np.ndarray:
+    """Colour planes of a flat: the CFA planes of a mosaic, or the channels of an RGB image."""
+    if array.ndim == 2:
+        return calibrate.split_cfa(array, np.asarray(pattern))[0]
+    return np.moveaxis(array, -1, 0)
+
+
+def _normalise_planes(planes: np.ndarray) -> np.ndarray:
+    """Each plane divided by its median in the central annulus, as ael.calibrate.master_flat does."""
+    _, h, w = planes.shape
+    yy, xx = np.mgrid[0:h, 0:w]
+    rr = np.hypot(xx - (w - 1) / 2, yy - (h - 1) / 2) / min(h, w)
+    ring = (rr >= 0.05) & (rr <= 0.18)
+    out = []
+    for plane in planes.astype(np.float32):
+        level = float(np.nanmedian(plane[ring]))
+        if not level > 0:
+            raise ValueError("A flat has no positive signal in its centre")
+        out.append(plane / level)
+    return np.stack(out)
+
+
+FLAT_NO_VALUE_BELOW = 0.1
+
+
+def native_layout(path: Path, kind: str) -> tuple[tuple, list | None]:
+    """Shape of a frame as AEL stacks it (the visible sensor area of a RAW file) and its CFA pattern (None for RGB)."""
+    if kind == "raw":
+        raw = calibrate.read_raw(path, full=False)
+        return tuple(raw["bayer"].shape), np.asarray(raw["pattern"]).tolist()
+    return tuple(np.shape(io.load_array(path))), None
+
+
+def build_calibration(plan: dict, level: dict, native: tuple, pattern, raw_frames: bool, folder: Path) -> dict:
+    """Make in folder the master darks that the frames use and the master flat; what was done to make them, and each
+    frame's files (names inside folder)."""
+    folder.mkdir(parents=True, exist_ok=True)
+    report = {"darks": [], "flat": None, "frames": [{"dark": None, "flat": None} for _ in plan["frame_dark"]]}
+    for index, group in enumerate(plan["darks"]):
+        files = [Path(p) for p in group["files"]]
+        if index not in plan["frame_dark"]:
+            report["darks"].append(dict(group, master=None, note="not used: no frame has this exposure"))
+            continue
+
+        def load(path: Path) -> np.ndarray:
+            array = _visible_raw(path) if path.suffix.lower() in RAW_EXTENSIONS else calibrate.load_calibration_frame(path)
+            if array.shape != native:
+                raise ValueError(f"The dark {path.name} measures {array.shape} and the frames {native}: a dark must "
+                                 "come from the camera of the frames, at full size.")
+            return array
+        master, method = _combine(files, load)
+        scaled = None
+        if raw_frames:
+            # A dark reads the black level plus a little dark current. A master saved in 0-1 (astronomy programs keep
+            # raw values divided by 65535) is brought back to the raw levels, and the same check then confirms it.
+            what =f"darks of {exposure_text(group['exposure_s'])}" if group["exposure_s"] else f"master dark {files[0].name}"
+            if not any(p.suffix.lower() in RAW_EXTENSIONS for p in files) and float(np.nanmax(master)) <= 1.0:
+                master, scaled = master * 65535.0, "values in 0-1 multiplied by 65535 (raw levels kept as 0-1)"
+            offset = float(np.median(master)) - level["black"]
+            if abs(offset) > 0.05 * (level["white"] - level["black"]):
+                raise ValueError(f"The {what} read{'s' if not group['exposure_s'] else ''} {offset:+.0f} levels from "
+                                 f"the black level of the frames ({level['black']:g}): "
+                                 + ("they do not look like darks (taken with the lens covered)." if offset > 0 else
+                                    "it is not in the raw levels of the frames. Give the dark frames as the camera "
+                                    "wrote them."))
+        name = f"master_dark_{index + 1}.npy"
+        np.save(folder / name, master)
+        report["darks"].append(dict(group, master=name, n_files=len(files), method=method, scaled=scaled,
+                                    median_level=float(np.median(master))))
+        for frame, used in zip(report["frames"], plan["frame_dark"]):
+            if used == index:
+                frame["dark"] = name
+    if plan["flat"]:
+        files = [Path(p) for p in plan["flat"]["files"]]
+        if plan["flat"]["kind"] == "raw":
+            flat_level = raw_levels(files[0])
+            ceiling = flat_level["black"] + flat_level["linearity_fraction"] * (flat_level["white"] - flat_level["black"])
+            planes, info = calibrate.master_flat(files, black=flat_level["black"], saturation=ceiling, visible=True)
+            method = dict(info, method="ael.calibrate.master_flat: each plane normalised on the central annulus, "
+                                       "weighted mean with rejection", black_source=flat_level["source"])
+            method.pop("pattern", None)
+        else:
+            def load(path: Path) -> np.ndarray:
+                array = np.asarray(calibrate.load_calibration_frame(path), np.float32)
+                if array.shape != native:
+                    raise ValueError(f"The flat {path.name} measures {array.shape} and the frames {native}: a flat "
+                                     "must come from the camera of the frames, at full size.")
+                return _normalise_planes(_flat_planes(array, pattern))
+            planes, combined = _combine(files, load)
+            method = {"n_frames": len(files), "method": f"each plane normalised on the central annulus; {combined}"}
+        master = calibrate.merge_cfa(planes) if raw_frames else np.moveaxis(planes, 0, -1)
+        if raw_frames and master.shape != native and all(0 <= n - m <= 1 for n, m in zip(native, master.shape)):
+            # A sensor with an odd side (4639 x 6959 on a Canon EOS R6 Mark III): its last row or column makes no 2x2
+            # cell, so the flat has no value there.
+            master = np.pad(master, [(0, n - m) for n, m in zip(native, master.shape)], constant_values=np.nan)
+        if master.shape != native:
+            raise ValueError(f"The flats give a master of {master.shape} and the frames measure {native}: a flat must "
+                             "come from the camera of the frames, at full size.")
+        # Where the flats saw no light (saturated or rejected in every flat, a dead pixel) the flat has no value, and
+        # the frames are left without data there.
+        no_value = ~np.isfinite(master) | (master < FLAT_NO_VALUE_BELOW)
+        master = np.where(no_value, np.nan, master).astype(np.float32)
+        np.save(folder / "master_flat.npy", master)
+        report["flat"] = dict(method, files=[str(p) for p in files], master="master_flat.npy",
+                              samples_without_value=int(no_value.sum()), no_value_below=FLAT_NO_VALUE_BELOW,
+                              median_per_plane=[float(np.nanmedian(p)) for p in _flat_planes(master, pattern)])
+        for frame in report["frames"]:
+            frame["flat"] = "master_flat.npy"
+    return report
 
 
 def sibling(input_path: Path, name: str) -> Path | None:
@@ -360,24 +628,29 @@ def run_filters(cfg: dict) -> dict:
 MOON_KEYS = ("xy", "r", "rms", "n_used", "n_rays")
 
 
-def frame_luminance(path: Path, kind: str, black: float, white: float, fraction: float):
-    """Full-resolution luminance above black, its usable pixels, native shape and CFA pattern.
+def frame_luminance(path: Path, kind: str, black: float, white: float, fraction: float,
+                    dark: np.ndarray | None = None, flat: np.ndarray | None = None):
+    """Full-resolution luminance above black (or above the master dark, divided by the master flat), its usable pixels,
+    native shape and CFA pattern.
 
     The luminance keeps saturated samples (clipped) for the limb fit; the usable mask drops
-    them, together with non-positive samples, for the solar registration.
+    them, together with non-positive samples and pixels without a flat value, for the solar
+    registration. Saturation is decided on the raw value, before any subtraction.
     """
     ceiling = fraction * (white - black)
     if kind == "raw":
         raw = calibrate.read_raw(path, full=False)
-        bayer = raw["bayer"].astype(np.float32) - black
-        green, _ = calibrate.green_plane(bayer, raw["pattern"])
-        _, bad = calibrate.green_plane(bayer, raw["pattern"], bayer >= ceiling)
+        bayer = raw["bayer"].astype(np.float32)
+        value = calibrate.calibrate(bayer, black if dark is None else dark, flat)
+        green, _ = calibrate.green_plane(value, raw["pattern"])
+        _, bad = calibrate.green_plane(value, raw["pattern"], bayer - black >= ceiling)
         return green, ~bad & (green > 0), bayer.shape, np.asarray(raw["pattern"]).tolist()
-    array = io.load_array(path).astype(np.float32) - black
+    array = io.load_array(path).astype(np.float32)
     if array.ndim != 3 or array.shape[-1] != 3:
         raise ValueError(f"Linear RGB input must be HxWx3: {path}")
-    lum = (array[..., 0] + 2 * array[..., 1] + array[..., 2]) / 4
-    usable = np.isfinite(lum) & (lum > 0) & ~(array >= ceiling).any(axis=-1)
+    value = calibrate.calibrate(array, black if dark is None else dark, flat)
+    lum = (value[..., 0] + 2 * value[..., 1] + value[..., 2]) / 4
+    usable = np.isfinite(lum) & (lum > 0) & ~(array - black >= ceiling).any(axis=-1)
     return lum, usable, array.shape[:2], None
 
 
@@ -531,7 +804,8 @@ def register_on_sun(reference, moving, geometry: EclipseGeometry, reference_moon
 
 
 def register_frame(reference, moving, geometry: EclipseGeometry, reference_moon: dict, *, margin_px: float,
-                   rmax_rsun: float = 3.0, max_lunar_px: float | None = None) -> dict:
+                   rmax_rsun: float = 3.0, max_lunar_px: float | None = None,
+                   lunar_basis: str = "during a totality") -> dict:
     """Moon of the moving frame from its own limb; registration on the Sun from the corona."""
     moon = measure_moon(moving[0], reference_moon["xy"], reference_moon["r"])
     moon_shift = np.asarray(moon["xy"]) - np.asarray(reference_moon["xy"])
@@ -539,10 +813,34 @@ def register_frame(reference, moving, geometry: EclipseGeometry, reference_moon:
                             rmax_rsun=rmax_rsun, initial=moon_shift)
     lunar = moon_shift - np.asarray(solar["translation"])
     if max_lunar_px is not None and np.hypot(*lunar) > max_lunar_px:
-        raise RuntimeError(f"Moon moved {np.hypot(*lunar):.2f} px relative to the Sun, above the "
-                           f"{max_lunar_px:.2f} px allowed; check the frames or the registration")
+        raise RuntimeError(f"aligned on the Sun, the Moon would have moved {np.hypot(*lunar):.1f} px across it, and "
+                           f"it can move at most {max_lunar_px:.1f} px {lunar_basis}: the alignment on the Sun is "
+                           "wrong, or the frames are not of one totality")
     return dict(solar, selected="sun_translation", moon_fit={key: moon[key] for key in MOON_KEYS},
-                lunar_shift_px=lunar.tolist())
+                lunar_shift_px=lunar.tolist(), lunar_bound_px=max_lunar_px, lunar_bound_basis=lunar_basis)
+
+
+# The Moon crosses the Sun at most about 0.6"/s (its own motion at perigee less the Sun's; the Earth's rotation only
+# slows it for an observer), and in a total eclipse it looks at least as large as the Sun, at least 944" in radius. A
+# Moon of R px therefore crosses at most 0.65 * R / 944 px in a second.
+LUNAR_RATE_ARCSEC_PER_S = 0.65
+MOON_RADIUS_MIN_ARCSEC = 944.0
+
+
+def lunar_bound(geometry: EclipseGeometry, reference: dict, frame: dict) -> tuple[float, str]:
+    """How far the Moon can move across the Sun between the reference frame and another one, and why."""
+    # During totality the Moon crosses at most twice the difference of the radii, and the Moon never looks more than
+    # about 8 % larger than the Sun: 0.16 lunar radii holds for every total eclipse, short or long.
+    totality = 0.16 * geometry.moon_radius_px + 2
+    if reference.get("time_s") is None or frame.get("time_s") is None:
+        return totality, "during a totality"
+    # the time between the starts of the two exposures, plus both exposures and how finely the times are known
+    seconds = (abs(frame["time_s"] - reference["time_s"]) + frame["exposure_s"] + reference["exposure_s"]
+               + max(frame["time_resolution_s"], reference["time_resolution_s"]))
+    bound = LUNAR_RATE_ARCSEC_PER_S * geometry.moon_radius_px / MOON_RADIUS_MIN_ARCSEC * seconds + 2
+    if bound >= totality:
+        return totality, "during a totality"
+    return bound, f"in the {seconds:.1f} s between the two frames"
 
 
 def run_master(cfg: dict) -> dict:
@@ -575,16 +873,29 @@ def run_master(cfg: dict) -> dict:
         raise ValueError("Stack one ISO at a time")
     if len({(item["make"], item["model"]) for item in meta}) != 1:
         raise ValueError("Stack one camera/optical train at a time")
-    exposures = sorted({item["exposure_s"] for item in meta})
-    if cfg.get("dark") and len(exposures) > 1:
-        # AEL subtracts the dark as recorded, before dividing by each frame's exposure.
-        # One master dark can match one exposure only.
-        raise ValueError(f"One master dark cannot calibrate frames with different exposures {exposures}. "
-                         "Stack each exposure with its own matching dark, or leave the dark empty.")
+    if len(set(kinds)) > 1:
+        raise ValueError("Give the frames either all as RAW files or all as TIFF or FITS files")
+    # Darks and flats are checked before anything is read or written.
+    plan = calibration_plan(paths, kinds, meta, cfg.get("dark"), cfg.get("flat"))
     if cfg.get("allow_rotation"):
         raise ValueError("Rotation is not supported: registration is a translation measured on the Sun")
-    data = [frame_luminance(path, kind, level["black"], level["white"], level["linearity_fraction"])
-            for path, kind, level in zip(paths, kinds, levels)]
+    out = Path(cfg["out"]).expanduser().resolve()
+    if out.exists():
+        raise FileExistsError(f"Output directory already exists: {out}")
+    calibration = {"darks": [], "flat": None, "frames": [{"dark": None, "flat": None} for _ in paths]}
+    if plan["darks"] or plan["flat"]:
+        # The masters are made first, into the output: the frames are registered calibrated, as they are stacked
+        # (a dark signal that does not grow with the exposure would bias a registration on the logarithm).
+        native, pattern = native_layout(paths[0], kinds[0])
+        calibration = build_calibration(plan, levels[0], native if kinds[0] == "raw" else native[:2] + (3,), pattern,
+                                        kinds[0] == "raw", out / "calibration")
+        calibration["folder"] = str(out / "calibration")
+    master_flat = (np.load(out / "calibration" / calibration["frames"][0]["flat"])
+                   if calibration["frames"][0]["flat"] else None)
+    data = [frame_luminance(path, kind, level["black"], level["white"], level["linearity_fraction"],
+                            dark=np.load(out / "calibration" / files["dark"]) if files["dark"] else None,
+                            flat=master_flat)
+            for path, kind, level, files in zip(paths, kinds, levels, calibration["frames"])]
     shapes = [tuple(item[2]) for item in data]
     given = cfg.get("geometry")
     geometry_report = None
@@ -619,9 +930,6 @@ def run_master(cfg: dict) -> dict:
     # are registered on the Sun; each frame keeps its own measured Moon for its mask.
     margin = float(cfg.get("registration_margin_px", max(6.0, 0.015 * geometry.moon_radius_px)))
     rmax = float(cfg.get("registration_rmax_rsun", 3.0))
-    # During totality the Moon crosses at most twice the difference of the radii, and the Moon never looks more than
-    # about 8 % larger than the Sun: 0.16 lunar radii holds for every total eclipse, short or long.
-    max_lunar = float(cfg.get("max_lunar_shift_px", 0.16 * geometry.moon_radius_px + 2))
     reference = data[reference_index][:2]
     reference_fit = measure_moon(reference[0], geometry.moon_xy, geometry.moon_radius_px)
     registrations = []
@@ -634,13 +942,24 @@ def run_master(cfg: dict) -> dict:
                             "moon_fit": {key: reference_fit[key] for key in MOON_KEYS},
                             "lunar_shift_px": [0.0, 0.0]}
         else:
-            registration = register_frame(reference, item[:2], geometry, reference_fit, margin_px=margin,
-                                          rmax_rsun=rmax, max_lunar_px=max_lunar)
+            # How far the Moon can cross the Sun: since the reference frame when both record when they were taken,
+            # otherwise in a whole totality (or as the configuration gives it).
+            if cfg.get("max_lunar_shift_px") is not None:
+                bound, basis = float(cfg["max_lunar_shift_px"]), "as the configuration allows"
+            else:
+                bound, basis = lunar_bound(geometry, meta[reference_index], meta[index])
+            try:
+                registration = register_frame(reference, item[:2], geometry, reference_fit, margin_px=margin,
+                                              rmax_rsun=rmax, max_lunar_px=bound, lunar_basis=basis)
+            except RuntimeError as exc:
+                raise RuntimeError(f"{paths[index].name} could not be aligned with {paths[reference_index].name}, so "
+                                   f"no master was made: {exc}") from exc
             matrix = np.hstack([np.eye(2), np.asarray(registration["translation"])[:, None]])
         registration["reference_to_input"] = matrix.tolist()
         registrations.append(registration)
         matrices.append(matrix)
         moon_geometries.append(registration["moon_fit"])
+    out.mkdir(parents=True, exist_ok=True)
     frames = []
     for index, (path, kind, info, matrix, moon_fit, level) in enumerate(
             zip(paths, kinds, meta, matrices, moon_geometries, levels)):
@@ -649,17 +968,13 @@ def run_master(cfg: dict) -> dict:
                  "reference_to_input": matrix.tolist(), "moon_xy": list(moon_fit["xy"]),
                  "moon_radius_px": moon_fit["r"], "train": profile.get("train", "one")}
         for key in ("dark", "flat"):
-            if cfg.get(key):
-                frame[key] = str(Path(cfg[key]).expanduser().resolve())
+            if calibration["frames"][index][key]:
+                frame[key] = str(out / "calibration" / calibration["frames"][index][key])
         frames.append(frame)
     recipe = {"geometry": json.loads(geometry.to_json()),
               "frames": frames, "stack": {"canvas": "reference", "taper_start": 0.8,
               "moon_guard_px": 2, "limb_fade_px": 4, "band_sigma_px": 0,
               "hot_pixels": {"enabled": False}}, "note": "PixInsight automated metadata and measured registration"}
-    out = Path(cfg["out"]).expanduser().resolve()
-    if out.exists():
-        raise FileExistsError(f"Output directory already exists: {out}")
-    out.mkdir(parents=True)
     recipe_path = out / "stack_recipe.json"
     recipe_path.write_text(json.dumps(recipe, indent=1, ensure_ascii=False), encoding="utf-8")
     master_dir = out / "master"
@@ -680,6 +995,7 @@ def run_master(cfg: dict) -> dict:
     receipt = {"product": "PixInsight AEL linear master workflow", "runtime": runtime(),
                "recipe": str(recipe_path), "ael_receipt": result["receipt"], "metadata": meta,
                "camera_levels": [dict(level, path=str(path)) for path, level in zip(paths, levels)],
+               "calibration": calibration,
                "geometry_source": "measured on the reference frame" if geometry_report else "given",
                "geometry_measurement": geometry_report,
                "registrations": registrations, "images": images,

@@ -1,14 +1,15 @@
 # Validation of 1.4.0 (30 October 2026)
 
-This release adds two experimental connectors that run `ael` from inside PixInsight and Photoshop. The `ael` package
-does not change (its version number only).
+This release adds two experimental connectors that run `ael` from inside PixInsight and Photoshop. In the `ael`
+package, the geometry can be measured on the image (`ael.geometry.find_disc` and `measure_geometry`), and a flat may
+mark with NaN a pixel it has no value for (`ael.stack`); nothing else changes.
 
 ## What changed
 
-1. **`plugins/pixinsight-ael/`, the PixInsight connector.** Two scripts for PixInsight 1.9. The bridge runs
-   `structure` and `polar` on the active image and opens every product in a new window. The workflow makes AEL's
-   filter layers from a linear stack (`linear.npy`) and writes the PixelMath expressions that compose them; it can
-   also build that stack from frames (the linear master, experimental).
+1. **`plugins/pixinsight-ael/`, the PixInsight connector.** One script for PixInsight 1.9 with one dialog. It runs
+   `structure` and `polar` on the active image, makes AEL's filter layers from the active image with the PixelMath
+   expressions that compose them, or builds a linear master from frames, darks and flats (experimental), and opens
+   every product in a new window.
 2. **`plugins/photoshop-ael/`, the Photoshop connector.** A script for Photoshop 2026 with the same four operations.
    The filter layers arrive as one layered 16-bit PSB, written and verified by `ael.photoshop` and then read again by
    Photoshop, which compares every layer's name, blend mode, opacity byte and visibility with what AEL wrote. A
@@ -65,11 +66,37 @@ PixInsight ran in its own instances (`-n --automation-mode`); Photoshop with no 
 ## Limits
 
 - **The linear master is not valid on real eclipse frames.** It registers every frame on the Sun; on real frames that
-  registration lands 0.07–2.2 px from the reference registration, and the cause has not been found. Both dialogs say
-  so. Its tests use synthetic frames.
+  registration lands 0.07–2.2 px from the reference registration on 2026 frames, and on three Canon EOS 6D frames of
+  2024 (1/80–1/15 s, 4–7 s apart) it landed 13 and 33 px from where the Moon puts the Sun; on three Sony α7 III frames
+  of 2024 a registration that passed the structure check made the Moon cross 15 px in 5 s with 95 % of the range
+  counted as linear, and with 85 % it does not converge. The cause has not been found. When the frames record when they were taken, the master now stops there: the Moon crosses the Sun at most
+  0.65″ a second. Both dialogs say the master is not valid on real frames. Its tests use synthetic frames.
 - Tested on macOS only, with the programs driven by scripts: no installation through PixInsight's Feature Scripts
   dialog and no mouse clicks. The filter workflow was not run at 80 megapixels.
 - The Photoshop PSB carries no colour profile; Photoshop assigns its working profile when it opens it.
 - Where there is no data, the display files of `structure` and `polar` hold black (0), as those of `python -m ael`
   do: the connectors keep every NaN up to AEL, and AEL's display writers turn them into 0. Which samples hold data is
   in the valid mask the products are made from, not in the display file.
+
+## Later on 30 October: one dialog, darks and flats
+
+After testing the package, the author asked for one menu entry instead of two, file lists that take several files and
+RAW files, an output folder that starts somewhere (Downloads) with a **Browse…** button, and darks and flats that make
+their masters or are taken as masters.
+
+- **Calibration, synthetic** (`plugins/pixinsight-ael/tests/workflow_calibration.py`): three frames written as a
+  sensor records them (a flat field with vignetting and a dust shadow, and a dark signal with hot pixels that grows
+  with the exposure), three darks per exposure, three flats with a dead pixel. One master dark per exposure, equal to
+  the median of its files; the master flat equal to the median of the normalised flats, without a value at the dead
+  pixel; the master equal, bit for bit, to the stack of the frames calibrated by hand with the same registration; the
+  same frames uncalibrated differ by up to 7.9 times the median. Refused before anything is written: a frame whose
+  exposure has no dark, a dark at another ISO, a master dark without an exposure for frames of several exposures, a
+  RAW dark for TIFF frames, a flat of another camera.
+- **Calibration, real:** two Vixen R6 III totality frames (1/30 s and 2 s) with 39 RAW darks of those exposures and
+  10 RAW flats: two master darks (median 512, the black of the covered border), a master flat without a value only on
+  the last row and column (the sensor's sides are odd, 4639 × 6959), and the second frame registered with the Moon
+  crossing 3.6 px in 15 s against 6.7 px allowed. 4.5 minutes, 14 GB of memory at the peak.
+- **The time between frames:** in `tests/workflow_lunar_motion.py` the same moving Moon (3.2 px) is refused in frames
+  taken 1 s apart and passes in frames taken 100 s apart (0.008 px against the Sun).
+- **The frames were registered uncalibrated**: a dark signal that does not grow with the exposure made the registration
+  on the logarithm fail to converge in the synthetic test. The frames are now registered calibrated, as they are stacked.

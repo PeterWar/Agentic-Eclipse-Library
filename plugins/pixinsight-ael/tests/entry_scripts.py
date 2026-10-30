@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
-"""Start each menu script from its own entry file, as PixInsight does, and check that its dialog appears.
+"""Start the menu script from its entry file, as PixInsight does, and check that its dialog appears.
 
 MIT License — Copyright (c) 2026 Pere Guerra Serra.
 Processed with Agentic Eclipse Library by Pere Guerra —
 https://github.com/PeterWar/Agentic-Eclipse-Library
 
-dialog_flow.py includes the dialog files itself; nothing there runs AELBridge.js or AELWorkflow.js, the two files that
-Script > Utilities starts. Here each entry file runs unchanged in a new PixInsight instance (-n --automation-mode, never
-an existing one): it includes its own files, builds its dialog and calls execute(), which waits for a click. The native
-Dialog class is replaced, before the entry file is read, by a subclass that records every dialog built; a timer that
-fires inside the dialog's own event loop checks its title, that it is visible, its Run button, its fields and the AEL
-folder it starts with, and closes it with Cancel. A message box never appears (it would wait for a click that does not
-come). The control: the same check on a copy of the plugin whose bridge entry has lost the include of its dialog must
-fail, so that a broken entry file cannot pass.
+dialog_flow.py includes the dialog files itself; nothing there runs AELBridge.js, the one file that Script > Utilities
+starts. Here the entry file runs unchanged in a new PixInsight instance (-n --automation-mode, never an existing one):
+it includes its own files, builds its dialog and calls execute(), which waits for a click. The native Dialog class is
+replaced, before the entry file is read, by a subclass that records every dialog built; a timer that fires inside the
+dialog's own event loop checks its title, that it is visible, its Run button, its fields, its four operations, its
+output folder and the AEL folder it starts with, and closes it with Cancel. A message box never appears (it would wait
+for a click that does not come). The control: the same check on a copy of the plugin whose entry has lost the include
+of its dialog must fail, so that a broken entry file cannot pass.
 
 To test a built package: --plugin PACKAGE/pixinsight-ael --expect-root PACKAGE/pixinsight-ael/runtime.
 """
@@ -29,14 +29,16 @@ import subprocess
 import tempfile
 
 ENTRIES = {
-    "bridge": {"file": "AELBridge.js", "title": "Agentic Eclipse Library", "run": "Run AEL",
-               "controls": ["imageList", "modeList", "outputEdit", "rmaxEdit"]},
-    "workflow": {"file": "AELWorkflow.js", "title": "AEL Linear Master and Filter Layers", "run": "Run workflow",
-                 "controls": ["modeList", "outputEdit", "allFiltersCheck", "darkEdit", "flatEdit"]},
+    "bridge": {"file": "AELBridge.js", "title": "Agentic Eclipse Library", "run": "Run",
+               "controls": ["imageList", "modeList", "outputEdit", "outputButton", "rmaxEdit", "allFiltersCheck",
+                            "filesText", "addFilesButton", "darksText", "addDarksButton", "flatsText", "addFlatsButton"],
+               "operations": ["Structure image", "Unrolled view of the corona", "Filter layers and PixelMath composite",
+                              "Linear master from frames (experimental)"]},
 }
 # What a person who does not know the technology should not have to fill in (Pere, 30-10): none of these fields exists.
+# darkEdit and flatEdit took one file each; the lists that replace them take several or one master.
 TECHNICAL = ["pythonEdit", "aelRootEdit", "geometryFileEdit", "geometryEdits", "validMaskEdit", "geometryEdit",
-             "cameraEdit", "compositeCheck", "noteEdit", "mirroredCheck"]
+             "cameraEdit", "compositeCheck", "noteEdit", "mirroredCheck", "darkEdit", "flatEdit"]
 
 PJSR = r'''
 #engine v8
@@ -79,6 +81,7 @@ timer.onTimeout = function()
             info.technical.push( CFG.technical[i] );
       info.aelRoot = dialog.aelRoot !== undefined ? dialog.aelRoot : null;
       info.python = dialog.pythonPath !== undefined ? dialog.pythonPath : null;
+      info.output = dialog.outputEdit ? dialog.outputEdit.text : null;
       if ( dialog.modeList )
          for ( let i = 0; i < dialog.modeList.numberOfItems; ++i )
             info.operations.push( dialog.modeList.itemText( i ) );
@@ -159,6 +162,10 @@ def judge(name: str, recorded: dict, expect_root: Path | None) -> dict[str, bool
         f"{name}_no_technical_fields": bool(first) and first.get("technical") == [],
         f"{name}_closed_and_finished": recorded.get("finished") is True and not recorded.get("stopped_by_timeout"),
         f"{name}_no_message_box": recorded.get("messages") == [],
+        f"{name}_four_operations": first.get("operations") == spec["operations"],
+        # the folder kept from the last run while it exists, otherwise Downloads
+        f"{name}_output_folder_ready": bool(first.get("output")) and (
+            first["output"] == str(Path.home() / "Downloads") or Path(first["output"]).is_dir()),
     }
     if expect_root is not None:
         gates[f"{name}_starts_with_the_expected_AEL_folder"] = first.get("aelRoot") == str(expect_root)

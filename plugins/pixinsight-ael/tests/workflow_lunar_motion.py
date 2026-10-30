@@ -14,6 +14,9 @@ A control run with a still Moon must pass too, so a failure points at the lunar 
 A third run adds photon and read noise and an exposure ladder that saturates the inner
 corona of the longer frames (full well 15000 counts). A control with another corona and
 the Moon in the same place (the limb matches, the corona does not) must be rejected.
+When the frames record when they were taken, the Moon may cross the Sun only as fast as it
+can (0.65"/s, for a Moon at least 944" in radius): the same moving Moon in frames taken 1 s
+apart is refused, and in frames taken 100 s apart it passes.
 """
 from __future__ import annotations
 
@@ -41,7 +44,7 @@ LADDER = [0.05, 0.2, 0.8]
 FULL_WELL = 15000.0
 
 
-def run_case(root: Path, lunar: list[np.ndarray], args, *, noisy: bool = False) -> dict:
+def run_case(root: Path, lunar: list[np.ndarray], args, *, noisy: bool = False, seconds: float | None = None) -> dict:
     root.mkdir()
     geometry = EclipseGeometry(shape=SHAPE, sun_xy=tuple(SUN), sun_radius_px=40, moon_xy=tuple(MOON),
                                moon_radius_px=MOON_RADIUS, north_deg=17, arcsec_per_px=8, note="Lunar motion test")
@@ -58,8 +61,13 @@ def run_case(root: Path, lunar: list[np.ndarray], args, *, noisy: bool = False) 
             image = scene.radiance(SHAPE, tuple(SUN + drift), tuple(MOON + drift + moon)).astype(np.float32) / 10
             tifffile.imwrite(path, np.stack([image * 1.03, image, image * 0.96], axis=-1) * exposure,
                              photometric="rgb")
+        stamp = [] if seconds is None else [f"-DateTimeOriginal=2026:08:12 18:00:{int(index * seconds) % 60:02d}",
+                                            f"-SubSecTimeOriginal=00"]
+        if seconds is not None and index * seconds >= 60:
+            minutes, rest = divmod(int(index * seconds), 60)
+            stamp[0] = f"-DateTimeOriginal=2026:08:12 18:{minutes:02d}:{rest:02d}"
         subprocess.run([args.exiftool, "-overwrite_original", f"-ExposureTime={exposure}", "-ISO=100",
-                        "-Make=Synthetic", "-Model=LunarMotion", str(path)], capture_output=True, check=True)
+                        "-Make=Synthetic", "-Model=LunarMotion", *stamp, str(path)], capture_output=True, check=True)
         frames.append(str(path))
     config = {"frames": frames, "reference": 0, "geometry": json.loads(geometry.to_json()),
               "camera": {"black": 0, "white": FULL_WELL if noisy else 1e6, "linearity_fraction": 0.95,
@@ -119,9 +127,15 @@ def main() -> None:
         moving = [np.zeros(2), np.array([1.5, 0.5]), np.array([3.0, 1.0])]
         report["moving_moon"] = run_case(Path(temporary) / "moving", moving, args)
         report["moving_moon_noisy"] = run_case(Path(temporary) / "noisy", moving, args, noisy=True)
+        report["moving_moon_1_s_apart"] = run_case(Path(temporary) / "fast", moving, args, seconds=1)
+        report["moving_moon_100_s_apart"] = run_case(Path(temporary) / "slow", moving, args, seconds=100)
     report["unrelated_corona"] = unrelated_corona_rejected(args)
-    report["ok"] = (all(report[key]["passed"] for key in ("still_moon", "moving_moon", "moving_moon_noisy"))
-                    and report["unrelated_corona"]["rejected"])
+    fast = report["moving_moon_1_s_apart"]
+    report["impossible_lunar_motion_refused"] = (not fast["workflow_ok"] and "can move at most" in str(fast["message"])
+                                                 and "between the two frames" in str(fast["message"]))
+    report["ok"] = (all(report[key]["passed"] for key in ("still_moon", "moving_moon", "moving_moon_noisy",
+                                                          "moving_moon_100_s_apart"))
+                    and report["unrelated_corona"]["rejected"] and report["impossible_lunar_motion_refused"])
     args.output.mkdir(parents=True, exist_ok=True)
     (args.output / "LUNAR_MOTION.json").write_text(json.dumps(report, indent=1), encoding="utf-8")
     print(json.dumps(report))

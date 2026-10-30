@@ -89,14 +89,18 @@ def _path(base, value):
     return p if p.is_absolute() else base / p
 
 
-def _field(value, base, shape, name, *, positive=False):
+def _field(value, base, shape, name, *, positive=False, missing=False):
+    """A scalar or a native-shape calibration field. With ``missing``, NaN marks a pixel the field has no value for:
+    the frame is then left without data there (a flat that saw no light at a pixel cannot correct it)."""
     a = io.load_array(_path(base, value)) if isinstance(value, str) else np.asarray(value, np.float32)
     try:
         a = np.broadcast_to(a, shape)
     except ValueError as e:
         raise ValueError(f"{name}: expected scalar or native input shape {shape}") from e
-    if not np.isfinite(a).all() or (positive and (a <= 0).any()):
-        raise ValueError(f"{name} must be finite" + (" and positive" if positive else ""))
+    known = np.isfinite(a)
+    if (not missing and not known.all()) or np.isinf(a).any() or (positive and (a[known] <= 0).any()):
+        raise ValueError(f"{name} must be finite" + (" and positive" if positive else "")
+                         + (" where it has a value (NaN: no value)" if missing else ""))
     return a
 
 
@@ -125,7 +129,8 @@ def _prepare(frame, base):
     if np.any(white <= black):
         raise ValueError('white must exceed black')
     dark = _field(frame.get('dark', frame['black']), base, shape, 'dark')
-    flat = _field(frame.get('flat', 1), base, shape, 'flat', positive=True)
+    # A flat pixel without a value (NaN) makes the value NaN, and resample_frame leaves it out like a saturated one.
+    flat = _field(frame.get('flat', 1), base, shape, 'flat', positive=True, missing=True)
     transmission = _field(frame.get('transmission', 1), base, shape, 'transmission', positive=True)
     background = _field(frame.get('background', 0), base, shape, 'background')
     exposure = float(frame['exposure_s'])

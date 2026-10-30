@@ -165,4 +165,46 @@ function aelWorkflowRunAndOpen( operation, configPath, runtime, aelRoot, buildCo
    }
 }
 
+// A folder name that does not exist yet under root (the helper refuses an existing one); root is created if needed.
+function aelWorkflowNewOutput( root, kind )
+{
+   if ( !File.directoryExists( root ) )
+      File.createDirectory( root, true );
+   let base = root + "/ael_" + kind + "_" + aelBridgeTimestamp();
+   let output = base;
+   let suffix = 1;
+   while ( File.exists( output ) || File.directoryExists( output ) )
+      output = base + "_" + String( ++suffix );
+   return output;
+}
+
+// AEL's filter layers from an open image. The image is handed to AEL as the bridge hands it (exported to a temporary
+// 32-bit TIFF with its samples without data put back as NaN, or the file itself when PixInsight does not hold it as
+// stored); the image is not changed and the temporary files are removed. AEL measures the geometry on the image, as for
+// the structure image: a geometry.json that happens to lie beside the file is not taken.
+function aelWorkflowFiltersFromView( view, outputRoot, filters, pythonPath, aelRoot, buildComposite )
+{
+   let runtime = aelBridgeCandidates( pythonPath, aelRoot );
+   if ( !runtime.ok )
+      throw new Error( runtime.message || "Python preflight failed." );
+   Settings.write( AEL_BRIDGE_SETTINGS_KEY + "pythonPath", DataType.UTF8String, runtime.python );
+   let tempDir = File.systemTempDirectory + "/pixinsight-ael-" + aelBridgeTimestamp();
+   File.createDirectory( tempDir, false );
+   let configPath = tempDir + "/filters.json";
+   let temporaryFiles = [ configPath ];
+   try
+   {
+      let prepared = aelBridgePrepareInput( view, runtime, aelRoot, tempDir, temporaryFiles );
+      let config = { input: prepared.inputPath, geometry: "auto", out: aelWorkflowNewOutput( outputRoot, "filters" ),
+                     filters: filters };
+      File.writeTextFile( configPath, JSON.stringify( config, null, 1 ) );
+      Console.writeln( "AEL filter layers of " + view.id + ( prepared.onFile ? " (AEL reads its file)" : "" ) );
+      return aelWorkflowRunAndOpen( "filters", configPath, runtime, aelRoot, buildComposite );
+   }
+   finally
+   {
+      aelBridgeCleanup( tempDir, temporaryFiles );
+   }
+}
+
 #endif // __AEL_WORKFLOW_CORE_jsh

@@ -18,8 +18,9 @@ Claude plugin folder `plugins/claude-ael/` go to 1.4.0.
   disc itself is saturated; on 660 synthetic eclipses (lunar radius 25–420 px, Moon 1.00–1.08 times the Sun, off by
   up to the difference of the radii, partly outside the frame, saturated, colour or mono) it is within max(1 px, 1 %
   of the radius) in 631, and every failure is a Moon of 25 px.
-- **`plugins/pixinsight-ael/`, for PixInsight 1.9.** The bridge runs `structure` and `polar` on the active image and
-  opens every product in a new window. The workflow makes AEL's filter layers from a linear stack and writes the
+- **`plugins/pixinsight-ael/`, for PixInsight 1.9.** One menu entry, **Utilities > Agentic Eclipse Library**, with
+  one dialog: it runs `structure` and `polar` on the active image, makes AEL's filter layers from the active image, or
+  a linear master from frames, and opens every product in a new window. The filter layers come with the
   PixelMath expressions that compose them, starting from the same floating-point values AEL starts from (0.504 of a
   16-bit step from AEL's composite, against a gate of one step). When PixInsight does not hold an image as its file
   stores it (it rescales a floating-point TIFF with values outside 0–1, writes NaN as 1.0 and reads a TIFF whose last
@@ -33,8 +34,10 @@ Claude plugin folder `plugins/claude-ael/` go to 1.4.0.
   checked byte by byte), synthetic demonstration files and a deterministic ZIP. Neither connector names an
   interpreter: each finds a Python that can import the AEL it carries and its dependencies, and both refuse an AEL
   older than 1.4.0.
-- **No geometry or camera file needed.** The PixInsight dialogs ask only for the image (or the files), the
-  operation and the output folder: no Python, AEL folder, geometry or camera profile. AEL measures the geometry on the
+- **No geometry or camera file needed.** The PixInsight dialog asks only for the operation, the image (or the
+  files) and the output folder, which starts at Downloads and has a **Browse…** button: no Python, AEL folder,
+  geometry or camera profile. Its file lists take several files at once: RAW (CR2, CR3, NEF, ARW, DNG and others),
+  TIFF or FITS. AEL measures the geometry on the
   image and a new window draws the circle it found; each RAW file gives its levels (the black measured on the sensor's covered
   border, which LibRaw misreports for the Canon EOS R6 Mark III, and 85 % of the range counted as linear), and a
   calibrated TIFF or FITS frame is measured (black 0; saturation where many samples share the highest value). The
@@ -43,9 +46,17 @@ Claude plugin folder `plugins/claude-ael/` go to 1.4.0.
   A FITS frame gives its exposure and gain from its header. The lunar drift allowed between frames is 0.16 lunar
   radii, which holds for every total eclipse (the Moon crosses at most twice the difference of the radii, and it never
   looks more than about 8 % larger than the Sun); it was 0.1 radii, which a long totality such as 2027's exceeds.
+  When the frames record when they were taken, the bound is how far the Moon can cross the Sun in that time (0.65″ a
+  second, for a Moon at least 944″ in radius), so a registration that would make it jump is refused.
+- **Darks and flats for the linear master.** Several darks make one master dark for each exposure (each frame takes
+  the master of its own exposure and ISO, and a frame whose exposure has no dark stops the run); several flats make one
+  master flat (`ael.calibrate.master_flat` for RAW flats). One file is taken as the master itself. The frames are
+  registered calibrated, as they are stacked. Where a flat has no value (a dead pixel, a sensor side with an odd
+  number of pixels) the stack leaves the pixel without data: `ael.stack` accepts NaN in a flat for that.
 - **The linear master is experimental.** It registers every frame on the Sun; on real eclipse frames that
-  registration lands 0.07–2.2 px from the reference registration, and the cause has not been found. Both dialogs say
-  so.
+  registration has landed 0.07–2.2 px from the reference registration on 2026 frames, and 13 and 33 px off on three
+  Canon EOS 6D frames of 2024, where the time between the frames now stops it; on three Sony α7 III frames of 2024 it
+  does not converge. The cause has not been found. Both dialogs say so.
 - **`tools/check_connectors.py`** fails when the shared parts of the two connectors drift apart, and runs both probes
   against stand-in AEL packages to check that each refuses an AEL older than 1.4.0.
 - Measurements and tests: [`docs/VALIDATION_1.4.0.md`](docs/VALIDATION_1.4.0.md).

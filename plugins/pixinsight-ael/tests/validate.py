@@ -256,11 +256,10 @@ saveReport();
 '''
 
 
-def pjsr_dialog_capture_body(dialog_script: Path) -> str:
+def pjsr_dialog_capture_body() -> str:
     return r'''
 try
 {
-   eval( File.readTextFile( "''' + str(dialog_script) + r'''" ) );
    let captureWindows = ImageWindow.open( CFG.scene );
    let captureDialog = new AELBridgeDialog;
    captureDialog.targetView = captureWindows[0].mainView;
@@ -595,8 +594,10 @@ def main() -> None:
                                           captureImage=str(root / "dialog.png"))
                     capture_config_path = root / "capture_config.json"
                     capture_config_path.write_text(json.dumps(capture_config), encoding="utf-8")
-                    write_generated(dialog_script, core, capture_config_path,
-                                    pjsr_dialog_capture_body(dialog_script_path))
+                    # the dialog is included as the menu script includes it (with its own #include lines)
+                    write_generated(dialog_script, core, capture_config_path, pjsr_dialog_capture_body(),
+                                    extra_includes=f"#include {json.dumps(str(dialog_script_path.parent / 'AELWorkflowCore.jsh'))}\n"
+                                                   f"#include {json.dumps(str(dialog_script_path))}\n")
                     report["captures"]["dialog"] = capture(args.pixinsight, dialog_script,
                         root / "dialog.png", root / "capture_dialog.log", hold=1)
 
