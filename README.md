@@ -49,6 +49,12 @@ python -m ael polar     --input out/structure_cool.tif --geometry out/structure_
 python -m ael motion    --config motion_config.json --out out/     # see examples/motion_config_template.json
 ```
 
+**From PixInsight or Photoshop (experimental).** [`plugins/pixinsight-ael/`](plugins/pixinsight-ael/) and
+[`plugins/photoshop-ael/`](plugins/photoshop-ael/) run these tools from inside the program: structure and unrolled
+views of the open image, and the filter layers of a linear stack, as a PixelMath composite in PixInsight or as one
+layered 16-bit PSB in Photoshop. Each package carries its own copy of the AEL engine; the products are those of
+`python -m ael` from a terminal, file by file.
+
 Every function reads only observed pixels; where there is no data the result is `NaN`, never a fill or a mirror.
 Details, and what the 2026 data taught (correlated noise, colour in linear light, a sensor pattern that looked
 like coronal motion), in [`README_AEL.md`](README_AEL.md). The agent's instructions for the three products are
@@ -216,6 +222,18 @@ repository").
 
 [MIT](LICENSE) © 2026 Pere Guerra Serra. You may use, copy, modify and redistribute this work freely, including
 commercially; the licence only asks you to keep the copyright and permission notices with copies of the work.
+
+## What is new in 1.4.0
+
+Two experimental connectors run AEL from inside PixInsight and Photoshop. The `ael` code does not change.
+
+- **PixInsight 1.9** ([`plugins/pixinsight-ael/`](plugins/pixinsight-ael/)): structure and unrolled views of the
+  active image, and AEL's filter layers with the PixelMath expressions that compose them.
+- **Photoshop 2026** ([`plugins/photoshop-ael/`](plugins/photoshop-ael/)): the same operations; the filter layers
+  arrive as one layered 16-bit PSB, which Photoshop checks layer by layer against what AEL wrote.
+- In both, every product equals that of `python -m ael` on the same file, also on a real stack with NaN outside its
+  coverage. The linear master they offer is not valid on real eclipse frames yet, and their dialogs say so. See
+  [`docs/VALIDATION_1.4.0.md`](docs/VALIDATION_1.4.0.md).
 
 ## What is new in 1.3.6
 
