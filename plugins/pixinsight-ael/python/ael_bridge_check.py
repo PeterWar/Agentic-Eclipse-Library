@@ -68,6 +68,27 @@ def probe() -> None:
          credit=CREDIT)
 
 
+def source_range(path: Path) -> None:
+    """Range of a floating-point TIFF file as stored. PixInsight maps a float file whose values leave 0-1 to exactly 0-1
+    when it opens it, (x - min) / (max - min), so the view is not the data in the file."""
+    import numpy as np
+    import tifffile
+
+    with tifffile.TiffFile(path) as tf:
+        page = tf.pages[0]
+        if page.dtype.kind != "f":
+            emit(ok=True, kind="not_float", dtype=str(page.dtype), outside_unit_range=False)
+            return
+        array = page.asarray()
+    finite = np.isfinite(array)
+    if not finite.any():
+        emit(ok=False, kind="no_finite_samples", message="The file holds no finite samples.")
+        return
+    low, high = float(array[finite].min()), float(array[finite].max())
+    emit(ok=True, kind="range", dtype=str(array.dtype), minimum=low, maximum=high,
+         outside_unit_range=bool(low < 0.0 or high > 1.0))
+
+
 def inspect(path: Path, width: int, height: int, channels: int, require_icc: bool,
             icc_source: Path | None) -> None:
     import tifffile
@@ -134,6 +155,8 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("probe")
+    source = sub.add_parser("source-range")
+    source.add_argument("path", type=Path)
     check = sub.add_parser("inspect")
     check.add_argument("path", type=Path)
     check.add_argument("--width", type=int, required=True)
@@ -145,6 +168,8 @@ def main() -> None:
     try:
         if args.command == "probe":
             probe()
+        elif args.command == "source-range":
+            source_range(args.path)
         else:
             inspect(args.path, args.width, args.height, args.channels, args.require_icc, args.icc_source)
     except Exception as exc:

@@ -270,6 +270,27 @@ function aelBridgeCandidates( preferred, aelRoot )
                     + "Tried:\n" + diagnostics.join( "\n" ) );
 }
 
+// PixInsight rescales a floating-point file whose values leave 0-1 to exactly 0-1 when it opens it, so the view is
+// not the data in the file, and AEL does not give the same result on rescaled numbers (its structure image depends on
+// the scale and on the zero). The range of the view's own TIFF file, as stored, or null when there is nothing to check:
+// no file, another format, an integer file, or a file that cannot be read.
+function aelBridgeSourceRange( runtime, aelRoot, view )
+{
+   let path = view.window.filePath;
+   if ( !path || path.length == 0 || !File.exists( path ) )
+      return null;
+   let extension = File.extractExtension( path ).toLowerCase();
+   if ( extension != ".tif" && extension != ".tiff" )
+      return null;
+   let run = aelBridgeRun( runtime.python, [ AEL_BRIDGE_CHECK_SCRIPT, "source-range", path ],
+                           aelRoot && aelRoot.length ? aelRoot : File.systemTempDirectory,
+                           aelBridgeEnvironment( aelRoot ), 300000 );
+   if ( !run.ok )
+      return null;
+   let result = aelBridgeParseJson( run.stdout, "Source range" );
+   return result.ok && result.kind == "range" ? result : null;
+}
+
 function aelBridgeReadSourceICC( view )
 {
    let result = { profile: null, bytes: 0, origin: "none" };
@@ -453,6 +474,16 @@ function aelBridgeRunOnView( parameters )
       throw new Error( runtime.message || "Python preflight failed." );
    Settings.write( AEL_BRIDGE_SETTINGS_KEY + "pythonPath", DataType.UTF8String, runtime.python );
 
+   // A view that the user has processed since opening it is theirs; one that is still the file is checked against it.
+   let sourceRange = view.window.isModified ? null : aelBridgeSourceRange( runtime, parameters.aelRoot, view );
+   if ( sourceRange && sourceRange.outside_unit_range )
+      throw new Error( "PixInsight rescaled this image when it opened its file: the file holds values from "
+                       + sourceRange.minimum + " to " + sourceRange.maximum + ", and PixInsight maps that range to 0-1. "
+                       + "The view is therefore not the data in the file (the zero and the scale are lost), and AEL does not "
+                       + "give the same result on the rescaled numbers as on the file, so nothing was run.\n\n"
+                       + "Save the image as a TIFF whose values are inside 0-1 (divide by one constant), open that file and "
+                       + "run the bridge on it. If you have processed the image since opening it, this check does not apply." );
+
    let tempDir = File.systemTempDirectory + "/pixinsight-ael-" + aelBridgeTimestamp();
    File.createDirectory( tempDir, false );
    let inputPath = tempDir + "/input_float32.tif";
@@ -505,7 +536,8 @@ function aelBridgeRunOnView( parameters )
                     ael_version: runtime.ael_version, ael_file: runtime.ael_file },
          source: { view_id: view.id, width: view.image.width, height: view.image.height,
                    channels: view.image.numberOfChannels, icc_bytes: exported.sourceICCBytes,
-                   icc_origin: exported.iccOrigin },
+                   icc_origin: exported.iccOrigin,
+                   file_range: sourceRange ? { minimum: sourceRange.minimum, maximum: sourceRange.maximum } : null },
          temporary_input: { format: "TIFF", dtype: inspected.dtype, shape: inspected.shape,
                             planar: inspected.planar, icc_bytes: inspected.icc_bytes,
                             icc_repaired: inspected.icc_repaired == true,

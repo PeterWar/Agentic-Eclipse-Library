@@ -126,6 +126,31 @@ try
       REPORT.errors.too_old = { not_tested: "No pre-3.10 Python executable was available" };
    REPORT.errors.old_ael = aelBridgeProbe( CFG.python, CFG.staleAel );
 
+   // PixInsight rescales a float file whose values leave 0-1 to exactly 0-1 when it opens it. The bridge must refuse
+   // such a view, before exporting anything, and say why; the files that stay inside 0-1 are run below.
+   try
+   {
+      let wide = ImageWindow.open( CFG.outOfRange, "fora_de_rang" )[0];
+      try
+      {
+         REPORT.errors.out_of_range = { view_maximum: wide.mainView.image.maximum() };
+         aelBridgeRunOnView( { view: wide.mainView, mode: "structure", geometry: CFG.geometry,
+            outputDirectoryExact: CFG.bridgeRange, pythonPath: CFG.python, aelRoot: CFG.repo,
+            runtime: runtime, validMask: "", timeoutMs: 600000 } );
+         REPORT.errors.out_of_range.refused = false;
+      }
+      catch ( error )
+      {
+         REPORT.errors.out_of_range.refused = true;
+         REPORT.errors.out_of_range.message = String( error );
+      }
+      wide.forceClose();
+   }
+   catch ( error )
+   {
+      REPORT.errors.out_of_range = { error: String( error ) };
+   }
+
    // Detection with nothing chosen: an empty Python field, no saved path and no AEL_PYTHON (the launcher drops it from
    // the environment of this instance). The scan of the standard folders and the virtual environments must find an
    // interpreter that holds the AEL of the connector. The settings of this instance may hold a path saved by an
@@ -310,6 +335,10 @@ def main() -> None:
             geometry.to_json(geometry_path)
             report["inputs"] = {p.name: {"sha256": sha256(p), "bytes": p.stat().st_size}
                                 for p in (rgb_path, mono_path, scene_path, geometry_path)}
+            # the same scene at eight times the level: values above 1, which PixInsight rescales when it opens the file
+            wide_path = root / "out_of_range.tif"
+            tifffile.imwrite(wide_path, (scene_rgb * 8.0).astype(np.float32), photometric="rgb")
+            assert float(tifffile.imread(wide_path).max()) > 1.0
 
             # Stand-ins for the `ael` package that carry only a version: the connector must refuse an AEL older than 1.3.6
             # (or one whose version cannot be read) and accept a later one, comparing numbers and not text (1.10.0 > 1.3.6).
@@ -360,6 +389,7 @@ def main() -> None:
                     "bridgePolar": str(root / "bridge_polar"),
                     "report": str(root / "pjsr_report.json"),
                     "badPython": str(root / "no-such-python"), "staleAel": str(stale_root),
+                    "outOfRange": str(wide_path), "bridgeRange": str(root / "bridge_out_of_range"),
                     "oldPython": "/usr/bin/python3" if Path("/usr/bin/python3").is_file() else ""
                 }
                 config_path = root / "pjsr_config.json"
@@ -397,6 +427,9 @@ def main() -> None:
                 report["tests"]["roundtrip_source_unchanged"] = {
                     key: pjsr["roundtrip"][key]["source_unchanged"] for key in ("rgb", "mono")}
                 report["tests"]["old_ael_kind"] = pjsr["errors"]["old_ael"].get("kind")
+                report["tests"]["out_of_range"] = {**pjsr["errors"]["out_of_range"],
+                                                   "output_written": (root / "bridge_out_of_range").exists()
+                                                                     and any((root / "bridge_out_of_range").iterdir())}
                 report["tests"]["autodetect_python"] = {"detected": pjsr["autodetect"], "default_root": pjsr["default_root"]}
                 report["tests"]["clear_errors"] = {
                     "bad_path": pjsr["errors"]["bad_path"].get("kind") == "bad_path",
@@ -465,6 +498,10 @@ def main() -> None:
                     "clear_errors": all(value is True or isinstance(value, dict)
                                         for value in report["tests"]["clear_errors"].values()),
                     "old_ael_refused_in_pixinsight": report["tests"]["old_ael_kind"] == "old_ael",
+                    "out_of_range_file_refused": report["tests"]["out_of_range"].get("refused") is True
+                                                 and "rescaled" in report["tests"]["out_of_range"].get("message", "")
+                                                 and report["tests"]["out_of_range"].get("view_maximum") == 1.0
+                                                 and not report["tests"]["out_of_range"]["output_written"],
                     "python_autodetected": bool(Path(report["tests"]["autodetect_python"]["detected"]["python"]).is_file())
                                            and report["tests"]["autodetect_python"]["detected"]["ael_version"] == ael.__version__,
                     "structure_pixels_equal": all(item["equal"] for item in report["tests"]["bridge_equals_direct_structure"].values()),
