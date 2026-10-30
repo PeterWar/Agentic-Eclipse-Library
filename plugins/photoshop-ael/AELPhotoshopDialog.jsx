@@ -43,10 +43,10 @@ var AELPhotoshopDialog = function () {
     operation.preferredSize.width = 410;
     // The same notice as the PixInsight connector's workflow dialog.
     var experimental = win.add("statictext", undefined, "Experimental. The filter layers from linear.npy operation is " +
-        "validated with synthetic data. The linear master places the Sun of every frame from its own Moon and its " +
-        "corona; on real frames of 2024 and 2026 they lie within 0.5-0.9 px of the Moon's straight path, but it " +
-        "has not been checked frame by frame against an independent registration.", {multiline: true});
-    experimental.preferredSize = [610, 64];
+        "validated with synthetic data. The linear master registers every frame on the Sun, and on real eclipse " +
+        "frames that registration is not valid yet: it lands 0.07-2.2 px from the reference registration. " +
+        "Do not use it on real frames.", {multiline: true});
+    experimental.preferredSize = [610, 48];
 
     var output = row("Output parent", Folder.myDocuments.fsName, folder);
     var geometry = row("Geometry JSON", "", function (field) { file(field, "EclipseGeometry JSON"); });
