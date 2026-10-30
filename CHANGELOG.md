@@ -11,7 +11,7 @@ Claude plugin folder `plugins/claude-ael/` go to 1.4.0.
   PixelMath expressions that compose them, starting from the same floating-point values AEL starts from (0.504 of a
   16-bit step from AEL's composite, against a gate of one step). When PixInsight does not hold an image as its file
   stores it (it rescales a floating-point TIFF with values outside 0–1, writes NaN as 1.0 and reads a TIFF whose last
-  sample is NaN as black), the bridge has AEL read the file itself, so the files it writes stay those of
+  sample is NaN as black), the bridge has AEL read the file itself, so its AEL products stay those of
   `python -m ael`.
 - **`plugins/photoshop-ael/`, for Photoshop 2026.** The same operations. The filter layers arrive as one layered
   16-bit PSB written and verified by `ael.photoshop`; Photoshop reads it again and compares every layer's name, mode,
