@@ -21,8 +21,9 @@ when no folder is given), the same files a person opens:
 * workflow dialog, «Linear master + all filter layers» (experimental): three frames, the master equals the one
   the helper makes from the terminal;
 * with no geometry at all: the bridge measures it on the image (structure equal to `python -m ael structure
-  --geometry auto`) and opens a check window; «Detect» fills the fields and opens the check, and the run then uses
-  the filled fields; the filter layers of a stack without geometry.json and the linear master without geometry or
+  --geometry auto`) and opens a check window; «Detect» fills the fields with what `python -m ael geometry` measures
+  on the same image and opens the check, and the run then uses the filled fields (on the display-stretched image the
+  measured limb lies about 1.5 px inside the true one, against 0.25 px on the linear image: it is reported, not gated); the filter layers of a stack without geometry.json and the linear master without geometry or
   camera profile measure what they need and say so in their receipts;
 * a message box never appears on the way (a box would wait for a click that does not come in automation).
 
@@ -299,6 +300,10 @@ def main() -> None:
 
         # the terminal runs that the dialogs must equal
         truth = json.loads((structure_dir / "geometry.json").read_text())
+        display_geometry = json.loads(subprocess.run(
+            [args.python, "-m", "ael", "geometry", "--input", config["polarImage"],
+             "--out", str(root / "terminal_display_geometry.json")],
+            text=True, capture_output=True, env=env, timeout=600, check=True).stdout)["geometry"]
         auto_direct = json.loads(subprocess.run(
             [args.python, "-m", "ael", "structure", "--input", config["structureImage"], "--geometry", "auto",
              "--out", str(root / "direct_structure_auto"), "--name", "structure"],
@@ -448,8 +453,16 @@ def main() -> None:
                                               "measurement": receipt.get("geometry_measurement")}
         gates["auto_bridge_opens_a_geometry_check"] = any(i.startswith("AEL_geometry_check") for i in steps["auto_structure_windows"])
         fields = steps["detect_fields"]
-        gates["detect_fills_the_fields"] = all(fields[k] for k in ("sunX", "sunY", "sunRadius")) and near(
-            (float(fields["moonX"]), float(fields["moonY"])), float(fields["moonRadius"]), truth["moon_xy"], truth["moon_radius_px"])
+        pairs = (("sunX", display_geometry["sun_xy"][0]), ("sunY", display_geometry["sun_xy"][1]),
+                 ("sunRadius", display_geometry["sun_radius_px"]), ("moonX", display_geometry["moon_xy"][0]),
+                 ("moonY", display_geometry["moon_xy"][1]), ("moonRadius", display_geometry["moon_radius_px"]))
+        gates["detect_fills_the_fields_with_what_the_terminal_measures"] = all(
+            fields[name] and abs(float(fields[name]) - value) <= 0.0051 for name, value in pairs)
+        gates["detect_finds_the_moon_centre"] = (abs(float(fields["moonX"]) - truth["moon_xy"][0]) <= 1.0
+                                                and abs(float(fields["moonY"]) - truth["moon_xy"][1]) <= 1.0)
+        report["steps"]["detect"] = {"fields": fields, "terminal": display_geometry,
+                                     "radius_minus_truth_px": float(fields["moonRadius"]) - truth["moon_radius_px"],
+                                     "note": "display-stretched image: the steepest edge lies inside the true limb"}
         gates["detect_opens_a_geometry_check"] = any(i.startswith("AEL_geometry_check") for i in steps["detect_windows"])
         detect_runs = sorted((root / "bridge detect out").glob("*"))
         gates["detect_then_run_uses_the_fields"] = len(detect_runs) == 1 and json.loads(

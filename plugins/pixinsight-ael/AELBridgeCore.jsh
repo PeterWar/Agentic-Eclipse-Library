@@ -676,17 +676,49 @@ function aelBridgeMeasureGeometry( runtime, aelRoot, inputPath, validMask, outPa
    return result;
 }
 
-// A new window, never the image itself: the image stretched for display (asinh between the given levels) with the
-// Sun drawn in red and, when it is a different circle, the Moon in cyan. Drawn by PixelMath on the whole canvas.
-function aelBridgeShowGeometryCheck( view, geometry, stretch )
+// Display levels of a view as PixelMath reads it (PixInsight may hold a file rescaled to 0-1): the 1st and 99.8th
+// percentiles of the mean of its colour channels, from about 400,000 samples on a regular grid; NaN is left out.
+function aelBridgeDisplayLevels( view )
 {
-   let low = stretch && isFinite( stretch.low ) ? stretch.low : 0;
-   let high = stretch && isFinite( stretch.high ) ? stretch.high : 1;
-   if ( !( high > low ) )
+   let image = view.image;
+   let width = image.width, height = image.height;
+   let channels = Math.min( 3, image.numberOfNominalChannels !== undefined ? image.numberOfNominalChannels
+                                                                          : image.numberOfChannels );
+   let step = Math.max( 1, Math.floor( Math.sqrt( width * height / 400000 ) ) );
+   let row = new Float32Array( width );
+   let sum = new Float32Array( width );
+   let values = [];
+   for ( let y = 0; y < height; y += step )
    {
-      low = 0;
-      high = 1;
+      sum.fill( 0 );
+      for ( let c = 0; c < channels; ++c )
+      {
+         image.getSamples( row, new Rect( 0, y, width, y + 1 ), c );
+         for ( let x = 0; x < width; x += step )
+            sum[x] += row[x];
+      }
+      for ( let x = 0; x < width; x += step )
+      {
+         let value = sum[x] / channels;
+         if ( isFinite( value ) )
+            values.push( value );
+      }
    }
+   if ( values.length < 100 )
+      return { low: 0, high: 1 };
+   let sorted = Float64Array.from( values ).sort();
+   let low = sorted[Math.floor( 0.01 * ( sorted.length - 1 ) )];
+   let high = sorted[Math.floor( 0.998 * ( sorted.length - 1 ) )];
+   return high > low ? { low: low, high: high } : { low: 0, high: 1 };
+}
+
+// A new window, never the image itself: the image stretched for display (asinh between its own 1st and 99.8th
+// percentiles) with the Sun drawn in red and, when it is a different circle, the Moon in cyan. Drawn by PixelMath on
+// the whole canvas.
+function aelBridgeShowGeometryCheck( view, geometry )
+{
+   let levels = aelBridgeDisplayLevels( view );
+   let low = levels.low, high = levels.high;
    let luminance = view.image.isColor ? "($T[0]+$T[1]+$T[2])/3" : "$T";
    let shown = "asinh(10*min(max((" + luminance + "-(" + low + "))/(" + ( high - low ) + "),0),1))/asinh(10)";
    let t = Math.max( 1.5, 0.004 * geometry.sun_radius_px );
@@ -718,8 +750,8 @@ function aelBridgeShowGeometryCheck( view, geometry, stretch )
    process.newImageWidth = 0;
    process.newImageHeight = 0;
    process.newImageAlpha = false;
-   process.newImageColorSpace = PixelMath.prototype.RGB;
-   process.newImageSampleFormat = PixelMath.prototype.i8;
+   process.newImageColorSpace = PixelMath.RGB;
+   process.newImageSampleFormat = PixelMath.i8;
    if ( !process.executeOn( view, false ) )
       throw new Error( "PixelMath could not draw the geometry check." );
    let check = View.viewById( id );
@@ -849,7 +881,7 @@ function aelBridgeRunOnView( parameters )
       File.writeTextFile( receiptPath, JSON.stringify( bridgeReceipt, null, 1 ) );
       aelBridgeOpenResults( result.files, mode, openedWindows );
       if ( measured && !parameters.noGeometryCheck )
-         openedWindows.push( aelBridgeShowGeometryCheck( view, geometry, measured.report.display_stretch ) );
+         openedWindows.push( aelBridgeShowGeometryCheck( view, geometry ) );
 
       Console.writeln( "AEL bridge receipt: " + receiptPath );
       Console.writeln( File.readTextFile( receiptPath ) );

@@ -150,8 +150,7 @@ function aelWorkflowRunAndOpen( operation, configPath, runtime, aelRoot, buildCo
          Console.writeln( "AEL workflow: geometry " + result.geometry_source + ": " + result.geometry.note );
          let displayId = result.idMap["AEL_DISPLAY"];
          if ( displayId )
-            result.windows.push( aelBridgeShowGeometryCheck( View.viewById( displayId ), result.geometry,
-                                                             { low: 0, high: 1 } ) );
+            result.windows.push( aelBridgeShowGeometryCheck( View.viewById( displayId ), result.geometry ) );
       }
       Console.writeln( "AEL workflow receipt: " + result.receipt );
       Console.writeln( File.readTextFile( result.receipt ) );

@@ -206,7 +206,7 @@ var AELBridgeDialog = class extends Dialog
                                               this.validMaskEdit.text.trim() );
       this.fillGeometry( measured.geometry );
       Console.writeln( "AEL bridge: geometry measured on the image: " + measured.geometry.note );
-      this.geometryCheck = aelBridgeShowGeometryCheck( this.targetView, measured.geometry, measured.report.display_stretch );
+      this.geometryCheck = aelBridgeShowGeometryCheck( this.targetView, measured.geometry );
       return measured;
    };
    detectButton.onClick = function()
