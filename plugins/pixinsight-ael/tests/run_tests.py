@@ -11,6 +11,7 @@ import argparse
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -19,13 +20,28 @@ CREDIT = ("Processed with Agentic Eclipse Library by Pere Guerra — "
           "https://github.com/PeterWar/Agentic-Eclipse-Library")
 
 
+def versioned(directory: Path) -> list[str]:
+    """python3, then python3.N from the newest minor version to the oldest, in one folder."""
+    found = []
+    for path in directory.glob("python3*"):
+        match = re.fullmatch(r"python3(?:\.([0-9]+))?", path.name)
+        if match and path.is_file():
+            found.append((int(match.group(1)) if match.group(1) else 1000, str(path)))
+    return [path for _, path in sorted(found, key=lambda item: -item[0])]
+
+
 def candidates() -> list[str]:
-    values = [os.environ.get("AEL_PYTHON", ""), sys.executable,
-              "/opt/homebrew/bin/python3", "/usr/local/bin/python3",
-              str(Path.home() / ".pyenv/shims/python"),
-              str(Path.home() / ".venvs/eines-ia-py312/bin/python"),
-              str(Path.home() / "miniconda3/bin/python"),
-              str(Path.home() / "miniforge3/bin/python")]
+    """The places the PixInsight dialog searches (AELBridgeCore.jsh, aelBridgeCandidates), in the same order."""
+    home = Path.home()
+    values = [os.environ.get("AEL_PYTHON", ""), sys.executable]
+    for directory in ("/opt/homebrew/bin", "/usr/local/bin", "/usr/bin"):
+        values += versioned(Path(directory))
+    for parent in (".venvs", ".virtualenvs", "venvs"):
+        values += [str(folder / "bin/python") for folder in sorted((home / parent).glob("*"))]
+    values += [str(home / name / "bin/python") for name in ("venv", ".venv")]
+    values.append(str(home / ".pyenv/shims/python"))
+    values += [str(home / name / "bin/python") for name in ("miniconda3", "anaconda3", "miniforge3", "mambaforge")]
+    values.append("/usr/bin/python3")
     return list(dict.fromkeys(value for value in values if value and Path(value).is_file()))
 
 

@@ -42,13 +42,15 @@ The output folder contains the AEL products, `input_geometry.json` and `AEL_BRID
 
 The tests and tools are in the repository (`plugins/pixinsight-ael/tests` and `tools`); the delivered package does not carry them.
 
-The test launcher detects a suitable interpreter; `AEL_PYTHON` can select one explicitly. It uses only synthetic data and starts new PixInsight instances with `-n --automation-mode` and `--force-exit`, which never send a script to an instance that is already open (without `-n`, PixInsight yields the command to a running instance). A test that is stopped by its timeout stops only its own instance.
+The test launcher looks for an interpreter in the same places as the dialog (see **Finding Python**); `AEL_PYTHON` selects one explicitly. It uses only synthetic data and starts new PixInsight instances with `-n --automation-mode` and `--force-exit`, which never send a script to an instance that is already open (without `-n`, PixInsight yields the command to a running instance). A test that is stopped by its timeout stops only its own instance.
 
 ```bash
 PYTHONDONTWRITEBYTECODE=1 python plugins/pixinsight-ael/tests/run_tests.py \
   --output /path/to/validation-output
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. python plugins/pixinsight-ael/tests/dialog_flow.py \
   --repo . --python "$(which python)" --output /path/to/dialog-output
+PYTHONDONTWRITEBYTECODE=1 python plugins/pixinsight-ael/tests/entry_scripts.py \
+  --repo . --output /path/to/entry-output
 ```
 
 `run_tests.py` covers:
@@ -64,6 +66,8 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=. python plugins/pixinsight-ael/tests/dialo
 - dialog and result images rendered by PixInsight.
 
 `dialog_flow.py` builds both dialogs in PixInsight, fills their fields, presses **Run** and checks the windows and files each one leaves, the pixels against `python -m ael` and `python -m ael filters` from the terminal, the PixelMath composite, and that no message box appears. The same test on the previous dialog code fails: a geometry file typed but not loaded stopped the run, and the box "Generate all 16 filters" had no effect.
+
+`entry_scripts.py` runs `AELBridge.js` and `AELWorkflow.js`, the two files that the Script menu starts, unchanged and each in its own new PixInsight instance, and checks that the dialog appears with its title, its Run button, its fields and the AEL folder that comes with the connector, then closes it with Cancel. The same check on a copy whose bridge entry has lost the include of its dialog fails (`ReferenceError: AELBridgeDialog is not defined`), so a broken entry file cannot pass. For a built package: `--plugin PACKAGE/pixinsight-ael --expect-root PACKAGE/pixinsight-ael/runtime`.
 
 `VALIDATION.json` contains the gates and exact commands. A missing PixInsight executable or a failed gate makes the complete validation fail. `--skip-pixinsight` runs only direct AEL checks and is not a complete bridge validation. `--skip-captures` omits only the visual captures.
 
