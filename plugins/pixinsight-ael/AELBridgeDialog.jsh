@@ -161,7 +161,7 @@ function aelBridgeChoiceText( choice )
       let filter = AEL_FILTERS[i];
       if ( choice.filters.indexOf( filter.name ) >= 0 )
          parts.push( filter.label.replace( /^\d+[a-z]? /, "" ) + " " + Math.round( 100 * ( choice.opacities[filter.name] || 0 ) )
-                     + " %" );
+                     + "\u00a0%" );                        // a number and its % stay on one line
    }
    return "Filter layers: " + parts.join( ", " );
 }

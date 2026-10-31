@@ -28,7 +28,9 @@ dialog asks for less guesswork.
   `partial_annuli='chain'` (the filter bank's NRGF uses it) each step of the profile and of the spread from one annulus
   to the next is measured on the 1-degree cells both annuli cover wherever those cells change; whole annuli, also cut
   short in radius, give exactly the old result. On a separable corona cut by the frame the variation along the radius
-  at a fixed angle falls 4 to 20 times. Nothing is filled in: only the two curves the filter divides by are bridged.
+  at a fixed angle falls 3 to 20 times; on the A7S, whose vignetting (no flats) stays, the thin rings are gone and the
+  variation along the radius in a sector falls by up to 40 %. Nothing is filled in: only the two curves the filter
+  divides by are bridged.
 - **PixInsight's linear master was black.** PixInsight 1.9.4 reads a floating-point TIFF whose last sample is NaN as
   all zeros, and rescales one whose values leave 0–1. The PixInsight connector's master is now written in 0–1 (DN/s
   over a power of ten, written in the receipt and the closing message) with an alpha channel that is 0 where nothing

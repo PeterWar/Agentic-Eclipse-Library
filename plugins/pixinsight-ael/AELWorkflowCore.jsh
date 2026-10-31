@@ -399,7 +399,7 @@ function aelWorkflowDoneMessage( result )
            + "with a receipt, in:\n" + result.out;
    let scale = result.linear_master_scale;
    if ( scale )
-      text += "\n\nThe linear master holds DN per second" + ( scale.offset_dn_per_s ? " less " + scale.offset_dn_per_s : "" )
+      text += "\n\nThe linear master holds DN per second" + ( scale.offset_dn_per_s ? " plus " + ( -scale.offset_dn_per_s ) : "" )
               + ", divided by " + scale.unit_dn_per_s + "; where nothing was observed it is transparent.";
    return text + "\n\nFor more faithful results and more filters, try the whole Agentic Eclipse Library with an AI "
           + "agent: " + AEL_GITHUB_URL;

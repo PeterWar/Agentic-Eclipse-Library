@@ -103,7 +103,7 @@ def done_message(summary: dict, left_out: list, out: str, scale: dict | None = N
              f"with a receipt, in:\n{out}")
     if scale:
         offset = scale.get("offset_dn_per_s") or 0
-        text += ("\n\nThe linear master holds DN per second" + (f" less {js_number(offset)}" if offset else "")
+        text += ("\n\nThe linear master holds DN per second" + (f" plus {js_number(-offset)}" if offset else "")
                  + f", divided by {js_number(scale['unit_dn_per_s'])}; where nothing was observed it is transparent.")
     return text + ("\n\nFor more faithful results and more filters, try the whole Agentic Eclipse Library with an AI "
                    "agent: https://github.com/PeterWar/Agentic-Eclipse-Library")
@@ -479,8 +479,8 @@ def main() -> None:
                                                            for key, i in HELP.items())
                                                        and all(text in steps["operation_tooltip"]
                                                                for text in steps["operation_help"]),
-                 "default_filters_shown": steps["choice_default"] == "Filter layers: NRGF 39 %, ACHF iso 1–16 px 8 %, "
-                                                                    "WOW edge-aware 37 %",
+                 "default_filters_shown": steps["choice_default"] == "Filter layers: NRGF 39\u00a0%, ACHF iso 1–16 px "
+                                                                    "8\u00a0%, WOW edge-aware 37\u00a0%",
                  "without_photos_it_says_so": len(steps["raw_empty"]["messages"]) == 1
                                               and "Choose the RAW photos of the totality first." in steps["raw_empty"]["messages"][0]
                                               and steps["raw_empty"]["windows"] == [],
