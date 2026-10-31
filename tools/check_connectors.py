@@ -7,7 +7,8 @@ shared parts. This script fails when those copies drift apart:
   linear master and the same filter layers in either program;
 - python/ael_workflow.py, tools/make_demo.py and tools/build_package.py are the same file once the program
   names are set aside (and, for the builder, its list of files), so both packages carry the same demonstration;
-- both dialogs ask for the same two things, the totality RAW photos and the optional darks and flats;
+- both dialogs ask for the same two things, the totality RAW photos and the optional darks and flats, and offer
+  the same output folder line ("Output folder" with "Browse…");
 - both probes refuse an AEL older than the same version: each probe runs against stand-in `ael` packages that
   carry only a version (1.3.3 and an unreadable one) and must refuse both, and the floor they print must match;
 - neither connector names a private interpreter or a home folder.
@@ -24,6 +25,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 PI, PS = REPO / "plugins/pixinsight-ael", REPO / "plugins/photoshop-ael"
 INPUTS = ("Totality RAW photos", "Darks and flats (optional)")
+OUTPUT = ("Output folder", "Browse…")
 PRIVATE = re.compile(r"/Users/|eines-ia|\.venvs/[A-Za-z0-9_-]+/bin")
 
 
@@ -89,6 +91,8 @@ def main() -> None:
         (PI / "python/ael_auto.py").read_bytes() == (PS / "python/ael_auto.py").read_bytes())
     checks[f"both dialogs ask for {' and '.join(INPUTS)}"] = all(
         label in literal_text(path) for label in INPUTS for path in (PI / "AELBridgeDialog.jsh", PS / "AELPhotoshopDialog.jsx"))
+    checks[f"both dialogs offer {' with '.join(OUTPUT)}"] = all(
+        label in literal_text(path) for label in OUTPUT for path in (PI / "AELBridgeDialog.jsh", PS / "AELPhotoshopDialog.jsx"))
     floors = (minimum(PI / "python/ael_bridge_check.py"), minimum(PS / "python/ael_photoshop.py"))
     checks[f"same AEL floor in both probes {floors}"] = floors[0] == floors[1] != "none"
     answers = refusals()
