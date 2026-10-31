@@ -269,7 +269,12 @@ var AELBridgeDialog = class extends Dialog
             Settings.write( AEL_BRIDGE_SETTINGS_KEY + "outputDirectory", DataType.UTF8String, outputRoot );
             d.ok();
             if ( mode == 0 )
-               aelWorkflowRaw( d.raw, d.calibration, outputRoot, d.pythonPath, d.aelRoot, d.buildComposite );
+            {
+               // the Photoshop connector's closing message, also written to the Process Console
+               let result = aelWorkflowRaw( d.raw, d.calibration, outputRoot, d.pythonPath, d.aelRoot, d.buildComposite );
+               new MessageBox( aelWorkflowDoneMessage( result ), "Agentic Eclipse Library", StdIcon.Information,
+                               StdButton.Ok ).execute();
+            }
             else if ( mode <= 2 )
                aelBridgeRunOnView( { view: d.targetView, mode: mode == 1 ? "structure" : "polar", geometry: null,
                                      outputDirectory: outputRoot, pythonPath: d.pythonPath, aelRoot: d.aelRoot,

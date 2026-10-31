@@ -259,15 +259,7 @@ function aelWorkflowRaw( raw, calibration, outputRoot, pythonPath, aelRoot, buil
       Console.writeln( "AEL: " + raw.length + " RAW photos and " + calibration.length + " darks and flats, into " + output );
       let result = aelWorkflowRunAndOpen( "raw", configPath, runtime, aelRoot, buildComposite,
                                           aelWorkflowProgress( progressPath, cancelPath ) );
-      let s = result.summary;
-      let left = result.left_out || [];
-      Console.noteln( "AEL: " + s.frames_stacked + " of " + s.frames_chosen + " photos stacked into one image ("
-                      + s.camera + ", " + s.date + "), saved with its layers and a receipt in " + result.out );
-      for ( let i = 0; i < left.length; ++i )
-         Console.warningln( "Left out: " + left[i].file + ": " + left[i].reason );
-      if ( s.cloudy )
-         Console.warningln( "The sky changed during the totality (thin clouds or haze): faint arcs may show where an "
-                            + "exposure saturates." );
+      Console.noteln( aelWorkflowDoneMessage( result ) );
       return result;
    }
    catch ( error )
@@ -280,6 +272,29 @@ function aelWorkflowRaw( raw, calibration, outputRoot, pythonPath, aelRoot, buil
    {
       aelBridgeCleanup( tempDir, temporaryFiles );
    }
+}
+
+// What a RAW run did, as the Photoshop connector says it when it finishes: how many photos were stacked, which were left
+// out and why, and where everything was saved.
+function aelWorkflowDoneMessage( result )
+{
+   let s = result.summary;
+   let left = result.left_out || [];
+   let text = "Done: " + s.frames_stacked + " of " + s.frames_chosen + " photos stacked into one image ("
+              + s.camera + ", " + s.date + ").";
+   if ( left.length )
+   {
+      text += "\n\nLeft out (" + left.length + "):";
+      for ( let i = 0; i < Math.min( left.length, 5 ); ++i )
+         text += "\n• " + left[i].file + ": " + left[i].reason;
+      if ( left.length > 5 )
+         text += "\n• … and " + ( left.length - 5 ) + " more, listed in the receipt";
+   }
+   if ( s.cloudy )
+      text += "\n\nThe sky changed during the totality (thin clouds or haze): faint arcs may show where an exposure "
+              + "saturates.";
+   return text + "\n\nThe linear master, its filter layers and their PixelMath composite are open. They are saved, "
+          + "with a receipt, in:\n" + result.out;
 }
 
 function aelWorkflowEmptyFolder( folder )

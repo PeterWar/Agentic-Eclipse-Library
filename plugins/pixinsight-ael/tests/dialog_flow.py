@@ -18,7 +18,8 @@ answer with the files a person would pick.
   linear master and the filter layers equal those of the same engine run from the terminal with the same files
   (ael_bridge_check.py raw: the engine the Photoshop connector shares), the PixelMath composite matches AEL's own
   composite (its preview) within one 8-bit step, a master dark is made for each exposure and a master flat, the
-  geometry is measured and shown, and the engine's steps reach the Console. Without photos, Run says what is missing;
+  geometry is measured and shown, the engine's steps reach the Console, and the closing message, word for word the
+  Photoshop connector's, appears in a message box and in the Console. Without photos, Run says what is missing;
   stopped from the Console, the run ends with a message and leaves no folder behind.
 * Structure on the open linear corona and unrolled view on the open display one: the dialog has no Python, AEL folder
   or geometry fields, so the Python is detected, AEL is the connector's own, and AEL measures the geometry on each
@@ -78,6 +79,22 @@ def pixels(path: Path) -> np.ndarray:
         from PIL import Image
         return np.asarray(Image.open(path))
     return tifffile.imread(path)
+
+
+def done_message(summary: dict, left_out: list, out: str) -> str:
+    """The closing message of a RAW run as the connector writes it (AELWorkflowCore.jsh, aelWorkflowDoneMessage), which
+    is the Photoshop connector's (doneMessage) with PixInsight's windows in its last sentence."""
+    text = (f"Done: {summary['frames_stacked']} of {summary['frames_chosen']} photos stacked into one image "
+            f"({summary['camera']}, {summary['date']}).")
+    if left_out:
+        text += f"\n\nLeft out ({len(left_out)}):" + "".join(f"\n• {item['file']}: {item['reason']}" for item in left_out[:5])
+        if len(left_out) > 5:
+            text += f"\n• … and {len(left_out) - 5} more, listed in the receipt"
+    if summary.get("cloudy"):
+        text += ("\n\nThe sky changed during the totality (thin clouds or haze): faint arcs may show where an exposure "
+                 "saturates.")
+    return text + ("\n\nThe linear master, its filter layers and their PixelMath composite are open. They are saved, "
+                   f"with a receipt, in:\n{out}")
 
 
 def listed(path: Path | None) -> list[str]:
@@ -377,7 +394,7 @@ def main() -> None:
         lists = [c for c in choosers if not c.get("folder")]
         raw_lists = [c for c in lists if c["caption"] in ("RAW photos of the totality (select them all)",
                                                           "Dark and flat frames of the same camera")]
-        expected_messages = {"raw_empty": 1, "raw_cancel": 1}
+        expected_messages = {"raw_empty": 1, "raw_cancel": 1, "raw": 1}
         gates = {"no_other_message_box": all(len(steps[key]["messages"]) == expected_messages.get(key, 0) for key in ROUNDS)
                                          and len(pjsr["messages"]) == sum(expected_messages.values()),
                  "output_folder_starts_at_downloads": steps["output_default"] == str(Path.home() / "Downloads"),
@@ -466,8 +483,12 @@ def main() -> None:
             "raw_steps_reach_the_console": all(any(line.startswith(f"AEL: {stage}") for line in log) for stage in
                                                ("Reading the files", "Finding the Moon", "Registering on the Sun",
                                                 "Stacking", "Filters")),
-            "raw_console_says_what_was_stacked": any(f"AEL: {len(raw)} of {len(raw)} photos stacked into one image" in line
-                                                     for line in log),
+            # the Photoshop connector's closing message, word for word, in a message box and in the Console
+            "raw_closing_message_as_in_photoshop": steps["raw"]["messages"] == [
+                done_message(result.get("summary") or {}, result.get("left_out") or [], result.get("out"))]
+                if result.get("summary") else False,
+            "raw_console_says_what_was_stacked": any(
+                line.startswith(f"Done: {len(raw)} of {len(raw)} photos stacked into one image") for line in log),
         })
         report["steps"]["raw"] = {"folder": str(folder), "terminal_rc": run.returncode, "terminal_ok": answer.get("ok"),
                                   "terminal_message": answer.get("message"), "terminal_stderr": run.stderr[-600:],
@@ -476,7 +497,9 @@ def main() -> None:
                                   "registration_method": (receipt.get("registration") or {}).get("method"),
                                   "composite_max_difference_8bit_steps": None if difference is None else difference * 255,
                                   "timings_s": receipt.get("timings_s"),
-                                  "console_lines": [line for line in log if line.startswith(("AEL: ", "Left out: "))][:120]}
+                                  "closing_message": steps["raw"]["messages"],
+                                  "console_lines": [line for line in log if line.startswith(("AEL: ", "Done: ", "Left out",
+                                                                                             "• "))][:120]}
 
         # structure and unrolled view: equal to python -m ael, geometry measured and shown
         for mode in ("structure", "polar"):
