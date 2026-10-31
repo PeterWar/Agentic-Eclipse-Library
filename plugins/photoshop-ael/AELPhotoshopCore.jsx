@@ -604,8 +604,13 @@ var AELPhotoshop = AELPhotoshop || {};
                 var fraction = info.total ? Math.min(1, info.done / info.total) : 0;
                 state.value = Math.max(state.value, span[0] + (span[1] - span[0]) * fraction);
             }
+            // a filter by the name the dialog gives it (WOW edge-aware), not by AEL's key (wow_edge_aware)
+            var message = info.message;
+            for (var k = 0; info.stage === "Filters" && k < ns.FILTERS.length; k++) {
+                if (ns.FILTERS[k].name === message) message = ns.FILTERS[k].label.replace(/^\d+[a-z]? /, "");
+            }
             var step = info.stage + (info.total ? " (" + info.done + " of " + info.total + ")" : "") +
-                (info.message ? ": " + info.message : "");
+                (message ? ": " + message : "");
             if (step !== state.said) {
                 ns.progressLog.push("AEL: " + step + " — " + Math.round((now - state.started) / 1000) + " s");
                 state.said = step;
