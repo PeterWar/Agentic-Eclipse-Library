@@ -56,8 +56,8 @@ Moon in every photo, registers them on the Sun, stacks them and adds AEL's filte
 measured and assumed. Both run the same engine (the same file in each package): Photoshop receives one layered
 16-bit PSB, PixInsight the same layers as images with the PixelMath expressions that compose them. In PixInsight they
 also work on an open linear stack (structure and unrolled views, filter layers). They have been tested on the
-author's Mac with five cameras of two eclipses, but not yet by other people: in theory they should work, and reports
-are welcome. Each package carries its own copy of the AEL engine.
+author's Mac (their engine on five cameras of two eclipses, each connector inside its program on six frames of one),
+but not yet by other people: in theory they should work, and reports are welcome. Each package carries its own copy of the AEL engine.
 
 Every function reads only observed pixels; where there is no data the result is `NaN` (display files show it as
 black), never a fill or a mirror.
@@ -232,7 +232,8 @@ commercially; the licence only asks you to keep the copyright and permission not
 
 Two connectors run AEL from inside PixInsight and Photoshop, from the RAW photos to a stacked image with AEL's filter
 layers. **They still have to be tried by other people**, on other computers and other eclipses; on the author's Mac
-they work inside both programs with five cameras of two eclipses, and in theory they should work elsewhere.
+their engine has been run on five cameras of two eclipses and each connector inside its program on six frames of one,
+and in theory they should work elsewhere.
 
 - **The same two choices in both:** the RAW photos of the totality, and darks and flats if you have them. Everything
   else (which photos to keep, the levels, the Moon, the registration on the Sun with the turn of the field, the light

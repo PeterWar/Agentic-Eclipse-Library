@@ -132,7 +132,8 @@ lunar limb and the DE440s ephemeris: median 0.16 px, largest 0.73 px (the yardst
 px). The field turn it measures, −0.0147° a minute, is the one measured by hand.
 
 **The two registrations side by side**, judged by the straight line the Moon makes relative to the Sun in time (the
-residual is the corona registration plus the limb fit), on the same frames:
+residual is the corona registration plus the limb fit), on the same frames; the residuals are those of the frames whose
+corona both methods registered (5 of the Vixen's, 10 of the 6D's and 12 of the Sony's):
 
 | Frames | RAW engine (`ael_auto`) | command-line master (`ael_workflow`) |
 |---|---|---|
@@ -181,7 +182,10 @@ the corona, the change leaves out the one frame that had been placed on the inte
 
 **Limits.**
 
-- Tested on macOS only, by the author and by scripts that press the dialogs' buttons; not yet by other people.
+- Tested on macOS only, by the author and by scripts that press the dialogs' buttons; not yet by other people. Inside
+  the programs, six frames of one eclipse; the five cameras of two eclipses went through the engine outside them.
+- Stopping a run: Photoshop's **Stop** and PixInsight's Console abort both write the file the engine reads at each
+  step; the tests wrote that file directly, and neither button was pressed during a run.
 - An astro-modified camera keeps the factory colour matrix and comes out red.
 - The Sony A7S of 2024 (Questar, no tracking, a re-pointing, cirrus): the Moon and the corona disagree along a curve of
   up to 13 px; the engine falls back to the corona alone and leaves a ring at the saturation edge of the 1 s frames.

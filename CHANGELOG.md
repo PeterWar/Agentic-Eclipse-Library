@@ -4,9 +4,9 @@
 
 Two connectors run `ael` from inside PixInsight and Photoshop, from the RAW photos of a totality to a stacked image
 with AEL's filter layers, and `ael` measures the geometry of an eclipse image on the image itself. **The connectors
-still have to be tried by other people, on other computers and other eclipses:** they have been tested on the
-author's Mac, inside both programs, with five cameras of two eclipses, and in theory they should work; please report
-what you find. The Codex plugin goes to 1.1.4; the Claude Code plugin of this repository's marketplace and the Claude
+still have to be tried by other people, on other computers and other eclipses:** on the author's Mac their engine
+has been run on the photos of five cameras of two eclipses, and each connector inside its program on six frames of
+one of them; in theory they should work elsewhere. Please report what you find. The Codex plugin goes to 1.1.4; the Claude Code plugin of this repository's marketplace and the Claude
 plugin folder `plugins/claude-ael/` go to 1.4.0.
 
 - **Geometry measured on the image** (`ael.geometry.find_disc` and `measure_geometry`, `python -m ael geometry`, and
