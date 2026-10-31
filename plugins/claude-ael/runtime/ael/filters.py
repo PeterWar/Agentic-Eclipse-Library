@@ -14,6 +14,16 @@ Implemented from the papers (cite them if you publish):
 * Starlet (isotropic undecimated wavelet, B3 spline) – Starck, Fadili & Murtagh (2007), IEEE TIP 16, 297.
 * Tangential high-pass – a circular (along the limb) high-pass in the spirit of the adaptive circular
   filters of Druckmüller, Rušin & Minarovjech (2006), Contrib. Astron. Obs. Skalnaté Pleso 36, 131.
+
+Structure-aware detail (since 1.4.1):
+
+* Curvilinear weight – Frangi, Niessen, Vincken & Viergever (1998), MICCAI, LNCS 1496, 130.
+* Steerable filters – Freeman & Adelson (1991), IEEE PAMI 13, 891; structure tensor as in Weickert (1999).
+* Multiscale (pyramidal) median transform – Starck, Murtagh & Bijaoui (1998), *Image Processing and Data
+  Analysis: The Multiscale Approach*, Cambridge University Press.
+* Coherence-enhancing diffusion – Weickert (1999), Int. J. Computer Vision 31, 111.
+* Fourier noise gating – DeForest (2017), ApJ 838, 155; the gain is the non-negative garrote of Breiman (1995),
+  Technometrics 37, 373.
 """
 from __future__ import annotations
 
@@ -23,7 +33,9 @@ import numpy as np
 from .geometry import EclipseGeometry
 
 __all__ = ["gaussian", "normalized_gaussian", "local_mean_std", "nrgf", "mgn", "starlet", "wow",
-           "noise_map", "noise_factors", "tangential_highpass", "STARLET_NOISE"]
+           "noise_map", "noise_factors", "tangential_highpass", "STARLET_NOISE",
+           "hessian", "hessian_eigen", "ridge_weight", "steerable_g2", "multiscale_median", "coherence_diffusion",
+           "noise_gate"]
 
 # Standard deviation of the B3-starlet detail coefficients for unit white Gaussian noise (scales 1..9).
 STARLET_NOISE = np.array([0.8908, 0.2007, 0.0856, 0.0413, 0.0205, 0.0103, 0.0052, 0.0026, 0.0013])
@@ -354,3 +366,343 @@ def tangential_highpass(img: np.ndarray, valid: np.ndarray | None, geometry: Ecl
     out = from_polar(P, a.shape, interp="linear")
     out[~m] = np.nan
     return out
+
+
+# ------------------------------------------------------------------------------------------------
+# Structure-aware detail (since 1.4.1): the five families of the survey of 30-10-2026 that AEL did not have
+# ------------------------------------------------------------------------------------------------
+# Every one of them reads only observed pixels and returns NaN where there is no data.  Second derivatives need
+# a value on both sides of a pixel: next to the edge of the data the missing side is the nearest observed value,
+# for the difference only (a flat continuation, never a trend), and the result there is NaN again.
+def nearest_index(valid: np.ndarray):
+    """Indices of the nearest observed pixel of every pixel (``scipy.ndimage.distance_transform_edt``)."""
+    from scipy import ndimage as ndi
+    return ndi.distance_transform_edt(~valid, return_distances=False, return_indices=True)
+
+
+def _filled(a: np.ndarray, valid: np.ndarray, index) -> np.ndarray:
+    a = np.asarray(a, np.float32)
+    if valid.all():
+        return a
+    return np.where(valid, a, a[tuple(index)]).astype(np.float32)
+
+
+_D2 = np.array([[1.0, -2.0, 1.0]], np.float32)
+_DXY = np.array([[1.0, 0.0, -1.0], [0.0, 0.0, 0.0], [-1.0, 0.0, 1.0]], np.float32) / 4
+
+
+def hessian(smoothed: np.ndarray):
+    """``(h_xx, h_xy, h_yy)`` of a field already smoothed at the scale of interest, by central differences."""
+    s = np.ascontiguousarray(smoothed, np.float32)
+    hxx = cv2.filter2D(s, -1, _D2, borderType=cv2.BORDER_REPLICATE)
+    hyy = cv2.filter2D(s, -1, _D2.T, borderType=cv2.BORDER_REPLICATE)
+    hxy = cv2.filter2D(s, -1, _DXY, borderType=cv2.BORDER_REPLICATE)
+    return hxx, hxy, hyy
+
+
+def hessian_eigen(hxx, hxy, hyy):
+    """Eigenvalues ``(big, small)`` of a 2×2 symmetric field, ordered by magnitude: ``|big| ≥ |small|``."""
+    root = np.sqrt((hxx - hyy) ** 2 + 4 * hxy ** 2)
+    a, b = (hxx + hyy + root) / 2, (hxx + hyy - root) / 2
+    first = np.abs(a) >= np.abs(b)
+    return np.where(first, a, b), np.where(first, b, a)
+
+
+def ridge_weight(img: np.ndarray, valid: np.ndarray | None, *, sigmas=(1.5, 3.0, 6.0), beta: float = 0.5,
+                 strength: float = 1.0, index=None):
+    """Curvilinear-structure weight in [0, 1] (Frangi, Niessen, Vincken & Viergever 1998, the 'vesselness' of the
+    scale-normalised Hessian), the maximum over ``sigmas``.
+
+    With ``|λ1| ≥ |λ2|``: ``R_B = |λ2| / |λ1|`` (0 on a line, 1 on a blob) and ``S = √(λ1² + λ2²)``;
+    ``V = exp(−R_B² / 2β²) · (1 − exp(−S² / 2c²))``.  Both signs count: a bright ray and a dark lane are both
+    structures of the corona.  ``c`` is measured, ``strength`` times the median ``S`` of the observed pixels at
+    that scale, so the weight does not depend on the units.  A weight never adds anything: multiplied into a
+    detail layer it keeps elongated structure (rays, loops, cavity edges at any angle) and lowers isotropic grain.
+    """
+    a = np.asarray(img, np.float32)
+    m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))
+    index = nearest_index(m) if index is None else index
+    best = np.zeros(a.shape, np.float32)
+    used = []
+    for s in sigmas:
+        sm = normalized_gaussian(a, m, s, min_support=0.01)
+        ok = m & np.isfinite(sm)
+        hxx, hxy, hyy = (s * s * h for h in hessian(_filled(np.where(ok, sm, 0), ok, index)))
+        big, small = hessian_eigen(hxx, hxy, hyy)
+        rb2 = (small / np.where(big == 0, 1, big)) ** 2
+        s2 = big * big + small * small
+        c2 = float(np.median(s2[ok])) * strength ** 2
+        if not np.isfinite(c2) or c2 <= 0:
+            continue
+        v = np.exp(-rb2 / (2 * beta * beta)) * (1 - np.exp(-s2 / (2 * c2)))
+        best = np.maximum(best, np.where(ok, v, 0).astype(np.float32))
+        used.append(dict(sigma_px=s, c=float(np.sqrt(c2))))
+    best[~m] = np.nan
+    return best, dict(method="Frangi vesselness of the scale-normalised Hessian, both signs, maximum over scales",
+                      beta=beta, strength=strength, scales=used)
+
+
+def steerable_g2(img: np.ndarray, valid: np.ndarray | None, *, sigmas=(1.5, 3.0, 6.0, 12.0),
+                 integration: float = 2.0, index=None):
+    """Second-derivative detail steered, pixel by pixel, across the local structure (Freeman & Adelson 1991,
+    'The design and use of steerable filters', IEEE PAMI 13, 891).
+
+    The G2 response at any angle θ is ``cos²θ·h_xx + 2 sinθ cosθ·h_xy + sin²θ·h_yy``: three base convolutions give
+    every orientation.  The angle is the dominant gradient direction of the structure tensor smoothed over
+    ``integration`` × σ (Weickert 1999), so it follows a ray, a loop or a cavity edge whatever its angle to the
+    radius, and is not set by the noise of single pixels.  Returns ``−σ²·G2θ`` averaged over ``sigmas``: positive on
+    a bright filament, negative on a dark lane.
+    """
+    a = np.asarray(img, np.float32)
+    m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))
+    index = nearest_index(m) if index is None else index
+    acc = np.zeros(a.shape, np.float32)
+    for s in sigmas:
+        sm = normalized_gaussian(a, m, s, min_support=0.01)
+        ok = m & np.isfinite(sm)
+        f = _filled(np.where(ok, sm, 0), ok, index)
+        gx = cv2.Sobel(f, cv2.CV_32F, 1, 0, ksize=1, borderType=cv2.BORDER_REPLICATE) / 2
+        gy = cv2.Sobel(f, cv2.CV_32F, 0, 1, ksize=1, borderType=cv2.BORDER_REPLICATE) / 2
+        rho = integration * s
+        j11 = normalized_gaussian(gx * gx, ok, rho, min_support=0.01)
+        j12 = normalized_gaussian(gx * gy, ok, rho, min_support=0.01)
+        j22 = normalized_gaussian(gy * gy, ok, rho, min_support=0.01)
+        theta = 0.5 * np.arctan2(2 * j12, j11 - j22)
+        c, sn = np.cos(theta), np.sin(theta)
+        hxx, hxy, hyy = hessian(f)
+        g2 = c * c * hxx + 2 * c * sn * hxy + sn * sn * hyy
+        acc += np.where(ok & np.isfinite(g2), -s * s * g2, 0).astype(np.float32) / len(sigmas)
+    acc[~m] = np.nan
+    return acc
+
+
+def _masked_median5(c: np.ndarray) -> np.ndarray:
+    """Median of the observed values (finite) of the 5×5 neighbourhood of every observed pixel; NaN elsewhere."""
+    h, w = c.shape
+    out = np.full(c.shape, np.nan, np.float32)
+    rows = max(1, 6_000_000 // (25 * max(w, 1)))
+    pad = np.pad(c, 2, mode="constant", constant_values=np.nan)
+    for y0 in range(0, h, rows):
+        y1 = min(h, y0 + rows)
+        taps = np.stack([pad[y0 + dy:y1 + dy, dx:dx + w] for dy in range(5) for dx in range(5)], axis=-1)
+        taps.sort(axis=-1)                                  # NaN sorts last
+        n = np.isfinite(taps).sum(axis=-1)
+        lo, hi = np.maximum((n - 1) // 2, 0), np.maximum(n // 2, 0)
+        med = 0.5 * (np.take_along_axis(taps, lo[..., None], -1)[..., 0] + np.take_along_axis(taps, hi[..., None], -1)[..., 0])
+        out[y0:y1] = np.where(np.isfinite(c[y0:y1]) & (n > 0), med, np.nan)
+    return out
+
+
+def _pad_to(c: np.ndarray, k: int) -> np.ndarray:
+    """``c`` with rows and columns of NaN (no data) added at the bottom and the right up to multiples of ``k``.
+
+    A pyramid that reduces by ``k`` and enlarges back must keep every block whole: cropping the odd row and
+    stretching the reduced image over the full size moves each enlarged block by up to half a block, and the shift
+    adds up scale after scale (up to 12 px across a 10,000-pixel canvas in a first, unpublished version). Padded, every block is enlarged
+    back exactly where it came from; crop the result to the original size."""
+    h, w = c.shape
+    H, W = -(-h // k) * k, -(-w // k) * k
+    if (H, W) == (h, w):
+        return np.asarray(c, np.float32)
+    out = np.full((H, W), np.nan, np.float32)
+    out[:h, :w] = c
+    return out
+
+
+def _block_mean(c: np.ndarray, k: int) -> np.ndarray:
+    """k×k block mean of the finite values; NaN where a block has none. The size must be a multiple of ``k``
+    (:func:`_pad_to`)."""
+    h, w = c.shape
+    if h % k or w % k:
+        raise ValueError(f'{c.shape} is not a multiple of {k}: pad it first')
+    ok = np.isfinite(c)
+    num = np.where(ok, c, 0).reshape(h // k, k, w // k, k).sum(axis=(1, 3))
+    den = ok.reshape(h // k, k, w // k, k).sum(axis=(1, 3))
+    return np.where(den > 0, num / np.maximum(den, 1), np.nan).astype(np.float32)
+
+
+def _half(c: np.ndarray) -> np.ndarray:
+    """2×2 block mean of the finite values (:func:`_block_mean`, after padding an odd size with no data)."""
+    return _block_mean(_pad_to(c, 2), 2)
+
+
+def _up(c: np.ndarray, shape) -> np.ndarray:
+    """Normalised bilinear enlargement of ``c`` (NaN = no data) to ``shape``."""
+    ok = np.isfinite(c)
+    size = (shape[1], shape[0])
+    num = cv2.resize(np.where(ok, c, 0).astype(np.float32), size, interpolation=cv2.INTER_LINEAR)
+    den = cv2.resize(ok.astype(np.float32), size, interpolation=cv2.INTER_LINEAR)
+    return np.where(den > 1e-3, num / np.maximum(den, 1e-3), np.nan).astype(np.float32)
+
+
+def multiscale_median(img: np.ndarray, valid: np.ndarray | None, n_scales: int = 5):
+    """Pyramidal median transform (Starck, Murtagh & Bijaoui 1998, *Image Processing and Data Analysis*, §1.5;
+    Starck & Murtagh 2006, ch. 2): ``c_{j+1}`` = the 5×5 median of ``c_j`` reduced by two, ``w_j = c_j − c_{j+1}``
+    enlarged back.  A median ignores a few extreme pixels, so a star, a prominence or the edge of the data does not
+    spread a dark ring into the scales around it, and a coefficient cannot change sign because of its neighbours.
+    The medians use observed pixels only.  The image is padded with no data up to a multiple of ``2^n_scales``
+    (:func:`_pad_to`), so that every scale is enlarged back exactly where it came from (a first, unpublished version
+    cropped an odd size and stretched it back, and the background of the coarse scales slid by up to 12 px).  Returns
+    the list of the ``n_scales`` detail planes at full size (scale j ≈ 2^j px), NaN where there is no data."""
+    a = np.asarray(img, np.float32)
+    m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))
+    h, w = a.shape
+    c = _pad_to(np.where(m, a, np.nan), 2 ** n_scales)
+    full = c.shape
+    planes = []
+    for _ in range(n_scales):
+        nxt = _block_mean(_masked_median5(c), 2)
+        detail = c - _up(nxt, c.shape)
+        planes.append((detail if detail.shape == full else _up(detail, full))[:h, :w].copy())
+        c = nxt
+    for p in planes:
+        p[~m] = np.nan
+    return planes
+
+
+def coherence_diffusion(img: np.ndarray, valid: np.ndarray | None, *, time: float = 8.0, tau: float = 0.15,
+                        sigma: float = 1.0, rho: float = 4.0, alpha: float = 1e-3, refresh: int = 4):
+    """Coherence-enhancing diffusion (Weickert 1999, IJCV 31, 111): ``∂u/∂t = div(D ∇u)``.
+
+    ``D`` has the eigenvectors of the structure tensor ``J_ρ(∇u_σ)``: across the structure the diffusivity is
+    ``alpha`` (nothing is widened), along it ``alpha + (1 − alpha)·exp(−C / (μ1 − μ2)²)``, so only where the
+    orientation is coherent does the image smooth along it.  ``C`` is measured, the median ``(μ1 − μ2)²`` of the
+    observed pixels.  Explicit steps of ``tau`` up to ``time`` (in pixels² of the image passed in); the tensor is
+    recomputed every ``refresh`` steps.  No flux crosses into unobserved pixels: the data is never mixed with what
+    is not data.  ⚠ It smooths only: on pure noise it organises the noise into flow-like strokes, so use it with a
+    null control (see docs).  Returns the diffused image, NaN outside the data."""
+    u = np.where(np.isfinite(img), img, 0).astype(np.float32)
+    m = np.isfinite(img) if valid is None else (valid.astype(bool) & np.isfinite(img))
+    u[~m] = 0
+    mf = m.astype(np.float32)
+    # A flux between two pixels only if both are observed.
+    ex = (mf[:, 1:] * mf[:, :-1]).astype(np.float32)
+    ey = (mf[1:, :] * mf[:-1, :]).astype(np.float32)
+    cx = (mf[:, 2:] * mf[:, :-2]).astype(np.float32)
+    cy = (mf[2:] * mf[:-2]).astype(np.float32)
+    steps = max(1, int(np.ceil(time / tau)))
+    C = None
+    for k in range(steps):
+        if k % refresh == 0:
+            us = normalized_gaussian(np.where(m, u, np.nan), m, sigma, min_support=0.01)
+            us = np.where(np.isfinite(us), us, 0).astype(np.float32)
+            gx = np.zeros_like(us); gy = np.zeros_like(us)
+            gx[:, 1:-1] = (us[:, 2:] - us[:, :-2]) / 2; gy[1:-1] = (us[2:] - us[:-2]) / 2
+            j11 = normalized_gaussian(gx * gx, m, rho, min_support=0.01)
+            j12 = normalized_gaussian(gx * gy, m, rho, min_support=0.01)
+            j22 = normalized_gaussian(gy * gy, m, rho, min_support=0.01)
+            j11, j12, j22 = (np.where(np.isfinite(j), j, 0) for j in (j11, j12, j22))
+            gap = np.sqrt((j11 - j22) ** 2 + 4 * j12 ** 2)          # μ1 − μ2
+            if C is None:
+                C = max(float(np.median(gap[m] ** 2)), 1e-30)
+            lam_along = alpha + (1 - alpha) * np.exp(-C / np.maximum(gap * gap, 1e-30))
+            # v1 (across) = (cos φ, sin φ), φ the dominant gradient direction; v2 (along) ⟂ v1
+            phi = 0.5 * np.arctan2(2 * j12, j11 - j22)
+            c, s = np.cos(phi), np.sin(phi)
+            d11 = (alpha * c * c + lam_along * s * s).astype(np.float32)
+            d12 = ((alpha - lam_along) * c * s).astype(np.float32)
+            d22 = (alpha * s * s + lam_along * c * c).astype(np.float32)
+        # Fluxes on the half-grid: x-faces carry d11·u_x + d12·u_y, y-faces d12·u_x + d22·u_y (central y/x gradients).
+        # The cross gradients count only where both neighbours are observed: no unobserved zero enters a flux.
+        ux = (u[:, 1:] - u[:, :-1]) * ex
+        uy_c = np.zeros_like(u); uy_c[1:-1] = (u[2:] - u[:-2]) / 2 * cy
+        uy_x = 0.5 * (uy_c[:, 1:] + uy_c[:, :-1]) * ex
+        fx = 0.5 * (d11[:, 1:] + d11[:, :-1]) * ux + 0.5 * (d12[:, 1:] + d12[:, :-1]) * uy_x
+        uy = (u[1:] - u[:-1]) * ey
+        ux_c = np.zeros_like(u); ux_c[:, 1:-1] = (u[:, 2:] - u[:, :-2]) / 2 * cx
+        ux_y = 0.5 * (ux_c[1:] + ux_c[:-1]) * ey
+        fy = 0.5 * (d12[1:] + d12[:-1]) * ux_y + 0.5 * (d22[1:] + d22[:-1]) * uy
+        div = np.zeros_like(u)
+        div[:, :-1] += fx; div[:, 1:] -= fx
+        div[:-1] += fy; div[1:] -= fy
+        u = (u + tau * div * mf).astype(np.float32)
+    out = np.where(m, u, np.nan).astype(np.float32)
+    return out, dict(method="coherence-enhancing diffusion (Weickert 1999), explicit, no flux into unobserved pixels",
+                     time=time, tau=tau, steps=steps, sigma=sigma, rho=rho, alpha=alpha, C=C, refresh=refresh)
+
+
+def noise_gate(img: np.ndarray, valid: np.ndarray | None, geometry: EclipseGeometry, *, tile: int = 32,
+               step: int = 8, gamma: float = 3.0, high_k: float = 0.6, r_range: tuple[float, float] | None = None):
+    """Fourier noise gating (DeForest 2017, ApJ 838, 155) on overlapping tiles of the corona unrolled in
+    (ln r, position angle).
+
+    In that plane a ray is nearly a line of constant angle, so its energy gathers on a narrow line of the tile's
+    spectrum, while the noise spreads over all of it.  Each tile (Hann window, a quarter of its size apart) is
+    transformed; the noise level of a row of tiles (one ln r) is the median, over the row, of the rms magnitude of
+    the coefficients above ``high_k`` of the Nyquist frequency and off the two axes of the plane, where rays
+    (k_ln r ≈ 0) and arcs (k_PA ≈ 0) put their energy (white noise); each coefficient is scaled by the
+    non-negative garrote ``max(0, 1 − (γN)² / |F|²)`` (Breiman 1995), which keeps a strong coefficient whole and
+    removes one at the noise level.  What the gate removes is mapped back to the image and subtracted from it: the
+    rest of the image keeps its own pixels.  Unobserved cells of a tile count as zero in its transform (the input
+    is a residual about zero) and the result is NaN there.  Returns (gated image, information)."""
+    from .polar import from_polar, to_polar
+
+    a = np.asarray(img, np.float32)
+    m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))
+    h, w = a.shape
+    cx, cy = geometry.sun_xy
+    yy, xx = np.nonzero(m)
+    rr = np.hypot(xx - cx, yy - cy)
+    del yy, xx
+    if r_range is None:
+        r_range = (max(float(rr.min()), 1.0), float(rr.max()) + 1.0)
+    r0, r1 = r_range
+    # ~1 px along the arc at 2 R☉ and along ln r at the same radius: fine detail kept where it can be measured.
+    ref = min(max(2.0 * geometry.sun_radius_px, r0), r1)
+    n_pa = int(np.ceil(2 * np.pi * ref / tile)) * tile
+    n_r = int(np.ceil(np.log(r1 / r0) * ref))
+    P = to_polar(np.where(m, a, np.nan), geometry, r_range=(r0, r1), n_r=n_r, n_pa=n_pa, radial="log",
+                 interp="linear", antialias=False, valid=m)
+    data = P.data
+    ok = np.isfinite(data)
+    z = np.where(ok, data, 0).astype(np.float32)
+    win1 = np.sin(np.pi * (np.arange(tile) + 0.5) / tile) ** 2
+    win = np.outer(win1, win1).astype(np.float32)
+    k = np.fft.fftfreq(tile)
+    kk = np.hypot(k[:, None], k[None, :]) / 0.5
+    # A ray is a line of constant angle (all its energy at k_ln r ≈ 0) and an arc one of constant radius (k_PA ≈ 0):
+    # the noise is measured off both axes, where only noise reaches the high frequencies.
+    off_axes = (np.abs(k)[:, None] > 1.5 / tile) & (np.abs(k)[None, :] > 1.5 / tile)
+    high = (kk >= high_k) & off_axes
+    # Rows padded so every row of the plane is covered by full tiles; angles wrap.
+    pad = tile
+    zp = np.pad(z, ((pad, pad), (0, 0)))
+    okp = np.pad(ok, ((pad, pad), (0, 0)))
+    removed = np.zeros_like(zp)
+    weight = np.zeros_like(zp)
+    starts = range(0, zp.shape[0] - tile + 1, step)
+    cols = np.arange(0, n_pa, step)
+    noise_rows = []
+    for y0 in starts:
+        band = zp[y0:y0 + tile]
+        bok = okp[y0:y0 + tile]
+        ext = np.concatenate([band, band[:, :tile]], axis=1)
+        eok = np.concatenate([bok, bok[:, :tile]], axis=1)
+        tiles = np.stack([ext[:, x0:x0 + tile] for x0 in cols])
+        share = np.stack([eok[:, x0:x0 + tile].mean() for x0 in cols])
+        F_ = np.fft.fft2(tiles * win)
+        mag = np.abs(F_)
+        observed = share >= 0.5
+        if not observed.any():
+            continue
+        level = float(np.median(np.sqrt(np.mean(mag[observed][:, high] ** 2, axis=1))))
+        noise_rows.append(level)
+        g = np.maximum(0.0, 1.0 - (gamma * level) ** 2 / np.maximum(mag ** 2, 1e-30))
+        gone = np.real(np.fft.ifft2(F_ * (1 - g))).astype(np.float32) * win
+        acc = np.zeros((tile, n_pa + tile), np.float32)
+        wsum = np.zeros((tile, n_pa + tile), np.float32)
+        for i, x0 in enumerate(cols):
+            acc[:, x0:x0 + tile] += gone[i]
+            wsum[:, x0:x0 + tile] += win * win
+        acc[:, :tile] += acc[:, n_pa:n_pa + tile]; wsum[:, :tile] += wsum[:, n_pa:n_pa + tile]
+        removed[y0:y0 + tile] += acc[:, :n_pa]
+        weight[y0:y0 + tile] += wsum[:, :n_pa]
+    removed = np.where(weight > 0, removed / np.maximum(weight, 1e-12), 0)[pad:pad + n_r]
+    P.data = np.where(ok, removed, np.nan).astype(np.float32)
+    back = from_polar(P, (h, w), interp="linear")
+    out = np.where(m & np.isfinite(back), a - back, np.where(m, a, np.nan)).astype(np.float32)
+    return out, dict(method="Fourier noise gating on (ln r, PA) tiles, non-negative garrote, removed part mapped "
+                            "back and subtracted", tile=tile, step=step, gamma=gamma, high_k=high_k,
+                     polar_shape=[n_r, n_pa], r_range_px=[r0, r1],
+                     noise_levels=dict(min=float(min(noise_rows)) if noise_rows else None,
+                                       max=float(max(noise_rows)) if noise_rows else None))

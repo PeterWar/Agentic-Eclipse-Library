@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import numpy as np
 from . import io, photoshop
-from .filterbank import ALIASES,DEFAULTS,NAMES,make_filter
+from .filterbank import ALIASES,DEFAULTS,EXTRA,NAMES,make_filter
 from .geometry import EclipseGeometry
 
 # Starting opacities of the default layers, from the author's 2026 image, where the Overlay layer was the edge-aware WOW
@@ -20,7 +20,10 @@ LAYER_LABELS={'nrgf':('01','NRGF'),'nrgf_log':('01','NRGF log'),'rhef':('02','RH
               'achf_angular4':('04','ACHF angular smoothed 4 px'),'achf_angular8':('04','ACHF angular smoothed 8 px'),
               'achf_iso_01':('04','ACHF iso 2–32 px'),'achf_iso_04':('04','ACHF iso 1–16 px'),
               'achf_iso_05':('04','ACHF iso 2–48 px'),'achf_iso_06':('04','ACHF iso 4–64 px'),
-              'wow':('05','WOW'),'wow_edge_aware':('05','WOW edge-aware')}
+              'wow':('05','WOW'),'wow_edge_aware':('05','WOW edge-aware'),
+              # structure-aware detail (after 1.4.0): one family each, after the agentic layers 06–07 of the author's files
+              'hessian_ridge':('10','Hessian ridge'),'steerable_g2':('11','Steerable G2'),'mmt':('12','Median transform'),
+              'noise_gate':('13','Noise gating'),'coherence_diffusion':('14','Coherence diffusion')}
 
 
 def layer_names(names):
@@ -116,8 +119,8 @@ def filters_from_config(config_path,out_dir,*,progress=print):
     names=cfg.get('filters',list(DEFAULTS))
     if names=='all': names=list(NAMES)
     if isinstance(names,list): names=[ALIASES.get(n,n) for n in names]          # 'wow_bilateral' up to 1.3.4
-    if not isinstance(names,list) or not names or len(set(names))!=len(names) or any(n not in NAMES for n in names):
-        raise ValueError(f'filters must be a nonempty unique list from {NAMES}, or "all"')
+    if not isinstance(names,list) or not names or len(set(names))!=len(names) or any(n not in NAMES+EXTRA for n in names):
+        raise ValueError(f'filters must be a nonempty unique list from {NAMES + EXTRA}, or "all"')
     # The plain WOW was the default in 1.3.4: a recipe that lists it without the edge-aware WOW keeps it visible
     visible_names=cfg.get('visible',[n for n in names if n in DEFAULTS or (n=='wow' and 'wow_edge_aware' not in names)])
     if isinstance(visible_names,list): visible_names=[ALIASES.get(n,n) for n in visible_names]

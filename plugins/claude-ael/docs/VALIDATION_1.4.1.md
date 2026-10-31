@@ -3,7 +3,8 @@
 This release follows the first use of the PixInsight connector by its author on photos of other cameras and eclipses:
 an astro-modified Sony A7S behind a Questar under thin cloud, and a Canon EOS 6D, both of 2024. Three artefacts of the
 A7S run are cured where they are born, in the engine both connectors share (`python/ael_auto.py`), in `ael.stack` and
-in `ael.radial`. The dialogs of both connectors ask for less guesswork, and Photoshop now shows AEL's progress. What
+in `ael.radial`. The dialogs of both connectors ask for less guesswork, and Photoshop now shows AEL's progress. Five
+structure filter layers are new, outside the defaults ([`STRUCTURE_FILTERS.md`](STRUCTURE_FILTERS.md)). What
 changed is described in the [changelog](../CHANGELOG.md); this page says how it was checked. Everything below was
 measured on the author's Mac: macOS on Apple silicon, Python 3.12, PixInsight 1.9.4, Photoshop 2026 (27.11.0).
 
@@ -119,18 +120,30 @@ by the test:
   file), the closing message says that nothing was opened, nothing was opened and no Python was left running.
   Photoshop left the screen and came back several times during the run; whenever it was on screen,
   so was the progress window (71 of 71).
-- The author also ran the dialog on 16 frames of the 2026 Sony A7R III (ILCE-7RM3A), without darks or flats: 4 were stacked and the
-  other 12 left out, each with its reason. The progress window stayed on screen whenever Photoshop was, through the
-  filters and the saving, and the run ended with the layered PSB open and the closing message.
+- The author also ran the dialog on 16 frames of the 2026 Sony A7R III (ILCE-7RM3A), without darks or flats: 4 were
+  stacked and the other 12 left out, each with its reason. The progress window stayed on screen whenever Photoshop
+  was, through the filters and the saving, and the run ended with the layered PSB open and the closing message.
 
 The programs ran the packages of the connectors as they are in this release, file for file, except
-`runtime/VERSION.json`, which names the commit they were built from.
+`runtime/VERSION.json`, which names the commit they were built from, and the three files of `runtime/ael` that carry
+the five new structure filters (`filters.py`, `filterbank.py`, `develop.py`), which the connectors do not use. On the
+six Vixen frames the engine gives the same linear master, byte for byte, and the same layers with them as without
+them.
 
 ## Other checks
 
-- `python -m ael selftest`: 117 of 117 (114 in 1.4.0), in the source tree and from the installed wheel, with network
-  and without. Three tests are new: the chained NRGF on a corona cut by the frame, the gradual hand-over (a long frame
-  that reads 1 % high, and which part of the stack it keeps), and a calibration field given on a coarser grid.
+- `python -m ael selftest`: 124 of 124 (114 in 1.4.0), in the source tree and from the installed wheel, with network
+  and without. Ten tests are new: the chained NRGF on a corona cut by the frame, the gradual hand-over (a long frame
+  that reads 1 % high, and which part of the stack it keeps), a calibration field given on a coarser grid, six for the
+  structure filters (their domain, a null control, injected rays and a loop, a star, the diffusion's sum, the gate)
+  and one for their pyramids (a ramp on a canvas of odd size).
+- **The five structure filters** ([`STRUCTURE_FILTERS.md`](STRUCTURE_FILTERS.md)): synthetic scenes with known
+  truth, and the yardstick of two independent optics on the 2026 stacks. `steerable_g2` shows as much confirmed fine
+  detail as ACHF iso 04 with less than half of the unconfirmed part; `noise_gate` gives the same layer as ACHF iso 04
+  on these stacks and `hessian_ridge` nearly so; the diffusion draws strokes on pure noise. A first, unpublished
+  version of the median transform, and of the diffusion's reduced copy, slid the coarse scales by up to 12 px; it was
+  found by an audit, cured where it was born (the pyramid now pads with no data to whole blocks), tested with a ramp
+  on a canvas of odd size, and the yardstick was run again on the cured code.
 - `tools/check_connectors.py`: 12 of 12. New: both dialogs show the same licence line and the disclaimer of their
   `LICENSE`, and both `LICENSE` files carry the same disclaimer. Five negative controls fail it (one word changed in
   the licence line, in the disclaimer or in a `LICENSE`, the invitation ending with a full stop, a typo in the
@@ -143,6 +156,10 @@ The programs ran the packages of the connectors as they are in this release, fil
 - The tests check the software; a new astronomical observation needs its own validation.
 
 ## What these checks taught
+
+- **A filter that reduces and enlarges has to be tested on a canvas of odd size.** The structure filters' synthetic
+  scenes were 320 px, a whole number of blocks, and passed; the audit on the 10,551-pixel canvas of 2026 found the
+  slide.
 
 - **A gate has to look at what a person sees.** The Photoshop test of an earlier 1.4.1 package (`e685a11`) passed 17 of 17 with a
   progress window that never reached the screen (the window server held it at 0 × 0 pixels, off screen, while the
@@ -174,6 +191,8 @@ The programs ran the packages of the connectors as they are in this release, fil
 - The Photoshop connector's linear master (a 32-bit TIFF with NaN where nothing was observed) opens black in
   PixInsight 1.9.4; for PixInsight, use the PixInsight connector, whose master is written in 0–1 with an alpha channel.
 - An astro-modified camera keeps the factory colour matrix and comes out red or magenta.
+- The five structure filters were judged on two stacks of one eclipse, and the connectors do not offer them. Shown
+  with a level and a spread per ring, they give the sky's noise far from the Sun almost the contrast of the corona.
 - **Installing through PixInsight's Feature Scripts:** after the result message, PixInsight's "Searching for Scripts"
   window comes up over it and stays open until **Cancel** is pressed; nothing is lost. It comes from PixInsight's own
   dialog, not from the package (the folder holds one script); a script cannot add itself to the menu, and an update

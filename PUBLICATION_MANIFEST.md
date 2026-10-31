@@ -17,8 +17,8 @@ of the Photoshop files by filter family.
 Version 1.3.6 (29 October) corrects two problems that Francisco Bitto found in the soft logarithm and in the MGN.
 Version 1.4.0 (30 October) adds two experimental connectors, for PixInsight and Photoshop (`plugins/pixinsight-ael/`,
 `plugins/photoshop-ael/`); the `ael` code does not change.
-Version 1.4.1 (31 October) cures in the stack and in the NRGF three artefacts of a cloudy run of 2024, and updates
-the dialogs of both connectors.
+Version 1.4.1 (31 October) cures in the stack and in the NRGF three artefacts of a cloudy run of 2024, adds five
+structure filter layers outside the defaults, and updates the dialogs of both connectors.
 
 | Included | Files | Notes |
 |---|---:|---|
@@ -26,7 +26,7 @@ the dialogs of both connectors.
 | `3-RECERCA/` — research notes | 187 | 180 numbered notes plus indexes, sources, prompts and reports of consultations with other models, small data tables |
 | `3-RECERCA/tools/` — processing code | 4,352 | Python, shell and Photoshop JSX scripts, and the small JSON/CSV parameter files they read |
 | `ael/`, `tests/`, `examples/`, `pyproject.toml`, `README_AEL.md` — the runnable package | 40 | Stacking, extinction, filter layers, structure images, unrolled views, coronal motion, coronagraph checks and layered Photoshop files from anyone's data; 108 tests with known truth (1.3.5) |
-| `docs/` | 22 | Recipes, field lessons, validation records, two community case studies, the plugin guide, privacy and terms, and the paper's layers against the library (English); lessons for model developers (English); record of the author's contributions (Catalan) |
+| `docs/` | 23 | Recipes, field lessons, validation records, two community case studies, the plugin guide, privacy and terms, and the paper's layers against the library (English); lessons for model developers (English); record of the author's contributions (Catalan) |
 | `AGENTS.md`, `README.md`, `LICENSE` (MIT), `CITATION.cff`, `.claude-plugin/` | — | Entry points, licence, citation and plugin manifest |
 
 | Left out | Why |

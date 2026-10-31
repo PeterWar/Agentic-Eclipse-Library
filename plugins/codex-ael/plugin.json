@@ -60,7 +60,7 @@
       "onboardingSkill": "./skills/eclipse-first-steps/SKILL.md",
       "publication": {
         "countries": [],
-        "release_notes": "Bundles AEL 1.4.1: a gradual hand-over between exposures and a map of sensor defects in ael.stack, and an NRGF that no longer steps where the frame's edge or the Moon cuts its annuli. The PixInsight and Photoshop connectors also changed; they are not part of this plugin.",
+        "release_notes": "Bundles AEL 1.4.1: a gradual hand-over between exposures and a map of sensor defects in ael.stack, an NRGF that no longer steps where the frame's edge or the Moon cuts its annuli, and five structure filter layers outside the defaults (hessian_ridge, steerable_g2, mmt, noise_gate, coherence_diffusion). The PixInsight and Photoshop connectors also changed; they are not part of this plugin.",
         "translations": {
           "ca-ES": {
             "subtitle": "Processa fotos d’eclipsis",

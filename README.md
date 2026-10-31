@@ -237,9 +237,12 @@ cured.
 - **Three artefacts cured where they are born.** Under thin cloud each frame gets a smooth level field before it is
   stacked, so the exposures agree where one gives way to the next. The next shorter exposure takes over gradually
   (`stack.handover`), so the grain does not jump there; on the A7S the contour along that boundary falls to the level
-  of the other isophotes. Dust shadows and hot pixels
-  are found on the frames themselves, and their pixels leave every frame without being replaced (`stack.defects`).
+  of the other isophotes. Dust shadows and hot pixels are found on the frames themselves, and their pixels leave every
+  frame without being replaced (`stack.defects`).
 - **The NRGF no longer steps** where the frame's edge or the Moon cuts its annuli (`partial_annuli='chain'`).
+- **Five new filter layers, outside the defaults** (`hessian_ridge`, `steerable_g2`, `mmt`, `noise_gate`,
+  `coherence_diffusion`), for recipes and agents; the connectors do not offer them. What each does and what two
+  independent optics confirm: [`docs/STRUCTURE_FILTERS.md`](docs/STRUCTURE_FILTERS.md).
 - **PixInsight:** the linear master no longer opens black; darks and flats in two lists; **Advanced settings…** for
   any of AEL's 16 filters and their opacity; no call that PixInsight 1.9.4 calls deprecated.
 - **Photoshop:** AEL's progress in Photoshop's own progress window, with the step, a clock and **Cancel** (the

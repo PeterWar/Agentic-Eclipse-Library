@@ -15,6 +15,10 @@ ISO = {'achf_iso_01': ((2,4,8,16,32),3), 'achf_iso_04': ((1,2,4,8,16),1.5),
 NAMES = ('nrgf','nrgf_log','rhef','rhef_upsilon','rhef_local60','rhef_local30',
          'achf_angular','achf_angular4','achf_angular8',*ISO,'mgn','wow','wow_edge_aware')
 DEFAULTS = ('nrgf','wow_edge_aware','achf_iso_04')
+# Structure-aware detail (since 1.4.1), from the survey of 30-10-2026: never in "all" nor in the defaults; a recipe
+# lists them by name. The first four are ACHF iso 04 (the default detail layer) with one change each, so the
+# yardstick of two optics can tell what the change brings; the fifth smooths along coherent structure.
+EXTRA = ('hessian_ridge','steerable_g2','mmt','noise_gate','coherence_diffusion')
 ALIASES = {'wow_bilateral': 'wow_edge_aware'}           # the name of the edge-aware WOW up to 1.3.4
 
 
@@ -357,10 +361,11 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
     ``achf_display`` (since 1.3.4): ``'rings'`` (default) maps every ACHF layer with a level and a spread per ring
     (:func:`display_detail_rings`, issue #9); ``'global'`` keeps the single whole-image spread of 1.3.3."""
     name=ALIASES.get(name,name)                         # 'wow_bilateral', the name up to 1.3.4
+    if name in EXTRA: return structure_filter(name,luminance,valid,geometry)
     a=np.asarray(luminance,np.float32)
     m=valid & np.isfinite(a)                          # the values NRGF needs no positive pixels (a subtracted sky)
     if name!='nrgf': m=m & (a>0)
-    if name not in NAMES: raise ValueError(f'unknown filter {name!r}; choose from {NAMES}')
+    if name not in NAMES: raise ValueError(f'unknown filter {name!r}; choose from {NAMES + EXTRA}')
     if upsilon_curve is not None:
         if not name.startswith('rhef'): raise ValueError('upsilon_curve applies to RHEF layers only')
         if len(upsilon_curve)!=2: raise ValueError('upsilon_curve is (low, high)')
@@ -417,4 +422,74 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
         q,display=display_detail_rings(q,m,geometry)
     else:
         q,display=display_detail(q,m)
+    return q,'overlay',dict(**info,**display)
+
+
+def structure_filter(name, luminance, valid, geometry):
+    """The layers of :data:`EXTRA` (since 1.4.1): (display layer in [0,1], 'overlay', effective parameters).
+
+    All start from the residual of ln L about its smooth radial profile (:func:`radial_log_residual`), as the
+    isotropic ACHF does, and end with the display per ring of :func:`display_detail_rings`.
+
+    - ``hessian_ridge``: the ACHF iso 04 detail times the Frangi weight of curvilinear structure
+      (:func:`ael.filters.ridge_weight`): rays, loops and cavity edges at any angle stay, isotropic grain is lowered.
+    - ``steerable_g2``: the second derivative steered across the local structure (:func:`ael.filters.steerable_g2`),
+      σ 1.5–12 px: filaments in any orientation, not only along r or θ.
+    - ``mmt``: the ACHF iso 04 bands taken from the pyramidal median transform (:func:`ael.filters.multiscale_median`)
+      instead of Gaussians: no dark ring around a star, a prominence or the edge of the data.
+    - ``noise_gate``: ACHF iso 04 of the residual after Fourier noise gating in (ln r, PA) (:func:`ael.filters.noise_gate`).
+    - ``coherence_diffusion``: the 8–32 px band of the residual after coherence-enhancing diffusion
+      (:func:`ael.filters.coherence_diffusion`), computed on a copy reduced to at most 6 Mpx. ⚠ On pure noise the
+      diffusion draws strokes; judge it with a null control.
+    """
+    if name not in EXTRA: raise ValueError(f'{name!r} is not one of {EXTRA}')
+    a=np.asarray(luminance,np.float32)
+    m=valid & np.isfinite(a) & (a>0)
+    if not m.any(): raise ValueError('no positive observed luminance')
+    residual,info=radial_log_residual(a,m,geometry)
+    m=np.isfinite(residual)
+    sigmas,outer=ISO['achf_iso_04']
+
+    def iso_bands(field):
+        ok=np.isfinite(field)
+        detail=np.zeros(field.shape,np.float32)
+        for s in sigmas:
+            detail+=(field-F.normalized_gaussian(field,ok,s,min_support=.01))/len(sigmas)
+        return F.normalized_gaussian(detail,ok,outer,min_support=.01)
+
+    if name=='hessian_ridge':
+        weight,winfo=F.ridge_weight(residual,m)
+        q=iso_bands(residual)*weight
+        info.update(detail='ACHF iso 04 (σ 1–16 px, outer 1.5 px)',ridge_weight=winfo,
+                    ridge_weight_median=float(np.nanmedian(weight[m])))
+    elif name=='steerable_g2':
+        sig=(1.5,3.0,6.0,12.0)
+        q=F.steerable_g2(residual,m,sigmas=sig,integration=2.0)
+        info.update(method='−σ²·G2 steered across the structure tensor (Freeman & Adelson 1991)',sigmas_px=list(sig),
+                    integration='2σ')
+    elif name=='mmt':
+        planes=F.multiscale_median(residual,m,n_scales=5)
+        q=np.zeros(residual.shape,np.float32)
+        for plane in planes: q+=np.where(np.isfinite(plane),plane,0)/len(planes)
+        q=F.normalized_gaussian(np.where(m,q,np.nan),m,outer,min_support=.01)
+        info.update(method='pyramidal median transform (Starck, Murtagh & Bijaoui 1998), 5×5 medians of observed pixels',
+                    scales_px=[1,2,4,8,16],outer_sigma_px=outer)
+    elif name=='noise_gate':
+        gated,ginfo=F.noise_gate(residual,m,geometry)
+        q=iso_bands(gated)
+        info.update(detail='ACHF iso 04 (σ 1–16 px, outer 1.5 px) of the gated residual',noise_gate=ginfo)
+    else:
+        f=max(1,int(np.ceil(np.sqrt(residual.size/6e6))))
+        small=residual
+        if f>1:
+            # padded with no data to a multiple of f, so the reduced copy is enlarged back where it came from (1.4.1)
+            padded=F._pad_to(residual,f)
+            small=F._block_mean(padded,f)
+        diffused,dinfo=F.coherence_diffusion(small,np.isfinite(small))
+        ok=np.isfinite(diffused)
+        band=F.normalized_gaussian(diffused,ok,8/f,min_support=.01)-F.normalized_gaussian(diffused,ok,32/f,min_support=.01)
+        q=F._up(band,padded.shape)[:residual.shape[0],:residual.shape[1]] if f>1 else band
+        info.update(coherence_diffusion=dinfo,reduction=f,band_px=[8,32])
+    q=np.where(m,q,np.nan).astype(np.float32)
+    q,display=display_detail_rings(q,m,geometry)
     return q,'overlay',dict(**info,**display)

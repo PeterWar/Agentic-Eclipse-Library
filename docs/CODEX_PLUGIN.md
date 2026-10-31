@@ -78,8 +78,10 @@ Version 1.1.5 bundles AEL 1.4.1. `ael.stack` can hand over gradually from one ex
 (`handover: 'gradual'`), so that the grain does not jump where a longer exposure stops being used, and takes a map of
 sensor defects whose pixels leave every frame (`defects`, and hot pixels found per exposure). The NRGF of the filter
 bank no longer steps where the frame's edge or the Moon cuts its annuli (`partial_annuli='chain'` in
-`ael.radial`). The connectors for PixInsight and Photoshop also changed; they are not part of this plugin. Its ZIP
-passed the seventeen integration checks, including the 117 bundled AEL tests.
+`ael.radial`). Five structure filter layers are new, outside the defaults: `hessian_ridge`, `steerable_g2`, `mmt`,
+`noise_gate` and `coherence_diffusion` ([what they do and what two optics confirm](STRUCTURE_FILTERS.md)). The
+connectors for PixInsight and Photoshop also changed; they are not part of this plugin. Its ZIP passed the seventeen
+integration checks, including the 124 bundled AEL tests.
 
 AEL 1.4.1 retains documented ACHF/WOW boundary bands, some fine-detail sign inversion in the worst sectors of the
 default edge-aware WOW, and rings of the plain WOW next to a lunar limb that the data reach. See [field lessons](FIELD_LESSONS.md). The plugin's structure launcher preserves the full

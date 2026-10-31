@@ -361,5 +361,7 @@ and makes the MGN independent of the units of the input, two problems found by F
 experimental connectors for PixInsight and Photoshop in the repository's `plugins/` folder; the engine does not
 change. Version 1.4.1 lets `ael.stack` hand over gradually from one exposure to the next shorter one and take a map
 of sensor defects, and the filter bank's NRGF measures a ring cut by the frame's edge or the Moon on the cells it
-shares with the next ring (`partial_annuli='chain'`). Existing images are not rewritten; compare the new numerical
-recipe before adopting it.
+shares with the next ring (`partial_annuli='chain'`); it also adds five structure filter layers outside the defaults
+(`hessian_ridge`, `steerable_g2`, `mmt`, `noise_gate`, `coherence_diffusion`; see
+[`docs/STRUCTURE_FILTERS.md`](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.4.1/docs/STRUCTURE_FILTERS.md)).
+Existing images are not rewritten; compare the new numerical recipe before adopting it.

@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 from ael import filters
 from ael.stack import full_resolution_affine, union_canvas, resample_frame, hot_pixel_mask, stack_from_config
-from ael.filterbank import achf_isotropic, make_filter, NAMES
+from ael.filterbank import achf_isotropic, make_filter, EXTRA, NAMES
 from ael.develop import LAYER_LABELS, filters_from_config, layer_alpha, layer_names
 from ael.geometry import EclipseGeometry
 
@@ -179,7 +179,7 @@ def test_filters_command_psb_roundtrip_relative_paths_and_immutable_output():
 
 def test_layer_names_number_the_family_and_letter_the_variants():
     # The scheme of the author's own files (1.3.5): '01a NRGF interior · V120', '05b WOW edge-aware · V120'.
-    assert set(LAYER_LABELS)==set(NAMES)
+    assert set(LAYER_LABELS)-set(EXTRA)==set(NAMES)
     assert layer_names(['nrgf','wow_edge_aware','achf_iso_04'])==['01 NRGF','05 WOW edge-aware','04 ACHF iso 1–16 px']
     assert layer_names(['nrgf','wow_bilateral','achf_iso_04','wow'])==['01 NRGF','05a WOW edge-aware',
                                                                         '04 ACHF iso 1–16 px','05b WOW']
