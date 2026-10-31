@@ -31,9 +31,12 @@ answer with the files a person would pick.
   about 1.5 px inside the true one: the centre is gated, the radius reported).
 * Filter layers from an open image: once from the linear corona (AEL is handed the image) with AEL's default layers,
   and once from a master frame whose values PixInsight rescaled to 0-1 on opening (AEL reads the file) with all 16,
-  ticked in the advanced settings (the dialog itself, its rows read back);
+  chosen in «Advanced settings…» opened with its button and confirmed with its own «All 16» and «OK» (a timer
+  presses them while the dialog is open);
   the layers equal those of the helper run from the terminal on the same file, the PixelMath composite matches
   AEL's display.tif within one 16-bit step, and the geometry is measured and shown.
+* The line that invites to the whole library is shown, and its «GitHub» button would run the system's command to open
+  the repository's page (a stand-in records the command instead of opening a browser).
 * Each operation shows only what it needs, and says what it does under the list and on the list's tooltip; the file
   choosers are read through filePaths (fileNames is deprecated in PixInsight 1.9.4); the output folder starts at Downloads (the setting the dialog keeps is
   restored afterwards) and «Browse…» sets it; no message box appears where none is due (a box would wait for a click
@@ -257,6 +260,16 @@ try
    REPORT.steps.operation_tooltip = first.modeList.toolTip;
    REPORT.steps.operation_help = AEL_OPERATION_HELP;
    REPORT.steps.choice_default = first.choiceLabel.text;
+   // «GitHub»: the system command that would open the page, recorded by a stand-in instead of run
+   let RealProcess = ExternalProcess, started = [];
+   ExternalProcess = function()
+   {
+      this.start = function( program, args ) { started.push( { program: program, args: args } ); return true; };
+      this.waitForFinished = function() { return true; };
+   };
+   try { first.githubButton.onClick(); } finally { ExternalProcess = RealProcess; }
+   REPORT.steps.github = { started: started, url: AEL_GITHUB_URL, platform: corePlatform,
+                           invitation: first.moreLabel.text };
    first.outputButton.onClick();
    REPORT.steps.output_browsed = first.outputEdit.text;
    first.cancel();
@@ -320,12 +333,28 @@ try
    round( "filters_defaults", CFG.structureImage, "corona_linear", 3, function( d ) {} );
    round( "filters_all", CFG.rescaledImage, "frame_rescaled", 3, function( d )
    {
-      // the advanced settings, as a person uses them: «All 16» ticks every filter, the opacities stay AEL's
-      let settings = new AELFiltersDialog( d.choice );
-      for ( let i = 0; i < settings.rows.length; ++i )
-         settings.rows[i].check.checked = true;
-      d.choice = settings.read();
-      d.updateChoice();
+      // «Advanced settings…» as a person uses it: the dialog opens (modal), «All 16» is pressed, then «OK»; a timer
+      // presses them, since nobody clicks in automation. The opacities stay AEL's.
+      let RealFilters = AELFiltersDialog;
+      AELFiltersDialog = class extends RealFilters
+      {
+         constructor( choice )
+         {
+            super( choice );
+            let self = this;
+            this.clicker = new Timer;
+            this.clicker.interval = 0.5;
+            this.clicker.periodic = false;
+            this.clicker.onTimeout = function()
+            {
+               REPORT.steps.advanced_was_open = self.visible;
+               self.allButton.onClick();
+               self.okButton.onClick();
+            };
+            this.clicker.start();
+         }
+      };
+      try { d.advancedButton.onClick(); } finally { AELFiltersDialog = RealFilters; }
       REPORT.steps.choice_all = { filters: d.choice.filters, opacities: d.choice.opacities, text: d.choiceLabel.text };
    } );
    REPORT.ok = true;
@@ -481,6 +510,11 @@ def main() -> None:
                                                                for text in steps["operation_help"]),
                  "default_filters_shown": steps["choice_default"] == "Filter layers: NRGF 39\u00a0%, ACHF iso 1–16 px "
                                                                     "8\u00a0%, WOW edge-aware 37\u00a0%",
+                 # the line that invites to the whole library, and its button: what would open the page (not run here)
+                 "github_button_opens_the_library_page": (steps["github"]["invitation"].startswith(
+                     "For more faithful results and more filters, try the whole Agentic Eclipse Library")
+                     and steps["github"]["started"] == [{"program": {"MacOSX": "open"}.get(steps["github"]["platform"], "xdg-open"),
+                                                         "args": ["https://github.com/PeterWar/Agentic-Eclipse-Library"]}]),
                  "without_photos_it_says_so": len(steps["raw_empty"]["messages"]) == 1
                                               and "Choose the RAW photos of the totality first." in steps["raw_empty"]["messages"][0]
                                               and steps["raw_empty"]["windows"] == [],
@@ -643,6 +677,9 @@ def main() -> None:
                 gates["filters_defaults_are_AEL_defaults"] = sorted(p.name.replace("_layer.tif", "") for p in tiffs) == sorted(DEFAULTS)
             else:
                 chosen = steps.get("choice_all") or {}
+                gates["advanced_settings_open_and_OK_takes_the_choice"] = (steps.get("advanced_was_open") is True
+                    and (chosen.get("text") or "").endswith(f", and {len(NAMES) - len(DEFAULTS)} more on their own")
+                    and list(chosen.get("filters") or [])[:len(DEFAULTS)] == list(DEFAULTS))
                 gates["advanced_settings_tick_all_16"] = (sorted(chosen.get("filters") or []) == sorted(NAMES)
                                                          and all(abs((chosen.get("opacities") or {}).get(n, -1)
                                                                      - (DEFAULT_OPACITY.get(n, 0) if n in DEFAULTS else 0))

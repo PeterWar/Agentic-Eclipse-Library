@@ -125,6 +125,10 @@ var AELFiltersDialog = class extends Dialog
       buttons.add( ok );
       buttons.add( cancel );
       this.sizer.add( buttons );
+      this.defaultsButton = defaults;
+      this.allButton = all;
+      this.okButton = ok;
+      this.cancelButton = cancel;
       this.adjustToContents();
    }
 
@@ -152,18 +156,24 @@ var AELFiltersDialog = class extends Dialog
    }
 };
 
-// The filters chosen, in one line: each layer with its opacity in the composite.
+// The filters chosen, in one line: each layer that goes into the composite with its opacity, and how many open on their
+// own.
 function aelBridgeChoiceText( choice )
 {
-   let parts = [];
+   let parts = [], alone = 0;
    for ( let i = 0; i < AEL_FILTERS.length; ++i )
    {
       let filter = AEL_FILTERS[i];
-      if ( choice.filters.indexOf( filter.name ) >= 0 )
-         parts.push( filter.label.replace( /^\d+[a-z]? /, "" ) + " " + Math.round( 100 * ( choice.opacities[filter.name] || 0 ) )
-                     + "\u00a0%" );                        // a number and its % stay on one line
+      if ( choice.filters.indexOf( filter.name ) < 0 )
+         continue;
+      let opacity = Math.round( 100 * ( choice.opacities[filter.name] || 0 ) );
+      if ( opacity > 0 )
+         parts.push( filter.label.replace( /^\d+[a-z]? /, "" ) + " " + opacity + "\u00a0%" );   // number and % together
+      else
+         ++alone;
    }
-   return "Filter layers: " + parts.join( ", " );
+   return "Filter layers: " + ( parts.length ? parts.join( ", " ) : "none in the composite" )
+          + ( alone ? ", and " + alone + " more on " + ( alone == 1 ? "its" : "their" ) + " own" : "" );
 }
 
 var AELBridgeDialog = class extends Dialog
@@ -394,6 +404,8 @@ var AELBridgeDialog = class extends Dialog
       moreSizer.add( more, 100 );
       moreSizer.add( github );
       this.sizer.add( moreSizer );
+      this.moreLabel = more;
+      this.githubButton = github;
 
       let buttons = new HorizontalSizer;
       buttons.spacing = 8;
