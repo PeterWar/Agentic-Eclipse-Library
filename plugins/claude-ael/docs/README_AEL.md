@@ -160,6 +160,14 @@ centre and radius, the direction of celestial north (degrees clockwise from imag
 scale. `ael.geometry.fit_limb` measures the Moon from the image (linear intensity: on the log image
 the edge slides into the dark tail of the blur — 3 px on a 62 px Moon in the tests).
 
+Without a geometry, `python -m ael geometry --input IMAGE --out geometry.json` (or `--geometry auto` for
+`structure` and `polar`) measures one on the image: the lunar disc, or the closed region without data around it
+(`ael.geometry.find_disc`, `measure_geometry`). The Sun is placed at the centre of that circle with its radius;
+north, parity and scale stay unknown unless they are given, and the note of the geometry says what was assumed.
+On a single frame the circle is the Moon, and the true Sun can be off by up to the difference of the radii; on a
+stack registered on the Sun over the whole totality, the region the Moon covered all along is close to the solar
+disc. An image without a lunar disc is refused, never given a default circle.
+
 ```json
 {"shape": [7506, 10551], "sun_xy": [5361.77, 3775.75], "sun_radius_px": 440.6,
  "moon_xy": [5391.24, 3777.41], "moon_radius_px": 469.2, "north_deg": 45.25, "mirrored": false,

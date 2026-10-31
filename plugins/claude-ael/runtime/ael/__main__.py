@@ -21,15 +21,21 @@ def main(argv=None):
         parser = sub.add_parser(command, help=help_text)
         parser.add_argument("--config", required=True, help="JSON recipe; paths relative to this file")
         parser.add_argument("--out", required=True, help="new output directory (must not exist)")
+    g = sub.add_parser("geometry", help="eclipse image -> geometry JSON measured on the image (the lunar disc, "
+                                        "or the region without data around it)")
+    g.add_argument("--input", required=True, help=".npy/.fits/.tif image, (H,W), (H,W,3) or (H,W,4) with alpha")
+    g.add_argument("--valid", help="optional boolean mask (.npy) of observed pixels")
+    g.add_argument("--out", required=True, help="geometry JSON to write (must not exist)")
     s = sub.add_parser("structure", help="linear composite -> structure images (mono, cool, measured colour)")
     s.add_argument("--input", required=True, help=".npy/.fits/.tif linear composite, (H,W) or (H,W,3)")
-    s.add_argument("--geometry", required=True, help="geometry JSON (see ael.geometry.EclipseGeometry)")
+    s.add_argument("--geometry", required=True, help="geometry JSON (see ael.geometry.EclipseGeometry), or 'auto' "
+                                                    "to measure it on the input")
     s.add_argument("--valid", help="optional boolean mask (.npy) of observed pixels")
     s.add_argument("--out", required=True)
     s.add_argument("--name", default="structure")
     p = sub.add_parser("polar", help="image in [0,1] (.npy/.tif/.png) -> unrolled views around Sun and Moon")
     p.add_argument("--input", required=True)
-    p.add_argument("--geometry", required=True)
+    p.add_argument("--geometry", required=True, help="geometry JSON, or 'auto' to measure it on the input")
     p.add_argument("--out", required=True)
     p.add_argument("--rmax", type=float, default=4.0)
     m = sub.add_parser("motion", help="RAW frames + JSON config -> motion analysis and animation")
@@ -52,17 +58,38 @@ def main(argv=None):
             print(json.dumps(run(a.config, a.out), indent=1))
         except (ValueError, FileExistsError, KeyError) as exc:
             ap.error(str(exc))
+    elif a.cmd == "geometry":
+        from pathlib import Path
+        from .geometry import measure_geometry
+        if Path(a.out).exists():
+            ap.error(f"{a.out} already exists")
+        valid = np.load(a.valid).astype(bool) if a.valid else None
+        try:
+            geo, report = measure_geometry(aio.load_array(a.input), valid)
+        except RuntimeError as exc:
+            ap.error(str(exc))
+        geo.to_json(a.out)
+        print(json.dumps(dict(geometry=json.loads(geo.to_json()), report=report, file=a.out), indent=1, default=float))
     elif a.cmd == "structure":
         data = aio.load_array(a.input)
-        geo = EclipseGeometry.from_json(a.geometry)
         valid = np.load(a.valid).astype(bool) if a.valid else None
+        if a.geometry == "auto":
+            from .geometry import measure_geometry
+            geo = measure_geometry(data, valid)[0]
+        else:
+            geo = EclipseGeometry.from_json(a.geometry)
         r = pipelines.structure_from_linear(np.asarray(data, np.float32), geo, a.out, valid=valid, name=a.name)
         print(json.dumps(dict(files=r["files"], receipt=r["receipt"], gate=r["gate"]), indent=1))
     elif a.cmd == "polar":
         img = aio.load_array(a.input).astype(np.float32)
         if img.max() > 1.0:
             img = img / (65535.0 if img.max() > 255 else 255.0)
-        r = pipelines.polar_views(img, EclipseGeometry.from_json(a.geometry), a.out, r_max_rsun=a.rmax)
+        if a.geometry == "auto":
+            from .geometry import measure_geometry
+            geo = measure_geometry(img)[0]
+        else:
+            geo = EclipseGeometry.from_json(a.geometry)
+        r = pipelines.polar_views(img, geo, a.out, r_max_rsun=a.rmax)
         print(json.dumps(r, indent=1))
     elif a.cmd == "motion":
         try:
