@@ -1,22 +1,29 @@
 # Adobe Photoshop connector for Agentic Eclipse Library
 
-Choose the RAW photos of a total solar eclipse, and optionally their darks and flats. AEL stacks them into one image and opens it in Photoshop as a layered 16-bit PSB: the display base and AEL's default filter layers (NRGF, WOW edge-aware and isotropic ACHF 04), each with its blend mode and opacity, ready to adjust.
+Choose the RAW photos of a total solar eclipse, and optionally their darks and flats. AEL stacks them into one image and opens it in Photoshop as a layered 16-bit PSB: the display base and AEL's default filter layers (NRGF, WOW edge-aware and isotropic ACHF 04), or the filters you choose in **Advanced settings…**, each with its blend mode and opacity, ready to adjust.
 
-There is nothing else to set but where the result goes. Everything else is measured on the files and written in a receipt.
+There is nothing else to set but where the result goes and, if you want, other filters. Everything else is measured on the files and written in a receipt.
+
+For more faithful results and more filters, try the whole Agentic Eclipse Library with an AI agent: <https://github.com/PeterWar/Agentic-Eclipse-Library>. The dialog says so in one line, with a button to that page.
 
 ## Use
 
 1. In Photoshop, choose **File > Scripts > Browse…** and select `AELPhotoshop.jsx`.
 2. **Totality RAW photos — Choose…**: select every RAW photo of the totality (all exposures together). Photos of the partial phases, darks or flats among them are recognised and left out.
 3. **Darks (optional) — Choose…** and **Flats (optional) — Choose…**: select the dark frames and the flat frames of the same camera, if you have them, each in its own field.
-4. **Output folder — Browse…**: where the results go. The dialog starts at Downloads, and afterwards at the folder used last time while it exists. Each run makes a new folder inside it, named with the date and time (`AEL_YYYYMMDD_HHMMSS_…`), so nothing is overwritten.
-5. Press **Make the image**. A progress window shows what AEL is doing. **Stop** asks AEL to stop at its next step (whether Photoshop delivers the click while a script runs has not been tested automatically).
+4. The line beside **Advanced settings…** lists the filter layers and their opacities: AEL's three default layers unless you choose others. **Advanced settings…** lists AEL's 16 filters, each with its blend mode and an opacity (rest the pointer on a filter to see what it shows): a ticked filter becomes a layer, visible at its opacity, or added hidden at 0 %, to turn on by hand. **AEL defaults** and **All 16** set the ticks in one click.
+5. **Output folder — Browse…**: where the results go. The dialog starts at Downloads, and afterwards at the folder used last time while it exists. Each run makes a new folder inside it, named with the date and time (`AEL_YYYYMMDD_HHMMSS_…`), so nothing is overwritten.
+6. Press **Make the image**. A progress window shows each step as AEL takes it, with the time. A filter can take minutes: after 20 s on the same step the window says that AEL is still working on it. **Stop** asks AEL to stop at its next step (whether Photoshop delivers the click while a script runs has not been tested automatically).
 
-When it finishes, the layered image opens and a message says how many photos were stacked, which were left out and why, and where everything was saved: the new folder, with the PSB, the linear master (32-bit float TIFF, no data = NaN), a preview, `AEL receipt.json` and the recipes in `details/`.
+Every field and button of the dialog says what it does when the pointer rests on it, with the words of the PixInsight connector.
+
+When it finishes, the layered image opens and a message says how many photos were stacked, which were left out and why, and where everything was saved: the new folder, with the PSB, the linear master (32-bit float TIFF in DN per second, no data = NaN), a preview, `AEL receipt.json` and the recipes in `details/`. The message ends with the invitation to the whole library and its address.
+
+PixInsight 1.9.4 reads a floating-point TIFF whose last sample is NaN as all zeros, so this master opens black there. To go on in PixInsight, make the stack with the PixInsight connector: the same photos give the same stack, written for PixInsight.
 
 ## One engine for PixInsight and Photoshop
 
-The work from the RAW files to the filter layers is done by one Python file, `python/ael_auto.py`, and the PixInsight connector carries the same file (`tools/check_connectors.py` in the repository fails if the two copies differ). The same photos give the same linear master and the same filter layers in both programs; only the last step differs: Photoshop opens one layered PSB, PixInsight opens the layers as images with the PixelMath expressions that compose them. Both dialogs keep the results the same way: an output folder that starts at Downloads, and then at the folder used last time, with a new folder for each run. `tools/check_connectors.py` also checks that both dialogs ask for the totality RAW photos, the optional darks and the optional flats.
+The work from the RAW files to the filter layers is done by one Python file, `python/ael_auto.py`, and the PixInsight connector carries the same file (`tools/check_connectors.py` in the repository fails if the two copies differ). The same photos give the same linear master and the same filter layers in both programs; only the last step differs: Photoshop opens one layered PSB, PixInsight opens the layers as images with the PixelMath expressions that compose them. Both dialogs keep the results the same way: an output folder that starts at Downloads, and then at the folder used last time, with a new folder for each run. `tools/check_connectors.py` also checks that both dialogs ask for the totality RAW photos, the optional darks and the optional flats, and that both offer the same advanced settings, with the same 16 filters and the same words for each, and the same invitation to the whole library.
 
 So far the engine has been tried on the totality photos of two eclipses, 2024 and 2026, taken with five cameras. It is meant for any total eclipse and should work for others, but both connectors still have to be tried on photos of more eclipses.
 
@@ -32,7 +39,7 @@ So far the engine has been tried on the totality photos of two eclipses, 2024 an
 - **Dust and hot pixels.** Without flats, a dust shadow on the sensor repeats in the stack as a row of dark dots when the photos sit apart on the sensor. When the photos of an exposure sit at least 3 px apart, AEL finds the shadows on the photos themselves and hot pixels per exposure with the noise measured around each pixel; their pixels leave every photo and are never replaced: the other photos cover that part of the sky (AEL 1.4.1). With flats, the flat removes them.
 - **The Sun.** The Sun's centre is the Moon's centre at the middle of the photos, on the fitted lunar motion. That is exact when the photos span the totality symmetrically and the site is on the central line; elsewhere the true centre is off by up to the difference of the radii, sideways to the Moon's motion. The Sun's radius is the lunar radius over the eclipse's ratio of apparent diameters (a table of total eclipses from 2008 to 2035); when the camera's date matches no eclipse of the table, the lunar radius is used. North, parity and plate scale are not known.
 - **Colour.** The camera's daylight white balance and its camera-to-sRGB matrix, derived from the colour matrix LibRaw holds for the camera. The corona keeps the colour that a camera set to daylight records: nothing is neutralised. The matrix is the one of the camera as it left the factory: a camera modified for astronomy (its infrared filter replaced) comes out reddish, and its colour has to be set by hand in Photoshop.
-- **The filters.** AEL's default layers with AEL's default opacities, over a display base scaled on the corona between 1.1 and 2 solar radii. The band that the Moon swept across the corona during the photos enters no filter: there the stack mixes different photos. Since AEL 1.4.1 the NRGF does not draw rings around the Sun where the frame's edge cuts its annuli.
+- **The filters.** AEL's default layers with AEL's default opacities, or those chosen in **Advanced settings…**, over a display base scaled on the corona between 1.1 and 2 solar radii. The band that the Moon swept across the corona during the photos enters no filter: there the stack mixes different photos. Since AEL 1.4.1 the NRGF does not draw rings around the Sun where the frame's edge cuts its annuli.
 
 ## Requirements
 
@@ -53,7 +60,7 @@ Keep `AELPhotoshop.jsx`, `AELPhotoshopCore.jsx`, `AELPhotoshopDialog.jsx`, `pyth
 
 ## Tests
 
-- `tests/run_photoshop_raw.py --plugin photoshop-ael --raw RAWS.txt [--darks DARKS.txt] [--flats FLATS.txt] --output NEW_FOLDER` runs the connector in Photoshop the way a person does: the entry script and the dialog as they are, with the dialog window, the file and folder choosers and `alert()` replaced by test doubles that press the dialog's own buttons and keep the messages. The progress window, the Python run, opening the PSB and Photoshop's own reading of its layers are the real ones. It checks the closing message, that exactly one PSB opened with the layers AEL wrote, 16 bits per channel, the PSB's SHA-256 against the receipt, and that the connector's folder is unchanged; and, for the output folder, that the dialog starts at Downloads when no folder is kept, that **Browse…** changes it, that the run goes to a new folder inside the chosen one and that the chosen folder is kept for the next run. The folder kept before the test is put back afterwards, and nothing is written to Downloads. Only documents the test opened are closed.
+- `tests/run_photoshop_raw.py --plugin photoshop-ael --raw RAWS.txt [--darks DARKS.txt] [--flats FLATS.txt] --output NEW_FOLDER` runs the connector in Photoshop the way a person does: the entry script and the dialog as they are, with the dialog windows, the file and folder choosers, opening a web page and `alert()` replaced by test doubles that press the dialogs' own buttons and keep the messages. In **Advanced settings…** it presses **AEL defaults**, ticks one more filter (by default the NRGF log at 0 %) and presses **OK**; it presses **GitHub**, whose double keeps the address instead of opening a browser. The progress window, the Python run, opening the PSB and Photoshop's own reading of its layers are the real ones. It checks the closing message and its invitation to the library, that every button, tick box and field of both windows says what it does, the filter line before and after the advanced settings, that the chosen filters reach the PSB (the extra one hidden) as AEL wrote them and as Photoshop reads them, that the progress window said AEL was still working during a filter, that exactly one PSB opened with the layers AEL wrote, 16 bits per channel, the PSB's SHA-256 against the receipt, and that the connector's folder is unchanged; and, for the output folder, that the dialog starts at Downloads when no folder is kept, that **Browse…** changes it, that the run goes to a new folder inside the chosen one and that the chosen folder is kept for the next run. The folder kept before the test is put back afterwards, and nothing is written to Downloads. Only documents the test opened are closed.
 - The older bridge tests (`run_tests.py`, `run_package_tests.py` and the workflow tests) cover the functions the dialog no longer offers: filters, structure and polar from an open document, and the experimental master of `ael_workflow.py`.
 
 ## Limitations
@@ -61,6 +68,6 @@ Keep `AELPhotoshop.jsx`, `AELPhotoshopCore.jsx`, `AELPhotoshopDialog.jsx`, `pyth
 - Tested on macOS only. Windows is untested.
 - Tried on two eclipses so far (see above).
 - One camera and one ISO per run. Each photo is placed by a shift and a turn of the field: optical distortion, which changes as the image drifts across the sensor, is not corrected.
-- Without darks, hot pixels stay in the stack.
+- Without darks, hot pixels stay in the stack, unless the photos of an exposure sit at least 3 px apart on the sensor (see **Dust and hot pixels**).
 - The Sun's centre and radius are estimates (see above); the receipt says how each was obtained.
-- The connector has not been signed, packaged for automatic updates or published.
+- The connector has not been signed or packaged for automatic updates.

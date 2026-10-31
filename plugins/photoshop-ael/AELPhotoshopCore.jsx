@@ -383,6 +383,94 @@ var AELPhotoshop = AELPhotoshop || {};
         return new Folder(Folder("~").fsName + "/Downloads");
     };
 
+    // AEL's filters, as the library names them (ael.filterbank.NAMES, ael.develop.layer_names), listed as the PixInsight
+    // connector lists them (tools/check_connectors.py keeps the two lists the same): the layer's name, its blend mode,
+    // its opacity (AEL's three default layers; at 0 the layer is added hidden, to turn on by hand) and what it shows.
+    ns.FILTERS = [
+        {name: "nrgf", label: "01 NRGF", mode: "Multiply", opacity: 0.39,
+            about: "Normalising radial graded filter: each radius scaled by its own spread, so the corona's " +
+                "shape shows from the limb outwards."},
+        {name: "nrgf_log", label: "01 NRGF log", mode: "Multiply", opacity: 0,
+            about: "The NRGF on the logarithm of the brightness: softer in the bright inner corona."},
+        {name: "rhef", label: "02 RHEF", mode: "Multiply", opacity: 0,
+            about: "Radial histogram equalisation: each radius spread over the whole tonal range."},
+        {name: "rhef_upsilon", label: "02 RHEF Upsilon", mode: "Multiply", opacity: 0,
+            about: "Radial histogram equalisation with the Upsilon curve, gentler at both ends."},
+        {name: "rhef_local60", label: "02 RHEF local 60°", mode: "Multiply", opacity: 0,
+            about: "Radial histogram equalisation in sectors of 60 degrees: each sector against its own range."},
+        {name: "rhef_local30", label: "02 RHEF local 30°", mode: "Multiply", opacity: 0,
+            about: "Radial histogram equalisation in sectors of 30 degrees."},
+        {name: "mgn", label: "03 MGN", mode: "Overlay", opacity: 0,
+            about: "Multi-scale Gaussian normalisation (Morgan and Druckmüller): fine structure at every scale."},
+        {name: "achf_angular", label: "04 ACHF angular", mode: "Overlay", opacity: 0,
+            about: "Angular high-pass: detail across the rays, along the position angle."},
+        {name: "achf_angular4", label: "04 ACHF angular smoothed 4 px", mode: "Overlay", opacity: 0,
+            about: "Angular high-pass, smoothed over 4 pixels along the radius."},
+        {name: "achf_angular8", label: "04 ACHF angular smoothed 8 px", mode: "Overlay", opacity: 0,
+            about: "Angular high-pass, smoothed over 8 pixels along the radius."},
+        {name: "achf_iso_01", label: "04 ACHF iso 2–32 px", mode: "Overlay", opacity: 0,
+            about: "Isotropic high-pass of the detail between 2 and 32 pixels."},
+        {name: "achf_iso_04", label: "04 ACHF iso 1–16 px", mode: "Overlay", opacity: 0.08,
+            about: "Isotropic high-pass of the finest detail, 1 to 16 pixels."},
+        {name: "achf_iso_05", label: "04 ACHF iso 2–48 px", mode: "Overlay", opacity: 0,
+            about: "Isotropic high-pass of the detail between 2 and 48 pixels."},
+        {name: "achf_iso_06", label: "04 ACHF iso 4–64 px", mode: "Overlay", opacity: 0,
+            about: "Isotropic high-pass of the broader detail, 4 to 64 pixels."},
+        {name: "wow", label: "05 WOW", mode: "Overlay", opacity: 0,
+            about: "Wavelet-based detail at every scale, each scale against its own noise."},
+        {name: "wow_edge_aware", label: "05 WOW edge-aware", mode: "Overlay", opacity: 0.37,
+            about: "Wavelet-based detail that keeps the edges of the structure sharp."}
+    ];
+    // AEL's default layers in the order the engine stacks them (ael.filterbank.DEFAULTS): Overlay does not commute.
+    ns.DEFAULT_ORDER = ["nrgf", "wow_edge_aware", "achf_iso_04"];
+
+    ns.has = function (list, value) {
+        for (var i = 0; i < list.length; i++) if (list[i] === value) return true;
+        return false;
+    };
+    // The filters chosen, in the order they are stacked: AEL's default ones first, in their order, then the others as
+    // listed.
+    ns.orderedFilters = function (names) {
+        var ordered = [], i;
+        for (i = 0; i < ns.DEFAULT_ORDER.length; i++) {
+            if (ns.has(names, ns.DEFAULT_ORDER[i])) ordered.push(ns.DEFAULT_ORDER[i]);
+        }
+        for (i = 0; i < ns.FILTERS.length; i++) {
+            if (ns.has(names, ns.FILTERS[i].name) && !ns.has(ordered, ns.FILTERS[i].name)) ordered.push(ns.FILTERS[i].name);
+        }
+        return ordered;
+    };
+    // What a run makes unless the advanced settings choose otherwise: AEL's three default layers at their opacities.
+    ns.defaultFilters = function () {
+        var choice = {filters: ns.DEFAULT_ORDER.slice(0), opacities: {}};
+        for (var i = 0; i < ns.FILTERS.length; i++) {
+            if (ns.has(ns.DEFAULT_ORDER, ns.FILTERS[i].name)) choice.opacities[ns.FILTERS[i].name] = ns.FILTERS[i].opacity;
+        }
+        return choice;
+    };
+    // The filters chosen, in one line: each visible layer with its opacity, and how many are added hidden.
+    ns.choiceText = function (choice) {
+        var parts = [], hidden = 0;
+        for (var i = 0; i < ns.FILTERS.length; i++) {
+            var filter = ns.FILTERS[i];
+            if (!ns.has(choice.filters, filter.name)) continue;
+            var opacity = Math.round(100 * (choice.opacities[filter.name] || 0));
+            // the number and its % stay together
+            if (opacity > 0) parts.push(filter.label.replace(/^\d+[a-z]? /, "") + " " + opacity + "\u00a0%");
+            else hidden++;
+        }
+        return "Filter layers: " + (parts.length ? parts.join(", ") : "none visible") +
+            (hidden ? ", and " + hidden + " more, hidden" : "");
+    };
+
+    // The whole library, for whoever wants more than this dialog: the same words as in the PixInsight connector.
+    ns.githubUrl = "https://github.com/PeterWar/Agentic-Eclipse-Library";
+    ns.invitation = "For more faithful results and more filters, try the whole Agentic Eclipse Library with an AI agent.";
+    ns.openUrl = function (url) {
+        if (/^win/i.test($.os)) app.system('cmd /c start "" "' + url + '"');
+        else app.system("open " + ns.shellQuote(url));
+    };
+
     ns.removeFolder = function (folder) {
         var files = folder.getFiles() || [];
         for (var i = 0; i < files.length; i++) {
@@ -437,6 +525,7 @@ var AELPhotoshop = AELPhotoshop || {};
         return answer;
     };
 
+    ns.HEARTBEAT_S = 20;
     ns.progressWindow = function () {
         var win = new Window("palette", "Agentic Eclipse Library");
         win.orientation = "column";
@@ -449,16 +538,35 @@ var AELPhotoshop = AELPhotoshop || {};
         var detail = win.add("statictext", undefined, "");
         detail.preferredSize.width = 420;
         var stop = win.add("button", undefined, "Stop");
+        stop.helpTip = "Ask AEL to stop at its next step";
         var steps = {"Reading the files": [0, 12], "Combining darks": [12, 16], "Combining flats": [16, 20],
             "Finding the Moon": [20, 32], "Registering on the Sun": [32, 48],
             "Measuring the light of each photo": [48, 55], "Stacking": [55, 65], "Filters": [65, 97],
             "Saving": [97, 99], "Done": [100, 100]};
+        // One filter can take minutes without a new step to report: the window keeps its own clock, and after
+        // HEARTBEAT_S on the same step it says that AEL is still working. ns.progressLog keeps what it said, as the
+        // PixInsight connector writes it to its Console.
+        var started = new Date().getTime(), said = "", saidAt = started, heard = started;
+        ns.progressLog = [];
         var update = function (info) {
+            var now = new Date().getTime();
             var span = steps[info.stage] || [0, 100];
             var fraction = info.total ? Math.min(1, info.done / info.total) : 0;
             bar.value = span[0] + (span[1] - span[0]) * fraction;
+            var text = info.stage + (info.total ? " (" + info.done + " of " + info.total + ")" : "") +
+                (info.message ? ": " + info.message : "");
+            if (text !== said) {
+                ns.progressLog.push("AEL: " + text + " — " + Math.round((now - started) / 1000) + " s");
+                said = text;
+                saidAt = heard = now;
+            } else if (now - heard >= ns.HEARTBEAT_S * 1000) {
+                ns.progressLog.push("AEL: still working on " + text + " — " + Math.round((now - saidAt) / 1000) + " s");
+                heard = now;
+            }
             stage.text = info.stage + (info.total ? " (" + info.done + " of " + info.total + ")" : "");
-            detail.text = (info.message || "") + "   " + Math.round(info.elapsed_s || 0) + " s";
+            var quiet = Math.round((now - saidAt) / 1000);
+            detail.text = (info.message || "") + "   " + Math.round((now - started) / 1000) + " s" +
+                (quiet >= ns.HEARTBEAT_S ? "  ·  still working on this step (" + quiet + " s)" : "");
             win.update();
         };
         update.cancelled = false;
@@ -470,6 +578,7 @@ var AELPhotoshop = AELPhotoshop || {};
     ns.runRaw = function (options) {
         if (!ns.runner.exists) throw new Error("Missing Python runner: " + ns.runner.fsName);
         var probe = ns.probe("", "");
+        var choice = options.choice || ns.defaultFilters();
         var parent = options.output ? new Folder(options.output) : ns.defaultOutput();
         if (!parent.exists && !parent.create()) throw new Error("Cannot create the output folder " + parent.fsName);
         var out = ns.uniqueFolder(parent, "AEL_");
@@ -480,7 +589,8 @@ var AELPhotoshop = AELPhotoshop || {};
         try {
             result = ns.runBackground(probe.selected_python,
                 {operation: "raw", raw: options.raw, darks: options.darks || [], flats: options.flats || [],
-                 calibration: options.calibration || [], out: out.fsName},
+                 calibration: options.calibration || [], out: out.fsName, filters: choice.filters,
+                 opacities: choice.opacities},
                 runRoot, progress.update);
         } catch (error) {
             progress.window.close();
@@ -532,6 +642,6 @@ var AELPhotoshop = AELPhotoshop || {};
                 "an exposure saturates.";
         }
         text += "\n\nThe layered image is open. It is saved, with the linear master and a receipt, in:\n" + result.out;
-        return text;
+        return text + "\n\n" + ns.invitation.replace(/\.$/, ":") + " " + ns.githubUrl;
     };
 }(AELPhotoshop));

@@ -9,6 +9,9 @@ shared parts. This script fails when those copies drift apart:
   names are set aside (and, for the builder, its list of files), so both packages carry the same demonstration;
 - both dialogs ask for the same three things, the totality RAW photos, the optional darks and the optional flats, and offer
   the same output folder line ("Output folder" with "Browse…");
+- both offer the same advanced settings, with the same list of AEL's filters (names, layer names, blend modes, default
+  opacities and the words that say what each shows), and the same invitation to the whole library with its GitHub
+  button;
 - both probes refuse an AEL older than the same version: each probe runs against stand-in `ael` packages that
   carry only a version (1.3.3 and an unreadable one) and must refuse both, and the floor they print must match;
 - neither connector names a private interpreter or a home folder.
@@ -26,6 +29,11 @@ REPO = Path(__file__).resolve().parents[1]
 PI, PS = REPO / "plugins/pixinsight-ael", REPO / "plugins/photoshop-ael"
 INPUTS = ("Totality RAW photos", "Darks (optional)", "Flats (optional)")
 OUTPUT = ("Output folder", "Browse…")
+MORE = ("Advanced settings…", "AEL defaults", "All 16", "GitHub", "https://github.com/PeterWar/Agentic-Eclipse-Library",
+        "For more faithful results and more filters, try the whole Agentic Eclipse Library with an AI agent.")
+# where each connector keeps its dialog and its list of filters
+WORDS = {"PixInsight": (PI / "AELBridgeDialog.jsh", PI / "AELWorkflowCore.jsh"),
+         "Photoshop": (PS / "AELPhotoshopDialog.jsx", PS / "AELPhotoshopCore.jsx")}
 PRIVATE = re.compile(r"/Users/|eines-ia|\.venvs/[A-Za-z0-9_-]+/bin")
 
 
@@ -45,6 +53,14 @@ def literal_text(path: Path) -> str:
     source = path.read_text(encoding="utf-8")
     pieces = re.findall(r'"((?:[^"\\]|\\.)*)"', source)
     return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", "".join(pieces)))
+
+
+def filter_list(path: Path) -> list:
+    """The connector's list of AEL's filters: name, layer name, blend mode, default opacity and what it shows."""
+    found = re.findall(r'\{\s*name: "(\w+)", label: "([^"]+)", mode: "(\w+)", opacity: ([0-9.]+),\s*about: (.*?)\s*\}',
+                       path.read_text(encoding="utf-8"), flags=re.S)
+    return [(name, label, mode, float(opacity), "".join(re.findall(r'"((?:[^"\\]|\\.)*)"', about)))
+            for name, label, mode, opacity, about in found]
 
 
 def minimum(path: Path) -> str:
@@ -93,6 +109,12 @@ def main() -> None:
         label in literal_text(path) for label in INPUTS for path in (PI / "AELBridgeDialog.jsh", PS / "AELPhotoshopDialog.jsx"))
     checks[f"both dialogs offer {' with '.join(OUTPUT)}"] = all(
         label in literal_text(path) for label in OUTPUT for path in (PI / "AELBridgeDialog.jsh", PS / "AELPhotoshopDialog.jsx"))
+    texts = {program: " ".join(literal_text(path) for path in paths) for program, paths in WORDS.items()}
+    checks["both offer the advanced settings and the invitation to the library with its GitHub button"] = all(
+        words in text for words in MORE for text in texts.values())
+    lists = {program: filter_list(paths[1]) for program, paths in WORDS.items()}
+    checks[f"both list the same {len(lists['PixInsight'])} filters with the same words"] = (
+        lists["PixInsight"] == lists["Photoshop"] and len(lists["PixInsight"]) == 16)
     floors = (minimum(PI / "python/ael_bridge_check.py"), minimum(PS / "python/ael_photoshop.py"))
     checks[f"same AEL floor in both probes {floors}"] = floors[0] == floors[1] != "none"
     answers = refusals()
