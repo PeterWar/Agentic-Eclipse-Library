@@ -359,11 +359,28 @@ var AELPhotoshop = AELPhotoshop || {};
     };
 
     // --- RAW photos in, a layered PSB out ------------------------------------------------------------------
-    // Where the results go: a folder of their own in the user's Pictures, one new folder per run.
-    ns.resultsParent = function () {
-        var parent = new Folder(Folder("~").fsName + "/Pictures/AEL Photoshop");
-        if (!parent.exists && !parent.create()) throw new Error("Cannot create the folder " + parent.fsName);
-        return parent;
+    // Where the results go: a new folder for each run, named with its date and time, inside the output folder of the
+    // dialog. The dialog starts at the folder used last time while it exists, otherwise at Downloads, as the
+    // PixInsight connector does. The folder is kept in Photoshop's custom options, like the Python.
+    ns.outputKey = "AELPhotoshop-output-e3b1c7a2";
+    ns.savedOutput = function () {
+        try {
+            return app.getCustomOptions(ns.outputKey).getString(stringIDToTypeID("folder"));
+        } catch (missing) {
+            return "";
+        }
+    };
+    ns.saveOutput = function (path) {
+        try {
+            var settings = new ActionDescriptor();
+            settings.putString(stringIDToTypeID("folder"), path);
+            app.putCustomOptions(ns.outputKey, settings, true);
+        } catch (ignored) {}
+    };
+    ns.defaultOutput = function () {
+        var saved = ns.savedOutput();
+        if (saved && new Folder(saved).exists) return new Folder(saved);
+        return new Folder(Folder("~").fsName + "/Downloads");
     };
 
     ns.removeFolder = function (folder) {
@@ -453,7 +470,9 @@ var AELPhotoshop = AELPhotoshop || {};
     ns.runRaw = function (options) {
         if (!ns.runner.exists) throw new Error("Missing Python runner: " + ns.runner.fsName);
         var probe = ns.probe("", "");
-        var out = ns.uniqueFolder(ns.resultsParent(), "AEL_");
+        var parent = options.output ? new Folder(options.output) : ns.defaultOutput();
+        if (!parent.exists && !parent.create()) throw new Error("Cannot create the output folder " + parent.fsName);
+        var out = ns.uniqueFolder(parent, "AEL_");
         var runRoot = ns.uniqueFolder(Folder.temp, "AEL_PS_run_");
         var progress = ns.progressWindow();
         var oldDialogs = app.displayDialogs;

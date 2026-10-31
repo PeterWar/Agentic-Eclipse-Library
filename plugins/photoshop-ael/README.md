@@ -2,16 +2,23 @@
 
 Choose the RAW photos of a total solar eclipse, and optionally their darks and flats. AEL stacks them into one image and opens it in Photoshop as a layered 16-bit PSB: the display base and AEL's default filter layers (NRGF, WOW edge-aware and isotropic ACHF 04), each with its blend mode and opacity, ready to adjust.
 
-There is nothing else to set. Everything else is measured on the files and written in a receipt.
+There is nothing else to set but where the result goes. Everything else is measured on the files and written in a receipt.
 
 ## Use
 
 1. In Photoshop, choose **File > Scripts > Browse…** and select `AELPhotoshop.jsx`.
 2. **Totality RAW photos — Choose…**: select every RAW photo of the totality (all exposures together). Photos of the partial phases, darks or flats among them are recognised and left out.
 3. **Darks and flats (optional) — Choose…**: select the dark and flat frames of the same camera, if you have them, mixed as they are.
-4. Press **Make the image**. A progress window shows what AEL is doing. **Stop** asks AEL to stop at its next step (whether Photoshop delivers the click while a script runs has not been tested automatically).
+4. **Output folder — Browse…**: where the results go. The dialog starts at Downloads, and afterwards at the folder used last time while it exists. Each run makes a new folder inside it, named with the date and time (`AEL_YYYYMMDD_HHMMSS_…`), so nothing is overwritten.
+5. Press **Make the image**. A progress window shows what AEL is doing. **Stop** asks AEL to stop at its next step (whether Photoshop delivers the click while a script runs has not been tested automatically).
 
-When it finishes, the layered image opens and a message says how many photos were stacked, which were left out and why, and where everything was saved: a new folder in `Pictures/AEL Photoshop/` with the PSB, the linear master (32-bit float TIFF, no data = NaN), a preview, `AEL receipt.json` and the recipes in `details/`.
+When it finishes, the layered image opens and a message says how many photos were stacked, which were left out and why, and where everything was saved: the new folder, with the PSB, the linear master (32-bit float TIFF, no data = NaN), a preview, `AEL receipt.json` and the recipes in `details/`.
+
+## One engine for PixInsight and Photoshop
+
+The work from the RAW files to the filter layers is done by one Python file, `python/ael_auto.py`, and the PixInsight connector carries the same file (`tools/check_connectors.py` in the repository fails if the two copies differ). The same photos give the same linear master and the same filter layers in both programs; only the last step differs: Photoshop opens one layered PSB, PixInsight opens the layers as images with the PixelMath expressions that compose them. Both dialogs keep the results the same way: an output folder that starts at Downloads, and then at the folder used last time, with a new folder for each run. `tools/check_connectors.py` also checks that both dialogs ask for the totality RAW photos and the optional darks and flats.
+
+So far the engine has been tried on the totality photos of two eclipses, 2024 and 2026, taken with five cameras. It is meant for any total eclipse and should work for others, but both connectors still have to be tried on photos of more eclipses.
 
 ## What AEL works out by itself
 
@@ -45,12 +52,13 @@ Keep `AELPhotoshop.jsx`, `AELPhotoshopCore.jsx`, `AELPhotoshopDialog.jsx`, `pyth
 
 ## Tests
 
-- `tests/run_photoshop_raw.py --plugin photoshop-ael --raw RAWS.txt [--calibration CALIBRATION.txt] --output NEW_FOLDER` runs the connector in Photoshop the way a person does: the entry script and the dialog as they are, with the dialog window, the file chooser and `alert()` replaced by test doubles that press the dialog's own buttons and keep the messages. The progress window, the Python run, opening the PSB and Photoshop's own reading of its layers are the real ones. It checks the closing message, that exactly one PSB opened with the layers AEL wrote, 16 bits per channel, the PSB's SHA-256 against the receipt, and that the connector's folder is unchanged. Only documents the test opened are closed.
+- `tests/run_photoshop_raw.py --plugin photoshop-ael --raw RAWS.txt [--calibration CALIBRATION.txt] --output NEW_FOLDER` runs the connector in Photoshop the way a person does: the entry script and the dialog as they are, with the dialog window, the file and folder choosers and `alert()` replaced by test doubles that press the dialog's own buttons and keep the messages. The progress window, the Python run, opening the PSB and Photoshop's own reading of its layers are the real ones. It checks the closing message, that exactly one PSB opened with the layers AEL wrote, 16 bits per channel, the PSB's SHA-256 against the receipt, and that the connector's folder is unchanged; and, for the output folder, that the dialog starts at Downloads when no folder is kept, that **Browse…** changes it, that the run goes to a new folder inside the chosen one and that the chosen folder is kept for the next run. The folder kept before the test is put back afterwards, and nothing is written to Downloads. Only documents the test opened are closed.
 - The older bridge tests (`run_tests.py`, `run_package_tests.py` and the workflow tests) cover the functions the dialog no longer offers: filters, structure and polar from an open document, and the experimental master of `ael_workflow.py`.
 
 ## Limitations
 
 - Tested on macOS only. Windows is untested.
+- Tried on two eclipses so far (see above).
 - One camera and one ISO per run. Each photo is placed by a shift and a turn of the field: optical distortion, which changes as the image drifts across the sensor, is not corrected.
 - Without darks, hot pixels stay in the stack.
 - The Sun's centre and radius are estimates (see above); the receipt says how each was obtained.
