@@ -195,9 +195,15 @@ def windows_on_screen() -> list:
         return []
 
 
+def application_frame(window: dict) -> bool:
+    """Photoshop's main window (the application frame), as against a progress window or a dialog."""
+    return window["width"] >= 600 and window["height"] >= 300
+
+
 class Watcher(threading.Thread):
-    """Every 1.5 s, the windows of Photoshop on screen that were not there before the test (the progress window);
-    two pictures of it, 12 s apart, from 8 s on."""
+    """Every 1.5 s, the windows of Photoshop on screen: whether its main window is (Photoshop is on this desktop and
+    not hidden), and the windows that were not there before the test and are not its main window (the progress
+    window); two pictures of the latter, 12 s apart, from 8 s on."""
 
     def __init__(self, folder: Path):
         super().__init__(daemon=True)
@@ -207,10 +213,11 @@ class Watcher(threading.Thread):
 
     def run(self) -> None:
         while not self.done.is_set():
-            new = [w for w in windows_on_screen()
-                   if w["id"] not in self.baseline and w["width"] > 100 and w["height"] > 50]
+            shown = windows_on_screen()
+            new = [w for w in shown if w["id"] not in self.baseline and not application_frame(w)
+                   and w["width"] > 100 and w["height"] > 50]
             t = round(time.time() - self.t0, 1)
-            self.polls.append({"t": t, "windows": new})
+            self.polls.append({"t": t, "windows": new, "photoshop_shown": any(application_frame(w) for w in shown)})
             if new and t >= 8 and len(self.pictures) < 2 and (not self.pictures or t - self.pictures[-1]["t"] >= 12):
                 picture = self.folder / f"progress_window_{len(self.pictures) + 1}.png"
                 subprocess.run(["screencapture", "-x", "-o", "-l", str(new[0]["id"]), str(picture)],
@@ -445,19 +452,24 @@ AEL_TEST_REPORT;
         gates["filter_line_shows_the_choice"] = report.get("filter_line") == [
             line, line + (f", and {hidden} more, hidden" if hidden else "")]
     # Photoshop's progress window as the window server saw it: on screen while AEL worked (from 5 s to the last step
-    # AEL reported, less 3 s), and changing (two pictures 12 s apart differ: its clock moves)
+    # AEL reported, less 3 s) whenever Photoshop itself was on screen (a person may hide it, or go to another desktop,
+    # during a test), and changing (two pictures 12 s apart differ: its clock moves)
     log = report.get("progress_log", [])
     steps = [int(found.group(1)) for line in log if not line.startswith("AEL: still working")
              for found in [re.search(r" (\d+) s$", line)] if found]
     during = [poll for poll in watcher.polls if 5 <= poll["t"] <= (max(steps) if steps else 0) - 3]
+    shown = [poll for poll in during if poll["photoshop_shown"]]
     report["progress_window"] = {
         "polls": len(watcher.polls), "polls_while_ael_worked": len(during),
-        "on_screen_while_ael_worked": sum(1 for poll in during if poll["windows"]),
+        "polls_while_ael_worked_and_photoshop_was_shown": len(shown),
+        "progress_window_on_screen_then": sum(1 for poll in shown if poll["windows"]),
         "windows_seen": sorted({json.dumps(w, sort_keys=True) for poll in watcher.polls for w in poll["windows"]}),
+        "timeline": [[poll["t"], int(poll["photoshop_shown"]), [w["name"] for w in poll["windows"]]]
+                     for poll in watcher.polls],
         "pictures": watcher.pictures}
     window_gates = {
-        "progress_window_on_screen_while_ael_works": (len(during) >= 5 and report["progress_window"][
-            "on_screen_while_ael_worked"] >= 0.9 * len(during)),
+        "progress_window_on_screen_while_ael_works": (len(shown) >= 5 and report["progress_window"][
+            "progress_window_on_screen_then"] >= 0.9 * len(shown)),
         "progress_window_changes": (len(watcher.pictures) == 2 and not same_picture(
             Path(watcher.pictures[0]["path"]), Path(watcher.pictures[1]["path"])))}
     if args.stop_after:
