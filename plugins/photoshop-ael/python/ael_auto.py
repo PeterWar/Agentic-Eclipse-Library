@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""RAW files in, a layered PSB out: the automatic workflow of the Photoshop connector.
+"""RAW files in, a layered image out: the automatic workflow shared by the PixInsight and Photoshop connectors.
 
 MIT License
 Copyright (c) 2026 Pere Guerra Serra
@@ -11,6 +11,10 @@ The user chooses the RAW files of the totality and, if there are any, calibratio
 measured on the files and written in the receipt: which files are totality frames, darks or flats; the camera's
 black and saturation levels; the lunar disc of every frame; the registration on the Sun; the lunar motion; and the
 solar geometry. Nothing is guessed silently: what is assumed is said in the receipt.
+
+Both connectors carry this same file (tools/check_connectors.py keeps the two copies identical): the same photos give
+the same linear master and the same filter layers in either program. Only the last step differs: Photoshop receives
+one layered 16-bit PSB, PixInsight the layers as images and the PixelMath expressions that compose them.
 """
 from __future__ import annotations
 
@@ -59,16 +63,16 @@ class Cancelled(RuntimeError):
 
 
 class Progress:
-    """Progress for the Photoshop palette: one small JSON file, rewritten in place. A ``cancel`` file beside it,
-    written by the palette's Stop button, stops the run at the next step."""
+    """Progress for the connector's window: one small JSON file, rewritten in place. A ``cancel`` file beside it,
+    written by the window's Stop button, stops the run at the next step."""
 
-    def __init__(self, path: Path | None, cancel: Path | None = None):
-        self.path, self.cancel = path, cancel
+    def __init__(self, path: Path | None, cancel: Path | None = None, program: str = "Photoshop"):
+        self.path, self.cancel, self.program = path, cancel, program
         self.start = time.time()
 
     def __call__(self, stage: str, done: int = 0, total: int = 0, message: str = "") -> None:
         if self.cancel and self.cancel.exists():
-            raise Cancelled("Stopped from Photoshop")
+            raise Cancelled(f"Stopped from {self.program}")
         if not self.path:
             return
         payload = {"stage": stage, "done": done, "total": total, "message": message,
@@ -1242,20 +1246,29 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+PROGRAMS = {"photoshop": "Photoshop", "pixinsight": "PixInsight"}
+
+
 def run_auto(cfg: dict) -> dict:
-    """The whole workflow: analyse, decide, stack, filter, write the PSB into ``cfg['out']``."""
+    """The whole workflow: analyse, decide, stack, filter, and write into ``cfg['out']`` what ``cfg['program']``
+    opens: a layered PSB for Photoshop (the default), the layer images and their PixelMath expressions for
+    PixInsight. Everything before the filter layers is the same for both."""
     from ael import develop, io
     from ael.filterbank import DEFAULTS
     from PIL import ImageCms
 
+    program = cfg.get("program", "photoshop")
+    if program not in PROGRAMS:
+        raise ValueError(f"Unknown program {program!r}: one of {sorted(PROGRAMS)}")
+    name = PROGRAMS[program]
     out = Path(cfg["out"]).expanduser().resolve()
     if out.exists() and any(out.iterdir()):
         raise FileExistsError(f"The output folder is not empty: {out}")
     out.mkdir(parents=True, exist_ok=True)
     progress = Progress(Path(cfg["progress"]) if cfg.get("progress") else None,
-                        Path(cfg["cancel"]) if cfg.get("cancel") else None)
+                        Path(cfg["cancel"]) if cfg.get("cancel") else None, name)
     clock = {"start": time.time()}
-    work = Path(tempfile.mkdtemp(prefix="AEL_Photoshop_", dir=cfg.get("work_parent")))
+    work = Path(tempfile.mkdtemp(prefix=f"AEL_{name}_", dir=cfg.get("work_parent")))
     kept_work = False
     try:
         analysis = analyse(cfg.get("raw") or [], cfg.get("calibration") or [], work / "calibration", progress)
@@ -1291,7 +1304,7 @@ def run_auto(cfg: dict) -> dict:
         swept_xy = ((pair[0] + pair[1]) / 2).tolist()
         shape = tuple(analysis["shape"])
         date = reference["time"].strftime("%Y-%m-%d") if reference["time"] else "unknown date"
-        note = (f"Measured on the RAW files by the AEL Photoshop connector. Sun: {decision['sun']['how']}; radius: "
+        note = (f"Measured on the RAW files by the AEL {name} connector. Sun: {decision['sun']['how']}; radius: "
                 f"{decision['sun']['radius_how']}. North unknown (position angles from the top of the image), parity "
                 f"not mirrored, plate scale unknown.")
         stack_geometry = EclipseGeometry(shape=shape, sun_xy=tuple(decision["sun"]["xy"]),
@@ -1307,7 +1320,7 @@ def run_auto(cfg: dict) -> dict:
         recipe = {"geometry": json.loads(stack_geometry.to_json()), "frames": frames,
                   "stack": {"canvas": "reference", "taper_start": taper, "moon_guard_px": 2, "limb_fade_px": 4,
                             "band_sigma_px": 0, "hot_pixels": {"enabled": False}},
-                  "note": "AEL Photoshop connector: every value measured on the files (see the connector's receipt)"}
+                  "note": f"AEL {name} connector: every value measured on the files (see the connector's receipt)"}
         recipe_path = work / "stack_recipe.json"
         recipe_path.write_text(json.dumps(recipe, indent=1, ensure_ascii=False), encoding="utf-8")
         total = len(frames)
@@ -1340,54 +1353,79 @@ def run_auto(cfg: dict) -> dict:
         scale = display_scale(linear, np.load(stacked["files"]["valid"]), np.load(stacked["files"]["coverage"]),
                               filter_geometry, colour)
         del linear
-        icc_path = work / "sRGB.icc"
-        icc_path.write_bytes(ImageCms.ImageCmsProfile(ImageCms.createProfile("sRGB")).tobytes())
-        filters_recipe = {"input": stacked["files"]["linear"], "geometry": str(filter_geometry_path),
-                          "valid": stacked["files"]["valid"], "coverage": stacked["files"]["coverage"],
-                          "min_coverage": 0.5, "alpha": stacked["files"]["alpha"],
-                          "filters": list(DEFAULTS), "visible": list(DEFAULTS),
-                          "display": {"scale": scale, "asinh": 20, "highlight_ceiling": 0.9}, "photoshop": True,
-                          "icc": str(icc_path),
-                          "note": "AEL Photoshop connector: AEL's default filter layers over the display base"}
-        if colour:
-            filters_recipe.update(white_balance=colour["white_balance"],
-                                  camera_to_linear_rgb=colour["camera_to_linear_rgb"])
-        filters_recipe_path = work / "filters_recipe.json"
-        filters_recipe_path.write_text(json.dumps(filters_recipe, indent=1, ensure_ascii=False), encoding="utf-8")
-
-        def filter_progress(message):
-            text = str(message)
-            if text.startswith("filter ") and "/" in text:
-                done = int(text.split()[1].split("/")[0])
-                progress("Filters", done, len(DEFAULTS), text.split(": ", 1)[-1])
-        product = develop.filters_from_config(filters_recipe_path, work / "filters", progress=filter_progress)
-        filters_receipt = json.loads(Path(product["receipt"]).read_text())
-        gates = filters_receipt["gates"]
-        if not gates.get("nothing_outside_data") or not gates.get("photoshop_roundtrip", {}).get("ok"):
-            raise RuntimeError(f"AEL filter gate failed: {gates}")
-        clock["filtered"] = time.time()
-
-        # What the user keeps: the PSB, the linear master, a preview and the receipts. The rest was temporary.
-        progress("Saving", 0, 1)
         model = reference.get("model") or analysis["camera"]
         stem = f"Eclipse {date} {model}".replace("/", "-").replace(":", "-").strip()
-        psb = out / f"{stem} AEL.psb"
-        shutil.move(product["files"]["psb"], psb)
         linear_tif = out / f"{stem} linear master.tif"
-        shutil.move(stacked["files"]["tiff"], linear_tif)
         preview = out / f"{stem} preview.png"
-        shutil.move(product["files"]["preview"], preview)
         details = out / "details"
+        layers_cfg = {"input": stacked["files"]["linear"], "geometry": str(filter_geometry_path),
+                      "valid": stacked["files"]["valid"], "coverage": stacked["files"]["coverage"],
+                      "min_coverage": 0.5, "alpha": stacked["files"]["alpha"],
+                      "filters": list(DEFAULTS), "visible": list(DEFAULTS),
+                      "display": {"scale": scale, "asinh": 20, "highlight_ceiling": 0.9},
+                      "note": f"AEL {name} connector: AEL's default filter layers over the display base"}
+        if colour:
+            layers_cfg.update(white_balance=colour["white_balance"], camera_to_linear_rgb=colour["camera_to_linear_rgb"])
+        if program == "photoshop":
+            icc_path = work / "sRGB.icc"
+            icc_path.write_bytes(ImageCms.ImageCmsProfile(ImageCms.createProfile("sRGB")).tobytes())
+            filters_recipe = dict(layers_cfg, photoshop=True, icc=str(icc_path))
+            filters_recipe_path = work / "filters_recipe.json"
+            filters_recipe_path.write_text(json.dumps(filters_recipe, indent=1, ensure_ascii=False), encoding="utf-8")
+
+            def filter_progress(message):
+                text = str(message)
+                if text.startswith("filter ") and "/" in text:
+                    done = int(text.split()[1].split("/")[0])
+                    progress("Filters", done, len(DEFAULTS), text.split(": ", 1)[-1])
+            product = develop.filters_from_config(filters_recipe_path, work / "filters", progress=filter_progress)
+            filters_receipt_path = Path(product["receipt"])
+            filters_receipt = json.loads(filters_receipt_path.read_text())
+            gates = filters_receipt["gates"]
+            if not gates.get("nothing_outside_data") or not gates.get("photoshop_roundtrip", {}).get("ok"):
+                raise RuntimeError(f"AEL filter gate failed: {gates}")
+            preview_source = product["files"]["preview"]
+            pixelmath, images = None, None
+        else:
+            # The same layers as images, and the PixelMath expressions that compose them over the display base, as
+            # the connector's filter operation makes them (ael_workflow.run_filters): PixInsight opens them as views.
+            from ael_workflow import run_filters
+            filters_dir = work / "filters"
+            layered = run_filters(dict(layers_cfg, out=str(filters_dir)))
+            filters_receipt_path = Path(json.loads(Path(layered["receipt"]).read_text())["ael_receipt"])
+            filters_receipt = json.loads(filters_receipt_path.read_text())
+            gates = filters_receipt["gates"]
+            preview_source = filters_receipt_path.parent / "preview.png"
+            pixelmath = layered["pixelmath"]
+            shutil.move(str(filters_dir / "tiff"), str(out / "layers"))
+            shutil.move(str(filters_dir / "PIXELMATH.md"), str(out / "PIXELMATH.md"))
+            images = [{"name": "linear", "kind": "linear", "path": str(linear_tif), "view": "AEL_LINEAR_MASTER"}]
+            images += [dict(image, path=str(out / "layers" / Path(image["path"]).name)) for image in layered["images"]]
+        clock["filtered"] = time.time()
+
+        # What the user keeps: the layered image, the linear master, a preview and the receipts. The rest was temporary.
+        progress("Saving", 0, 1)
+        shutil.move(stacked["files"]["tiff"], linear_tif)
+        shutil.move(str(preview_source), preview)
         details.mkdir()
-        for source, name in ((recipe_path, "stack_recipe.json"), (Path(stacked["receipt"]), "stack_receipt.json"),
-                             (filters_recipe_path, "filters_recipe.json"), (Path(product["receipt"]), "filters_receipt.json"),
-                             (filter_geometry_path, "geometry.json")):
-            shutil.copy2(source, details / name)
+        for source, detail in ((recipe_path, "stack_recipe.json"), (Path(stacked["receipt"]), "stack_receipt.json"),
+                               (filters_receipt_path, "filters_receipt.json"), (filter_geometry_path, "geometry.json")):
+            shutil.copy2(source, details / detail)
         layers = [{"name": "Background", "mode": "normal", "opacity": 1.0, "visible": True},
                   {"name": "Linear reference / receipt scale", "mode": "normal", "opacity": 1.0, "visible": False},
                   {"name": "00 Display base", "mode": "normal", "opacity": 1.0, "visible": True}]
         layers += [{"name": entry["layer"], "mode": entry["mode"], "opacity": float(entry["opacity"]),
                     "visible": bool(entry["visible"])} for entry in filters_receipt["parameters"]["layers"]]
+        outputs = {"linear_master": dict(path=str(linear_tif), sha256=_sha256(linear_tif)),
+                   "preview": dict(path=str(preview), sha256=_sha256(preview))}
+        if program == "photoshop":
+            psb = out / f"{stem} AEL.psb"
+            shutil.move(product["files"]["psb"], psb)
+            outputs["psb"] = dict(path=str(psb), sha256=_sha256(psb))
+        else:
+            outputs["layers"] = [dict(path=image["path"], sha256=_sha256(Path(image["path"])))
+                                 for image in images[1:]]
+            outputs["pixelmath"] = dict(path=str(out / "PIXELMATH.md"), operations=pixelmath)
         used = decision["used"]
         summary = dict(camera=analysis["camera"], date=date, iso=analysis["iso"], frames_stacked=len(used),
                        sky_consistency=photometry.get("residual"), cloudy=cloudy,
@@ -1395,18 +1433,16 @@ def run_auto(cfg: dict) -> dict:
                        exposures=sorted({row["exposure_s"] for row in used}),
                        darks=len(analysis["calibration"]["darks"]),
                        flat=bool(analysis["calibration"]["flat"]), left_out=len(analysis["excluded"]))
-        receipt = {"product": "AEL Photoshop connector: RAW files to a layered PSB", "credit": CREDIT,
-                   "runtime": runtime(), "summary": summary,
+        receipt = {"product": f"AEL {name} connector: RAW files to " +
+                              ("a layered PSB" if program == "photoshop" else "filter layers and a PixelMath composite"),
+                   "credit": CREDIT, "runtime": runtime(), "program": name, "summary": summary,
                    "files": [{k: (str(v) if k == "time" else v) for k, v in f.items()} for f in analysis["files"].values()],
                    "left_out": analysis["excluded"], "levels": lv, "calibration": analysis["calibration"],
                    "reference": reference["name"], "band_sigma_half_px": analysis["sigma_half_px"],
                    "registration": decision, "photometry": dict(photometry, taper_start=taper),
                    "colour": colour or "camera colour matrix unknown: sensor RGB",
                    "display_scale": scale, "stack_gates": stack_receipt["gates"], "filters_gates": gates,
-                   "layers": layers,
-                   "outputs": {"psb": dict(path=str(psb), sha256=_sha256(psb)),
-                               "linear_master": dict(path=str(linear_tif), sha256=_sha256(linear_tif)),
-                               "preview": dict(path=str(preview), sha256=_sha256(preview))},
+                   "layers": layers, "outputs": outputs,
                    "assumed": [decision["sun"]["how"], decision["sun"]["radius_how"],
                                "north unknown: position angles from the top of the image; plate scale unknown",
                                f"the top {100 - round(100 * LINEARITY_FRACTION)} % of each RAW range is not used "
@@ -1416,9 +1452,14 @@ def run_auto(cfg: dict) -> dict:
         receipt_path = out / "AEL receipt.json"
         receipt_path.write_text(json.dumps(receipt, indent=1, ensure_ascii=False, default=str), encoding="utf-8")
         progress("Done", 1, 1)
-        return {"ok": True, "operation": "raw", "out": str(out), "psb": str(psb), "linear_master": str(linear_tif),
-                "preview": str(preview), "receipt": str(receipt_path), "summary": summary, "psb_layers": layers,
-                "left_out": analysis["excluded"]}
+        answer = {"ok": True, "operation": "raw", "program": name, "out": str(out), "linear_master": str(linear_tif),
+                  "preview": str(preview), "receipt": str(receipt_path), "summary": summary, "left_out": analysis["excluded"]}
+        if program == "photoshop":
+            answer.update(psb=outputs["psb"]["path"], psb_layers=layers)
+        else:
+            answer.update(images=images, pixelmath=pixelmath, gates=gates, geometry_source="measured on the RAW files",
+                          geometry=json.loads(filter_geometry_path.read_text(encoding="utf-8")))
+        return answer
     except Exception:
         kept_work = bool(cfg.get("keep_work_on_error"))
         raise

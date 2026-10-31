@@ -3,9 +3,11 @@
 plugins/pixinsight-ael/ and plugins/photoshop-ael/ are self-contained, so each carries its own copy of the
 shared parts. This script fails when those copies drift apart:
 
+- python/ael_auto.py, the RAW-to-layered-image engine, is the same file in both: the same photos give the same
+  linear master and the same filter layers in either program;
 - python/ael_workflow.py, tools/make_demo.py and tools/build_package.py are the same file once the program
   names are set aside (and, for the builder, its list of files), so both packages carry the same demonstration;
-- both dialogs show the same experimental notice about the linear master;
+- both dialogs ask for the same two things, the totality RAW photos and the optional darks and flats;
 - both probes refuse an AEL older than the same version: each probe runs against stand-in `ael` packages that
   carry only a version (1.3.3 and an unreadable one) and must refuse both, and the floor they print must match;
 - neither connector names a private interpreter or a home folder.
@@ -21,9 +23,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 PI, PS = REPO / "plugins/pixinsight-ael", REPO / "plugins/photoshop-ael"
-NOTICE = ("The linear master places the Sun of every frame from its own Moon and its corona; on real frames of 2024 "
-          "and 2026 they lie within 0.5-0.9 px of the Moon's straight path, but it has not been checked frame by frame "
-          "against an independent registration.")
+INPUTS = ("Totality RAW photos", "Darks and flats (optional)")
 PRIVATE = re.compile(r"/Users/|eines-ia|\.venvs/[A-Za-z0-9_-]+/bin")
 
 
@@ -85,8 +85,10 @@ def main() -> None:
                                 ("tools/build_package.py", lambda t: without_file_list(neutral(t)))):
         a, b = (normalise((root / relative).read_text(encoding="utf-8")) for root in (PI, PS))
         checks[f"{relative} is the same in both"] = a == b
-    checks["same experimental notice in both dialogs"] = all(
-        NOTICE in literal_text(path) for path in (PI / "AELBridgeDialog.jsh", PS / "AELPhotoshopDialog.jsx"))
+    checks["python/ael_auto.py is identical in both"] = (
+        (PI / "python/ael_auto.py").read_bytes() == (PS / "python/ael_auto.py").read_bytes())
+    checks[f"both dialogs ask for {' and '.join(INPUTS)}"] = all(
+        label in literal_text(path) for label in INPUTS for path in (PI / "AELBridgeDialog.jsh", PS / "AELPhotoshopDialog.jsx"))
     floors = (minimum(PI / "python/ael_bridge_check.py"), minimum(PS / "python/ael_photoshop.py"))
     checks[f"same AEL floor in both probes {floors}"] = floors[0] == floors[1] != "none"
     answers = refusals()

@@ -29,7 +29,8 @@ import zipfile
 PLUGIN = Path(__file__).resolve().parents[1]
 REPO = PLUGIN.parents[1]
 FILES = ["AELBridge.js", "AELBridgeCore.jsh", "AELBridgeDialog.jsh", "AELWorkflowCore.jsh",
-         "README.md", "LICENSE", "python/ael_bridge_check.py", "python/ael_workflow.py"]
+         "README.md", "LICENSE", "python/ael_bridge_check.py", "python/ael_workflow.py",
+         "python/ael_auto.py"]
 SKIP = shutil.ignore_patterns("__pycache__", "*.pyc", ".DS_Store")
 
 
