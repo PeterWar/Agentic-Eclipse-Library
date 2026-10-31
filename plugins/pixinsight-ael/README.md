@@ -4,7 +4,9 @@ This connector runs the Agentic Eclipse Library (AEL) from PixInsight, with one 
 
 Your files are never edited. Each resulting image opens in a new PixInsight window and is also written to disk.
 
-For more faithful results and more filters, try the whole Agentic Eclipse Library with an AI agent: <https://github.com/PeterWar/Agentic-Eclipse-Library>. The dialog says so in one line, with a button to that page.
+For more faithful results and more filters, try the whole Agentic Eclipse Library with an AI agent: <https://github.com/PeterWar/Agentic-Eclipse-Library>. The dialog says so in one line, with that address written as a web link that opens the page, and the licence under it.
+
+MIT License, Copyright © 2026 Pere Guerra Serra (see `LICENSE`). The connector and the library are provided "as is", without warranty of any kind.
 
 ## Requirements
 
@@ -22,6 +24,8 @@ The dialog has no Python field: the connector looks for one by itself, in this o
 2. In PixInsight, choose **Script > Feature Scripts…**.
 3. Click **Add** (it asks for a folder), choose the folder `pixinsight-ael/`, and the dialog lists `AELBridge.js`, enabled. Click **Done**.
 4. Open **Utilities > Agentic Eclipse Library**.
+
+On PixInsight 1.9.4 for macOS, step 3 may leave a window **Searching for Scripts** open over the message «1 additional script(s) were found», with a bar that keeps moving: the search has already finished, and that window only closes with its **Cancel**. Press **Cancel**, then **OK** on the message, then **Done**: the script is added. This comes from PixInsight's own Feature Scripts dialog, not from the connector (the folder holds one script and a few dozen files). An update repository would avoid the Feature Scripts dialog altogether, but PixInsight accepts one only when it is signed by a Certified PixInsight Developer, or when the user allows unsigned repositories in the security preferences.
 
 This is a local build for testing, not a signed update repository. `tools/build_package.py --out FOLDER [--zip FILE]` assembles the folder, with `runtime/ael` copied from the checkout and checked byte by byte, `runtime/VERSION.json` (AEL version, the last commit of `ael/`, the commit of the connector and whether either had uncommitted changes, with the same keys as the Photoshop connector's) and the synthetic files of `demo/`.
 

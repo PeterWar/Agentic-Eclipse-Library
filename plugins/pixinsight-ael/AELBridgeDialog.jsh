@@ -25,6 +25,7 @@
  */
 
 #include <pjsr/TextAlign.jsh>
+#include <pjsr/StdCursor.jsh>
 
 // The one dialog of the connector (Script > Utilities > Agentic Eclipse Library). It asks only for what a person knows:
 // what to make, from which RAW photos or which open image, and where to save it.
@@ -390,22 +391,36 @@ var AELBridgeDialog = class extends Dialog
       outputSizer.add( this.outputButton );
       this.sizer.add( outputSizer );
 
-      // The whole library, for whoever wants more than this dialog
-      let moreSizer = new HorizontalSizer;
-      moreSizer.spacing = 6;
+      // The whole library, for whoever wants more than this dialog: its address, written as a web link (blue,
+      // underlined, a hand under the pointer) that opens it in the browser, and the licence under it
       let more = new Label( this );
       more.wordWrapping = true;
       more.styleSheet = "QLabel { color: gray; }";
-      more.text = "For more faithful results and more filters, try the whole Agentic Eclipse Library with an AI agent.";
+      more.text = "For more faithful results and more filters, try the whole Agentic Eclipse Library with an AI agent:";
       let github = new ToolButton( this );
-      github.text = "GitHub";
-      github.toolTip = AEL_GITHUB_URL;
+      github.text = AEL_GITHUB_URL;
+      github.toolTip = "Opens the Agentic Eclipse Library on GitHub in your web browser.";
+      github.cursor = new Cursor( StdCursor_Hand );
+      github.styleSheet = "QWidget { color: #0066ff; text-decoration: underline; border: none; background: transparent; "
+                        + "padding: 0px; }";
+      let linkFont = github.font;
+      linkFont.underline = true;
+      github.font = linkFont;
       github.onClick = function() { aelBridgeOpenUrl( AEL_GITHUB_URL ); };
-      moreSizer.add( more, 100 );
-      moreSizer.add( github );
-      this.sizer.add( moreSizer );
+      let linkSizer = new HorizontalSizer;
+      linkSizer.add( github );
+      linkSizer.addStretch();
+      let licence = new Label( this );
+      licence.wordWrapping = true;
+      licence.styleSheet = "QLabel { color: gray; }";
+      licence.text = AEL_LICENCE_LINE;
+      licence.toolTip = AEL_LICENCE_DISCLAIMER;
+      this.sizer.add( more );
+      this.sizer.add( linkSizer );
+      this.sizer.add( licence );
       this.moreLabel = more;
       this.githubButton = github;
+      this.licenceLabel = licence;
 
       let buttons = new HorizontalSizer;
       buttons.spacing = 8;

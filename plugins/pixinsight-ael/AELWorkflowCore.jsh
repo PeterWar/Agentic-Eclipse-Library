@@ -40,6 +40,16 @@ var AEL_RAW_TIME_LIMIT_MS = 4 * 3600 * 1000;
 var AEL_HEARTBEAT_MS = 20000;
 // Where the whole library is, for the line that invites people to use it with an AI agent.
 var AEL_GITHUB_URL = "https://github.com/PeterWar/Agentic-Eclipse-Library";
+// The licence of the library and of this connector (LICENSE): one line under the invitation, and the whole disclaimer
+// when the pointer rests on it.
+var AEL_LICENCE_LINE = "MIT License \u00b7 Copyright \u00a9 2026 Pere Guerra Serra \u00b7 Provided \u201cas is\u201d, "
+                     + "without warranty of any kind.";
+var AEL_LICENCE_DISCLAIMER = "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, "
+                           + "INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR "
+                           + "PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE "
+                           + "FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR "
+                           + "OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER "
+                           + "DEALINGS IN THE SOFTWARE.";
 
 // AEL's filters, as the library names them (ael.filterbank.NAMES, ael.develop.layer_names): the layer's name, its blend
 // mode in the composite, its opacity there (AEL's three default layers; 0 opens the layer without composing it) and
