@@ -247,6 +247,22 @@ function aelBridgeInitialRoot()
    return "";
 }
 
+// An environment variable, or "" when it is not set. PixInsight 1.9 reads them through System: its global
+// getEnvironmentVariable() still answers, but the Console calls it deprecated at every run.
+function aelBridgeEnvironmentVariable( name )
+{
+   try
+   {
+      if ( typeof System != "undefined" && typeof System.getEnvironmentVariable == "function" )
+         return System.getEnvironmentVariable( name ) || "";
+      return getEnvironmentVariable( name ) || "";
+   }
+   catch ( error )
+   {
+      return "";
+   }
+}
+
 function aelBridgeCandidates( preferred, aelRoot )
 {
    let candidates = [];
@@ -264,13 +280,7 @@ function aelBridgeCandidates( preferred, aelRoot )
    let saved = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "pythonPath", DataType.UTF8String );
    if ( saved )
       add( saved );
-   try
-   {
-      add( getEnvironmentVariable( "AEL_PYTHON" ) );
-   }
-   catch ( error )
-   {
-   }
+   add( aelBridgeEnvironmentVariable( "AEL_PYTHON" ) );
 #ifeq __PI_PLATFORM__ MACOSX
    addAll( aelBridgeVersionedPythons( "/opt/homebrew/bin" ) );
    addAll( aelBridgeVersionedPythons( "/usr/local/bin" ) );
@@ -315,7 +325,7 @@ function aelBridgeCandidates( preferred, aelRoot )
    }
    throw new Error( "No Python 3.10 or later with AEL's dependencies was found. Install Python 3, and then, in the "
                     + "Terminal: python3 -m pip install numpy scipy opencv-python-headless pillow tifffile imageio\n"
-                    + "AEL " + "1.4.0 itself comes with the connector. To use one particular Python, set the environment "
+                    + "The AEL it needs comes with the connector. To use one particular Python, set the environment "
                     + "variable AEL_PYTHON to it.\n\n"
                     + "Tried:\n" + diagnostics.join( "\n" ) );
 }
@@ -591,14 +601,20 @@ function aelBridgeOpenResults( files, mode, openedWindows )
    }
 }
 
-// A web page in the system's browser, when the user asks for it (a button); nothing is opened on its own.
+// A web page in the system's browser, when the user asks for it (a button); nothing is opened on its own. The system's
+// command is chosen when the script is read: PixInsight 1.9 calls corePlatform deprecated at every use.
 function aelBridgeOpenUrl( url )
 {
+   let program = "xdg-open", args = [ url ];
+#ifeq __PI_PLATFORM__ MACOSX
+   program = "open";
+#endif
+#ifeq __PI_PLATFORM__ MSWINDOWS
+   program = "cmd";
+   args = [ "/c", "start", "", url ];
+#endif
    let process = new ExternalProcess;
-   if ( corePlatform == "MSWINDOWS" || corePlatform == "MSWindows" )
-      process.start( "cmd", [ "/c", "start", "", url ] );
-   else
-      process.start( corePlatform == "MacOSX" ? "open" : "xdg-open", [ url ] );
+   process.start( program, args );
    process.waitForFinished( 5000 );
 }
 

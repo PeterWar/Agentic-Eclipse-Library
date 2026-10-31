@@ -127,6 +127,7 @@ def listed(path: Path | None) -> list[str]:
 
 PJSR = r'''
 #engine v8
+console.beginLog();      // everything the Console says from the first line: no call PixInsight calls deprecated
 #include "%(core)s"
 #include "%(wcore)s"
 #include "%(dialog)s"
@@ -268,8 +269,10 @@ try
       this.waitForFinished = function() { return true; };
    };
    try { first.githubButton.onClick(); } finally { ExternalProcess = RealProcess; }
-   REPORT.steps.github = { started: started, url: AEL_GITHUB_URL, platform: corePlatform,
-                           invitation: first.moreLabel.text };
+   REPORT.steps.github = { started: started, url: AEL_GITHUB_URL, platform: System.platform,
+                           invitation: first.moreLabel.text, link_text: first.githubButton.text,
+                           link_style: first.githubButton.styleSheet, link_underlined: first.githubButton.font.underline,
+                           licence: first.licenceLabel.text, licence_tip: first.licenceLabel.toolTip };
    first.outputButton.onClick();
    REPORT.steps.output_browsed = first.outputEdit.text;
    first.cancel();
@@ -324,9 +327,11 @@ try
       d.addFlatsButton.onClick();
       REPORT.steps.raw_lists = { raw: d.raw.slice(), darks: d.darks.slice(), flats: d.flats.slice(),
                                  raw_text: d.rawText.text };
+      REPORT.steps.console_before_raw = console.endLog().utf8ToString();
       console.beginLog();                       // what the Console shows during the run
    } );
    REPORT.steps.raw_console = console.endLog().utf8ToString();
+   console.beginLog();
    round( "structure", CFG.structureImage, "corona_linear", 1, function( d ) {} );
    round( "polar", CFG.polarImage, "corona_display", 2, function( d ) { d.rmaxEdit.text = "4.0"; } );
    REPORT.steps.python_saved = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "pythonPath", DataType.UTF8String );
@@ -366,6 +371,13 @@ catch ( error )
 }
 finally
 {
+   try
+   {
+      REPORT.steps.console_after_raw = console.endLog().utf8ToString();
+   }
+   catch ( error )
+   {
+   }
    aelWorkflowProgress = realProgress;
    // the folder the dialog keeps is the user's: put it back as it was
    if ( savedOutput )
@@ -513,8 +525,18 @@ def main() -> None:
                  # the line that invites to the whole library, and its button: what would open the page (not run here)
                  "github_button_opens_the_library_page": (steps["github"]["invitation"].startswith(
                      "For more faithful results and more filters, try the whole Agentic Eclipse Library")
-                     and steps["github"]["started"] == [{"program": {"MacOSX": "open"}.get(steps["github"]["platform"], "xdg-open"),
-                                                         "args": ["https://github.com/PeterWar/Agentic-Eclipse-Library"]}]),
+                     and steps["github"]["started"] == ([{"program": "cmd", "args": ["/c", "start", "",
+                                                                                         "https://github.com/PeterWar/Agentic-Eclipse-Library"]}]
+                                                        if steps["github"]["platform"] == "Windows" else
+                                                        [{"program": "open" if steps["github"]["platform"] == "macOS" else "xdg-open",
+                                                          "args": ["https://github.com/PeterWar/Agentic-Eclipse-Library"]}])),
+                 # the address is written out as a web link, and the licence is under it (Pere, 31-10)
+                 "github_link_is_the_address_in_blue_underlined": (steps["github"]["link_text"] == steps["github"]["url"]
+                                                                    and "#0066ff" in steps["github"]["link_style"]
+                                                                    and steps["github"]["link_underlined"] is True),
+                 "mit_licence_and_disclaimer_shown": (steps["github"]["licence"].startswith("MIT License")
+                                                      and "without warranty of any kind" in steps["github"]["licence"]
+                                                      and 'PROVIDED "AS IS", WITHOUT WARRANTY' in steps["github"]["licence_tip"]),
                  "without_photos_it_says_so": len(steps["raw_empty"]["messages"]) == 1
                                               and "Choose the RAW photos of the totality first." in steps["raw_empty"]["messages"][0]
                                               and steps["raw_empty"]["windows"] == [],
@@ -717,6 +739,22 @@ def main() -> None:
         gates["filters_all_reads_the_rescaled_file"] = (Path(report["steps"]["filters_all"]["input_given_to_ael"]).resolve()
                                                         == Path(config["rescaledImage"]).resolve())
         gates["package_unchanged_by_the_run"] = tree_sha256(plugin) == before_tree
+        # Two functions with one name in the scripts: the second silently replaces the first. On 31-10 a helper named
+        # like the one that builds the probe's environment left every Python without ael.
+        defined = {}
+        for source in sorted(list(plugin.glob("*.js")) + list(plugin.glob("*.jsh"))):
+            for name in re.findall(r"^function\s+(\w+)\s*\(", source.read_text(encoding="utf-8"), re.M):
+                defined.setdefault(name, []).append(source.name)
+        report["functions_defined_twice"] = {k: v for k, v in defined.items() if len(v) > 1}
+        gates["no_function_defined_twice"] = bool(defined) and not report["functions_defined_twice"]
+        # PixInsight writes a warning for each deprecated call (once per session: hence the whole Console, from the
+        # script's first line). On 31-10 a person saw «getEnvironmentVariable() is deprecated» at every Run.
+        consoles = [steps.get(k) for k in ("console_before_raw", "raw_console", "console_after_raw")]
+        deprecated = [line.split("] ", 1)[-1] for text in consoles if text for line in text.splitlines()
+                      if "deprecated" in line.lower()]
+        report["deprecated_in_the_console"] = deprecated
+        gates["console_has_the_whole_session"] = all(isinstance(t, str) and t for t in consoles)
+        gates["no_deprecated_call_in_the_console"] = not deprecated
         report["gates"] = gates
         report["ok"] = all(gates.values())
     except Exception as exc:

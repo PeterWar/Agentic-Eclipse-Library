@@ -50,9 +50,14 @@ dialog asks for less guesswork.
   and `flats`, still measures each file and leaves out one that is not what it was chosen as). «Advanced settings…»
   chooses any of AEL's 16 filters as layers and their opacity in the composite. Each item of «Make» says what it does,
   under the list and on its tooltip. The composite is saved (32-bit XISF) and shown in front. The Console hears each
-  filter and, while a step lasts, a line every 20 s. The file chooser uses `filePaths` (`fileNames` is deprecated in
-  PixInsight 1.9.4). Windows are named in local time, like the run's folder. A line invites to try the whole library
-  with an AI agent, with a button to its GitHub page.
+  filter and, while a step lasts, a line every 20 s. Windows are named in local time, like the run's folder. A line
+  invites to try the whole library with an AI agent, with its GitHub address written as a web link (blue, underlined)
+  that opens the page, and the MIT licence under it, with the whole disclaimer on its tooltip.
+- **No call that PixInsight 1.9.4 calls deprecated.** The file chooser uses `filePaths` (not `fileNames`), the search
+  for Python reads the environment through `System.getEnvironmentVariable` (not the global function), and the command
+  that opens a web page is chosen by the script's platform directives (not by `corePlatform`): the Console warned at
+  every Run. The dialog test reads the whole Console, from the script's first line, and fails on any call PixInsight
+  calls deprecated (on the package of 0150ca0 it finds two), and on any function the scripts define twice.
 
 ## 1.4.0 — 2026-10-31
 
