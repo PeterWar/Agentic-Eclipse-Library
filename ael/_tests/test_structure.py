@@ -104,7 +104,7 @@ def test_pyramids_put_a_ramp_back_in_place_on_a_canvas_of_odd_size():
     detail at any scale, so on a canvas of odd size (389 × 515) every plane of the median transform, and the copy
     reduced by 2 or 3 and enlarged back that the coherence layer uses, must stay at zero inside the data (measured:
     5e-7, the float precision). Negative control: cropping the odd row and stretching back, as a first unpublished version did, leaves
-    the ramp in the planes (measured: 6e-3 to 1e-2, a shift of 1.4–2.9 px of this ramp)."""
+    the ramp in the planes (measured: 6e-3 to 1e-2, a shift of 0.8–3.2 px of this ramp, depending on the plane and the axis)."""
     h, w = 389, 515
     yy, xx = np.mgrid[:h, :w].astype(np.float32)
     ramp = (0.004 * xx + 0.003 * yy).astype(np.float32)

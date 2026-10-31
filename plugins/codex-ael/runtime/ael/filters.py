@@ -498,7 +498,8 @@ def _pad_to(c: np.ndarray, k: int) -> np.ndarray:
 
     A pyramid that reduces by ``k`` and enlarges back must keep every block whole: cropping the odd row and
     stretching the reduced image over the full size moves each enlarged block by up to half a block, and the shift
-    adds up scale after scale (up to 12 px across a 10,000-pixel canvas in a first, unpublished version). Padded, every block is enlarged
+    adds up scale after scale (in a first, unpublished version, about 12 px near the Sun and up to 23 px at the edges of
+    a 7506 × 10,551 canvas). Padded, every block is enlarged
     back exactly where it came from; crop the result to the original size."""
     h, w = c.shape
     H, W = -(-h // k) * k, -(-w // k) * k
@@ -539,10 +540,12 @@ def multiscale_median(img: np.ndarray, valid: np.ndarray | None, n_scales: int =
     """Pyramidal median transform (Starck, Murtagh & Bijaoui 1998, *Image Processing and Data Analysis*, §1.5;
     Starck & Murtagh 2006, ch. 2): ``c_{j+1}`` = the 5×5 median of ``c_j`` reduced by two, ``w_j = c_j − c_{j+1}``
     enlarged back.  A median ignores a few extreme pixels, so a star, a prominence or the edge of the data does not
-    spread a dark ring into the scales around it, and a coefficient cannot change sign because of its neighbours.
+    spread a dark ring into the sum of the scales around it (a single plane can still go negative beside a blob 2 px or
+    wider).
     The medians use observed pixels only.  The image is padded with no data up to a multiple of ``2^n_scales``
     (:func:`_pad_to`), so that every scale is enlarged back exactly where it came from (a first, unpublished version
-    cropped an odd size and stretched it back, and the background of the coarse scales slid by up to 12 px).  Returns
+    cropped an odd size and stretched it back, and the background of the coarse scales slid by about 12 px near the Sun and up to 23 px at the edges of the
+    2026 canvas).  Returns
     the list of the ``n_scales`` detail planes at full size (scale j ≈ 2^j px), NaN where there is no data."""
     a = np.asarray(img, np.float32)
     m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))

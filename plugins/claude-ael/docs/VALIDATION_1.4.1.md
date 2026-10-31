@@ -125,10 +125,11 @@ by the test:
   was, through the filters and the saving, and the run ended with the layered PSB open and the closing message.
 
 The programs ran the packages of the connectors as they are in this release, file for file, except
-`runtime/VERSION.json`, which names the commit they were built from, and the three files of `runtime/ael` that carry
-the five new structure filters (`filters.py`, `filterbank.py`, `develop.py`), which the connectors do not use. On the
-six Vixen frames the engine gives the same linear master, byte for byte, and the same layers with them as without
-them.
+`runtime/VERSION.json`, which names the commit they were built from, and six files of `runtime/ael`: `filters.py`,
+`filterbank.py` and `develop.py`, which now hold the five new structure filters (the connectors take only AEL's 16
+filters and cannot call them), and three test files. On the six Vixen frames the engine gives the same linear
+master, byte for byte, and the same layers with them as without them, in both programs; PixInsight's dialog, menu
+and bridge tests also passed again on the package with them.
 
 ## Other checks
 
@@ -139,9 +140,10 @@ them.
   and one for their pyramids (a ramp on a canvas of odd size).
 - **The five structure filters** ([`STRUCTURE_FILTERS.md`](STRUCTURE_FILTERS.md)): synthetic scenes with known
   truth, and the yardstick of two independent optics on the 2026 stacks. `steerable_g2` shows as much confirmed fine
-  detail as ACHF iso 04 with less than half of the unconfirmed part; `noise_gate` gives the same layer as ACHF iso 04
-  on these stacks and `hessian_ridge` nearly so; the diffusion draws strokes on pure noise. A first, unpublished
-  version of the median transform, and of the diffusion's reduced copy, slid the coarse scales by up to 12 px; it was
+  detail as ACHF iso 04 with less than half of the unconfirmed part (probably because its passband has no 1-pixel
+  scale); `noise_gate` gives the same layer as ACHF iso 04
+  within 4 R☉ on these stacks and `hessian_ridge` nearly so; the diffusion draws strokes on pure noise. A first, unpublished
+  version of the median transform, and of the diffusion's reduced copy, slid the coarse scales by about 12 px near the Sun and up to 23 px at the canvas edges; it was
   found by an audit, cured where it was born (the pyramid now pads with no data to whole blocks), tested with a ramp
   on a canvas of odd size, and the yardstick was run again on the cured code.
 - `tools/check_connectors.py`: 12 of 12. New: both dialogs show the same licence line and the disclaimer of their
@@ -158,8 +160,8 @@ them.
 ## What these checks taught
 
 - **A filter that reduces and enlarges has to be tested on a canvas of odd size.** The structure filters' synthetic
-  scenes were 320 px, a whole number of blocks, and passed; the audit on the 10,551-pixel canvas of 2026 found the
-  slide.
+  scenes were 320 px, a whole number of blocks, and passed; the audit on the 7506 × 10,551-pixel canvas of 2026
+  found the slide.
 
 - **A gate has to look at what a person sees.** The Photoshop test of an earlier 1.4.1 package (`e685a11`) passed 17 of 17 with a
   progress window that never reached the screen (the window server held it at 0 × 0 pixels, off screen, while the

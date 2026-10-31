@@ -51,15 +51,15 @@ plugin goes to 1.1.5; the Claude Code plugin of this repository's marketplace an
 - **Five structure filters, outside the defaults** (`ael/filters.py`, `ael.filterbank.EXTRA`, Photoshop layers 10 to
   14), from a survey of the solar and astronomical image-processing literature made with Gemini (Google):
   `hessian_ridge` (ACHF iso 04 times the Frangi weight of curvilinear structure), `steerable_g2` (the second
-  derivative steered across the local structure), `mmt` (the ACHF iso 04 bands taken from the pyramidal median
-  transform), `noise_gate` (ACHF iso 04 after Fourier noise gating in ln r and position angle) and
+  derivative steered across the local structure), `mmt` (the residual minus its median background at the fifth scale of a
+  pyramidal median transform, all five scales weighed alike), `noise_gate` (ACHF iso 04 after Fourier noise gating in ln r and position angle) and
   `coherence_diffusion` (the 8–32 px band after coherence-enhancing diffusion). They are in neither `"all"` nor the
   defaults, and the connectors do not offer them: a recipe lists them by name. Judged by two independent optics of
   the 2026 eclipse, `steerable_g2` shows as much confirmed fine detail as ACHF iso 04 with less than half of the
-  unconfirmed part; on the same stacks `noise_gate` gives the same layer as ACHF iso 04 and `hessian_ridge` nearly
-  so; on pure noise the diffusion draws strokes. A first, unpublished version of the median transform, and of the
+  unconfirmed part (probably because its passband has no 1-pixel scale); on the same stacks `noise_gate` gives the
+  same layer as ACHF iso 04 within 4 R☉ and `hessian_ridge` nearly so; on pure noise the diffusion draws strokes. A first, unpublished version of the median transform, and of the
   reduced copy the diffusion works on, cropped an odd row and stretched the rest back, which slid the coarse scales
-  by up to 12 px on the 2026 stacks: both now pad with no data to whole blocks, and a ramp on a canvas of odd size
+  by about 12 px near the Sun and up to 23 px at the edges of the 2026 canvas: both now pad with no data to whole blocks, and a ramp on a canvas of odd size
   tests it. Seven tests are new. Details and measurements: `docs/STRUCTURE_FILTERS.md`.
 - **PixInsight's linear master was black.** PixInsight 1.9.4 reads a floating-point TIFF whose last sample is NaN as
   all zeros, and rescales one whose values leave 0–1. The PixInsight connector's master is now written in 0–1 (DN/s

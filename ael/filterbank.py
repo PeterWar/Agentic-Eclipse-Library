@@ -16,8 +16,9 @@ NAMES = ('nrgf','nrgf_log','rhef','rhef_upsilon','rhef_local60','rhef_local30',
          'achf_angular','achf_angular4','achf_angular8',*ISO,'mgn','wow','wow_edge_aware')
 DEFAULTS = ('nrgf','wow_edge_aware','achf_iso_04')
 # Structure-aware detail (since 1.4.1), from the survey of 30-10-2026: never in "all" nor in the defaults; a recipe
-# lists them by name. The first four are ACHF iso 04 (the default detail layer) with one change each, so the
-# yardstick of two optics can tell what the change brings; the fifth smooths along coherent structure.
+# lists them by name. hessian_ridge and noise_gate are ACHF iso 04 (the default detail layer) with one change each, so
+# the yardstick of two optics can tell what the change brings; steerable_g2 and mmt are detail layers of their own, and
+# coherence_diffusion smooths along coherent structure.
 EXTRA = ('hessian_ridge','steerable_g2','mmt','noise_gate','coherence_diffusion')
 ALIASES = {'wow_bilateral': 'wow_edge_aware'}           # the name of the edge-aware WOW up to 1.3.4
 
@@ -435,8 +436,9 @@ def structure_filter(name, luminance, valid, geometry):
       (:func:`ael.filters.ridge_weight`): rays, loops and cavity edges at any angle stay, isotropic grain is lowered.
     - ``steerable_g2``: the second derivative steered across the local structure (:func:`ael.filters.steerable_g2`),
       σ 1.5–12 px: filaments in any orientation, not only along r or θ.
-    - ``mmt``: the ACHF iso 04 bands taken from the pyramidal median transform (:func:`ael.filters.multiscale_median`)
-      instead of Gaussians: no dark ring around a star, a prominence or the edge of the data.
+    - ``mmt``: the residual minus its median background at the fifth scale of the pyramidal median transform
+      (:func:`ael.filters.multiscale_median`), all five scales weighed alike (ACHF iso 04 favours the fine ones):
+      no dark ring around a star, a prominence or the edge of the data.
     - ``noise_gate``: ACHF iso 04 of the residual after Fourier noise gating in (ln r, PA) (:func:`ael.filters.noise_gate`).
     - ``coherence_diffusion``: the 8–32 px band of the residual after coherence-enhancing diffusion
       (:func:`ael.filters.coherence_diffusion`), computed on a copy reduced to at most 6 Mpx. ⚠ On pure noise the
