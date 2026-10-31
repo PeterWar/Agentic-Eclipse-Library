@@ -33,14 +33,21 @@
 #include <pjsr/UndoFlag.jsh>
 
 var AEL_WORKFLOW_SCRIPT = AEL_BRIDGE_CORE_DIR + "/python/ael_workflow.py";
+// A whole totality with its darks and flats can take long: the RAW workflow has hours, and aborting from the Console
+// stops it at its next step.
+var AEL_RAW_TIME_LIMIT_MS = 4 * 3600 * 1000;
 
-function aelWorkflowExecute( operation, configPath, runtime, aelRoot )
+// The RAW workflow is the engine the Photoshop connector shares (python/ael_auto.py), reached through the bridge's
+// helper; the filter layers of an open image go through the workflow helper.
+function aelWorkflowExecute( operation, configPath, runtime, aelRoot, onWait )
 {
-   if ( !File.exists( AEL_WORKFLOW_SCRIPT ) )
-      throw new Error( "Workflow helper not found: " + AEL_WORKFLOW_SCRIPT );
-   let run = aelBridgeRun( runtime.python, [ AEL_WORKFLOW_SCRIPT, operation, configPath ],
+   let raw = operation == "raw";
+   let script = raw ? AEL_BRIDGE_CHECK_SCRIPT : AEL_WORKFLOW_SCRIPT;
+   if ( !File.exists( script ) )
+      throw new Error( "Workflow helper not found: " + script );
+   let run = aelBridgeRun( runtime.python, [ script, operation, configPath ],
                            aelRoot && aelRoot.length ? aelRoot : File.systemTempDirectory,
-                           aelBridgeEnvironment( aelRoot ), 1800000 );
+                           aelBridgeEnvironment( aelRoot ), raw ? AEL_RAW_TIME_LIMIT_MS : 1800000, onWait );
    if ( run.timedOut )
       throw new Error( "The AEL workflow exceeded its time limit and was stopped." );
    if ( !run.ok )
@@ -136,9 +143,9 @@ function aelWorkflowBuildComposite( result )
    return composite;
 }
 
-function aelWorkflowRunAndOpen( operation, configPath, runtime, aelRoot, buildComposite )
+function aelWorkflowRunAndOpen( operation, configPath, runtime, aelRoot, buildComposite, onWait )
 {
-   let result = aelWorkflowExecute( operation, configPath, runtime, aelRoot );
+   let result = aelWorkflowExecute( operation, configPath, runtime, aelRoot, onWait );
    try
    {
       aelWorkflowOpenImages( result );
@@ -176,6 +183,98 @@ function aelWorkflowNewOutput( root, kind )
    while ( File.exists( output ) || File.directoryExists( output ) )
       output = base + "_" + String( ++suffix );
    return output;
+}
+
+// The engine writes how far it has gone into a small JSON file; each new step goes to the Console. Aborting the script
+// from the Console leaves the file that stops the engine at its next step.
+function aelWorkflowProgress( progressPath, cancelPath )
+{
+   let last = 0;
+   let said = "";
+   console.abortEnabled = true;
+   return function()
+   {
+      let now = Date.now();
+      if ( now - last < 500 )
+         return;
+      last = now;
+      if ( console.abortRequested && !File.exists( cancelPath ) )
+      {
+         File.writeTextFile( cancelPath, "stop" );
+         Console.warningln( "AEL: stopping at the next step…" );
+      }
+      if ( !File.exists( progressPath ) )
+         return;
+      let info;
+      try { info = JSON.parse( File.readTextFile( progressPath ) ); } catch ( busy ) { return; }
+      let text = info.stage + ( info.total ? " (" + info.done + " of " + info.total + ")" : "" )
+                 + ( info.message ? ": " + info.message : "" );
+      if ( text != said )
+      {
+         Console.writeln( "AEL: " + text + " — " + Math.round( info.elapsed_s || 0 ) + " s" );
+         Console.flush();
+         said = text;
+      }
+   };
+}
+
+// RAW photos of the totality in, and, if there are any, darks and flats (mixed: AEL tells them apart). AEL measures the
+// rest (camera, levels, the Moon, the registration on the Sun, colour) and makes the linear master and its default
+// filter layers, which open here with their PixelMath composite. The same photos give the same master and layers as in
+// the Photoshop connector. A run that stops leaves no empty folder behind.
+function aelWorkflowRaw( raw, calibration, outputRoot, pythonPath, aelRoot, buildComposite )
+{
+   let runtime = aelBridgeCandidates( pythonPath, aelRoot );
+   if ( !runtime.ok )
+      throw new Error( runtime.message || "Python preflight failed." );
+   Settings.write( AEL_BRIDGE_SETTINGS_KEY + "pythonPath", DataType.UTF8String, runtime.python );
+   let tempDir = File.systemTempDirectory + "/pixinsight-ael-" + aelBridgeTimestamp();
+   File.createDirectory( tempDir, false );
+   let configPath = tempDir + "/raw.json";
+   let progressPath = tempDir + "/progress.json";
+   let cancelPath = tempDir + "/cancel";
+   let temporaryFiles = [ configPath, progressPath, tempDir + "/progress.tmp", cancelPath ];
+   let output = aelWorkflowNewOutput( outputRoot, "stacked" );
+   try
+   {
+      File.writeTextFile( configPath, JSON.stringify( { raw: raw, calibration: calibration, out: output,
+                                                        progress: progressPath, cancel: cancelPath }, null, 1 ) );
+      console.show();
+      Console.writeln( "AEL: " + raw.length + " RAW photos and " + calibration.length + " darks and flats, into " + output );
+      let result = aelWorkflowRunAndOpen( "raw", configPath, runtime, aelRoot, buildComposite,
+                                          aelWorkflowProgress( progressPath, cancelPath ) );
+      let s = result.summary;
+      let left = result.left_out || [];
+      Console.noteln( "AEL: " + s.frames_stacked + " of " + s.frames_chosen + " photos stacked into one image ("
+                      + s.camera + ", " + s.date + "), saved with its layers and a receipt in " + result.out );
+      for ( let i = 0; i < left.length; ++i )
+         Console.warningln( "Left out: " + left[i].file + ": " + left[i].reason );
+      if ( s.cloudy )
+         Console.warningln( "The sky changed during the totality (thin clouds or haze): faint arcs may show where an "
+                            + "exposure saturates." );
+      return result;
+   }
+   catch ( error )
+   {
+      if ( File.directoryExists( output ) && aelWorkflowEmptyFolder( output ) )
+         try { File.removeDirectory( output ); } catch ( busy ) {}
+      throw error;
+   }
+   finally
+   {
+      aelBridgeCleanup( tempDir, temporaryFiles );
+   }
+}
+
+function aelWorkflowEmptyFolder( folder )
+{
+   let find = new FileFind;
+   let empty = true;
+   for ( let more = find.begin( folder + "/*" ); more && empty; more = find.next() )
+      if ( find.name != "." && find.name != ".." )
+         empty = false;
+   find.end();
+   return empty;
 }
 
 // AEL's filter layers from an open image. The image is handed to AEL as the bridge hands it (exported to a temporary

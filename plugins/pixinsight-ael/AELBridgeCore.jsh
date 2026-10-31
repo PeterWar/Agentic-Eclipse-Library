@@ -116,7 +116,8 @@ function aelBridgeEnvironment( aelRoot )
    return environment;
 }
 
-function aelBridgeRun( program, arguments, workingDirectory, environment, timeoutMs )
+// onWait, when given, is called again and again while the process runs (it keeps its own pace).
+function aelBridgeRun( program, arguments, workingDirectory, environment, timeoutMs, onWait )
 {
    let process = new ExternalProcess;
    let stdout = "";
@@ -139,6 +140,8 @@ function aelBridgeRun( program, arguments, workingDirectory, environment, timeou
    while ( process.isStarting || process.isRunning )
    {
       CoreApplication.processEvents();
+      if ( onWait )
+         onWait();
       if ( timeoutMs > 0 && Date.now() - started > timeoutMs )
       {
          timedOut = true;

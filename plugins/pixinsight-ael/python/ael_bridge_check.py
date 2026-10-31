@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Small, JSON-only preflight helper for the PixInsight AEL bridge.
+"""Small, JSON-only helper for the PixInsight AEL bridge: the preflight checks, and the RAW workflow that the Photoshop
+connector shares (python/ael_auto.py).
 
 MIT License
 Copyright (c) 2026 Pere Guerra Serra
@@ -10,6 +11,7 @@ https://github.com/PeterWar/Agentic-Eclipse-Library
 from __future__ import annotations
 
 import argparse
+import contextlib
 import hashlib
 import json
 import sys
@@ -183,10 +185,24 @@ def inspect(path: Path, width: int, height: int, channels: int, require_icc: boo
          sha256=digest.hexdigest(), bytes=path.stat().st_size)
 
 
+def raw(config: Path) -> None:
+    """RAW photos in, AEL's filter layers and their PixelMath composite out: the same engine, and the same photos give
+    the same linear master and layers, as in the Photoshop connector. Anything printed on the way goes to the error
+    stream, so that the answer is the only text PixInsight reads, and a value the engine leaves undefined (NaN) is sent
+    as null, which PixInsight's JSON reader accepts."""
+    from ael_auto import run_auto
+    cfg = json.loads(config.read_text(encoding="utf-8"))
+    with contextlib.redirect_stdout(sys.stderr):
+        answer = run_auto(dict(cfg, program="pixinsight"))
+    emit(**json.loads(json.dumps(answer, default=str), parse_constant=lambda constant: None))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("probe")
+    stacked = sub.add_parser("raw")
+    stacked.add_argument("config", type=Path)
     source = sub.add_parser("source-range")
     source.add_argument("path", type=Path)
     check = sub.add_parser("inspect")
@@ -201,12 +217,14 @@ def main() -> None:
     try:
         if args.command == "probe":
             probe()
+        elif args.command == "raw":
+            raw(args.config)
         elif args.command == "source-range":
             source_range(args.path)
         else:
             inspect(args.path, args.width, args.height, args.channels, args.require_icc, args.icc_source, args.nonfinite)
     except Exception as exc:
-        emit(ok=False, kind="preflight_error", message=str(exc))
+        emit(ok=False, kind=type(exc).__name__ if args.command == "raw" else "preflight_error", message=str(exc))
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Detect a suitable Python and run the PixInsight bridge validation.
+"""Detect a suitable Python and run the PixInsight bridge validation; with RAW photos of a totality (--raw), also the
+dialog as a person uses it, the stacked image from those photos included.
 
 MIT License — Copyright (c) 2026 Pere Guerra Serra.
 Processed with Agentic Eclipse Library by Pere Guerra —
@@ -15,6 +16,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 
 CREDIT = ("Processed with Agentic Eclipse Library by Pere Guerra — "
           "https://github.com/PeterWar/Agentic-Eclipse-Library")
@@ -72,6 +74,9 @@ def main() -> None:
                         default=Path("/Applications/PixInsight/PixInsight.app/Contents/MacOS/PixInsight"))
     parser.add_argument("--skip-pixinsight", action="store_true", help="run only direct AEL checks (not a full validation)")
     parser.add_argument("--skip-captures", action="store_true")
+    parser.add_argument("--raw", type=Path, help="text file with RAW photos of one totality, one path per line: the "
+                        "dialog then also makes a stacked image from them in PixInsight (tests/dialog_flow.py)")
+    parser.add_argument("--calibration", type=Path, help="text file with their darks and flats, one path per line")
     args = parser.parse_args()
     repo = Path(__file__).resolve().parents[3]
     python, runtime = detect(repo)
@@ -87,7 +92,15 @@ def main() -> None:
         env["AEL_VALIDATION_OUTPUT"] = str(args.output.resolve())
     env["AEL_VALIDATION_RUNTIME"] = json.dumps(runtime)
     completed = subprocess.run(command, env=env, check=False)
-    raise SystemExit(completed.returncode)
+    if completed.returncode or not args.raw or args.skip_pixinsight:
+        raise SystemExit(completed.returncode)
+    # the dialog as a person uses it, every operation, the stacked image from the RAW photos given
+    flow = [python, str(Path(__file__).with_name("dialog_flow.py")), "--repo", str(repo), "--python", python,
+            "--pixinsight", str(args.pixinsight), "--raw", str(args.raw),
+            "--output", str((args.output or Path(tempfile.mkdtemp(prefix="ael-dialog-flow-"))) / "dialog_flow")]
+    if args.calibration:
+        flow += ["--calibration", str(args.calibration)]
+    raise SystemExit(subprocess.run(flow, env=env, check=False).returncode)
 
 
 if __name__ == "__main__":

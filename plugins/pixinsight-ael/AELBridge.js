@@ -26,7 +26,7 @@
 
 #engine v8
 #feature-id AELBridge : Utilities > Agentic Eclipse Library
-#feature-info Structure images, unrolled views and filter layers of the corona from an open image, or a linear master from totality frames (experimental), made by the Agentic Eclipse Library.
+#feature-info A stacked image with its filter layers from the RAW photos of the totality, or structure images, unrolled views and filter layers of the corona from an open image, made by the Agentic Eclipse Library.
 
 #include "AELWorkflowCore.jsh"
 #include "AELBridgeDialog.jsh"

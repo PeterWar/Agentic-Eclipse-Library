@@ -9,8 +9,9 @@ dialog_flow.py includes the dialog files itself; nothing there runs AELBridge.js
 starts. Here the entry file runs unchanged in a new PixInsight instance (-n --automation-mode, never an existing one):
 it includes its own files, builds its dialog and calls execute(), which waits for a click. The native Dialog class is
 replaced, before the entry file is read, by a subclass that records every dialog built; a timer that fires inside the
-dialog's own event loop checks its title, that it is visible, its Run button, its fields, its four operations, its
-output folder and the AEL folder it starts with, and closes it with Cancel. A message box never appears (it would wait
+dialog's own event loop checks its title, that it is visible, its Run button, its fields, its four operations (the
+first, the stacked image from RAW photos, chosen and its lists shown), its output folder and the AEL folder it starts
+with, and closes it with Cancel. A message box never appears (it would wait
 for a click that does not come). The control: the same check on a copy of the plugin whose entry has lost the include
 of its dialog must fail, so that a broken entry file cannot pass.
 
@@ -31,9 +32,9 @@ import tempfile
 ENTRIES = {
     "bridge": {"file": "AELBridge.js", "title": "Agentic Eclipse Library", "run": "Run",
                "controls": ["imageList", "modeList", "outputEdit", "outputButton", "rmaxEdit", "allFiltersCheck",
-                            "filesText", "addFilesButton", "darksText", "addDarksButton", "flatsText", "addFlatsButton"],
-               "operations": ["Structure image", "Unrolled view of the corona", "Filter layers and PixelMath composite",
-                              "Linear master from frames (experimental)"]},
+                            "rawText", "addRawButton", "calibrationText", "addCalibrationButton"],
+               "operations": ["Stacked image from RAW photos", "Structure image", "Unrolled view of the corona",
+                              "Filter layers and PixelMath composite"]},
 }
 # What a person who does not know the technology should not have to fill in (Pere, 30-10): none of these fields exists.
 # darkEdit and flatEdit took one file each; the lists that replace them take several or one master.
@@ -83,8 +84,14 @@ timer.onTimeout = function()
       info.python = dialog.pythonPath !== undefined ? dialog.pythonPath : null;
       info.output = dialog.outputEdit ? dialog.outputEdit.text : null;
       if ( dialog.modeList )
+      {
          for ( let i = 0; i < dialog.modeList.numberOfItems; ++i )
             info.operations.push( dialog.modeList.itemText( i ) );
+         info.chosen = dialog.modeList.itemText( dialog.modeList.currentItem );
+         // the RAW lists show while their operation is chosen, the image list does not
+         info.rawShown = Boolean( dialog.rawText && dialog.rawText.visible );
+         info.imageShown = Boolean( dialog.imageList && dialog.imageList.visible );
+      }
    }
    catch ( error )
    {
@@ -163,6 +170,8 @@ def judge(name: str, recorded: dict, expect_root: Path | None) -> dict[str, bool
         f"{name}_closed_and_finished": recorded.get("finished") is True and not recorded.get("stopped_by_timeout"),
         f"{name}_no_message_box": recorded.get("messages") == [],
         f"{name}_four_operations": first.get("operations") == spec["operations"],
+        f"{name}_opens_on_the_RAW_photos": first.get("chosen") == spec["operations"][0]
+                                           and first.get("rawShown") is True and first.get("imageShown") is False,
         # the folder kept from the last run while it exists, otherwise Downloads
         f"{name}_output_folder_ready": bool(first.get("output")) and (
             first["output"] == str(Path.home() / "Downloads") or Path(first["output"]).is_dir()),
