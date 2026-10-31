@@ -49,12 +49,15 @@ python -m ael polar     --input out/structure_cool.tif --geometry out/structure_
 python -m ael motion    --config motion_config.json --out out/     # see examples/motion_config_template.json
 ```
 
-**From PixInsight or Photoshop (experimental).** [`plugins/pixinsight-ael/`](plugins/pixinsight-ael/) and
-[`plugins/photoshop-ael/`](plugins/photoshop-ael/) run these tools from inside the program: structure and unrolled
-views of the open image, and the filter layers of a linear stack, as a PixelMath composite in PixInsight or as one
-layered 16-bit PSB in Photoshop. Each package carries its own copy of the AEL engine. The AEL products a connector
-delivers (structure and unrolled views, filter layers, the linear master) are the files `python -m ael` writes from a
-terminal on the same input; the connector adds conversions for the program, such as 16-bit copies of the layers.
+**From PixInsight or Photoshop (to be tested).** [`plugins/pixinsight-ael/`](plugins/pixinsight-ael/) and
+[`plugins/photoshop-ael/`](plugins/photoshop-ael/) make the whole image from inside the program. You choose the RAW
+photos of the totality and, if you have them, darks and flats; the connector sorts the files, calibrates, finds the
+Moon in every photo, registers them on the Sun, stacks them and adds AEL's filter layers, with a receipt of what it
+measured and assumed. Both run the same engine (the same file in each package): Photoshop receives one layered
+16-bit PSB, PixInsight the same layers as images with the PixelMath expressions that compose them. In PixInsight they
+also work on an open linear stack (structure and unrolled views, filter layers). They have been tested on the
+author's Mac with five cameras of two eclipses, but not yet by other people: in theory they should work, and reports
+are welcome. Each package carries its own copy of the AEL engine.
 
 Every function reads only observed pixels; where there is no data the result is `NaN` (display files show it as
 black), never a fill or a mirror.
@@ -227,16 +230,20 @@ commercially; the licence only asks you to keep the copyright and permission not
 
 ## What is new in 1.4.0
 
-Two experimental connectors run AEL from inside PixInsight and Photoshop. The `ael` code does not change.
+Two connectors run AEL from inside PixInsight and Photoshop, from the RAW photos to a stacked image with AEL's filter
+layers. **They still have to be tried by other people**, on other computers and other eclipses; on the author's Mac
+they work inside both programs with five cameras of two eclipses, and in theory they should work elsewhere.
 
-- **PixInsight 1.9** ([`plugins/pixinsight-ael/`](plugins/pixinsight-ael/)): structure and unrolled views of the
-  active image, and AEL's filter layers with the PixelMath expressions that compose them.
-- **Photoshop 2026** ([`plugins/photoshop-ael/`](plugins/photoshop-ael/)): the same operations; the filter layers
-  arrive as one layered 16-bit PSB, which Photoshop checks layer by layer against what AEL wrote.
-- In both, the AEL products a connector delivers are the files `python -m ael` writes from the same input, also on a
-  real stack with NaN outside its coverage. The composites the programs draw from those files differ slightly from AEL's
-  own (by 0.504 of a 16-bit step in PixInsight, and up to 5 steps in Photoshop). The linear master they offer is not
-  valid on real eclipse frames yet, and their dialogs say so. See [`docs/VALIDATION_1.4.0.md`](docs/VALIDATION_1.4.0.md).
+- **The same two choices in both:** the RAW photos of the totality, and darks and flats if you have them. Everything
+  else (which photos to keep, the levels, the Moon, the registration on the Sun with the turn of the field, the light
+  of each photo, the colour, the filters) is measured on the files and written in a receipt.
+- **The same engine in both** ([`python/ael_auto.py`](plugins/photoshop-ael/python/ael_auto.py)): the same photos
+  give the same linear master and the same filter layers in either program. Photoshop receives one layered 16-bit
+  PSB, checked layer by layer; PixInsight the layers as images with their PixelMath composite, and it also works on
+  an open linear stack.
+- **`ael` measures the geometry on the image** (`ael.geometry.find_disc`, `python -m ael geometry`): no geometry file
+  is needed to start.
+- Measurements, limits and tests: [`docs/VALIDATION_1.4.0.md`](docs/VALIDATION_1.4.0.md).
 
 ## What is new in 1.3.6
 

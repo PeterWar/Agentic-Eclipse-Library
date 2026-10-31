@@ -1,10 +1,13 @@
 # Changelog
 
-## 1.4.0 — 2026-10-30
+## 1.4.0 — 2026-10-31
 
-Two experimental connectors run `ael` from inside PixInsight and Photoshop, and `ael` measures the geometry of an
-eclipse image on the image itself, so that nobody has to write a geometry file to start. The Codex plugin goes to 1.1.4; the Claude Code plugin of this repository's marketplace and the
-Claude plugin folder `plugins/claude-ael/` go to 1.4.0.
+Two connectors run `ael` from inside PixInsight and Photoshop, from the RAW photos of a totality to a stacked image
+with AEL's filter layers, and `ael` measures the geometry of an eclipse image on the image itself. **The connectors
+still have to be tried by other people, on other computers and other eclipses:** they have been tested on the
+author's Mac, inside both programs, with five cameras of two eclipses, and in theory they should work; please report
+what you find. The Codex plugin goes to 1.1.4; the Claude Code plugin of this repository's marketplace and the Claude
+plugin folder `plugins/claude-ael/` go to 1.4.0.
 
 - **Geometry measured on the image** (`ael.geometry.find_disc` and `measure_geometry`, `python -m ael geometry`, and
   `--geometry auto` for `structure` and `polar`). It finds the lunar disc with no input, after the lunar detection of
@@ -18,54 +21,66 @@ Claude plugin folder `plugins/claude-ael/` go to 1.4.0.
   disc itself is saturated; on 660 synthetic eclipses (lunar radius 25–420 px, Moon 1.00–1.08 times the Sun, off by
   up to the difference of the radii, partly outside the frame, saturated, colour or mono) it is within max(1 px, 1 %
   of the radius) in 631, and every failure is a Moon of 25 px.
+- **One RAW engine for both connectors** (`python/ael_auto.py`, the same file in each; `tools/check_connectors.py`
+  compares the two copies byte for byte). The person chooses the RAW photos of the totality and, if there are any,
+  darks and flats mixed together; the engine measures everything else on the files and writes it in a receipt:
+  - which files are totality frames, darks or flats (calibration files are sorted by their embedded preview, and
+    every dark is checked again on its RAW data); frames that show the photosphere (Baily's beads, the diamond ring)
+    or sunlight scattered near a contact stay out; one camera and one ISO per stack, the most frequent;
+  - the black level on the sensor's covered border (LibRaw misreports it for the Canon EOS R6 Mark III), the top
+    15 % of the range left out because some sensors stop being linear before they clip, a master dark for each
+    exposure and a master flat;
+  - the Moon of every frame on its limb, and the registration on the Sun: the corona of each frame, band-passed in the
+    log between 1.36 and 3 solar radii, is correlated with the reference frame and refined by Gauss-Newton for the
+    shift and the turn of the field; the lunar motion is fitted as a straight line in time on the frames the corona
+    registered, and each frame is placed by its own limb minus that line (the 1/3200 s frames included). When the
+    Moon and the corona do not make one straight motion (more than 1 px off it, or faster than the Moon can cross the
+    Sun), every frame keeps its own corona registration and a frame without one stays out; shuffled capture times
+    therefore leave the stack in place instead of moving frames;
+  - one pointing of the mount per stack (a jump of more than 2 % of the sensor's diagonal starts another), so that
+    no edge of a photo crosses the image;
+  - one photometric gain per photo, measured on a polar grid of the corona; the gains are applied only when, once
+    fitted, the photos still disagree by more than 3 % from cell to cell (thin cloud or haze crossing the field), and
+    each photo's weight fades over the top half of its range, so that two exposures hand over without a step;
+  - the Sun's radius from the lunar radius and the eclipse's magnitude (a table of the total eclipses 2008–2035),
+    the camera's daylight white balance and its camera-to-sRGB matrix from LibRaw (a low Sun stays golden; an
+    astro-modified camera comes out red), and AEL's three default filter layers, with the band that the Moon swept
+    during the frames left out of every filter;
+  - a new folder for every run, with the linear master as a 32-bit TIFF, a preview and the receipt.
+- **`plugins/photoshop-ael/`, for Photoshop 2026.** A dialog with the two file choices and the output folder
+  (Downloads the first time, with **Browse…**); the engine runs in the background with a progress window. The result
+  is one layered 16-bit PSB written and verified by `ael.photoshop`; Photoshop reads it again and compares every
+  layer's name, mode, opacity byte and visibility with what AEL wrote, and a difference stops the run. Photoshop's
+  own composite of that file stays within 5 of 65,535 of AEL's (99.9th percentile 4), the effect of its 15-bit
+  arithmetic.
 - **`plugins/pixinsight-ael/`, for PixInsight 1.9.** One menu entry, **Utilities > Agentic Eclipse Library**, with
-  one dialog: it runs `structure` and `polar` on the active image, makes AEL's filter layers from the active image, or
-  a linear master from frames, and opens every product in a new window. The filter layers come with the
-  PixelMath expressions that compose them, starting from the same floating-point values AEL starts from (0.504 of a
-  16-bit step from AEL's composite, against a gate of one step). When PixInsight does not hold an image as its file
-  stores it (it rescales a floating-point TIFF with values outside 0–1, writes NaN as 1.0 and reads a TIFF whose last
-  sample is NaN as black), the bridge has AEL read the file itself, so its AEL products stay those of
-  `python -m ael`.
-- **`plugins/photoshop-ael/`, for Photoshop 2026.** The same operations. The filter layers arrive as one layered
-  16-bit PSB written and verified by `ael.photoshop`; Photoshop reads it again and compares every layer's name, mode,
-  opacity byte and visibility with what AEL wrote, and a difference stops the run. Photoshop's own composite of that
-  file stays within 5 of 65,535 of AEL's (99.9th percentile 4), the effect of its 15-bit arithmetic.
+  one dialog. Its first operation, **Stacked image from RAW photos**, takes the same two file choices and output
+  folder and runs the same engine: the same linear master and the same layers, opened as images with the PixelMath
+  expressions that compose them, starting from the same floating-point values AEL starts from (0.504 of a 16-bit
+  step from AEL's composite). Its other operations work on the active image, a linear stack made elsewhere:
+  `structure` and `polar`, and AEL's filter layers. When PixInsight does not hold an image as its file stores it (it
+  rescales a floating-point TIFF with values outside 0–1, writes NaN as 1.0 and reads a TIFF whose last sample is NaN
+  as black), the bridge has AEL read the file itself.
 - **Packages.** Each connector's `tools/build_package.py` writes a folder with the AEL engine inside (`runtime/ael`,
   checked byte by byte), synthetic demonstration files and a deterministic ZIP. Neither connector names an
   interpreter: each finds a Python that can import the AEL it carries and its dependencies, and both refuse an AEL
-  older than 1.4.0.
-- **No geometry or camera file needed.** The PixInsight dialog asks only for the operation, the image (or the
-  files) and the output folder, which starts at Downloads and has a **Browse…** button: no Python, AEL folder,
-  geometry or camera profile. Its file lists take several files at once: RAW (CR2, CR3, NEF, ARW, DNG and others),
-  TIFF or FITS. AEL measures the geometry on the
-  image and a new window draws the circle it found; each RAW file gives its levels (the black measured on the sensor's covered
-  border, which LibRaw misreports for the Canon EOS R6 Mark III, and 85 % of the range counted as linear), and a
-  calibrated TIFF or FITS frame is measured (black 0; saturation where many samples share the highest value). The
-  shared helper takes the same "auto" for the Photoshop connector, whose dialog still asks for a geometry file. The linear master takes a frame whose
-  lunar limb can be measured as its reference when the first one cannot (a long exposure can saturate the lunar disc).
-  A FITS frame gives its exposure and gain from its header. The lunar drift allowed between frames is 0.16 lunar
-  radii, which holds for every total eclipse (the Moon crosses at most twice the difference of the radii, and it never
-  looks more than about 8 % larger than the Sun); it was 0.1 radii, which a long totality such as 2027's exceeds.
-  When the frames record when they were taken, the bound is how far the Moon can cross the Sun in that time (0.65″ a
-  second, for a Moon at least 944″ in radius), so a registration that would make it jump is refused.
-- **Darks and flats for the linear master.** Several darks make one master dark for each exposure (each frame takes
-  the master of its own exposure and ISO, and a frame whose exposure has no dark stops the run); several flats make one
-  master flat (`ael.calibrate.master_flat` for RAW flats). One file is taken as the master itself. The frames are
-  registered calibrated, as they are stacked. Where a flat has no value (a dead pixel, a sensor side with an odd
-  number of pixels) the stack leaves the pixel without data: `ael.stack` accepts NaN in a flat for that.
-- **The linear master registers on the Moon and the corona.** Each frame's Moon, fitted on its limb, places its Sun
-  within the distance the Moon can have moved since the reference frame, and the corona, band-passed at scales that
-  follow the Moon's size, is correlated within that window (a masked normalised cross-correlation in the Fourier
-  domain). With the frames' times, the lunar velocity from the frames whose corona holds places every frame's Sun from
-  its own Moon, the 1/3200 s frames included. The reference frame is chosen at the middle of the exposure ladder. On
-  real frames of three cameras the frames lie within 0.45–0.9 px of the Moon's straight path, and on the Vixen the
-  lunar velocity is the ephemeris's within 0.1 %; the Gauss-Newton fit of the logarithm it replaces put the Moon up to
-  33 px off on Canon EOS 6D frames of 2024. A frame whose limb fit fails, or whose corona disagrees with its Moon by
-  more than 3 px, stops the run with its name, and so do shuffled times.
-- **The linear master is experimental.** Its registration has not been compared frame by frame with an independent
-  one. Both dialogs say so.
-- **`tools/check_connectors.py`** fails when the shared parts of the two connectors drift apart, and runs both probes
-  against stand-in AEL packages to check that each refuses an AEL older than 1.4.0.
+  older than 1.4.0. They need `rawpy` (and, optionally, `exifread`); no ExifTool.
+- **Tested on the author's Mac** with the totality of 12 August 2026 (Vixen VSD90SS + Canon EOS R6 Mark III with
+  893 darks and flats; Sony A7R III with a 300 mm lens, partial phases included) and of 8 April 2024 (Sony A7 III,
+  Canon EOS 6D, Sony A7S): on the Vixen, the engine's placements lie within 0.16 px (median) and 0.73 px (largest) of
+  an independent registration from the lunar limb and the DE440s ephemeris; on six Vixen frames both programs get
+  the same linear master byte for byte and the same layer pixels. Known limits: an astro-modified camera keeps the
+  factory colour matrix; a uniform dimming of the whole field (no cell-to-cell disagreement) is not corrected; the
+  Sony A7S of 2024 (a 1,280 mm Questar without tracking, re-pointed, under cirrus) keeps a ring at the saturation edge
+  of its 1 s frames; only macOS was tried.
+- **`python/ael_workflow.py`** (shared, the same in both but for the program's name) keeps, for the command line,
+  the linear master from calibrated TIFF or FITS frames: each frame's Moon and its corona, correlated at the Moon's
+  scale, with the frames' times bounding how far the Moon can move. It registers shift only. On 15 Vixen frames its
+  lunar velocity is the ephemeris's within 0.1 % where the RAW engine's is 4 % fast (on the Canon EOS 6D and Sony
+  A7 III frames of 2024 the two tie); bringing that correlation into the RAW engine is the next step.
+- **`tools/check_connectors.py`** fails when the shared parts of the two connectors drift apart (the engine, the
+  helper, the demonstration, the builder, the two file choices and the output folder line of both dialogs), and runs
+  both probes against stand-in AEL packages to check that each refuses an AEL older than 1.4.0.
 - Measurements and tests: [`docs/VALIDATION_1.4.0.md`](docs/VALIDATION_1.4.0.md).
 
 ## 1.3.6 — 2026-10-29
