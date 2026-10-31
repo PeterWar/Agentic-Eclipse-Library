@@ -10,11 +10,22 @@ dialog asks for less guesswork.
   per frame does not make the frames agree: where the 1 s frames of the A7S gave way to the 0.05 s ones, the short
   frames were 8 % darker, and 37 % brighter farther out (the cloud dims the corona and spreads part of its light around
   it). The stack stepped there, and every filter drew the step as a ring that follows the corona's brightness. When
-  the sky changed during the totality, each frame now gets a smooth level field: its ratio to the common stack wherever
-  it is linear, smoothed over 64 pixels, with what all frames share over 512 pixels left as it is (the cure of the 2026
-  image's exposure boundaries); it multiplies the frame, so the colour is untouched. On the A7S the exposures agree
-  to within 1–2 % up to the ceiling of the long ones, and the ring is gone. A gain-plus-background model did no better
-  and would have changed the colour of the faint corona.
+  the sky changed during the totality, each frame now gets a smooth level field (the cure of the 2026 image's exposure
+  boundaries): a gain and a background against the common stack, fitted wherever the frame is linear over 64 pixels,
+  with what all frames share over 512 pixels left as it is. The background is taken from each colour in proportion to
+  its light, so the colour is untouched. A gain alone left a step of about 0.5 % in the master; with the background
+  the exposures of the A7S agree within 0.3 %, and along the boundary isophote the master's fine level (12 pixels)
+  dips no more than along other isophotes (1.8 times more with 1.4.0).
+- **The change of grain where one exposure gives way to the next** (`ael/stack.py`, `stack.handover`). With weights
+  proportional to the exposure time, a frame eight times longer kept most of the stack until the last tenth of its
+  range: on the A7S the grain doubled across a band 0.08 solar radii wide, and WOW and ACHF, which normalise by the
+  local noise, drew it as a thin dark contour even with the level matched. With `handover: 'gradual'` (the connectors
+  use it) the taper adds to a frame's variance, as much as one frame of the next shorter exposure has at the middle of
+  the taper, so the shorter exposure takes over across the whole top half of the range. On the A7S the contour along
+  the boundary isophote is no larger than along any other isophote, in each of twelve sectors of position angle (it
+  was up to 11 times larger with 1.4.0). The price: in the band where the exposures hand over (65–88 % of the long
+  frames' ceiling) the grain rises up to twice that of 1.4.0, to the grain the shorter exposure already had just
+  outside the boundary. The default (`'exposure'`) is unchanged.
 - **Dust and hot pixels on the sensor** (`ael_auto.py`, `ael/stack.py`). Without flats, a dust shadow on the sensor
   repeats in a stack of frames placed apart on the sensor as a row of dark dots (on the A7S, shadows 20–65 % deep in
   each frame, dots 6 % deep in the stack). When the frames of an exposure sit at least 3 px apart, the engine finds the
