@@ -227,8 +227,8 @@ def stack_from_config(config_path, out_dir, *, progress=print):
     if not np.isfinite(geo.sun_radius_px) or geo.sun_radius_px <= 0 or not np.isfinite(geo.sun_xy).all():
         raise ValueError('solar geometry must be finite with a positive radius')
     settings = cfg.get('stack', {})
-    keys(settings, 'canvas taper_start band_sigma_px clouds hot_pixels defects moon_guard_px limb_fade_px gain_e_per_dn '
-                   'read_noise_dn', 'stack')
+    keys(settings, 'canvas taper_start handover band_sigma_px clouds hot_pixels defects moon_guard_px limb_fade_px '
+                   'gain_e_per_dn read_noise_dn', 'stack')
     for f in frames:
         keys(f, 'path kind pattern iso train exposure_s black white dark flat transmission background flux_scale '
              'linearity_fraction reference_to_input moon_xy moon_radius_px cirrus_fraction note', 'frame')
@@ -238,6 +238,18 @@ def stack_from_config(config_path, out_dir, *, progress=print):
     taper_start = float(settings.get('taper_start', .8))
     if not 0 < taper_start < 1:
         raise ValueError('taper_start must be in (0,1)')
+    # How an exposure gives way to the next shorter one across its taper. 'exposure': its weight stays proportional
+    # to the exposure time and fades with the taper, so a frame eight times longer keeps most of the stack until the
+    # last tenth of its range and the grain changes there within a few pixels. 'gradual': the taper adds to the
+    # frame's variance instead, as much as one frame of the next shorter exposure has at the middle of the taper and
+    # without limit at the ceiling (weight e(1-s) / ((1-s) + s e/e_next), s the taper's smoothstep), so the shorter
+    # exposure takes over across the whole taper and the grain changes slowly. The filters that normalise by the
+    # local noise draw a sudden change of grain as a contour along the corona's isophotes.
+    handover = settings.get('handover', 'exposure')
+    if handover not in ('exposure', 'gradual'):
+        raise ValueError('handover must be exposure or gradual')
+    ladder = sorted({float(f['exposure_s']) for f in frames})
+    shorter = {e: max([s for s in ladder if s < e], default=None) for e in ladder}
     band_sigma = float(settings.get('band_sigma_px', 0))
     if not np.isfinite(band_sigma) or band_sigma < 0:
         raise ValueError('band_sigma_px must be finite and >=0')
@@ -353,6 +365,8 @@ def stack_from_config(config_path, out_dir, *, progress=print):
         ramp = smoothstep(d, guard, guard+fade)
         wt = np.where(support >= .5, support*taper*ramp, 0).astype(np.float32)
         fine_weight = wt * float(f['exposure_s'])
+        if handover == 'gradual' and shorter[float(f['exposure_s'])]:
+            fine_weight = fine_weight / (taper + (1 - taper) * float(f['exposure_s']) / shorter[float(f['exposure_s'])])
         if band_sigma:
             good = (support >= .5) & (taper > 0)
             low = np.stack([normalized_gaussian(rgb[...,c], good, band_sigma, min_support=.01)

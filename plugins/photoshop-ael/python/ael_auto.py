@@ -47,14 +47,23 @@ MAX_FLATS = 48
 # frame to frame, and the cloud spreads some of the corona's light around it. Where a longer exposure gives way to a
 # shorter one the stack then steps, and the filters draw the step as a ring that follows the corona's brightness.
 # Each frame gets a smooth level field instead (the cure of the 2026 image's exposure boundaries, and a lesson of the
-# 2024 eclipse): its ratio to the common stack, measured wherever it is linear (up to its ceiling: the step lies where
-# the longer exposure's weight fades), smoothed over LEVEL_FIELD_PX; what all the frames share over LEVEL_GAUGE_PX is
-# left as it is. Cells of LEVEL_CELL_PX pixels. A field multiplies the frame: the colour of the corona is untouched.
-# On 16 frames of a Sony A7S under thin cloud (2024) it took the step where the 1 s frames give way to the 0.05 s ones
-# from 8 % to under 2 %, and the ring it drew around the Sun out of the filters.
+# 2024 eclipse): a gain and a background against the common stack, measured wherever the frame is linear (up to its
+# ceiling: the step lies where the longer exposure's weight fades), over LEVEL_FIELD_PX; what all the frames share
+# over LEVEL_GAUGE_PX is left as it is. Cells of LEVEL_CELL_PX pixels. The background is taken from each colour in
+# proportion to its light, so the colour of the corona is untouched. On 16 frames of a Sony A7S under thin cloud
+# (2024), where the 0.05 s frames were 8 % darker than the 1 s ones as these give way and 37 % brighter farther out,
+# the exposures then agree within 0.3 %, and the step left the linear master.
 LEVEL_FIELD_PX = 64
 LEVEL_GAUGE_PX = 512
 LEVEL_CELL_PX = 8
+LEVEL_ITERATIONS = 6
+# How a longer exposure gives way to the next shorter one across its taper (``handover`` of ``ael.stack``): the taper
+# adds to its variance, as much as one frame of the shorter exposure has at the middle of the taper, so the shorter
+# exposure takes over across the whole taper. With the weight proportional to the exposure time alone, a frame eight
+# times longer keeps most of the stack until the last tenth of its range, and the grain changes there within a few
+# pixels: on a Sony A7S (2024) the grain doubled across a band 0.08 solar radii wide, and the high-pass filters drew
+# it as a thin dark contour.
+HANDOVER = "gradual"
 # Hot and dead pixels fixed on the sensor: found when the frames of an exposure sit at least this far apart on the
 # sensor (the corona moves there, a defect does not), and left out of the stack, never replaced.
 DITHER_PX = 3.0
@@ -675,9 +684,23 @@ def _smooth_where(values, weights, sigma, fill=True):
     return out
 
 
+def stack_weight(exposure: float, x, ladder) -> np.ndarray:
+    """A frame's weight in the stack where it has crossed a fraction ``x`` of its taper (0 below the taper, 1 at its
+    ceiling): its exposure time fading with the taper and, with HANDOVER gradual, handing over to the next shorter
+    exposure of the ``ladder`` (the stack's own rule)."""
+    s = x * x * (3 - 2 * x)
+    shorter = max([e for e in ladder if e < exposure], default=None)
+    w = exposure * (1 - s)
+    return w / ((1 - s) + s * exposure / shorter) if HANDOVER == "gradual" and shorter else w
+
+
 def level_fields(analysis: dict, decision: dict, out: Path, apply: bool, progress=Progress(None)) -> dict:
-    """A smooth level field for every placed frame (see LEVEL_FIELD_PX), on the canvas, and the same field on the
-    frame's own grid of cells, written as the transmission the stack divides the frame by. Measured always, applied
+    """A level field for every placed frame (see LEVEL_FIELD_PX), on the canvas, and the same field on the frame's own
+    grid of cells, written as the transmission the stack divides the frame by. Each frame is fitted against the common
+    stack as a smooth gain and a smooth background (L = a C + b, by weighted regression over LEVEL_FIELD_PX, held to
+    the gain alone where the stack has too little contrast to tell them apart): the cloud both dims the corona and
+    spreads part of its light around it. The frame is then divided by a / (1 - b / L), L its own light in each cell: the
+    background goes in proportion to the light of each colour, which keeps the colour. Measured always, applied
     (``apply``) only when the sky changed during the totality, as the gains are. The rows' cell sums are consumed."""
     rows = decision["used"]
     shape = tuple(analysis["shape"])
@@ -685,6 +708,7 @@ def level_fields(analysis: dict, decision: dict, out: Path, apply: bool, progres
     H, W = -(-shape[0] // q), -(-shape[1] // q)
     cy, cx = np.mgrid[:H, :W].astype(np.float64) * q + (q - 1) / 2   # cell centres, native pixels
     light, weight, exposure_of, keys = {}, {}, {}, []
+    ladder = sorted({float(row["exposure_s"]) for row in rows})
     for row in rows:
         blocks = row.pop("blocks", None)
         if blocks is None:
@@ -700,7 +724,7 @@ def level_fields(analysis: dict, decision: dict, out: Path, apply: bool, progres
         gain = float(row.get("gain_measured", 1.0))
         x = np.clip((t - 0.5) / 0.5, 0, 1)                              # the stack's taper, from half the range
         light[row["file"]] = np.where(good, s / np.maximum(n, 1e-9) / gain, np.nan)
-        weight[row["file"]] = np.where(good, float(row["exposure_s"]) * (1 - x * x * (3 - 2 * x)), 0.0)
+        weight[row["file"]] = np.where(good, stack_weight(float(row["exposure_s"]), x, ladder), 0.0)
         exposure_of[row["file"]] = float(row["exposure_s"])
         keys.append(row["file"])
     if len(keys) < 2:
@@ -731,19 +755,37 @@ def level_fields(analysis: dict, decision: dict, out: Path, apply: bool, progres
                 for e in sorted(stacks) if e != top and np.isfinite(stacks[e] / stacks[top]).sum() > 50}
 
     before = agreement()
-    for it in range(4):
-        progress("Levelling the photos", it + 1, 4)
+    ridge = 0.05                     # the gain alone where the stack varies by less than about 22 % in the window
+    clipped = {}
+    for it in range(LEVEL_ITERATIONS):
+        progress("Levelling the photos", it + 1, LEVEL_ITERATIONS)
         common, den = stack_now()
-        eps = {}
+        gains, backgrounds = {}, {}
         for k in keys:
             use = np.isfinite(common) & (common > 0) & np.isfinite(light[k]) & (light[k] > 0)
-            ratio = np.where(use, np.log(np.where(use, light[k], 1) / np.where(use, common, 1)) - phi[k], 0.0)
-            eps[k] = phi[k] + _smooth_where(ratio, use.astype(float), sigma)
-        mean = sum(weight[k] * eps[k] for k in keys) / np.maximum(den, 1e-30)
-        gauge = _smooth_where(np.where(den > 0, mean, 0), (den > 0).astype(float), gauge_sigma)
-        phi = {k: eps[k] - gauge for k in keys}
+            w = use.astype(float)
+            c, l = np.where(use, common, 0.0), np.where(use, light[k], 0.0)
+            mc, ml = _smooth_where(c, w, sigma), _smooth_where(l, w, sigma)
+            vc = _smooth_where(c * c, w, sigma) - mc * mc
+            cov = _smooth_where(l * c, w, sigma) - ml * mc
+            a = (cov + ridge * ml * mc) / np.maximum(vc + ridge * mc * mc, 1e-30)
+            a = np.where(np.isfinite(a) & (a > 0), a, ml / np.maximum(mc, 1e-30))
+            gains[k], backgrounds[k] = a, ml - a * mc
+        log_gain = sum(weight[k] * np.log(gains[k]) for k in keys) / np.maximum(den, 1e-30)
+        mean_bg = sum(weight[k] * backgrounds[k] for k in keys) / np.maximum(den, 1e-30)
+        gauge_gain = _smooth_where(np.where(den > 0, log_gain, 0), (den > 0).astype(float), gauge_sigma)
+        gauge_bg = _smooth_where(np.where(den > 0, mean_bg, 0), (den > 0).astype(float), gauge_sigma)
+        for k in keys:
+            a, b = gains[k] / np.exp(gauge_gain), backgrounds[k] - gauge_bg
+            own = np.where(np.isfinite(light[k]) & (light[k] > 0), light[k], np.nan)
+            share = 1 - b / own
+            clipped[k] = int(np.sum(np.isfinite(share) & ((share < 0.5) | (share > 2))))
+            share = np.where(np.isfinite(share), np.clip(share, 0.5, 2), 1.0)
+            phi[k] = np.log(a) - np.log(share)
     after = agreement()
     report = dict(applied=bool(apply), field_px=LEVEL_FIELD_PX, gauge_px=LEVEL_GAUGE_PX, cell_px=q,
+                  model="gain and background per frame (L = a C + b), applied as a / (1 - b / L)",
+                  cells_held_at_half_or_double=clipped,
                   exposures_agree_before=before, exposures_agree_after=after,
                   per_frame={k: dict(p5=round(float(np.percentile(phi[k], 5)), 4),
                                      p50=round(float(np.percentile(phi[k], 50)), 4),
@@ -809,13 +851,14 @@ def sensor_defects(analysis: dict, decision: dict, fields: dict, out: Path, prog
     flat = np.load(analysis["flat"]) if analysis.get("flat") else None
     rows = decision["used"]
     span = lv["white"] - lv["black"]
+    ladder = sorted({float(row["exposure_s"]) for row in rows})
 
     def read(row):
         f = by_name[row["file"]]
         green, saturated, _ = green_half(Path(f["path"]), lv, analysis["dark_for"].get(f["exposure_s"]), flat)
         light, ok = _frame_light(green, saturated, row, f["exposure_s"], lv)
         x = np.clip((green / (LINEARITY_FRACTION * span) - 0.5) / 0.5, 0, 1)
-        weight = np.where(ok, float(f["exposure_s"]) * (1 - x * x * (3 - 2 * x)), 0).astype(np.float32)
+        weight = np.where(ok, stack_weight(float(f["exposure_s"]), x, ladder), 0).astype(np.float32)
         level = fields.get("files", {}).get(row["file"])
         if level:                                      # the frame's level field, from its 8-pixel cells
             light = light / stack._coarse(np.load(level), light.shape).astype(np.float32)
@@ -1650,12 +1693,14 @@ def run_auto(cfg: dict) -> dict:
                                          moon_xy=tuple(canvas_moons[0]), moon_radius_px=moon_r, note=note)
         # Two exposures never agree exactly where the longer one saturates (shutter times, the sky changing, the
         # blur of the inner corona), and an abrupt hand-over leaves a step that the filters draw as a ring. Each
-        # photo's weight therefore fades over the top half of its range, not the top fifth: the hand-over spreads over
-        # about 15 % of the radius, and the shorter exposure covers what the longer one gives up.
+        # photo's weight therefore fades over the top half of its range, not the top fifth, and with HANDOVER the
+        # shorter exposure takes over across that whole half: the level and the grain change over about 15 % of the
+        # radius, and the shorter exposure covers what the longer one gives up.
         photometry = analysis["photometry"]
         taper = 0.5
         recipe = {"geometry": json.loads(stack_geometry.to_json()), "frames": frames,
-                  "stack": {"canvas": "reference", "taper_start": taper, "moon_guard_px": 2, "limb_fade_px": 4,
+                  "stack": {"canvas": "reference", "taper_start": taper, "handover": HANDOVER,
+                            "moon_guard_px": 2, "limb_fade_px": 4,
                             "band_sigma_px": 0,
                             "hot_pixels": {"enabled": True, "dithered": True, "by_exposure": True,
                                            "gain_e_per_dn": 1e6}
