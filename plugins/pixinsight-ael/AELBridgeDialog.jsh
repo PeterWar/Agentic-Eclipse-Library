@@ -26,6 +26,7 @@
 
 #include <pjsr/TextAlign.jsh>
 #include <pjsr/StdCursor.jsh>
+#include <pjsr/ButtonCodes.jsh>
 
 // The one dialog of the connector (Script > Utilities > Agentic Eclipse Library). It asks only for what a person knows:
 // what to make, from which RAW photos or which open image, and where to save it.
@@ -391,35 +392,40 @@ var AELBridgeDialog = class extends Dialog
       outputSizer.add( this.outputButton );
       this.sizer.add( outputSizer );
 
-      // The whole library, for whoever wants more than this dialog: its address, written as a web link (blue,
-      // underlined, a hand under the pointer) that opens it in the browser, and the licence under it
-      let more = new Label( this );
+      // The whole library, for whoever wants more than this dialog, in a box of its own: the invitation, the address
+      // written as a web link (blue, underlined, a hand under the pointer; a click opens it in the browser) and the
+      // licence. The link is a label styled as one, not an <a> anchor: a label with an anchor keeps its clicks, a plain
+      // one gives them to onMouseRelease, as PixInsight's own ImageSolver does.
+      let libraryBox = new GroupBox( this );
+      libraryBox.title = "Agentic Eclipse Library";
+      let more = new Label( libraryBox );
       more.wordWrapping = true;
-      more.styleSheet = "QLabel { color: gray; }";
-      more.text = "For more faithful results and more filters, try the whole Agentic Eclipse Library with an AI agent:";
-      let github = new ToolButton( this );
-      github.text = AEL_GITHUB_URL;
-      github.toolTip = "Opens the Agentic Eclipse Library on GitHub in your web browser.";
+      more.text = "For more faithful results and more filters, try the whole library with an AI agent:";
+      let github = new Label( libraryBox );
+      github.useRichText = true;
+      github.text = "<span style=\"color:#0066ff; text-decoration:underline;\">" + AEL_GITHUB_URL + "</span>";
       github.cursor = new Cursor( StdCursor_Hand );
-      github.styleSheet = "QWidget { color: #0066ff; text-decoration: underline; border: none; background: transparent; "
-                        + "padding: 0px; }";
-      let linkFont = github.font;
-      linkFont.underline = true;
-      github.font = linkFont;
-      github.onClick = function() { aelBridgeOpenUrl( AEL_GITHUB_URL ); };
-      let linkSizer = new HorizontalSizer;
-      linkSizer.add( github );
-      linkSizer.addStretch();
-      let licence = new Label( this );
+      github.toolTip = "Opens the Agentic Eclipse Library on GitHub in your web browser.";
+      github.onMouseRelease = function( x, y, button )
+      {
+         if ( button == MouseButton_Left )
+            aelBridgeOpenUrl( AEL_GITHUB_URL );
+      };
+      let licence = new Label( libraryBox );
       licence.wordWrapping = true;
       licence.styleSheet = "QLabel { color: gray; }";
       licence.text = AEL_LICENCE_LINE;
       licence.toolTip = AEL_LICENCE_DISCLAIMER;
-      this.sizer.add( more );
-      this.sizer.add( linkSizer );
-      this.sizer.add( licence );
+      libraryBox.sizer = new VerticalSizer;
+      libraryBox.sizer.margin = 8;
+      libraryBox.sizer.spacing = 4;
+      libraryBox.sizer.add( more );
+      libraryBox.sizer.add( github );
+      libraryBox.sizer.add( licence );
+      this.sizer.add( libraryBox );
+      this.libraryBox = libraryBox;
       this.moreLabel = more;
-      this.githubButton = github;
+      this.githubLink = github;
       this.licenceLabel = licence;
 
       let buttons = new HorizontalSizer;

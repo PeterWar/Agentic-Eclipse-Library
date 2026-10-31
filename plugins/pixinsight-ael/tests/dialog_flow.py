@@ -35,8 +35,9 @@ answer with the files a person would pick.
   presses them while the dialog is open);
   the layers equal those of the helper run from the terminal on the same file, the PixelMath composite matches
   AEL's display.tif within one 16-bit step, and the geometry is measured and shown.
-* The line that invites to the whole library is shown, and its «GitHub» button would run the system's command to open
-  the repository's page (a stand-in records the command instead of opening a browser).
+* The box «Agentic Eclipse Library» invites to the whole library, and its address, written as a web link, would run the
+  system's command to open the repository's page when clicked (a stand-in records the command instead of opening a
+  browser); the MIT licence is under it, with the whole disclaimer on its tooltip.
 * Each operation shows only what it needs, and says what it does under the list and on the list's tooltip; the file
   choosers are read through filePaths (fileNames is deprecated in PixInsight 1.9.4); the output folder starts at Downloads (the setting the dialog keeps is
   restored afterwards) and «Browse…» sets it; no message box appears where none is due (a box would wait for a click
@@ -268,10 +269,10 @@ try
       this.start = function( program, args ) { started.push( { program: program, args: args } ); return true; };
       this.waitForFinished = function() { return true; };
    };
-   try { first.githubButton.onClick(); } finally { ExternalProcess = RealProcess; }
+   try { first.githubLink.onMouseRelease( 4, 4, MouseButton_Left ); } finally { ExternalProcess = RealProcess; }
    REPORT.steps.github = { started: started, url: AEL_GITHUB_URL, platform: System.platform,
-                           invitation: first.moreLabel.text, link_text: first.githubButton.text,
-                           link_style: first.githubButton.styleSheet, link_underlined: first.githubButton.font.underline,
+                           invitation: first.moreLabel.text, link_text: first.githubLink.text,
+                           box_title: first.libraryBox.title,
                            licence: first.licenceLabel.text, licence_tip: first.licenceLabel.toolTip };
    first.outputButton.onClick();
    REPORT.steps.output_browsed = first.outputEdit.text;
@@ -523,17 +524,19 @@ def main() -> None:
                  "default_filters_shown": steps["choice_default"] == "Filter layers: NRGF 39\u00a0%, ACHF iso 1–16 px "
                                                                     "8\u00a0%, WOW edge-aware 37\u00a0%",
                  # the line that invites to the whole library, and its button: what would open the page (not run here)
-                 "github_button_opens_the_library_page": (steps["github"]["invitation"].startswith(
-                     "For more faithful results and more filters, try the whole Agentic Eclipse Library")
+                 "github_link_opens_the_library_page": (steps["github"]["invitation"].startswith(
+                     "For more faithful results and more filters, try the whole library with an AI agent")
                      and steps["github"]["started"] == ([{"program": "cmd", "args": ["/c", "start", "",
                                                                                          "https://github.com/PeterWar/Agentic-Eclipse-Library"]}]
                                                         if steps["github"]["platform"] == "Windows" else
                                                         [{"program": "open" if steps["github"]["platform"] == "macOS" else "xdg-open",
                                                           "args": ["https://github.com/PeterWar/Agentic-Eclipse-Library"]}])),
-                 # the address is written out as a web link, and the licence is under it (Pere, 31-10)
-                 "github_link_is_the_address_in_blue_underlined": (steps["github"]["link_text"] == steps["github"]["url"]
-                                                                    and "#0066ff" in steps["github"]["link_style"]
-                                                                    and steps["github"]["link_underlined"] is True),
+                 # in a box of its own (Pere chose it, 31-10): the address written out as a web link, the licence under it
+                 "library_box_with_its_title": steps["github"]["box_title"] == "Agentic Eclipse Library",
+                 "github_link_is_the_address_in_blue_underlined": (steps["github"]["url"] in steps["github"]["link_text"]
+                                                                    and "#0066ff" in steps["github"]["link_text"]
+                                                                    and "text-decoration:underline" in steps["github"]["link_text"]
+                                                                    and "<a " not in steps["github"]["link_text"]),
                  "mit_licence_and_disclaimer_shown": (steps["github"]["licence"].startswith("MIT License")
                                                       and "without warranty of any kind" in steps["github"]["licence"]
                                                       and 'PROVIDED "AS IS", WITHOUT WARRANTY' in steps["github"]["licence_tip"]),
