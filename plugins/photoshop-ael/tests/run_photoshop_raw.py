@@ -348,7 +348,12 @@ var AEL_TEST_REPORT = (function () {{
         output_shown: AEL_TEST_SHOWN, folder_chooser_started_at: AEL_TEST_STARTS, output_kept_before: kept,
         output_remembered: remembered, output_kept_after: restored, advanced_pressed: AEL_TEST_ADVANCED_PRESSED,
         filter_line: AEL_TEST_CHOICE_LINE, urls: AEL_TEST_URLS, without_tip: AEL_TEST_NO_TIP,
-        link: AEL_TEST_LINK, licence: AEL_TEST_LICENCE, progress_log: AELPhotoshop.progressLog || []}});
+        link: AEL_TEST_LINK, licence: AEL_TEST_LICENCE, progress_log: AELPhotoshop.progressLog || [],
+        progress_shown: (function () {{
+            var shown = [], line;
+            for (line in AELPhotoshop.progressShown || {{}}) shown.push(line);
+            return shown;
+        }}())}});
 }}());
 AEL_TEST_REPORT;
 """
@@ -400,6 +405,9 @@ AEL_TEST_REPORT;
                  "try the whole Agentic Eclipse Library with an AI agent: " + GITHUB),
              "progress_says_it_is_still_working": any(line.startswith("AEL: still working on Filters")
                                                       for line in report.get("progress_log", [])),
+             # what Photoshop's progress window was told to show on its second line
+             "progress_window_said_still_working": "Still working (m:ss): a filter or writing the PSB can take "
+                                                   "minutes." in report.get("progress_shown", []),
              "one_psb_opened": len(report.get("opened", [])) == 1,
              "plugin_unchanged": report["unchanged_plugin"],
              # nothing kept: the dialog shows Downloads; "Browse…" changes it; the run goes to a new dated folder in it
@@ -462,13 +470,15 @@ AEL_TEST_REPORT;
                  "python_stopped": not report["engines_left"],
                  "stopped_in_time": report["seconds"] <= args.stop_after + grace + 30,
                  "progress_said_stopping": any(line.startswith("AEL: stopping") for line in log),
+                 "progress_window_said_stopping": ("Stopping: AEL stops at the end of this step."
+                                                   in report.get("progress_shown", [])),
                  "plugin_unchanged": gates["plugin_unchanged"],
                  "kept_folder_put_back": gates["kept_folder_put_back"]}
         gates.update(window_gates)
-        least = 10
+        least = 11
     else:
         gates.update(window_gates)
-        least = 22
+        least = 23
     report["gates"] = gates
     report["ok"] = all(gates.values()) and len(gates) >= least
     (output / "REPORT.json").write_text(json.dumps(report, indent=1, ensure_ascii=False), encoding="utf-8")

@@ -598,6 +598,7 @@ var AELPhotoshop = AELPhotoshop || {};
         var start = new Date().getTime();
         var state = {started: start, said: "", saidAt: start, heard: start, value: 0, cancelled: false, text: ""};
         ns.progressLog = [];
+        ns.progressShown = {};
         state.read = function (info) {
             var now = new Date().getTime();
             info = info || {stage: "Starting"};
@@ -627,12 +628,15 @@ var AELPhotoshop = AELPhotoshop || {};
                     Math.round((now - state.started) / 1000) + " s");
                 state.stopping = true;
             }
-            var quiet = now - state.saidAt;
-            state.text = step + "  ·  " + ns.clock(now - state.started) + "\n" +
-                (state.cancelled ? "Stopping: AEL stops at the end of this step." :
-                quiet >= ns.HEARTBEAT_S * 1000 ? "Still working (" + ns.clock(quiet) +
-                    "): a filter or writing the PSB can take minutes." :
-                "The Agentic Eclipse Library is making the image.");
+            // No chained ?: here: Photoshop's ExtendScript (4.5.12) reads a ? b : c ? d : e as (a ? b : c) ? d : e,
+            // and the window said «Still working» after Cancel (31-10).
+            var quiet = now - state.saidAt, second = "The Agentic Eclipse Library is making the image.";
+            if (state.cancelled) {
+                second = "Stopping: AEL stops at the end of this step.";
+            } else if (quiet >= ns.HEARTBEAT_S * 1000) {
+                second = "Still working (" + ns.clock(quiet) + "): a filter or writing the PSB can take minutes.";
+            }
+            state.text = step + "  ·  " + ns.clock(now - state.started) + "\n" + second;
             return state;
         };
         return state;
@@ -647,6 +651,8 @@ var AELPhotoshop = AELPhotoshop || {};
             state.read(info);
             if (ns.progressJob) {
                 app.changeProgressText(state.text);
+                // what the window was told to say on its second line, for the test
+                ns.progressShown[state.text.split("\n")[1].replace(/\([0-9:]+\)/, "(m:ss)")] = true;
                 if (!app.updateProgress(Math.round(10 * state.value), 1000)) state.cancelled = true;
             }
             update.cancelled = state.cancelled;
