@@ -23,9 +23,9 @@ CREDIT = ("Processed with Agentic Eclipse Library by Pere Guerra — "
           "https://github.com/PeterWar/Agentic-Eclipse-Library")
 # What the four operations import besides AEL (rawpy only for RAW frames), and the psd-tools modules that
 # ael.photoshop loads to write the layered PSB.
-NEEDED = ("numpy", "scipy", "cv2", "tifffile", "PIL", "imageio", "psd_tools", "psd_tools.api.layers",
-          "psd_tools.constants", "psd_tools.psd.image_resources", "psd_tools.psd.layer_and_mask",
-          "psd_tools.psd.tagged_blocks")
+NEEDED = ("numpy", "scipy", "cv2", "tifffile", "PIL", "PIL.ImageCms", "imageio", "rawpy", "psd_tools",
+          "psd_tools.api.layers", "psd_tools.constants", "psd_tools.psd.image_resources",
+          "psd_tools.psd.layer_and_mask", "psd_tools.psd.tagged_blocks")
 # The connector is validated against this AEL: the edge-aware WOW and the per-family layer names (1.3.5), the
 # soft-log and MGN corrections (1.3.6), which the structure image and the filter layers depend on, and the geometry
 # measured on the image (1.4.0), which the dialogs use when no geometry is given.
@@ -198,15 +198,25 @@ def execute(cfg: dict) -> dict:
                 failed.append(name)
                 missing.append(f"{name} ({type(exc).__name__}: {exc})")
         if not missing:
-            try:
-                import ael_workflow  # noqa: F401
-            except Exception as exc:
-                missing.append(f"ael_workflow ({type(exc).__name__}: {exc})")
+            for helper in ("ael_workflow", "ael_auto"):
+                try:
+                    importlib.import_module(helper)
+                except Exception as exc:
+                    missing.append(f"{helper} ({type(exc).__name__}: {exc})")
         if missing:
             return {"ok": False, "kind": "missing_dependency",
                     "message": f"AEL {ael.__version__} found, but this Python lacks {', '.join(missing)}",
                     "runtime": runtime()}
-        return {"ok": True, "kind": "ready", "runtime": runtime(), "credit": CREDIT}
+        # exifread is optional: without it the camera's name and the fractions of a second are not read.
+        try:
+            importlib.import_module("exifread")
+            optional = []
+        except Exception:
+            optional = ["exifread"]
+        return {"ok": True, "kind": "ready", "runtime": runtime(), "credit": CREDIT, "optional_missing": optional}
+    if operation == "raw":
+        from ael_auto import run_auto
+        return run_auto(cfg)
     if operation not in ("structure", "polar", "master", "filters"):
         raise ValueError(f"Unsupported operation: {operation}")
     missing = []
