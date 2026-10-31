@@ -172,7 +172,8 @@ the corona, the change leaves out the one frame that had been placed on the inte
 - PixInsight (its own instances, `-n --automation-mode`): the dialog run the way a person runs it, with **Stacked image
   from RAW photos**, the six Vixen frames, 16 darks and 5 flats (4 darks for each of the 4 exposures), Run pressed:
   63 of 63 gates, in the source tree, in the built package and in its ZIP unpacked under a folder with accents and
-  spaces. All six frames stacked, four master darks (one per exposure) and the master flat; the linear master and the
+  spaces; with the closing message (the Photoshop connector's text, word for word, in a message box and in the
+  Console) 64 of 64, in the source tree and in the package. All six frames stacked, four master darks (one per exposure) and the master flat; the linear master and the
   seven images of `layers/` are those of the engine run from a terminal on the same files, pixel for pixel. The bridge
   validation 26 of 26, the menu scripts 12 of 12.
 
