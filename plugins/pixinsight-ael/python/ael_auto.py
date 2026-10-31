@@ -1311,6 +1311,9 @@ def run_auto(cfg: dict) -> dict:
         far = max((float(np.hypot(*(a - b))) for a in canvas_moons for b in canvas_moons), default=0.0)
         pair = max(((a, b) for a in canvas_moons for b in canvas_moons), key=lambda ab: float(np.hypot(*(ab[0] - ab[1]))))
         swept_xy = ((pair[0] + pair[1]) / 2).tolist()
+        # On a straight lunar motion every centre lies between the two farthest ones, within far/2 of their middle; when
+        # the frames go by their corona alone the centres need not be in line, and the disc must still cover each one.
+        reach = max([far / 2] + [float(np.hypot(*(c - np.asarray(swept_xy)))) for c in canvas_moons])
         shape = tuple(analysis["shape"])
         date = reference["time"].strftime("%Y-%m-%d") if reference["time"] else "unknown date"
         note = (f"Measured on the RAW files by the AEL {name} connector. Sun: {decision['sun']['how']}; radius: "
@@ -1351,7 +1354,7 @@ def run_auto(cfg: dict) -> dict:
         filter_geometry = EclipseGeometry.from_json(stacked["files"]["geometry"])
         filter_geometry = EclipseGeometry(shape=filter_geometry.shape, sun_xy=filter_geometry.sun_xy,
                                           sun_radius_px=filter_geometry.sun_radius_px, moon_xy=tuple(swept_xy),
-                                          moon_radius_px=moon_r + far / 2 + 1.0, north_deg=0.0, mirrored=False,
+                                          moon_radius_px=moon_r + reach + 1.0, north_deg=0.0, mirrored=False,
                                           note=note + f" Lunar disc for the filters: every position of the Moon during "
                                                       f"the frames ({far:.1f} px of motion), so that the band the Moon "
                                                       f"swept enters no filter.")
