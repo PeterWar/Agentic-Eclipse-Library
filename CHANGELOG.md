@@ -27,7 +27,7 @@ plugin goes to 1.1.5; the Claude Code plugin of this repository's marketplace an
   On the A7S, in each of twelve sectors of position angle, the contour along the boundary isophote is now at most
   1.37 times the largest along the control isophotes (a sector fails above 1.5; with 1.4.0 it reached 10.8 times). At
   the second boundary (0.125 s to 0.05 s), which only one sector reaches, the NRGF and the master's fine level still
-  show a step. The price: in the band where the exposures hand over (65–88 % of the long
+  show a contour there. The price: in the band where the exposures hand over (65–88 % of the long
   frames' ceiling) the grain rises up to twice that of 1.4.0 (0.132 % against 0.065 %), without exceeding the
   grain the shorter exposure already had just outside the boundary (0.160 %). The default (`'exposure'`) is unchanged.
 - **Dust and hot pixels on the sensor** (`ael_auto.py`, `ael/stack.py`). Without flats, a dust shadow on the sensor

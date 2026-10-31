@@ -51,7 +51,7 @@ times. At full resolution, with the contrast tripled, the ring is no longer seen
 
 **The second boundary**, where the 0.125 s frames give way to the 0.05 s ones, is reached by only one sector
 (300–330°). There ACHF, WOW and the composite pass, but the NRGF still fails (1.9 times its largest control; 2.28 with
-1.4.0), and so does the master's fine level (9.55 times; 9.2 with 1.4.0). 1.4.1 did not create these steps and does
+1.4.0), and so does the master's fine level (9.55 times; 9.2 with 1.4.0). 1.4.1 did not create these contours and does
 not cure them; their cause is not diagnosed yet.
 
 **The price.** In the band where the exposures hand over (65–88 % of the ceiling of the 1 s frames), the grain per
@@ -164,7 +164,7 @@ The programs ran the packages of the connectors as they are in this release, fil
   where Photoshop's answer marks it, and call what the click calls (the system's `open` with
   `https://github.com/PeterWar/Agentic-Eclipse-Library`).
 - At the A7S's second boundary (0.125 s to 0.05 s), which only one sector reaches, the NRGF and the master's fine
-  level still show a step.
+  level still show a contour there.
 - Where the exposures hand over, the grain is up to twice that of 1.4.0. The gradual hand-over is what the connectors
   use; the library's default stays `'exposure'`.
 - Without flats the vignetting stays. Dust and hot pixels are found on the frames only when the frames of an exposure
