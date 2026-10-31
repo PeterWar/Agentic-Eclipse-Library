@@ -150,7 +150,10 @@ them, placing the frames without a corona registration of their own on a lunar t
 times were wrong: up to 15.7 px from their place, without a word. It now keeps each frame's own corona registration
 and leaves out a frame without one, whenever the Moon and the corona do not make one straight motion (more than 1 px
 off it, or faster than the Moon can cross the Sun, 0.65″ a second for a Moon of at least 944″). On the six Vixen
-frames, two shuffles of the times leave every frame within 0.31 px of its place with the true times. On the Sony
+frames, two shuffles of the times leave every frame within 0.31 px of its place with the true times. On the three
+sets of the comparison with shuffled times, it leaves out the frames without a corona registration of their own
+(Vixen 8 of 13, 6D 5 of 15, Sony 1 of 13) and the others stay within 1.62, 1.43 and 1.11 px of their places with
+the true times; with the true times nothing changes. On the Sony
 A7S frames of 2024, where the Moon and the corona are 55 px off a straight motion and the engine already went by
 the corona, the change leaves out the one frame that had been placed on the interpolated track.
 
