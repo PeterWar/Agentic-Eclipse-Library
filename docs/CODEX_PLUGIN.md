@@ -77,7 +77,7 @@ PixInsight and Photoshop, which are not part of this plugin.
 Version 1.1.5 bundles AEL 1.4.1. `ael.stack` can hand over gradually from one exposure to the next shorter one
 (`handover: 'gradual'`), so that the grain does not jump where a longer exposure stops being used, and takes a map of
 sensor defects whose pixels leave every frame (`defects`, and hot pixels found per exposure). The NRGF of the filter
-bank no longer draws rings where the frame's edge or the Moon cuts its annuli (`partial_annuli='chain'` in
+bank no longer steps where the frame's edge or the Moon cuts its annuli (`partial_annuli='chain'` in
 `ael.radial`). The connectors for PixInsight and Photoshop also changed; they are not part of this plugin. Its ZIP
 passed the seventeen integration checks, including the 117 bundled AEL tests.
 

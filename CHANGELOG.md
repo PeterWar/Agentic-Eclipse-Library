@@ -2,9 +2,9 @@
 
 ## 1.4.1 — 2026-10-31
 
-The connectors for PixInsight and Photoshop, after their first use by their author on photos of other cameras and
-eclipses (a Sony A7S behind a Questar, under thin cloud, 2024; a Canon EOS 6D, 2024). Three artefacts are cured where
-they are born, the dialogs ask for less guesswork, and Photoshop shows AEL's progress in its own window. The Codex
+After their author first used the PixInsight connector on photos of other cameras and eclipses (a Sony A7S behind a
+Questar, under thin cloud, 2024; a Canon EOS 6D, 2024), three artefacts are cured where they are born, in the engine
+both connectors share; the dialogs ask for less guesswork, and Photoshop shows AEL's progress in its own window. The Codex
 plugin goes to 1.1.5; the Claude Code plugin of this repository's marketplace and the Claude plugin folder
 `plugins/claude-ael/` go to 1.4.1.
 
@@ -12,8 +12,8 @@ plugin goes to 1.1.5; the Claude Code plugin of this repository's marketplace an
   per frame does not make the frames agree: where the 1 s frames of the A7S gave way to the 0.05 s ones, the short
   frames were 8 % darker, and 37 % brighter farther out (the cloud dims the corona and spreads part of its light around
   it). The stack stepped there, and every filter drew the step as a ring that follows the corona's brightness. When
-  the sky changed during the totality, each frame now gets a smooth level field (the cure of the 2026 image's exposure
-  boundaries): a gain and a background against the common stack, fitted wherever the frame is linear over 64 pixels,
+  the sky changed during the totality, each frame now gets a smooth level field: a gain and a background against the
+  common stack, fitted wherever the frame is linear over 64 pixels,
   with what all frames share over 512 pixels left as it is. The background is taken from each colour in proportion to
   its light, so the colour is untouched. A gain alone left a step of about 0.5 % in the master; with the background
   the exposures of the A7S agree within 0.3 %, and along the boundary isophote the master's fine level (12 pixels)
@@ -23,43 +23,48 @@ plugin goes to 1.1.5; the Claude Code plugin of this repository's marketplace an
   range: on the A7S the grain doubled across a band 0.08 solar radii wide, and WOW and ACHF, which normalise by the
   local noise, drew it as a thin dark contour even with the level matched. With `handover: 'gradual'` (the connectors
   use it) the taper adds to a frame's variance, as much as one frame of the next shorter exposure has at the middle of
-  the taper, so the shorter exposure takes over across the whole top half of the range. On the A7S the contour along
-  the boundary isophote is no larger than along any other isophote, in each of twelve sectors of position angle (it
-  was up to 11 times larger with 1.4.0). The price: in the band where the exposures hand over (65–88 % of the long
-  frames' ceiling) the grain rises up to twice that of 1.4.0, to the grain the shorter exposure already had just
-  outside the boundary. The default (`'exposure'`) is unchanged.
+  the taper, so the shorter exposure takes over across the whole taper (the connectors start it at half the range).
+  On the A7S, in each of twelve sectors of position angle, the contour along the boundary isophote is now at most
+  1.37 times the largest along the control isophotes (a sector fails above 1.5; with 1.4.0 it reached 10.8 times). At
+  the second boundary (0.125 s to 0.05 s), which only one sector reaches, the NRGF and the master's fine level still
+  show a step. The price: in the band where the exposures hand over (65–88 % of the long
+  frames' ceiling) the grain rises up to twice that of 1.4.0 (0.132 % against 0.065 %), without exceeding the
+  grain the shorter exposure already had just outside the boundary (0.160 %). The default (`'exposure'`) is unchanged.
 - **Dust and hot pixels on the sensor** (`ael_auto.py`, `ael/stack.py`). Without flats, a dust shadow on the sensor
   repeats in a stack of frames placed apart on the sensor as a row of dark dots (on the A7S, shadows 20–65 % deep in
   each frame, dots 6 % deep in the stack). When the frames of an exposure sit at least 3 px apart, the engine finds the
   shadows on the frames themselves (each frame against the stack on its own sensor, high-passed, averaged over the
   frames: a compact part of the sensor at least 5 % darker at its core and 5 standard errors), and hot pixels with the
-  noise measured around each pixel and per exposure; their pixels leave every frame and are never replaced. The stack
+  noise measured around each pixel, in each exposure of at least three frames; their pixels leave every frame and are
+  never replaced. The stack
   takes such a map (`stack.defects`) and, per exposure, `hot_pixels.by_exposure`; a smooth calibration field may be
   given on a coarser grid of cells.
 - **Rings of the NRGF where the frame cuts the annuli** (`ael/radial.py`). An annulus that the frame's edge or the Moon
   cuts loses position angles, and its median and spread jump when a bright or a faint sector leaves it. With
   `partial_annuli='chain'` (the filter bank's NRGF uses it) each step of the profile and of the spread from one annulus
   to the next is measured on the 1-degree cells both annuli cover wherever those cells change; whole annuli, also cut
-  short in radius, give exactly the old result. On a separable corona cut by the frame the variation along the radius
-  at a fixed angle falls 3 to 20 times; on the A7S, whose vignetting (no flats) stays, the thin rings are gone and the
-  variation along the radius in a sector falls by up to 40 %. Nothing is filled in: only the two curves the filter
-  divides by are bridged.
+  short in radius, give exactly the old result. On a corona cut by the frame (the bundled test's) the variation along
+  the radius at a fixed angle falls 3 to 8 times at the three angles the test checks (1.2 to 7.9 times every 15°). On the A7S, in fixed 15° sectors, the
+  layer's median step at the radii where the frame cuts the annuli fell from 0.0136 to 0.0074, below its step at
+  control radii (0.0137); its vignetting (no flats) stays. Nothing is filled in: only the two curves the filter uses
+  (the profile it subtracts and the spread it divides by) are bridged.
 - **PixInsight's linear master was black.** PixInsight 1.9.4 reads a floating-point TIFF whose last sample is NaN as
   all zeros, and rescales one whose values leave 0–1. The PixInsight connector's master is now written in 0–1 (DN/s
-  over a power of ten, written in the receipt and the closing message) with an alpha channel that is 0 where nothing
+  over a power of ten, plus an offset when some values are negative, both written in the receipt and the closing
+  message) with an alpha channel that is 0 where nothing
   was observed; its window is checked against its file.
 - **The PixInsight dialog.** Darks and flats in two lists (also in the Photoshop connector: the engine takes `darks`
   and `flats`, still measures each file and leaves out one that is not what it was chosen as). «Advanced settings…»
   chooses any of AEL's 16 filters as layers and their opacity in the composite. Each item of «Make» says what it does,
-  under the list and on its tooltip. The composite is saved (32-bit XISF) and shown in front. The Console hears each
-  filter and, while a step lasts, a line every 20 s. Windows are named in local time, like the run's folder. A box of
-  its own, «Agentic Eclipse Library», invites to try the whole library with an AI agent, with its GitHub address
+  under the list and on its tooltip. The composite is saved (32-bit XISF) and shown in front. The Console names each
+  filter and, while a step lasts, writes a line every 20 s. Windows are named in local time, like the run's folder. A
+  box of its own, «Agentic Eclipse Library», invites you to try the whole library with an AI agent, with its GitHub address
   written as a web link (blue, underlined) that opens the page, and the MIT licence under it, with the whole
   disclaimer on its tooltip.
 - **No call that PixInsight 1.9.4 calls deprecated.** The file chooser uses `filePaths` (not `fileNames`), the search
   for Python reads the environment through `System.getEnvironmentVariable` (not the global function), and the command
   that opens a web page is chosen by the script's platform directives (not by `corePlatform`): the Console warned at
-  every Run. The dialog test reads the whole Console, from the script's first line, and fails on any call PixInsight
+  the first Run of each session. The dialog test reads the whole Console, from the script's first line, and fails on any call PixInsight
   calls deprecated (on the package of 0150ca0 it finds two), and on any function the scripts define twice.
 - **Photoshop shows AEL's progress in its own progress window** (`plugins/photoshop-ael/`). On Photoshop 2026 for
   macOS the connector's own progress window (a ScriptUI palette) was never drawn while the script waited for the
@@ -68,15 +73,16 @@ plugin goes to 1.1.5; the Claude Code plugin of this repository's marketplace an
   since **Make the image**, and moves every second; after 20 s on one step, a second line says that AEL is still
   working (a filter or writing the PSB can take minutes). **Cancel** stops AEL at the end of its step, or stops
   Python 15 s later, and nothing is opened. The test now asks the window server whether that window is on screen
-  while AEL works, compares two pictures of it taken 12 s apart, and presses Cancel in the middle of a filter.
+  while AEL works, compares two pictures of it taken at least 12 s apart, and marks Cancel in the middle of a filter
+  where Photoshop's answer to the button would mark it.
   Photoshop's ExtendScript reads `a ? b : c ? d : e` as `(a ? b : c) ? d : e`; the connector has no chained
   conditional left.
 - **The Photoshop dialog as PixInsight's.** Darks and flats in two lists, **Advanced settings…** with AEL's 16
   filters and their opacities, the same filter line, a filter named in the progress as in the dialog, and the same
   box “Agentic Eclipse Library” with the GitHub address as a web link (blue, underlined; a click opens the page) and
   the MIT licence line, with the whole disclaimer on its tooltip. `tools/check_connectors.py` checks that both
-  dialogs show the same licence line and the disclaimer of their `LICENSE`, and that both `LICENSE` files are the
-  same.
+  dialogs show the same licence line and the disclaimer of their `LICENSE`, and that both `LICENSE` files carry the
+  same disclaimer.
 
 ## 1.4.0 — 2026-10-31
 

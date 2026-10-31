@@ -230,14 +230,16 @@ commercially; the licence only asks you to keep the copyright and permission not
 
 ## What is new in 1.4.1
 
-The two connectors after their first use by their author on photos of other cameras and eclipses (a Sony A7S behind
-a Questar under thin cloud, and a Canon EOS 6D, both in 2024).
+Fixes from the first use of the PixInsight connector by its author on photos of other cameras and eclipses (a Sony
+A7S behind a Questar under thin cloud, and a Canon EOS 6D, both in 2024); both connectors share the engine that was
+cured.
 
 - **Three artefacts cured where they are born.** Under thin cloud each frame gets a smooth level field before it is
   stacked, so the exposures agree where one gives way to the next. The next shorter exposure takes over gradually
-  (`stack.handover`), so the grain does not jump there and the filters draw no contour. Dust shadows and hot pixels
+  (`stack.handover`), so the grain does not jump there; on the A7S the contour along that boundary falls to the level
+  of the other isophotes. Dust shadows and hot pixels
   are found on the frames themselves, and their pixels leave every frame without being replaced (`stack.defects`).
-- **No rings in the NRGF** where the frame's edge or the Moon cuts its annuli (`partial_annuli='chain'`).
+- **The NRGF no longer steps** where the frame's edge or the Moon cuts its annuli (`partial_annuli='chain'`).
 - **PixInsight:** the linear master no longer opens black; darks and flats in two lists; **Advanced settings…** for
   any of AEL's 16 filters and their opacity; no call that PixInsight 1.9.4 calls deprecated.
 - **Photoshop:** AEL's progress in Photoshop's own progress window, with the step, a clock and **Cancel** (the
