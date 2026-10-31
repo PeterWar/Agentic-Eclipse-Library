@@ -185,6 +185,22 @@ function aelWorkflowNewOutput( root, kind )
    return output;
 }
 
+// The folder of one RAW run, named as the Photoshop connector names its own: the prefix, then the local date and time
+// (AEL_20261031_031502_7), and _1, _2… after it if that name is taken. The engine creates it; root is created if needed.
+function aelWorkflowStampedOutput( root, prefix )
+{
+   if ( !File.directoryExists( root ) )
+      File.createDirectory( root, true );
+   let now = new Date();
+   let two = function( n ) { return n < 10 ? "0" + n : String( n ); };
+   let base = root + "/" + prefix + now.getFullYear() + two( now.getMonth() + 1 ) + two( now.getDate() ) + "_"
+              + two( now.getHours() ) + two( now.getMinutes() ) + two( now.getSeconds() ) + "_" + now.getMilliseconds();
+   let output = base;
+   for ( let suffix = 1; File.exists( output ) || File.directoryExists( output ); ++suffix )
+      output = base + "_" + suffix;
+   return output;
+}
+
 // The engine writes how far it has gone into a small JSON file; each new step goes to the Console. Aborting the script
 // from the Console leaves the file that stops the engine at its next step.
 function aelWorkflowProgress( progressPath, cancelPath )
@@ -234,7 +250,7 @@ function aelWorkflowRaw( raw, calibration, outputRoot, pythonPath, aelRoot, buil
    let progressPath = tempDir + "/progress.json";
    let cancelPath = tempDir + "/cancel";
    let temporaryFiles = [ configPath, progressPath, tempDir + "/progress.tmp", cancelPath ];
-   let output = aelWorkflowNewOutput( outputRoot, "stacked" );
+   let output = aelWorkflowStampedOutput( outputRoot, "AEL_" );
    try
    {
       File.writeTextFile( configPath, JSON.stringify( { raw: raw, calibration: calibration, out: output,

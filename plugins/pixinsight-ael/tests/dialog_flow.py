@@ -39,10 +39,12 @@ To test a built package instead of the checkout: --plugin PACKAGE/pixinsight-ael
 from __future__ import annotations
 
 import argparse
+from datetime import datetime
 import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import signal
 import subprocess
 import sys
@@ -398,7 +400,7 @@ def main() -> None:
                  "stopped_it_says_so_and_leaves_nothing": len(steps["raw_cancel"]["messages"]) == 1
                                                           and "Stopped from PixInsight" in steps["raw_cancel"]["messages"][0]
                                                           and steps["raw_cancel"]["windows"] == []
-                                                          and not any(Path(out["raw_cancel"]).glob("ael_stacked_*")),
+                                                          and not any(Path(out["raw_cancel"]).glob("AEL_*")),
                  "takes_the_active_image": steps["structure_target"] == "corona_linear"
                                            and steps["polar_target"] == "corona_display"
                                            and steps["filters_all_target"] == "frame_rescaled",
@@ -412,9 +414,15 @@ def main() -> None:
                 gates[f"{key}_starts_with_the_expected_AEL_folder"] = steps[f"{key}_root"] == str(expect_root)
 
         # the stacked image from RAW photos: equal to the same engine run from the terminal with the same files
-        folders = sorted(Path(out["raw"]).glob("ael_stacked_*"))
+        folders = sorted(Path(out["raw"]).glob("AEL_*"))
         gates["raw_one_output_folder"] = len(folders) == 1
         folder = folders[0]
+        # named as the Photoshop connector names its runs: AEL_, the local date and time, the milliseconds (a name in
+        # universal time would be an hour or more away from the folder's local time, here in Central Europe)
+        named = re.fullmatch(r"AEL_(\d{8})_(\d{6})_\d{1,3}", folder.name)
+        made = datetime.fromtimestamp(folder.stat().st_mtime)
+        gates["raw_folder_named_as_in_photoshop"] = bool(named) and abs(
+            (datetime.strptime("".join(named.groups()), "%Y%m%d%H%M%S") - made).total_seconds()) < 1800
         result = steps.get("raw_result") or {}
         terminal = root / "terminal_raw"
         terminal_config = root / "terminal_raw.json"
