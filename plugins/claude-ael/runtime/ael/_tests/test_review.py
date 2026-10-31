@@ -457,3 +457,94 @@ def test_nrgf_gives_nothing_for_noiseless_radial_profiles_on_a_small_grid():
     f = np.isfinite(q) & np.isfinite(q.T) & m; c = np.cos(2*th)
     assert f.sum() > .97*m.sum() and np.corrcoef((q-q.T)[f], (c-c.T)[f])[0, 1] > .9, f.sum()/m.sum()   # 98 %: all
     # but the partial outer annulus (258-260 px)
+
+
+def test_nrgf_chain_keeps_a_cut_corona_flat_and_leaves_whole_annuli_alone():
+    """1.4.1. A Sun near the frame's edge: the annuli lose position angles as they grow, and with them a bright or a
+    faint sector. The plain NRGF follows the angles left and draws rings around the Sun; with partial_annuli='chain'
+    a separable corona stays flat along the radius at a fixed angle. On whole annuli (also ones cut short in radius)
+    the two give the same pixels."""
+    h, w = 900, 1400
+    g = EclipseGeometry(shape=(h, w), sun_xy=(820.0, 330.0), sun_radius_px=150.0, moon_xy=(824.0, 331.0),
+                        moon_radius_px=152.0)
+    y, x = np.mgrid[:h, :w].astype(np.float64)
+    rp = np.hypot(x - 820, y - 330); r = rp / 150; th = np.arctan2(y - 330, x - 820)
+    a = np.where(r > .5, r, 1)**-3*(1+.6*np.cos(2*th)+.3*np.cos(th+.4))*1e4
+    a = (a+np.random.default_rng(1).normal(0, 1, a.shape)*np.sqrt(a)*.05).astype(np.float32)
+    valid = r > 1.03
+
+    def spread(q, deg):
+        near = np.abs(((np.degrees(th)-deg+180) % 360)-180) < 4
+        p = np.array([np.nanmedian(q[near & (r >= lo) & (r < lo+.1)]) for lo in np.arange(1.2, 3.6, .1)])
+        return float(np.std(p[np.isfinite(p)]))
+    plain = F.nrgf(a, valid, g, bin_px=2, min_count=12)
+    chain = F.nrgf(a, valid, g, bin_px=2, min_count=12, partial_annuli='chain')
+    for deg in (180, 135, 90):
+        assert spread(chain, deg) < .5*spread(plain, deg) and spread(chain, deg) < .06, deg
+    for m in ((rp >= 156) & (rp < 322), (rp >= 155) & (rp < 321.3)):
+        assert np.array_equal(F.nrgf(a, m, g, bin_px=2, min_count=12),
+                              F.nrgf(a, m, g, bin_px=2, min_count=12, partial_annuli='chain'), equal_nan=True)
+
+
+def test_stack_takes_a_coarse_field_and_a_map_of_sensor_defects():
+    """1.4.1. A smooth calibration field may come on cells of q native pixels (cell i centred on pixel q*i + (q-1)/2);
+    a map of sensor defects (one colour plane) leaves those pixels out of every frame, and nothing is filled in."""
+    from ael.stack import _coarse
+    f = np.arange(12, dtype=np.float32).reshape(3, 4)
+    big = _coarse(f, (9, 11))
+    assert big.shape == (9, 11) and big[4, 4] == f[1, 1] and big[1, 1] == f[0, 0]
+    assert _coarse(f, (3, 4)) is f or np.array_equal(_coarse(f, (3, 4)), f)
+
+
+def test_stack_gradual_handover_lets_the_shorter_exposure_take_over_across_the_taper():
+    """1.4.1. Two exposures eight times apart on a ramp of light that takes the long one through its taper to its
+    ceiling. The long frame reads 1 % high, so the stack's excess over the truth is 1 % of the long frame's share.
+    'exposure' (the default) keeps the long frame at 80 % of the stack at the middle of its taper, and its share then
+    falls within the last tenth of its range; 'gradual' adds the taper to its variance, as much as one short frame has
+    at the middle of the taper, so the short frame takes over there and the share falls about half as steeply."""
+    import json, tempfile
+    from pathlib import Path
+    from ael.stack import stack_from_config, smoothstep
+    h, w = 6, 120
+    x = np.arange(w, dtype=np.float64)
+    sky = 1000 + 40 * x                                        # green, DN/s
+    rgb = np.broadcast_to(np.stack([sky * .7, sky, sky * .8], axis=-1), (h, w, 3))
+    black, white = 512., 4000.
+    far = [-500, -500]
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        frames = []
+        for t, bias in ((.1, 1.0), (.8, 1.01)):
+            np.save(root / f"f{t}.npy", (rgb * t * bias + black).astype(np.float32))
+            frames.append(dict(path=f"f{t}.npy", kind="rgb", iso=100, exposure_s=t, black=black, white=white,
+                               reference_to_input=[[1, 0, 0], [0, 1, 0]], moon_xy=far, moon_radius_px=5))
+        share = {}
+        for mode in (None, "exposure", "gradual"):
+            stack = dict(canvas="reference", taper_start=.5, moon_guard_px=0, limb_fade_px=4)
+            if mode:
+                stack["handover"] = mode
+            cfg = dict(geometry=dict(shape=[h, w], sun_xy=far, sun_radius_px=5, moon_xy=far, moon_radius_px=5),
+                       frames=frames, stack=stack)
+            p = root / f"{mode}.json"
+            p.write_text(json.dumps(cfg))
+            stack_from_config(p, root / f"out_{mode}", progress=lambda *_: None)
+            share[mode] = (np.load(root / f"out_{mode}/linear.npy")[3, :, 1].astype(np.float64) / sky - 1) / .01
+        bad = dict(cfg, stack=dict(cfg["stack"], handover="share"))
+        (root / "bad.json").write_text(json.dumps(bad))
+        try:
+            stack_from_config(root / "bad.json", root / "out_bad", progress=lambda *_: None)
+            raise AssertionError("an unknown hand-over was accepted")
+        except ValueError:
+            pass
+    assert np.array_equal(share[None], share["exposure"])
+    s = smoothstep(1.01 * .8 * sky / (.95 * (white - black)), .5, 1)
+    expected = {"exposure": .8 * (1 - s), "gradual": .8 * (1 - s) / ((1 - s) + 8 * s)}
+    for mode, long_weight in expected.items():
+        assert np.max(np.abs(share[mode] - long_weight / (long_weight + .1))) < 2e-3, mode
+    middle = int(np.argmin(np.abs(s - .5)))
+    assert share["exposure"][middle] > .75 and .35 < share["gradual"][middle] < .6
+    below, ceiling = s == 0, s == 1
+    assert below.any() and ceiling.any()
+    for mode in ("exposure", "gradual"):
+        assert np.allclose(share[mode][below], .8 / .9, atol=2e-3) and np.allclose(share[mode][ceiling], 0, atol=2e-3)
+    assert np.max(-np.diff(share["gradual"])) < .6 * np.max(-np.diff(share["exposure"]))

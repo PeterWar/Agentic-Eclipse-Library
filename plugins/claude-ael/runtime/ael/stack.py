@@ -89,10 +89,27 @@ def _path(base, value):
     return p if p.is_absolute() else base / p
 
 
+def _coarse(a, shape):
+    """A smooth field given on a coarser grid, ceil(H/q) x ceil(W/q) cells for an integer step q (cell i centred on
+    native pixel q*i + (q-1)/2), brought to the native grid by bilinear interpolation. Anything else is returned as
+    it is, for the broadcasting check."""
+    a = np.asarray(a)
+    if a.ndim != 2 or len(shape) != 2 or a.shape == tuple(shape):
+        return a
+    for q in range(2, 129):
+        if a.shape == (-(-shape[0] // q), -(-shape[1] // q)):
+            big = cv2.resize(np.ascontiguousarray(a, np.float32), (a.shape[1] * q, a.shape[0] * q),
+                             interpolation=cv2.INTER_LINEAR)
+            return big[:shape[0], :shape[1]]
+    return a
+
+
 def _field(value, base, shape, name, *, positive=False, missing=False):
-    """A scalar or a native-shape calibration field. With ``missing``, NaN marks a pixel the field has no value for:
-    the frame is then left without data there (a flat that saw no light at a pixel cannot correct it)."""
+    """A scalar or a native-shape calibration field (a smooth one may come on a coarser grid: :func:`_coarse`). With
+    ``missing``, NaN marks a pixel the field has no value for: the frame is then left without data there (a flat that
+    saw no light at a pixel cannot correct it)."""
     a = io.load_array(_path(base, value)) if isinstance(value, str) else np.asarray(value, np.float32)
+    a = _coarse(a, shape)
     try:
         a = np.broadcast_to(a, shape)
     except ValueError as e:
@@ -210,7 +227,8 @@ def stack_from_config(config_path, out_dir, *, progress=print):
     if not np.isfinite(geo.sun_radius_px) or geo.sun_radius_px <= 0 or not np.isfinite(geo.sun_xy).all():
         raise ValueError('solar geometry must be finite with a positive radius')
     settings = cfg.get('stack', {})
-    keys(settings, 'canvas taper_start band_sigma_px clouds hot_pixels moon_guard_px limb_fade_px gain_e_per_dn read_noise_dn', 'stack')
+    keys(settings, 'canvas taper_start handover band_sigma_px clouds hot_pixels defects moon_guard_px limb_fade_px '
+                   'gain_e_per_dn read_noise_dn', 'stack')
     for f in frames:
         keys(f, 'path kind pattern iso train exposure_s black white dark flat transmission background flux_scale '
              'linearity_fraction reference_to_input moon_xy moon_radius_px cirrus_fraction note', 'frame')
@@ -220,6 +238,18 @@ def stack_from_config(config_path, out_dir, *, progress=print):
     taper_start = float(settings.get('taper_start', .8))
     if not 0 < taper_start < 1:
         raise ValueError('taper_start must be in (0,1)')
+    # How an exposure gives way to the next shorter one across its taper. 'exposure': its weight stays proportional
+    # to the exposure time and fades with the taper, so a frame eight times longer keeps most of the stack until the
+    # last tenth of its range and the grain changes there within a few pixels. 'gradual': the taper adds to the
+    # frame's variance instead, as much as one frame of the next shorter exposure has at the middle of the taper and
+    # without limit at the ceiling (weight e(1-s) / ((1-s) + s e/e_next), s the taper's smoothstep), so the shorter
+    # exposure takes over across the whole taper and the grain changes slowly. The filters that normalise by the
+    # local noise draw a sudden change of grain as a contour along the corona's isophotes.
+    handover = settings.get('handover', 'exposure')
+    if handover not in ('exposure', 'gradual'):
+        raise ValueError('handover must be exposure or gradual')
+    ladder = sorted({float(f['exposure_s']) for f in frames})
+    shorter = {e: max([s for s in ladder if s < e], default=None) for e in ladder}
     band_sigma = float(settings.get('band_sigma_px', 0))
     if not np.isfinite(band_sigma) or band_sigma < 0:
         raise ValueError('band_sigma_px must be finite and >=0')
@@ -234,7 +264,7 @@ def stack_from_config(config_path, out_dir, *, progress=print):
                                   'background' not in f or 'cirrus_fraction' not in f for f in frames):
             raise ValueError('clouds require two bands and frozen spatial transmission/background/cirrus per frame')
     hp = settings.get('hot_pixels', {})
-    keys(hp, 'enabled dithered threshold persistence read_noise_dn gain_e_per_dn', 'hot_pixels')
+    keys(hp, 'enabled dithered by_exposure threshold persistence read_noise_dn gain_e_per_dn', 'hot_pixels')
     if hp.get('enabled') and not hp.get('dithered'):
         raise ValueError('hot-pixel inference requires an explicitly confirmed dithered sequence')
     # Validate all inputs before creating any output. Stream them again for stacking.
@@ -260,24 +290,53 @@ def stack_from_config(config_path, out_dir, *, progress=print):
     if hp.get('enabled'):
         if len(set(shapes)) != 1:
             raise ValueError('hot-pixel inference requires equal native input shapes')
-        # One plane at a time bounds memory. Sensor DN, not exposure-normalised.
+        # One plane at a time bounds memory. Sensor DN, not exposure-normalised. With ``by_exposure`` the frames of
+        # each exposure (three or more) are searched on their own and a pixel found in any group leaves every frame:
+        # a hot pixel of the long exposures does not show in the short ones, so it would never persist across all.
+        groups = [list(range(len(frames)))]
+        if hp.get('by_exposure'):
+            by = {}
+            for n, f in enumerate(frames):
+                by.setdefault(float(f['exposure_s']), []).append(n)
+            groups = [g for g in by.values() if len(g) >= 3]
         hot = []
         nplanes = 3 if patterns[0] is None else 4
         for k in range(nplanes):
-            samples = []
-            for f in frames:
-                raw, pat = _read(f, base)
-                black = _field(f['black'], base, raw.shape, 'black')
-                white = _field(f['white'], base, raw.shape, 'white')
-                a = raw-black
-                a[raw >= black + float(f.get('linearity_fraction', .95))*(white-black)] = np.nan
-                p = a[..., k] if pat is None else a[k//2::2, k%2::2]
-                samples.append(p.copy())
-            hot.append(hot_pixel_mask(samples, threshold=float(hp.get('threshold', 6)),
-                                      persistence=float(hp.get('persistence', .8)),
-                                      read_noise_dn=float(hp.get('read_noise_dn', 3)),
-                                      gain_e_per_dn=float(hp.get('gain_e_per_dn', 1))))
-            del samples, raw, a
+            mask = None
+            for group in groups:
+                samples = []
+                for n in group:
+                    f = frames[n]
+                    raw, pat = _read(f, base)
+                    black = _field(f['black'], base, raw.shape, 'black')
+                    white = _field(f['white'], base, raw.shape, 'white')
+                    a = raw-black
+                    a[raw >= black + float(f.get('linearity_fraction', .95))*(white-black)] = np.nan
+                    p = a[..., k] if pat is None else a[k//2::2, k%2::2]
+                    samples.append(p.copy())
+                    del raw, a
+                found = hot_pixel_mask(samples, threshold=float(hp.get('threshold', 6)),
+                                       persistence=float(hp.get('persistence', .8)),
+                                       read_noise_dn=float(hp.get('read_noise_dn', 3)),
+                                       gain_e_per_dn=float(hp.get('gain_e_per_dn', 1)))
+                mask = found if mask is None else mask | found
+                del samples
+            if mask is None:
+                p = _read(frames[0], base)[0]
+                mask = np.zeros((p.shape[0], p.shape[1]) if patterns[0] is None else (p[0::2, 0::2].shape), bool)
+            hot.append(mask)
+    # Defects of the sensor found elsewhere (dust shadows, from dithered frames): a boolean map at the resolution of one
+    # colour plane (half the native size for a Bayer sensor), the same for every frame. Their pixels are left out of
+    # every frame, never replaced; the other frames cover that part of the sky.
+    if settings.get('defects'):
+        bad = np.asarray(io.load_array(_path(base, settings['defects'])), bool)
+        raw0, pat0 = _read(frames[0], base)
+        planes = [raw0.shape[:2]]*3 if pat0 is None else [raw0[k//2::2, k%2::2].shape for k in range(4)]
+        if bad.shape != tuple(planes[0]):
+            raise ValueError(f'defects must be a boolean map of one colour plane, {list(planes[0])}')
+        fit = [np.pad(bad, [(0, max(n-m, 0)) for n, m in zip(sh, bad.shape)])[:sh[0], :sh[1]] for sh in planes]
+        hot = fit if hot is None else [h | f for h, f in zip(hot, fit)]
+        del raw0
     out = Path(out_dir).resolve()
     out.mkdir(parents=True, exist_ok=False)
     h, w = shape
@@ -306,6 +365,8 @@ def stack_from_config(config_path, out_dir, *, progress=print):
         ramp = smoothstep(d, guard, guard+fade)
         wt = np.where(support >= .5, support*taper*ramp, 0).astype(np.float32)
         fine_weight = wt * float(f['exposure_s'])
+        if handover == 'gradual' and shorter[float(f['exposure_s'])]:
+            fine_weight = fine_weight / (taper + (1 - taper) * float(f['exposure_s']) / shorter[float(f['exposure_s'])])
         if band_sigma:
             good = (support >= .5) & (taper > 0)
             low = np.stack([normalized_gaussian(rgb[...,c], good, band_sigma, min_support=.01)
@@ -348,6 +409,7 @@ def stack_from_config(config_path, out_dir, *, progress=print):
     receipt = io.write_receipt(out/'receipt.json', product='linear stack', inputs=inputs, outputs=files,
         parameters=dict(recipe=cfg, canvas=canvas, origin_reference_xy=origin, frames=frame_reports,
                         hot_pixels_per_plane=[] if hot is None else [int(a.sum()) for a in hot],
+                        defects=settings.get('defects'),
                         median_rgb_dn_per_s=colour.tolist(), colour_region='all valid pixels, unbalanced sensor RGB'),
         gates=gates, notes='One train/ISO. Frozen registration and calibrations. No automatic cloud fitting. '
         'Coverage is geometric, support excludes saturation. No saturated-pixel reconstruction. '

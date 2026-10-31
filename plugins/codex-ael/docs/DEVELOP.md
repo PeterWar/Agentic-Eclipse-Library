@@ -59,12 +59,25 @@ normalised interpolation. No reconstruction is made where every exposure clips.
 
 - `canvas`: `"union"` (default) or `"reference"`; no inferred crop or new field choice.
 - `taper_start`: begin saturation taper at this fraction of the linear ceiling (.8).
+- `handover`: how an exposure gives way to the next shorter one across its taper.
+  `"exposure"` (default): the weight stays proportional to the exposure time and
+  fades with the taper, so a frame eight times longer keeps most of the stack until
+  the last tenth of its range and the grain changes there within a few pixels.
+  `"gradual"` (1.4.1): the taper adds to the frame's variance, as much as one frame
+  of the next shorter exposure has at the middle of the taper, so the shorter one
+  takes over across the whole taper. Filters that normalise by the local noise
+  (WOW, ACHF) draw a sudden change of grain as a contour along the isophotes.
 - `moon_guard_px`, `limb_fade_px`: exclusion and weighting ramp outside each Moon
   (2 and 4 native pixels by default). These are data-dependent recipe choices.
 - `hot_pixels`: optional `{ "enabled": true, "dithered": true, "threshold": 6,
   "persistence": .8, "read_noise_dn": 3, "gain_e_per_dn": 1 }`. Only enable for
   at least three dithered frames. Signed persistent residuals are normalised by
   local noise; a fixed star in an undithered sequence cannot be distinguished.
+  With `"by_exposure": true` the frames of each exposure (three or more) are searched
+  on their own and a pixel found in any group leaves every frame.
+- `defects`: optional path to a boolean map of one colour plane (half the native size
+  for a Bayer sensor), the same for every frame: sensor defects such as dust shadows
+  found elsewhere. Their pixels leave every frame and are never replaced.
 - `band_sigma_px`: 0 for the ordinary exposure-weighted stack; positive (e.g. 3)
   for two bands. Fine detail uses exposure weights, coarse structure uses an
   approximate inverse photon/read/cirrus variance. The split is a Gaussian low

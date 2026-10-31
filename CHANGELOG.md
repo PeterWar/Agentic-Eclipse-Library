@@ -2,9 +2,11 @@
 
 ## 1.4.1 — 2026-10-31
 
-The PixInsight connector, after its first use by its author on photos of other cameras and eclipses (a Sony A7S behind
-a Questar, under thin cloud, 2024; a Canon EOS 6D, 2024). Three artefacts are cured where they are born, and the
-dialog asks for less guesswork.
+The connectors for PixInsight and Photoshop, after their first use by their author on photos of other cameras and
+eclipses (a Sony A7S behind a Questar, under thin cloud, 2024; a Canon EOS 6D, 2024). Three artefacts are cured where
+they are born, the dialogs ask for less guesswork, and Photoshop shows AEL's progress in its own window. The Codex
+plugin goes to 1.1.5; the Claude Code plugin of this repository's marketplace and the Claude plugin folder
+`plugins/claude-ael/` go to 1.4.1.
 
 - **Exposure boundaries under thin cloud** (`python/ael_auto.py`, both connectors). With thin clouds or haze one gain
   per frame does not make the frames agree: where the 1 s frames of the A7S gave way to the 0.05 s ones, the short
@@ -59,6 +61,22 @@ dialog asks for less guesswork.
   that opens a web page is chosen by the script's platform directives (not by `corePlatform`): the Console warned at
   every Run. The dialog test reads the whole Console, from the script's first line, and fails on any call PixInsight
   calls deprecated (on the package of 0150ca0 it finds two), and on any function the scripts define twice.
+- **Photoshop shows AEL's progress in its own progress window** (`plugins/photoshop-ael/`). On Photoshop 2026 for
+  macOS the connector's own progress window (a ScriptUI palette) was never drawn while the script waited for the
+  engine: the window server held it at 0 × 0 pixels, off screen, and only the spinning wheel showed that something
+  ran. Photoshop's progress window is drawn at every update. Its first line names the step, its count and the time
+  since **Make the image**, and moves every second; after 20 s on one step, a second line says that AEL is still
+  working (a filter or writing the PSB can take minutes). **Cancel** stops AEL at the end of its step, or stops
+  Python 15 s later, and nothing is opened. The test now asks the window server whether that window is on screen
+  while AEL works, compares two pictures of it taken 12 s apart, and presses Cancel in the middle of a filter.
+  Photoshop's ExtendScript reads `a ? b : c ? d : e` as `(a ? b : c) ? d : e`; the connector has no chained
+  conditional left.
+- **The Photoshop dialog as PixInsight's.** Darks and flats in two lists, **Advanced settings…** with AEL's 16
+  filters and their opacities, the same filter line, a filter named in the progress as in the dialog, and the same
+  box “Agentic Eclipse Library” with the GitHub address as a web link (blue, underlined; a click opens the page) and
+  the MIT licence line, with the whole disclaimer on its tooltip. `tools/check_connectors.py` checks that both
+  dialogs show the same licence line and the disclaimer of their `LICENSE`, and that both `LICENSE` files are the
+  same.
 
 ## 1.4.0 — 2026-10-31
 

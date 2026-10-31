@@ -168,7 +168,7 @@ need to publish your photos to contribute.
   codex plugin add agentic-eclipse-library@pere-guerra-eclipse
   ```
   Python and its dependencies are checked separately. The plugin runs locally and includes the maintained
-  AEL 1.4.0 engine. See the guide for desktop-app installation and supported workflows.
+  AEL 1.4.1 engine. See the guide for desktop-app installation and supported workflows.
 - **Other agents:** point the agent at [`AGENTS.md`](AGENTS.md). Each skill is a plain `SKILL.md` with
   `references/` and `scripts/`.
 - Most text is in Catalan. Current models read and translate it without trouble; ask your agent to answer in your
@@ -227,6 +227,24 @@ repository").
 
 [MIT](LICENSE) © 2026 Pere Guerra Serra. You may use, copy, modify and redistribute this work freely, including
 commercially; the licence only asks you to keep the copyright and permission notices with copies of the work.
+
+## What is new in 1.4.1
+
+The two connectors after their first use by their author on photos of other cameras and eclipses (a Sony A7S behind
+a Questar under thin cloud, and a Canon EOS 6D, both in 2024).
+
+- **Three artefacts cured where they are born.** Under thin cloud each frame gets a smooth level field before it is
+  stacked, so the exposures agree where one gives way to the next. The next shorter exposure takes over gradually
+  (`stack.handover`), so the grain does not jump there and the filters draw no contour. Dust shadows and hot pixels
+  are found on the frames themselves, and their pixels leave every frame without being replaced (`stack.defects`).
+- **No rings in the NRGF** where the frame's edge or the Moon cuts its annuli (`partial_annuli='chain'`).
+- **PixInsight:** the linear master no longer opens black; darks and flats in two lists; **Advanced settings…** for
+  any of AEL's 16 filters and their opacity; no call that PixInsight 1.9.4 calls deprecated.
+- **Photoshop:** AEL's progress in Photoshop's own progress window, with the step, a clock and **Cancel** (the
+  connector's own progress window was never drawn on Photoshop 2026 for macOS); darks and flats in two lists and
+  **Advanced settings…**, as in PixInsight.
+- **Both:** a box titled “Agentic Eclipse Library” with the GitHub address as a web link and the MIT licence.
+- Measurements, limits and tests: [`docs/VALIDATION_1.4.1.md`](docs/VALIDATION_1.4.1.md).
 
 ## What is new in 1.4.0
 

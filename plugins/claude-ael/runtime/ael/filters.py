@@ -87,7 +87,7 @@ def local_mean_std(img: np.ndarray, valid: np.ndarray | None, sigma: float, min_
 # ------------------------------------------------------------------------------------------------
 def nrgf(img: np.ndarray, valid: np.ndarray | None, geometry: EclipseGeometry, *, center="sun",
          bin_px: float = 1.0, robust: bool = True, min_count: int = 50, smooth_bins: float = 0.0,
-         spread_about: str = "profile"):
+         spread_about: str = "profile", partial_annuli: str = "observed"):
     """Normalising-radial-graded filter: ``(I − <I>(r)) / σ(r)`` over annuli around the centre.
 
     ``robust`` uses the median and 1.4826·MAD instead of mean and standard deviation (Morgan, Habbal and
@@ -102,12 +102,14 @@ def nrgf(img: np.ndarray, valid: np.ndarray | None, geometry: EclipseGeometry, *
     and neither is the differential extinction of a low Sun: subtract a sky model first
     (:func:`ael.render.sky_background`) and correct the extinction (:mod:`ael.extinction`) if the field
     is large or the Sun was low. See docs/PAPER_AND_LIBRARY.md for how this differs from the layers of
-    the paper's published image.
+    the paper's published image. ``partial_annuli='chain'`` (since 1.4.1; AEL's filter bank uses it) keeps the
+    statistics of an annulus that the frame's edge or the Moon cut from jumping when a bright or a faint sector
+    leaves it, which draws rings around the Sun (:func:`ael.radial.continuous_nrgf`).
     """
     from .radial import continuous_nrgf
     return continuous_nrgf(img, valid, geometry, center=center, bin_px=bin_px,
                            robust=robust, min_count=min_count, smooth_bins=smooth_bins,
-                           spread_about=spread_about)
+                           spread_about=spread_about, partial_annuli=partial_annuli)
 
 
 # ------------------------------------------------------------------------------------------------

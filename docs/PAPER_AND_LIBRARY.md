@@ -8,7 +8,7 @@ the code behind the published layers and the library described three different o
 RHEF. This page says what each one does, filter by filter.
 
 "Production" means the code that made the layers of the published image, under `3-RECERCA/tools/` (the paper's
-image is version V125 of the project). "Library" means `ael` 1.4.0 (its code is that of 1.3.6); changes since 1.3.2 are marked.
+image is version V125 of the project). "Library" means `ael` 1.4.1; changes since 1.3.2 are marked.
 
 ## NRGF (Morgan, Habbal and Woo 2006)
 
@@ -16,7 +16,7 @@ image is version V125 of the project). "Library" means `ael` 1.4.0 (its code is 
 |---|---|---|
 | Input | Green channel of the linear composite, stars removed | Luminance; `nrgf_log` uses ln L |
 | Rings | 1 px; partial rings completed from the 40 neighbouring complete rings (outwards at the limb, inwards at the edge of the canvas) | 2 px |
-| Statistics | Mean and standard deviation, interpolated linearly to each pixel's radius | Median and 1.4826·MAD (`ael.filters.nrgf(..., robust=False)` gives mean and standard deviation; `make_filter` uses the robust form); one node per ring at the mean radius of its pixels, with the profile's slope and curvature (from the neighbouring median nodes) removed; a local cubic Hermite curve through the nodes; each run modelled on the values, on their logarithm or on asinh, keeping the better fit; spread measured about the continuous profile; no node smoothing in `make_filter`; no output where the residuals have no angular part, where half a ring shares one value, or in runs of fewer than four rings |
+| Statistics | Mean and standard deviation, interpolated linearly to each pixel's radius | Median and 1.4826·MAD (`ael.filters.nrgf(..., robust=False)` gives mean and standard deviation; `make_filter` uses the robust form); one node per ring at the mean radius of its pixels, with the profile's slope and curvature (from the neighbouring median nodes) removed; a local cubic Hermite curve through the nodes; each run modelled on the values, on their logarithm or on asinh, keeping the better fit; spread measured about the continuous profile; no node smoothing in `make_filter`; where the frame's edge, the Moon or missing pixels cut a ring, each step of the profile and of the spread from one ring to the next is measured on the 1° cells both rings cover (`partial_annuli='chain'`, since 1.4.1); no output where the residuals have no angular part, where half a ring shares one value, or in runs of fewer than four rings |
 | Display | Affine stretch; the same NRGF twice, with two stretches | `0.5 + 0.5·tanh(q/(2.5·max(1.4826·MAD, 1e−5)))` |
 | Limits | Local dark structure compressed to 0.2 (σ 400 px); a limiter that restrains darkening relative to an estimated sky level | None |
 | Blend | Multiply, 39 % and 14 % | Multiply |

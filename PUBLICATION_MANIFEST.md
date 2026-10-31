@@ -17,6 +17,8 @@ of the Photoshop files by filter family.
 Version 1.3.6 (29 October) corrects two problems that Francisco Bitto found in the soft logarithm and in the MGN.
 Version 1.4.0 (30 October) adds two experimental connectors, for PixInsight and Photoshop (`plugins/pixinsight-ael/`,
 `plugins/photoshop-ael/`); the `ael` code does not change.
+Version 1.4.1 (31 October) cures in the stack and in the NRGF three artefacts of a cloudy run of 2024, and updates
+the dialogs of both connectors.
 
 | Included | Files | Notes |
 |---|---:|---|

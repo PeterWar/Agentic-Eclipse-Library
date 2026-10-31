@@ -1,7 +1,7 @@
 # AEL for Codex
 
 Agentic Eclipse Library is available as a desktop plugin with seven guided workflows and the bundled
-AEL 1.4.0 numerical engine. Plugin version 1.1.4 is independently versioned from the Python library.
+AEL 1.4.1 numerical engine. Plugin version 1.1.5 is independently versioned from the Python library.
 The repository marketplace works independently of OpenAI's public directory review.
 
 ![AEL synthetic workflow demonstration](../plugins/codex-ael/assets/synthetic-workflow.png)
@@ -74,7 +74,14 @@ seventeen integration checks, including the 110 bundled AEL tests.
 Version 1.1.4 bundles AEL 1.4.0. The engine's code is that of 1.3.6; the library version adds connectors for
 PixInsight and Photoshop, which are not part of this plugin.
 
-AEL 1.4.0 retains documented ACHF/WOW boundary bands, some fine-detail sign inversion in the worst sectors of the
+Version 1.1.5 bundles AEL 1.4.1. `ael.stack` can hand over gradually from one exposure to the next shorter one
+(`handover: 'gradual'`), so that the grain does not jump where a longer exposure stops being used, and takes a map of
+sensor defects whose pixels leave every frame (`defects`, and hot pixels found per exposure). The NRGF of the filter
+bank no longer draws rings where the frame's edge or the Moon cuts its annuli (`partial_annuli='chain'` in
+`ael.radial`). The connectors for PixInsight and Photoshop also changed; they are not part of this plugin. Its ZIP
+passed the seventeen integration checks, including the 117 bundled AEL tests.
+
+AEL 1.4.1 retains documented ACHF/WOW boundary bands, some fine-detail sign inversion in the worst sectors of the
 default edge-aware WOW, and rings of the plain WOW next to a lunar limb that the data reach. See [field lessons](FIELD_LESSONS.md). The plugin's structure launcher preserves the full
 canvas and defaults to mono; the underlying historical CLI has different display defaults.
 
