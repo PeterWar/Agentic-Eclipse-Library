@@ -34,7 +34,7 @@ import ael
 from ael import calibrate, stack
 from ael.geometry import EclipseGeometry, find_disc, fit_limb
 
-from ael_workflow import CREDIT, RAW_EXTENSIONS, runtime
+from ael_workflow import CREDIT, LUNAR_RATE_ARCSEC_PER_S, MOON_RADIUS_MIN_ARCSEC, RAW_EXTENSIONS, runtime
 
 # The top of each RAW range is left out of the stack: some sensors stop being linear well before they clip (the
 # Canon R6 Mark III at 85 % of its range). Shorter exposures of the same totality cover what is left out.
@@ -1010,17 +1010,17 @@ def decide(analysis: dict) -> dict:
         coef = np.array([fit["intercept"], fit["velocity_px_per_s"]])
         line = np.column_stack([np.ones(len(seconds)), seconds]) @ coef
         limit = max(3 * fit["sigma"], 0.5)
-        # When the Moon and the corona disagree beyond a pixel (sigma of the line), one of them is biased and the data
-        # cannot tell which. The corona is what the image is made of: each frame registered on it keeps its own
-        # registration, and a frame between two of them follows the lunar track measured on its neighbours in time.
-        # A frame before the first or after the last frame on the corona cannot be placed and stays out.
-        local = fit["sigma"] > 1.0
+        # The Moon crosses the Sun at most 0.65" a second, for a Moon at least 944" in radius: a faster line is not the
+        # Moon's (wrong capture times, or a corona registration that slipped).
+        fastest = LUNAR_RATE_ARCSEC_PER_S * float(np.median([f["moon_full"]["r"] for f in placed])) / MOON_RADIUS_MIN_ARCSEC
+        speed_fit = float(np.hypot(*fit["velocity_px_per_s"]))
+        # When the Moon and the corona disagree beyond a pixel (sigma of the line), or the line is faster than the
+        # Moon, one of them is biased and the data cannot tell which. The corona is what the image is made of: each
+        # frame registered on it keeps its own registration. A frame without its own corona registration cannot be
+        # placed (a lunar track between its neighbours would follow times that the frames contradict) and stays out.
+        local = fit["sigma"] > 1.0 or speed_fit > fastest
         if local:
-            order_t = np.argsort(seconds[use])
-            known_t = seconds[use][order_t]
-            known_l = lunar[use][order_t]
-            line = np.column_stack([np.interp(seconds, known_t, known_l[:, 0], left=np.nan, right=np.nan),
-                                    np.interp(seconds, known_t, known_l[:, 1], left=np.nan, right=np.nan)])
+            line = np.full((len(seconds), 2), np.nan)
             limit = float("inf")
         for k, f in enumerate(placed):
             theta = float(measured[k]) if (local and use[k]) else float(theta_fit[k])
@@ -1041,10 +1041,14 @@ def decide(analysis: dict) -> dict:
                     row["excluded"] = (f"the corona places it {fit['residual_norm'][k]:.2f} px off the lunar motion "
                                        f"(limit {limit:.2f} px)")
             if not np.isfinite(row["shift"]).all():
-                row["excluded"] = ("outside the time span of the frames registered on the corona, while the Moon and "
-                                   "the corona disagree: it cannot be placed")
+                row["excluded"] = (f"no corona registration of its own, while the Moon and the corona do not make one "
+                                   f"straight lunar motion ({fit['sigma']:.1f} px off it, {speed_fit:.3f} px/s against at "
+                                   f"most {fastest:.3f}): it cannot be placed")
             report["frames"].append(row)
-        for f in by_corona:
+        for f in by_corona if local else []:
+            analysis["excluded"].append(dict(file=f["name"], reason="no lunar disc of its own, and the lunar motion "
+                                                                    "that would place its Moon does not hold"))
+        for f in [] if local else by_corona:
             seconds_f = (f["time"] - reference["time"]).total_seconds() if f["time"] else 0.0
             canvas_moon = np.array([1.0, seconds_f]) @ coef
             theta = float(f.get("corona_theta", 0.0))
@@ -1056,21 +1060,26 @@ def decide(analysis: dict) -> dict:
                                          canvas_moon=canvas_moon.tolist(), matrix=row_matrix(theta, f["corona_full"]),
                                          placed="by the corona: its Moon cannot be measured"))
         speed = float(np.hypot(*fit["velocity_px_per_s"]))
-        report.update(method=("the corona registration of each frame, and for the others their lunar limb minus the "
-                              "lunar track measured on their neighbours in time (the Moon and the corona disagree by "
-                              f"{fit['sigma']:.1f} px on a straight lunar motion)") if local else
+        report.update(method=("the corona registration of each frame; the frames without one stay out (the Moon and the "
+                              f"corona are {fit['sigma']:.1f} px off one straight lunar motion of {speed_fit:.3f} px/s, "
+                              f"at most {fastest:.3f} px/s physically)") if local else
                       "lunar limb of each frame, minus the lunar motion fitted on the corona registration",
                       lunar_velocity_px_per_s=fit["velocity_px_per_s"], lunar_speed_px_per_s=speed,
-                      residual_sigma_px=fit["sigma"], frames_on_corona=int(use.sum()),
+                      residual_sigma_px=fit["sigma"], frames_on_corona=int(use.sum()), lunar_motion_holds=not local,
+                      fastest_lunar_px_per_s=fastest,
                       frames_in_fit=int(fit["used"].sum()), limit_px=limit,
                       field_turn_deg_per_min=math.degrees(spin[1]) * 60,
                       field_turn_residual_deg=float(np.degrees(np.sqrt(np.mean(spin_residual ** 2)))))
         span = [float(seconds.min()), float(seconds.max())]
         middle = 0.5 * (span[0] + span[1])
-        sun = (np.asarray(fit["intercept"]) + np.asarray(fit["velocity_px_per_s"]) * middle).tolist()
-        report["sun"] = dict(xy=sun, how=f"the Moon's centre at the middle of the frames ({middle:+.1f} s from the "
-                                          f"reference), on the fitted lunar motion: the Sun's centre when the frames "
-                                          f"span the totality symmetrically and the site is on the central line")
+        if local:
+            report["sun"] = dict(xy=list(reference["moon_full"]["xy"]),
+                                 how="the Moon's centre of the reference frame (the lunar motion does not hold)")
+        else:
+            sun = (np.asarray(fit["intercept"]) + np.asarray(fit["velocity_px_per_s"]) * middle).tolist()
+            report["sun"] = dict(xy=sun, how=f"the Moon's centre at the middle of the frames ({middle:+.1f} s from the "
+                                              f"reference), on the fitted lunar motion: the Sun's centre when the frames "
+                                              f"span the totality symmetrically and the site is on the central line")
     else:
         why = "the frames carry no capture time" if not timed else f"only {len(on_corona)} frames registered on the corona"
         for f in by_corona + [f for f in placed if f in on_corona]:
