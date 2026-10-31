@@ -4,7 +4,7 @@ This connector runs the Agentic Eclipse Library (AEL) from PixInsight, with one 
 
 Your files are never edited. Each resulting image opens in a new PixInsight window and is also written to disk.
 
-For more faithful results and more filters, try the whole Agentic Eclipse Library with an AI agent: <https://github.com/PeterWar/Agentic-Eclipse-Library>. The dialog says so in one line, with that address written as a web link that opens the page, and the licence under it.
+For more faithful results and more filters, try the whole Agentic Eclipse Library with an AI agent: <https://github.com/PeterWar/Agentic-Eclipse-Library>. The dialog says so in a box of its own, «Agentic Eclipse Library», with that address written as a web link that opens the page, and the licence under it.
 
 MIT License, Copyright © 2026 Pere Guerra Serra (see `LICENSE`). The connector and the library are provided "as is", without warranty of any kind.
 
