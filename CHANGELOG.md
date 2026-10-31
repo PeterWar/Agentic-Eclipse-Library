@@ -1,5 +1,46 @@
 # Changelog
 
+## 1.4.1 — 2026-10-31
+
+The PixInsight connector, after its first use by its author on photos of other cameras and eclipses (a Sony A7S behind
+a Questar, under thin cloud, 2024; a Canon EOS 6D, 2024). Three artefacts are cured where they are born, and the
+dialog asks for less guesswork.
+
+- **Exposure boundaries under thin cloud** (`python/ael_auto.py`, both connectors). With thin clouds or haze one gain
+  per frame does not make the frames agree: where the 1 s frames of the A7S gave way to the 0.05 s ones, the short
+  frames were 8 % darker, and 37 % brighter farther out (the cloud dims the corona and spreads part of its light around
+  it). The stack stepped there, and every filter drew the step as a ring that follows the corona's brightness. When
+  the sky changed during the totality, each frame now gets a smooth level field: its ratio to the common stack wherever
+  it is linear, smoothed over 64 pixels, with what all frames share over 512 pixels left as it is (the cure of the 2026
+  image's exposure boundaries); it multiplies the frame, so the colour is untouched. On the A7S the exposures agree
+  to within 1–2 % up to the ceiling of the long ones, and the ring is gone. A gain-plus-background model did no better
+  and would have changed the colour of the faint corona.
+- **Dust and hot pixels on the sensor** (`ael_auto.py`, `ael/stack.py`). Without flats, a dust shadow on the sensor
+  repeats in a stack of frames placed apart on the sensor as a row of dark dots (on the A7S, shadows 20–65 % deep in
+  each frame, dots 6 % deep in the stack). When the frames of an exposure sit at least 3 px apart, the engine finds the
+  shadows on the frames themselves (each frame against the stack on its own sensor, high-passed, averaged over the
+  frames: a compact part of the sensor at least 5 % darker at its core and 5 standard errors), and hot pixels with the
+  noise measured around each pixel and per exposure; their pixels leave every frame and are never replaced. The stack
+  takes such a map (`stack.defects`) and, per exposure, `hot_pixels.by_exposure`; a smooth calibration field may be
+  given on a coarser grid of cells.
+- **Rings of the NRGF where the frame cuts the annuli** (`ael/radial.py`). An annulus that the frame's edge or the Moon
+  cuts loses position angles, and its median and spread jump when a bright or a faint sector leaves it. With
+  `partial_annuli='chain'` (the filter bank's NRGF uses it) each step of the profile and of the spread from one annulus
+  to the next is measured on the 1-degree cells both annuli cover wherever those cells change; whole annuli, also cut
+  short in radius, give exactly the old result. On a separable corona cut by the frame the variation along the radius
+  at a fixed angle falls 4 to 20 times. Nothing is filled in: only the two curves the filter divides by are bridged.
+- **PixInsight's linear master was black.** PixInsight 1.9.4 reads a floating-point TIFF whose last sample is NaN as
+  all zeros, and rescales one whose values leave 0–1. The PixInsight connector's master is now written in 0–1 (DN/s
+  over a power of ten, written in the receipt and the closing message) with an alpha channel that is 0 where nothing
+  was observed; its window is checked against its file.
+- **The PixInsight dialog.** Darks and flats in two lists (also in the Photoshop connector: the engine takes `darks`
+  and `flats`, still measures each file and leaves out one that is not what it was chosen as). «Advanced settings…»
+  chooses any of AEL's 16 filters as layers and their opacity in the composite. Each item of «Make» says what it does,
+  under the list and on its tooltip. The composite is saved (32-bit XISF) and shown in front. The Console hears each
+  filter and, while a step lasts, a line every 20 s. The file chooser uses `filePaths` (`fileNames` is deprecated in
+  PixInsight 1.9.4). Windows are named in local time, like the run's folder. A line invites to try the whole library
+  with an AI agent, with a button to its GitHub page.
+
 ## 1.4.0 — 2026-10-31
 
 Two connectors run `ael` from inside PixInsight and Photoshop, from the RAW photos of a totality to a stacked image

@@ -457,3 +457,40 @@ def test_nrgf_gives_nothing_for_noiseless_radial_profiles_on_a_small_grid():
     f = np.isfinite(q) & np.isfinite(q.T) & m; c = np.cos(2*th)
     assert f.sum() > .97*m.sum() and np.corrcoef((q-q.T)[f], (c-c.T)[f])[0, 1] > .9, f.sum()/m.sum()   # 98 %: all
     # but the partial outer annulus (258-260 px)
+
+
+def test_nrgf_chain_keeps_a_cut_corona_flat_and_leaves_whole_annuli_alone():
+    """1.4.1. A Sun near the frame's edge: the annuli lose position angles as they grow, and with them a bright or a
+    faint sector. The plain NRGF follows the angles left and draws rings around the Sun; with partial_annuli='chain'
+    a separable corona stays flat along the radius at a fixed angle. On whole annuli (also ones cut short in radius)
+    the two give the same pixels."""
+    h, w = 900, 1400
+    g = EclipseGeometry(shape=(h, w), sun_xy=(820.0, 330.0), sun_radius_px=150.0, moon_xy=(824.0, 331.0),
+                        moon_radius_px=152.0)
+    y, x = np.mgrid[:h, :w].astype(np.float64)
+    rp = np.hypot(x - 820, y - 330); r = rp / 150; th = np.arctan2(y - 330, x - 820)
+    a = np.where(r > .5, r, 1)**-3*(1+.6*np.cos(2*th)+.3*np.cos(th+.4))*1e4
+    a = (a+np.random.default_rng(1).normal(0, 1, a.shape)*np.sqrt(a)*.05).astype(np.float32)
+    valid = r > 1.03
+
+    def spread(q, deg):
+        near = np.abs(((np.degrees(th)-deg+180) % 360)-180) < 4
+        p = np.array([np.nanmedian(q[near & (r >= lo) & (r < lo+.1)]) for lo in np.arange(1.2, 3.6, .1)])
+        return float(np.std(p[np.isfinite(p)]))
+    plain = F.nrgf(a, valid, g, bin_px=2, min_count=12)
+    chain = F.nrgf(a, valid, g, bin_px=2, min_count=12, partial_annuli='chain')
+    for deg in (180, 135, 90):
+        assert spread(chain, deg) < .5*spread(plain, deg) and spread(chain, deg) < .06, deg
+    for m in ((rp >= 156) & (rp < 322), (rp >= 155) & (rp < 321.3)):
+        assert np.array_equal(F.nrgf(a, m, g, bin_px=2, min_count=12),
+                              F.nrgf(a, m, g, bin_px=2, min_count=12, partial_annuli='chain'), equal_nan=True)
+
+
+def test_stack_takes_a_coarse_field_and_a_map_of_sensor_defects():
+    """1.4.1. A smooth calibration field may come on cells of q native pixels (cell i centred on pixel q*i + (q-1)/2);
+    a map of sensor defects (one colour plane) leaves those pixels out of every frame, and nothing is filled in."""
+    from ael.stack import _coarse
+    f = np.arange(12, dtype=np.float32).reshape(3, 4)
+    big = _coarse(f, (9, 11))
+    assert big.shape == (9, 11) and big[4, 4] == f[1, 1] and big[1, 1] == f[0, 0]
+    assert _coarse(f, (3, 4)) is f or np.array_equal(_coarse(f, (3, 4)), f)

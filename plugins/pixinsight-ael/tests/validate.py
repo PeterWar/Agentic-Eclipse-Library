@@ -408,11 +408,11 @@ def main() -> None:
             tifffile.imwrite(wide_path, (scene_rgb * 8.0).astype(np.float32), photometric="rgb")
             assert float(tifffile.imread(wide_path).max()) > 1.0
 
-            # Stand-ins for the `ael` package that carry only a version: the connector must refuse an AEL older than 1.4.0,
-            # the first that measures the geometry on the image (or one whose version cannot be read), and accept a later
-            # one, comparing numbers and not text (1.10.0 > 1.4.0).
+            # Stand-ins for the `ael` package that carry only a version: the connector must refuse an AEL older than 1.4.1,
+            # whose NRGF and stack the RAW engine uses (1.4.0 was the first that measures the geometry on the image), or
+            # one whose version cannot be read, and accept a later one, comparing numbers and not text (1.10.0 > 1.4.1).
             stubs = {}
-            for label, version in (("stale", "1.3.3"), ("previous", "1.3.6"), ("newer", "1.10.0"),
+            for label, version in (("stale", "1.3.3"), ("previous", "1.3.6"), ("released", "1.4.0"), ("newer", "1.10.0"),
                                    ("unreadable", "development")):
                 stub_root = root / f"{label} ael"
                 (stub_root / "ael").mkdir(parents=True)
@@ -428,6 +428,27 @@ def main() -> None:
                 info = json.loads(probe_run.stdout[probe_run.stdout.find("{"):probe_run.stdout.rfind("}") + 1])
                 versions[label] = {"ok": info.get("ok"), "kind": info.get("kind"), "ael_version": info.get("ael_version")}
             report["tests"]["ael_version_floor"] = versions
+
+            # The dialog's list of filters (AELWorkflowCore.jsh, AEL_FILTERS) against the AEL it comes with: the same
+            # names, layer names, blend modes and default opacities, and AEL's default layers in the engine's order.
+            import re
+            from ael.develop import DEFAULT_OPACITY, layer_names
+            from ael.filterbank import DEFAULTS, NAMES, make_filter
+            core_text = (Path(__file__).resolve().parents[1] / "AELWorkflowCore.jsh").read_text(encoding="utf-8")
+            listed = re.findall(r'\{ name: "(\w+)", label: "([^"]+)", mode: "(\w+)", opacity: ([0-9.]+)', core_text)
+            order = re.search(r'AEL_DEFAULT_ORDER = \[([^\]]*)\]', core_text)
+            g_small = EclipseGeometry(shape=(120, 120), sun_xy=(60.0, 60.0), sun_radius_px=16.0)
+            yy_s, xx_s = np.mgrid[:120, :120]
+            r_s = np.hypot(xx_s - 60, yy_s - 60) / 16
+            a_s = (np.where(r_s > .5, r_s, 1) ** -3 * (1 + .3 * np.cos(4 * np.arctan2(yy_s - 60, xx_s - 60))) * 1e3
+                   * (1 + .01 * np.random.default_rng(0).standard_normal(r_s.shape))).astype(np.float32)
+            library = {n: (layer_names([n])[0], make_filter(n, a_s, r_s > 1.05, g_small)[1].capitalize(),
+                           float(DEFAULT_OPACITY.get(n, 0)) if n in DEFAULTS else 0.0) for n in NAMES}
+            dialog_list = {n: (label, mode, float(opacity)) for n, label, mode, opacity in listed}
+            report["tests"]["filter_catalogue"] = {
+                "matches": dialog_list == library and len(listed) == len(NAMES)
+                           and bool(order) and re.findall(r'"(\w+)"', order.group(1)) == list(DEFAULTS),
+                "dialog": dialog_list, "library": library}
 
             direct = {}
             for key, mode, source in (("structure", "structure", scene_path), ("polar", "polar", scene_path),
@@ -617,7 +638,8 @@ def main() -> None:
             gates = {
                 "negative_rotated": report["tests"]["negative_rotated"],
                 "direct_structure_and_polar": report["tests"]["direct_structure_and_polar"],
-                "old_ael_refused": all(floor[key]["kind"] == "old_ael" for key in ("stale", "previous", "unreadable")),
+                "old_ael_refused": all(floor[key]["kind"] == "old_ael" for key in ("stale", "previous", "released",
+                                                                                     "unreadable")),
                 "newer_ael_accepted": bool(floor["newer"]["ok"]) and floor["newer"]["ael_version"] == "1.10.0"}
             if not args.skip_pixinsight:
                 gates.update({
@@ -666,6 +688,7 @@ def main() -> None:
                                                                report["tests"]["bridge_equals_direct_structure_no_data"].values())})
                 if not args.skip_captures:
                     gates["captures_created"] = all(report["captures"][key]["created"] for key in ("dialog", "results"))
+            gates["filter_catalogue_matches_ael"] = report["tests"]["filter_catalogue"]["matches"]
             report["gates"] = gates
             report["ok"] = all(gates.values())
         except Exception as exc:

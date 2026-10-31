@@ -22,8 +22,10 @@ CREDIT = ("Processed with Agentic Eclipse Library by Pere Guerra — "
 
 # The connector is validated against this AEL: the edge-aware WOW and the per-family layer names (1.3.5), the
 # soft-log and MGN corrections (1.3.6), which the structure image and the filter layers depend on, and the geometry
-# measured on the image (1.4.0), which the dialogs use when no geometry is given.
-MINIMUM_AEL = (1, 4, 0)
+# measured on the image (1.4.0), which the dialogs use when no geometry is given; the NRGF that keeps an annulus cut by
+# the frame from drawing rings, and the stack's map of dust and per-exposure hot pixels, which the RAW engine uses
+# (1.4.1).
+MINIMUM_AEL = (1, 4, 1)
 
 
 def version_tuple(text) -> tuple:

@@ -8,7 +8,7 @@ https://github.com/PeterWar/Agentic-Eclipse-Library
 The connector's entry script and dialog run inside Photoshop with four substitutions only: the dialog window, the
 file chooser, the folder chooser and alert() are test doubles. The window double presses the dialog's own buttons in
 order ("Browse…", every "Choose…", then "Make the image"); the file chooser double returns the RAW files, then the
-calibration files, given here; the folder chooser double returns this test's results folder; alert() keeps the
+darks, then the flats, given here; the folder chooser double returns this test's results folder; alert() keeps the
 messages. The progress palette, the Python run in the background, opening the PSB and Photoshop's own reading of its
 layers are the real ones. Only documents this test opened are closed. The connector's folder must come out byte for
 byte unchanged.
@@ -16,7 +16,7 @@ byte unchanged.
 The output folder the dialog keeps in Photoshop's custom options is set aside before the run, so the dialog starts as
 it does the first time (at Downloads), and put back afterwards. Nothing is written to Downloads.
 
-    python run_photoshop_raw.py --plugin photoshop-ael --raw raws.txt [--calibration calib.txt] --output report/
+    python run_photoshop_raw.py --plugin photoshop-ael --raw raws.txt [--darks darks.txt] [--flats flats.txt] --output report/
 """
 from __future__ import annotations
 
@@ -107,7 +107,8 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--plugin", type=Path, required=True, help="the photoshop-ael folder")
     parser.add_argument("--raw", type=Path, required=True, help="text file, one RAW path per line")
-    parser.add_argument("--calibration", type=Path, help="text file, one calibration RAW path per line")
+    parser.add_argument("--darks", type=Path, help="text file, one dark RAW path per line")
+    parser.add_argument("--flats", type=Path, help="text file, one flat RAW path per line")
     parser.add_argument("--output", type=Path, required=True, help="new folder for this test's report")
     parser.add_argument("--timeout", type=int, default=7200)
     args = parser.parse_args()
@@ -117,8 +118,9 @@ def main() -> None:
         raise SystemExit(f"{output} exists: choose a new folder")
     output.mkdir(parents=True)
     raws = [line.strip() for line in args.raw.read_text(encoding="utf-8").splitlines() if line.strip()]
-    calibration = ([line.strip() for line in args.calibration.read_text(encoding="utf-8").splitlines() if line.strip()]
-                   if args.calibration else [])
+    listed = lambda path: ([line.strip() for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+                           if path else [])
+    darks, flats = listed(args.darks), listed(args.flats)
     before = digest(plugin)
 
     entry = (plugin / "AELPhotoshop.jsx").read_text(encoding="utf-8")
@@ -126,7 +128,7 @@ def main() -> None:
     entry = swapped(entry, (("alert(", "AEL_TEST_ALERT(", 2),))
     dialog = swapped((plugin / "AELPhotoshopDialog.jsx").read_text(encoding="utf-8"), SWAPS)
     core = plugin / "AELPhotoshopCore.jsx"
-    choices = json.dumps([raws, calibration], ensure_ascii=False)
+    choices = json.dumps([raws, darks, flats], ensure_ascii=False)
     picked = output / "results"
     picked.mkdir()
     code = f"""

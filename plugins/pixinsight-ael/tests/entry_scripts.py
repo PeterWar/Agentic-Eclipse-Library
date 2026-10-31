@@ -31,15 +31,17 @@ import tempfile
 
 ENTRIES = {
     "bridge": {"file": "AELBridge.js", "title": "Agentic Eclipse Library", "run": "Run",
-               "controls": ["imageList", "modeList", "outputEdit", "outputButton", "rmaxEdit", "allFiltersCheck",
-                            "rawText", "addRawButton", "calibrationText", "addCalibrationButton"],
+               "controls": ["imageList", "modeList", "modeHelp", "outputEdit", "outputButton", "rmaxEdit",
+                            "advancedButton", "choiceLabel", "rawText", "addRawButton", "darksText", "addDarksButton",
+                            "flatsText", "addFlatsButton"],
                "operations": ["Stacked image from RAW photos", "Structure image", "Unrolled view of the corona",
                               "Filter layers and PixelMath composite"]},
 }
 # What a person who does not know the technology should not have to fill in (Pere, 30-10): none of these fields exists.
 # darkEdit and flatEdit took one file each; the lists that replace them take several or one master.
 TECHNICAL = ["pythonEdit", "aelRootEdit", "geometryFileEdit", "geometryEdits", "validMaskEdit", "geometryEdit",
-             "cameraEdit", "compositeCheck", "noteEdit", "mirroredCheck", "darkEdit", "flatEdit"]
+             "cameraEdit", "compositeCheck", "noteEdit", "mirroredCheck", "darkEdit", "flatEdit", "calibrationText",
+             "allFiltersCheck"]
 
 PJSR = r'''
 #engine v8

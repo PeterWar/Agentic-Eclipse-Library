@@ -43,6 +43,31 @@ LINEARITY_FRACTION = 0.85
 # that of one light frame, and a whole session of calibration frames stays quick to read.
 MAX_DARKS = 32
 MAX_FLATS = 48
+# Under thin clouds or haze one gain per frame is not enough: the light reaching each part of the field changes from
+# frame to frame, and the cloud spreads some of the corona's light around it. Where a longer exposure gives way to a
+# shorter one the stack then steps, and the filters draw the step as a ring that follows the corona's brightness.
+# Each frame gets a smooth level field instead (the cure of the 2026 image's exposure boundaries, and a lesson of the
+# 2024 eclipse): its ratio to the common stack, measured wherever it is linear (up to its ceiling: the step lies where
+# the longer exposure's weight fades), smoothed over LEVEL_FIELD_PX; what all the frames share over LEVEL_GAUGE_PX is
+# left as it is. Cells of LEVEL_CELL_PX pixels. A field multiplies the frame: the colour of the corona is untouched.
+# On 16 frames of a Sony A7S under thin cloud (2024) it took the step where the 1 s frames give way to the 0.05 s ones
+# from 8 % to under 2 %, and the ring it drew around the Sun out of the filters.
+LEVEL_FIELD_PX = 64
+LEVEL_GAUGE_PX = 512
+LEVEL_CELL_PX = 8
+# Hot and dead pixels fixed on the sensor: found when the frames of an exposure sit at least this far apart on the
+# sensor (the corona moves there, a defect does not), and left out of the stack, never replaced.
+DITHER_PX = 3.0
+# Dust on the sensor's window or on a filter casts shadows a few pixels across, fixed on the sensor. With no flat
+# they stay, and on frames placed apart on the sensor each one repeats in the stack as a row of dark dots. A shadow
+# is a compact part of the sensor (at most DUST_SPAN_PX across) where every frame is darker than the stack: by
+# DUST_DEPTH at least and DUST_SIGMA standard errors at its core, by DUST_EDGE around it. Its pixels leave every frame,
+# never replaced: the other frames, placed apart, cover that part of the sky. (On a Sony A7S behind a Questar, 2024:
+# shadows 20-65 % deep in each frame, which the stack drew as rows of dots 6 % deep.)
+DUST_DEPTH = 0.05
+DUST_SIGMA = 5.0
+DUST_EDGE = 0.01
+DUST_SPAN_PX = 80
 # Registration on the Sun: the corona between these radii of the reference frame, where it is bright, structured and
 # free of the Moon's own scattered light.
 RING_RSUN = (1.36, 3.0)
@@ -615,6 +640,250 @@ def photometry_grid(green, saturated, moon, exposure, matrix, centre, radius, le
     return {int(cell[a]): float(np.median(values[a:b])) for a, b in zip(starts, ends) if b - a >= 30}
 
 
+def level_blocks(green, saturated, moon, exposure, levels) -> tuple:
+    """One frame's light in cells of LEVEL_CELL_PX native pixels (cell i centred on pixel 8i + 3.5), from its pixels
+    that the stack uses: not saturated, below the linear ceiling, above the noise floor and outside its own Moon. The
+    DN/s sum, the pixel count and the highest fraction of the linear range of each cell (the stack's weight fades over
+    the top half of that range)."""
+    span = levels["white"] - levels["black"]
+    h, w = green.shape
+    yy, xx = np.mgrid[:h, :w]
+    ceiling = LINEARITY_FRACTION * span
+    ok = np.isfinite(green) & ~saturated & (green > 0.002 * span) & (green < 0.97 * ceiling)
+    ok &= np.hypot(xx - moon["xy"][0], yy - moon["xy"][1]) > moon["r"] * 1.03 + 3
+    b = LEVEL_CELL_PX // 2                                     # half-resolution pixels per cell side
+    H, W = -(-h // b), -(-w // b)
+    pad = ((0, H * b - h), (0, W * b - w))
+    cells = lambda a: np.pad(a, pad).reshape(H, b, W, b)
+    total = cells(np.where(ok, green / exposure, 0)).sum(axis=(1, 3))
+    count = cells(ok.astype(np.float32)).sum(axis=(1, 3))
+    top = cells(np.where(ok, green / ceiling, 0)).max(axis=(1, 3))
+    return total.astype(np.float64), count.astype(np.float64), top.astype(np.float64)
+
+
+def _smooth_where(values, weights, sigma, fill=True):
+    """Weighted Gaussian mean over the cells with weight; cells too far from any are filled from the nearest one."""
+    from scipy.ndimage import distance_transform_edt
+    k = int(6 * sigma) | 1
+    blur = lambda a: cv2.GaussianBlur(np.ascontiguousarray(a, np.float32), (k, k), sigma,
+                                      borderType=cv2.BORDER_REPLICATE).astype(np.float64)
+    num, den = blur(values * weights), blur(weights)
+    out = np.where(den > 0.05 * max(float(den.max()), 1e-30), num / np.maximum(den, 1e-30), np.nan)
+    bad = ~np.isfinite(out)
+    if fill and bad.any() and (~bad).any():
+        out = out[tuple(distance_transform_edt(bad, return_distances=False, return_indices=True))]
+    return out
+
+
+def level_fields(analysis: dict, decision: dict, out: Path, apply: bool, progress=Progress(None)) -> dict:
+    """A smooth level field for every placed frame (see LEVEL_FIELD_PX), on the canvas, and the same field on the
+    frame's own grid of cells, written as the transmission the stack divides the frame by. Measured always, applied
+    (``apply``) only when the sky changed during the totality, as the gains are. The rows' cell sums are consumed."""
+    rows = decision["used"]
+    shape = tuple(analysis["shape"])
+    q = LEVEL_CELL_PX
+    H, W = -(-shape[0] // q), -(-shape[1] // q)
+    cy, cx = np.mgrid[:H, :W].astype(np.float64) * q + (q - 1) / 2   # cell centres, native pixels
+    light, weight, exposure_of, keys = {}, {}, {}, []
+    for row in rows:
+        blocks = row.pop("blocks", None)
+        if blocks is None:
+            continue
+        total, count, top = blocks
+        m = np.asarray(row["matrix"], np.float64)                       # canvas -> frame, native pixels
+        fx = (m[0, 0] * cx + m[0, 1] * cy + m[0, 2] - (q - 1) / 2) / q
+        fy = (m[1, 0] * cx + m[1, 1] * cy + m[1, 2] - (q - 1) / 2) / q
+        sample = lambda a: cv2.remap(np.ascontiguousarray(a, np.float32), fx.astype(np.float32), fy.astype(np.float32),
+                                     cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0).astype(np.float64)
+        s, n, t = sample(total), sample(count), sample(top)
+        good = n >= 0.5 * (q // 2) ** 2
+        gain = float(row.get("gain_measured", 1.0))
+        x = np.clip((t - 0.5) / 0.5, 0, 1)                              # the stack's taper, from half the range
+        light[row["file"]] = np.where(good, s / np.maximum(n, 1e-9) / gain, np.nan)
+        weight[row["file"]] = np.where(good, float(row["exposure_s"]) * (1 - x * x * (3 - 2 * x)), 0.0)
+        exposure_of[row["file"]] = float(row["exposure_s"])
+        keys.append(row["file"])
+    if len(keys) < 2:
+        return dict(applied=False, note="fewer than two frames with a linear part: no level fields")
+    phi = {k: np.zeros((H, W)) for k in keys}
+    sigma, gauge_sigma = LEVEL_FIELD_PX / q, LEVEL_GAUGE_PX / q
+
+    def stack_now():
+        num = sum(np.where(weight[k] > 0, weight[k] * light[k] * np.exp(-phi[k]), 0) for k in keys)
+        den = sum(weight[k] for k in keys)
+        return np.where(den > 0, num / np.maximum(den, 1e-30), np.nan), den
+
+    def agreement():
+        """How far the exposures are from one another where two of them have full weight: the median ratio of each
+        exposure's stack to the longest exposure's, cell by cell."""
+        groups = {}
+        for k in keys:
+            groups.setdefault(exposure_of[k], []).append(k)
+        if len(groups) < 2:
+            return {}
+        stacks = {}
+        for e, ks in groups.items():
+            num = sum(np.where(weight[k] > 0, light[k] * np.exp(-phi[k]), 0) for k in ks)
+            den = sum((weight[k] > 0).astype(float) for k in ks)
+            stacks[e] = np.where(den > 0, num / np.maximum(den, 1e-30), np.nan)
+        top = max(stacks)
+        return {f"{e:g} s / {top:g} s": round(float(np.nanmedian(stacks[e] / stacks[top])), 4)
+                for e in sorted(stacks) if e != top and np.isfinite(stacks[e] / stacks[top]).sum() > 50}
+
+    before = agreement()
+    for it in range(4):
+        progress("Levelling the photos", it + 1, 4)
+        common, den = stack_now()
+        eps = {}
+        for k in keys:
+            use = np.isfinite(common) & (common > 0) & np.isfinite(light[k]) & (light[k] > 0)
+            ratio = np.where(use, np.log(np.where(use, light[k], 1) / np.where(use, common, 1)) - phi[k], 0.0)
+            eps[k] = phi[k] + _smooth_where(ratio, use.astype(float), sigma)
+        mean = sum(weight[k] * eps[k] for k in keys) / np.maximum(den, 1e-30)
+        gauge = _smooth_where(np.where(den > 0, mean, 0), (den > 0).astype(float), gauge_sigma)
+        phi = {k: eps[k] - gauge for k in keys}
+    after = agreement()
+    report = dict(applied=bool(apply), field_px=LEVEL_FIELD_PX, gauge_px=LEVEL_GAUGE_PX, cell_px=q,
+                  exposures_agree_before=before, exposures_agree_after=after,
+                  per_frame={k: dict(p5=round(float(np.percentile(phi[k], 5)), 4),
+                                     p50=round(float(np.percentile(phi[k], 50)), 4),
+                                     p95=round(float(np.percentile(phi[k], 95)), 4)) for k in keys},
+                  files={})
+    if not apply:
+        return report
+    out.mkdir(parents=True, exist_ok=True)
+    for row in rows:
+        k = row["file"]
+        if k not in phi:
+            continue
+        m = np.vstack([np.asarray(row["matrix"], np.float64), [0.0, 0.0, 1.0]])
+        inv = np.linalg.inv(m)[:2]                                       # frame -> canvas
+        ux = inv[0, 0] * cx + inv[0, 1] * cy + inv[0, 2]
+        uy = inv[1, 0] * cx + inv[1, 1] * cy + inv[1, 2]
+        field = cv2.remap(np.ascontiguousarray(phi[k], np.float32), ((ux - (q - 1) / 2) / q).astype(np.float32),
+                          ((uy - (q - 1) / 2) / q).astype(np.float32), cv2.INTER_LINEAR,
+                          borderMode=cv2.BORDER_REPLICATE)
+        path = out / f"{Path(k).stem}_level.npy"
+        np.save(path, np.exp(field).astype(np.float32))
+        report["files"][k] = str(path)
+    return report
+
+
+def dithered(rows: list[dict]) -> dict:
+    """Whether the frames of each exposure (three or more) sit apart on the sensor: the median distance from each
+    frame to its nearest one of the same exposure, from the measured placements."""
+    groups = {}
+    for row in rows:
+        groups.setdefault(float(row["exposure_s"]), []).append(np.asarray(row["matrix"], np.float64)[:, 2])
+    nearest = {}
+    for e, shifts in groups.items():
+        if len(shifts) < 3:
+            continue
+        a = np.array(shifts)
+        d = np.hypot(*(a[:, None, :] - a[None, :, :]).transpose(2, 0, 1))
+        np.fill_diagonal(d, np.inf)
+        nearest[f"{e:g} s"] = round(float(np.median(d.min(axis=1))), 2)
+    return dict(nearest_px=nearest, dithered=bool(nearest) and min(nearest.values()) >= DITHER_PX)
+
+
+def _frame_light(green, saturated, row, exposure, levels):
+    """A frame's DN/s at half resolution (its gain removed) and where it is usable: not saturated, below the linear
+    ceiling, above the noise floor, outside its own Moon."""
+    span = levels["white"] - levels["black"]
+    h, w = green.shape
+    yy, xx = np.mgrid[:h, :w]
+    mx, my, mr = (row["moon_xy"][0] - 0.5) / 2, (row["moon_xy"][1] - 0.5) / 2, row["moon_r"] / 2
+    ok = (np.isfinite(green) & ~saturated & (green > 0.002 * span) & (green < 0.97 * LINEARITY_FRACTION * span)
+          & (np.hypot(xx - mx, yy - my) > mr * 1.03 + 3))
+    gain = float(row.get("gain_measured", 1.0))
+    return np.where(ok, green / exposure / gain, 0).astype(np.float32), ok
+
+
+def sensor_defects(analysis: dict, decision: dict, fields: dict, out: Path, progress=Progress(None)) -> dict:
+    """The dust shadows of the sensor (see DUST_DEPTH), from the frames themselves: a stack at half resolution (the
+    frames' level fields applied, if any), then each frame's ratio to it on the frame's own sensor, high-passed (about
+    12 pixels), averaged over the frames. Written as a map of one colour plane for the stack to leave out."""
+    from scipy.ndimage import binary_dilation, binary_propagation, find_objects, label
+    lv = analysis["levels"]
+    by_name = {f["name"]: f for f in analysis["lights"]}
+    flat = np.load(analysis["flat"]) if analysis.get("flat") else None
+    rows = decision["used"]
+    span = lv["white"] - lv["black"]
+
+    def read(row):
+        f = by_name[row["file"]]
+        green, saturated, _ = green_half(Path(f["path"]), lv, analysis["dark_for"].get(f["exposure_s"]), flat)
+        light, ok = _frame_light(green, saturated, row, f["exposure_s"], lv)
+        x = np.clip((green / (LINEARITY_FRACTION * span) - 0.5) / 0.5, 0, 1)
+        weight = np.where(ok, float(f["exposure_s"]) * (1 - x * x * (3 - 2 * x)), 0).astype(np.float32)
+        level = fields.get("files", {}).get(row["file"])
+        if level:                                      # the frame's level field, from its 8-pixel cells
+            light = light / stack._coarse(np.load(level), light.shape).astype(np.float32)
+        return light, ok, weight
+
+    def remap(a, fx, fy):
+        return cv2.remap(np.ascontiguousarray(a, np.float32), fx.astype(np.float32), fy.astype(np.float32),
+                         cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
+    num = den = None
+    for n, row in enumerate(rows):                       # 1: the stack on the canvas, at half resolution
+        progress("Looking for dust on the sensor", n + 1, 2 * len(rows), row["file"])
+        light, ok, weight = read(row)
+        if num is None:
+            h, w = light.shape
+            gy, gx = np.mgrid[:h, :w].astype(np.float64)
+            num, den = np.zeros((h, w)), np.zeros((h, w))
+        m = np.asarray(row["matrix"], np.float64)
+        X, Y = 2 * gx + 0.5, 2 * gy + 0.5
+        fx = (m[0, 0] * X + m[0, 1] * Y + m[0, 2] - 0.5) / 2
+        fy = (m[1, 0] * X + m[1, 1] * Y + m[1, 2] - 0.5) / 2
+        num += remap(weight * light, fx, fy)
+        den += remap(weight, fx, fy)
+    common = np.where(den > 0, num / np.maximum(den, 1e-30), 0)
+    have = (den > 0).astype(np.float32)
+    s1, s2, count = np.zeros((h, w)), np.zeros((h, w)), np.zeros((h, w))
+    k = 37
+    for n, row in enumerate(rows):                       # 2: each frame against it, on the frame's own sensor
+        progress("Looking for dust on the sensor", len(rows) + n + 1, 2 * len(rows), row["file"])
+        light, ok, _ = read(row)
+        inv = np.linalg.inv(np.vstack([np.asarray(row["matrix"], np.float64), [0.0, 0.0, 1.0]]))[:2]
+        u, v = 2 * gx + 0.5, 2 * gy + 0.5
+        cx_ = (inv[0, 0] * u + inv[0, 1] * v + inv[0, 2] - 0.5) / 2
+        cy_ = (inv[1, 0] * u + inv[1, 1] * v + inv[1, 2] - 0.5) / 2
+        there = remap(common, cx_, cy_)
+        full = remap(have, cx_, cy_) > 0.999
+        use = ok & full & (there > 0) & (light > 0)
+        r = np.where(use, np.log(np.where(use, light, 1) / np.where(use, there, 1)), 0).astype(np.float32)
+        wsum = cv2.GaussianBlur(use.astype(np.float32), (k, k), 6)
+        hp = r - cv2.GaussianBlur(r, (k, k), 6) / np.maximum(wsum, 1e-6)
+        good = use & (wsum > 0.5)
+        s1 += np.where(good, hp, 0); s2 += np.where(good, hp * hp, 0); count += good
+    with np.errstate(all="ignore"):
+        mean = np.where(count > 0, s1 / np.maximum(count, 1), 0)
+        error = np.sqrt(np.maximum(s2 / np.maximum(count, 1) - mean ** 2, 0) / np.maximum(count - 1, 1))
+    seen = count >= 4
+    core = seen & (mean < -DUST_DEPTH) & (mean < -DUST_SIGMA * error)
+    shadow = binary_dilation(binary_propagation(core, mask=seen & (mean < -DUST_EDGE)), iterations=1)
+    spots, found = label(shadow)
+    keep = np.zeros(found + 1, bool)
+    for i, box in enumerate(find_objects(spots), 1):  # compact shadows only: a line or an arc is not dust
+        if box is not None and max(box[0].stop - box[0].start, box[1].stop - box[1].start) * 2 <= DUST_SPAN_PX:
+            keep[i] = core[box][spots[box] == i].any()
+    shadow = keep[spots]
+    spots, found = label(shadow)
+    out.mkdir(parents=True, exist_ok=True)
+    path = out / "dust.npy"
+    np.save(path, shadow)
+    largest = []
+    if found:
+        sizes = np.bincount(spots.ravel())[1:]
+        for i in np.argsort(sizes)[::-1][:10]:
+            yy, xx = np.nonzero(spots == i + 1)
+            largest.append(dict(x=int(2 * xx.mean() + 0.5), y=int(2 * yy.mean() + 0.5), pixels=int(sizes[i]) * 4,
+                                depth=round(float(1 - np.exp(mean[yy, xx].min())), 3)))
+    return dict(applied=bool(found), path=str(path), shadows=int(found), sensor_pixels=int(shadow.sum()) * 4,
+                largest=largest, depth_min=DUST_DEPTH, sigma_min=DUST_SIGMA, edge=DUST_EDGE, span_max_px=DUST_SPAN_PX)
+
+
 def solve_gains(grids: list[dict], reference: int) -> dict:
     """One photometric gain per frame: log F[n, c] = log a[n] + log S[c], by alternating medians (robust to clouds
     over part of the field and to a few bad cells), with the reference frame's gain fixed at 1. What the gains leave
@@ -694,11 +963,19 @@ def unique_files(values) -> list[Path]:
     return answer
 
 
-def analyse(raw_files, calibration_files, work: Path, progress=Progress(None)) -> dict:
-    """Everything the stack needs, measured on the files: see the module's docstring."""
+def analyse(raw_files, calibration_files, work: Path, progress=Progress(None), darks=(), flats=()) -> dict:
+    """Everything the stack needs, measured on the files: see the module's docstring. ``calibration_files`` may mix
+    darks and flats (AEL tells them apart); ``darks`` and ``flats`` are files the user chose as such: each is still
+    measured, and one that is not what it was chosen as is left out, with the reason."""
     t_start = time.time()
-    lights_in, calibration_in = unique_files(raw_files), unique_files(calibration_files)
-    calibration_in = [p for p in calibration_in if str(p) not in {str(q) for q in lights_in}]
+    lights_in = unique_files(raw_files)
+    taken = {str(q) for q in lights_in}
+    darks_in = [p for p in unique_files(darks) if str(p) not in taken]
+    taken |= {str(q) for q in darks_in}
+    flats_in = [p for p in unique_files(flats) if str(p) not in taken]
+    taken |= {str(q) for q in flats_in}
+    calibration_in = darks_in + flats_in + [p for p in unique_files(calibration_files) if str(p) not in taken]
+    chosen_kind = {**{str(p): "dark" for p in darks_in}, **{str(p): "flat" for p in flats_in}}
     if not lights_in:
         raise ValueError("Choose the RAW files of the totality (CR2, CR3, NEF, ARW, DNG, RAF, ORF or RW2)")
     every = lights_in + calibration_in
@@ -732,11 +1009,16 @@ def analyse(raw_files, calibration_files, work: Path, progress=Progress(None)) -
             shape = None
         files[str(path)] = dict(path=str(path), name=path.name, camera=key, model=row.get("model"), kind=kind, stats=stats,
                                 exposure_s=float(row.get("ExposureTime") or 0), iso=row.get("ISO"),
-                                time=capture_time(row), chosen_as="light" if path in lights_in else "calibration",
-                                shape=shape)
+                                time=capture_time(row), shape=shape,
+                                chosen_as="light" if path in lights_in else chosen_kind.get(str(path), "calibration"))
     for item in files.values():
         if item["chosen_as"] == "calibration" and item["kind"] == "light":
             excluded.append(dict(file=item["name"], reason="chosen as calibration, but it is a light frame"))
+        elif item["chosen_as"] in ("dark", "flat") and item["kind"] != item["chosen_as"]:
+            excluded.append(dict(file=item["name"], reason=f"chosen as a {item['chosen_as']}, but it looks like a "
+                                                           f"{'light frame' if item['kind'] == 'light' else item['kind']}: "
+                                                           "not used"))
+            item["kind"] = "refused"
     lights = [f for f in files.values() if f["chosen_as"] == "light"]
     if not lights:
         raise ValueError("None of the chosen RAW files is a light frame of the eclipse: " +
@@ -1163,6 +1445,8 @@ def measure_photometry(analysis: dict, decision: dict, progress=Progress(None)) 
         green, saturated, _ = green_half(Path(f["path"]), lv, analysis["dark_for"].get(f["exposure_s"]), flat)
         moon = dict(xy=[(v - 0.5) / 2 for v in row["moon_xy"]], r=row["moon_r"] / 2)
         row["grid"] = photometry_grid(green, saturated, moon, f["exposure_s"], row["matrix"], centre, radius, lv)
+        row["exposure_s"] = f["exposure_s"]
+        row["blocks"] = level_blocks(green, saturated, moon, f["exposure_s"], lv)
     reference = analysis["reference"]["name"]
     kept = list(rows)
     for _ in range(3):
@@ -1187,6 +1471,8 @@ def measure_photometry(analysis: dict, decision: dict, progress=Progress(None)) 
         row["gain"] = gain if cloudy else 1.0
     for row in rows:
         row.pop("grid", None)
+        if row not in kept:
+            row.pop("blocks", None)
     decision["used"] = kept
     photometry = {k: v for k, v in solved.items() if k not in ("gains", "residual_per_frame")}
     photometry["frames_without_overlap"] = [kept[n]["file"] for n in solved["frames_without_overlap"]]
@@ -1201,6 +1487,24 @@ def measure_photometry(analysis: dict, decision: dict, progress=Progress(None)) 
 XYZ_FROM_SRGB = np.array([[0.412453, 0.357580, 0.180423],
                           [0.212671, 0.715160, 0.072169],
                           [0.019334, 0.119193, 0.950227]])
+
+
+def pixinsight_master(linear: np.ndarray, path: Path) -> dict:
+    """The linear master as PixInsight 1.9.4 reads it right: a floating-point TIFF whose last sample has no value (NaN)
+    is read as all zeros, and one whose values leave 0-1 is rescaled without a word. So the values go in 0-1 (DN/s less
+    a negative offset, if any, over a power of ten), and where nothing was observed the colour is 0 and an alpha
+    channel is 0 (transparent). The scale is returned for the receipt and the closing message."""
+    import tifffile
+    seen = np.isfinite(linear).all(axis=-1)
+    low = min(0.0, float(np.nanmin(linear[seen]))) if seen.any() else 0.0
+    top = float(np.nanmax(linear[seen])) - low if seen.any() else 1.0
+    unit = float(10 ** math.ceil(math.log10(max(top, 1e-30))))
+    rgb = np.where(seen[..., None], (linear - low) / unit, 0).astype(np.float32)
+    tifffile.imwrite(path, np.dstack([rgb, seen.astype(np.float32)]), photometric="rgb", extrasamples=["unassalpha"],
+                     description=json.dumps({"ael": "linear master for PixInsight", "unit_dn_per_s": unit,
+                                             "offset_dn_per_s": low, "alpha": "1 observed, 0 no data"}))
+    return dict(unit_dn_per_s=unit, offset_dn_per_s=low, no_data="alpha 0, colour 0",
+                how="DN/s = value * unit_dn_per_s + offset_dn_per_s")
 
 
 def daylight_colour(path: Path) -> dict | None:
@@ -1263,7 +1567,8 @@ def run_auto(cfg: dict) -> dict:
     opens: a layered PSB for Photoshop (the default), the layer images and their PixelMath expressions for
     PixInsight. Everything before the filter layers is the same for both."""
     from ael import develop, io
-    from ael.filterbank import DEFAULTS
+    from ael.develop import DEFAULT_OPACITY
+    from ael.filterbank import ALIASES, DEFAULTS, NAMES
     from PIL import ImageCms
 
     program = cfg.get("program", "photoshop")
@@ -1280,10 +1585,29 @@ def run_auto(cfg: dict) -> dict:
     work = Path(tempfile.mkdtemp(prefix=f"AEL_{name}_", dir=cfg.get("work_parent")))
     kept_work = False
     try:
-        analysis = analyse(cfg.get("raw") or [], cfg.get("calibration") or [], work / "calibration", progress)
+        # The filter layers: AEL's default ones unless the user chose others ("filters"), each with its own opacity in
+        # the composite ("opacities"; 0 opens the layer without putting it in the composite).
+        chosen = [ALIASES.get(n, n) for n in (cfg.get("filters") or list(DEFAULTS))]
+        unknown = [n for n in chosen if n not in NAMES]
+        if unknown or not chosen:
+            raise ValueError(f"Unknown filters {unknown}: choose from {list(NAMES)}")
+        chosen = list(dict.fromkeys(chosen))
+        opacity = {n: float(DEFAULT_OPACITY.get(n, 1.0) if n in DEFAULTS else 0.0) for n in chosen}
+        opacity.update({ALIASES.get(k, k): float(v) for k, v in (cfg.get("opacities") or {}).items()
+                        if ALIASES.get(k, k) in opacity})
+        if any(not 0 <= v <= 1 for v in opacity.values()):
+            raise ValueError("Each opacity must be between 0 and 1")
+        shown = [n for n in chosen if opacity[n] > 0]
+        analysis = analyse(cfg.get("raw") or [], cfg.get("calibration") or [], work / "calibration", progress,
+                           darks=cfg.get("darks") or [], flats=cfg.get("flats") or [])
         clock["analysed"] = time.time()
         decision = decide(analysis)
         analysis["photometry"] = measure_photometry(analysis, decision, progress)
+        cloudy = analysis["photometry"].get("residual") is not None and analysis["photometry"]["residual"] > 0.03
+        fields = level_fields(analysis, decision, work / "fields", cloudy, progress)
+        dither = dithered(decision["used"])
+        dust = (sensor_defects(analysis, decision, fields, work / "defects", progress) if dither["dithered"]
+                else dict(applied=False, note="the frames do not sit apart on the sensor: dust cannot be told from the sky"))
         lv, reference = analysis["levels"], analysis["reference"]
         by_name = {f["name"]: f for f in analysis["lights"]}
         dark_for = {d["exposure_s"]: d["path"] for d in analysis["calibration"]["darks"]}
@@ -1299,6 +1623,8 @@ def run_auto(cfg: dict) -> dict:
                      "reference_to_input": row["matrix"],
                      "moon_xy": row["moon_xy"], "moon_radius_px": row["moon_r"], "train": "one",
                      "flux_scale": float(row.get("gain", 1.0))}
+            if fields["files"].get(row["file"]):
+                frame["transmission"] = fields["files"][row["file"]]
             if dark_for.get(f["exposure_s"]):
                 frame["dark"] = dark_for[f["exposure_s"]]
             if flat_path:
@@ -1327,12 +1653,16 @@ def run_auto(cfg: dict) -> dict:
         # photo's weight therefore fades over the top half of its range, not the top fifth: the hand-over spreads over
         # about 15 % of the radius, and the shorter exposure covers what the longer one gives up.
         photometry = analysis["photometry"]
-        cloudy = photometry.get("residual") is not None and photometry["residual"] > 0.03
         taper = 0.5
         recipe = {"geometry": json.loads(stack_geometry.to_json()), "frames": frames,
                   "stack": {"canvas": "reference", "taper_start": taper, "moon_guard_px": 2, "limb_fade_px": 4,
-                            "band_sigma_px": 0, "hot_pixels": {"enabled": False}},
+                            "band_sigma_px": 0,
+                            "hot_pixels": {"enabled": True, "dithered": True, "by_exposure": True,
+                                           "gain_e_per_dn": 1e6}
+                            if dither["dithered"] else {"enabled": False}},
                   "note": f"AEL {name} connector: every value measured on the files (see the connector's receipt)"}
+        if dust.get("applied"):
+            recipe["stack"]["defects"] = dust["path"]
         recipe_path = work / "stack_recipe.json"
         recipe_path.write_text(json.dumps(recipe, indent=1, ensure_ascii=False), encoding="utf-8")
         total = len(frames)
@@ -1350,7 +1680,7 @@ def run_auto(cfg: dict) -> dict:
         clock["stacked"] = time.time()
 
         # Filters: AEL's default layers over the display base, in the colours of the camera set to daylight.
-        progress("Filters", 0, len(DEFAULTS))
+        progress("Filters", 0, len(chosen))
         filter_geometry = EclipseGeometry.from_json(stacked["files"]["geometry"])
         filter_geometry = EclipseGeometry(shape=filter_geometry.shape, sun_xy=filter_geometry.sun_xy,
                                           sun_radius_px=filter_geometry.sun_radius_px, moon_xy=tuple(swept_xy),
@@ -1373,23 +1703,27 @@ def run_auto(cfg: dict) -> dict:
         layers_cfg = {"input": stacked["files"]["linear"], "geometry": str(filter_geometry_path),
                       "valid": stacked["files"]["valid"], "coverage": stacked["files"]["coverage"],
                       "min_coverage": 0.5, "alpha": stacked["files"]["alpha"],
-                      "filters": list(DEFAULTS), "visible": list(DEFAULTS),
+                      "filters": chosen, "visible": shown, "opacities": {n: opacity[n] for n in shown},
                       "display": {"scale": scale, "asinh": 20, "highlight_ceiling": 0.9},
                       "note": f"AEL {name} connector: AEL's default filter layers over the display base"}
         if colour:
             layers_cfg.update(white_balance=colour["white_balance"], camera_to_linear_rgb=colour["camera_to_linear_rgb"])
+
+        state = {"done": 0}
+
+        def filter_progress(message):
+            text = str(message)
+            if text.startswith("filter ") and "/" in text:
+                state["done"] = int(text.split()[1].split("/")[0])
+                progress("Filters", state["done"], len(chosen), text.split(": ", 1)[-1])
+            elif text:
+                progress("Filters", state["done"], len(chosen), text)
         if program == "photoshop":
             icc_path = work / "sRGB.icc"
             icc_path.write_bytes(ImageCms.ImageCmsProfile(ImageCms.createProfile("sRGB")).tobytes())
             filters_recipe = dict(layers_cfg, photoshop=True, icc=str(icc_path))
             filters_recipe_path = work / "filters_recipe.json"
             filters_recipe_path.write_text(json.dumps(filters_recipe, indent=1, ensure_ascii=False), encoding="utf-8")
-
-            def filter_progress(message):
-                text = str(message)
-                if text.startswith("filter ") and "/" in text:
-                    done = int(text.split()[1].split("/")[0])
-                    progress("Filters", done, len(DEFAULTS), text.split(": ", 1)[-1])
             product = develop.filters_from_config(filters_recipe_path, work / "filters", progress=filter_progress)
             filters_receipt_path = Path(product["receipt"])
             filters_receipt = json.loads(filters_receipt_path.read_text())
@@ -1403,7 +1737,7 @@ def run_auto(cfg: dict) -> dict:
             # the connector's filter operation makes them (ael_workflow.run_filters): PixInsight opens them as views.
             from ael_workflow import run_filters
             filters_dir = work / "filters"
-            layered = run_filters(dict(layers_cfg, out=str(filters_dir)))
+            layered = run_filters(dict(layers_cfg, out=str(filters_dir)), progress=filter_progress)
             filters_receipt_path = Path(json.loads(Path(layered["receipt"]).read_text())["ael_receipt"])
             filters_receipt = json.loads(filters_receipt_path.read_text())
             gates = filters_receipt["gates"]
@@ -1417,7 +1751,11 @@ def run_auto(cfg: dict) -> dict:
 
         # What the user keeps: the layered image, the linear master, a preview and the receipts. The rest was temporary.
         progress("Saving", 0, 1)
-        shutil.move(stacked["files"]["tiff"], linear_tif)
+        master_scale = None
+        if program == "pixinsight":
+            master_scale = pixinsight_master(np.load(stacked["files"]["linear"]), linear_tif)
+        else:
+            shutil.move(stacked["files"]["tiff"], linear_tif)
         shutil.move(str(preview_source), preview)
         details.mkdir()
         for source, detail in ((recipe_path, "stack_recipe.json"), (Path(stacked["receipt"]), "stack_receipt.json"),
@@ -1428,7 +1766,7 @@ def run_auto(cfg: dict) -> dict:
                   {"name": "00 Display base", "mode": "normal", "opacity": 1.0, "visible": True}]
         layers += [{"name": entry["layer"], "mode": entry["mode"], "opacity": float(entry["opacity"]),
                     "visible": bool(entry["visible"])} for entry in filters_receipt["parameters"]["layers"]]
-        outputs = {"linear_master": dict(path=str(linear_tif), sha256=_sha256(linear_tif)),
+        outputs = {"linear_master": dict(path=str(linear_tif), sha256=_sha256(linear_tif), scale=master_scale),
                    "preview": dict(path=str(preview), sha256=_sha256(preview))}
         if program == "photoshop":
             psb = out / f"{stem} AEL.psb"
@@ -1452,6 +1790,12 @@ def run_auto(cfg: dict) -> dict:
                    "left_out": analysis["excluded"], "levels": lv, "calibration": analysis["calibration"],
                    "reference": reference["name"], "band_sigma_half_px": analysis["sigma_half_px"],
                    "registration": decision, "photometry": dict(photometry, taper_start=taper),
+                   "level_fields": {k: v for k, v in fields.items() if k != "files"},
+                   "hot_pixels": dict(dither, applied=bool(dither["dithered"]),
+                                      noise="measured around each pixel (the camera's gain is not known)",
+                                      per_plane=stack_receipt["parameters"].get("hot_pixels_per_plane", [])),
+                   "dust": {k: v for k, v in dust.items() if k != "path"},
+                   "filters": {"chosen": chosen, "opacities": opacity},
                    "colour": colour or "camera colour matrix unknown: sensor RGB",
                    "display_scale": scale, "stack_gates": stack_receipt["gates"], "filters_gates": gates,
                    "layers": layers, "outputs": outputs,
@@ -1469,7 +1813,8 @@ def run_auto(cfg: dict) -> dict:
         if program == "photoshop":
             answer.update(psb=outputs["psb"]["path"], psb_layers=layers)
         else:
-            answer.update(images=images, pixelmath=pixelmath, gates=gates, geometry_source="measured on the RAW files",
+            answer.update(images=images, pixelmath=pixelmath, gates=gates, linear_master_scale=master_scale,
+                          geometry_source="measured on the RAW files",
                           geometry=json.loads(filter_geometry_path.read_text(encoding="utf-8")))
         return answer
     except Exception:

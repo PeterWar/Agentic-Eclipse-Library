@@ -5,8 +5,8 @@ Processed with Agentic Eclipse Library by Pere Guerra —
 https://github.com/PeterWar/Agentic-Eclipse-Library
 */
 
-// Two choices only: the RAW files of the totality and, if there are any, the calibration frames, plus where the result
-// goes. Everything else (camera, levels, the Moon, the registration on the Sun, colour, filters) AEL measures.
+// The RAW files of the totality and, if there are any, the darks and the flats, plus where the result goes. Everything
+// else (camera, levels, the Moon, the registration on the Sun, colour, filters) AEL measures.
 var AELPhotoshopDialog = function () {
     var RAW = /\.(cr2|cr3|nef|arw|dng|raf|orf|rw2)$/i;
     var win = new Window("dialog", "Agentic Eclipse Library");
@@ -48,8 +48,10 @@ var AELPhotoshopDialog = function () {
 
     var raws = picker("Totality RAW photos", "none chosen", "Choose…");
     raws.button.onClick = function () { choose(raws, "RAW photos of the totality (select them all)"); };
-    var calibration = picker("Darks and flats (optional)", "none", "Choose…");
-    calibration.button.onClick = function () { choose(calibration, "Dark and flat frames of the same camera"); };
+    var darks = picker("Darks (optional)", "none", "Choose…");
+    darks.button.onClick = function () { choose(darks, "Dark frames of the same camera"); };
+    var flats = picker("Flats (optional)", "none", "Choose…");
+    flats.button.onClick = function () { choose(flats, "Flat frames of the same camera and optics"); };
     // Each run makes a new folder, named with its date and time, inside this one.
     var output = picker("Output folder", "", "Browse…");
     output.folder = AELPhotoshop.defaultOutput();
@@ -74,7 +76,7 @@ var AELPhotoshopDialog = function () {
             return;
         }
         AELPhotoshop.saveOutput(output.folder.fsName);
-        answer = {raw: raws.files, calibration: calibration.files, output: output.folder.fsName};
+        answer = {raw: raws.files, darks: darks.files, flats: flats.files, output: output.folder.fsName};
         win.close(1);
     };
     cancel.onClick = function () { win.close(0); };

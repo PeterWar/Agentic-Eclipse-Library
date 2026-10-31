@@ -479,7 +479,8 @@ var AELPhotoshop = AELPhotoshop || {};
         var result;
         try {
             result = ns.runBackground(probe.selected_python,
-                {operation: "raw", raw: options.raw, calibration: options.calibration, out: out.fsName},
+                {operation: "raw", raw: options.raw, darks: options.darks || [], flats: options.flats || [],
+                 calibration: options.calibration || [], out: out.fsName},
                 runRoot, progress.update);
         } catch (error) {
             progress.window.close();

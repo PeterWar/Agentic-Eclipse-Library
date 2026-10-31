@@ -369,9 +369,10 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
     info={}
     if name in ('nrgf','nrgf_log'):
         q=F.nrgf(np.log(np.maximum(a,1e-30)) if name=='nrgf_log' else a,m,geometry,
-                 bin_px=2,min_count=12,smooth_bins=0)
+                 bin_px=2,min_count=12,smooth_bins=0,partial_annuli='chain')
         result,info=display_detail(q,m)
         return result,'multiply',dict(**info,input='ln L' if name=='nrgf_log' else 'L',bin_px=2,smooth_bins=0,
+                                           partial_annuli='chain',
                                            profile_evaluation='local cubic Hermite curve through nodes at the mean radius of each annulus')
     if name.startswith('rhef'):
         sector=60 if name.endswith('60') else 30 if name.endswith('30') else None

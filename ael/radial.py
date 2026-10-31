@@ -90,8 +90,55 @@ def _radial_smooth(rr, z, step, least=24, distinct=4):
     return CubicSpline(centre, level, bc_type='not-a-knot')(rr)
 
 
+def _covered_cells(geometry, center, m, bin_px, nb=360):
+    """Annulus by annulus, which of ``nb`` position-angle cells hold observed light: the cell lies whole inside the image
+    (its four corners do: a cell that the frame's edge cuts is not covered) and has an observed pixel, or no pixel at all
+    (a small annulus leaves cells empty; that is no missing angle). An annulus cut short in radius keeps its angles.
+    Where a cell would hold fewer than six pixels on average, every cell counts as covered: a missing angle cannot
+    be told from the pixel grid there. Also the cell of every pixel."""
+    cx, cy = geometry.center(center)
+    h, w = geometry.shape
+    y = (np.arange(h, dtype=np.float64) - cy)[:, None]
+    x = (np.arange(w, dtype=np.float64) - cx)[None, :]
+    cell = (np.floor((np.arctan2(y, x) + np.pi) / (2 * np.pi) * nb).astype(np.int64) % nb)
+    ring = np.floor(np.hypot(x, y) / bin_px).astype(np.int64)
+    n = int(ring.max()) + 1
+    inside = np.bincount((ring * nb + cell).ravel(), minlength=n * nb).reshape(n, nb)
+    seen = np.bincount((ring * nb + cell)[m], minlength=n * nb).reshape(n, nb)
+    edges = -np.pi + 2 * np.pi * np.arange(nb + 1) / nb
+    whole = np.ones((n, nb), bool)
+    for radius in (np.arange(n) * bin_px, (np.arange(n) + 1) * bin_px):
+        ex = cx + radius[:, None] * np.cos(edges)[None, :]
+        ey = cy + radius[:, None] * np.sin(edges)[None, :]
+        ok = (ex >= -.5) & (ex <= w - .5) & (ey >= -.5) & (ey <= h - .5)
+        whole &= ok[:, :-1] & ok[:, 1:]
+    sparse = np.pi * bin_px ** 2 * (2 * np.arange(n) + 1) / nb < 6
+    return (whole & ((seen > 0) | (inside == 0))) | sparse[:, None], cell
+
+
+def _chain_terms(sets, covered, statistic):
+    """For each annulus after the first of a run: how much the step of ``statistic`` (in logarithm) from the annulus
+    before changes when it is measured on the position-angle cells both annuli cover, instead of on all their pixels.
+    Zero where the covered cells do not change, so a run of whole annuli is left exactly as it is; ``None`` if a
+    statistic is not positive."""
+    terms = np.zeros(len(sets))
+    for i in range(1, len(sets)):
+        if np.array_equal(covered[i - 1], covered[i]):
+            continue
+        both = covered[i - 1] & covered[i]
+        (z0, c0), (z1, c1) = sets[i - 1], sets[i]
+        a, b = z1[both[c1]], z0[both[c0]]
+        if len(a) < 12 or len(b) < 12:
+            continue                                            # nothing shared to bridge the step on
+        s = [statistic(v) for v in (a, b, z1, z0)]
+        if not all(np.isfinite(s)) or min(s) <= 0:
+            return None
+        terms[i] = (np.log(s[0]) - np.log(s[1])) - (np.log(s[2]) - np.log(s[3]))
+    return terms
+
+
 def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=True,
-                    min_count=50, smooth_bins=0., spread_about='profile'):
+                    min_count=50, smooth_bins=0., spread_about='profile', partial_annuli='observed'):
     """Evaluate annular mean/spread at the actual radius, without image smoothing.
 
     Statistical nodes are measured annulus by annulus and interpolated separately across each contiguous run of
@@ -108,9 +155,20 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
     clipping, integers coarser than the noise); an annulus whose residuals vary with radius only (no angular spread
     above a float32 step of its own values). Nodes are smoothed only if ``smooth_bins`` > 0.
     ``'bin'`` reproduces 1.3.1: nodes at the median (or mean) radius, spread about each annulus' own centre, PCHIP.
+
+    ``partial_annuli='chain'`` (since 1.4.1): where the frame's edge, the Moon or missing pixels take position angles
+    out of an annulus, its median and spread are those of the angles left, and they jump when a bright or a faint
+    sector leaves: the filter draws that jump as a ring around the Sun. With ``'chain'`` every step of the profile and
+    of the spread from one annulus to the next is measured on the position-angle cells (1 degree) that both annuli
+    cover, wherever those cells change; where they do not change, the step is the usual one, so whole annuli give
+    exactly the ``'observed'`` result. No pixel is filled in: only the two curves the filter divides by are bridged.
     """
     if spread_about not in ('profile', 'bin'):
         raise ValueError("spread_about must be 'profile' or 'bin'")
+    if partial_annuli not in ('observed', 'chain'):
+        raise ValueError("partial_annuli must be 'observed' or 'chain'")
+    if partial_annuli == 'chain' and spread_about != 'profile':
+        raise ValueError("partial_annuli='chain' needs spread_about='profile'")
     a, m, r = _observed(img, valid, geometry, bin_px, min_count, center)
     if not np.isfinite(smooth_bins) or smooth_bins < 0:
         raise ValueError('smooth_bins must be finite and nonnegative')
@@ -157,6 +215,10 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
     order = np.argsort(r[m], kind='stable')                    # by radius (annuli stay contiguous)
     values, radii = v[order], r[m][order]
     pos = np.flatnonzero(m.ravel())[order]
+    covered = cellof = None
+    if partial_annuli == 'chain':
+        covered, cell = _covered_cells(geometry, center, m, bin_px)
+        cellof = cell.ravel()[pos]
     # 1.3.2. Each annulus gives a node at the mean radius of its own pixels (a node placed at the annulus' centre would
     # be extrapolated from its data where an edge cuts the annulus), with the profile's local slope and curvature
     # removed inside the annulus. Both come from the quartic through the five nearest nodes (the cubic through four
@@ -294,6 +356,20 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
             if best is None or score < best[0]:
                 best = (score, tr, nd, s1, res, sp)
         _, tr, nd, s1, res, sp = best
+        if covered is not None:
+            here = cellof[lo:hi]
+            pieces = [slice(cuts[k]-lo, cuts[k+1]-lo) for k in run]
+            terms = _chain_terms([(au[s], here[s]) for s in pieces], covered[run], np.median if robust else np.mean)
+            if terms is not None and terms.any():
+                nd = fwd(tr, inv(tr, nd)*np.exp(np.cumsum(terms)))
+                s1 = _node_derivatives(nd, anchors[run])[0]
+                y = smooth(nd, run)
+                res = au-along(y, run, ru, tr, s1 if smooth_bins == 0 else _node_derivatives(y, anchors[run])[0])
+                sp, _ = spread(res, run)
+            spread_of = ((lambda z: 1.4826*np.median(np.abs(z-np.median(z)))) if robust else np.std)
+            terms = _chain_terms([(res[s], here[s]) for s in pieces], covered[run], spread_of)
+            if terms is not None and terms.any():
+                sp = sp*np.exp(np.cumsum(terms))
         resid[lo:hi] = res; sd2[run] = sp; angular[run] = angular_spread(res, run, au)
         dIdy = 1. if tr[0] == 'lin' else np.exp(nd) if tr[0] == 'log' else tr[1]*np.cosh(nd)
         floor[run] = eps*(mag[run]+np.abs(s1*dIdy)*anchors[run])+4*tiny

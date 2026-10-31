@@ -76,7 +76,8 @@ def main() -> None:
     parser.add_argument("--skip-captures", action="store_true")
     parser.add_argument("--raw", type=Path, help="text file with RAW photos of one totality, one path per line: the "
                         "dialog then also makes a stacked image from them in PixInsight (tests/dialog_flow.py)")
-    parser.add_argument("--calibration", type=Path, help="text file with their darks and flats, one path per line")
+    parser.add_argument("--darks", type=Path, help="text file with their darks, one path per line")
+    parser.add_argument("--flats", type=Path, help="text file with their flats, one path per line")
     args = parser.parse_args()
     repo = Path(__file__).resolve().parents[3]
     python, runtime = detect(repo)
@@ -98,8 +99,9 @@ def main() -> None:
     flow = [python, str(Path(__file__).with_name("dialog_flow.py")), "--repo", str(repo), "--python", python,
             "--pixinsight", str(args.pixinsight), "--raw", str(args.raw),
             "--output", str((args.output or Path(tempfile.mkdtemp(prefix="ael-dialog-flow-"))) / "dialog_flow")]
-    if args.calibration:
-        flow += ["--calibration", str(args.calibration)]
+    for option in ("darks", "flats"):
+        if getattr(args, option):
+            flow += [f"--{option}", str(getattr(args, option))]
     raise SystemExit(subprocess.run(flow, env=env, check=False).returncode)
 
 

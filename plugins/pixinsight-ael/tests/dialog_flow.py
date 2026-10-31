@@ -8,29 +8,34 @@ https://github.com/PeterWar/Agentic-Eclipse-Library
 validate.py renders the dialog and calls the Core functions directly; nothing there presses «Run». This test builds
 the dialog in a new PixInsight instance (-n --automation-mode, never an existing one), chooses each operation, fills
 its few fields, presses Run and checks the result. The stacked image is made from real RAW photos of a totality, given
-here (--raw), with their darks and flats if there are any (--calibration); the other operations use the synthetic
+here (--raw), with their darks and their flats if there are any (--darks, --flats); the other operations use the synthetic
 files of demo/ (made by tools/make_demo.py when no folder is given), the same files a person opens. The file and folder
 choosers are replaced by stand-ins that record how they were asked (several files at once, which file types) and
 answer with the files a person would pick.
 
 * Stacked image from RAW photos (the first operation, chosen when the dialog opens): the photos are added twice and a
-  TIFF with them, the darks and flats mixed in the second list; the photos are listed once, the TIFF is not added. The
-  linear master and the filter layers equal those of the same engine run from the terminal with the same files
-  (ael_bridge_check.py raw: the engine the Photoshop connector shares), the PixelMath composite matches AEL's own
-  composite (its preview) within one 8-bit step, a master dark is made for each exposure and a master flat, the
-  geometry is measured and shown, the engine's steps reach the Console, and the closing message, word for word the
-  Photoshop connector's, appears in a message box and in the Console. Without photos, Run says what is missing;
-  stopped from the Console, the run ends with a message and leaves no folder behind.
+  TIFF with them, the darks in their list and the flats in theirs; the photos are listed once, the TIFF is not added.
+  The linear master and the filter layers equal those of the same engine run from the terminal with the same files
+  (ael_bridge_check.py raw: the engine the Photoshop connector shares), and the master's window holds what its file
+  holds (PixInsight reads a floating-point TIFF with a missing last sample as zeros: the master it opens is written for
+  it). The PixelMath composite matches AEL's own composite (its preview) within one 8-bit step, is saved beside the
+  rest and is the window in front. A master dark is made for each exposure and a master flat, the geometry is measured
+  and shown, the engine's steps reach the Console and, while a step lasts, a line every 20 s says it is still working;
+  the closing message, the Photoshop connector's with PixInsight's last sentences, appears in a message box and in the
+  Console. Without photos, Run says what is missing; stopped from the Console, the run ends with a message and leaves
+  no folder behind.
 * Structure on the open linear corona and unrolled view on the open display one: the dialog has no Python, AEL folder
   or geometry fields, so the Python is detected, AEL is the connector's own, and AEL measures the geometry on each
   image and opens a check window; the pixels equal those of `python -m ael ... --geometry auto` from the terminal, and
   the Moon of the demonstration image is found within 1 px (on the display-stretched image the measured limb lies
   about 1.5 px inside the true one: the centre is gated, the radius reported).
 * Filter layers from an open image: once from the linear corona (AEL is handed the image) with AEL's default layers,
-  and once from a master frame whose values PixInsight rescaled to 0-1 on opening (AEL reads the file) with all 16;
+  and once from a master frame whose values PixInsight rescaled to 0-1 on opening (AEL reads the file) with all 16,
+  ticked in the advanced settings (the dialog itself, its rows read back);
   the layers equal those of the helper run from the terminal on the same file, the PixelMath composite matches
   AEL's display.tif within one 16-bit step, and the geometry is measured and shown.
-* Each operation shows only what it needs; the output folder starts at Downloads (the setting the dialog keeps is
+* Each operation shows only what it needs, and says what it does under the list and on the list's tooltip; the file
+  choosers are read through filePaths (fileNames is deprecated in PixInsight 1.9.4); the output folder starts at Downloads (the setting the dialog keeps is
   restored afterwards) and «Browse…» sets it; no message box appears where none is due (a box would wait for a click
   that does not come in automation: the stand-in records it instead).
 
@@ -55,6 +60,7 @@ import traceback
 import numpy as np
 import tifffile
 
+from ael.develop import DEFAULT_OPACITY
 from ael.filterbank import DEFAULTS, NAMES
 
 
@@ -81,7 +87,7 @@ def pixels(path: Path) -> np.ndarray:
     return tifffile.imread(path)
 
 
-def done_message(summary: dict, left_out: list, out: str) -> str:
+def done_message(summary: dict, left_out: list, out: str, scale: dict | None = None) -> str:
     """The closing message of a RAW run as the connector writes it (AELWorkflowCore.jsh, aelWorkflowDoneMessage), which
     is the Photoshop connector's (doneMessage) with PixInsight's windows in its last sentence."""
     text = (f"Done: {summary['frames_stacked']} of {summary['frames_chosen']} photos stacked into one image "
@@ -93,8 +99,19 @@ def done_message(summary: dict, left_out: list, out: str) -> str:
     if summary.get("cloudy"):
         text += ("\n\nThe sky changed during the totality (thin clouds or haze): faint arcs may show where an exposure "
                  "saturates.")
-    return text + ("\n\nThe linear master, its filter layers and their PixelMath composite are open. They are saved, "
-                   f"with a receipt, in:\n{out}")
+    text += ("\n\nThe linear master, its filter layers and their PixelMath composite are open. They are saved, "
+             f"with a receipt, in:\n{out}")
+    if scale:
+        offset = scale.get("offset_dn_per_s") or 0
+        text += ("\n\nThe linear master holds DN per second" + (f" less {js_number(offset)}" if offset else "")
+                 + f", divided by {js_number(scale['unit_dn_per_s'])}; where nothing was observed it is transparent.")
+    return text + ("\n\nFor more faithful results and more filters, try the whole Agentic Eclipse Library with an AI "
+                   "agent: https://github.com/PeterWar/Agentic-Eclipse-Library")
+
+
+def js_number(value: float) -> str:
+    """A number as JavaScript writes it in a string (1000000, not 1000000.0)."""
+    return str(int(value)) if float(value).is_integer() and abs(value) < 1e21 else repr(float(value))
 
 
 def listed(path: Path | None) -> list[str]:
@@ -126,14 +143,14 @@ MessageBox = function( text, caption, icon, button1, button2, button3 )
 var PICKS = [];
 OpenFileDialog = function()
 {
-   this.caption = ""; this.multipleSelections = false; this.filters = []; this.fileNames = []; this.fileName = "";
+   this.caption = ""; this.multipleSelections = false; this.filters = []; this.filePaths = []; this.filePath = "";
    this.execute = function()
    {
       let picked = PICKS.shift() || [];
       REPORT.choosers.push( { caption: this.caption, multiple: this.multipleSelections, filters: this.filters,
                               picked: picked.length } );
-      this.fileNames = picked;
-      this.fileName = picked.length ? picked[0] : "";
+      this.filePaths = picked;
+      this.filePath = picked.length ? picked[0] : "";
       return picked.length > 0;
    };
 };
@@ -154,7 +171,34 @@ aelWorkflowRaw = function()
    let result = realRaw.apply( this, arguments );
    REPORT.steps.raw_result = { out: result.out, receipt: result.receipt, summary: result.summary,
                                left_out: result.left_out, geometry_source: result.geometry_source,
-                               preview: result.preview, linear_master: result.linear_master };
+                               preview: result.preview, linear_master: result.linear_master,
+                               linear_master_scale: result.linear_master_scale, composite_path: result.compositePath };
+   // what PixInsight holds in the master's window, sample by sample (a TIFF it misreads would show here as zeros)
+   let view = View.viewById( result.idMap["AEL_LINEAR_MASTER"] );
+   if ( view && !view.isNull )
+   {
+      let image = view.image, rows = 128, buffer = new Float32Array( image.width * rows ), held = [];
+      for ( let c = 0; c < image.numberOfChannels; ++c )
+      {
+         let s = { sum: 0, nonzero: 0, max: 0 };
+         for ( let y = 0; y < image.height; y += rows )
+         {
+            let n = Math.min( rows, image.height - y );
+            image.getSamples( buffer, new Rect( 0, y, image.width, y + n ), c );
+            for ( let i = 0, k = image.width * n; i < k; ++i )
+            {
+               s.sum += buffer[i];
+               if ( buffer[i] != 0 ) ++s.nonzero;
+               if ( buffer[i] > s.max ) s.max = buffer[i];
+            }
+         }
+         held.push( s );
+      }
+      REPORT.steps.raw_master_view = { channels: image.numberOfChannels, alpha: image.numberOfAlphaChannels,
+                                       width: image.width, height: image.height, held: held };
+   }
+   REPORT.steps.raw_front = ImageWindow.activeWindow.isNull ? null : ImageWindow.activeWindow.mainView.id;
+   return result;
    return result;
 };
 // Aborting from the Console makes the progress watcher leave the cancel file; here it is left at once.
@@ -197,8 +241,8 @@ function count( list, prefix )
 // what each operation shows, once the dialog is on screen (a control of a dialog that is not shown is never visible)
 function shown( d )
 {
-   return { raw: d.rawText.visible, calibration: d.calibrationText.visible, radius: d.rmaxEdit.visible,
-            image: d.imageList.visible, filters: d.allFiltersCheck.visible };
+   return { raw: d.rawText.visible, darks: d.darksText.visible, flats: d.flatsText.visible, radius: d.rmaxEdit.visible,
+            image: d.imageList.visible, filters: d.advancedButton.visible && d.choiceLabel.visible };
 }
 var OUTPUT_KEY = AEL_BRIDGE_SETTINGS_KEY + "outputDirectory";
 var savedOutput = Settings.read( OUTPUT_KEY, DataType.UTF8String );
@@ -210,6 +254,9 @@ try
    REPORT.steps.output_default = first.outputEdit.text;
    REPORT.steps.operation_default = { index: first.modeList.currentItem,
                                       text: first.modeList.itemText( first.modeList.currentItem ) };
+   REPORT.steps.operation_tooltip = first.modeList.toolTip;
+   REPORT.steps.operation_help = AEL_OPERATION_HELP;
+   REPORT.steps.choice_default = first.choiceLabel.text;
    first.outputButton.onClick();
    REPORT.steps.output_browsed = first.outputEdit.text;
    first.cancel();
@@ -227,6 +274,7 @@ try
       d.updateOperation();
       d.show();
       REPORT.steps[key + "_shown"] = shown( d );
+      REPORT.steps[key + "_help"] = d.modeHelp.text;
       d.outputEdit.text = CFG.out[key];
       setup( d );
       d.runButton.onClick();
@@ -256,20 +304,30 @@ try
    round( "raw", null, null, 0, function( d )
    {
       // the photos are added twice, as a person might, the second time with a TIFF among them
-      PICKS.push( CFG.raw, CFG.raw.concat( [ CFG.notRaw ] ), CFG.calibration );
+      PICKS.push( CFG.raw, CFG.raw.concat( [ CFG.notRaw ] ), CFG.darks, CFG.flats );
       d.addRawButton.onClick();
       d.addRawButton.onClick();
-      d.addCalibrationButton.onClick();
-      REPORT.steps.raw_lists = { raw: d.raw.slice(), calibration: d.calibration.slice(), raw_text: d.rawText.text };
+      d.addDarksButton.onClick();
+      d.addFlatsButton.onClick();
+      REPORT.steps.raw_lists = { raw: d.raw.slice(), darks: d.darks.slice(), flats: d.flats.slice(),
+                                 raw_text: d.rawText.text };
       console.beginLog();                       // what the Console shows during the run
    } );
    REPORT.steps.raw_console = console.endLog().utf8ToString();
    round( "structure", CFG.structureImage, "corona_linear", 1, function( d ) {} );
    round( "polar", CFG.polarImage, "corona_display", 2, function( d ) { d.rmaxEdit.text = "4.0"; } );
    REPORT.steps.python_saved = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "pythonPath", DataType.UTF8String );
-   round( "filters_defaults", CFG.structureImage, "corona_linear", 3,
-          function( d ) { d.allFiltersCheck.checked = false; } );
-   round( "filters_all", CFG.rescaledImage, "frame_rescaled", 3, function( d ) { d.allFiltersCheck.checked = true; } );
+   round( "filters_defaults", CFG.structureImage, "corona_linear", 3, function( d ) {} );
+   round( "filters_all", CFG.rescaledImage, "frame_rescaled", 3, function( d )
+   {
+      // the advanced settings, as a person uses them: «All 16» ticks every filter, the opacities stay AEL's
+      let settings = new AELFiltersDialog( d.choice );
+      for ( let i = 0; i < settings.rows.length; ++i )
+         settings.rows[i].check.checked = true;
+      d.choice = settings.read();
+      d.updateChoice();
+      REPORT.steps.choice_all = { filters: d.choice.filters, opacities: d.choice.opacities, text: d.choiceLabel.text };
+   } );
    REPORT.ok = true;
 }
 catch ( error )
@@ -290,13 +348,14 @@ save();
 '''
 
 
-EXPECTED_SHOWN = {  # RAW photos, darks and flats, radius, image, filters
-    "raw": dict(raw=True, calibration=True, radius=False, image=False, filters=False),
-    "structure": dict(raw=False, calibration=False, radius=False, image=True, filters=False),
-    "polar": dict(raw=False, calibration=False, radius=True, image=True, filters=False),
-    "filters_defaults": dict(raw=False, calibration=False, radius=False, image=True, filters=True),
-    "filters_all": dict(raw=False, calibration=False, radius=False, image=True, filters=True),
+EXPECTED_SHOWN = {  # RAW photos, darks, flats, radius, image, filter choice (with «Advanced settings…»)
+    "raw": dict(raw=True, darks=True, flats=True, radius=False, image=False, filters=True),
+    "structure": dict(raw=False, darks=False, flats=False, radius=False, image=True, filters=False),
+    "polar": dict(raw=False, darks=False, flats=False, radius=True, image=True, filters=False),
+    "filters_defaults": dict(raw=False, darks=False, flats=False, radius=False, image=True, filters=True),
+    "filters_all": dict(raw=False, darks=False, flats=False, radius=False, image=True, filters=True),
 }
+HELP = {"raw": 0, "structure": 1, "polar": 2, "filters_defaults": 3, "filters_all": 3}
 ROUNDS = ["raw_empty", "raw_cancel"] + list(EXPECTED_SHOWN)
 RAW_TYPES = ["*.cr2", "*.cr3", "*.nef", "*.arw", "*.dng", "*.raf", "*.orf", "*.rw2"]
 
@@ -310,7 +369,8 @@ def main() -> None:
     parser.add_argument("--expect-root", type=Path, help="the AEL folder the dialog must start with")
     parser.add_argument("--raw", type=Path, required=True,
                         help="text file with the RAW photos of one totality, one path per line")
-    parser.add_argument("--calibration", type=Path, help="text file with their darks and flats, one path per line")
+    parser.add_argument("--darks", type=Path, help="text file with their darks, one path per line")
+    parser.add_argument("--flats", type=Path, help="text file with their flats, one path per line")
     parser.add_argument("--python", required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--pixinsight", type=Path,
@@ -321,8 +381,9 @@ def main() -> None:
     plugin = args.plugin or (args.repo / "plugins/pixinsight-ael")
     ael_root = args.ael_root or args.repo
     expect_root = args.expect_root or (None if args.plugin else args.repo)
-    raw, calibration = listed(args.raw), listed(args.calibration)
-    report = {"ok": False, "plugin": str(plugin), "ael_root": str(ael_root), "raw": raw, "calibration": calibration,
+    raw, darks, flats = listed(args.raw), listed(args.darks), listed(args.flats)
+    calibration = darks + flats
+    report = {"ok": False, "plugin": str(plugin), "ael_root": str(ael_root), "raw": raw, "darks": darks, "flats": flats,
               "gates": {}, "steps": {}}
     context = tempfile.TemporaryDirectory(prefix="ael-dialogs-") if args.keep is None else None
     base = Path(context.name) if context else args.keep
@@ -347,7 +408,7 @@ def main() -> None:
                   "polarImage": str(structure_dir / "corona_display.tif"),
                   # values far above 1: PixInsight rescales the view to 0-1, so AEL must read the file itself
                   "rescaledImage": str(master_dir / "frame_1.tif"),
-                  "raw": raw, "calibration": calibration, "notRaw": str(structure_dir / "corona_linear.tif"),
+                  "raw": raw, "darks": darks, "flats": flats, "notRaw": str(structure_dir / "corona_linear.tif"),
                   "pickedFolder": str(root / "picked folder"), "out": out, "report": str(root / "pjsr_report.json")}
         config_path = root / "dialog_config.json"
         config_path.write_text(json.dumps(config, indent=1), encoding="utf-8")
@@ -393,7 +454,8 @@ def main() -> None:
         choosers = pjsr["choosers"]
         lists = [c for c in choosers if not c.get("folder")]
         raw_lists = [c for c in lists if c["caption"] in ("RAW photos of the totality (select them all)",
-                                                          "Dark and flat frames of the same camera")]
+                                                          "Dark frames of the same camera",
+                                                          "Flat frames of the same camera and optics")]
         expected_messages = {"raw_empty": 1, "raw_cancel": 1, "raw": 1}
         gates = {"no_other_message_box": all(len(steps[key]["messages"]) == expected_messages.get(key, 0) for key in ROUNDS)
                                          and len(pjsr["messages"]) == sum(expected_messages.values()),
@@ -403,14 +465,22 @@ def main() -> None:
                      "index": 0, "text": "Stacked image from RAW photos"},
                  "each_operation_shows_only_what_it_needs": all(steps[f"{key}_shown"] == expected
                                                                 for key, expected in EXPECTED_SHOWN.items()),
-                 "file_lists_take_several_files": len(raw_lists) == len(lists) == 4 and all(c["multiple"] is True for c in lists),
+                 "file_lists_take_several_files": len(raw_lists) == len(lists) == 5 and all(c["multiple"] is True for c in lists),
                  # in both cases: cameras write upper-case names (_MG_9502.CR2)
-                 "file_lists_take_raw_photos_only": len(lists) == 4 and all(
+                 "file_lists_take_raw_photos_only": len(lists) == 5 and all(
                      all(t in c["filters"][0] and t.upper() in c["filters"][0] for t in RAW_TYPES)
                      and not any(".tif" in t.lower() for t in c["filters"][0]) and len(c["filters"]) == 1 for c in lists),
                  "a_photo_added_twice_is_listed_once": steps["raw_lists"]["raw"] == raw,
                  "a_file_that_is_not_raw_is_not_added": config["notRaw"] not in steps["raw_lists"]["raw"],
-                 "darks_and_flats_listed": steps["raw_lists"]["calibration"] == calibration,
+                 "darks_listed": steps["raw_lists"]["darks"] == darks,
+                 "flats_listed": steps["raw_lists"]["flats"] == flats,
+                 # what each operation does, under the list and on its tooltip (all four there)
+                 "make_says_what_each_operation_does": all(steps[f"{key}_help"] == steps["operation_help"][i]
+                                                           for key, i in HELP.items())
+                                                       and all(text in steps["operation_tooltip"]
+                                                               for text in steps["operation_help"]),
+                 "default_filters_shown": steps["choice_default"] == "Filter layers: NRGF 39 %, ACHF iso 1–16 px 8 %, "
+                                                                    "WOW edge-aware 37 %",
                  "without_photos_it_says_so": len(steps["raw_empty"]["messages"]) == 1
                                               and "Choose the RAW photos of the totality first." in steps["raw_empty"]["messages"][0]
                                               and steps["raw_empty"]["windows"] == [],
@@ -443,7 +513,7 @@ def main() -> None:
         result = steps.get("raw_result") or {}
         terminal = root / "terminal_raw"
         terminal_config = root / "terminal_raw.json"
-        terminal_config.write_text(json.dumps({"raw": raw, "calibration": calibration, "out": str(terminal)}),
+        terminal_config.write_text(json.dumps({"raw": raw, "darks": darks, "flats": flats, "out": str(terminal)}),
                                    encoding="utf-8")
         run = subprocess.run([args.python, str(plugin / "python/ael_bridge_check.py"), "raw", str(terminal_config)],
                              text=True, capture_output=True, env=env, timeout=args.timeout, check=False)
@@ -466,6 +536,17 @@ def main() -> None:
                       if composite is not None and preview is not None and composite.shape[:2] == preview.shape[:2] else None)
         # the Console of the run, without its time stamps
         log = [line.split("] ", 1)[-1] for line in steps.get("raw_console", "").splitlines()]
+        # the master's window against its file: every channel's sum, count of non-zero samples and maximum
+        view = steps.get("raw_master_view") or {}
+        master_file = tifffile.imread(dialog_master[0]).astype(np.float64) if dialog_master else None
+        held_ok = False
+        if master_file is not None and view.get("held") and master_file.ndim == 3:
+            held_ok = view["channels"] == master_file.shape[2] and view["alpha"] == 1 and all(
+                abs(h["sum"] - float(master_file[..., c].sum())) <= 1e-5 * max(1.0, float(master_file[..., c].sum()))
+                and h["nonzero"] == int(np.count_nonzero(master_file[..., c])) and h["nonzero"] > 0
+                and abs(h["max"] - float(master_file[..., c].max())) <= 1e-6
+                for c, h in enumerate(view["held"]))
+        composite_saved = Path(result.get("composite_path") or "/nonexistent")
         gates.update({
             "raw_master_and_layers_equal_terminal": len(identical) == 2 + 2 * len(DEFAULTS) and all(
                 v["equal"] for v in identical.values()),
@@ -474,6 +555,19 @@ def main() -> None:
                                                            and steps["raw"]["alphas"] == len(DEFAULTS)
                                                            and len(steps["raw"]["composite"]) == 1,
             "raw_composite_matches_AEL_composite_within_an_8_bit_step": difference is not None and difference <= 1 / 255,
+            "raw_master_window_holds_its_file": held_ok,
+            "raw_master_in_0_1_with_alpha": master_file is not None and master_file.shape[2] == 4
+                                            and 0 <= float(master_file.min()) and float(master_file.max()) <= 1
+                                            and set(np.unique(master_file[..., 3]).tolist()) <= {0.0, 1.0},
+            # PixInsight writes the temporary folder's real path (/private/var/… on macOS), Python its link (/var/…)
+            "raw_composite_saved_beside_the_rest": composite_saved.resolve().parent == folder.resolve()
+                                                   and composite_saved.is_file()
+                                                   and composite_saved.name.endswith(" composite.xisf"),
+            "raw_composite_in_front": (steps.get("raw_front") or "").startswith("AEL_COMPOSITE"),
+            "raw_console_still_working_while_a_step_lasts": any(line.startswith("AEL: still working on Filters")
+                                                                for line in log),
+            "raw_filters_reach_the_console_one_by_one": all(any(line.startswith(f"AEL: Filters ({n} of {len(DEFAULTS)})")
+                                                                for line in log) for n in range(1, len(DEFAULTS) + 1)),
             "raw_measures_the_geometry": result.get("geometry_source") == "measured on the RAW files",
             "raw_opens_a_geometry_check": any(i.startswith("AEL_geometry_check") for i in windows),
             "raw_stacks_every_photo": summary.get("frames_stacked") == summary.get("frames_chosen") == len(raw),
@@ -485,7 +579,8 @@ def main() -> None:
                                                 "Stacking", "Filters")),
             # the Photoshop connector's closing message, word for word, in a message box and in the Console
             "raw_closing_message_as_in_photoshop": steps["raw"]["messages"] == [
-                done_message(result.get("summary") or {}, result.get("left_out") or [], result.get("out"))]
+                done_message(result.get("summary") or {}, result.get("left_out") or [], result.get("out"),
+                             result.get("linear_master_scale"))]
                 if result.get("summary") else False,
             "raw_console_says_what_was_stacked": any(
                 line.startswith(f"Done: {len(raw)} of {len(raw)} photos stacked into one image") for line in log),
@@ -497,6 +592,8 @@ def main() -> None:
                                   "registration_method": (receipt.get("registration") or {}).get("method"),
                                   "composite_max_difference_8bit_steps": None if difference is None else difference * 255,
                                   "timings_s": receipt.get("timings_s"),
+                                  "master_view": view, "master_scale": result.get("linear_master_scale"),
+                                  "composite_saved": str(composite_saved), "front_window": steps.get("raw_front"),
                                   "closing_message": steps["raw"]["messages"],
                                   "console_lines": [line for line in log if line.startswith(("AEL: ", "Done: ", "Left out",
                                                                                              "• "))][:120]}
@@ -544,6 +641,12 @@ def main() -> None:
             gates[f"{key}_one_composite"] = len(info["composite"]) == 1
             if which == "defaults":
                 gates["filters_defaults_are_AEL_defaults"] = sorted(p.name.replace("_layer.tif", "") for p in tiffs) == sorted(DEFAULTS)
+            else:
+                chosen = steps.get("choice_all") or {}
+                gates["advanced_settings_tick_all_16"] = (sorted(chosen.get("filters") or []) == sorted(NAMES)
+                                                         and all(abs((chosen.get("opacities") or {}).get(n, -1)
+                                                                     - (DEFAULT_OPACITY.get(n, 0) if n in DEFAULTS else 0))
+                                                                 < 1e-9 for n in NAMES))
             gates[f"{key}_measures_the_geometry"] = workflow_receipt.get("geometry_source") == "measured on the image"
             gates[f"{key}_opens_a_geometry_check"] = any(i.startswith("AEL_geometry_check") for i in info["windows"])
             composite = tifffile.imread(Path(out[key]) / "composite_from_pixinsight.tif")

@@ -75,13 +75,14 @@ function aelBridgeRepairPath( damaged )
 var AEL_BRIDGE_CORE_DIR = aelBridgeRepairPath( File.extractDrive( #__FILE__ ) + File.extractDirectory( #__FILE__ ) );
 var AEL_BRIDGE_CHECK_SCRIPT = AEL_BRIDGE_CORE_DIR + "/python/ael_bridge_check.py";
 
+// Local time, as the RAW run's folder is named: a window and the folder it was saved in carry the same clock.
 function aelBridgeTimestamp()
 {
    let d = new Date();
    function pad( n ) { return n < 10 ? "0" + n : String( n ); }
-   return String( d.getUTCFullYear() ) + pad( d.getUTCMonth() + 1 ) + pad( d.getUTCDate() )
-          + "_" + pad( d.getUTCHours() ) + pad( d.getUTCMinutes() ) + pad( d.getUTCSeconds() )
-          + "_" + String( d.getUTCMilliseconds() );
+   return String( d.getFullYear() ) + pad( d.getMonth() + 1 ) + pad( d.getDate() )
+          + "_" + pad( d.getHours() ) + pad( d.getMinutes() ) + pad( d.getSeconds() )
+          + "_" + String( d.getMilliseconds() );
 }
 
 function aelBridgeId( text )
@@ -588,6 +589,17 @@ function aelBridgeOpenResults( files, mode, openedWindows )
          windows[i].show();
       }
    }
+}
+
+// A web page in the system's browser, when the user asks for it (a button); nothing is opened on its own.
+function aelBridgeOpenUrl( url )
+{
+   let process = new ExternalProcess;
+   if ( corePlatform == "MSWINDOWS" || corePlatform == "MSWindows" )
+      process.start( "cmd", [ "/c", "start", "", url ] );
+   else
+      process.start( corePlatform == "MacOSX" ? "open" : "xdg-open", [ url ] );
+   process.waitForFinished( 5000 );
 }
 
 function aelBridgeCleanup( directory, files )

@@ -466,7 +466,7 @@ def pixelmath_expression(name: str, mode: str, opacity: float) -> dict:
             "mode": mode, "opacity": opacity, "effective_opacity": effective}
 
 
-def run_filters(cfg: dict) -> dict:
+def run_filters(cfg: dict, progress=None) -> dict:
     input_path = Path(cfg["input"]).expanduser().resolve()
     out = Path(cfg["out"]).expanduser().resolve()
     if out.exists():
@@ -530,7 +530,9 @@ def run_filters(cfg: dict) -> dict:
     recipe_path = out / "filters_recipe.json"
     recipe_path.write_text(json.dumps(recipe, indent=1, ensure_ascii=False), encoding="utf-8")
     product = out / "ael"
-    result = develop.filters_from_config(recipe_path, product)
+    # ``progress`` (a callable taking one message) hears each filter as AEL starts it: "filter 2/3: wow_edge_aware".
+    say = progress or print
+    result = develop.filters_from_config(recipe_path, product, progress=say)
     ael_receipt_path = Path(result["receipt"])
     ael_receipt = json.loads(ael_receipt_path.read_text())
     if not all(ael_receipt["gates"].get(key) for key in ("nothing_outside_data", "positive_display_base_not_clipped")):
@@ -549,8 +551,11 @@ def run_filters(cfg: dict) -> dict:
                        note="Display base layer only (alpha = valid mask): no visible filter layer")
     base_recipe_path = out / "display_base_recipe.json"
     base_recipe_path.write_text(json.dumps(base_recipe, indent=1, ensure_ascii=False), encoding="utf-8")
-    base_result = develop.filters_from_config(base_recipe_path, out / "ael_display_base")
+    say("display base for the PixelMath composite")
+    base_result = develop.filters_from_config(base_recipe_path, out / "ael_display_base",
+                                              progress=lambda message: None)
 
+    say("the layer images")
     tiff_dir = out / "tiff"
     tiff_dir.mkdir()
     images = [{"name": "display", "kind": "display", "path": str(tiff_dir / "display.tif"),

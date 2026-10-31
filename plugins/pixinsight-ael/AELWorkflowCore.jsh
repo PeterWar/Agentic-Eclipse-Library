@@ -36,6 +36,73 @@ var AEL_WORKFLOW_SCRIPT = AEL_BRIDGE_CORE_DIR + "/python/ael_workflow.py";
 // A whole totality with its darks and flats can take long: the RAW workflow has hours, and aborting from the Console
 // stops it at its next step.
 var AEL_RAW_TIME_LIMIT_MS = 4 * 3600 * 1000;
+// While the engine works without a new step to report (one filter can take minutes), the Console still hears from it.
+var AEL_HEARTBEAT_MS = 20000;
+// Where the whole library is, for the line that invites people to use it with an AI agent.
+var AEL_GITHUB_URL = "https://github.com/PeterWar/Agentic-Eclipse-Library";
+
+// AEL's filters, as the library names them (ael.filterbank.NAMES, ael.develop.layer_names): the layer's name, its blend
+// mode in the composite, its opacity there (AEL's three default layers; 0 opens the layer without composing it) and
+// what it shows. tests/validate.py checks this list against the library that comes with the connector.
+var AEL_FILTERS = [
+   { name: "nrgf", label: "01 NRGF", mode: "Multiply", opacity: 0.39,
+     about: "Normalising radial graded filter: each radius scaled by its own spread, so the corona's shape shows from the "
+            + "limb outwards." },
+   { name: "nrgf_log", label: "01 NRGF log", mode: "Multiply", opacity: 0,
+     about: "The NRGF on the logarithm of the brightness: softer in the bright inner corona." },
+   { name: "rhef", label: "02 RHEF", mode: "Multiply", opacity: 0,
+     about: "Radial histogram equalisation: each radius spread over the whole tonal range." },
+   { name: "rhef_upsilon", label: "02 RHEF Upsilon", mode: "Multiply", opacity: 0,
+     about: "Radial histogram equalisation with the Upsilon curve, gentler at both ends." },
+   { name: "rhef_local60", label: "02 RHEF local 60°", mode: "Multiply", opacity: 0,
+     about: "Radial histogram equalisation in sectors of 60 degrees: each sector against its own range." },
+   { name: "rhef_local30", label: "02 RHEF local 30°", mode: "Multiply", opacity: 0,
+     about: "Radial histogram equalisation in sectors of 30 degrees." },
+   { name: "mgn", label: "03 MGN", mode: "Overlay", opacity: 0,
+     about: "Multi-scale Gaussian normalisation (Morgan and Druckmüller): fine structure at every scale." },
+   { name: "achf_angular", label: "04 ACHF angular", mode: "Overlay", opacity: 0,
+     about: "Angular high-pass: detail across the rays, along the position angle." },
+   { name: "achf_angular4", label: "04 ACHF angular smoothed 4 px", mode: "Overlay", opacity: 0,
+     about: "Angular high-pass, smoothed over 4 pixels along the radius." },
+   { name: "achf_angular8", label: "04 ACHF angular smoothed 8 px", mode: "Overlay", opacity: 0,
+     about: "Angular high-pass, smoothed over 8 pixels along the radius." },
+   { name: "achf_iso_01", label: "04 ACHF iso 2–32 px", mode: "Overlay", opacity: 0,
+     about: "Isotropic high-pass of the detail between 2 and 32 pixels." },
+   { name: "achf_iso_04", label: "04 ACHF iso 1–16 px", mode: "Overlay", opacity: 0.08,
+     about: "Isotropic high-pass of the finest detail, 1 to 16 pixels." },
+   { name: "achf_iso_05", label: "04 ACHF iso 2–48 px", mode: "Overlay", opacity: 0,
+     about: "Isotropic high-pass of the detail between 2 and 48 pixels." },
+   { name: "achf_iso_06", label: "04 ACHF iso 4–64 px", mode: "Overlay", opacity: 0,
+     about: "Isotropic high-pass of the broader detail, 4 to 64 pixels." },
+   { name: "wow", label: "05 WOW", mode: "Overlay", opacity: 0,
+     about: "Wavelet-based detail at every scale, each scale against its own noise." },
+   { name: "wow_edge_aware", label: "05 WOW edge-aware", mode: "Overlay", opacity: 0.37,
+     about: "Wavelet-based detail that keeps the edges of the structure sharp." }
+];
+
+// AEL's default layers in the order the engine and the Photoshop connector stack them (ael.filterbank.DEFAULTS): the
+// composite applies its layers one after another, and Overlay does not commute.
+var AEL_DEFAULT_ORDER = [ "nrgf", "wow_edge_aware", "achf_iso_04" ];
+
+// The filters chosen, in the order they are stacked: AEL's default ones first, in their order, then the others as listed.
+function aelWorkflowOrdered( names )
+{
+   let ordered = AEL_DEFAULT_ORDER.filter( function( name ) { return names.indexOf( name ) >= 0; } );
+   for ( let i = 0; i < AEL_FILTERS.length; ++i )
+      if ( names.indexOf( AEL_FILTERS[i].name ) >= 0 && ordered.indexOf( AEL_FILTERS[i].name ) < 0 )
+         ordered.push( AEL_FILTERS[i].name );
+   return ordered;
+}
+
+// The filters a run makes: AEL's three default layers at their opacities, unless the advanced settings chose others.
+function aelWorkflowDefaultFilters()
+{
+   let choice = { filters: AEL_DEFAULT_ORDER.slice(), opacities: {} };
+   for ( let i = 0; i < AEL_FILTERS.length; ++i )
+      if ( AEL_DEFAULT_ORDER.indexOf( AEL_FILTERS[i].name ) >= 0 )
+         choice.opacities[AEL_FILTERS[i].name] = AEL_FILTERS[i].opacity;
+   return choice;
+}
 
 // The RAW workflow is the engine the Photoshop connector shares (python/ael_auto.py), reached through the bridge's
 // helper; the filter layers of an open image go through the workflow helper.
@@ -143,6 +210,15 @@ function aelWorkflowBuildComposite( result )
    return composite;
 }
 
+// Where the composite is saved: beside the run's preview, with its name (Eclipse … composite.xisf), or in the run's
+// folder.
+function aelWorkflowCompositePath( result )
+{
+   if ( result.preview && /preview\.png$/.test( result.preview ) )
+      return result.preview.replace( /preview\.png$/, "composite.xisf" );
+   return result.out ? result.out + "/AEL composite.xisf" : null;
+}
+
 function aelWorkflowRunAndOpen( operation, configPath, runtime, aelRoot, buildComposite, onWait )
 {
    let result = aelWorkflowExecute( operation, configPath, runtime, aelRoot, onWait );
@@ -158,6 +234,19 @@ function aelWorkflowRunAndOpen( operation, configPath, runtime, aelRoot, buildCo
          let displayId = result.idMap["AEL_DISPLAY"];
          if ( displayId )
             result.windows.push( aelBridgeShowGeometryCheck( View.viewById( displayId ), result.geometry ) );
+      }
+      // The composite is the result: saved with the rest (32-bit XISF) and shown in front of the other windows.
+      if ( result.composite )
+      {
+         let path = aelWorkflowCompositePath( result );
+         if ( path )
+         {
+            if ( !result.composite.window.saveAs( path, false, false, false, false ) )
+               throw new Error( "Could not save the composite: " + path );
+            result.compositePath = path;
+            Console.writeln( "AEL workflow: composite saved in " + path );
+         }
+         result.composite.window.bringToFront();
       }
       Console.writeln( "AEL workflow receipt: " + result.receipt );
       Console.writeln( File.readTextFile( result.receipt ) );
@@ -201,12 +290,14 @@ function aelWorkflowStampedOutput( root, prefix )
    return output;
 }
 
-// The engine writes how far it has gone into a small JSON file; each new step goes to the Console. Aborting the script
-// from the Console leaves the file that stops the engine at its next step.
+// The engine writes how far it has gone into a small JSON file; each new step goes to the Console, and while a step lasts
+// a line every AEL_HEARTBEAT_MS says that it is still working. Aborting the script from the Console leaves the file that
+// stops the engine at its next step.
 function aelWorkflowProgress( progressPath, cancelPath )
 {
    let last = 0;
    let said = "";
+   let saidAt = Date.now();
    console.abortEnabled = true;
    return function()
    {
@@ -230,16 +321,25 @@ function aelWorkflowProgress( progressPath, cancelPath )
          Console.writeln( "AEL: " + text + " — " + Math.round( info.elapsed_s || 0 ) + " s" );
          Console.flush();
          said = text;
+         saidAt = now;
+      }
+      else if ( now - saidAt >= AEL_HEARTBEAT_MS )
+      {
+         Console.writeln( "AEL: still working on " + text + " — " + Math.round( ( now - saidAt ) / 1000 ) + " s more" );
+         Console.flush();
+         saidAt = now;
       }
    };
 }
 
-// RAW photos of the totality in, and, if there are any, darks and flats (mixed: AEL tells them apart). AEL measures the
-// rest (camera, levels, the Moon, the registration on the Sun, colour) and makes the linear master and its default
-// filter layers, which open here with their PixelMath composite. The same photos give the same master and layers as in
-// the Photoshop connector. A run that stops leaves no empty folder behind.
-function aelWorkflowRaw( raw, calibration, outputRoot, pythonPath, aelRoot, buildComposite )
+// RAW photos of the totality in, and, if there are any, darks and flats (AEL still measures each and leaves out one that
+// is not what it was chosen as). AEL measures the rest (camera, levels, the Moon, the registration on the Sun, colour)
+// and makes the linear master and its filter layers (``choice``: the filters and their opacities; AEL's default layers
+// when there is none), which open here with their PixelMath composite. The same photos give the same master and layers
+// as in the Photoshop connector. A run that stops leaves no empty folder behind.
+function aelWorkflowRaw( raw, darks, flats, outputRoot, pythonPath, aelRoot, buildComposite, choice )
 {
+   choice = choice || aelWorkflowDefaultFilters();
    let runtime = aelBridgeCandidates( pythonPath, aelRoot );
    if ( !runtime.ok )
       throw new Error( runtime.message || "Python preflight failed." );
@@ -253,10 +353,12 @@ function aelWorkflowRaw( raw, calibration, outputRoot, pythonPath, aelRoot, buil
    let output = aelWorkflowStampedOutput( outputRoot, "AEL_" );
    try
    {
-      File.writeTextFile( configPath, JSON.stringify( { raw: raw, calibration: calibration, out: output,
+      File.writeTextFile( configPath, JSON.stringify( { raw: raw, darks: darks, flats: flats, out: output,
+                                                        filters: choice.filters, opacities: choice.opacities,
                                                         progress: progressPath, cancel: cancelPath }, null, 1 ) );
       console.show();
-      Console.writeln( "AEL: " + raw.length + " RAW photos and " + calibration.length + " darks and flats, into " + output );
+      Console.writeln( "AEL: " + raw.length + " RAW photos, " + darks.length + " darks and " + flats.length
+                       + " flats, into " + output );
       let result = aelWorkflowRunAndOpen( "raw", configPath, runtime, aelRoot, buildComposite,
                                           aelWorkflowProgress( progressPath, cancelPath ) );
       Console.noteln( aelWorkflowDoneMessage( result ) );
@@ -293,8 +395,14 @@ function aelWorkflowDoneMessage( result )
    if ( s.cloudy )
       text += "\n\nThe sky changed during the totality (thin clouds or haze): faint arcs may show where an exposure "
               + "saturates.";
-   return text + "\n\nThe linear master, its filter layers and their PixelMath composite are open. They are saved, "
-          + "with a receipt, in:\n" + result.out;
+   text += "\n\nThe linear master, its filter layers and their PixelMath composite are open. They are saved, "
+           + "with a receipt, in:\n" + result.out;
+   let scale = result.linear_master_scale;
+   if ( scale )
+      text += "\n\nThe linear master holds DN per second" + ( scale.offset_dn_per_s ? " less " + scale.offset_dn_per_s : "" )
+              + ", divided by " + scale.unit_dn_per_s + "; where nothing was observed it is transparent.";
+   return text + "\n\nFor more faithful results and more filters, try the whole Agentic Eclipse Library with an AI "
+          + "agent: " + AEL_GITHUB_URL;
 }
 
 function aelWorkflowEmptyFolder( folder )
@@ -312,8 +420,9 @@ function aelWorkflowEmptyFolder( folder )
 // 32-bit TIFF with its samples without data put back as NaN, or the file itself when PixInsight does not hold it as
 // stored); the image is not changed and the temporary files are removed. AEL measures the geometry on the image, as for
 // the structure image: a geometry.json that happens to lie beside the file is not taken.
-function aelWorkflowFiltersFromView( view, outputRoot, filters, pythonPath, aelRoot, buildComposite )
+function aelWorkflowFiltersFromView( view, outputRoot, choice, pythonPath, aelRoot, buildComposite )
 {
+   choice = choice || aelWorkflowDefaultFilters();
    let runtime = aelBridgeCandidates( pythonPath, aelRoot );
    if ( !runtime.ok )
       throw new Error( runtime.message || "Python preflight failed." );
@@ -326,7 +435,14 @@ function aelWorkflowFiltersFromView( view, outputRoot, filters, pythonPath, aelR
    {
       let prepared = aelBridgePrepareInput( view, runtime, aelRoot, tempDir, temporaryFiles );
       let config = { input: prepared.inputPath, geometry: "auto", out: aelWorkflowNewOutput( outputRoot, "filters" ),
-                     filters: filters };
+                     filters: choice.filters, opacities: {}, visible: [] };
+      // the layers with an opacity enter the composite; the others open on their own
+      for ( let i = 0; i < choice.filters.length; ++i )
+         if ( ( choice.opacities[choice.filters[i]] || 0 ) > 0 )
+         {
+            config.visible.push( choice.filters[i] );
+            config.opacities[choice.filters[i]] = choice.opacities[choice.filters[i]];
+         }
       File.writeTextFile( configPath, JSON.stringify( config, null, 1 ) );
       Console.writeln( "AEL filter layers of " + view.id + ( prepared.onFile ? " (AEL reads its file)" : "" ) );
       return aelWorkflowRunAndOpen( "filters", configPath, runtime, aelRoot, buildComposite );
