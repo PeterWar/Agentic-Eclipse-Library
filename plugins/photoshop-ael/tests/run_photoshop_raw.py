@@ -72,6 +72,7 @@ AEL_TEST_ELEMENT.prototype.addEventListener = function (type, handler) { this.li
 AEL_TEST_ELEMENT.prototype.add = function (kind, bounds, text, properties) {
     var element = new AEL_TEST_ELEMENT(kind, text, this.root);
     element.properties = properties;
+    element.parent = this;
     this.root.all.push(element);
     return element;
 };
@@ -123,13 +124,16 @@ function AEL_TEST_MAIN(win) {
         }
         if (e.kind === "statictext" && e.text === AEL_TEST_GITHUB && e.listeners.mousedown) {
             var under = win.all[i + 1] || {graphics: {}};
-            AEL_TEST_LINK = {text: e.text, tip: e.helpTip || "",
+            AEL_TEST_LINK = {text: e.text, tip: e.helpTip || "", box: e.parent.parent.kind === "panel" ?
+                e.parent.parent.text : null,
                 colour: e.graphics.foregroundColor ? e.graphics.foregroundColor.colour : null,
                 line_size: under.preferredSize || null,
                 line_colour: under.graphics.backgroundColor ? under.graphics.backgroundColor.colour : null};
             e.listeners.mousedown(); pressed.push("github");
         }
-        if (e.kind === "statictext" && /^MIT License/.test(e.text)) AEL_TEST_LICENCE = {text: e.text, tip: e.helpTip || ""};
+        if (e.kind === "statictext" && /^MIT License/.test(e.text)) {
+            AEL_TEST_LICENCE = {text: e.text, tip: e.helpTip || "", box: e.parent.kind === "panel" ? e.parent.text : null};
+        }
     }
     AEL_TEST_TIPS(win);
     for (i = 0; i < win.all.length; i++) {
@@ -384,6 +388,10 @@ AEL_TEST_REPORT;
                  and ((report.get("link") or {}).get("colour") or [])[:3] == [0, 0.4, 1]
                  and ((report.get("link") or {}).get("line_colour") or [])[:3] == [0, 0.4, 1]
                  and ((report.get("link") or {}).get("line_size") or [0, 0])[1:2] == [1]),
+             # the invitation, the link and the licence in the box «Agentic Eclipse Library», as in PixInsight
+             "library_box_holds_the_link_and_the_licence": ((report.get("link") or {}).get("box") ==
+                                                            (report.get("licence") or {}).get("box") ==
+                                                            "Agentic Eclipse Library"),
              "mit_licence_and_disclaimer_shown": (
                  (report.get("licence") or {}).get("text", "").startswith("MIT License")
                  and "without warranty of any kind" in (report.get("licence") or {}).get("text", "")
@@ -460,7 +468,7 @@ AEL_TEST_REPORT;
         least = 10
     else:
         gates.update(window_gates)
-        least = 21
+        least = 22
     report["gates"] = gates
     report["ok"] = all(gates.values()) and len(gates) >= least
     (output / "REPORT.json").write_text(json.dumps(report, indent=1, ensure_ascii=False), encoding="utf-8")

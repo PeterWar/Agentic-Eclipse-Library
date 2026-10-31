@@ -31,6 +31,7 @@ PI, PS = REPO / "plugins/pixinsight-ael", REPO / "plugins/photoshop-ael"
 INPUTS = ("Totality RAW photos", "Darks (optional)", "Flats (optional)")
 OUTPUT = ("Output folder", "Browse…")
 MORE = ("Advanced settings…", "AEL defaults", "All 16", "GitHub", "https://github.com/PeterWar/Agentic-Eclipse-Library",
+        "For more faithful results and more filters, try the whole library with an AI agent:",
         "For more faithful results and more filters, try the whole Agentic Eclipse Library with an AI agent:")
 LICENCE_LINE = "MIT License · Copyright © 2026 Pere Guerra Serra · Provided “as is”, without warranty of any kind."
 # where each connector keeps its dialog and its list of filters

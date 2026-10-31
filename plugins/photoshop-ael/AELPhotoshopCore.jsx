@@ -467,6 +467,8 @@ var AELPhotoshop = AELPhotoshop || {};
     // PixInsight connector. The licence is one line under the address, with the whole disclaimer on its tip.
     ns.githubUrl = "https://github.com/PeterWar/Agentic-Eclipse-Library";
     ns.invitation = "For more faithful results and more filters, try the whole Agentic Eclipse Library with an AI agent:";
+    // in the dialog's box «Agentic Eclipse Library», where the title names the library
+    ns.invitationInBox = "For more faithful results and more filters, try the whole library with an AI agent:";
     ns.licenceLine = "MIT License · Copyright © 2026 Pere Guerra Serra · Provided “as is”, " +
         "without warranty of any kind.";
     ns.licenceDisclaimer = "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, " +

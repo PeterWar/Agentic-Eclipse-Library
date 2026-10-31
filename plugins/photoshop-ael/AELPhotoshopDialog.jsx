@@ -97,22 +97,24 @@ var AELPhotoshopDialog = function () {
         output.status.helpTip = chosen.fsName;
     };
 
-    // The whole library, for whoever wants more than this dialog: its address, written as a web link that opens it in
-    // the browser, and the licence under it, with the whole disclaimer on its tip (as in the PixInsight connector).
-    function grey(control) {
-        try {
-            control.graphics.foregroundColor = control.graphics.newPen(control.graphics.PenType.SOLID_COLOR,
-                [0.5, 0.5, 0.5], 1);
-        } catch (noColour) {}
-    }
-    var more = win.add("statictext", undefined, AELPhotoshop.invitation, {multiline: true});
-    more.preferredSize = [460, 34];
-    grey(more);
-    AELPhotoshop.addLink(win, AELPhotoshop.githubUrl, "Opens the Agentic Eclipse Library on GitHub in your web browser.");
-    var licence = win.add("statictext", undefined, AELPhotoshop.licenceLine, {multiline: true});
-    licence.preferredSize = [460, 34];
+    // The whole library, for whoever wants more than this dialog, in a box of its own, as in the PixInsight connector:
+    // the invitation, the address written as a web link that opens it in the browser, and the licence, grey, with the
+    // whole disclaimer on its tip.
+    var library = win.add("panel", undefined, "Agentic Eclipse Library");
+    library.orientation = "column";
+    library.alignChildren = "left";
+    library.margins = [12, 16, 12, 10];
+    library.spacing = 4;
+    var more = library.add("statictext", undefined, AELPhotoshop.invitationInBox, {multiline: true});
+    more.preferredSize = [440, 34];
+    AELPhotoshop.addLink(library, AELPhotoshop.githubUrl, "Opens the Agentic Eclipse Library on GitHub in your web browser.");
+    var licence = library.add("statictext", undefined, AELPhotoshop.licenceLine, {multiline: true});
+    licence.preferredSize = [440, 34];
     licence.helpTip = AELPhotoshop.licenceDisclaimer;
-    grey(licence);
+    try {
+        licence.graphics.foregroundColor = licence.graphics.newPen(licence.graphics.PenType.SOLID_COLOR,
+            [0.5, 0.5, 0.5], 1);
+    } catch (noColour) {}
 
     var buttons = win.add("group");
     buttons.alignment = "right";

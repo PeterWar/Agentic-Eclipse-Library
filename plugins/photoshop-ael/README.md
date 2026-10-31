@@ -4,7 +4,7 @@ Choose the RAW photos of a total solar eclipse, and optionally their darks and f
 
 There is nothing else to set but where the result goes and, if you want, other filters. Everything else is measured on the files and written in a receipt.
 
-For more faithful results and more filters, try the whole Agentic Eclipse Library with an AI agent: <https://github.com/PeterWar/Agentic-Eclipse-Library>. The dialog says so in one line, with that address written as a web link (blue, with a line under it) that opens the page, and the licence under it.
+For more faithful results and more filters, try the whole Agentic Eclipse Library with an AI agent: <https://github.com/PeterWar/Agentic-Eclipse-Library>. The dialog says so in a box of its own, «Agentic Eclipse Library», with that address written as a web link (blue, with a line under it) that opens the page, and the licence under it.
 
 MIT License, Copyright © 2026 Pere Guerra Serra (see `LICENSE`). The connector and the library are provided "as is", without warranty of any kind. The dialog shows the licence in one line, with the whole disclaimer when the pointer rests on it.
 
