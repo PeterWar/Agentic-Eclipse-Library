@@ -97,25 +97,30 @@ var AELPhotoshopDialog = function () {
         output.status.helpTip = chosen.fsName;
     };
 
-    // The whole library, for whoever wants more than this dialog
-    var moreRow = win.add("group");
-    moreRow.alignChildren = ["left", "center"];
-    var more = moreRow.add("statictext", undefined, AELPhotoshop.invitation, {multiline: true});
-    more.preferredSize = [380, 34];
-    try {
-        more.graphics.foregroundColor = more.graphics.newPen(more.graphics.PenType.SOLID_COLOR, [0.5, 0.5, 0.5], 1);
-    } catch (noColour) {}
-    var github = moreRow.add("button", undefined, "GitHub");
-    github.helpTip = AELPhotoshop.githubUrl;
-    github.onClick = function () { AELPhotoshop.openUrl(AELPhotoshop.githubUrl); };
+    // The whole library, for whoever wants more than this dialog: its address, written as a web link that opens it in
+    // the browser, and the licence under it, with the whole disclaimer on its tip (as in the PixInsight connector).
+    function grey(control) {
+        try {
+            control.graphics.foregroundColor = control.graphics.newPen(control.graphics.PenType.SOLID_COLOR,
+                [0.5, 0.5, 0.5], 1);
+        } catch (noColour) {}
+    }
+    var more = win.add("statictext", undefined, AELPhotoshop.invitation, {multiline: true});
+    more.preferredSize = [460, 34];
+    grey(more);
+    AELPhotoshop.addLink(win, AELPhotoshop.githubUrl, "Opens the Agentic Eclipse Library on GitHub in your web browser.");
+    var licence = win.add("statictext", undefined, AELPhotoshop.licenceLine, {multiline: true});
+    licence.preferredSize = [460, 34];
+    licence.helpTip = AELPhotoshop.licenceDisclaimer;
+    grey(licence);
 
     var buttons = win.add("group");
     buttons.alignment = "right";
     var cancel = buttons.add("button", undefined, "Cancel", {name: "cancel"});
     cancel.helpTip = "Close without making anything";
     var run = buttons.add("button", undefined, "Make the image", {name: "ok"});
-    run.helpTip = "Stack the photos, make the filter layers and open the layered image here. A window shows each " +
-        "step; its Stop button asks AEL to stop at its next step.";
+    run.helpTip = "Stack the photos, make the filter layers and open the layered image here. Photoshop's progress " +
+        "window shows each step and the time; its Cancel button stops AEL.";
     var answer = null;
     run.onClick = function () {
         if (!raws.files.length) {

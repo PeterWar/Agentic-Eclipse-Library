@@ -11,7 +11,8 @@ shared parts. This script fails when those copies drift apart:
   the same output folder line ("Output folder" with "Browse…");
 - both offer the same advanced settings, with the same list of AEL's filters (names, layer names, blend modes, default
   opacities and the words that say what each shows), and the same invitation to the whole library with its GitHub
-  button;
+  address;
+- both show the same licence line, and on its tip the disclaimer of the LICENSE file, which is the same in both;
 - both probes refuse an AEL older than the same version: each probe runs against stand-in `ael` packages that
   carry only a version (1.3.3 and an unreadable one) and must refuse both, and the floor they print must match;
 - neither connector names a private interpreter or a home folder.
@@ -30,7 +31,8 @@ PI, PS = REPO / "plugins/pixinsight-ael", REPO / "plugins/photoshop-ael"
 INPUTS = ("Totality RAW photos", "Darks (optional)", "Flats (optional)")
 OUTPUT = ("Output folder", "Browse…")
 MORE = ("Advanced settings…", "AEL defaults", "All 16", "GitHub", "https://github.com/PeterWar/Agentic-Eclipse-Library",
-        "For more faithful results and more filters, try the whole Agentic Eclipse Library with an AI agent.")
+        "For more faithful results and more filters, try the whole Agentic Eclipse Library with an AI agent:")
+LICENCE_LINE = "MIT License · Copyright © 2026 Pere Guerra Serra · Provided “as is”, without warranty of any kind."
 # where each connector keeps its dialog and its list of filters
 WORDS = {"PixInsight": (PI / "AELBridgeDialog.jsh", PI / "AELWorkflowCore.jsh"),
          "Photoshop": (PS / "AELPhotoshopDialog.jsx", PS / "AELPhotoshopCore.jsx")}
@@ -49,10 +51,17 @@ def without_file_list(text: str) -> str:
 
 
 def literal_text(path: Path) -> str:
-    """The string literals of a script joined, without markup: what the dialog shows."""
+    """The string literals of a script joined, without markup and with \\u and \\" escapes read: what the dialog shows."""
     source = path.read_text(encoding="utf-8")
     pieces = re.findall(r'"((?:[^"\\]|\\.)*)"', source)
-    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", "".join(pieces)))
+    text = re.sub(r"\\u([0-9a-fA-F]{4})", lambda m: chr(int(m.group(1), 16)), "".join(pieces)).replace('\\"', '"')
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", text))
+
+
+def disclaimer(path: Path) -> str:
+    """The disclaimer of a LICENSE file, on one line."""
+    text = re.sub(r"\s+", " ", path.read_text(encoding="utf-8"))
+    return text[text.index("THE SOFTWARE IS PROVIDED"):].strip()
 
 
 def filter_list(path: Path) -> list:
@@ -110,8 +119,11 @@ def main() -> None:
     checks[f"both dialogs offer {' with '.join(OUTPUT)}"] = all(
         label in literal_text(path) for label in OUTPUT for path in (PI / "AELBridgeDialog.jsh", PS / "AELPhotoshopDialog.jsx"))
     texts = {program: " ".join(literal_text(path) for path in paths) for program, paths in WORDS.items()}
-    checks["both offer the advanced settings and the invitation to the library with its GitHub button"] = all(
+    checks["both offer the advanced settings and the invitation to the library with its GitHub address"] = all(
         words in text for words in MORE for text in texts.values())
+    licences = [disclaimer(root / "LICENSE") for root in (PI, PS)]
+    checks["both show the MIT licence line and the disclaimer of their LICENSE, the same in both"] = (
+        licences[0] == licences[1] and all(LICENCE_LINE in text and licences[0] in text for text in texts.values()))
     lists = {program: filter_list(paths[1]) for program, paths in WORDS.items()}
     checks[f"both list the same {len(lists['PixInsight'])} filters with the same words"] = (
         lists["PixInsight"] == lists["Photoshop"] and len(lists["PixInsight"]) == 16)

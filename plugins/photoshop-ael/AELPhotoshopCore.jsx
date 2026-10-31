@@ -463,9 +463,38 @@ var AELPhotoshop = AELPhotoshop || {};
             (hidden ? ", and " + hidden + " more, hidden" : "");
     };
 
-    // The whole library, for whoever wants more than this dialog: the same words as in the PixInsight connector.
+    // The whole library, for whoever wants more than this dialog, and the licence (LICENSE): the same words as in the
+    // PixInsight connector. The licence is one line under the address, with the whole disclaimer on its tip.
     ns.githubUrl = "https://github.com/PeterWar/Agentic-Eclipse-Library";
-    ns.invitation = "For more faithful results and more filters, try the whole Agentic Eclipse Library with an AI agent.";
+    ns.invitation = "For more faithful results and more filters, try the whole Agentic Eclipse Library with an AI agent:";
+    ns.licenceLine = "MIT License · Copyright © 2026 Pere Guerra Serra · Provided “as is”, " +
+        "without warranty of any kind.";
+    ns.licenceDisclaimer = "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, " +
+        "INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR " +
+        "PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE " +
+        "FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR " +
+        "OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER " +
+        "DEALINGS IN THE SOFTWARE.";
+    // A web address written as a link that opens the page when clicked: blue text (#0066ff, as in the PixInsight
+    // connector) with a blue line under it. ScriptUI does not underline text, and on Photoshop 2026 for macOS a
+    // control's onDraw does not draw text at all (31-10): the line is a group one pixel high, filled with blue.
+    ns.addLink = function (parent, url, tip) {
+        var box = parent.add("group");
+        box.orientation = "column";
+        box.alignChildren = "left";
+        box.spacing = 0;
+        var text = box.add("statictext", undefined, url);
+        text.helpTip = tip;
+        var line = box.add("group");
+        try {
+            var blue = [0, 0.4, 1, 1];
+            text.graphics.foregroundColor = text.graphics.newPen(text.graphics.PenType.SOLID_COLOR, blue, 1);
+            line.preferredSize = [Math.ceil(text.graphics.measureString(url, text.graphics.font)[0]), 1];
+            line.graphics.backgroundColor = line.graphics.newBrush(line.graphics.BrushType.SOLID_COLOR, blue);
+        } catch (plainText) {}
+        text.addEventListener("mousedown", function () { ns.openUrl(url); });
+        return text;
+    };
     ns.openUrl = function (url) {
         if (/^win/i.test($.os)) app.system('cmd /c start "" "' + url + '"');
         else app.system("open " + ns.shellQuote(url));
@@ -479,8 +508,16 @@ var AELPhotoshop = AELPhotoshop || {};
         folder.remove();
     };
 
-    // Python runs in the background; Photoshop shows its progress and waits for its result file. A cancel file
-    // stops Python at its next step.
+    // Python runs in the background; Photoshop shows its progress and waits for its result file. Cancel writes a file
+    // that stops Python at its next step; when that step is long (a filter, writing the PSB), Python is stopped after
+    // STOP_GRACE_S.
+    ns.STOP_GRACE_S = 15;
+    ns.stoppedError = function (answer) {
+        var error = new Error("Stopped: AEL did not finish, and nothing was opened.");
+        error.stopped = true;
+        error.answer = answer;
+        return error;
+    };
     ns.runBackground = function (python, cfg, runRoot, onProgress) {
         var config = new File(runRoot.fsName + "/config.json");
         var result = new File(runRoot.fsName + "/result.json");
@@ -494,30 +531,45 @@ var AELPhotoshop = AELPhotoshop || {};
             ns.shellQuote(ns.runner.fsName) + " " + ns.shellQuote(config.fsName) + " " + ns.shellQuote(result.fsName) +
             " > " + ns.shellQuote(log.fsName) + " 2>&1 & echo $! > " + ns.shellQuote(pid.fsName);
         app.system(command);
-        var started = new Date().getTime(), lastCheck = started, processId = "";
+        var lastCheck = new Date().getTime(), processId = "", info = null, stopAsked = 0, stopSent = false;
         while (!result.exists) {
             $.sleep(400);
-            if (new File(cfg.progress).exists) {
-                try { onProgress(ns.readJSON(new File(cfg.progress))); } catch (busy) {}
+            var progress = new File(cfg.progress);
+            if (progress.exists) {
+                try { info = ns.readJSON(progress); } catch (busy) {}
             }
-            if (onProgress.cancelled && !new File(cfg.cancel).exists) ns.writeJSON(new File(cfg.cancel), {cancel: true});
+            // At every turn, not only when AEL reports a new step: the window's clock and its Cancel button stay alive.
+            onProgress(info);
+            if (onProgress.cancelled && !stopAsked) {
+                stopAsked = new Date().getTime();
+                ns.writeJSON(new File(cfg.cancel), {cancel: true});
+            }
+            if (!processId && pid.exists) {
+                pid.open("r");
+                processId = String(pid.read()).replace(/\s+/g, "");
+                pid.close();
+            }
+            var known = /^[0-9]+$/.test(processId);
+            if (stopAsked && !stopSent && known && new Date().getTime() - stopAsked > ns.STOP_GRACE_S * 1000) {
+                app.system("kill " + processId);
+                stopSent = true;
+            }
             if (new Date().getTime() - lastCheck > 5000) {
                 lastCheck = new Date().getTime();
-                if (!processId && pid.exists) {
-                    pid.open("r");
-                    processId = String(pid.read()).replace(/\s+/g, "");
-                    pid.close();
-                }
                 // kill -0 only asks whether the process is still there.
-                if (/^[0-9]+$/.test(processId) && app.system("kill -0 " + processId) !== 0) {
+                if (known && app.system("kill -0 " + processId) !== 0) {
                     $.sleep(1000);
-                    if (!result.exists) throw new Error("Python stopped without an answer. Its messages are in " + log.fsName);
+                    if (!result.exists) {
+                        if (stopAsked) throw ns.stoppedError(null);
+                        throw new Error("Python stopped without an answer. Its messages are in " + log.fsName);
+                    }
                 }
             }
         }
         $.sleep(200);
         var answer = ns.readJSON(result);
         if (!answer.ok) {
+            if (stopAsked) throw ns.stoppedError(answer);
             var error = new Error(answer.message || "AEL failed");
             error.answer = answer;
             throw error;
@@ -525,54 +577,94 @@ var AELPhotoshop = AELPhotoshop || {};
         return answer;
     };
 
+    // AEL's steps, in the order it takes them, and the part of the bar each one fills.
+    ns.PROGRESS_STEPS = {"Starting": [0, 0], "Reading the files": [0, 10], "Combining darks": [10, 14],
+        "Combining flats": [14, 17], "Finding the Moon": [17, 27], "Registering on the Sun": [27, 40],
+        "Measuring the light of each photo": [40, 45], "Levelling the photos": [45, 49],
+        "Looking for dust on the sensor": [49, 54], "Stacking": [54, 64], "Filters": [64, 92], "Saving": [92, 99],
+        "Done": [100, 100]};
     ns.HEARTBEAT_S = 20;
-    ns.progressWindow = function () {
-        var win = new Window("palette", "Agentic Eclipse Library");
-        win.orientation = "column";
-        win.alignChildren = "fill";
-        win.margins = 16;
-        var stage = win.add("statictext", undefined, "Starting…");
-        stage.preferredSize.width = 420;
-        var bar = win.add("progressbar", undefined, 0, 100);
-        bar.preferredSize.width = 420;
-        var detail = win.add("statictext", undefined, "");
-        detail.preferredSize.width = 420;
-        var stop = win.add("button", undefined, "Stop");
-        stop.helpTip = "Ask AEL to stop at its next step";
-        var steps = {"Reading the files": [0, 12], "Combining darks": [12, 16], "Combining flats": [16, 20],
-            "Finding the Moon": [20, 32], "Registering on the Sun": [32, 48],
-            "Measuring the light of each photo": [48, 55], "Stacking": [55, 65], "Filters": [65, 97],
-            "Saving": [97, 99], "Done": [100, 100]};
-        // One filter can take minutes without a new step to report: the window keeps its own clock, and after
-        // HEARTBEAT_S on the same step it says that AEL is still working. ns.progressLog keeps what it said, as the
-        // PixInsight connector writes it to its Console.
-        var started = new Date().getTime(), said = "", saidAt = started, heard = started;
+    ns.clock = function (ms) {
+        var s = Math.max(0, Math.round(ms / 1000));
+        return Math.floor(s / 60) + ":" + (s % 60 < 10 ? "0" : "") + (s % 60);
+    };
+    // What the progress window says at every turn of the wait. First line: the step, its count, what AEL is on, and
+    // the time since Make the image, so something moves every second. Second line: after HEARTBEAT_S on the same
+    // step (one filter can take minutes), that AEL is still working on it. The bar fills step by step and never goes
+    // back. ns.progressLog keeps what it said, as the PixInsight connector writes it to its Console.
+    ns.progressState = function () {
+        var start = new Date().getTime();
+        var state = {started: start, said: "", saidAt: start, heard: start, value: 0, cancelled: false, text: ""};
         ns.progressLog = [];
-        var update = function (info) {
+        state.read = function (info) {
             var now = new Date().getTime();
-            var span = steps[info.stage] || [0, 100];
-            var fraction = info.total ? Math.min(1, info.done / info.total) : 0;
-            bar.value = span[0] + (span[1] - span[0]) * fraction;
-            var text = info.stage + (info.total ? " (" + info.done + " of " + info.total + ")" : "") +
-                (info.message ? ": " + info.message : "");
-            if (text !== said) {
-                ns.progressLog.push("AEL: " + text + " — " + Math.round((now - started) / 1000) + " s");
-                said = text;
-                saidAt = heard = now;
-            } else if (now - heard >= ns.HEARTBEAT_S * 1000) {
-                ns.progressLog.push("AEL: still working on " + text + " — " + Math.round((now - saidAt) / 1000) + " s");
-                heard = now;
+            info = info || {stage: "Starting"};
+            var span = ns.PROGRESS_STEPS[info.stage];
+            if (span) {
+                var fraction = info.total ? Math.min(1, info.done / info.total) : 0;
+                state.value = Math.max(state.value, span[0] + (span[1] - span[0]) * fraction);
             }
-            stage.text = info.stage + (info.total ? " (" + info.done + " of " + info.total + ")" : "");
-            var quiet = Math.round((now - saidAt) / 1000);
-            detail.text = (info.message || "") + "   " + Math.round((now - started) / 1000) + " s" +
-                (quiet >= ns.HEARTBEAT_S ? "  ·  still working on this step (" + quiet + " s)" : "");
-            win.update();
+            var step = info.stage + (info.total ? " (" + info.done + " of " + info.total + ")" : "") +
+                (info.message ? ": " + info.message : "");
+            if (step !== state.said) {
+                ns.progressLog.push("AEL: " + step + " — " + Math.round((now - state.started) / 1000) + " s");
+                state.said = step;
+                state.saidAt = state.heard = now;
+            } else if (now - state.heard >= ns.HEARTBEAT_S * 1000) {
+                ns.progressLog.push("AEL: still working on " + step + " — " +
+                    Math.round((now - state.saidAt) / 1000) + " s");
+                state.heard = now;
+            }
+            if (state.cancelled && !state.stopping) {
+                ns.progressLog.push("AEL: stopping at the end of this step — " +
+                    Math.round((now - state.started) / 1000) + " s");
+                state.stopping = true;
+            }
+            var quiet = now - state.saidAt;
+            state.text = step + "  ·  " + ns.clock(now - state.started) + "\n" +
+                (state.cancelled ? "Stopping: AEL stops at the end of this step." :
+                quiet >= ns.HEARTBEAT_S * 1000 ? "Still working (" + ns.clock(quiet) +
+                    "): a filter or writing the PSB can take minutes." :
+                "The Agentic Eclipse Library is making the image.");
+            return state;
+        };
+        return state;
+    };
+    // The steps are shown in Photoshop's own progress window: it is drawn, its bar and its text change, and its
+    // Cancel button answers while the script waits for Python. A ScriptUI palette is not drawn at all: on Photoshop
+    // 2026 for macOS it stays at 0 x 0 pixels, off screen, until the script ends (measured on 31-10), and the only sign
+    // of life was the spinning wheel. Photoshop's window runs a function named in a string: runProgressJob.
+    ns.withProgress = function (work) {
+        var state = ns.progressState();
+        var update = function (info) {
+            state.read(info);
+            if (ns.progressJob) {
+                app.changeProgressText(state.text);
+                if (!app.updateProgress(Math.round(10 * state.value), 1000)) state.cancelled = true;
+            }
+            update.cancelled = state.cancelled;
         };
         update.cancelled = false;
-        stop.onClick = function () { update.cancelled = true; stage.text = "Stopping…"; };
-        win.show();
-        return {window: win, update: update};
+        if (typeof app.doForcedProgress === "undefined") return work(update);
+        var outcome;
+        ns.progressJob = {work: work, update: update, outcome: null};
+        try {
+            app.doForcedProgress("Agentic Eclipse Library", "AELPhotoshop.runProgressJob()");
+            outcome = ns.progressJob.outcome;
+        } finally {
+            ns.progressJob = null;
+        }
+        if (!outcome) throw new Error("Photoshop's progress window did not run AEL.");
+        if (outcome.failed) throw outcome.error;
+        return outcome.value;
+    };
+    ns.runProgressJob = function () {
+        var job = ns.progressJob;
+        try {
+            job.outcome = {value: job.work(job.update)};
+        } catch (error) {
+            job.outcome = {failed: true, error: error};
+        }
     };
 
     ns.runRaw = function (options) {
@@ -583,25 +675,25 @@ var AELPhotoshop = AELPhotoshop || {};
         if (!parent.exists && !parent.create()) throw new Error("Cannot create the output folder " + parent.fsName);
         var out = ns.uniqueFolder(parent, "AEL_");
         var runRoot = ns.uniqueFolder(Folder.temp, "AEL_PS_run_");
-        var progress = ns.progressWindow();
+        var cfg = {operation: "raw", raw: options.raw, darks: options.darks || [], flats: options.flats || [],
+            calibration: options.calibration || [], out: out.fsName, filters: choice.filters,
+            opacities: choice.opacities};
         var oldDialogs = app.displayDialogs;
         var result;
         try {
-            result = ns.runBackground(probe.selected_python,
-                {operation: "raw", raw: options.raw, darks: options.darks || [], flats: options.flats || [],
-                 calibration: options.calibration || [], out: out.fsName, filters: choice.filters,
-                 opacities: choice.opacities},
-                runRoot, progress.update);
+            result = ns.withProgress(function (update) {
+                return ns.runBackground(probe.selected_python, cfg, runRoot, update);
+            });
         } catch (error) {
-            progress.window.close();
             var log = new File(runRoot.fsName + "/python.log");
             if (log.exists) log.copy(new File(out.fsName + "/AEL error log.txt"));
             if (error.answer) ns.writeJSON(new File(out.fsName + "/AEL error.json"), error.answer);
-            throw new Error(error.message + "\n\nDetails: " + out.fsName);
+            var failure = new Error(error.message + "\n\nDetails: " + out.fsName);
+            failure.stopped = error.stopped;
+            throw failure;
         } finally {
             ns.removeFolder(runRoot);
         }
-        progress.window.close();
         try {
             app.displayDialogs = DialogModes.NO;
             var psb = new File(result.psb);
@@ -642,6 +734,6 @@ var AELPhotoshop = AELPhotoshop || {};
                 "an exposure saturates.";
         }
         text += "\n\nThe layered image is open. It is saved, with the linear master and a receipt, in:\n" + result.out;
-        return text + "\n\n" + ns.invitation.replace(/\.$/, ":") + " " + ns.githubUrl;
+        return text + "\n\n" + ns.invitation + " " + ns.githubUrl;
     };
 }(AELPhotoshop));

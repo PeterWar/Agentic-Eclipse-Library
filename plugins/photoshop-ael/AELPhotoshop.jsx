@@ -18,6 +18,6 @@ Run from File > Scripts > Browse, or install in Photoshop's Scripts folder.
             alert(AELPhotoshop.doneMessage(result));
         }
     } catch (error) {
-        alert("AEL could not make the image.\n\n" + error.message);
+        alert(error.stopped ? error.message : "AEL could not make the image.\n\n" + error.message);
     }
 }());
