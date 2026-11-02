@@ -4,16 +4,20 @@ import json
 from pathlib import Path
 import numpy as np
 from . import io, photoshop
-from .filterbank import ALIASES,DEFAULTS,EXTRA,NAMES,make_filter
+from .filterbank import ALIASES,DEFAULTS,EXTRA,LARSON_SEKANINA,NAMES,make_filter,red_excess_mask
 from .geometry import EclipseGeometry
 
 # Starting opacities of the default layers, from the author's 2026 image, where the Overlay layer was the edge-aware WOW
 # at 0.37. The plain WOW (`wow`, the default in 1.3.4) keeps 0.37 for recipes that list it (docs/VALIDATION_1.3.4.md).
-DEFAULT_OPACITY={'nrgf':.39,'wow_edge_aware':.37,'achf_iso_04':.08,'wow':.37}
+# Since 1.4.2 the author's 2026 test layers give three more: NAFE at 0.79 (where it adds, at 1.3–3 R☉, the contrast of
+# his edge-aware WOW at 0.37) and both Larson–Sekanina layers at 0.20. SWAP is a whole view in Normal: 1.
+DEFAULT_OPACITY={'nrgf':.39,'wow_edge_aware':.37,'achf_iso_04':.08,'wow':.37,'nafe':.79,'larson_sekanina_1':.2,
+                 'larson_sekanina_0.4':.2,'swap':1.}
 
 # Photoshop layer names (since 1.3.5), the scheme of the author's own files: the number is the family, in the order
-# of his stack (00 display base, 01 NRGF, 02 RHEF, 03 MGN, 04 ACHF, 05 WOW); a letter tells the variants of one family
-# apart from the bottom up; then the filter and the parameter that distinguishes it. The receipt keeps the code names.
+# of his stack (00 display base, 01 NRGF, 02 RHEF, 03 MGN, 04 ACHF, 05 WOW, 09 NAFE); a letter tells the variants of
+# one family apart from the bottom up; then the filter and the parameter that distinguishes it. The receipt keeps the
+# code names.
 LAYER_LABELS={'nrgf':('01','NRGF'),'nrgf_log':('01','NRGF log'),'rhef':('02','RHEF'),
               'rhef_upsilon':('02','RHEF Upsilon'),'rhef_local60':('02','RHEF local 60°'),
               'rhef_local30':('02','RHEF local 30°'),'mgn':('03','MGN'),'achf_angular':('04','ACHF angular'),
@@ -23,7 +27,10 @@ LAYER_LABELS={'nrgf':('01','NRGF'),'nrgf_log':('01','NRGF log'),'rhef':('02','RH
               'wow':('05','WOW'),'wow_edge_aware':('05','WOW edge-aware'),
               # structure-aware detail (after 1.4.0): one family each, after the agentic layers 06–07 of the author's files
               'hessian_ridge':('10','Hessian ridge'),'steerable_g2':('11','Steerable G2'),'mmt':('12','Median transform'),
-              'noise_gate':('13','Noise gating'),'coherence_diffusion':('14','Coherence diffusion')}
+              'noise_gate':('13','Noise gating'),'coherence_diffusion':('14','Coherence diffusion'),
+              # since 1.4.2: NAFE keeps the number of the author's 2026 test layer; then one family each
+              'nafe':('09','NAFE'),'larson_sekanina_1':('15','Larson-Sekanina 1°'),
+              'larson_sekanina_0.4':('15','Larson-Sekanina 0.4°'),'swap':('16','SWAP filter')}
 
 
 def layer_names(names):
@@ -169,9 +176,13 @@ def filters_from_config(config_path,out_dir,*,progress=print):
     add('Linear reference / receipt scale',reference,alpha,visible=False)
     add('00 Display base',base,alpha)
     domain_checks=[]
+    # The Larson–Sekanina layers copy a prominence at ±Δθ: it leaves their input, found by its red (since 1.4.2)
+    prominences=red_excess_mask(rgb,valid,geo) if set(names)&set(LARSON_SEKANINA) else None
     for i,(name,label) in enumerate(zip(names,layer_names(names))):
         progress(f'filter {i+1}/{len(names)}: {name}')
-        image,mode,info=make_filter(name,lum,valid,geo,achf_display=achf_display)
+        kw=dict(exclude=prominences) if name in LARSON_SEKANINA else {}
+        image,mode,info=make_filter(name,lum,valid,geo,achf_display=achf_display,**kw)
+        if name in LARSON_SEKANINA: info=dict(info,excluded='prominences: red_excess_mask (R/G above 1.12 times its annulus)')
         observed=valid & np.isfinite(image)
         al=layer_alpha(alpha,observed,mode)
         opacity=float(opacities.get(name,DEFAULT_OPACITY.get(name,1)))

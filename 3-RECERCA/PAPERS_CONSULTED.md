@@ -10,6 +10,10 @@ Added in 1.3.0 (October 2026, coronagraph comparison and absolute calibration; n
 - Llebaria_2021_SolPhys296_53_LASCO_C2_C3_calibration_stars
 - vandeHulst_1950_BAN11_135_electron_density_solar_corona
 
+Added in 1.4.2 (the NAFE layer, written on 28-10-2026):
+
+- Druckmuller_2013_ApJS207_25_NAFE_noise_adaptive_fuzzy_equalization
+
 Earlier:
 
 - Auchere_2023_AA670_A66_WOW_wavelets_optimized_whitening

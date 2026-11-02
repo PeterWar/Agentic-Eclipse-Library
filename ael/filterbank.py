@@ -19,7 +19,12 @@ DEFAULTS = ('nrgf','wow_edge_aware','achf_iso_04')
 # lists them by name. hessian_ridge and noise_gate are ACHF iso 04 (the default detail layer) with one change each, so
 # the yardstick of two optics can tell what the change brings; steerable_g2 and mmt are detail layers of their own, and
 # coherence_diffusion smooths along coherent structure.
-EXTRA = ('hessian_ridge','steerable_g2','mmt','noise_gate','coherence_diffusion')
+STRUCTURE = ('hessian_ridge','steerable_g2','mmt','noise_gate','coherence_diffusion')
+# Since 1.4.2, three more layers outside "all" and the defaults, which the author tried on his 2026 image: NAFE
+# (Druckmüller 2013), the SWAP filter above the limb (Seaton et al. 2023) and the Larson–Sekanina rotational gradient
+# with Δθ = 1° and 0.4° (Larson & Sekanina 1984). The connectors do not offer any of EXTRA.
+EXTRA = STRUCTURE + ('nafe','swap','larson_sekanina_1','larson_sekanina_0.4')
+LARSON_SEKANINA = {'larson_sekanina_1': 1.0, 'larson_sekanina_0.4': 0.4}     # Δθ in degrees
 ALIASES = {'wow_bilateral': 'wow_edge_aware'}           # the name of the edge-aware WOW up to 1.3.4
 
 
@@ -351,7 +356,108 @@ def wow_measured(img, valid, geometry, *, n_scales=6, noise_floor=3., noise_regi
                                                                                  smoothstep=list(edge_completeness)))
 
 
-def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display='rings'):
+def nafe_noise_sigma(luminance,valid,geometry,*,multiple=12.,region_rsun=4.,smooth_px=4.):
+    """The sigma of NAFE: ``multiple`` times the pixel noise sigma_A, measured where the corona is faint (beyond
+    ``region_rsun``, or the outermost fifth of the radii if that leaves fewer than 20 000 pixels) as 1.4826·MAD of the
+    residual from a ``smooth_px`` normalised Gaussian. A 4 px blur keeps in the residual the 2–3 px grain of a
+    registered stack, which the finest wavelet scale misses. Druckmüller (2013) puts sigma at 2–12 sigma_A; 12, the
+    low-noise end, is the setting of the author's 2026 test layer (sigma_A ≈ 1 DN at 4–7 R☉, sigma = 12 DN)."""
+    a=np.asarray(luminance,np.float32); m=valid & np.isfinite(a)
+    rs=geometry.rsun_map(); reg=m & (rs>=region_rsun); where=f'r >= {region_rsun:g} R_sun'
+    if reg.sum()<20000:
+        reg=m & (rs>=np.quantile(rs[m],.8)); where='outermost fifth of the observed radii'
+    sm=F.normalized_gaussian(a,m,smooth_px,min_support=.5)
+    d=(a-sm)[reg & np.isfinite(sm)]
+    sigma_a=1.4826*float(np.median(np.abs(d-np.median(d)))) if d.size else 0.
+    sigma=multiple*sigma_a
+    if not sigma>0:                                     # a noiseless input: any sigma gives the same layer (0.5 on a flat one)
+        sigma=max(1e-6*float(np.max(np.abs(a[m]))),1e-12)
+    return sigma,dict(sigma_A=sigma_a,noise_multiple=multiple,noise_region=where,noise_pixels=int(d.size),
+                      noise_estimate=f'1.4826 MAD of the residual from a {smooth_px:g} px normalised Gaussian')
+
+
+def red_excess_mask(rgb,valid,geometry,*,ratio=1.12,r_max_rsun=1.4,step_rsun=.01,dilate_px=6,min_count=200):
+    """Prominences, by their colour (since 1.4.2): the pixels whose R/G exceeds ``ratio`` times the median R/G of
+    the observed pixels in the same annulus of ``step_rsun`` around the Sun (from 1 to ``r_max_rsun`` R☉; an annulus
+    with ``min_count`` pixels or fewer is skipped), dilated by an ellipse of ``dilate_px``. H-alpha makes a prominence
+    red against the white corona. This is how the author's 2026 Larson–Sekanina layers kept prominences out of their
+    input; :func:`ael.develop.filters_from_config` passes it to those layers as ``exclude``."""
+    import cv2
+    rgb=np.asarray(rgb,np.float32)
+    if rgb.shape!=(*valid.shape,3): raise ValueError('rgb must be HxWx3 on the valid canvas')
+    rs=geometry.rsun_map()
+    sel=valid & (rs>=1.) & (rs<r_max_rsun) & np.isfinite(rgb).all(axis=-1) & (rgb[...,1]>0)
+    iy,ix=np.nonzero(sel)
+    q=rgb[iy,ix,0]/rgb[iy,ix,1]
+    k=np.floor((rs[iy,ix]-1.)/step_rsun+1e-6).astype(np.int64)
+    red=np.zeros(len(q),bool)
+    for ring in np.unique(k):
+        one=k==ring
+        if one.sum()>min_count: red[one]=q[one]>ratio*np.median(q[one])
+    out=np.zeros(valid.shape,np.uint8); out[iy[red],ix[red]]=1
+    kernel=cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(2*dilate_px+1,2*dilate_px+1))
+    return cv2.dilate(out,kernel)>0
+
+
+def larson_sekanina_layer(luminance,valid,geometry,delta_deg,*,exclude=None,limb_band_rsun=.035,fade_px=16.):
+    """The Larson–Sekanina layer (since 1.4.2), as the author's 2026 test layers: (display layer in [0,1], 'overlay',
+    effective parameters).
+
+    The input is ln L of the observed pixels, without the band of ``limb_band_rsun`` next to the Moon (when the geometry
+    has the Moon) and without ``exclude``: there, compact bright objects turned into saturated light and dark copies
+    at ±Δθ. :func:`ael.filters.larson_sekanina` gives the gradient; it is shown as ``0.5 + 0.5·tanh(LS/s0)``, with one
+    ``s0`` for the whole layer (the 99th percentile of |LS| between 1.1 and 2.5 R☉, divided by 1.2), and it fades to mid
+    grey, which changes nothing in Overlay, over the last ``fade_px`` px before the edge of its domain, so that a
+    texture does not stop dead there."""
+    from scipy import ndimage as ndi
+    a=np.asarray(luminance,np.float32)
+    m=valid & np.isfinite(a) & (a>0)
+    limb=excluded=0
+    if geometry.moon_xy is not None and geometry.moon_radius_px is not None:
+        band=(geometry.radius_map('moon')-geometry.moon_radius_px)<limb_band_rsun*geometry.sun_radius_px
+        limb=int((m & band).sum()); m=m & ~band
+    if exclude is not None:
+        exclude=np.asarray(exclude,bool)
+        if exclude.shape!=m.shape: raise ValueError('exclude does not match the canvas')
+        excluded=int((m & exclude).sum()); m=m & ~exclude
+    if not m.any(): raise ValueError('no positive observed luminance left for the Larson–Sekanina layer')
+    ls,info=F.larson_sekanina(np.log(np.where(m,a,1)),m,geometry,delta_deg)
+    ok=np.isfinite(ls)
+    if not ok.any(): raise ValueError('no pixel has both partners at ±Δθ inside the data')
+    rs=geometry.rsun_map()
+    sel=ok & (rs>1.1) & (rs<2.5)
+    region='1.1–2.5 R☉'
+    if sel.sum()<1000: sel,region=ok,'all its pixels (fewer than 1000 between 1.1 and 2.5 R☉)'
+    s0=max(float(np.percentile(np.abs(ls[sel]),99))/1.2,1e-12)
+    fade=np.clip(ndi.distance_transform_edt(np.pad(ok,1))[1:-1,1:-1]/fade_px,0,1)
+    fade=fade*fade*(3-2*fade)
+    q=np.where(ok,.5+.5*np.tanh(ls/s0)*fade,np.nan).astype(np.float32)
+    moon=geometry.moon_xy is not None and geometry.moon_radius_px is not None
+    return q,'overlay',dict(**info,input='ln L',limb_band_rsun=limb_band_rsun if moon else None,limb_band_pixels=limb,excluded_pixels=excluded,s0=s0,s0_region=region,
+                            display='0.5 + 0.5 tanh(LS/s0), one s0 for the layer',fade_px=fade_px)
+
+
+def swap_layer(luminance,valid,geometry):
+    """The SWAP layer (since 1.4.2): (display layer in [0,1], 'normal', effective parameters). The filtered image
+    ``I/F′`` of :func:`ael.filters.swap_filter` is shown as the paper shows it (eq. 2), with one adaptation: its fourth
+    root, from 0.5 to 2.0, after ``I/F′`` is divided by its median over the observed pixels. The paper reads that range
+    in SWAP's renormalised counts; dividing by the median keeps it from depending on the units of the input, and puts
+    the median at 1 (0.33 of the layer). A Normal layer: a complete image to look at on its own (at 100 % it covers the
+    layers below), not a detail layer to blend."""
+    a=np.asarray(luminance,np.float32)
+    m=valid & np.isfinite(a) & (a>0)
+    if not m.any(): raise ValueError('no positive observed luminance')
+    ratio,info=F.swap_filter(a,m,geometry)
+    good=np.isfinite(ratio)
+    median=float(np.median(ratio[good]))
+    u=(np.where(good,ratio,median)/median)**.25
+    q=np.where(good,np.clip((u-.5)/1.5,0,1),np.nan).astype(np.float32)
+    return q,'normal',dict(**info,input='linear luminance',renormalised_by=median,
+                           display='fourth root of (I/F′ over its median), shown from 0.5 to 2.0',
+                           below_0_5=float((u[good]<.5).mean()),above_2_0=float((u[good]>2.).mean()))
+
+
+def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display='rings',nafe_sigma=None,exclude=None):
     """Return (display layer in [0,1], blend mode, effective parameters).
 
     ``upsilon_curve`` (since 1.3.2): ``(low, high)`` exponents of the Upsilon curve of Gilly & Cranmer (2025) to
@@ -360,13 +466,26 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
     with ``upsilon_curve`` is refused.
 
     ``achf_display`` (since 1.3.4): ``'rings'`` (default) maps every ACHF layer with a level and a spread per ring
-    (:func:`display_detail_rings`, issue #9); ``'global'`` keeps the single whole-image spread of 1.3.3."""
+    (:func:`display_detail_rings`, issue #9); ``'global'`` keeps the single whole-image spread of 1.3.3.
+
+    ``nafe_sigma`` (NAFE only, since 1.4.2): the sigma of the noise gate in the units of ``luminance``; by default 12
+    times the measured pixel noise (:func:`nafe_noise_sigma`).
+
+    ``exclude`` (Larson–Sekanina only, since 1.4.2): pixels to leave out of the layer's input besides the band next to
+    the Moon, which it always leaves out: compact bright objects, such as prominences (:func:`red_excess_mask`) or
+    stars, that it would copy at ±Δθ."""
     name=ALIASES.get(name,name)                         # 'wow_bilateral', the name up to 1.3.4
-    if name in EXTRA: return structure_filter(name,luminance,valid,geometry)
+    if nafe_sigma is not None and name!='nafe': raise ValueError('nafe_sigma applies to the NAFE layer only')
+    if exclude is not None and name not in LARSON_SEKANINA:
+        raise ValueError('exclude applies to the Larson–Sekanina layers only')
+    if name in STRUCTURE: return structure_filter(name,luminance,valid,geometry)
+    if name in LARSON_SEKANINA:
+        return larson_sekanina_layer(luminance,valid,geometry,LARSON_SEKANINA[name],exclude=exclude)
+    if name=='swap': return swap_layer(luminance,valid,geometry)
     a=np.asarray(luminance,np.float32)
     m=valid & np.isfinite(a)                          # the values NRGF needs no positive pixels (a subtracted sky)
     if name!='nrgf': m=m & (a>0)
-    if name not in NAMES: raise ValueError(f'unknown filter {name!r}; choose from {NAMES + EXTRA}')
+    if name not in NAMES+('nafe',): raise ValueError(f'unknown filter {name!r}; choose from {NAMES + EXTRA}')
     if upsilon_curve is not None:
         if not name.startswith('rhef'): raise ValueError('upsilon_curve applies to RHEF layers only')
         if len(upsilon_curve)!=2: raise ValueError('upsilon_curve is (low, high)')
@@ -405,6 +524,14 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
         lo,hi=np.nanpercentile(q[m],[1,99])
         q=np.where(m,np.clip((q-lo)/max(float(hi-lo),1e-12),0,1),np.nan)
         return q,'overlay',dict(display_limits=[float(lo),float(hi)],h=.7,k=.7,gamma=3.2)
+    elif name=='nafe':
+        if nafe_sigma is None: sigma,ninfo=nafe_noise_sigma(a,m,geometry)
+        else: sigma,ninfo=float(nafe_sigma),dict(sigma_from='given')
+        q,linfo=F.nafe(a,m,sigma)
+        return q,'overlay',dict(**linfo,**ninfo,input='linear luminance',
+                                method='Druckmüller (2013), ApJS 207, 25: eq. 11–14 (the equalized image E, as printed)',
+                                display='E itself, in [0, 1]; the paper blends (1 - w)·gamma + w·E with w ≈ 0.2; in '
+                                        'Overlay the layer opacity plays a role like w')
     elif name=='wow':
         residual,info=radial_log_residual(a,m,geometry)
         q,winfo=wow_measured(residual,m,geometry)
@@ -427,7 +554,7 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
 
 
 def structure_filter(name, luminance, valid, geometry):
-    """The layers of :data:`EXTRA` (since 1.4.1): (display layer in [0,1], 'overlay', effective parameters).
+    """The layers of :data:`STRUCTURE` (since 1.4.1): (display layer in [0,1], 'overlay', effective parameters).
 
     All start from the residual of ln L about its smooth radial profile (:func:`radial_log_residual`), as the
     isotropic ACHF does, and end with the display per ring of :func:`display_detail_rings`.
@@ -444,7 +571,7 @@ def structure_filter(name, luminance, valid, geometry):
       (:func:`ael.filters.coherence_diffusion`), computed on a copy reduced to at most 6 Mpx. ⚠ On pure noise the
       diffusion draws strokes; judge it with a null control.
     """
-    if name not in EXTRA: raise ValueError(f'{name!r} is not one of {EXTRA}')
+    if name not in STRUCTURE: raise ValueError(f'{name!r} is not one of {STRUCTURE}')
     a=np.asarray(luminance,np.float32)
     m=valid & np.isfinite(a) & (a>0)
     if not m.any(): raise ValueError('no positive observed luminance')
