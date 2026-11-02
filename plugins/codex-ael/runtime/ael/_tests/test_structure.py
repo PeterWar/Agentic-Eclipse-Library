@@ -7,7 +7,7 @@ dark ring in the median transform, the diffusion moves no light out of the data 
 import numpy as np
 from ael import filters as F
 from ael.develop import LAYER_LABELS, layer_alpha, layer_names
-from ael.filterbank import DEFAULTS, EXTRA, NAMES, make_filter, radial_log_residual
+from ael.filterbank import DEFAULTS, EXTRA, NAMES, STRUCTURE, make_filter, radial_log_residual
 from ael.geometry import EclipseGeometry
 
 
@@ -32,15 +32,15 @@ def corr(x, y, sel):
 
 def test_structure_filters_are_extra_layers_that_keep_the_observed_domain():
     assert len(NAMES) == 16 and not set(EXTRA) & set(NAMES) and not set(EXTRA) & set(DEFAULTS)
-    assert set(LAYER_LABELS) == set(NAMES) | set(EXTRA)
-    assert layer_names(list(EXTRA)) == ['10 Hessian ridge', '11 Steerable G2', '12 Median transform', '13 Noise gating',
+    assert set(LAYER_LABELS) == set(NAMES) | set(EXTRA) and set(STRUCTURE) <= set(EXTRA)
+    assert layer_names(list(STRUCTURE)) == ['10 Hessian ridge', '11 Steerable G2', '12 Median transform', '13 Noise gating',
                                         '14 Coherence diffusion']
     geo = EclipseGeometry((110, 140), (65.2, 55.3), 18, (67, 55), 19)
     r = geo.radius_map(); theta = np.radians(geo.pa_map())
     a = (100 * np.maximum(r / 18, 1) ** -3 * (1 + .1 * np.sin(12 * theta))).astype(np.float32)
     m = ~geo.moon_mask(2); m[20:35, 105:120] = False
     alpha = np.where(m, np.clip((geo.radius_map('moon') - 21) / 5, 0, 1), 0)
-    for name in EXTRA:
+    for name in STRUCTURE:
         layer, mode, info = make_filter(name, a, m, geo)
         assert mode == 'overlay', name
         assert np.isfinite(layer[m]).all(), name          # the rectangle rule: every observed pixel, edges included
@@ -52,7 +52,7 @@ def test_structure_filters_are_extra_layers_that_keep_the_observed_domain():
 def test_structure_filters_null_control_two_noise_realisations_share_nothing():
     a1, m, geo, _, rs = scene(1); a2, *_ = scene(2)
     ring = m & (rs > 1.3) & (rs < 4)
-    for name in ('achf_iso_04',) + EXTRA:
+    for name in ('achf_iso_04',) + STRUCTURE:
         q1 = make_filter(name, a1, m, geo)[0]; q2 = make_filter(name, a2, m, geo)[0]
         assert abs(corr(q1, q2, ring & np.isfinite(q1) & np.isfinite(q2))) < .15, name
 

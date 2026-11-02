@@ -19,6 +19,9 @@ Version 1.4.0 (30 October) adds two experimental connectors, for PixInsight and 
 `plugins/photoshop-ael/`); the `ael` code does not change.
 Version 1.4.1 (31 October) cures in the stack and in the NRGF three artefacts of a cloudy run of 2024, adds five
 structure filter layers outside the defaults, and updates the dialogs of both connectors.
+Version 1.4.2 (2 November) adds three filter layers outside the defaults (NAFE, the SWAP filter and the Larson–Sekanina
+gradient) and removes from `3-RECERCA/tools/` twelve copies of third-party GPLv3 code, a script that called
+it and a C++ translation of it.
 
 | Included | Files | Notes |
 |---|---:|---|
@@ -39,7 +42,7 @@ structure filter layers outside the defaults, and updates the dialogs of both co
 | Note 81A, a transcription of a video tutorial | Not ours to publish |
 | Raw answers from other AI models | Kept out for simplicity; prompts and reports are included |
 | The reviewer's letter and synthetic test scripts (October 2026) | Private correspondence; the changes they led to are in the changelog |
-| Third-party code copied during research (`umbra`, `eclipsetools`, `sunkit-image`) | Not ours; available from their authors under their own licences |
+| Third-party code copied during research (`umbra`, `eclipsetools`, `sunkit-image`, and since 1.4.2 Eric Buchlin's NAFE from `aia-movie`) | Not ours; available from their authors under their own licences (`aia-movie` is GPLv3; see `3-RECERCA/tools/v31_purs/LLEGEIX-ME_NAFE.md`) |
 
 **Cleaning applied to every published text file:** absolute personal paths rewritten to `/Users/USUARI/…`;
 e-mail addresses replaced by `[adreça]`; camera and lens serial numbers replaced by `[SÈRIE]`; one travel detail

@@ -168,7 +168,7 @@ need to publish your photos to contribute.
   codex plugin add agentic-eclipse-library@pere-guerra-eclipse
   ```
   Python and its dependencies are checked separately. The plugin runs locally and includes the maintained
-  AEL 1.4.1 engine. See the guide for desktop-app installation and supported workflows.
+  AEL 1.4.2 engine. See the guide for desktop-app installation and supported workflows.
 - **Other agents:** point the agent at [`AGENTS.md`](AGENTS.md). Each skill is a plain `SKILL.md` with
   `references/` and `scripts/`.
 - Most text is in Catalan. Current models read and translate it without trouble; ask your agent to answer in your
@@ -227,6 +227,23 @@ repository").
 
 [MIT](LICENSE) © 2026 Pere Guerra Serra. You may use, copy, modify and redistribute this work freely, including
 commercially; the licence only asks you to keep the copyright and permission notices with copies of the work.
+
+## What is new in 1.4.2
+
+Three filters that the author tried as hidden test layers on his 2026 image, now in the library, outside the defaults:
+a recipe lists them by name, and the connectors do not offer them.
+
+- **NAFE** (`nafe`, Druckmüller 2013): local histogram equalisation with a noise gate, written from the paper.
+- **The SWAP filter** (`swap`, Seaton et al. 2023): the image divided by a smoothed copy of itself (a running median
+  over ±15° along each circle around the Sun, plus a constant, to the power 0.75), as an image to look at on its own.
+- **The Larson–Sekanina gradient** (`larson_sekanina_1`, `larson_sekanina_0.4`, Larson & Sekanina 1984): where the
+  brightness changes along the circle, with Δθ = 1° and 0.4°; prominences, found by their colour, and the band next to
+  the Moon stay out of its input.
+- On the 2026 stacks each one agrees with the author's research version of it: NAFE with his σ, Larson–Sekanina with his
+  layers made again by their own script, SWAP with his September recipe run again on the same input. What they do,
+  what was checked and their limits: [`docs/NAFE_SWAP_LARSON_SEKANINA.md`](docs/NAFE_SWAP_LARSON_SEKANINA.md),
+  [`docs/VALIDATION_1.4.2.md`](docs/VALIDATION_1.4.2.md).
+- Copies of a third party's GPLv3 code that research layers of September used are removed from `3-RECERCA/tools/`.
 
 ## What is new in 1.4.1
 

@@ -1,5 +1,53 @@
 # Changelog
 
+## 1.4.2 — 2026-11-02
+
+Three filters that the author tried as hidden test layers on his 2026 image join the library, outside the defaults:
+NAFE, the SWAP filter and the Larson–Sekanina rotational gradient. A recipe lists them by name; `"all"`, the defaults
+and the connectors do not change. The Codex plugin goes to 1.1.6; the Claude Code plugin of this repository's
+marketplace and the Claude plugin folder `plugins/claude-ael/` go to 1.4.2. What each filter does, what was checked
+and its limits: [`docs/NAFE_SWAP_LARSON_SEKANINA.md`](docs/NAFE_SWAP_LARSON_SEKANINA.md); measurements on the 2026
+stacks: [`docs/VALIDATION_1.4.2.md`](docs/VALIDATION_1.4.2.md).
+
+- **`nafe`** (`ael.filters.nafe`; layer `09 NAFE`, Overlay, starting opacity 0.79): the equalized image E of the noise
+  adaptive fuzzy equalization of Druckmüller (2013, ApJS 207, 25, eq. 11–14 with eq. 13 as printed), written from the
+  paper. The gate σ is 12 times the pixel noise measured beyond 4 R☉; `make_filter('nafe', ..., nafe_sigma=...)` takes
+  another. In Overlay the opacity plays a role like the paper's weight w, but 79 % in Overlay is not w = 0.79: it is
+  the opacity of the author's test layer, where NAFE adds at 1.3–3 R☉ the contrast his edge-aware WOW adds at 37 %.
+  On the author's 2026 base, with his σ of 12 DN given by hand, it gives his test layer within 7.9e-5 rms (correlation
+  0.999998); with the σ it measures by default, 12.49 DN, rms 0.0017, the figures of the day it was written.
+- **`swap`** (`ael.filters.swap_filter`; layer `16 SWAP filter`, Normal): the filter of Seaton, Berghmans, Bloomfield
+  et al. (2023, Solar Physics 298, 92), its part above the limb: the image divided by F′ = (F + t0)^0.75 (eq. 1 and 2),
+  with F a running median along each circle over ±15° blurred by a Gaussian of σ = 4 px, and t0 the median of F as
+  the paper advises; shown as its fourth root from 0.5 to 2.0 (eq. 2), after dividing by its median. On the 2026 stack
+  its filtered image agrees with the September research recipe, run again on the same input, within 1.7e-5 for 99 % of
+  the pixels (at most 1.2 %), with the same t0.
+- **`larson_sekanina_1`, `larson_sekanina_0.4`** (`ael.filters.larson_sekanina`; layers `15a`/`15b`, Overlay, 0.20):
+  the rotational gradient of Larson & Sekanina (1984, AJ 89, 571) around the Sun on ln L, smoothed as the
+  signal-to-noise ratio falls, with Δθ = 1° and 0.4°. A ray narrower than Δθ comes out with two dark copies at ±Δθ;
+  compact bright objects give saturated copies, so the band of 0.035 R☉ next to the Moon always leaves the input and,
+  in a recipe, so do the prominences, found by their colour (`ael.filterbank.red_excess_mask`; not with a mono input).
+  On the 2026 stack the prominences it finds are those of the author's research layers, pixel for pixel, and the layers
+  agree with those layers made again with their own script (correlation 0.99975; rms 0.00099 for 1° and 0.00094 for
+  0.4° in layer units, 0.0087 and 0.0085 next to the limb).
+- **Keys' kernel with a = −0.5 for the turned values.** The Larson–Sekanina layers read ℓ(r, θ ± Δθ) with Keys' cubic
+  convolution with a = −0.5, exact for a quadratic. OpenCV's cubic interpolation, which the research layers used, has
+  a = −0.75, not exact even for a straight gradient: on a synthetic corona with no angular structure, where the
+  gradient should be zero, it left a fixed pattern of up to 4.5e-4 in ln L at 1.1–1.6 R☉ (6e-6 with a = −0.5).
+- **`ael.filterbank.EXTRA` now holds every layer outside `"all"`**: the five structure layers of 1.4.1, now also named
+  `ael.filterbank.STRUCTURE`, and the four new ones. Code that passed any name of `EXTRA` to `structure_filter` must
+  pass a name of `STRUCTURE` (or call `make_filter`).
+- **Third-party GPLv3 code removed from `3-RECERCA/tools/`**: a copy of Eric Buchlin's NAFE implementation
+  (`aia-movie`, GPLv3) that a September research layer used, the script that called it and a C++ translation of it in
+  `v31_purs/`, and eleven more copies of that implementation in the folders of the next test versions
+  (`v32_arcs_20260907` to `v42_20260910`, `purs/sources/`). They lacked the GPLv3 notice in this MIT repository.
+  Earlier versions of the repository and its Git history still contain them. The receipts stay, with a note that
+  credits the method to Miloslav Druckmüller (`3-RECERCA/tools/v31_purs/LLEGEIX-ME_NAFE.md`). The library's `nafe`
+  uses none of that code; that research layer blended 0.8 of E with 0.2 of a gamma image and is not this filter.
+- Tests: 13 new (`ael/_tests/test_nafe_swap_larson.py`), with their controls; selftest 137 of 137 in the source tree
+  and in the wheel. The connectors' code does not change, and their engine gives the same linear master and default
+  layers as 1.4.1, pixel for pixel.
+
 ## 1.4.1 — 2026-10-31
 
 After their author first used the PixInsight connector on photos of other cameras and eclipses (a Sony A7S behind a

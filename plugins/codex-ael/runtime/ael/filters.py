@@ -24,8 +24,16 @@ Structure-aware detail (since 1.4.1):
 * Coherence-enhancing diffusion – Weickert (1999), Int. J. Computer Vision 31, 111.
 * Fourier noise gating – DeForest (2017), ApJ 838, 155; the gain is the non-negative garrote of Breiman (1995),
   Technometrics 37, 373.
+
+Three more layers outside the defaults (since 1.4.2), tried by the author on his 2026 image:
+
+* NAFE – Druckmüller (2013), ApJS 207, 25 (noise adaptive fuzzy equalization), from the paper's equations.
+* SWAP filter – Seaton, Berghmans, Bloomfield et al. (2023), Solar Physics 298, 92, its off-limb part.
+* Rotational gradient – Larson & Sekanina (1984), AJ 89, 571.
 """
 from __future__ import annotations
+
+import warnings
 
 import cv2
 import numpy as np
@@ -35,7 +43,7 @@ from .geometry import EclipseGeometry
 __all__ = ["gaussian", "normalized_gaussian", "local_mean_std", "nrgf", "mgn", "starlet", "wow",
            "noise_map", "noise_factors", "tangential_highpass", "STARLET_NOISE",
            "hessian", "hessian_eigen", "ridge_weight", "steerable_g2", "multiscale_median", "coherence_diffusion",
-           "noise_gate"]
+           "noise_gate", "nafe", "nafe_neighbourhood", "swap_filter", "larson_sekanina"]
 
 # Standard deviation of the B3-starlet detail coefficients for unit white Gaussian noise (scales 1..9).
 STARLET_NOISE = np.array([0.8908, 0.2007, 0.0856, 0.0413, 0.0205, 0.0103, 0.0052, 0.0026, 0.0013])
@@ -709,3 +717,290 @@ def noise_gate(img: np.ndarray, valid: np.ndarray | None, geometry: EclipseGeome
                      polar_shape=[n_r, n_pa], r_range_px=[r0, r1],
                      noise_levels=dict(min=float(min(noise_rows)) if noise_rows else None,
                                        max=float(max(noise_rows)) if noise_rows else None))
+
+
+# ------------------------------------------------------------------------------------------------
+# NAFE (noise adaptive fuzzy equalization, since 1.4.2)
+# ------------------------------------------------------------------------------------------------
+def nafe_neighbourhood(n: int = 129) -> np.ndarray:
+    """The fuzzy neighbourhood of NAFE (Druckmüller 2013, eq. 12–14, with Gσm as printed in eq. 13):
+    ``d · Σ c_m (2π√σ_m)⁻¹ exp(−½ r²/σ_m²)``, twelve σ_m = 2^(m/2) px (1.4–64), every c_m = 1 (the
+    paper's default), ``d`` such that the centre is 1.  Half of the weight lies beyond 32 px."""
+    if n % 2 != 1:
+        raise ValueError("n must be odd")
+    k = np.arange(n) - n // 2
+    r2 = (k[:, None] ** 2 + k[None, :] ** 2).astype(np.float64)
+    sig = 2.0 ** (np.arange(1, 13) / 2)
+    g = sum(np.exp(-0.5 * r2 / s ** 2) / (2 * np.pi * np.sqrt(s)) for s in sig)
+    return g * (2 * np.pi / np.sum(sig ** -0.5))
+
+
+def nafe(img: np.ndarray, valid: np.ndarray | None, sigma: float, *, n: int = 129,
+         level_step: float = 0.005):
+    """The equalized image ``E`` of NAFE (Druckmüller 2013, ApJS 207, 25, eq. 11), in [0, 1].
+
+    ``E(p)`` is the cumulative fuzzy histogram of the neighbourhood of ``p``, convolved with a Gaussian
+    of ``sigma`` along the intensity axis and read at the value of ``p``:
+    ``Σ_q l(p−q) Φ((I_p − I_q)/σ) / Σ_q l(p−q)``, with ``l`` from :func:`nafe_neighbourhood` and only
+    observed neighbours ``q``.  The convolution is the paper's noise gate (it equals adding noise of
+    ``sigma`` to the copy that builds the histogram): it flattens a neighbourhood made of noise and
+    hardly touches one with contrast.  ``sigma`` is in the units of ``img``; the paper puts it at
+    2–12 times the pixel noise.  Without the gate, equalization only uses the order of the values; with
+    it, ``E`` is unchanged by a pedestal, but ``sigma`` must follow any change of scale, and a
+    non-linear tone curve changes ``E``.  A flat input gives 0.5.
+
+    The paper's output is ``(1 − w)·Tγ(A) + w·E`` with ``w`` ≈ 0.2; as a Photoshop layer, ``E`` goes in
+    Overlay, where the opacity plays a role like ``w`` (Overlay is not the paper's linear blend).
+
+    Computed on levels ``t`` of intensity (one FFT convolution each) and interpolated linearly to the
+    value of every pixel: levels ``sigma/2`` apart (error < 1 % of the range of ``E``) up to ``100·sigma``
+    above the minimum, and beyond that ``level_step`` times the height above the minimum apart, which
+    smooths the histogram of the bright parts like a noise of 0.4·``level_step`` of that height.
+    Returns ``(E, info)``; ``NaN`` outside the data.
+    """
+    from scipy import fft as sfft
+    from scipy.special import ndtr
+
+    if not sigma > 0:
+        raise ValueError("sigma must be positive")
+    a = np.asarray(img, np.float32)
+    m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))
+    if not m.any():
+        raise ValueError("no observed pixels")
+    h, w = a.shape
+    half = n // 2
+    a0 = np.where(m, a, 0).astype(np.float32)
+    mf = m.astype(np.float32)
+    ph, pw = sfft.next_fast_len(h + n - 1, real=True), sfft.next_fast_len(w + n - 1, real=True)
+    kf = sfft.rfft2(nafe_neighbourhood(n).astype(np.float32), s=(ph, pw), workers=-1)
+
+    def conv(x):
+        y = sfft.irfft2(sfft.rfft2(x, s=(ph, pw), workers=-1) * kf, s=(ph, pw), workers=-1)
+        return y[half:half + h, half:half + w]
+
+    norm = np.maximum(conv(mf), 1e-12)
+    v = a0[m].astype(np.float64)
+    lo, hi = float(v.min()), float(v.max())
+    t = [lo - sigma]
+    while t[-1] < hi or len(t) < 2:
+        t.append(t[-1] + max(sigma / 2, level_step * (t[-1] - lo)))
+    t = np.asarray(t)
+    idx = np.flatnonzero(m.ravel())
+    k = np.clip(np.searchsorted(t, v, side="right") - 1, 0, len(t) - 2)
+    order = np.argsort(k, kind="stable")
+    idx, v, k = idx[order], v[order], k[order]
+    cuts = np.searchsorted(k, np.arange(len(t)))
+    out = np.full(h * w, np.nan, np.float32)
+
+    def level(tj):
+        return (conv(mf * ndtr((tj - a0) / sigma).astype(np.float32)) / norm).ravel()
+
+    used = 0
+    prev = None
+    for j in range(1, len(t)):
+        lo_j, hi_j = cuts[j - 1], cuts[j]
+        nxt = cuts[j + 1] if j + 1 < len(t) else hi_j
+        if hi_j == lo_j and nxt == hi_j:            # no pixel needs this level
+            prev = None
+            continue
+        if prev is None:
+            prev = level(t[j - 1]); used += 1
+        cur = level(t[j]); used += 1
+        if hi_j > lo_j:
+            p = idx[lo_j:hi_j]
+            f = (v[lo_j:hi_j] - t[j - 1]) / (t[j] - t[j - 1])
+            out[p] = prev[p] + f * (cur[p] - prev[p])
+        prev = cur
+    out = np.clip(out.reshape(h, w), 0, 1)
+    out[~m] = np.nan
+    return out, dict(n=n, c_m=1, sigma=float(sigma), levels=int(len(t)), convolutions=used,
+                     level_step=level_step, linear_levels_up_to=float(lo + 100 * sigma))
+
+
+# ------------------------------------------------------------------------------------------------
+# SWAP filter (since 1.4.2): the part above the limb of Seaton et al. (2023)
+# ------------------------------------------------------------------------------------------------
+def swap_filter(img: np.ndarray, valid: np.ndarray | None, geometry: EclipseGeometry, *, half_width_deg: float = 15.,
+                blur_px: float = 4., n_theta: int = 720, c0: float = .75, t0: float | None = None):
+    """The SWAP filter above the limb (Seaton, Berghmans, Bloomfield et al. 2023, Solar Physics 298, 92):
+    ``img / F′`` with ``F′ = (F + t0)**c0`` (their eq. 1; the division is in their eq. 2).
+
+    ``F`` is ``img`` smoothed along each circle around the Sun with a running median over ±``half_width_deg`` of
+    position angle (theirs is ±15°, the scale of many off-limb features), then blurred with a Gaussian of σ =
+    ``blur_px`` in the image plane (theirs, σ = 4 px). The median runs over polar samples 1 px apart in radius and
+    360/``n_theta`` degrees apart in angle, each the mean of the observed pixels around it (bilinear), and only over
+    the observed samples; it comes back to the image with the same normalised bilinear interpolation. An observed pixel
+    that the polar grid misses gets the same median taken at its own radius and angle. Only the paper's branch above
+    the limb: in an eclipse the Moon covers the disc (their filter image also holds the bright solar disc).
+
+    ``c0`` is their crush factor, 0.75: below 1 it leaves part of the radial fall of brightness, and it tempers the
+    bright parts most. ``t0``, their tapering parameter, holds the faint and noisy parts back; it was 1.5 for their
+    SWAP images, and they advise roughly the median of all the pixels of the filter image. That is the default here:
+    the median of ``F`` over the observed pixels, in the units of ``img``.
+
+    Returns ``(ratio, info)``: ``img / (F + t0)**c0``, ``NaN`` outside the data."""
+    from scipy import ndimage as ndi
+
+    a = np.asarray(img, np.float32)
+    m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))
+    if not m.any():
+        raise ValueError("no observed pixels")
+    if not 0 < c0 < 1:
+        raise ValueError("c0 must be between 0 and 1")
+    if not 0 < half_width_deg < 180 or not blur_px > 0 or n_theta < 36:
+        raise ValueError("half_width_deg in (0, 180), blur_px > 0 and n_theta >= 36")
+    h, w = a.shape
+    cx, cy = geometry.sun_xy
+    yy, xx = np.mgrid[0:h, 0:w]
+    r = np.hypot(xx - cx, yy - cy)
+    t = np.mod(np.arctan2(yy - cy, xx - cx), 2 * np.pi)
+    del yy, xx
+    rv = np.arange(max(0., np.floor(float(r[m].min())) - 2), np.ceil(float(r[m].max())) + 3, 1.)
+    th = np.arange(n_theta) * (2 * np.pi / n_theta)
+    half = max(1, int(round(half_width_deg / 360 * n_theta)))
+    af = np.where(m, a, 0).astype(np.float32)
+    mf = m.astype(np.float32)
+
+    def bilinear(z, Y, X):
+        # 'grid-constant': a point a hair past the last pixel still reads it ('constant' would give 0 there)
+        return ndi.map_coordinates(z, [Y, X], order=1, mode="grid-constant", cval=0., prefilter=False)
+
+    def sample(X, Y):                          # the mean of the observed pixels around each point; NaN if none
+        v, wgt = bilinear(af, Y, X), bilinear(mf, Y, X)
+        return np.where(wgt > 1e-6, v / np.maximum(wgt, 1e-20), np.nan)
+
+    polar = np.empty((len(rv), n_theta), np.float32)
+    for y in range(0, len(rv), 256):
+        rr = rv[y:y + 256, None]
+        polar[y:y + 256] = sample(cx + rr * np.cos(th), cy + rr * np.sin(th))
+    med = np.empty_like(polar)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)          # an arc with no observed sample: NaN
+        for y in range(0, len(rv), 32):
+            ring = np.pad(polar[y:y + 32], ((0, 0), (half, half)), mode="wrap")   # the circle closes on itself
+            med[y:y + 32] = np.nanmedian(np.lib.stride_tricks.sliding_window_view(ring, 2 * half + 1, axis=1), axis=-1)
+    ok = np.isfinite(med)
+    num = np.concatenate([np.where(ok, med, 0), np.where(ok[:, :1], med[:, :1], 0)], axis=1).astype(np.float32)
+    den = np.concatenate([ok, ok[:, :1]], axis=1).astype(np.float32)
+    back = np.full((h, w), np.nan, np.float32)
+    for y in range(0, h, 512):
+        xm = t[y:y + 512] * (n_theta / (2 * np.pi))
+        ym = r[y:y + 512] - rv[0]
+        nu, de = bilinear(num, ym, xm), bilinear(den, ym, xm)
+        back[y:y + 512] = np.where(de > 1e-6, nu / np.maximum(de, 1e-20), np.nan)
+    missed = m & ~np.isfinite(back)
+    iy, ix = np.nonzero(missed)
+    offsets = np.arange(-half, half + 1) * (2 * np.pi / n_theta)
+    for k in range(0, len(iy), 4096):           # the same median, at the pixel's own radius and angle
+        rr = r[iy[k:k + 4096], ix[k:k + 4096]][:, None]
+        tt = t[iy[k:k + 4096], ix[k:k + 4096]][:, None] + offsets[None, :]
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            back[iy[k:k + 4096], ix[k:k + 4096]] = np.nanmedian(
+                sample(cx + rr * np.cos(tt), cy + rr * np.sin(tt)), axis=1)
+    F_ = normalized_gaussian(np.where(m, back, np.nan), m, blur_px, min_support=1e-6)
+    if t0 is None:
+        t0, t0_from = float(np.median(F_[m & np.isfinite(F_)])), "median of F over the observed pixels"
+    else:
+        t0, t0_from = float(t0), "given"
+    base = F_ + np.float32(t0)
+    good = m & np.isfinite(base) & (base > 0)
+    ratio = np.full((h, w), np.nan, np.float32)
+    ratio[good] = a[good] / base[good] ** np.float32(c0)
+    return ratio, dict(method="Seaton et al. (2023), Solar Physics 298, 92, eq. 1 and 2, above the limb",
+                       half_width_deg=half_width_deg, median_samples=2 * half + 1, n_theta=n_theta, radial_step_px=1,
+                       blur_px=blur_px, c0=c0, t0=t0, t0_from=t0_from, direct_median_pixels=int(len(iy)),
+                       pixels_without_filter=int((m & ~good).sum()))
+
+
+# ------------------------------------------------------------------------------------------------
+# Rotational gradient, Larson & Sekanina (1984) (since 1.4.2)
+# ------------------------------------------------------------------------------------------------
+def _keys(t: np.ndarray) -> np.ndarray:
+    """Keys' cubic convolution kernel with a = −0.5 (Keys 1981, IEEE ASSP 29, 1153): exact for quadratics."""
+    t = np.abs(t)
+    return np.where(t <= 1, (1.5 * t - 2.5) * t * t + 1, np.where(t < 2, ((-.5 * t + 2.5) * t - 4) * t + 2, 0.))
+
+
+def _turned(src: np.ndarray, good: np.ndarray, centre, angle_deg: float, rows: int = 256):
+    """``src`` read at each pixel turned by ``angle_deg`` about ``centre``, by Keys' cubic convolution at the exact
+    coordinates; and whether the sixteen pixels read are all ``good`` and inside the array."""
+    h, w = src.shape
+    cx, cy = float(centre[0]), float(centre[1])
+    c, s = np.cos(np.radians(angle_deg)), np.sin(np.radians(angle_deg))
+    out = np.zeros((h, w), np.float64)
+    read = np.zeros((h, w), bool)
+    dx = np.arange(w, dtype=np.float64)[None, :] - cx
+    for y0 in range(0, h, rows):
+        dy = np.arange(y0, min(h, y0 + rows), dtype=np.float64)[:, None] - cy
+        X, Y = cx + dx * c - dy * s, cy + dx * s + dy * c
+        ix, iy = np.floor(X).astype(np.int64), np.floor(Y).astype(np.int64)
+        fx, fy = X - ix, Y - iy
+        inside = (ix >= 1) & (ix <= w - 3) & (iy >= 1) & (iy <= h - 3)
+        ix, iy = np.clip(ix, 1, w - 3), np.clip(iy, 1, h - 3)
+        wx = [_keys(fx + 1), _keys(fx), _keys(1 - fx), _keys(2 - fx)]
+        acc = np.zeros(X.shape)
+        ok = inside
+        for j in range(4):
+            wy, row = _keys(fy + 1 - j), iy + j - 1
+            for i in range(4):
+                col = ix + i - 1
+                acc += wy * wx[i] * src[row, col]
+                ok = ok & good[row, col]
+        out[y0:y0 + rows], read[y0:y0 + rows] = acc, ok
+    return out, read
+
+
+def larson_sekanina(img: np.ndarray, valid: np.ndarray | None, geometry: EclipseGeometry, delta_deg: float, *,
+                    sigmas=(1.5, 3., 6., 12.), cuts_rsun=(1.6, 2.5, 4.)):
+    """The rotational gradient of Larson & Sekanina (1984, AJ 89, 571) around the Sun:
+    ``LS = 2·ℓ(r, θ) − ℓ(r, θ + Δθ) − ℓ(r, θ − Δθ)``, with ``ℓ`` = ``img`` (give it ln L).
+
+    ``ℓ`` is first smoothed with a normalised Gaussian whose width follows the signal-to-noise ratio: ``sigmas`` px,
+    changing at ``cuts_rsun`` solar radii, smoothly over ±0.1 in ln r. The weights depend only on the radius and a
+    rotation keeps the radius, so this equals smoothing each rotated copy. Each partner, ℓ(r, θ ± Δθ), is read with
+    Keys' cubic convolution with a = −0.5, which is exact for a quadratic, at its exact coordinates. OpenCV's cubic
+    interpolation uses a = −0.75, which is not exact even for a straight gradient; on a corona with no angular
+    structure it left a fixed pattern of up to 4.5e-4 in ln L where this gives 6e-6. A pixel keeps a value only where
+    all sixteen pixels that the interpolation reads for each partner are observed.
+
+    ⚠ A structure narrower than Δθ comes out with two dark copies at ±Δθ, each of about half its amplitude: that is
+    the filter, not the data. A compact bright object (a prominence, a star, the band next to the Moon) gives
+    saturated light and dark copies; leave it out of ``valid``.
+
+    Returns ``(LS, info)``; ``NaN`` where the pixel or one of its partners has no data."""
+    a = np.asarray(img, np.float32)
+    m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))
+    if not m.any():
+        raise ValueError("no observed pixels")
+    if not 0 < delta_deg < 90:
+        raise ValueError("delta_deg must be between 0 and 90")
+    if len(cuts_rsun) != len(sigmas) - 1 or any(b <= c for c, b in zip(cuts_rsun, cuts_rsun[1:])):
+        raise ValueError("cuts_rsun: one fewer than sigmas, increasing")
+    h, w = a.shape
+    lr = np.log(np.maximum(geometry.rsun_map(), 1e-3))
+    smooth = np.zeros((h, w), np.float32)
+    done = np.zeros((h, w), np.float32)
+    ok = m.copy()
+    for k, s in enumerate(sigmas):
+        if k < len(cuts_rsun):
+            up = np.clip((lr - (np.log(cuts_rsun[k]) - .1)) / .2, 0, 1)
+            wk = ((1 - up * up * (3 - 2 * up)) - done).astype(np.float32)
+        else:
+            wk = (1 - done).astype(np.float32)
+        done += wk
+        x = normalized_gaussian(a, m, s, min_support=.01)
+        ok &= np.isfinite(x) | (wk < 1e-6)
+        smooth += np.where(np.isfinite(x), x, 0) * wk
+    src = np.where(ok, smooth, 0).astype(np.float32)
+    acc = 2 * src.astype(np.float64)
+    keep = ok.copy()
+    for sign in (1, -1):
+        turned, read = _turned(src, ok, geometry.sun_xy, sign * float(delta_deg))
+        acc -= turned
+        keep &= read
+    return (np.where(keep, acc, np.nan).astype(np.float32),
+            dict(method="Larson & Sekanina (1984), AJ 89, 571: 2·l(r, θ) − l(r, θ + Δθ) − l(r, θ − Δθ) around the Sun",
+                 delta_deg=float(delta_deg), smoothing_px=list(sigmas), smoothing_cuts_rsun=list(cuts_rsun),
+                 rotation="Keys cubic convolution (a = -0.5) at the exact coordinates; all 16 pixels read observed",
+                 pixels=int(keep.sum()), observed_pixels_without_partners=int((m & ~keep).sum())))

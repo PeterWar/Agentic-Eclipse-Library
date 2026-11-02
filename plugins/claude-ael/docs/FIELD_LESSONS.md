@@ -142,7 +142,19 @@ with Δθ = 0.4° and 1°, needs its input cleaned first: compact bright objects
 lunar limb) turned into saturated light and dark copies at ±Δθ. Removing them from the input (prominences by
 their R/G excess, dilated; the 0.035 R☉ next to the Moon) left no alpha over them. A ray narrower than Δθ
 still gets two dark copies at ±Δθ of half its amplitude: that is the filter, not the data. Keep such a filter
-as a separate layer the owner can switch off, and say what it does.
+as a separate layer the owner can switch off, and say what it does. Since 1.4.2 it is in the library
+(`larson_sekanina_1`, `larson_sekanina_0.4`), with the band next to the Moon and the prominences, found by their colour,
+out of its input.
+
+## A turned copy of the image needs an interpolation exact for smooth gradients
+
+OpenCV's cubic interpolation (`INTER_CUBIC`, in `remap` and `warpAffine`) uses Keys' kernel with a = −0.75, which is
+not exact even for a straight gradient: its error depends on where the point falls between pixels, so on a turned
+image it is a fixed pattern. Where the corona's brightness falls fast, next to the limb, that is a few 1e-4 in ln L. On
+a synthetic corona with no angular structure the Larson–Sekanina gradient, which should be zero, came out up to 4.5e-4
+at 1.1–1.6 R☉ with OpenCV's rotation, and up to 6e-6 with a = −0.5 (exact for a quadratic) at the exact coordinates. A
+filter that subtracts a turned or resampled copy of the image needs such an interpolation; a test with no angular
+structure finds the difference.
 
 ## Adding layers must not rewrite the owner's layers
 

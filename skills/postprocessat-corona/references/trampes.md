@@ -127,8 +127,8 @@ que exigeix literalment que si l'etiqueta declara coherència el sufix també.
 ## ⛔ UN FILTRE QUE DIVIDEIX PER UNA DISPERSIÓ HA DE TENIR UN TERRA MESURAT
 
 25-08-2026, enxampat per les proves dels filtres nous abans de sortir. El NRGF,
-el NAFE, el MGN i el WOW normalitzen dividint per una dispersió local o per
-anell. Amb una entrada llisa de veritat aquella dispersió és **zero**, i llavors:
+el «NAFE» d'aquells dies (una aproximació nostra, no el mètode de l'article), el
+MGN i el WOW normalitzen dividint per una dispersió local o per anell. Amb una entrada llisa de veritat aquella dispersió és **zero**, i llavors:
 
 - el NRGF donava `(residu d'arrodoniment)/(≈0)` = O(1) a tot el camp;
 - el NAFE saturava a **±1 a tot el camp**, o sigui pintava una imatge sencera;
@@ -138,6 +138,10 @@ anell. Amb una entrada llisa de veritat aquella dispersió és **zero**, i llavo
 ⛔ Els tres **inventaven estructura on no n'hi havia cap**, que és el pitjor
 error possible en aquest projecte. I el marc del WOW el va destapar **mirar el
 full de contacte**, no llegir el codi.
+
+El NAFE de l'article (Druckmüller 2013; `nafe` a l'AEL des de la 1.4.2) no
+divideix per cap dispersió: és un histograma acumulat local. Amb una entrada
+plana dona 0,5 a tot arreu (`test_nafe_follows_the_paper_and_does_not_invent_on_a_flat_input`).
 
 El terra no pot ser un número triat a ull. Es **mesura** de la mateixa imatge amb
 les diferències entre píxels veïns (`1,4826·MAD/√2`), i mai per sota d'una part

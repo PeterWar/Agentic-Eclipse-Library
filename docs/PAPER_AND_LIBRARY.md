@@ -8,7 +8,7 @@ the code behind the published layers and the library described three different o
 RHEF. This page says what each one does, filter by filter.
 
 "Production" means the code that made the layers of the published image, under `3-RECERCA/tools/` (the paper's
-image is version V125 of the project). "Library" means `ael` 1.4.1; changes since 1.3.2 are marked.
+image is version V125 of the project). "Library" means `ael` 1.4.2; changes since 1.3.2 are marked.
 
 ## NRGF (Morgan, Habbal and Woo 2006)
 
@@ -37,12 +37,13 @@ Ranked within sectors, the RHEF becomes an adaptive histogram equalisation on a 
 whole-ring normalisation that defines the RHEF: local ranking suppresses broad angular gradients, and the
 large-scale contrast between directions has to come from another layer (the NRGF, here).
 
-## MGN, WOW and ACHF
+## MGN, WOW, NAFE and ACHF
 
 | Filter | Production (published layers) | Library |
 |---|---|---|
 | MGN (Morgan and Druckmüller 2014) | Green channel; sizes 1.25–40 px, k 0.7, γ 3.2, global weight 0.7; Multiply 5 % | The same parameters; display from the 1st–99th percentiles; **Overlay** |
 | WOW (Auchère et al. 2023) | Green channel; 8 scales, equal weights, no global noise threshold; edge-aware and standard; the edge-aware layer with a local preprocessing step from a fixed signal-to-noise map on its three finest scales; Overlay 37 % and 3 % | `wow_edge_aware` (the default since 1.3.5; called `wow_bilateral` in 1.3.4): the author's edge-aware operator with range weights taken from a guide, symmetric observed pairs, eight scales on linear input, the local level of each scale removed; display spread from 1.1–2 R☉; Overlay. `wow` (the default in 1.3.4, optional since 1.3.5): 6 scales on the residual of ln L about a smooth radial spline; a noise floor of 3× the noise of each scale, measured at scales 1–3 beyond 6 R☉ and extrapolated above; the local mean along circles around the Sun removed from 8 px up; symmetric pairs at the edges of the data; display spread from 1.1–2 R☉; Overlay. Up to 1.3.3 `wow_bilateral` was a bilateral starlet with symmetric pairs, white-noise factors and an isotropic local mean removed from 8 px up |
+| NAFE (Druckmüller 2013) | In the author's 2026 image only as a test layer: the image E of eq. 11 on the linear green, neighbourhood of 129 px (eq. 12–14 as printed, every c_m = 1), gate σ = 12 DN = 12 times the pixel noise at 4–7 R☉; Overlay 79 %, hidden. A research layer of September 2026 blended 0.8 of E with 0.2 of a gamma image, four times the paper's typical weight, and is not this filter | `nafe` (1.4.2, outside the defaults): the same operator, computed on levels of intensity with FFT convolutions and checked against the paper's sum over the neighbours (within 0.01); σ = 12 times the pixel noise measured beyond 4 R☉ (1.4826 MAD of the residual from a 4 px Gaussian); E in [0, 1]; Overlay, where the opacity plays a role like the paper's weight w (79 % in Overlay is not w = 0.79 in the paper's linear blend) |
 | ACHF (Druckmüller et al. 2006, as published in Druckmüllerová's thesis) | Isotropic on ln of the luminance; along-the-arc variants on ln of the green of each instrument; Overlay 8 %, 2 % and 3 % | Isotropic on the residual of ln L about a smooth radial spline; along-the-arc on ln L; display: a level and a spread per ring (since 1.3.4); Overlay |
 
 ## Blending a layer centred on mid grey

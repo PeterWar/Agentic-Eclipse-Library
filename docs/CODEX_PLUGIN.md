@@ -1,7 +1,7 @@
 # AEL for Codex
 
 Agentic Eclipse Library is available as a desktop plugin with seven guided workflows and the bundled
-AEL 1.4.1 numerical engine. Plugin version 1.1.5 is independently versioned from the Python library.
+AEL 1.4.2 numerical engine. Plugin version 1.1.6 is independently versioned from the Python library.
 The repository marketplace works independently of OpenAI's public directory review.
 
 ![AEL synthetic workflow demonstration](../plugins/codex-ael/assets/synthetic-workflow.png)
@@ -83,8 +83,14 @@ bank no longer steps where the frame's edge or the Moon cuts its annuli (`partia
 connectors for PixInsight and Photoshop also changed; they are not part of this plugin. Its ZIP passed the seventeen
 integration checks, including the 124 bundled AEL tests.
 
-AEL 1.4.1 retains documented ACHF/WOW boundary bands, some fine-detail sign inversion in the worst sectors of the
-default edge-aware WOW, and rings of the plain WOW next to a lunar limb that the data reach. See [field lessons](FIELD_LESSONS.md). The plugin's structure launcher preserves the full
+Version 1.1.6 bundles AEL 1.4.2. Three filter layers are new, outside the defaults: `nafe` (Druckmüller 2013),
+`swap` (the SWAP filter of Seaton et al. 2023) and `larson_sekanina_1` and `larson_sekanina_0.4` (the rotational
+gradient of Larson & Sekanina 1984; [what they do and how they were checked](NAFE_SWAP_LARSON_SEKANINA.md)).
+Its ZIP passed the seventeen integration checks, including the 137 bundled AEL tests.
+
+AEL 1.4.2 retains documented ACHF/WOW boundary bands, some fine-detail sign inversion in the worst sectors of the
+default edge-aware WOW, and rings of the plain WOW next to a lunar limb that the data reach. Of the layers new in 1.4.2,
+NAFE draws a light ring next to the lunar limb, and the Larson–Sekanina layers copy what is narrower than Δθ at ±Δθ. See [field lessons](FIELD_LESSONS.md). The plugin's structure launcher preserves the full
 canvas and defaults to mono; the underlying historical CLI has different display defaults.
 
 ## Privacy, licence and support
