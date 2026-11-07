@@ -5,7 +5,7 @@ description: Compare eclipse observations with K-Cor, SOHO/LASCO and SDO/AIA usi
 
 # Compare with coronagraphs
 
-Read [setup and operating instructions](../../docs/USAGE.md) before running AEL. Resolve this plugin's root from this skill file and use its bundled launcher. Respond in the user's language. Work on user-selected inputs and write new output directories.
+Read [setup and operating instructions](../../docs/USAGE.md) before running AEL. This plugin holds instructions only: run the AEL 1.4.2 engine installed and checked as that guide describes. Respond in the user's language. Work on user-selected inputs and write new output directories.
 
 Read [the package guide](../../docs/README_AEL.md), [field lessons](../../docs/FIELD_LESSONS.md), and [the comparison template](../../examples/coronagraph_config_template.json). Detailed instrument guidance is in [coronagraph-method.md](../../docs/coronagraph-method.md).
 

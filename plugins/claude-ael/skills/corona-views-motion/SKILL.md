@@ -5,11 +5,11 @@ description: Make full-canvas corona structure displays, unrolled polar views an
 
 # Corona views and motion
 
-Read [setup and operating instructions](../../docs/USAGE.md) before running AEL. Resolve this plugin's root from this skill file and use its bundled launcher. Respond in the user's language. Work on user-selected inputs and write new output directories.
+Read [setup and operating instructions](../../docs/USAGE.md) before running AEL. This plugin holds instructions only: run the AEL 1.4.2 engine installed and checked as that guide describes. Respond in the user's language. Work on user-selected inputs and write new output directories.
 
-Read [the runnable package guide](../../docs/README_AEL.md) and the corresponding maintained source under `runtime/ael/` for API parameters. Run `selftest` before the first analysis.
+Read [the runnable package guide](../../docs/README_AEL.md) and the docstrings of the installed `ael` package for API parameters. Run `selftest` before the first analysis.
 
-For structure, use the plugin launcher `structure --input ARRAY --valid MASK --geometry GEOMETRY --out NEW_DIR`. It preserves the full canvas and defaults to mono. The radial brightness compression is a display transformation, not an absolute brightness measurement. Choose measured colour only for justified RGB data; a cool tint is an optional illustration style that needs the user's choice. Use a sky region supported by the field, never move it into the corona to force success.
+For structure, use [the full-canvas call of the setup guide](../../docs/USAGE.md#structure-display-on-the-full-canvas): it keeps the whole canvas and writes mono by default. The plain `PYTHON -m ael structure` command crops to 3.2 solar radii and, from RGB data, adds two colour styles; do not use it for this plugin's work. The radial brightness compression is a display transformation, not an absolute brightness measurement. Choose measured colour only for justified RGB data; a cool tint is an optional illustration style that needs the user's choice. Use a sky region supported by the field, never move it into the corona to force success.
 
 For polar views, use `polar --input IMAGE --geometry GEOMETRY --out NEW_DIR`. Confirm the solar and lunar centres, orientation, parities and coverage. A polar transform is a derived view alongside the full original, not an authorisation to crop or change it.
 

@@ -1,10 +1,12 @@
 # Agentic Eclipse Library plugin — privacy policy
 
-Publisher: Pere Guerra Serra. Effective date: 16 October 2026.
+Publisher: Pere Guerra Serra. Effective date: 16 October 2026. Updated: 7 November 2026 (the Claude plugin).
 
-This policy covers the Agentic Eclipse Library desktop plugin and its bundled local Python engine.
-It does not replace the policies of the AI application, package registry, reference-data provider or
-website that you choose to use.
+This policy covers the Agentic Eclipse Library desktop plugins and their local Python engine: the Codex
+plugin bundles the engine; the Claude plugin of Claude's plugin directory holds instructions only and
+installs the same engine from the project's GitHub release, with your approval. It does not replace the
+policies of the AI application, package registry, code host, reference-data provider or website that you
+choose to use.
 
 ## Information processed and purposes
 
@@ -14,7 +16,7 @@ and observation information supplied for scientific calculations. A local path c
 name. Use only the information needed for calibration, stacking, visualisation or comparison; remove
 unneeded personal metadata from material you choose to share.
 
-The bundled engine reads these inputs and writes images, arrays, reports and provenance records locally.
+The engine reads these inputs and writes images, arrays, reports and provenance records locally.
 It has no telemetry, advertising, account system, credential reader or automatic upload service. The
 publisher does not receive your photographs, prompts or processing results through the plugin.
 
@@ -23,7 +25,8 @@ publisher does not receive your photographs, prompts or processing results throu
 - Your AI host may process prompts, file names, selected previews and tool outputs that enter the chat.
   Its own account settings and privacy policy govern that processing. Local numerical processing does
   not mean that an AI conversation is offline.
-- Installing dependencies normally contacts PyPI and its distribution infrastructure. Downloading
+- Installing dependencies normally contacts PyPI and its distribution infrastructure. With the Claude
+  plugin, installing the engine also downloads its package from GitHub's release storage. Downloading
   authorised public reference data contacts the named scientific data provider. Astropy may retrieve
   Earth-orientation tables when network access is enabled. These services receive ordinary network
   request information, such as the connecting IP address and requested resource, under their policies.

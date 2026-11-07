@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+The Claude plugin folder `plugins/claude-ael/` no longer carries the engine. Claude's plugin directory accepts
+programs only from organizations it has verified; from anyone else it takes Markdown, text, JSON, YAML and images.
+The folder keeps the seven skills, the documentation, the recipe templates and the images. Its setup guide,
+[`plugins/claude-ael/docs/USAGE.md`](plugins/claude-ael/docs/USAGE.md), installs AEL 1.4.2 from the wheel of the
+1.4.2 release once the user approves it, and pip checks the wheel against its SHA-256 fingerprint. The skills run
+the engine with `python -m ael`; a structure image keeps the full canvas through a short call to
+`ael.pipelines.structure_from_linear`, written out in the guide. The engine, the Codex plugin and the Claude Code
+plugin of this repository's marketplace do not change. `tools/build_claude_plugin.py --check` also lists every file
+of a type the directory refuses.
+
 ## 1.4.2 — 2026-11-02
 
 Three filters that the author tried as hidden test layers on his 2026 image join the library, outside the defaults:

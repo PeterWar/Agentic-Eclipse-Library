@@ -1,6 +1,6 @@
 # Coronagraph method notes
 
-Use the maintained `ael.coronagraph` API and its docstrings in `runtime/ael/coronagraph.py` for exact
+Use the maintained `ael.coronagraph` API and its docstrings in the installed package (`ael/coronagraph.py`) for exact
 parameters. These instructions describe comparisons; they do not supply the user's calibration or data.
 
 ## References and geometry

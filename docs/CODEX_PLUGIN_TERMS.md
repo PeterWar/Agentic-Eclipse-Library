@@ -1,8 +1,9 @@
 # Agentic Eclipse Library plugin — licence and terms
 
-Publisher: Pere Guerra Serra. Updated: 16 October 2026.
+Publisher: Pere Guerra Serra. Updated: 7 November 2026.
 
-The Agentic Eclipse Library plugin and its bundled AEL source are provided under the
+The Agentic Eclipse Library plugins and the AEL source (bundled in the Codex plugin, installed from the
+project's GitHub release by the Claude plugin) are provided under the
 [MIT License](../LICENSE). That licence governs permission to use, copy, modify and distribute the
 software, the requirement to retain its copyright and permission notice, and the warranty and
 liability provisions. This page adds no separate licence restrictions or mandatory attribution.

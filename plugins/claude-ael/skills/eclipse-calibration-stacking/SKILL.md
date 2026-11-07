@@ -5,7 +5,7 @@ description: Calibrate and stack total solar eclipse RAW, Bayer or linear RGB da
 
 # Calibrate and stack
 
-Read [setup and operating instructions](../../docs/USAGE.md) before running AEL. Resolve this plugin's root from this skill file and use its bundled launcher. Respond in the user's language. Work on user-selected inputs and write new output directories.
+Read [setup and operating instructions](../../docs/USAGE.md) before running AEL. This plugin holds instructions only: run the AEL 1.4.2 engine installed and checked as that guide describes. Respond in the user's language. Work on user-selected inputs and write new output directories.
 
 Read [stacking and extinction recipes](../../docs/DEVELOP.md) and the template at [stack_config_template.json](../../examples/stack_config_template.json). The CLI executes a declared recipe; registration and calibration must be measured beforehand.
 
@@ -15,7 +15,7 @@ Read [stacking and extinction recipes](../../docs/DEVELOP.md) and the template a
 - Keep the user's chosen full canvas. Record a reference or union canvas explicitly; do not choose a crop to hide coverage boundaries. No extrapolation or reconstruction where every exposure clips.
 - Statistical hot-pixel rejection requires supported dithering. Clouds require measured spatial transmission/background maps frozen before testing and independently fitted for independent witnesses; one scalar per frame is insufficient.
 
-Run `stack --config RECIPE --out NEW_DIR` through the launcher. Check the linear result, coverage, support, weights, alpha and geometry at the limb and all boundaries. Keep input hashes and the receipt. The package's variance model is not a complete photometric uncertainty budget.
+Run `stack --config RECIPE --out NEW_DIR` with the installed engine (`PYTHON -m ael`), into a new directory. Check the linear result, coverage, support, weights, alpha and geometry at the limb and all boundaries. Keep input hashes and the receipt. The package's variance model is not a complete photometric uncertainty budget.
 
 For differential extinction under a low Sun, read the extinction section and [template](../../examples/extinction_config_template.json). Subtract the sky and use a measured extinction coefficient on the linear stack; sky/extinction degeneracy must be declared. Rebuild dependent layers. See [field lessons](../../docs/FIELD_LESSONS.md) for failed controls and limitations.
 
