@@ -12,6 +12,31 @@ the engine with `python -m ael`; a structure image keeps the full canvas through
 plugin of this repository's marketplace do not change. `tools/build_claude_plugin.py --check` also lists every file
 of a type the directory refuses.
 
+For the next version of the engine (1.5.0; not released, not numbered yet), found while rebuilding the author's 2026
+image from the raw frames:
+
+- **NRGF over cut annuli** (`partial_annuli='chain'`, the filter bank's NRGF since 1.4.1). The chain summed its terms
+  from the first annulus of a run. With the Moon off the Sun's centre and data up to the limb, the first annuli are
+  the cut ones, and what the bridging added there was carried to every whole annulus beyond: on the author's 2026
+  canvas the profile drifted until the layer read −18 spreads from 1.5 R☉ outwards. The sum now counts from the
+  nearest whole annulus (`ael.radial._anchored_chain`); whole annuli give exactly the `'observed'` result.
+- **Extinction with a plate fitted on stars**: `airmass_map_from_site(offsets='true')` takes each pixel to its true
+  direction and refracts it point by point. Image vectors from a star plate, passed as apparent offsets, were wrong
+  by up to 0.027 in air mass at the corners of the 2026 canvas with the Sun at 9° (1 % in the extinction factor).
+- **A uniform background**: `correct_extinction(pedestal=…)` adds a constant level back instead of the sky map.
+- **The operator and the display of a layer as two steps**: `filter_detail` returns a layer before its display
+  mapping and `frozen_display` measures one display curve and keeps it, so that layers that must be compared share
+  one yardstick (a yardstick measured ring by ring on a noisy layer and applied to a clean one prints fine
+  concentric rings).
+- **A noise floor for the edge-aware WOW**: `wow_edge_aware(noise_floor=…)`, off by default.
+
+What this rebuild also showed, and the engine does not solve: the general-purpose layers of `make_filter` are not
+the layers of the author's published image (correlations of 0.40 to 0.95 on the same data); with data up to the
+limb of an off-centre Moon, an NRGF layer needs a rule for the cut annuli of its own (the author's image carries
+there the angular pattern of the first forty whole annuli); and the per-node noise of the NRGF profile prints
+rings of about 6·10⁻⁴ of the display range, which a gate that measures coherence between sectors catches
+(`smooth_bins=8` removes them on a large image).
+
 ## 1.4.2 — 2026-11-02
 
 Three filters that the author tried as hidden test layers on his 2026 image join the library, outside the defaults:
