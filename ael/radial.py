@@ -137,6 +137,30 @@ def _chain_terms(sets, covered, statistic):
     return terms
 
 
+def _anchored_chain(terms, whole):
+    """The chain terms summed along a run, **anchored on its whole annuli** (since 1.5.0).
+
+    A plain cumulative sum starts at the first annulus of the run. When that end is the cut one — the annuli next to
+    an off-centre Moon — whatever the bridging adds there is carried to every annulus beyond, the whole ones
+    included: on the author's 2026 canvas (Moon 14 px off the Sun, data up to the limb) the profile drifted until the
+    layer read −18 spreads from 1.5 R☉ outwards. Whole annuli need no bridging, so they are the reference: zero on
+    them, the sum counted from the nearest whole annulus on either side of a cut stretch (blended linearly across a
+    stretch that has whole annuli on both sides). A run with no whole annulus keeps the plain sum."""
+    c = np.cumsum(terms)
+    idx = np.flatnonzero(whole)
+    if not len(idx):
+        return c
+    out = np.zeros_like(c)
+    first, last = idx[0], idx[-1]
+    out[:first] = c[:first] - c[first]
+    out[last + 1:] = c[last + 1:] - c[last]
+    for g in np.flatnonzero(np.diff(idx) > 1):
+        a, b = idx[g], idx[g + 1]
+        w = (np.arange(a + 1, b) - a) / (b - a)
+        out[a + 1:b] = (1 - w) * (c[a + 1:b] - c[a]) + w * (c[a + 1:b] - c[b])
+    return out
+
+
 def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=True,
                     min_count=50, smooth_bins=0., spread_about='profile', partial_annuli='observed'):
     """Evaluate annular mean/spread at the actual radius, without image smoothing.
@@ -160,8 +184,11 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
     out of an annulus, its median and spread are those of the angles left, and they jump when a bright or a faint
     sector leaves: the filter draws that jump as a ring around the Sun. With ``'chain'`` every step of the profile and
     of the spread from one annulus to the next is measured on the position-angle cells (1 degree) that both annuli
-    cover, wherever those cells change; where they do not change, the step is the usual one, so whole annuli give
-    exactly the ``'observed'`` result. No pixel is filled in: only the two curves the filter divides by are bridged.
+    cover, wherever those cells change; where they do not change, the step is the usual one. The steps are summed from
+    the nearest whole annulus (:func:`_anchored_chain`, since 1.5.0), so whole annuli give exactly the ``'observed'``
+    result wherever the cut annuli are; up to 1.4.2 the sum started at the first annulus of the run, and cut annuli
+    next to an off-centre Moon shifted the profile of every annulus beyond. No pixel is filled in: only the two
+    curves the filter divides by are bridged.
     """
     if spread_about not in ('profile', 'bin'):
         raise ValueError("spread_about must be 'profile' or 'bin'")
@@ -361,7 +388,7 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
             pieces = [slice(cuts[k]-lo, cuts[k+1]-lo) for k in run]
             terms = _chain_terms([(au[s], here[s]) for s in pieces], covered[run], np.median if robust else np.mean)
             if terms is not None and terms.any():
-                nd = fwd(tr, inv(tr, nd)*np.exp(np.cumsum(terms)))
+                nd = fwd(tr, inv(tr, nd)*np.exp(_anchored_chain(terms, covered[run].all(axis=1))))
                 s1 = _node_derivatives(nd, anchors[run])[0]
                 y = smooth(nd, run)
                 res = au-along(y, run, ru, tr, s1 if smooth_bins == 0 else _node_derivatives(y, anchors[run])[0])
@@ -369,7 +396,7 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
             spread_of = ((lambda z: 1.4826*np.median(np.abs(z-np.median(z)))) if robust else np.std)
             terms = _chain_terms([(res[s], here[s]) for s in pieces], covered[run], spread_of)
             if terms is not None and terms.any():
-                sp = sp*np.exp(np.cumsum(terms))
+                sp = sp*np.exp(_anchored_chain(terms, covered[run].all(axis=1)))
         resid[lo:hi] = res; sd2[run] = sp; angular[run] = angular_spread(res, run, au)
         dIdy = 1. if tr[0] == 'lin' else np.exp(nd) if tr[0] == 'log' else tr[1]*np.cosh(nd)
         floor[run] = eps*(mag[run]+np.abs(s1*dIdy)*anchors[run])+4*tiny

@@ -126,3 +126,47 @@ def test_pyramids_put_a_ramp_back_in_place_on_a_canvas_of_odd_size():
         nxt = cropped_half(F._masked_median5(c)); d = c - F._up(nxt, c.shape)
         old.append(d if d.shape == ramp.shape else F._up(d, ramp.shape)); c = nxt
     assert max(float(np.nanmax(np.abs(p[inner]))) for p in old) > 1e-3
+
+
+
+def test_nrgf_chain_leaves_whole_annuli_exactly_as_observed_beyond_a_cut_inner_edge():
+    """Since 1.5.0. With the Moon off the Sun's centre the innermost annuli are cut; up to 1.4.2 the chain summed its
+    terms from the first annulus of the run, and whatever the bridging added on those cut annuli shifted the profile
+    of every whole annulus beyond (on the author's 2026 canvas the layer read −18 spreads from 1.5 R☉ outwards; in
+    this scene, up to 17 spreads). The scene is large enough for 1° cells to tell a missing angle (R☉ = 250 px)."""
+    import numpy as np
+    from ael import filters as F
+    from ael.geometry import EclipseGeometry
+    from ael.radial import _covered_cells, _anchored_chain
+    h, w, R = 1500, 1900, 250.0
+    cx, cy = 950.0, 750.0
+    mx = cx + 16.0
+    g = EclipseGeometry((h, w), (cx, cy), R, moon_xy=(mx, cy), moon_radius_px=258.0)
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float64)
+    rp = np.hypot(xx - cx, yy - cy)
+    pa = np.arctan2(yy - cy, xx - cx)
+    rng = np.random.default_rng(5)
+    # a steep corona with one very bright sector next to the cut: a cut annulus loses a bright angle
+    I = 2e5 * np.maximum(rp / R, .5) ** -6 * (1 + 3.0 * np.exp(-((pa - 0.4) / 0.35) ** 2) + 0.2 * np.cos(3 * pa)) + 300.0
+    I = (I * (1 + 0.01 * rng.standard_normal(I.shape))).astype(np.float32)
+    valid = np.hypot(xx - mx, yy - cy) > 258.0                            # data up to the limb of the off-centre Moon
+    seen = F.nrgf(I, valid, g, bin_px=2, min_count=12, partial_annuli='observed')
+    chained = F.nrgf(I, valid, g, bin_px=2, min_count=12, partial_annuli='chain')
+    covered, _ = _covered_cells(g, 'sun', valid, 2)
+    flags = covered.all(axis=1)
+    assert (~flags[115:140]).sum() >= 10                                  # the Moon does cut annuli in this scene
+    first_whole = int(np.flatnonzero(flags & (np.arange(len(flags)) > 125))[0])
+    inscribed = int(min(cx, w - cx, cy, h - cy) // 2)
+    ring = np.floor(rp / 2).astype(int)
+    # five annuli away from the cut ones: the curve through the nodes takes its slope from the five nearest
+    whole = valid & (ring > first_whole + 5) & (ring < inscribed - 5) & np.isfinite(seen) & np.isfinite(chained)
+    assert whole.sum() > 500000
+    assert np.max(np.abs(chained[whole] - seen[whole])) < 2e-3, float(np.max(np.abs(chained[whole] - seen[whole])))
+    cut = valid & (ring <= first_whole) & np.isfinite(seen) & np.isfinite(chained)
+    assert np.max(np.abs(chained[cut] - seen[cut])) > 0.05                # the cut annuli are still bridged
+    # the anchor itself: zero on whole annuli, counted from the nearest one, and the plain sum when there is none
+    terms = np.array([0., .3, -.1, 0., 0., .2, 0., 0., -.4])
+    whole_flags = np.array([0, 0, 0, 1, 1, 0, 1, 1, 0], bool)
+    out = _anchored_chain(terms, whole_flags)
+    assert np.allclose(out[whole_flags], 0) and np.allclose(out[:3], [-.2, .1, 0.]) and np.isclose(out[5], .1) and np.isclose(out[8], -.4)
+    assert np.allclose(_anchored_chain(terms, np.zeros(9, bool)), np.cumsum(terms))
