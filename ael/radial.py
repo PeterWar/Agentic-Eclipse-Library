@@ -411,13 +411,19 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
     return out
 
 
-def radial_quantile_rank(img, valid, geometry, sector_deg=None, bin_px=2., *, min_count=12):
+def radial_quantile_rank(img, valid, geometry, sector_deg=None, bin_px=2., *, min_count=12, smooth_bins=0):
     """Interpolate measured log-intensity quantiles in radius/angle, then invert.
 
     257 quantiles per observed cell; local angular nodes every quarter-sector.
     Only immediate populated neighbours contribute. No image blur, extrapolated
     radiance or output outside valid positive samples. Constant distributions rank
     at one half; ties use the midpoint of the coincident quantile interval.
+
+    ``smooth_bins`` (since 1.5.0; 0 = off, as before): an odd number of annuli over which every quantile curve is
+    smoothed along the radius with a local parabola, node by node. Each annulus measures its quantiles with its own
+    sampling noise, and a ranking prints that noise as fine arcs around the Sun, different in every sector: on the
+    author's 2026 image the 60° layer carried arcs of 0.6 display levels with a period of two annuli that a person saw
+    and a gate comparing sectors with each other could not. The image itself is not smoothed.
     """
     a, m, radius = _observed(img, valid, geometry, bin_px, min_count)
     m &= a > 0
@@ -456,6 +462,16 @@ def radial_quantile_rank(img, valid, geometry, sector_deg=None, bin_px=2., *, mi
             sample = values[np.abs((angles-j*step+180) % 360-180) <= sector_deg/2]
             if len(sample) >= min_count:
                 table[k, j] = np.quantile(sample, probabilities)
+    if smooth_bins:
+        from scipy.signal import savgol_filter
+        w = int(smooth_bins)
+        if w < 5 or w % 2 == 0:
+            raise ValueError('smooth_bins must be an odd number of annuli, at least 5')
+        for j in range(na):                                     # along the radius, inside each run of populated annuli
+            ok = np.flatnonzero(np.isfinite(table[:, j, 0]))
+            for run in np.split(ok, np.flatnonzero(np.diff(ok) != 1)+1):
+                if len(run) > w:
+                    table[run, j] = np.sort(savgol_filter(table[run, j].astype(np.float64), w, 2, axis=0, mode='interp'), axis=1)
     u = np.clip(r/bin_px-.5-first, 0, nb-1)
     k0 = np.floor(u).astype(int)
     k1 = np.minimum(k0+1, nb-1)

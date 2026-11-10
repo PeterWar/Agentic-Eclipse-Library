@@ -416,6 +416,85 @@ def red_excess_mask(rgb,valid,geometry,*,ratio=1.12,r_max_rsun=1.4,step_rsun=.01
     return cv2.dilate(out,kernel)>0
 
 
+def protected_zones(rgb, valid, geometry, *, limb_full_px=12., limb_fade_px=40., red_ratio=1.12, red_r_max_rsun=1.4,
+                    bead_factor=4., bead_within_px=80., feather_px=12.):
+    """Where detail filters must not act (since 1.5.0): the lunar limb, prominences and the chromosphere, and Baily's
+    beads. Returns ``(weight, info)``: a float32 map in [0, 1], 1 where a layer must carry no detail, and what each
+    zone holds.
+
+    These filters were made for the corona. On the limb they draw rims and dotted lines along it, on a prominence or
+    a bead they saturate and ring, whatever the operator: on the author's 2026 image a person marked the limb on
+    nearly every detail layer, the author's own included, most of it within 10 px of the limb.
+
+    - **Limb**: the distance of every pixel to the contour one sees — the edge of the observed data next to the Moon or
+      the Moon's circle, whichever lies further out. Full protection up to ``limb_full_px``, none from
+      ``limb_fade_px`` (smoothstep). ``geometry`` must hold the Moon.
+    - **Prominences and chromosphere**: :func:`red_excess_mask` (``red_ratio``, ``red_r_max_rsun``), feathered.
+    - **Beads**: within ``bead_within_px`` of the limb, pixels brighter than ``bead_factor`` times the median of the
+      pixels at the same distance from the limb, grown and feathered by ``feather_px``.
+
+    Use: in a protected zone an Overlay layer is transparent (alpha × (1 − weight)) and a Multiply layer keeps only its
+    level, taken from outside the zone (:func:`level_through_zones`). Nothing is painted where there is no data."""
+    import cv2
+    rgb = np.asarray(rgb, np.float32)
+    if rgb.shape != (*valid.shape, 3): raise ValueError('rgb must be HxWx3 on the valid canvas')
+    if geometry.moon_xy is None or geometry.moon_radius_px is None: raise ValueError('protected_zones needs the Moon in the geometry')
+    if not 0 <= limb_full_px < limb_fade_px: raise ValueError('limb_full_px must be below limb_fade_px')
+    ok = valid & np.isfinite(rgb).all(axis=-1) & (rgb[..., 1] > 0)
+    h, w = valid.shape; mx, my = geometry.moon_xy
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    dm = np.hypot(xx - mx, yy - my) - np.float32(geometry.moon_radius_px); del yy, xx
+    near = dm < limb_fade_px + bead_within_px
+    dist = cv2.distanceTransform(ok.astype(np.uint8), cv2.DIST_L2, 5)
+    rho = np.minimum(dist, np.maximum(dm, 0))                    # distance to the contour one sees
+    t = np.clip((rho - limb_full_px) / (limb_fade_px - limb_full_px), 0, 1)
+    limb = np.where(near & (dm < limb_fade_px + 2), 1 - t * t * (3 - 2 * t), 0).astype(np.float32)
+
+    def feathered(mask):
+        if not mask.any(): return np.zeros(mask.shape, np.float32)
+        d = cv2.distanceTransform((~mask).astype(np.uint8), cv2.DIST_L2, 5)
+        q = np.clip(d / max(feather_px, 1e-6), 0, 1)
+        return (1 - q * q * (3 - 2 * q)).astype(np.float32)
+
+    red = red_excess_mask(rgb, ok, geometry, ratio=red_ratio, r_max_rsun=red_r_max_rsun)
+    lum = rgb.mean(-1)
+    band = ok & (dm >= 0) & (dm < bead_within_px)
+    beads = np.zeros(valid.shape, bool)
+    if band.any():
+        k = np.floor(dm[band]).astype(np.int64); v = lum[band]
+        med = np.full(int(k.max()) + 1, np.inf)
+        for i in np.unique(k):
+            one = v[k == i]
+            if len(one) >= 50: med[i] = np.median(one)
+        hit = np.zeros(valid.shape, bool); hit[band] = v > bead_factor * med[k]
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * int(feather_px // 2) + 1,) * 2)
+        beads = cv2.dilate(hit.astype(np.uint8), kernel) > 0
+    weight = np.maximum(limb, np.maximum(feathered(red), feathered(beads)))
+    return weight, dict(limb_full_px=limb_full_px, limb_fade_px=limb_fade_px, limb_pixels=int((limb > 0).sum()),
+                        red_excess_pixels=int(red.sum()), bead_pixels=int(beads.sum()), bead_factor=bead_factor,
+                        protected_pixels=int((weight >= .999).sum()), touched_pixels=int((weight > 0).sum()))
+
+
+def level_through_zones(layer, valid, weight, *, sigmas=(20., 60., 180.)):
+    """The level of a Multiply layer carried through its protected zones (since 1.5.0): where ``weight`` > 0 the layer
+    is blended towards the mean of the unprotected observed pixels around (normalised Gaussian, the first of
+    ``sigmas`` that reaches unprotected pixels), ``weight·level + (1 − weight)·layer``. No detail enters a zone and no
+    step is left at its edge; outside the zones the layer is returned bit for bit. ``valid`` False stays NaN."""
+    import cv2
+    a = np.asarray(layer, np.float32); wz = np.clip(np.asarray(weight, np.float32), 0, 1)
+    ok = np.asarray(valid, bool) & np.isfinite(a)
+    free = (ok * (1 - wz) ** 2).astype(np.float32)
+    level = np.full(a.shape, np.nan, np.float32)
+    for s in sigmas:
+        num = cv2.GaussianBlur(np.where(ok, a, 0) * free, (0, 0), s, borderType=cv2.BORDER_CONSTANT)
+        den = cv2.GaussianBlur(free, (0, 0), s, borderType=cv2.BORDER_CONSTANT)
+        fill = ~np.isfinite(level) & (den > 1e-3)
+        level[fill] = (num[fill] / den[fill])
+        if np.isfinite(level[wz > 0]).all(): break
+    out = np.where(wz > 0, wz * np.where(np.isfinite(level), level, a) + (1 - wz) * np.where(ok, a, np.where(np.isfinite(level), level, 0)), a)
+    return np.where(ok | ((wz > 0) & np.isfinite(level)), out, np.nan).astype(np.float32), level
+
+
 def larson_sekanina_layer(luminance,valid,geometry,delta_deg,*,exclude=None,limb_band_rsun=.035,fade_px=16.):
     """The Larson–Sekanina layer (since 1.4.2), as the author's 2026 test layers: (display layer in [0,1], 'overlay',
     effective parameters).
