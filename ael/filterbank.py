@@ -170,7 +170,7 @@ def _paired_b3_step(c, m, step, bilateral=False, guide=None, rows=128):
     return out, compl, pair
 
 
-def wow_edge_aware(img, valid, *, n_scales=8, guided=True, completeness=(.6, .995)):
+def wow_edge_aware(img, valid, *, n_scales=8, guided=True, completeness=(.6, .995), noise_floor=0., noise_factors=None):
     """Edge-aware WOW, the default WOW layer since 1.3.5 (called WOW bilateral up to 1.3.4): the operator of the edge-aware
     WOW layer of the author's 2026 image, with the cure of issue #4. Edge-aware is the name Auchère et al. (2023) give to the
     variant of WOW whose smoothing uses range weights, a bilateral filter, to avoid halos at spikes and edges.
@@ -185,8 +185,23 @@ def wow_edge_aware(img, valid, *, n_scales=8, guided=True, completeness=(.6, .99
     structure into its opposite. With ``guided`` (the default), the range weights of each scale come from a guide that
     does not contain the detail of that scale (the same step without range weights) and the mean still comes from the
     data. Measured: docs/VALIDATION_1.3.4.md and docs/VALIDATION_1.3.5.md. ``guided=False`` is the author's operator as it
-    ran in 2026."""
+    ran in 2026.
+
+    ``noise_floor`` (since 1.5.0; 0 = off, the layer as before): each scale is divided by sqrt(local power +
+    (noise_floor × noise of that scale)²) instead of by its local RMS alone, as :func:`wow_measured` does. Without a
+    floor the whitening gives pure noise the same contrast as structure, everywhere (on the 2026 image nearly all the
+    visible grain of the composite was this layer's). The pixel noise is measured on the image
+    (:func:`ael.filters.noise_map`) and ``noise_factors`` are the factors of each scale relative to it
+    (:func:`ael.filters.noise_factors`, measured where the noise dominates); by default those of white noise, which
+    real stacks exceed at scales 1–3. A floor also lowers real detail that is no stronger than the noise: judge it
+    with two independent half-stacks."""
     a = np.asarray(img, np.float32); m = valid & np.isfinite(a)
+    if noise_floor < 0: raise ValueError('noise_floor must be non-negative')
+    floor = None
+    if noise_floor > 0:
+        nf = F.STARLET_NOISE if noise_factors is None else np.asarray(noise_factors, np.float64)
+        pix = F.noise_map(a, m)
+        floor = lambda s: np.float32(noise_floor * nf[min(s, len(nf) - 1)]) * pix
     c = np.where(m, a, 0).astype(np.float32); out = np.zeros_like(c); lo, hi = completeness
     for s in range(n_scales):
         step = 2 ** s
@@ -194,7 +209,9 @@ def wow_edge_aware(img, valid, *, n_scales=8, guided=True, completeness=(.6, .99
         nxt, compl, pair = _paired_b3_step(c, m, step, True, guide); nxt = np.where(m, nxt, 0).astype(np.float32)
         wave = np.where(m, c - nxt, 0).astype(np.float32)
         wave[np.abs(wave) <= 8 * np.finfo(np.float32).eps * np.maximum(np.abs(c), np.abs(nxt))] = 0
-        g = np.where(m & (compl > 0), wave / np.sqrt(np.maximum(_b3_normalized(wave * wave, m, step), 1e-20)), 0).astype(np.float32)
+        power = np.maximum(_b3_normalized(wave * wave, m, step), 1e-20)
+        if floor is not None: power = power + np.where(m, floor(s), 0) ** 2
+        g = np.where(m & (compl > 0), wave / np.sqrt(power), 0).astype(np.float32)
         if s >= 3:
             q = np.clip((compl - lo) / (hi - lo), 0, 1); w = (q * q * (3 - 2 * q) * m).astype(np.float32)
         else:
@@ -457,7 +474,7 @@ def swap_layer(luminance,valid,geometry):
                            below_0_5=float((u[good]<.5).mean()),above_2_0=float((u[good]>2.).mean()))
 
 
-def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display='rings',nafe_sigma=None,exclude=None):
+def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display='rings',nafe_sigma=None,exclude=None,_raw=False):
     """Return (display layer in [0,1], blend mode, effective parameters).
 
     ``upsilon_curve`` (since 1.3.2): ``(low, high)`` exponents of the Upsilon curve of Gilly & Cranmer (2025) to
@@ -478,7 +495,9 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
     if nafe_sigma is not None and name!='nafe': raise ValueError('nafe_sigma applies to the NAFE layer only')
     if exclude is not None and name not in LARSON_SEKANINA:
         raise ValueError('exclude applies to the Larson–Sekanina layers only')
-    if name in STRUCTURE: return structure_filter(name,luminance,valid,geometry)
+    if name in STRUCTURE: return structure_filter(name,luminance,valid,geometry,_raw=_raw)
+    if _raw and (name in LARSON_SEKANINA or name in ('swap','nafe')):
+        raise ValueError(f'{name!r} has no separate display step: use make_filter')
     if name in LARSON_SEKANINA:
         return larson_sekanina_layer(luminance,valid,geometry,LARSON_SEKANINA[name],exclude=exclude)
     if name=='swap': return swap_layer(luminance,valid,geometry)
@@ -495,6 +514,7 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
     if name in ('nrgf','nrgf_log'):
         q=F.nrgf(np.log(np.maximum(a,1e-30)) if name=='nrgf_log' else a,m,geometry,
                  bin_px=2,min_count=12,smooth_bins=0,partial_annuli='chain')
+        if _raw: return np.where(m,q,np.nan).astype(np.float32),'multiply',dict(kind='signed detail in units of the ring spread')
         result,info=display_detail(q,m)
         return result,'multiply',dict(**info,input='ln L' if name=='nrgf_log' else 'L',bin_px=2,smooth_bins=0,
                                            partial_annuli='chain',
@@ -505,6 +525,7 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
         ups=upsilon_curve if upsilon_curve is not None else (.35,.35) if name=='rhef_upsilon' else None
         if ups is not None:
             q=upsilon(q,*ups)
+        if _raw: return q,'multiply',dict(kind='rank in [0, 1]',sector_deg=sector,upsilon=list(ups) if ups is not None else 1)
         return q,'multiply',dict(sector_deg=sector,bin_px=2,upsilon=list(ups) if ups is not None else 1,
                                  quantiles=257,statistics='continuous log-quantiles in radius and angle',
                                  image_smoothing=False,
@@ -521,6 +542,7 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
         info=dict(sigma_deg=1,smoothing_px=sr)
     elif name=='mgn':
         q=F.mgn(a,m,h=.7,min_support=.01)
+        if _raw: return np.where(m,q,np.nan).astype(np.float32),'overlay',dict(kind='MGN output before its display limits',h=.7,k=.7,gamma=3.2)
         lo,hi=np.nanpercentile(q[m],[1,99])
         q=np.where(m,np.clip((q-lo)/max(float(hi-lo),1e-12),0,1),np.nan)
         return q,'overlay',dict(display_limits=[float(lo),float(hi)],h=.7,k=.7,gamma=3.2)
@@ -535,17 +557,20 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
     elif name=='wow':
         residual,info=radial_log_residual(a,m,geometry)
         q,winfo=wow_measured(residual,m,geometry)
+        if _raw: return q,'overlay',dict(kind='signed detail',**info,**winfo)
         rs=geometry.rsun_map()
         q,display=display_detail(q,m,scale_region=(rs>=1.1)&(rs<2.))
         if display['scale_region']=='given': display['display_scale_rsun']=[1.1,2.]
         return q,'overlay',dict(**info,**winfo,n_scales=6,noise_floor=3,**display)
     else:
         q=wow_edge_aware(a,m)
+        if _raw: return q,'overlay',dict(kind='signed detail',input='linear luminance',n_scales=8)
         rs=geometry.rsun_map()
         q,display=display_detail(q,m,scale_region=(rs>=1.1)&(rs<2.))
         if display['scale_region']=='given': display['display_scale_rsun']=[1.1,2.]
         return q,'overlay',dict(input='linear luminance',n_scales=8,range_weights='guided (issue #4)',pairs='symmetric observed',
                                 completeness=[.6,.995],level_sigma_px='min(150, max(32, 4*2^j))',**display)
+    if _raw: return np.where(m,q,np.nan).astype(np.float32),'overlay',dict(kind='signed detail',**info)
     if achf_display=='rings':
         q,display=display_detail_rings(q,m,geometry)
     else:
@@ -553,7 +578,7 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
     return q,'overlay',dict(**info,**display)
 
 
-def structure_filter(name, luminance, valid, geometry):
+def structure_filter(name, luminance, valid, geometry, *, _raw=False):
     """The layers of :data:`STRUCTURE` (since 1.4.1): (display layer in [0,1], 'overlay', effective parameters).
 
     All start from the residual of ln L about its smooth radial profile (:func:`radial_log_residual`), as the
@@ -620,5 +645,65 @@ def structure_filter(name, luminance, valid, geometry):
         q=F._up(band,padded.shape)[:residual.shape[0],:residual.shape[1]] if f>1 else band
         info.update(coherence_diffusion=dinfo,reduction=f,band_px=[8,32])
     q=np.where(m,q,np.nan).astype(np.float32)
+    if _raw: return q,'overlay',dict(kind='signed detail',**info)
     q,display=display_detail_rings(q,m,geometry)
     return q,'overlay',dict(**info,**display)
+
+
+def filter_detail(name, luminance, valid, geometry, *, upsilon_curve=None):
+    """A layer **before its display mapping** (since 1.5.0): ``(values, blend mode, info)``.
+
+    :func:`make_filter` ends every layer with a display step measured on the layer itself (one robust spread, or a
+    level and a spread per ring). That is right for one image, and wrong as soon as two layers must be shown with the
+    *same* yardstick — a layer of a noise-reduced base next to the layer of the plain base, two half-stacks, two optics:
+    a yardstick measured ring by ring on one of them carries the noise of its own estimate, and applied to a cleaner
+    layer it is printed as fine concentric rings ("gramophone grooves"; measured on the 2026 image: coherence between
+    sectors 0.76–0.92, against −0.07 for the layer shown with its own yardstick). With this function the operator and
+    the display are two steps: take the detail here, measure the yardstick once on the observed data
+    (:func:`frozen_display`), keep it, and apply it to every layer that must be compared.
+
+    ``values`` is the signed detail (NRGF in units of the ring spread, ACHF, WOW, the structure layers), the rank in
+    [0, 1] (RHEF, with ``upsilon_curve`` if given) or the MGN output before its limits; NaN where there is no data.
+    NAFE, SWAP and Larson–Sekanina have no separate display step and are refused."""
+    return make_filter(name, luminance, valid, geometry, upsilon_curve=upsilon_curve, _raw=True)
+
+
+def frozen_display(reference, valid, *, target=None, knots=257, region=None):
+    """A display curve measured once and kept (since 1.5.0): returns ``(apply, info)``.
+
+    Without ``target``: the curve of :func:`display_detail`, ``0.5 + 0.5·tanh(x / (2.5·spread))``, with the spread
+    (1.4826·MAD) of ``reference`` over ``valid`` (and ``region``) — one number for the whole layer, no ring statistics.
+
+    With ``target`` (a display layer in [0, 1] on the same grid, for example the layer an image already has): the
+    monotone curve that gives ``reference`` the distribution of ``target`` over the pixels where both are observed
+    (quantile matching at ``knots`` quantiles, linear in between, the end values beyond). It reproduces black and
+    white points and any curve the old layer had, with no fit per ring or per sector.
+
+    ``apply(x)`` maps any detail on that grid or another (a second layer, a half-stack) with the *same* curve; NaN stays NaN."""
+    ref = np.asarray(reference, np.float32)
+    good = np.asarray(valid, bool) & np.isfinite(ref)
+    if region is not None and (good & region).sum() >= 1000: good = good & region
+    if good.sum() < 1000: raise ValueError('frozen_display needs at least 1000 observed pixels')
+    if target is None:
+        median = float(np.median(ref[good]))
+        scale = max(float(1.4826 * np.median(np.abs(ref[good] - median))), 1e-12)
+
+        def apply(x):
+            x = np.asarray(x, np.float32)
+            return np.where(np.isfinite(x), .5 + .5 * np.tanh(x / np.float32(2.5 * scale)), np.nan).astype(np.float32)
+        return apply, dict(curve='0.5 + 0.5·tanh(x / (2.5·spread))', spread=scale, pixels=int(good.sum()))
+    tgt = np.asarray(target, np.float32)
+    both = good & np.isfinite(tgt)
+    if both.sum() < 1000: raise ValueError('frozen_display needs at least 1000 pixels observed in both layers')
+    qs = np.linspace(0, 1, int(knots))
+    xr = np.quantile(ref[both].astype(np.float64), qs); yt = np.quantile(tgt[both].astype(np.float64), qs)
+    keep = np.r_[True, np.diff(xr) > 0]                      # strictly increasing abscissae for the interpolation
+    xr, yt = xr[keep], yt[keep]
+    if len(xr) < 2: raise ValueError('the reference layer is constant: no curve to measure')
+
+    def apply(x):
+        x = np.asarray(x, np.float32)
+        return np.where(np.isfinite(x), np.interp(x, xr, yt), np.nan).astype(np.float32)
+    rho = float(np.corrcoef(ref[both][::max(1, both.sum() // 2_000_000)], tgt[both][::max(1, both.sum() // 2_000_000)])[0, 1])
+    return apply, dict(curve='quantile matching to a target layer', knots=int(len(xr)), pixels=int(both.sum()),
+                       x=[float(v) for v in xr], y=[float(v) for v in yt], correlation_with_target=rho)
