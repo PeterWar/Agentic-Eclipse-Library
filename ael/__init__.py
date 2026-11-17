@@ -16,6 +16,9 @@ the general part of it, rewritten so that an agent — or a person — can run i
 * :mod:`ael.coronagraph` – the image against K-Cor, SOHO/LASCO and SDO/AIA: solar frames per observer
   (affine plates included), angular structure with its null, and brightness in mean solar brightness
   (K + F corona from K-Cor pB, both LASCO C2 calibrations, asymmetric ratio bands).
+* :mod:`ael.zones`     – the inner limit of the filters: one map, to the pixel, of what is corona and what is limb,
+  chromosphere, prominence or bead, from the colour and brightness of the data; and the filters' input without the
+  hydrogen light.
 * :mod:`ael.photoshop` – layered 16-bit Photoshop files (PSD/PSB), verified by reopening; needs psd-tools.
 * :mod:`ael.annotate`, :mod:`ael.io`, :mod:`ael.synthetic`, :mod:`ael.gates` – drawing, files and
   receipts, synthetic coronae for tests, and the gates every product must pass.
@@ -25,10 +28,10 @@ Rule that shapes every function: **nothing invented, nothing mirrored**. Where t
 result is ``NaN`` (or transparent), never a fill, a continuation or a reflection.
 """
 
-__version__ = "1.4.2"
+__version__ = "1.5.0"
 
 CREDIT = ("Processed with Agentic Eclipse Library by Pere Guerra — "
           "https://github.com/PeterWar/Agentic-Eclipse-Library")
 
-from . import geometry, polar, filters, render, motion, calibrate, extinction, coronagraph, photoshop, annotate, io, synthetic, gates, pipelines  # noqa: E402,F401
+from . import geometry, polar, filters, render, motion, calibrate, extinction, coronagraph, photoshop, annotate, io, synthetic, gates, zones, pipelines  # noqa: E402,F401
 from .geometry import EclipseGeometry  # noqa: E402,F401

@@ -23,13 +23,34 @@ STRUCTURE = ('hessian_ridge','steerable_g2','mmt','noise_gate','coherence_diffus
 # Since 1.4.2, three more layers outside "all" and the defaults, which the author tried on his 2026 image: NAFE
 # (Druckmüller 2013), the SWAP filter above the limb (Seaton et al. 2023) and the Larson–Sekanina rotational gradient
 # with Δθ = 1° and 0.4° (Larson & Sekanina 1984). The connectors do not offer any of EXTRA.
-EXTRA = STRUCTURE + ('nafe','swap','larson_sekanina_1','larson_sekanina_0.4')
+# Since 1.5.0, FNRGF (Druckmüllerová, Morgan & Habbal 2011): the layer the author keeps next to the NRGF on his 2026
+# image. It is listed here, outside "all", only because the connectors announce "all" as sixteen layers.
+EXTRA = STRUCTURE + ('nafe','swap','larson_sekanina_1','larson_sekanina_0.4','fnrgf')
+# How a layer treats an edge of the data (the Moon, a protected core, the frame), since 1.5.0:
+#   'unbiased' (default)  local references that lean less on the edge: the radial profile and the local RHEF measured
+#                         in chain over cut annuli, local means by polynomial fit (ael.filters.local_fit);
+#   'classic'             the operators as they were up to 1.4.2 (the connectors use these in 1.5.0). One layer is not
+#                         the 1.4.2 one with either value: the NRGF, whose chain over cut annuli is anchored on the
+#                         whole ones since 1.5.0 (a correction; see ael.radial._anchored_chain).
+# The same in both: both WOW layers (the edge-aware one has no cure; a dense-kernel variant of the plain one is an
+# option of wow_measured, not the default: docs/INNER_LIMIT.md says why) and the angular ACHF.
+EDGES = ('unbiased','classic')
+UNBIASED = ('rhef_local60','rhef_local30','mgn','hessian_ridge',*ISO)      # fnrgf has the chain with either value
 LARSON_SEKANINA = {'larson_sekanina_1': 1.0, 'larson_sekanina_0.4': 0.4}     # Δθ in degrees
 ALIASES = {'wow_bilateral': 'wow_edge_aware'}           # the name of the edge-aware WOW up to 1.3.4
 
 
-def radial_log_residual(luminance, valid, geometry):
+def radial_log_residual(luminance, valid, geometry, *, partial_annuli='observed', whole_share=.90, cells=180):
     """Subtract a smooth cubic spline in ln r BEFORE isotropic high-pass.
+
+    ``partial_annuli='chain'`` (since 1.5.0): the medians of the annuli that a hole (the Moon, a protected core) cuts
+    depend on which sectors the hole hides; the curve followed them with its knots at 1.03 and 1.06 R☉ and rippled over
+    the next stretches — rings around the Sun that a whitening layer amplifies. With ``'chain'`` the step from one cut
+    annulus to the next is the median, over the 2° angular cells both have, of the difference of their cell medians,
+    (wider cells on a small image, so that each holds eight pixels or more),
+    and the steps are summed inwards from the first annulus with ``whole_share`` of its pixels or more. The same
+    smooth curve with the same knots; the residual stays flat up to the limb. If no annulus is that whole, the
+    medians are used as observed and the result says so.
 
     Ring medians are observations for a smooth fit, never a stepwise image to
     subtract. An off-centre Moon or a rectangular boundary cannot introduce a
@@ -55,6 +76,32 @@ def radial_log_residual(luminance, valid, geometry):
     # where only a small angular fraction of an annulus is observed.
     lr_values=np.log(r[m].astype(np.float64))[order]
     lr=np.array([np.mean(lr_values[cuts[i]:cuts[i+1]]) for i in bins])
+    chain=None
+    if partial_annuli not in ('observed','chain'): raise ValueError("partial_annuli must be 'observed' or 'chain'")
+    if partial_annuli=='chain':
+        cov=cnt/(2*np.pi*(np.arange(len(cnt))+.5)); whole=np.flatnonzero((cov>=whole_share)&(cnt>=12))
+        if not len(whole):
+            chain=dict(chained_annuli=0,note=f'no annulus holds {whole_share:.0%} of its pixels: medians as observed')
+        else:
+            first=int(whole[0]); lv=np.log(a[m]); yy,xx=np.nonzero(m); inner=ri<=first+1
+            cells=int(np.clip(2*np.pi*first/8,24,cells))     # at least eight pixels per cell on the first whole annulus
+            ci=((np.arctan2(yy[inner]-geometry.sun_xy[1],xx[inner]-geometry.sun_xy[0])+np.pi)/(2*np.pi)*cells).astype(int)%cells
+            k0=int(ri[inner].min()); nk=first+2-k0; key=(ri[inner]-k0)*cells+ci
+            o=np.lexsort((lv[inner],key)); n=np.bincount(key,minlength=nk*cells); ini=np.r_[0,np.cumsum(n)][:-1]
+            vs=lv[inner][o]; cmed=np.full(nk*cells,np.nan); good=n>=4; cmed[good]=vs[(ini+n//2)[good]]; cmed=cmed.reshape(nk,cells)
+            cad=np.full(nk,np.nan); cad[first-k0]=med[bins==first][0]; chained=0
+            for k in range(first-1,k0-1,-1):
+                com=np.isfinite(cmed[k-k0])&np.isfinite(cmed[k+1-k0])
+                if com.sum()<5: break
+                cad[k-k0]=cad[k+1-k0]-np.median(cmed[k+1-k0][com]-cmed[k-k0][com]); chained+=1
+            use=np.ones(len(bins),bool)
+            for i,b in enumerate(bins):
+                if b<first:
+                    if b>=k0 and np.isfinite(cad[b-k0]): med[i]=cad[b-k0]
+                    else: use[i]=False
+            bins,med,lr=bins[use],med[use],lr[use]
+            if len(bins)<8: raise ValueError('radial spline needs at least eight populated annuli')
+            chain=dict(first_whole_annulus_px=first,chained_annuli=chained,first_annulus_px=int(bins[0]))
     candidates=np.log(geometry.sun_radius_px*np.array([1.03,1.06,1.10,1.15,1.22,1.32,1.45,1.65,1.95,2.4,3,3.8,4.8,6]))
     knots=[v for v in candidates if lr[3]<v<lr[-4]]
     # Avoid overparameterised/singular splines on small images, preserving a
@@ -71,24 +118,37 @@ def radial_log_residual(luminance, valid, geometry):
     out=np.where(m,ln-profile,np.nan).astype(np.float32)
     return out,dict(method='cubic spline in ln r fitted to annular log-luminance medians',
                     knots_rsun=(np.exp(knots)/geometry.sun_radius_px).tolist(),
-                    annuli=len(bins),fit_rms=float(np.sqrt(np.mean((med-fit(lr))**2))))
+                    annuli=len(bins),fit_rms=float(np.sqrt(np.mean((med-fit(lr))**2))),
+                    **({} if chain is None else dict(partial_annuli='chain',**chain)))
 
 
-def achf_isotropic(luminance, valid, geometry, *, sigmas=(1,2,4,8,16), outer_sigma=1.5):
-    residual, info=radial_log_residual(luminance,valid,geometry)
-    m=np.isfinite(residual)
+def _smoother(edges):
+    """The local Gaussian mean of a layer: the plain normalised one ('classic') or by local fit of order 2."""
+    if edges=='classic': return F.normalized_gaussian
+    return lambda a,m,sigma,min_support=.25: F.normalized_gaussian_fit(a,m,sigma,min_support,order=2)
+
+
+def achf_isotropic(luminance, valid, geometry, *, sigmas=(1,2,4,8,16), outer_sigma=1.5, edges='classic'):
+    """Isotropic ACHF: mean over ``sigmas`` of (residual − its Gaussian mean), then a light ``outer_sigma`` blur.
+    ``edges='unbiased'`` (since 1.5.0): the radial profile in chain and every mean by local fit of order 2, so that
+    the layer leaves no dark band along the limb (false-hole gate, 3–6 px: 3.0 spreads of the layer before, 0.59)."""
+    if edges not in EDGES: raise ValueError(f'edges must be one of {EDGES}')
+    residual, info=radial_log_residual(luminance,valid,geometry,partial_annuli='chain' if edges=='unbiased' else 'observed')
+    m=np.isfinite(residual); mean=_smoother(edges)
     detail=np.zeros(residual.shape,np.float32)
     for s in sigmas:
-        detail += (residual-F.normalized_gaussian(residual,m,s,min_support=.01))/len(sigmas)
+        detail += (residual-mean(residual,m,s,min_support=.01))/len(sigmas)
     if outer_sigma:
-        detail=F.normalized_gaussian(detail,m,outer_sigma,min_support=.01)
+        detail=mean(detail,m,outer_sigma,min_support=.01)
     detail[~m]=np.nan
-    return detail,dict(**info,sigmas_px=list(sigmas),outer_sigma_px=outer_sigma)
+    return detail,dict(**info,sigmas_px=list(sigmas),outer_sigma_px=outer_sigma,edges=edges)
 
 
-def radial_rank(img, valid, geometry, sector_deg=None, bin_px=2):
-    """Continuous radial/sector quantile rank of positive observed luminance."""
-    return radial_quantile_rank(img, valid, geometry, sector_deg, bin_px)
+def radial_rank(img, valid, geometry, sector_deg=None, bin_px=2, *, edges='classic'):
+    """Continuous radial/sector quantile rank of positive observed luminance. ``edges='unbiased'`` (since 1.5.0):
+    the cells whose angular window a hole cuts are measured in chain (:func:`ael.radial.radial_quantile_rank`)."""
+    return radial_quantile_rank(img, valid, geometry, sector_deg, bin_px,
+                                partial_windows='chain' if edges=='unbiased' and sector_deg is not None else 'observed')
 
 
 _B3K = np.array([1, 4, 6, 4, 1], np.float32) / 16
@@ -320,7 +380,8 @@ def _tangential_mean_removed(s, valid, frame, sigma_deg=10.):
 
 
 def wow_measured(img, valid, geometry, *, n_scales=6, noise_floor=3., noise_region_rsun=6., tangential_from=3,
-                 tangential_sigma_deg=45., min_support=.01, pairs=True, edge_from=3, edge_completeness=(.95,.995)):
+                 tangential_sigma_deg=45., min_support=.01, pairs=True, edge_from=3, edge_completeness=(.95,.995),
+                 starlet_kernel='atrous'):
     """WOW (wavelet-optimised whitening, Auchère et al. 2023) for layers of real stacks; the default WOW layer since
     1.3.4.
 
@@ -344,15 +405,27 @@ def wow_measured(img, valid, geometry, *, n_scales=6, noise_floor=3., noise_regi
     detail correlated at 0.77–0.84 with the data's own, 1.3–2.9 % of it inverted; coarse detail (6–24 px) about as plain
     WOW; no radial streaks in the noise (correlation lengths along and across the radius unchanged); ring level per
     0.05 R☉ within ±0.005 at 4.3–5.1 R☉, where plain WOW made a ring of −0.036. Limits and gates:
-    docs/VALIDATION_1.3.4.md."""
+    docs/VALIDATION_1.3.4.md.
+
+    ``starlet_kernel='dense'`` with ``edge_completeness=None`` (since 1.5.0; **an option, not what**
+    :func:`make_filter` **uses**): the fade of the coarse scales near an edge is itself a change of regime at 16, 32
+    and 64 px of every edge, and on the author's 2026 layer it showed as straight bands parallel to the limb; the
+    dense-kernel starlet with a local plane (:func:`ael.filters.starlet`) needs no fade, and it is what his plain WOW
+    layer uses since November 2026, on the residual of the radial profile in chain
+    (``radial_log_residual(partial_annuli='chain')``; false-hole gate on his image, 3–6 px from the edge: 0.86 spreads
+    of the layer with the fade, 0.33 without; accepted by eye). But on synthetic coronae whose truth is known, from 40 to 300 px per
+    solar radius, the variant without the fade draws a level along the edge that the default does not (0.18–0.24 of
+    the display range against 0.02–0.09 in the first 16 px, and three times the error against the same layer made
+    with the data whole): a coarse coefficient computed from one side is biased, and the fade was hiding exactly
+    that. The two measurements disagree, so the default stays the 1.3.4 operator."""
     a=np.asarray(img,np.float32); m=valid & np.isfinite(a)
-    noise=F.noise_map(a,m)
+    noise=F.noise_map(a,m,kernel=starlet_kernel)
     rs=geometry.rsun_map(); reg=m & (rs>noise_region_rsun)
-    nf=F.noise_factors(a,m,reg,n_scales=n_scales) if reg.sum()>20000 else None
+    nf=F.noise_factors(a,m,reg,n_scales=n_scales,kernel=starlet_kernel) if reg.sum()>20000 else None
     white_why=None if nf is not None else 'fewer than 20 000 pixels beyond noise_region_rsun'
     if nf is not None and not (np.isfinite(nf).all() and (np.asarray(nf)<=50*F.STARLET_NOISE[:len(nf)]).all()):
         nf,white_why=None,'far-field noise not measurable (eroded away, clipped or quantised)'
-    details,_=F.starlet(a,m,n_scales,min_support,pairs=pairs)
+    details,_=F.starlet(a,m,n_scales,min_support,pairs=pairs,kernel=starlet_kernel)
     frame=_tangential_frame(m,geometry) if tangential_from<n_scales else None
     out=np.zeros(a.shape,np.float32); mf=m.astype(np.float32)
     for j,d in enumerate(details):
@@ -368,7 +441,7 @@ def wow_measured(img, valid, geometry, *, n_scales=6, noise_floor=3., noise_regi
     return out,dict(noise_factors='measured' if nf is not None else 'white noise',white_noise_reason=white_why,
                     noise_factor_values=None if nf is None else [round(float(x),4) for x in nf],
                     noise_region_rsun=noise_region_rsun,tangential_from_scale=tangential_from,
-                    tangential_sigma_deg=tangential_sigma_deg,symmetric_pairs=bool(pairs),
+                    tangential_sigma_deg=tangential_sigma_deg,symmetric_pairs=bool(pairs),starlet_kernel=starlet_kernel,
                     edge_completeness=None if edge_completeness is None else dict(from_scale=edge_from,
                                                                                  smoothstep=list(edge_completeness)))
 
@@ -416,70 +489,15 @@ def red_excess_mask(rgb,valid,geometry,*,ratio=1.12,r_max_rsun=1.4,step_rsun=.01
     return cv2.dilate(out,kernel)>0
 
 
-def protected_zones(rgb, valid, geometry, *, limb_full_px=12., limb_fade_px=40., red_ratio=1.12, red_r_max_rsun=1.4,
-                    bead_factor=4., bead_within_px=80., feather_px=12.):
-    """Where detail filters must not act (since 1.5.0): the lunar limb, prominences and the chromosphere, and Baily's
-    beads. Returns ``(weight, info)``: a float32 map in [0, 1], 1 where a layer must carry no detail, and what each
-    zone holds.
-
-    These filters were made for the corona. On the limb they draw rims and dotted lines along it, on a prominence or
-    a bead they saturate and ring, whatever the operator: on the author's 2026 image a person marked the limb on
-    nearly every detail layer, the author's own included, most of it within 10 px of the limb.
-
-    - **Limb**: the distance of every pixel to the contour one sees — the edge of the observed data next to the Moon or
-      the Moon's circle, whichever lies further out. Full protection up to ``limb_full_px``, none from
-      ``limb_fade_px`` (smoothstep). ``geometry`` must hold the Moon.
-    - **Prominences and chromosphere**: :func:`red_excess_mask` (``red_ratio``, ``red_r_max_rsun``), feathered.
-    - **Beads**: within ``bead_within_px`` of the limb, pixels brighter than ``bead_factor`` times the median of the
-      pixels at the same distance from the limb, grown and feathered by ``feather_px``.
-
-    Use: in a protected zone an Overlay layer is transparent (alpha × (1 − weight)) and a Multiply layer keeps only its
-    level, taken from outside the zone (:func:`level_through_zones`). Nothing is painted where there is no data."""
-    import cv2
-    rgb = np.asarray(rgb, np.float32)
-    if rgb.shape != (*valid.shape, 3): raise ValueError('rgb must be HxWx3 on the valid canvas')
-    if geometry.moon_xy is None or geometry.moon_radius_px is None: raise ValueError('protected_zones needs the Moon in the geometry')
-    if not 0 <= limb_full_px < limb_fade_px: raise ValueError('limb_full_px must be below limb_fade_px')
-    ok = valid & np.isfinite(rgb).all(axis=-1) & (rgb[..., 1] > 0)
-    h, w = valid.shape; mx, my = geometry.moon_xy
-    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
-    dm = np.hypot(xx - mx, yy - my) - np.float32(geometry.moon_radius_px); del yy, xx
-    near = dm < limb_fade_px + bead_within_px
-    dist = cv2.distanceTransform(ok.astype(np.uint8), cv2.DIST_L2, 5)
-    rho = np.minimum(dist, np.maximum(dm, 0))                    # distance to the contour one sees
-    t = np.clip((rho - limb_full_px) / (limb_fade_px - limb_full_px), 0, 1)
-    limb = np.where(near & (dm < limb_fade_px + 2), 1 - t * t * (3 - 2 * t), 0).astype(np.float32)
-
-    def feathered(mask):
-        if not mask.any(): return np.zeros(mask.shape, np.float32)
-        d = cv2.distanceTransform((~mask).astype(np.uint8), cv2.DIST_L2, 5)
-        q = np.clip(d / max(feather_px, 1e-6), 0, 1)
-        return (1 - q * q * (3 - 2 * q)).astype(np.float32)
-
-    red = red_excess_mask(rgb, ok, geometry, ratio=red_ratio, r_max_rsun=red_r_max_rsun)
-    lum = rgb.mean(-1)
-    band = ok & (dm >= 0) & (dm < bead_within_px)
-    beads = np.zeros(valid.shape, bool)
-    if band.any():
-        k = np.floor(dm[band]).astype(np.int64); v = lum[band]
-        med = np.full(int(k.max()) + 1, np.inf)
-        for i in np.unique(k):
-            one = v[k == i]
-            if len(one) >= 50: med[i] = np.median(one)
-        hit = np.zeros(valid.shape, bool); hit[band] = v > bead_factor * med[k]
-        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * int(feather_px // 2) + 1,) * 2)
-        beads = cv2.dilate(hit.astype(np.uint8), kernel) > 0
-    weight = np.maximum(limb, np.maximum(feathered(red), feathered(beads)))
-    return weight, dict(limb_full_px=limb_full_px, limb_fade_px=limb_fade_px, limb_pixels=int((limb > 0).sum()),
-                        red_excess_pixels=int(red.sum()), bead_pixels=int(beads.sum()), bead_factor=bead_factor,
-                        protected_pixels=int((weight >= .999).sum()), touched_pixels=int((weight > 0).sum()))
-
-
 def level_through_zones(layer, valid, weight, *, sigmas=(20., 60., 180.)):
-    """The level of a Multiply layer carried through its protected zones (since 1.5.0): where ``weight`` > 0 the layer
-    is blended towards the mean of the unprotected observed pixels around (normalised Gaussian, the first of
-    ``sigmas`` that reaches unprotected pixels), ``weight·level + (1 − weight)·layer``. No detail enters a zone and no
-    step is left at its edge; outside the zones the layer is returned bit for bit. ``valid`` False stays NaN."""
+    """The level of a Multiply layer carried through the protected core (since 1.5.0). ``weight`` is 1 in the core
+    (:attr:`ael.zones.InnerZones.core`) and 0 outside; there the layer takes the mean of the unprotected observed pixels
+    around (normalised Gaussian, the first of ``sigmas`` that reaches unprotected pixels). A Multiply layer centred on
+    mid grey darkens whatever lies under it: transparent over a prominence, it would leave the prominence brighter than
+    the corona around it. With its level and no detail, the core is darkened like its surroundings and nothing of the
+    filter is drawn on it. Outside the core the layer is returned bit for bit; ``valid`` False outside the core stays
+    NaN. ``weight`` must lie inside the observed data (the core of :func:`ael.zones.inner_zones` does): the level is
+    written wherever it is above zero. Returns ``(layer, level)``."""
     import cv2
     a = np.asarray(layer, np.float32); wz = np.clip(np.asarray(weight, np.float32), 0, 1)
     ok = np.asarray(valid, bool) & np.isfinite(a)
@@ -553,7 +571,8 @@ def swap_layer(luminance,valid,geometry):
                            below_0_5=float((u[good]<.5).mean()),above_2_0=float((u[good]>2.).mean()))
 
 
-def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display='rings',nafe_sigma=None,exclude=None,_raw=False):
+def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display='rings',nafe_sigma=None,exclude=None,
+                edges='unbiased',_raw=False):
     """Return (display layer in [0,1], blend mode, effective parameters).
 
     ``upsilon_curve`` (since 1.3.2): ``(low, high)`` exponents of the Upsilon curve of Gilly & Cranmer (2025) to
@@ -569,12 +588,23 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
 
     ``exclude`` (Larson–Sekanina only, since 1.4.2): pixels to leave out of the layer's input besides the band next to
     the Moon, which it always leaves out: compact bright objects, such as prominences (:func:`red_excess_mask`) or
-    stars, that it would copy at ±Δθ."""
+    stars, that it would copy at ±Δθ.
+
+    ``edges`` (since 1.5.0): ``'unbiased'`` (default) or ``'classic'`` (the operators of 1.4.2; the NRGF carries its
+    corrected chain with either), see :data:`EDGES`.
+    It changes the layers of :data:`UNBIASED` within some tens of pixels of an edge of the data and leaves them
+    practically the same beyond (docs/INNER_LIMIT.md gives the figures; the 1.4.2 operators approximate Gaussians of
+    12 px or more on a decimated grid, and the fits do not); the other layers ignore it. The lower-level functions
+    (``achf_isotropic``, ``radial_rank``, ``ael.filters.mgn``, ``ridge_weight``) keep the 1.4.2 behaviour by default.
+
+    Pass the luminance of the *clean* input and the support *without the core* of :func:`ael.zones.inner_zones`
+    when the image has prominences: no operator should see them (``ael filters`` does it by itself)."""
+    if edges not in EDGES: raise ValueError(f'edges must be one of {EDGES}')
     name=ALIASES.get(name,name)                         # 'wow_bilateral', the name up to 1.3.4
     if nafe_sigma is not None and name!='nafe': raise ValueError('nafe_sigma applies to the NAFE layer only')
     if exclude is not None and name not in LARSON_SEKANINA:
         raise ValueError('exclude applies to the Larson–Sekanina layers only')
-    if name in STRUCTURE: return structure_filter(name,luminance,valid,geometry,_raw=_raw)
+    if name in STRUCTURE: return structure_filter(name,luminance,valid,geometry,edges=edges,_raw=_raw)
     if _raw and (name in LARSON_SEKANINA or name in ('swap','nafe')):
         raise ValueError(f'{name!r} has no separate display step: use make_filter')
     if name in LARSON_SEKANINA:
@@ -583,13 +613,18 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
     a=np.asarray(luminance,np.float32)
     m=valid & np.isfinite(a)                          # the values NRGF needs no positive pixels (a subtracted sky)
     if name!='nrgf': m=m & (a>0)
-    if name not in NAMES+('nafe',): raise ValueError(f'unknown filter {name!r}; choose from {NAMES + EXTRA}')
+    if name not in NAMES+('nafe','fnrgf'): raise ValueError(f'unknown filter {name!r}; choose from {NAMES + EXTRA}')
     if upsilon_curve is not None:
         if not name.startswith('rhef'): raise ValueError('upsilon_curve applies to RHEF layers only')
         if len(upsilon_curve)!=2: raise ValueError('upsilon_curve is (low, high)')
     if not m.any(): raise ValueError('no observed luminance' if name=='nrgf' else 'no positive observed luminance')
     if achf_display not in ('rings','global'): raise ValueError("achf_display is 'rings' or 'global'")
     info={}
+    if name=='fnrgf':
+        q,finfo=F.fnrgf(a,m,geometry,return_info=True)
+        if _raw: return q,'multiply',dict(kind='signed detail in units of the local spread',**finfo)
+        result,info=display_detail(q,np.isfinite(q))
+        return result,'multiply',dict(**finfo,**info,input='L')
     if name in ('nrgf','nrgf_log'):
         q=F.nrgf(np.log(np.maximum(a,1e-30)) if name=='nrgf_log' else a,m,geometry,
                  bin_px=2,min_count=12,smooth_bins=0,partial_annuli='chain')
@@ -600,12 +635,13 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
                                            profile_evaluation='local cubic Hermite curve through nodes at the mean radius of each annulus')
     if name.startswith('rhef'):
         sector=60 if name.endswith('60') else 30 if name.endswith('30') else None
-        q=radial_rank(a,m,geometry,sector)
+        q=radial_rank(a,m,geometry,sector,edges=edges)
         ups=upsilon_curve if upsilon_curve is not None else (.35,.35) if name=='rhef_upsilon' else None
         if ups is not None:
             q=upsilon(q,*ups)
-        if _raw: return q,'multiply',dict(kind='rank in [0, 1]',sector_deg=sector,upsilon=list(ups) if ups is not None else 1)
-        return q,'multiply',dict(sector_deg=sector,bin_px=2,upsilon=list(ups) if ups is not None else 1,
+        part='chain' if edges=='unbiased' and sector is not None else 'observed'
+        if _raw: return q,'multiply',dict(kind='rank in [0, 1]',sector_deg=sector,upsilon=list(ups) if ups is not None else 1,partial_windows=part)
+        return q,'multiply',dict(sector_deg=sector,bin_px=2,upsilon=list(ups) if ups is not None else 1,partial_windows=part,
                                  quantiles=257,statistics='continuous log-quantiles in radius and angle',
                                  image_smoothing=False,
                                  note='Multiply with a layer centred on 0.5 = a uniform darkening (1 - a/2) times a '
@@ -613,18 +649,19 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
                                       'contrast as a 15 % one, and Upsilon tempers both tails (docs/PAPER_AND_LIBRARY.md)')
     if name in ISO:
         sigmas,outer=ISO[name]
-        q,info=achf_isotropic(a,m,geometry,sigmas=sigmas,outer_sigma=outer)
+        q,info=achf_isotropic(a,m,geometry,sigmas=sigmas,outer_sigma=outer,edges=edges)
     elif name.startswith('achf_angular'):
         sr=4 if name.endswith('4') else 8 if name.endswith('8') else 0
         q=F.tangential_highpass(np.log(np.maximum(a,1e-30)),m,geometry,sigma_deg=1)
         if sr: q=F.normalized_gaussian(q,np.isfinite(q),sr,min_support=.01)
         info=dict(sigma_deg=1,smoothing_px=sr)
     elif name=='mgn':
-        q=F.mgn(a,m,h=.7,min_support=.01)
-        if _raw: return np.where(m,q,np.nan).astype(np.float32),'overlay',dict(kind='MGN output before its display limits',h=.7,k=.7,gamma=3.2)
+        fit=2 if edges=='unbiased' else 0
+        q=F.mgn(a,m,h=.7,min_support=.01,order=fit)
+        if _raw: return np.where(m,q,np.nan).astype(np.float32),'overlay',dict(kind='MGN output before its display limits',h=.7,k=.7,gamma=3.2,local_fit_order=fit)
         lo,hi=np.nanpercentile(q[m],[1,99])
         q=np.where(m,np.clip((q-lo)/max(float(hi-lo),1e-12),0,1),np.nan)
-        return q,'overlay',dict(display_limits=[float(lo),float(hi)],h=.7,k=.7,gamma=3.2)
+        return q,'overlay',dict(display_limits=[float(lo),float(hi)],h=.7,k=.7,gamma=3.2,local_fit_order=fit)
     elif name=='nafe':
         if nafe_sigma is None: sigma,ninfo=nafe_noise_sigma(a,m,geometry)
         else: sigma,ninfo=float(nafe_sigma),dict(sigma_from='given')
@@ -634,7 +671,7 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
                                 display='E itself, in [0, 1]; the paper blends (1 - w)·gamma + w·E with w ≈ 0.2; in '
                                         'Overlay the layer opacity plays a role like w')
     elif name=='wow':
-        residual,info=radial_log_residual(a,m,geometry)
+        residual,info=radial_log_residual(a,m,geometry)       # the same with either `edges` (see wow_measured)
         q,winfo=wow_measured(residual,m,geometry)
         if _raw: return q,'overlay',dict(kind='signed detail',**info,**winfo)
         rs=geometry.rsun_map()
@@ -657,7 +694,7 @@ def make_filter(name,luminance,valid,geometry,*,upsilon_curve=None,achf_display=
     return q,'overlay',dict(**info,**display)
 
 
-def structure_filter(name, luminance, valid, geometry, *, _raw=False):
+def structure_filter(name, luminance, valid, geometry, *, edges='unbiased', _raw=False):
     """The layers of :data:`STRUCTURE` (since 1.4.1): (display layer in [0,1], 'overlay', effective parameters).
 
     All start from the residual of ln L about its smooth radial profile (:func:`radial_log_residual`), as the
@@ -674,12 +711,18 @@ def structure_filter(name, luminance, valid, geometry, *, _raw=False):
     - ``coherence_diffusion``: the 8–32 px band of the residual after coherence-enhancing diffusion
       (:func:`ael.filters.coherence_diffusion`), computed on a copy reduced to at most 6 Mpx. ⚠ On pure noise the
       diffusion draws strokes; judge it with a null control.
+
+    ``edges`` (since 1.5.0) acts on ``hessian_ridge`` only: with ``'unbiased'`` its radial profile is measured in
+    chain and its means are local fits of order 2, as in the isotropic ACHF. The other four keep the 1.4.2 operators
+    (they have not been through the false-hole gate).
     """
+    if edges not in EDGES: raise ValueError(f'edges must be one of {EDGES}')
+    cured=edges=='unbiased' and name=='hessian_ridge'; mean=_smoother('unbiased' if cured else 'classic')
     if name not in STRUCTURE: raise ValueError(f'{name!r} is not one of {STRUCTURE}')
     a=np.asarray(luminance,np.float32)
     m=valid & np.isfinite(a) & (a>0)
     if not m.any(): raise ValueError('no positive observed luminance')
-    residual,info=radial_log_residual(a,m,geometry)
+    residual,info=radial_log_residual(a,m,geometry,partial_annuli='chain' if cured else 'observed')
     m=np.isfinite(residual)
     sigmas,outer=ISO['achf_iso_04']
 
@@ -687,11 +730,11 @@ def structure_filter(name, luminance, valid, geometry, *, _raw=False):
         ok=np.isfinite(field)
         detail=np.zeros(field.shape,np.float32)
         for s in sigmas:
-            detail+=(field-F.normalized_gaussian(field,ok,s,min_support=.01))/len(sigmas)
-        return F.normalized_gaussian(detail,ok,outer,min_support=.01)
+            detail+=(field-mean(field,ok,s,min_support=.01))/len(sigmas)
+        return mean(detail,ok,outer,min_support=.01)
 
     if name=='hessian_ridge':
-        weight,winfo=F.ridge_weight(residual,m)
+        weight,winfo=F.ridge_weight(residual,m,fit_order=2 if cured else 0)
         q=iso_bands(residual)*weight
         info.update(detail='ACHF iso 04 (σ 1–16 px, outer 1.5 px)',ridge_weight=winfo,
                     ridge_weight_median=float(np.nanmedian(weight[m])))
@@ -729,7 +772,7 @@ def structure_filter(name, luminance, valid, geometry, *, _raw=False):
     return q,'overlay',dict(**info,**display)
 
 
-def filter_detail(name, luminance, valid, geometry, *, upsilon_curve=None):
+def filter_detail(name, luminance, valid, geometry, *, upsilon_curve=None, edges='unbiased'):
     """A layer **before its display mapping** (since 1.5.0): ``(values, blend mode, info)``.
 
     :func:`make_filter` ends every layer with a display step measured on the layer itself (one robust spread, or a
@@ -744,7 +787,7 @@ def filter_detail(name, luminance, valid, geometry, *, upsilon_curve=None):
     ``values`` is the signed detail (NRGF in units of the ring spread, ACHF, WOW, the structure layers), the rank in
     [0, 1] (RHEF, with ``upsilon_curve`` if given) or the MGN output before its limits; NaN where there is no data.
     NAFE, SWAP and Larson–Sekanina have no separate display step and are refused."""
-    return make_filter(name, luminance, valid, geometry, upsilon_curve=upsilon_curve, _raw=True)
+    return make_filter(name, luminance, valid, geometry, upsilon_curve=upsilon_curve, edges=edges, _raw=True)
 
 
 def frozen_display(reference, valid, *, target=None, knots=257, region=None):
@@ -761,7 +804,9 @@ def frozen_display(reference, valid, *, target=None, knots=257, region=None):
     ``apply(x)`` maps any detail on that grid or another (a second layer, a half-stack) with the *same* curve; NaN stays NaN."""
     ref = np.asarray(reference, np.float32)
     good = np.asarray(valid, bool) & np.isfinite(ref)
-    if region is not None and (good & region).sum() >= 1000: good = good & region
+    if region is not None:
+        region = np.asarray(region, bool)
+        if (good & region).sum() >= 1000: good = good & region
     if good.sum() < 1000: raise ValueError('frozen_display needs at least 1000 observed pixels')
     if target is None:
         median = float(np.median(ref[good]))

@@ -173,40 +173,22 @@ def test_nrgf_chain_leaves_whole_annuli_exactly_as_observed_beyond_a_cut_inner_e
 
 
 
-def test_protected_zones_cover_limb_prominence_and_bead_and_nothing_else():
-    """Since 1.5.0: detail filters keep off the limb, a red prominence and a bead; far from them, no protection."""
+def test_multiply_layer_carries_only_its_level_through_a_binary_core():
+    """Since 1.5.0: through the protected core (binary, no feather) a Multiply layer keeps the level of outside and
+    none of its detail; outside the core it is returned bit for bit."""
     import numpy as np
     from ael import filterbank as fb
-    from ael.geometry import EclipseGeometry
-    h, w, R = 700, 800, 150.0
-    g = EclipseGeometry((h, w), (400.0, 350.0), R, moon_xy=(404.0, 350.0), moon_radius_px=155.0)
+    h, w = 300, 400
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float64)
-    r = np.hypot(xx - 400.0, yy - 350.0) / R
-    dm = np.hypot(xx - 404.0, yy - 350.0) - 155.0
-    lum = 1e5 * np.maximum(r, .5) ** -5 + 200.0
-    rgb = np.stack([lum, lum, lum], -1).astype(np.float32)
-    prom = np.hypot(xx - 239.0, yy - 300.0) < 14            # a red knot at the left limb
-    rgb[prom, 0] *= 1.8
-    bead = np.hypot(xx - 404.0, yy - 190.0) < 3             # a bead at the top, six times the corona around it
-    rgb[bead] *= 6.0
-    valid = dm > 0
-    wz, info = fb.protected_zones(rgb, valid, g)
-    assert wz.dtype == np.float32 and wz.min() >= 0 and wz.max() <= 1
-    assert (wz[valid & (dm < 10)] > .999).all()             # the limb
-    assert wz[prom & valid].min() > .999 and wz[190, 404] > .999   # the prominence and the bead
-    far = valid & (dm > 60) & (np.hypot(xx - 239.0, yy - 300.0) > 60) & (np.hypot(xx - 404.0, yy - 190.0) > 40)
-    assert wz[far].max() == 0 and far.sum() > 100000        # nothing else
-    ring = valid & (dm > 14) & (dm < 38) & (np.abs(xx - 404.0) < 5) & (yy > 350)   # the fade: monotonic along a radius
-    order = np.argsort(dm[ring]); assert (np.diff(wz[ring][order]) <= 1e-6).all()
-    assert info['red_excess_pixels'] > 0 and info['bead_pixels'] > 0
-    # a Multiply layer keeps its level through the zones, and is untouched outside them
-    layer = (0.5 + 0.1 * np.sin(xx / 7.0) + 0.3 * prom).astype(np.float32)
-    out, level = fb.level_through_zones(layer, valid, wz)
-    free = valid & (wz == 0)
-    assert np.array_equal(out[free], layer[free])
-    deep = valid & (wz > .999)
-    assert np.abs(out[deep] - 0.5).max() < 0.06 and np.abs(layer[deep] - 0.5).max() > 0.25   # no detail inside, the level of outside
-    assert np.isnan(out[~valid & (wz == 0)]).all()
+    core = np.hypot(xx - 150.0, yy - 150.0) < 14
+    valid = xx > 20
+    layer = (0.5 + 0.1 * np.sin(xx / 7.0) + 0.3 * core).astype(np.float32)
+    seen = valid & ~core                                    # the filter never saw the core
+    out, level = fb.level_through_zones(np.where(seen, layer, np.nan), seen, core.astype(np.float32))
+    assert np.array_equal(out[seen], layer[seen])
+    assert np.isfinite(out[core]).all() and np.abs(out[core] - 0.5).max() < 0.06      # the level of outside, no detail
+    assert np.abs(layer[core] - 0.5).max() > 0.25                                     # (the layer itself had it)
+    assert np.isnan(out[~valid]).all()
 
 
 def test_rank_smoothing_along_radius_does_no_harm():

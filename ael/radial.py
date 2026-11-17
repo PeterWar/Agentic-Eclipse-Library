@@ -411,7 +411,8 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
     return out
 
 
-def radial_quantile_rank(img, valid, geometry, sector_deg=None, bin_px=2., *, min_count=12, smooth_bins=0):
+def radial_quantile_rank(img, valid, geometry, sector_deg=None, bin_px=2., *, min_count=12, smooth_bins=0,
+                         partial_windows='observed', whole_share=.97):
     """Interpolate measured log-intensity quantiles in radius/angle, then invert.
 
     257 quantiles per observed cell; local angular nodes every quarter-sector.
@@ -424,7 +425,17 @@ def radial_quantile_rank(img, valid, geometry, sector_deg=None, bin_px=2., *, mi
     sampling noise, and a ranking prints that noise as fine arcs around the Sun, different in every sector: on the
     author's 2026 image the 60° layer carried arcs of 0.6 display levels with a period of two annuli that a person saw
     and a gate comparing sectors with each other could not. The image itself is not smoothed.
+
+    ``partial_windows='chain'`` (since 1.5.0; local sectors only): a cell (annulus, angular node) whose angular window
+    the Moon or the frame cuts does not have its whole reference population, and its quantiles are those of the angles
+    left. With ``'chain'`` the quantile table of such a cell (observed share of the window below ``whole_share``) is
+    that of the next annulus outwards plus the change of the quantiles from one annulus to the other, measured on the
+    half-degree angles both have inside the window, and so on inwards from the first whole window. With the window
+    whole it is the usual table. A window that the *frame* cuts (its whole neighbours lie inwards) is left as
+    observed. No pixel is filled in: only the population a pixel is ranked against changes.
     """
+    if partial_windows not in ('observed', 'chain'):
+        raise ValueError("partial_windows must be 'observed' or 'chain'")
     a, m, radius = _observed(img, valid, geometry, bin_px, min_count)
     m &= a > 0
     if sector_deg is not None:
@@ -462,6 +473,35 @@ def radial_quantile_rank(img, valid, geometry, sector_deg=None, bin_px=2., *, mi
             sample = values[np.abs((angles-j*step+180) % 360-180) <= sector_deg/2]
             if len(sample) >= min_count:
                 table[k, j] = np.quantile(sample, probabilities)
+    if sector_deg is not None and partial_windows == 'chain':
+        # angular cells of half a degree, or wider where the innermost annulus is too small to put six pixels in each
+        # (an empty cell must mean a missing angle, not the pixel grid)
+        nm = int(np.clip(2*np.pi*(first+.5)*bin_px*bin_px/6, 36, 720)); mic = np.floor(theta/360*nm).astype(np.int64) % nm
+        pres = np.zeros((nb, nm), bool); pres[bins, mic] = True
+        micang = (np.arange(nm)+.5)*360/nm
+        for j in range(na):
+            inw = np.abs((micang-j*step+180) % 360-180) <= sector_deg/2
+            fr = pres[:, inw].mean(1)
+            # Inwards only, and only from a window that is whole or was itself bridged from a whole one: the Moon cuts
+            # the inner annuli and leaves the outer ones whole. A window the frame cuts has its whole neighbours on the
+            # inside; bridging it from the outside would anchor it on the corner of the image. Those stay as observed.
+            anchored = False
+            for k in range(nb-2, -1, -1):
+                if not np.isfinite(table[k+1, j, 0]):
+                    anchored = False
+                elif fr[k+1] >= whole_share:
+                    anchored = True
+                if count[k] < min_count or fr[k] >= whole_share or not anchored:
+                    if fr[k] < whole_share:
+                        anchored = False
+                    continue
+                com = pres[k] & pres[k+1] & inw
+                ia = order[cuts[k]:cuts[k+1]]; ib = order[cuts[k+1]:cuts[k+2]]
+                sa = v[ia][com[mic[ia]]]; sb = v[ib][com[mic[ib]]]
+                if com.sum() < .25*inw.sum() or len(sa) < min_count or len(sb) < min_count:
+                    anchored = False
+                    continue
+                table[k, j] = np.sort(table[k+1, j]+np.quantile(sa, probabilities)-np.quantile(sb, probabilities))
     if smooth_bins:
         from scipy.signal import savgol_filter
         w = int(smooth_bins)
