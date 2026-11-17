@@ -168,7 +168,7 @@ need to publish your photos to contribute.
   codex plugin add agentic-eclipse-library@pere-guerra-eclipse
   ```
   Python and its dependencies are checked separately. The plugin runs locally and includes the maintained
-  AEL 1.4.2 engine. See the guide for desktop-app installation and supported workflows.
+  AEL 1.5.0 engine. See the guide for desktop-app installation and supported workflows.
 - **Other agents:** point the agent at [`AGENTS.md`](AGENTS.md). Each skill is a plain `SKILL.md` with
   `references/` and `scripts/`.
 - Most text is in Catalan. Current models read and translate it without trouble; ask your agent to answer in your
@@ -227,6 +227,26 @@ repository").
 
 [MIT](LICENSE) © 2026 Pere Guerra Serra. You may use, copy, modify and redistribute this work freely, including
 commercially; the licence only asks you to keep the copyright and permission notices with copies of the work.
+
+## What is new in 1.5.0
+
+The filter layers keep off what is not corona, and four of them draw weaker bands along the edges of the data.
+
+- **One map of the inner limit**, to the pixel (`ael.zones.inner_zones`): the lunar limb and its white rim, the
+  chromosphere, prominences and Baily's beads, found by their colour and brightness. No filter acts there or sees it;
+  the faint hydrogen haze around a prominence is taken out of what the filters read; no margin and no feather, so the
+  corona between prominences and next to the limb keeps its fine detail. `ael filters` does it by default and writes
+  the map as a picture to check.
+- **Operators that lean less on an edge** (`edges="unbiased"`, the default): a local polynomial fit instead of the
+  plain mean, and statistics per annulus measured in chain where the Moon cuts the annuli, for the MGN, the isotropic
+  ACHF, the local RHEF and the Hessian layer. A new layer, the **FNRGF** of Druckmüllerová, Morgan & Habbal (2011),
+  outside the defaults. Neither WOW layer has a cure: both still draw bands along an edge.
+- **Gates**: the inner limit (enforced by `ael filters`: a layer that fails is written switched off), the false hole
+  (what an operator does next to an edge, with the truth known), gramophone grooves against a control, and a synthetic
+  scene with the truth known for the mistake no other gate sees — a map that protects too much.
+- Set on one image, the author's of 2026, where he judged every step by eye. The connectors for PixInsight and
+  Photoshop keep the operators of 1.4.2 in this version. Method, how to read the verdict, figures and limits:
+  [`docs/INNER_LIMIT.md`](docs/INNER_LIMIT.md), [`docs/VALIDATION_1.5.0.md`](docs/VALIDATION_1.5.0.md).
 
 ## What is new in 1.4.2
 

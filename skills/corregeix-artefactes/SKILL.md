@@ -326,3 +326,25 @@ paquet `ael` són a `docs/FIELD_LESSONS.md` del repositori públic. Per a aquest
 - El WOW bilateral de l'`ael` pot girar el signe del detall fi i feble que té al costat una estructura més forta
   (incidència #4). Un detall invertit no és un artefacte de la base.
 
+
+## El límit interior dels filtres (AEL 1.5.0, 17-11-2026)
+
+Vores a les protuberàncies i a les perles, ratlles al llarg del limbe i bandes paral·leles a la vora de la dada en una
+capa de filtre tenen, des de la 1.5.0, la seva cura a la llibreria. El mètode, les xifres i els límits són a
+`docs/INNER_LIMIT.md` del repositori públic (en anglès). Per a aquesta skill:
+
+- **Un sol mapa per a tots els filtres** (`ael.zones.inner_zones`): què és limbe, cromosfera, protuberància o perla
+  ho diu la dada (color i brillantor), píxel a píxel. Cap marge ni fosa: la corona d'entre les protuberàncies i la de
+  tocar del limbe és corona. `ael filters` el fa servir sol, escriu `inner_limit_map.png` i torna un veredicte
+  (`PASS`, `WARN`, `FAIL`, `NOT JUDGED`). Una capa visible que falla la porta s'escriu apagada (`gates.failed` diu quina).
+- **Una banda al llarg d'una vora es diagnostica provant l'operador, no mesurant la imatge**: la prova del forat fals
+  (`ael.gates.false_hole`, i `false_hole_regression` per comparar una cura amb el que substitueix). Després de la
+  porta, mira la capa de debò al limbe: el forat fals té la vora llisa.
+- **La cura és un estimador sense biaix, mai apagar escales a prop de la vora**: l'ajust polinòmic local
+  (`ael.filters.local_fit`) i la cadena sobre els anells que la Lluna talla. Amb menys efecte de vora que abans (entre
+  la meitat i una novena part, en una sola imatge): la part local de l'MGN, l'ACHF isòtropa, la Hessian i la RHEF
+  local. Sense cura: les dues WOW (incidències #3 i #4, obertes).
+- **Els discs de gramòfon** (`ael.gates.gramophone`) es jutgen sempre amb la capa tal qual de control: sola, la porta
+  també marca els anells que ja porta la dada (les transicions d'exposició d'un apilat).
+- **Una porta no veu un mapa que protegeix de més.** Per a això hi ha l'escena sintètica amb veritat
+  (`ael.synthetic.inner_scene`, `ael.gates.zones_against_truth`) i el mapa, que s'ha de mirar ampliat.

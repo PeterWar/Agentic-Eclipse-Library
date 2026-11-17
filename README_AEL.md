@@ -6,7 +6,7 @@ eclipse data**: linear stacking, filter layers and the structure, polar and moti
 | Product | What it is | Entry point |
 |---|---|---|
 | **Linear stack** | RAW/Bayer/RGB frames, declared calibration and registration, support and coverage | `python -m ael stack` |
-| **Filter layers** | Three defaults or sixteen portable variants, optional verified 16-bit PSB | `python -m ael filters` |
+| **Filter layers** | Three defaults or sixteen portable variants, kept off the lunar limb, prominences and beads by one map measured on the image (since 1.5.0), optional verified 16-bit PSB | `python -m ael filters` |
 | **Extinction-corrected stack** | The linear stack corrected for differential atmospheric extinction under a low Sun, after subtracting the sky | `python -m ael extinction` · `ael.extinction` |
 | **Coronagraph check** | Your corona against K-Cor, SOHO/LASCO and SDO/AIA: angular structure ring by ring with its null, and brightness in mean solar brightness with both published LASCO C2 calibrations and K + F for K-Cor | `python -m ael coronagraph` · `ael.coronagraph` |
 | **Structure image** | The corona's fine filaments from the limb to the edge of the field, in the style made famous by Miloslav Druckmüller's composites; mono, cool-toned or in the data's own colour | `python -m ael structure` · `ael.pipelines.structure_from_linear` |
@@ -33,7 +33,7 @@ python -m ael stack --config stack.json --out stack_run/
 python -m ael filters --config filters.json --out filter_run/
 ```
 
-Start with [`docs/DEVELOP.md`](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.4.2/docs/DEVELOP.md) and the JSON templates in `examples/`.
+Start with [`docs/DEVELOP.md`](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.5.0/docs/DEVELOP.md) and the JSON templates in `examples/`.
 Registration and calibration must be measured and declared first. The default filters
 are NRGF, WOW and isotropic ACHF; all sixteen variants are available on request.
 These are portable recipes, not an exact replay of the author's final Photoshop image.
@@ -116,7 +116,7 @@ that the same gate rejects with the same thresholds.
 Two questions, kept apart because they fail differently. **Structure:** are the rays and streamers where
 an independent instrument sees them? **Brightness:** how bright is the corona in mean solar brightness
 (MSB, B/B☉)? The agent's recipe, with the data to ask for and the traps, is the skill
-[`skills/coronagraph-comparison/`](https://github.com/PeterWar/Agentic-Eclipse-Library/tree/v1.4.2/skills/coronagraph-comparison/).
+[`skills/coronagraph-comparison/`](https://github.com/PeterWar/Agentic-Eclipse-Library/tree/v1.5.0/skills/coronagraph-comparison/).
 
 ```sh
 python -m ael coronagraph --config coronagraph.json --out cmp_run/   # see examples/coronagraph_config_template.json
@@ -343,16 +343,16 @@ Raúl Hussein contributed the `eclipse-astrophotography` skill and a three-camer
 from Oscar Maseda and Carlos Oltra, and corrected the NRGF description in the field lessons (1.3.3).
 Eduardo Piñas (@edu27) tested 1.3.3 on his own frames; his reports led to the new default WOW, the per-ring ACHF display,
 `ael.gates.fine_detail_fidelity` and the mirror scan (1.3.4).
-Other contributions are listed in the repository [README](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.4.2/README.md#contributors).
+Other contributions are listed in the repository [README](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.5.0/README.md#contributors).
 
 Version 1.3.0 adds `ael extinction` and `ael coronagraph`, corrects stepped radial statistics and
 clipped display highlights (prepared as 1.2.1), adds an explicit native-reference canvas option and
-documents the limits of internal dust calibration. See [field lessons](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.4.2/docs/FIELD_LESSONS.md) and
-[recipe details](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.4.2/docs/DEVELOP.md). Version 1.3.2 replaces the smoothed ring profile of the NRGF, which
+documents the limits of internal dust calibration. See [field lessons](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.5.0/docs/FIELD_LESSONS.md) and
+[recipe details](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.5.0/docs/DEVELOP.md). Version 1.3.2 replaces the smoothed ring profile of the NRGF, which
 biased steep profiles, lets any RHEF layer made with `make_filter` use the Upsilon curve with an exponent for
 each side, and
 documents how the library's filters differ from the paper's published layers
-([`docs/PAPER_AND_LIBRARY.md`](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.4.2/docs/PAPER_AND_LIBRARY.md)). Version 1.3.4 replaces the default
+([`docs/PAPER_AND_LIBRARY.md`](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.5.0/docs/PAPER_AND_LIBRARY.md)). Version 1.3.4 replaces the default
 WOW layer (WOW bilateral could invert faint fine detail), rebuilds WOW bilateral with guided range weights for data
 that reach the lunar limb, shows the ACHF layers with a level and a spread per ring,
 adds `ael.gates.fine_detail_fidelity` and `ael.coronagraph.scan_mirror`, and makes `ael motion` read `"mirrored"`.
@@ -364,8 +364,16 @@ change. Version 1.4.1 lets `ael.stack` hand over gradually from one exposure to 
 of sensor defects, and the filter bank's NRGF measures a ring cut by the frame's edge or the Moon on the cells it
 shares with the next ring (`partial_annuli='chain'`); it also adds five structure filter layers outside the defaults
 (`hessian_ridge`, `steerable_g2`, `mmt`, `noise_gate`, `coherence_diffusion`; see
-[`docs/STRUCTURE_FILTERS.md`](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.4.2/docs/STRUCTURE_FILTERS.md)).
+[`docs/STRUCTURE_FILTERS.md`](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.5.0/docs/STRUCTURE_FILTERS.md)).
 Version 1.4.2 adds three more layers outside the defaults: NAFE (`nafe`), the SWAP filter (`swap`) and the
 Larson–Sekanina gradient (`larson_sekanina_1`, `larson_sekanina_0.4`; see
-[`docs/NAFE_SWAP_LARSON_SEKANINA.md`](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.4.2/docs/NAFE_SWAP_LARSON_SEKANINA.md)).
+[`docs/NAFE_SWAP_LARSON_SEKANINA.md`](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.5.0/docs/NAFE_SWAP_LARSON_SEKANINA.md)).
 Existing images are not rewritten; compare the new numerical recipe before adopting it.
+
+Version 1.5.0 gives the filter layers an inner limit: one map, to the pixel, of the lunar limb, the chromosphere,
+prominences and beads (`ael.zones.inner_zones`), which no filter enters or sees, a filter input without the hydrogen
+light, operators that lean less on the edges of the data (`edges="unbiased"`: local polynomial fits and statistics in
+chain over the annuli the Moon cuts), the FNRGF layer (`fnrgf`) and four gates (`ael.gates.inner_limit`, `false_hole`,
+`gramophone`, `zones_against_truth`). `python -m ael filters` uses the map, the clean input, the unbiased operators
+and the inner-limit gate by default, and prints a verdict
+([`docs/INNER_LIMIT.md`](https://github.com/PeterWar/Agentic-Eclipse-Library/blob/v1.5.0/docs/INNER_LIMIT.md)).

@@ -1,7 +1,7 @@
 # AEL for Codex
 
 Agentic Eclipse Library is available as a desktop plugin with seven guided workflows and the bundled
-AEL 1.4.2 numerical engine. Plugin version 1.1.6 is independently versioned from the Python library.
+AEL 1.5.0 numerical engine. Plugin version 1.1.7 is independently versioned from the Python library.
 The repository marketplace works independently of OpenAI's public directory review.
 
 ![AEL synthetic workflow demonstration](../plugins/codex-ael/assets/synthetic-workflow.png)
@@ -88,8 +88,14 @@ Version 1.1.6 bundles AEL 1.4.2. Three filter layers are new, outside the defaul
 gradient of Larson & Sekanina 1984; [what they do and how they were checked](NAFE_SWAP_LARSON_SEKANINA.md)).
 Its ZIP passed the seventeen integration checks, including the 137 bundled AEL tests.
 
-AEL 1.4.2 retains documented ACHF/WOW boundary bands, some fine-detail sign inversion in the worst sectors of the
-default edge-aware WOW, and rings of the plain WOW next to a lunar limb that the data reach. Of the layers new in 1.4.2,
+Version 1.1.7 bundles AEL 1.5.0. The filter layers keep off the lunar limb, the chromosphere, prominences and beads
+(one map measured on the image, `ael.zones.inner_zones`); the MGN, the isotropic ACHF, the local RHEF and the Hessian
+layer use operators that lean less on the edges of the data; `fnrgf` is a new layer outside the defaults; and
+`filters` prints a verdict ([how to read it, and what was measured](INNER_LIMIT.md)). Its skill for filter layers reads
+that verdict in three steps. Its ZIP passed the seventeen integration checks, including the 157 bundled AEL tests.
+
+AEL 1.5.0 retains boundary bands in both WOW layers, some fine-detail sign inversion in the worst sectors of the
+default edge-aware WOW, and rings of the plain WOW next to a lunar limb that the data reach. Of the layers of 1.4.2,
 NAFE draws a light ring next to the lunar limb, and the Larson–Sekanina layers copy what is narrower than Δθ at ±Δθ. See [field lessons](FIELD_LESSONS.md). The plugin's structure launcher preserves the full
 canvas and defaults to mono; the underlying historical CLI has different display defaults.
 

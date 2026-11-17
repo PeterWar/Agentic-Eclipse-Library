@@ -46,6 +46,16 @@ Read the metadata of every file (`ael.calibrate.read_raw`, or `exiftool`) and pr
 - **Where and when** they observed. With the site and the time (from GPS, EXIF or the user), the Sun's centre and
   celestial north come from the ephemeris instead of being guessed.
 
+- **Files that are already demosaiced** (FITS or TIFF converted from SER or RAW by another program): check whether
+  the samples of each colour at its own Bayer site are still the untouched raw values (compare with the SER or RAW,
+  or test which channel matches at each site). If they are, extract the mosaic and stack it as `kind: "bayer"`, not
+  as `"rgb"`: stacked as RGB without dithering, the demosaicing pattern adds up coherently and the detail filters
+  show a regular 2 px crosshatch. A vertical flip (`ROWORDER`, SER → FITS) changes the pattern: RGGB becomes GBRG
+  when the height is even. (Field report by Eduardo Piñas, issue #12.)
+- **Exposure per frame, not per series.** In a ramp of video sequences the first frame (or two) of each sequence
+  can still carry the exposure of the one before, and headers can say nothing (`EXPTIME = 0`): check the level of
+  every frame inside its sequence before trusting a label. (Same report.)
+
 Ask only the questions that block the next step (usually: "do you have darks or flats?" and "where did you
 observe?"). Answer in the user's language.
 
@@ -148,10 +158,26 @@ WOW is the edge-aware one, as in his image.
 | **WOW** (Auchère et al. 2023) | Equalises the contrast of structures of every size: the fine filaments that make the "Druckmüller look". Since 1.3.5 the default is the edge-aware WOW, the author's own operator with range weights taken from a guide: it keeps the lunar limb clean | Overlay, 37 % | `ael.filterbank.make_filter("wow_edge_aware", ...)` (called `"wow_bilateral"` up to 1.3.4). The plain WOW (`"wow"`, the default in 1.3.4) is optional: next to a lunar limb that the data reach it draws rings; to use it further out, blend both layers with a feathered mask. Check fine detail with `ael.gates.fine_detail_fidelity` (issue #4) |
 | **ACHF, isotropic** (Druckmüller et al.) | Small-scale detail near the limb | Overlay, 8 % | `ael.filterbank.achf_isotropic`, **on log luminance after subtracting its radial spline, never channel by channel**; since 1.3.4 shown with a level and a spread per ring (`achf_display`), so it does not burn next to the limb when the sky is left in the stack |
 
-Then, if the user wants more: the extended NRGF (Multiply, 14 %), RHEF (an alternative radial normalisation,
+Then, if the user wants more: the FNRGF (`fnrgf`, since 1.5.0: an NRGF whose mean and spread follow the angle, so a
+bright streamer does not flatten the sector beside it; the author keeps it next to the NRGF on his image), the
+extended NRGF (Multiply, 14 %), RHEF (an alternative radial normalisation,
 Gilly and Cranmer 2025), local RHEF, MGN (Morgan and Druckmüller 2014), the angular ACHF
 (`ael.filters.tangential_highpass`) and WOW bilateral (inspect its fine detail: `ael.gates.fine_detail_fidelity`). Beyond the layered file, `ael` makes structure images,
 unrolled polar views and coronal-motion animations (`skills/corona-visualizations/`).
+
+**The inner limit (since 1.5.0).** With the Moon in the geometry, `ael filters` first makes one map of what is not
+corona — the lunar limb and its white rim, the chromosphere, prominences, beads — from the colour and brightness of
+the data, keeps every filter out of it, takes the hydrogen light out of what the filters read, and checks every
+layer against the map. Nothing to add to the recipe. After the run:
+
+1. Read `gates.verdict` in what the command prints. `PASS`: go on. `WARN`: read the warning next to the layer and
+   look at that layer where it says. `FAIL`: `gates.failed` names the layer; if it was visible it was written switched
+   off; do not switch it on, find the cause (with `failed` empty, the layers do not start at the same place).
+   `NOT JUDGED`: no map was made (`inner_limit.why_not` says why; usually the geometry has no Moon).
+2. Open `inner_limit_map.png` enlarged and show it to the user: every red or pink pixel must be emission, and no
+   corona must be coloured.
+3. Never add a margin to the map, never change a threshold to pass a layer, never hide a band along the limb by
+   switching scales off near it. The whole of it, with the figures: [`docs/INNER_LIMIT.md`](../../docs/INNER_LIMIT.md).
 
 Rules for every filter:
 - read only observed pixels; where there is no data the layer is empty (no fill, no mirror, no continuation);

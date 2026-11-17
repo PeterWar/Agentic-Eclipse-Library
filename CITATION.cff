@@ -5,8 +5,8 @@ type: software
 authors:
   - family-names: Guerra Serra
     given-names: Pere
-version: 1.4.2
-date-released: 2026-11-02
+version: 1.5.0
+date-released: 2026-11-17
 license: MIT
 repository-code: "https://github.com/PeterWar/Agentic-Eclipse-Library"
 keywords:

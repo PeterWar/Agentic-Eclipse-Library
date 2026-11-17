@@ -1,19 +1,64 @@
 # Changelog
 
-## Unreleased
+## 1.5.0 — 2026-11-17
 
-The Claude plugin folder `plugins/claude-ael/` no longer carries the engine. Claude's plugin directory accepts
-programs only from organizations it has verified; from anyone else it takes Markdown, text, JSON, YAML and images.
-The folder keeps the seven skills, the documentation, the recipe templates and the images. Its setup guide,
-[`plugins/claude-ael/docs/USAGE.md`](plugins/claude-ael/docs/USAGE.md), installs AEL 1.4.2 from the wheel of the
-1.4.2 release once the user approves it, and pip checks the wheel against its SHA-256 fingerprint. The skills run
-the engine with `python -m ael`; a structure image keeps the full canvas through a short call to
-`ael.pipelines.structure_from_linear`, written out in the guide. The engine, the Codex plugin and the Claude Code
-plugin of this repository's marketplace do not change. `tools/build_claude_plugin.py --check` also lists every file
-of a type the directory refuses.
+The filter layers get an inner limit, and four of them draw weaker bands along the edges of the data (between a half
+and a ninth for three of them and for the local part of the MGN, on one image; the `mgn` layer with its global term,
+by about a third); both WOW layers still draw them. Everything was found on the author's image of the
+12 August 2026 eclipse, where he judged each step by eye, layer by layer; this version carries the method into the
+library, behind one command. The Codex plugin goes to 1.1.7; the
+Claude Code plugin of this repository's marketplace and the Claude plugin folder go to 1.5.0. Method, how to read the
+verdict, figures and limits: [`docs/INNER_LIMIT.md`](docs/INNER_LIMIT.md); what was checked:
+[`docs/VALIDATION_1.5.0.md`](docs/VALIDATION_1.5.0.md).
 
-For the next version of the engine (1.5.0; not released, not numbered yet), found while rebuilding the author's 2026
-image from the raw frames:
+**The inner limit**
+
+- **`ael.zones.inner_zones`**: one map, to the pixel, of what is not corona — the lunar limb and its white rim, the
+  chromosphere, prominences and Baily's beads — from the colour and the brightness of the data. No margin, no
+  feather, and pockets of corona inside a prominence arch stay corona. The pixels where the light that is not corona
+  is 5 % or more are the core; no filter acts there or sees it.
+- **A filter input without the hydrogen light**: around a prominence, where the pixel is still mostly corona, red and
+  blue are clipped to the corona's colour and green takes a small measured correction. The display base is not touched.
+- **`ael filters` uses both by default** when the geometry holds the Moon, writes the map as a picture
+  (`inner_limit_map.png`), makes an Overlay layer transparent in the core and carries only the level of a Multiply
+  layer through it, and checks every layer with the inner-limit gate: a layer that fails is written switched off.
+  The command returns `gates.verdict` (`PASS`, `WARN`, `FAIL`, `NOT JUDGED`). New optional recipe keys: `inner_limit`
+  (`"auto"`, `true`, `false`), `edges` (`"unbiased"`, `"classic"`), `gates` (`"enforce"`, `"report"`).
+  `"inner_limit": false` with `"edges": "classic"` gives the layers of 1.4.2, except the NRGF (`nrgf`, `nrgf_log`), whose chain over cut annuli is anchored on the whole ones with either value, a correction to the chain of 1.4.2
+  (see "Also in this version").
+
+**Operators that lean less on an edge** (`make_filter(..., edges="unbiased")`, the default; `"classic"`: the operators of 1.4.2)
+
+- `ael.filters.local_fit`: the mean a whole kernel would see of the polynomial fitted to the observed pixels; the
+  plain mean where the kernel is whole. Used, at order 2, by the MGN (`mgn(order=2)`), the isotropic ACHF and the
+  Hessian layer (`normalized_gaussian_fit`).
+- The chain over cut annuli, already in the NRGF, now also in the radial profile subtracted before the isotropic
+  filters (`radial_log_residual(partial_annuli="chain")`) and in the local RHEF
+  (`radial_quantile_rank(partial_windows="chain")`, for the windows the Moon cuts).
+- **`fnrgf`**, a new layer outside the defaults and outside `"all"`: the Fourier normalising-radial-graded filter of
+  Druckmüllerová, Morgan & Habbal (2011), with the annuli the Moon cuts measured in chain (`ael.filters.fnrgf`).
+- On a crop of the 2026 image, false hole grown by 80 px, 3–6 px from the edge, in spreads of each layer: the local
+  part of the MGN (`mgn(h=0)`) 2.09 → 0.23, isotropic ACHF 3.01 → 0.58, Hessian 3.75 → 0.75, local RHEF 30°
+  0.88 → 0.42 and 60° 0.61 → 0.28. The `mgn` layer with its global term reads 5.4 → 3.4: that term follows the
+  extremes of the observed data, and a larger hole changes them.
+- **Not cured:** both WOW layers. The edge-aware WOW (the default) got worse with each of three attempts. For the
+  plain WOW, a dense-kernel starlet without the fade of the coarse scales (`starlet(kernel="dense")`; the residual of
+  `radial_log_residual(partial_annuli="chain")` through `wow_measured(starlet_kernel="dense", edge_completeness=None)`)
+  is what the author's image now uses, and it is an
+  option only: it improves the false hole on his image (0.86 → 0.33) and draws a level along the edge on synthetic
+  scenes with the truth known (three times the error of the 1.3.4 WOW). Issues #3 and #4 stay open.
+
+**Gates** (`ael.gates`), each with its negative control in the selftest
+
+- `inner_limit` (and `inner_limit_selfcheck`): every layer starts where the map says, like the others, with nothing
+  inside the core.
+- `false_hole`, `false_hole_regression`: what an operator does next to an edge, with the truth known — pretend the
+  hole is larger and run the operator twice.
+- `gramophone`: fine concentric rings a step adds to a layer, against the plain layer as control.
+- `zones_against_truth` on `ael.synthetic.inner_scene`: a map against a colour scene whose truth is known (an arch
+  with a pocket of corona inside, a white rim, beads). It is the only gate that sees a core that is too large.
+
+**Also in this version**, found while rebuilding the author's 2026 image from the raw frames
 
 - **NRGF over cut annuli** (`partial_annuli='chain'`, the filter bank's NRGF since 1.4.1). The chain summed its terms
   from the first annulus of a run. With the Moon off the Sun's centre and data up to the limb, the first annuli are
@@ -28,14 +73,38 @@ image from the raw frames:
   mapping and `frozen_display` measures one display curve and keeps it, so that layers that must be compared share
   one yardstick (a yardstick measured ring by ring on a noisy layer and applied to a clean one prints fine
   concentric rings).
-- **A noise floor for the edge-aware WOW**: `wow_edge_aware(noise_floor=…)`, off by default.
+- **A noise floor for the edge-aware WOW**: `wow_edge_aware(noise_floor=…)`, off by default. A floor in the divisor
+  lowers detail and noise alike; it is not a noise reduction.
+- **Smoother quantiles for the RHEF**: `radial_quantile_rank(smooth_bins=…)`, off by default.
 
-What this rebuild also showed, and the engine does not solve: the general-purpose layers of `make_filter` are not
-the layers of the author's published image (correlations of 0.40 to 0.95 on the same data); with data up to the
-limb of an off-centre Moon, an NRGF layer needs a rule for the cut annuli of its own (the author's image carries
-there the angular pattern of the first forty whole annuli); and the per-node noise of the NRGF profile prints
-rings of about 6·10⁻⁴ of the display range, which a gate that measures coherence between sectors catches
-(`smooth_bins=8` removes them on a large image).
+**Documentation and skills**
+
+- `AGENTS.md`, rule 12: filters act on the corona, and only on it. `skills/eclipse-first-steps/` reads the verdict of
+  `ael filters` in three steps. `docs/FIELD_LESSONS.md`: what the inner limit taught.
+- From Eduardo Piñas's field report (issue #12): a file another program already demosaiced can still hold the raw
+  mosaic, and should then be stacked as `bayer`; the first frame of each video sequence of an exposure ramp can
+  carry the previous exposure (`docs/DEVELOP.md`, `docs/FIELD_LESSONS.md`, `skills/eclipse-first-steps/`).
+
+**Connectors.** The PixInsight and Photoshop connectors keep the operators of 1.4.2: their engine asks the library
+for `inner_limit: false` and `edges: "classic"`. One of their three default layers changes, the NRGF, by its
+corrected chain: on six frames of the 2026 eclipse, 0.2 % of the display range in the median and 1 % at most; the
+linear master and the other two layers are the same pixel for pixel. The inner limit has not been run inside
+PixInsight or Photoshop. Their scripts and dialogs do not change.
+
+**Limits.** One image: the map, its two thresholds and the limits of the gates were set on the 2026 data, at 440 px
+per solar radius. No second real image has been through `inner_zones`. A mono camera has no prominences in the map.
+`ael structure` does not use the map. With `edges="unbiased"` the layers above change within some tens of pixels of
+an edge of the data: compare full canvases before adopting them for an image that already exists.
+
+What the rebuild of the 2026 image also showed, and the engine does not solve: the general-purpose layers of
+`make_filter` are not the layers of the author's published image.
+
+Earlier, on 7 November, without a version of its own: the Claude plugin folder `plugins/claude-ael/` stopped carrying
+the engine. Claude's plugin directory accepts programs only from organizations it has verified; from anyone else it
+takes Markdown, text, JSON, YAML and images. The folder keeps the seven skills, the documentation, the recipe
+templates and the images; its setup guide, [`plugins/claude-ael/docs/USAGE.md`](plugins/claude-ael/docs/USAGE.md),
+installs AEL from the wheel of its GitHub release once the user approves it, and pip checks the wheel against its
+SHA-256 fingerprint. `tools/build_claude_plugin.py --check` also lists every file of a type the directory refuses.
 
 ## 1.4.2 — 2026-11-02
 

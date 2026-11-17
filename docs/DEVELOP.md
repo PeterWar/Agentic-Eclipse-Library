@@ -26,7 +26,7 @@ Each frame supplies:
 | Key | Meaning |
 | --- | --- |
 | `path`, `kind` | RAW (`raw`, default), Bayer NPY/FITS/TIFF (`bayer`), or linear native RGB array (`rgb`) |
-| `pattern` | For `bayer` only: a 2x2 array of R/G/B letters with two G sites |
+| `pattern` | For `bayer` only: a 2x2 array of R/G/B letters with two G sites. A file that another program already demosaiced may still hold the untouched raw sample of each colour at its own Bayer site (Siril's debayered FITS do): extract the mosaic and use `bayer`, not `rgb`, or the demosaicing pattern adds up coherently in an undithered stack and the detail filters show a 2 px crosshatch. A vertical flip changes the pattern (issue #12) |
 | `iso`, `exposure_s` | Declared ISO and positive exposure duration; exposure is divided exactly once |
 | `black`, `white` | Measured native DN, scalars or native-shaped arrays; never guessed from libraw |
 | `linearity_fraction` | Linear ceiling as fraction above black, default .95; **measure it for your camera** |
@@ -145,6 +145,17 @@ See `docs/FIELD_LESSONS.md`.
 
 ## Filters recipe
 
+**Since 1.5.0 the filters keep off what is not corona.** With the Moon in the geometry, `ael filters` measures one map
+of the inner limit (lunar limb and its white rim, chromosphere, prominences, beads), takes that core out of every
+filter's support, takes the hydrogen light out of the filters' input, and uses operators that lean less on the edges
+of the data. It writes `inner_limit_map.png` (look at it, enlarged) and a verdict, `gates.verdict`: `PASS`, `WARN`,
+`FAIL` (a layer that fails the inner-limit gate is written switched off) or `NOT JUDGED` (no map: the geometry has no
+Moon, the map could not be measured, or the recipe switched it off). Three optional keys: `"inner_limit"` (`"auto"`, `true`, `false`), `"edges"` (`"unbiased"`, `"classic"`) and
+`"gates"` (`"enforce"`, `"report"`); `"inner_limit": false` with `"edges": "classic"` gives the layers of 1.4.2,
+except the NRGF (`nrgf`, `nrgf_log`), whose chain over cut annuli is anchored on the whole ones with either value, a correction to the chain of 1.4.2. With the map, no layer carries detail in the core: Overlay and whole-view layers
+(such as `swap`) are transparent there, and a Multiply layer carries only its level. How
+to read the verdict, what each key does and what was measured: [`INNER_LIMIT.md`](INNER_LIMIT.md).
+
 See `examples/filters_config_template.json`. Input must be linear. Supply the
 stack's geometry, valid mask, **geometric** coverage and base alpha. Optional
 `exclude` masks remove stars or known defects from the filter **input**, never
@@ -196,7 +207,10 @@ Override `visible` and `opacities`, or request `"filters": "all"` for sixteen la
 Outside `"all"`, a recipe can list extra layers by name: the structure layers of 1.4.1 (`hessian_ridge`,
 `steerable_g2`, `mmt`, `noise_gate`, `coherence_diffusion`; [`STRUCTURE_FILTERS.md`](STRUCTURE_FILTERS.md)) and, since
 1.4.2, `nafe`, `swap`, `larson_sekanina_1` and `larson_sekanina_0.4`
-([`NAFE_SWAP_LARSON_SEKANINA.md`](NAFE_SWAP_LARSON_SEKANINA.md)). They come hidden unless `visible` names them; when a
+([`NAFE_SWAP_LARSON_SEKANINA.md`](NAFE_SWAP_LARSON_SEKANINA.md)), and since 1.5.0 `fnrgf`, the Fourier
+normalising-radial-graded filter of Druckmüllerová, Morgan & Habbal (2011), a Multiply layer named `01 FNRGF` (`01b FNRGF` next to an NRGF, which is then `01a NRGF`): the
+mean and the spread of each annulus as a Fourier series of order 6 in the angle, with the annuli that the Moon cuts
+measured in chain from the whole ones (it needs at least one whole annulus around the Sun). They come hidden unless `visible` names them; when a
 recipe lists a Larson–Sekanina layer, the prominences found by their colour leave that layer's input (with a mono input
 none is found).
 

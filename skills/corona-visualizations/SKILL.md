@@ -38,6 +38,10 @@ validated on.
    Inspect 1:1 crops at the limb, at 2 R☉, in the outer field and at the frame edges; for motion, inspect
    every candidate (§3).
 
+> **Filter layers** (the layered file of `ael filters`) are not one of the three products of this skill. Since 1.5.0
+> they keep off the limb, prominences and beads by themselves: read the verdict and look at the map as
+> [`docs/INNER_LIMIT.md`](../../docs/INNER_LIMIT.md) says. The structure image below does not use that map.
+
 ## 1 · Structure image
 
 Input: a linear HDR composite (RGB or mono, sky included), its `valid` mask, and an `EclipseGeometry` JSON

@@ -88,6 +88,13 @@ Each of these was learnt the hard way in this project; the skills give the detai
     one's calibrated distortion correction has been applied, not even for a presentation. A free affine fitted to
     make the overlap match is not a substitute.
 
+12. **Filters act on the corona, and only on it.** The lunar limb, the chromosphere, prominences and Baily's beads
+    are not corona: a detail filter draws rims and rings on them. One map, made from the colour and brightness of
+    the data, says where they are (`ael.zones.inner_zones`; `ael filters` uses it by default), and every filter
+    starts there. Never give the map a margin "to be safe": the corona between prominences and next to the limb is
+    what one wants. Bands along an edge of the data are cured in the operator, never by switching scales off near
+    the edge. How to read the verdict of the command and what never to do: [`docs/INNER_LIMIT.md`](docs/INNER_LIMIT.md).
+
 ## Help users share what they learn
 
 When a useful stage ends with a reusable finding, proactively invite the user to contribute it back to AEL.

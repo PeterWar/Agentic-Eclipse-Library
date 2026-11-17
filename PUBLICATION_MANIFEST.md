@@ -22,6 +22,10 @@ structure filter layers outside the defaults, and updates the dialogs of both co
 Version 1.4.2 (2 November) adds three filter layers outside the defaults (NAFE, the SWAP filter and the Larson–Sekanina
 gradient) and removes from `3-RECERCA/tools/` twelve copies of third-party GPLv3 code, a script that called
 it and a C++ translation of it.
+Version 1.5.0 (17 November) gives the filter layers an inner limit (one map of the lunar limb, the chromosphere,
+prominences and beads, measured on the image), operators that lean less on the edges of the data, the FNRGF layer
+and four gates; `ael/`, the documentation, the skills, the plugins and two build scripts of `tools/` change, and no
+research note or tool is added.
 
 | Included | Files | Notes |
 |---|---:|---|
@@ -29,7 +33,7 @@ it and a C++ translation of it.
 | `3-RECERCA/` — research notes | 187 | 180 numbered notes plus indexes, sources, prompts and reports of consultations with other models, small data tables |
 | `3-RECERCA/tools/` — processing code | 4,352 | Python, shell and Photoshop JSX scripts, and the small JSON/CSV parameter files they read |
 | `ael/`, `tests/`, `examples/`, `pyproject.toml`, `README_AEL.md` — the runnable package | 40 | Stacking, extinction, filter layers, structure images, unrolled views, coronal motion, coronagraph checks and layered Photoshop files from anyone's data; 108 tests with known truth (1.3.5) |
-| `docs/` | 23 | Recipes, field lessons, validation records, two community case studies, the plugin guide, privacy and terms, and the paper's layers against the library (English); lessons for model developers (English); record of the author's contributions (Catalan) |
+| `docs/` | 27 | Recipes, field lessons, validation records, two community case studies, the plugin guide, privacy and terms, and the paper's layers against the library (English); lessons for model developers (English); record of the author's contributions (Catalan) |
 | `AGENTS.md`, `README.md`, `LICENSE` (MIT), `CITATION.cff`, `.claude-plugin/` | — | Entry points, licence, citation and plugin manifest |
 
 | Left out | Why |
