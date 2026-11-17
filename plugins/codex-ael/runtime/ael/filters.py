@@ -25,6 +25,13 @@ Structure-aware detail (since 1.4.1):
 * Fourier noise gating – DeForest (2017), ApJ 838, 155; the gain is the non-negative garrote of Breiman (1995),
   Technometrics 37, 373.
 
+Estimators that lean less on an edge of the data (since 1.5.0, see docs/INNER_LIMIT.md):
+
+* Local polynomial fit – :func:`local_fit`: the mean a whole kernel would see of the polynomial fitted to the observed
+  pixels (local regression in the sense of Cleveland 1979 and Savitzky & Golay 1964, with Gaussian weights).
+* FNRGF – Druckmüllerová, Morgan & Habbal (2011), ApJ 737, 88 (Fourier normalizing-radial-graded filter), with the
+  annuli that the Moon or the frame cut measured in chain from the whole ones.
+
 Three more layers outside the defaults (since 1.4.2), tried by the author on his 2026 image:
 
 * NAFE – Druckmüller (2013), ApJS 207, 25 (noise adaptive fuzzy equalization), from the paper's equations.
@@ -40,7 +47,8 @@ import numpy as np
 
 from .geometry import EclipseGeometry
 
-__all__ = ["gaussian", "normalized_gaussian", "local_mean_std", "nrgf", "mgn", "starlet", "wow",
+__all__ = ["gaussian", "normalized_gaussian", "local_mean_std", "gaussian_kernel", "local_fit",
+           "normalized_gaussian_fit", "nrgf", "fnrgf", "mgn", "starlet", "wow",
            "noise_map", "noise_factors", "tangential_highpass", "STARLET_NOISE",
            "hessian", "hessian_eigen", "ridge_weight", "steerable_g2", "multiscale_median", "coherence_diffusion",
            "noise_gate", "nafe", "nafe_neighbourhood", "swap_filter", "larson_sekanina"]
@@ -102,6 +110,139 @@ def local_mean_std(img: np.ndarray, valid: np.ndarray | None, sigma: float, min_
     return mu, np.sqrt(np.maximum(var, 0.0))
 
 
+def gaussian_kernel(sigma: float) -> np.ndarray:
+    """A normalised one-dimensional Gaussian of ``sigma`` px, out to 4 sigma (float64)."""
+    h = max(1, int(np.ceil(4 * sigma)))
+    u = np.arange(-h, h + 1, dtype=np.float64)
+    k = np.exp(-.5 * (u / sigma) ** 2)
+    return k / k.sum()
+
+
+def local_fit(img: np.ndarray, valid: np.ndarray, kernel, order: int = 2, *, kernel_y=None, ridge: float = 1e-4,
+              chunk: int = 1 << 19):
+    """A local mean that leans less on an edge of the data (since 1.5.0). Returns ``(mean, support)``.
+
+    Every detail filter compares a pixel with a local reference: ``I − B``, with ``B`` the weighted mean of the pixels
+    around. Next to a hole (the Moon, a protected core, the frame) the kernel is cut, ``B`` is the mean of what is left,
+    and what is left is not a symmetric sample: on a brightness that falls away from the hole, the pixel at the edge is
+    the brightest it sees and ``I − B`` comes out positive — a halo, or a band along the edge.
+
+    Here ``B`` is the mean that the **whole** kernel would see if the data followed, inside the hole, the polynomial of
+    degree ``order`` (0, 1 or 2) fitted by weighted least squares to the observed pixels under the same kernel:
+    ``q(u) = a + b·u + ½·uᵀC·u`` and ``B = a + ½·tr(C·Σ)``, Σ the variance of the kernel.
+
+    * With the kernel whole, the residuals of the fit are orthogonal to the constant, so the mean of ``q`` is the mean
+      of ``I``: ``B`` is exactly the usual mean and the filter does not change away from every edge.
+    * At an edge, ``B`` has the gradient (order 1) and the curvature (order 2) that the cut sample does not balance
+      taken out. On raw luminance, which falls steeply, order 1 still leaves a thin halo; order 2 does not.
+    * It is not a fill: no pixel takes its value from the polynomial. Only the level each observed pixel is compared
+      with changes.
+
+    ``kernel`` is a normalised 1-D kernel along x (and along y unless ``kernel_y`` is given). The moments are computed
+    with the kernels ``k(u)·uᵃ`` (no difference of large numbers). ``ridge`` is a small weight on the terms of degree
+    above zero, relative to the observed weight: it makes the fall towards the plain mean continuous where the support
+    does not determine the polynomial, and does not touch the equation of the constant. ``support`` is the observed
+    share of the kernel (0…1); decide with it where the result is to be trusted.
+
+    The polynomial is solved only at observed pixels whose kernel an edge cuts, ``chunk`` pixels at a time; elsewhere
+    (and at pixels without data) the result is the plain mean of the observed neighbours. The means are exact
+    convolutions: :func:`normalized_gaussian` approximates Gaussians of 12 px or more on a decimated grid, so away
+    from every edge the two differ by that approximation (a few per cent of the spread of a residual at 64 px). With
+    masked pixels scattered all over the image every kernel is cut, and the fit costs as much as it can.
+    """
+    if order not in (0, 1, 2):
+        raise ValueError("order must be 0, 1 or 2")
+    kx = _kernel_powers(kernel, 2 * order); ky = kx if kernel_y is None else _kernel_powers(kernel_y, 2 * order)
+    m = np.asarray(valid, bool) & np.isfinite(img)
+    mf = m.astype(np.float64); iz = np.where(m, img, 0).astype(np.float64)
+    s00 = cv2.sepFilter2D(mf, cv2.CV_64F, kx[0], ky[0], borderType=cv2.BORDER_CONSTANT)
+    out = cv2.sepFilter2D(iz, cv2.CV_64F, kx[0], ky[0], borderType=cv2.BORDER_CONSTANT) / np.maximum(s00, 1e-12)
+    if order == 0:
+        return out, s00
+    exps = [(0, 0), (1, 0), (0, 1)] + ([(2, 0), (1, 1), (0, 2)] if order == 2 else [])
+    n = len(exps)
+    # Where the kernel is whole the answer is the plain mean, exactly (see above): the polynomial is solved only where
+    # an edge cuts the kernel, band by band, so the moments never fill the memory of a whole large canvas.
+    for sel, mom_m, mom_i in _cut_bands(mf, iz, s00, kx, ky, m):
+        t = [mom_i(*e) for e in exps]; cache = {}
+        for i in range(n):
+            for j in range(n):
+                e = (exps[i][0] + exps[j][0], exps[i][1] + exps[j][1])
+                if e not in cache:
+                    cache[e] = mom_m(*e)
+        step = max(int(chunk), 1)
+        for c0 in range(0, len(sel[0]), step):
+            c1 = min(len(sel[0]), c0 + step)
+            A = np.empty((c1 - c0, n, n)); b = np.stack([v[c0:c1] for v in t], 1)
+            for i in range(n):
+                for j in range(n):
+                    A[:, i, j] = cache[(exps[i][0] + exps[j][0], exps[i][1] + exps[j][1])][c0:c1]
+            w0 = np.maximum(A[:, 0, 0], 1e-12)
+            for i in range(1, n):
+                A[:, i, i] += ridge * w0
+            x = np.linalg.solve(A, b[..., None])[..., 0]
+            # mean of the polynomial over the whole kernel: a + c20·E[ux²] + c02·E[uy²] (both 1 in units of the
+            # kernel's own spread; the odd and the cross terms average to zero)
+            out[sel[0][c0:c1], sel[1][c0:c1]] = x[:, 0] + ((x[:, 3] + x[:, 5]) if order == 2 else 0)
+    return out, s00
+
+
+def _kernel_powers(kernel, top: int):
+    """The kernels ``k(u)·(u/s)ᵖ`` for p = 0…top, ``s`` the kernel's own spread: moments without large differences."""
+    k = np.asarray(kernel, np.float64); h = len(k) // 2; u = np.arange(-h, h + 1, dtype=np.float64)
+    sd = float(np.sqrt((k * u * u).sum())) or 1.0
+    return [k * (u / sd) ** p for p in range(top + 1)]
+
+
+def _cut_bands(mf, iz, s00, kx, ky, observed, rows: int = 512):
+    """Bands of rows that hold observed pixels whose kernel an edge cuts (observed share below 1). Yields, for each,
+    the index of those pixels and two functions that give a moment of the mask and of the image at them."""
+    H, W = mf.shape; hx, hy = len(kx[0]) // 2, len(ky[0]) // 2
+    cut = (s00 < 1 - 1e-7) & (s00 > 1e-9) & observed
+    for y0 in range(0, H, rows):
+        y1 = min(H, y0 + rows); c = cut[y0:y1]
+        if not c.any():
+            continue
+        cols = np.flatnonzero(c.any(0)); xa, xb = int(cols[0]), int(cols[-1]) + 1
+        Y0, Y1, X0, X1 = max(0, y0 - hy), min(H, y1 + hy), max(0, xa - hx), min(W, xb + hx)
+        sub_m = np.ascontiguousarray(mf[Y0:Y1, X0:X1]); sub_i = np.ascontiguousarray(iz[Y0:Y1, X0:X1])
+        pick = c[:, xa:xb]; inner = (slice(y0 - Y0, y1 - Y0), slice(xa - X0, xb - X0))
+        ys, xs = np.nonzero(pick)
+        at = lambda src, i, j: cv2.sepFilter2D(src, cv2.CV_64F, kx[i], ky[j], borderType=cv2.BORDER_CONSTANT)[inner][pick]
+        yield (ys + y0, xs + xa), (lambda i, j, src=sub_m: at(src, i, j)), (lambda i, j, src=sub_i: at(src, i, j))
+
+
+def _local_plane(img: np.ndarray, valid: np.ndarray, kernel) -> tuple[np.ndarray, np.ndarray]:
+    """The value at each pixel of the plane fitted, under the separable ``kernel``, to the observed pixels around it,
+    and the observed share of the kernel. :func:`local_fit` of order 1 without its ridge, solved in closed form (Cramer)
+    and falling back to the plain mean where the plane is not determined: the fit of the dense starlet as it ran on the
+    author's 2026 layers. Where the kernel is whole it is the plain mean."""
+    kp = _kernel_powers(kernel, 2)
+    mf = valid.astype(np.float64); iz = np.where(valid, img, 0).astype(np.float64)
+    s00 = cv2.sepFilter2D(mf, cv2.CV_64F, kp[0], kp[0], borderType=cv2.BORDER_CONSTANT)
+    out = cv2.sepFilter2D(iz, cv2.CV_64F, kp[0], kp[0], borderType=cv2.BORDER_CONSTANT) / np.maximum(s00, 1e-12)
+    for sel, mm, mi in _cut_bands(mf, iz, s00, kp, kp, np.asarray(valid, bool)):
+        s0, sx, sy, sxx, sxy, syy = mm(0, 0), mm(1, 0), mm(0, 1), mm(2, 0), mm(1, 1), mm(0, 2)
+        t0, tx, ty = mi(0, 0), mi(1, 0), mi(0, 1)
+        det = s0 * (sxx * syy - sxy * sxy) - sx * (sx * syy - sxy * sy) + sy * (sx * sxy - sxx * sy)
+        da = t0 * (sxx * syy - sxy * sxy) - sx * (tx * syy - sxy * ty) + sy * (tx * sxy - sxx * ty)
+        fine = det > 1e-6 * np.maximum(s0, 1e-12) ** 3
+        out[sel] = np.where(fine, da / np.where(fine, det, 1), t0 / np.maximum(s0, 1e-12))
+    return out, s00
+
+
+def normalized_gaussian_fit(img: np.ndarray, valid: np.ndarray | None, sigma: float, min_support: float = 0.25,
+                            order: int = 2) -> np.ndarray:
+    """:func:`normalized_gaussian` with the mean taken by :func:`local_fit` of degree ``order``: the exact Gaussian
+    mean where the kernel is whole (:func:`normalized_gaussian` approximates it from 12 px up), and no lean towards the
+    data side where an edge cuts it. ``NaN`` where the pixel has no data or the observed share of the kernel is below
+    ``min_support``."""
+    a = np.asarray(img, np.float32)
+    m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))
+    b, s0 = local_fit(np.where(m, a, 0), m, gaussian_kernel(float(sigma)), order)
+    return np.where(m & (s0 >= min_support), b, np.nan).astype(np.float32)
+
+
 # ------------------------------------------------------------------------------------------------
 # NRGF
 # ------------------------------------------------------------------------------------------------
@@ -132,12 +273,126 @@ def nrgf(img: np.ndarray, valid: np.ndarray | None, geometry: EclipseGeometry, *
                            spread_about=spread_about, partial_annuli=partial_annuli)
 
 
+def fnrgf(img: np.ndarray, valid: np.ndarray | None, geometry: EclipseGeometry, *, order: int = 6, bin_px: float = 2.0,
+          sectors: int = 72, min_count: int = 12, smooth_annuli: int = 17, angle_samples: int = 720,
+          return_info: bool = False):
+    """Fourier normalising-radial-graded filter (Druckmüllerová, Morgan & Habbal 2011), since 1.5.0:
+    ``(I − <I>(r, φ)) / σ(r, φ)``, with the mean and the spread of each annulus around the Sun as a Fourier series of
+    ``order`` in the angle, so that a bright streamer does not flatten the faint detail of the sector beside it as it
+    does in an NRGF.
+
+    Per annulus of ``bin_px`` and sector of 360/``sectors`` degrees, the mean and the standard deviation of the
+    observed pixels (cells with fewer than ``min_count`` are empty); a series of ``order`` fitted to each; the
+    coefficients smoothed along the radius (a parabola over ``smooth_annuli`` annuli, relative to the mean term);
+    the two curves evaluated at each pixel's radius and angle (bilinear in a table of ``angle_samples`` angles).
+    The spread is floored at a fifth of the annulus' mean spread.
+
+    **Annuli that the Moon or the frame cut are measured in chain** (as the NRGF of the filter bank). A short series
+    fitted to an arc is *not* the cut of the series: it swallows part of the structure, a different part in every
+    annulus, and the layer draws an arc at the first whole annulus. Inwards of the first whole annulus no series is
+    fitted to an incomplete one: only the *change* from one annulus to the next is measured — the ratio of the cell
+    means that both have, which is smooth and nearly constant — and fitted with the same series (leaning on "the shape
+    does not change" where there is no data). The curve of a cut annulus is that of the next one times that ratio; the
+    same for the spread. Outwards, an annulus the frame cuts is still fitted, leaning on the coefficients of the one
+    before. No pixel is invented: only the reference curves change. Needs at least one whole annulus, and a positive
+    mean in every annulus (linear brightness, not its logarithm). The cells are not scaled with the image: below about
+    70 px from the Sun's centre a cell of 5° × ``bin_px`` holds fewer than ``min_count`` pixels and gives no output, so
+    on an image with fewer than about 70 px per solar radius the inner corona comes out empty.
+
+    Returns the signed detail in units of the local spread (``NaN`` where there is no data or no curve); with
+    ``return_info``, also what was measured."""
+    from scipy.signal import savgol_filter
+    a = np.asarray(img, np.float32)
+    m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))
+    if a.shape != tuple(geometry.shape):
+        raise ValueError("image must match the geometry")
+    if not m.any():
+        raise ValueError("no observed pixels")
+    H, W = a.shape; N, NS, NA = int(order), int(sectors), int(angle_samples)
+    r = geometry.radius_map().astype(np.float32)
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    phi = np.arctan2(yy - geometry.sun_xy[1], xx - geometry.sun_xy[0]); del yy, xx
+    k = np.floor(r[m] / bin_px).astype(np.int64); sc = (np.floor((phi[m] + np.pi) / (2 * np.pi) * NS).astype(np.int64)) % NS
+    nr = int(k.max()) + 1; idx = k * NS + sc; v = a[m].astype(np.float64)
+    n = np.bincount(idx, minlength=nr * NS).reshape(nr, NS).astype(np.float64)
+    s1 = np.bincount(idx, weights=v, minlength=nr * NS).reshape(nr, NS); s2 = np.bincount(idx, weights=v * v, minlength=nr * NS).reshape(nr, NS)
+    okc = n >= min_count
+    mean = np.where(okc, s1 / np.maximum(n, 1), np.nan)
+    std = np.sqrt(np.maximum(np.where(okc, s2 / np.maximum(n, 1) - mean ** 2, np.nan), 0))
+    cov = okc.mean(1); ps = -np.pi + (np.arange(NS) + 0.5) * 2 * np.pi / NS
+    basis = lambda t: np.concatenate([np.ones((len(t), 1))] + [np.c_[np.cos(j * t), np.sin(j * t)] for j in range(1, N + 1)], 1)
+    A = basis(ps); AG = basis(-np.pi + (np.arange(NA) + 0.5) * 2 * np.pi / NA)
+    whole = np.flatnonzero(cov > 0.999)
+    if not len(whole):
+        raise ValueError("FNRGF needs at least one whole annulus around the Sun to anchor on (none has data at every angle)")
+    k0 = int(whole[0]); cm = np.full((nr, 2 * N + 1), np.nan); cs = np.full((nr, 2 * N + 1), np.nan)
+
+    def fit(y, w, prior, lam, free_mean=False):
+        Aw = A * w[:, None]; P = lam * np.eye(A.shape[1]); P[0, 0] = 0 if free_mean else lam
+        return np.linalg.solve(Aw.T @ A + P + 1e-12 * np.eye(A.shape[1]), Aw.T @ np.where(w > 0, y, 0) + P @ prior)
+    pm = psd = None
+    for kk in range(k0, nr):                                # outwards (the frame cuts annuli too)
+        w = okc[kk].astype(np.float64)
+        if w.sum() < 0.25 * NS:
+            continue
+        if pm is None:
+            pm, psd = np.zeros(2 * N + 1), np.zeros(2 * N + 1)
+        lam = 0.0 if cov[kk] > 0.999 else 0.5 * NS * (1 - cov[kk])
+        cm[kk] = fit(mean[kk], w, pm, lam); cs[kk] = fit(std[kk], w, psd, lam); pm, psd = cm[kk], cs[kk]
+    ok = np.isfinite(cm[:, 0]) & np.isfinite(cs[:, 0]) & (cm[:, 0] > 0) & (cs[:, 0] > 0)
+
+    def smooth(y, okk):
+        o = y.copy(); ix = np.flatnonzero(okk)
+        for run in np.split(ix, np.flatnonzero(np.diff(ix) != 1) + 1):
+            if len(run) > smooth_annuli:
+                o[run] = savgol_filter(y[run], smooth_annuli, 2, mode="interp")
+        return o
+    for c in (cm, cs):
+        a0 = c[:, 0].copy(); rel = c[:, 1:] / np.where(ok, a0, 1)[:, None]
+        la = smooth(np.where(ok, np.log(np.where(ok, a0, 1)), 0.0), ok)
+        for j in range(rel.shape[1]):
+            rel[:, j] = smooth(np.where(ok, rel[:, j], 0.0), ok)
+        c[:, 0] = np.where(ok, np.exp(la), np.nan); c[:, 1:] = np.where(ok[:, None], rel * c[:, [0]], np.nan)
+    FM = np.full((nr, NA), np.nan); FS = np.full((nr, NA), np.nan); T0 = np.full(nr, np.nan)
+    FM[ok] = cm[ok] @ AG.T; FS[ok] = cs[ok] @ AG.T; T0[ok] = cs[ok, 0]
+    e = np.zeros(2 * N + 1); chained = 0
+    for kk in range(k0 - 1, -1, -1):                        # inwards: the chain of ratios
+        both = okc[kk] & okc[kk + 1]
+        if both.sum() < 0.25 * NS or not np.isfinite(FM[kk + 1]).all():
+            break
+        w = both.astype(np.float64); lam = 0.5 * NS * (1 - both.mean())
+        with np.errstate(all="ignore"):
+            qm = np.where(both, mean[kk] / mean[kk + 1], 1.0); qs = np.where(both & (std[kk + 1] > 0), std[kk] / std[kk + 1], 1.0)
+        fm = fit(qm, w, e, lam, free_mean=True); fs = fit(qs, w, e, lam, free_mean=True)
+        gm, gs = AG @ fm, AG @ fs
+        if not ((gm > 0.2).all() and (gs > 0.2).all()):
+            break
+        FM[kk] = FM[kk + 1] * gm; FS[kk] = FS[kk + 1] * gs; T0[kk] = T0[kk + 1] * fs[0]; ok[kk] = True; chained += 1
+    nodes = (np.arange(nr) + 0.5) * bin_px; kv = np.flatnonzero(ok)
+    if not len(kv):
+        raise ValueError("FNRGF: no annulus could be fitted")
+    if not (np.diff(kv) == 1).all():
+        raise ValueError("FNRGF: there are annuli without a fit between fitted ones (a ring without data); this filter "
+                         "cannot bridge them")
+    out = np.full((H, W), np.nan, np.float32)
+    rr = r[m].astype(np.float64); u = np.clip((rr - nodes[kv[0]]) / bin_px, 0, len(kv) - 1)
+    ka = kv[0] + np.floor(u).astype(int); kb = np.minimum(ka + 1, kv[-1]); wr = u - np.floor(u)
+    ua = (phi[m].astype(np.float64) + np.pi) / (2 * np.pi) * NA - .5; ja = np.floor(ua).astype(int) % NA; jb = (ja + 1) % NA; wa = ua - np.floor(ua)
+    bil = lambda T: (1 - wr) * ((1 - wa) * T[ka, ja] + wa * T[ka, jb]) + wr * ((1 - wa) * T[kb, ja] + wa * T[kb, jb])
+    c = bil(FM); sd = bil(FS); floor = 0.2 * ((1 - wr) * T0[ka] + wr * T0[kb]); inside = (rr >= nodes[kv[0]]) & (rr <= nodes[kv[-1]])
+    out[m] = np.where(inside, (a[m] - c) / np.maximum(sd, floor), np.nan).astype(np.float32)
+    info = dict(method="FNRGF (Druckmüllerová, Morgan & Habbal 2011): Fourier series per annulus, cut annuli in chain",
+                order=N, bin_px=bin_px, sectors=NS, first_whole_annulus_px=float(nodes[k0]), chained_annuli=int(chained),
+                first_annulus_px=float(nodes[kv[0]]), smooth_annuli=int(smooth_annuli))
+    return (out, info) if return_info else out
+
+
 # ------------------------------------------------------------------------------------------------
 # MGN
 # ------------------------------------------------------------------------------------------------
 def mgn(img: np.ndarray, valid: np.ndarray | None = None, *, sigmas=(1.25, 2.5, 5, 10, 20, 40), k: float = 0.7,
         weights=None, h: float = 0.0, gamma: float = 3.2, global_image: np.ndarray | None = None,
-        a0: float | None = None, a1: float | None = None, min_support: float = 0.25):
+        a0: float | None = None, a1: float | None = None, min_support: float = 0.25, order: int = 0):
     """Multi-scale Gaussian normalisation (Morgan & Druckmüller 2014).
 
     Local part: for each scale, ``C = (I − B)/sqrt(G*(I − B)²)`` with ``B = G*I``, then ``arctan(k·C)``,
@@ -146,13 +401,29 @@ def mgn(img: np.ndarray, valid: np.ndarray | None = None, *, sigmas=(1.25, 2.5, 
     tone-mapped base instead.  Returns an image in radians-like units (local part in [−π/2, π/2]) if
     ``h == 0``.  The result does not depend on the units of the input (until 1.3.5 an absolute floor of 1e-12
     on the local spread changed it when the input was scaled by 1e-8; found by Francisco Bitto).
+
+    ``order`` (since 1.5.0; 0 = the plain Gaussian mean, as before): 1 or 2 takes ``B`` by :func:`local_fit` of that
+    degree. The input is raw luminance, which falls steeply away from the Moon: next to the edge of the data the plain
+    mean leans to the data side and the layer draws a bright halo along the limb (on the author's 2026 image a person
+    marked it; in the false-hole gate it was 2.1 spreads of the layer at 3–6 px with the plain mean, 1.2 with order 1
+    and 0.23 with order 2, for the local part, ``h = 0``). Away from every edge the three agree to within the
+    approximation the plain path makes for its Gaussians of 12 px or more. With ``h > 0`` the global term follows the
+    extremes of the observed data, and so does its sensitivity to a hole.
     """
     a = np.asarray(img, np.float32)
     m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))
     w = np.ones(len(sigmas)) if weights is None else np.asarray(weights, float)
     acc = np.zeros(a.shape, np.float32)
     for s, wi in zip(sigmas, w):
-        mu, sd = local_mean_std(a, m, s, min_support)
+        if order:
+            k1 = gaussian_kernel(float(s))
+            b, s0 = local_fit(a, m, k1, order)
+            hp = np.where(m, a - b, 0)
+            v = cv2.sepFilter2D((hp * hp).astype(np.float64), cv2.CV_64F, k1, k1, borderType=cv2.BORDER_CONSTANT) / np.maximum(s0, 1e-12)
+            mu = np.where(s0 >= min_support, b, np.nan).astype(np.float32)
+            sd = np.sqrt(np.maximum(v, 0)).astype(np.float32)
+        else:
+            mu, sd = local_mean_std(a, m, s, min_support)
         c = np.full(a.shape, np.nan, np.float32)    # no absolute floor: the result must not depend on the units
         np.divide(a - mu, sd, out=c, where=np.isfinite(mu) & (sd > 0))
         acc += wi * np.arctan(k * c).astype(np.float32)
@@ -226,7 +497,7 @@ def _atrous_pairs(c: np.ndarray, mf: np.ndarray, step: int):
 
 
 def starlet(img: np.ndarray, valid: np.ndarray | None, n_scales: int = 6, min_support: float = 0.2, *,
-            pairs: bool = False):
+            pairs: bool = False, kernel: str = "atrous"):
     """Masked isotropic undecimated wavelet (starlet, B3 spline) transform.
 
     Returns ``(details, coarse)`` where ``details[j]`` is scale ``j+1`` (``2**j`` px holes).  With a
@@ -235,7 +506,26 @@ def starlet(img: np.ndarray, valid: np.ndarray | None, n_scales: int = 6, min_su
     the valid pixels (exact reconstruction).  With ``pairs=True`` (since 1.3.4) each smoothing uses
     symmetric observed pairs only: next to an edge of the data a one-sided kernel would tilt every
     coefficient towards the side that has data.
+
+    ``kernel='dense'`` (since 1.5.0; ``pairs`` is then not used): every smoothed plane is computed straight from the
+    image with the *dense* kernel of its scale (the cascade of à-trous steps 1, 2, …, 2ʲ convolved together) and a
+    local plane fitted to the observed pixels (as :func:`local_fit` of order 1). Away from every edge it is the same
+    transform. Next to an irregular edge it does not depend on which of the sparse à-trous taps fall in the hole: with
+    a protected core cut to the pixel, each tap that fell in it made the coefficient jump, and a whitened layer showed
+    rows of dots at 8, 16 and 32 px from the edge.
     """
+    if kernel not in ("atrous", "dense"):
+        raise ValueError("kernel must be 'atrous' or 'dense'")
+    if kernel == "dense":
+        a = np.asarray(img, np.float32)
+        m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))
+        b3 = np.asarray(_B3, np.float64); k = np.array([1.0]); c = np.where(m, a, 0).astype(np.float64); details = []
+        for j in range(n_scales):
+            d = np.zeros(4 * 2 ** j + 1); d[::2 ** j] = b3; k = np.convolve(k, d)       # dense kernel of scale j + 1
+            plane, s0 = _local_plane(a, m, k)
+            c_next = np.where(s0 > min_support, plane, c)                              # thin support: detail 0
+            details.append(np.where(m, c - c_next, np.nan).astype(np.float32)); c = np.where(m, c_next, 0)
+        return details, np.where(m, c, np.nan).astype(np.float32)
     a = np.asarray(img, np.float32)
     m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))
     mf = m.astype(np.float32)
@@ -257,13 +547,13 @@ def starlet(img: np.ndarray, valid: np.ndarray | None, n_scales: int = 6, min_su
     return details, coarse
 
 
-def noise_map(img: np.ndarray, valid: np.ndarray | None, sigma: float = 6.0) -> np.ndarray:
+def noise_map(img: np.ndarray, valid: np.ndarray | None, sigma: float = 6.0, *, kernel: str = "atrous") -> np.ndarray:
     """Local standard deviation of the white noise, estimated from the finest starlet scale.
 
     Assumes the optical PSF is at least ~2 px FWHM, so that the finest scale is mostly noise (true for
     well-sampled eclipse data).  Returns a map in the units of ``img``.
     """
-    d, _ = starlet(img, valid, n_scales=1)
+    d, _ = starlet(img, valid, n_scales=1, kernel=kernel)
     w1 = d[0]
     ok = np.isfinite(w1)
     p = normalized_gaussian(np.where(ok, w1 * w1, np.nan), ok, sigma)
@@ -271,7 +561,7 @@ def noise_map(img: np.ndarray, valid: np.ndarray | None, sigma: float = 6.0) -> 
 
 
 def noise_factors(img: np.ndarray, valid: np.ndarray | None, region: np.ndarray, n_scales: int = 8,
-                  trusted_scales: int = 4, decay: float = 0.5, margin: int = 64) -> np.ndarray:
+                  trusted_scales: int = 4, decay: float = 0.5, margin: int = 64, *, kernel: str = "atrous") -> np.ndarray:
     """Empirical noise of each starlet scale relative to the pixel noise, measured in ``region``
     (a boolean mask where the noise dominates, e.g. the far field).
 
@@ -284,7 +574,7 @@ def noise_factors(img: np.ndarray, valid: np.ndarray | None, region: np.ndarray,
     """
     a = np.asarray(img, np.float32)
     m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))
-    d, _ = starlet(a, m, n_scales=min(n_scales, trusted_scales))
+    d, _ = starlet(a, m, n_scales=min(n_scales, trusted_scales), kernel=kernel)
     reg = region.astype(bool) & m
     if margin > 0:
         import cv2 as _cv2
@@ -417,7 +707,7 @@ def hessian_eigen(hxx, hxy, hyy):
 
 
 def ridge_weight(img: np.ndarray, valid: np.ndarray | None, *, sigmas=(1.5, 3.0, 6.0), beta: float = 0.5,
-                 strength: float = 1.0, index=None):
+                 strength: float = 1.0, index=None, fit_order: int = 0):
     """Curvilinear-structure weight in [0, 1] (Frangi, Niessen, Vincken & Viergever 1998, the 'vesselness' of the
     scale-normalised Hessian), the maximum over ``sigmas``.
 
@@ -426,6 +716,8 @@ def ridge_weight(img: np.ndarray, valid: np.ndarray | None, *, sigmas=(1.5, 3.0,
     structures of the corona.  ``c`` is measured, ``strength`` times the median ``S`` of the observed pixels at
     that scale, so the weight does not depend on the units.  A weight never adds anything: multiplied into a
     detail layer it keeps elongated structure (rays, loops, cavity edges at any angle) and lowers isotropic grain.
+    ``fit_order`` (since 1.5.0): 1 or 2 smooths with :func:`normalized_gaussian_fit` instead of the plain mean, so
+    that the weight leans less on an edge of the data.
     """
     a = np.asarray(img, np.float32)
     m = np.isfinite(a) if valid is None else (valid.astype(bool) & np.isfinite(a))
@@ -433,7 +725,8 @@ def ridge_weight(img: np.ndarray, valid: np.ndarray | None, *, sigmas=(1.5, 3.0,
     best = np.zeros(a.shape, np.float32)
     used = []
     for s in sigmas:
-        sm = normalized_gaussian(a, m, s, min_support=0.01)
+        sm = (normalized_gaussian_fit(a, m, s, min_support=0.01, order=fit_order) if fit_order
+              else normalized_gaussian(a, m, s, min_support=0.01))
         ok = m & np.isfinite(sm)
         hxx, hxy, hyy = (s * s * h for h in hessian(_filled(np.where(ok, sm, 0), ok, index)))
         big, small = hessian_eigen(hxx, hxy, hyy)

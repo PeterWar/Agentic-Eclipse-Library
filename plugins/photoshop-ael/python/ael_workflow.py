@@ -527,6 +527,12 @@ def run_filters(cfg: dict, progress=None) -> dict:
         recipe["white_balance"] = cfg["white_balance"]
     if cfg.get("camera_to_linear_rgb") is not None:
         recipe["camera_to_linear_rgb"] = cfg["camera_to_linear_rgb"]
+    if hasattr(develop, "EDGES"):
+        # AEL 1.5.0 gives its filter step an inner limit and operators that lean less on the edges of the data.
+        # The connectors keep the operators of 1.4.2 (the inner limit has not been tried inside the two programs);
+        # the NRGF carries its corrected chain.
+        recipe["inner_limit"] = cfg.get("inner_limit", False)
+        recipe["edges"] = cfg.get("edges", "classic")
     recipe_path = out / "filters_recipe.json"
     recipe_path.write_text(json.dumps(recipe, indent=1, ensure_ascii=False), encoding="utf-8")
     product = out / "ael"

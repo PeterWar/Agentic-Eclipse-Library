@@ -236,7 +236,10 @@ validate the author's own chain.
   and check the highlights after converting; the lunar support must belong to the source and instant that
   observed it, without moving anyone's manual geometry. The package does not reconstruct lunar relief.
 
-**Reproduced in the package and not fixed yet**
+**Reproduced in the package and not fixed yet** (state in 1.5.0: for the lunar limb the bands of the isotropic ACHF
+are several times weaker — its radial profile is measured in chain over the annuli the Moon cuts and its means are
+local fits, see [`INNER_LIMIT.md`](INNER_LIMIT.md); the bands of both WOW layers, and those along a straight coverage
+or frame edge, remain)
 
 - *Bands along the edges of the data in ACHF and WOW*
   ([issue #3](https://github.com/PeterWar/Agentic-Eclipse-Library/issues/3)). With a smooth
@@ -347,6 +350,56 @@ His photographs are not public; his numbers cannot be reproduced from this repos
   weights, most of the inversion goes; the rest of it, in the worst sectors, is still open.
 - A default is also a decision. In 1.3.5 the author chose the edge-aware WOW for its clean limb, although it fails the
   worst sector of the gate, and the release says so.
+
+## The inner limit of the filters (1.5.0)
+
+The figures and the method are in [`INNER_LIMIT.md`](INNER_LIMIT.md). The lessons, for whoever meets the same thing:
+
+- **Every filter needs an inner limit, and it must be one.** When each operator kept its own rule at the limb (a
+  protected band of fixed width, a fade, a mean taken out along the arc), each layer started at a different place,
+  25 to 47 px from the limb depending on the layer, and the author saw the difference at once. One map for all, and
+  no operator with a rule of its own.
+- **Protect by what the pixel is, never by distance.** A band of fixed width protects corona and misses a prominence
+  that reaches further. Colour tells emission from corona; brightness against the trend of the same angle tells the
+  white rim of the limb.
+- **A written rule does not protect.** "No zone by fixed distance" was written down, and three hours later the map
+  had 9 px of margin; the gate of the day passed it whole, and the author found it with a mark on a pocket
+  of corona inside a prominence arch. What protects is code, a gate that fails closed, and a scene with the truth
+  known for the mistake the gate cannot see (a core that is too large).
+- **A threshold that detects is not a boundary.** Five sigma of colour is a fine detector and a poor frontier: the
+  haze around a prominence passes it while the pixel is 95 % corona. Clean the haze out of the filters' input and put
+  the frontier where the foreign light weighs.
+- **No operator should see what it must not touch.** A bead was the maximum of the data and set the global term of
+  the MGN; masking the output was not enough.
+- **Test the operator, not the image.** No measure of the image separated the bands a person had marked from the
+  rest (one gave the opposite). Pretending the hole is larger and running the operator twice reproduced what he had marked.
+  After the gate, look at the real layer: the false hole has a smooth edge.
+- **A cure must be the old layer away from the edge.** Two candidates improved the gate and were other filters
+  (correlation 0.2–0.8 with the layer they meant to cure). Say "practically the same, with these figures", not
+  "identical", unless the receipt says so.
+- **Check the cost of a check before calling it hours.** For three days the bright rim along the limb was "probably
+  the stack, not verified: it would take hours". The stack takes two minutes, and the answer had been written six
+  weeks earlier in the project's own notes: below 2–3 px from the real limb there is no corona to recover in those
+  data.
+
+## Capture checks from a short exposure ramp (Eduardo Piñas, issue #12)
+
+Reported on a ramp of six SER sequences of the 2026 eclipse (a one-shot-colour camera, no dithering, no calibration
+frames), converted to FITS with Siril and processed with AEL 1.4.2:
+
+- **A debayered file can still hold the mosaic.** In those FITS (Siril 1.4.4) the sample of each colour at its own
+  Bayer site is the untouched raw value. Stacked as `rgb`, the demosaicing pattern adds up coherently (power at Nyquist about 10³ above
+  the background in one frame, 10⁴ in the stack) and the WOW and ACHF layers show a regular 2 px crosshatch. Stacked
+  as `bayer`, with the pattern of the flipped file (RGGB in the SER, GBRG in the FITS), the crosshatch goes.
+- **The first frame of each sequence can carry the previous exposure.** Its level matched the sequence before (and
+  the first two frames of the first sequence carried light of the setting before it); the other frames matched their
+  nominal exposure (ratios between consecutive series 1.99–2.00, and 2.05 for 33/16 ms). Check levels frame by frame.
+- **Row noise that changes from frame to frame** (uncorrelated between series, so a master dark would not remove it)
+  leaves horizontal bands in the sky that WOW amplifies. Subtracting only the high-frequency part of each row's
+  offset, measured on the sky at both ends of the row, lowered the row rms of the sky from 2.65 to 1.50 DN/s and
+  changed the corona at 1.05–3 R☉ by 0.02 % (median). No independent control was available.
+
+These are one user's measurements on one data set; the library does not do any of the three by itself.
 
 ## Deliver and describe the actual file
 

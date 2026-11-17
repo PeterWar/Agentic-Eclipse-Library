@@ -330,7 +330,8 @@ def test_recipe_makes_the_new_layers_hidden_with_their_opacities_and_keeps_a_pro
         root = Path(tmp)
         np.save(root / 'input.npy', rgb); g.to_json(root / 'geometry.json')
         cfg = dict(input='input.npy', geometry='geometry.json', display=dict(scale=1000, asinh=20),
-                   filters=['nrgf', 'nafe', 'swap', 'larson_sekanina_1'], moon_margin_px=0)
+                   filters=['nrgf', 'nafe', 'swap', 'larson_sekanina_1'], moon_margin_px=0,
+                   inner_limit=False)       # 1.4.2's behaviour; with the inner limit of 1.5.0 the knot leaves every layer
         (root / 'filters.json').write_text(json.dumps(cfg))
         result = filters_from_config(root / 'filters.json', root / 'out', progress=lambda *_: None)
         rec = json.loads(Path(result['receipt']).read_text())
@@ -344,3 +345,9 @@ def test_recipe_makes_the_new_layers_hidden_with_their_opacities_and_keeps_a_pro
         ls = np.load(root / 'out' / 'larson_sekanina_1_layer.npy'); nafe = np.load(root / 'out' / 'nafe_layer.npy')
         assert np.isnan(ls[blob]).all() and np.isfinite(nafe[blob & m]).all()
         assert rec['gates']['nothing_outside_data']
+        # since 1.5.0, by default: the red knot is in the core of the inner limit and no layer covers it
+        (root / 'inner.json').write_text(json.dumps({k: v for k, v in cfg.items() if k != 'inner_limit'}))
+        inner = filters_from_config(root / 'inner.json', root / 'inner', progress=lambda *_: None)
+        core = np.load(root / 'inner' / 'inner_limit_core.npy')
+        assert inner['inner_limit']['used'] and core[blob & m].mean() > .8
+        assert np.isnan(np.load(root / 'inner' / 'nafe_layer.npy')[core]).all()

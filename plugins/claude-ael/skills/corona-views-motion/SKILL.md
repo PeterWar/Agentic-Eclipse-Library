@@ -5,7 +5,7 @@ description: Make full-canvas corona structure displays, unrolled polar views an
 
 # Corona views and motion
 
-Read [setup and operating instructions](../../docs/USAGE.md) before running AEL. This plugin holds instructions only: run the AEL 1.4.2 engine installed and checked as that guide describes. Respond in the user's language. Work on user-selected inputs and write new output directories.
+Read [setup and operating instructions](../../docs/USAGE.md) before running AEL. This plugin holds instructions only: run the AEL 1.5.0 engine installed and checked as that guide describes. Respond in the user's language. Work on user-selected inputs and write new output directories.
 
 Read [the runnable package guide](../../docs/README_AEL.md) and the docstrings of the installed `ael` package for API parameters. Run `selftest` before the first analysis.
 

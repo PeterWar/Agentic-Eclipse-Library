@@ -1,7 +1,7 @@
 # Setup and operation
 
 This plugin holds instructions, recipe templates and documentation only. The numerical work is done by the
-AEL 1.4.2 Python package, installed in the user's Python environment from the project's GitHub release.
+AEL 1.5.0 Python package, installed in the user's Python environment from the project's GitHub release.
 Resolve user input and output paths against the user's workspace, not the plugin's installation directory.
 
 ## Choose Python and check what is installed
@@ -20,28 +20,28 @@ PYTHON -c "import importlib.util as u, sys; print(sys.version.split()[0], {m: u.
 PYTHON -c "import importlib.metadata as md; print(md.version('agentic-eclipse-library'))"
 ```
 
-These instructions were checked against AEL 1.4.2. If another version is installed, tell the user which one
+These instructions were checked against AEL 1.5.0. If another version is installed, tell the user which one
 and ask before replacing it; do not mix these instructions with another version's defaults.
 
 ## Install the engine, only with the user's approval
 
 Before installing, tell the user what will be downloaded and from where, and wait for their approval:
 
-- the AEL 1.4.2 wheel (about 250 KB) from the project's GitHub release, which pip checks against the SHA-256
+- the AEL 1.5.0 wheel (about 300 KB) from the project's GitHub release, which pip checks against the SHA-256
   fingerprint written below;
 - its dependencies, normally from PyPI: numpy ≥ 1.24, scipy ≥ 1.10, opencv-python-headless ≥ 4.8, pillow ≥ 9,
   tifffile ≥ 2023.1 and imageio ≥ 2.30; the `raw` extra adds rawpy ≥ 0.19 and astropy ≥ 5 for RAW and FITS
   frames, and `photoshop` adds psd-tools ≥ 1.18 for layered Photoshop files.
 
 ```
-PYTHON -m pip install "agentic-eclipse-library[raw,photoshop] @ https://github.com/PeterWar/Agentic-Eclipse-Library/releases/download/v1.4.2/agentic_eclipse_library-1.4.2-py3-none-any.whl#sha256=a86e0e75c01a8bbc59173c03d82afbeda68bbab0a73de326c4a3ca7223007e25"
+PYTHON -m pip install "agentic-eclipse-library[raw,photoshop] @ https://github.com/PeterWar/Agentic-Eclipse-Library/releases/download/v1.5.0/agentic_eclipse_library-1.5.0-py3-none-any.whl#sha256=88d9aed00cf37558842fb6c6cbe7af85c0863b24a0ee7bc4dded77cae11dce1a"
 ```
 
 Choose only the extras needed; with none, the requirement starts `agentic-eclipse-library @`. Run the command
 first with `--dry-run` added: if pip would upgrade or replace a package already in the environment, or if
 `opencv-python` is installed (two copies of `cv2` conflict), tell the user and ask before going on. pip refuses
 the file if its fingerprint differs: report that and stop, never remove or edit the `#sha256=` part to get past
-it. The release page lists the same fingerprint in `SHA256SUMS`: https://github.com/PeterWar/Agentic-Eclipse-Library/releases/tag/v1.4.2. Do not upgrade unrelated
+it. The release page lists the same fingerprint in `SHA256SUMS`: https://github.com/PeterWar/Agentic-Eclipse-Library/releases/tag/v1.5.0. Do not upgrade unrelated
 packages silently.
 
 After installing, check from the user's workspace that the installed package is the one imported. Its path must

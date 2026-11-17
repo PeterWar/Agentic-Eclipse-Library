@@ -457,3 +457,85 @@ def test_extinction_command_sky_forms_and_refusals_before_writing():
         (td / "taken" / "keep.txt").write_text("x")
         _raises(FileExistsError, lambda: ex.extinction_from_config(td / "ext0.json", td / "taken"))
         assert [p.name for p in (td / "taken").iterdir()] == ["keep.txt"]
+
+
+def test_pedestal_returns_a_flat_background_and_refuses_a_map():
+    """Since 1.5.0: after the correction, a constant level instead of the sky itself (a uniform background)."""
+    g = _geo()
+    X, x_ref, E, r, valid = _scene(g)
+    C = _structured_corona(g)[..., None] * np.array([1.3, 1.0, 0.55])
+    S = np.stack([_sky_plane(g, lv) for lv in (300.0, 400.0, 250.0)], -1)
+    I = C / E[..., None] + S
+    level = np.array([310.0, 405.0, 260.0])
+    bare = ex.correct_extinction(I, X, K, x_ref=x_ref, sky=S, valid=valid)
+    flat = ex.correct_extinction(I, X, K, x_ref=x_ref, sky=S, valid=valid, pedestal=level)
+    ok = valid & (r >= 1.1)
+    assert np.allclose(flat[ok] - level, bare[ok], rtol=1e-5, atol=1e-3)
+    assert np.isnan(flat[~valid]).all()                         # the level is not painted where there is no data
+    far = valid & (r > 9.0)                                     # where the corona is gone, the background is uniform:
+    kept = ex.correct_extinction(I, X, K, x_ref=x_ref, sky=S, valid=valid, keep_sky=True)
+    yy, xx = np.mgrid[0:g.shape[0], 0:g.shape[1]]
+    A = np.c_[np.ones(far.sum()), xx[far], yy[far]]
+    slope = lambda img: np.linalg.lstsq(A, img[far][:, 1].astype(np.float64), rcond=None)[0][1:]
+    sky_slope = np.array([30.0 / g.shape[1], -50.0 / g.shape[0]])
+    assert np.linalg.norm(slope(kept) - sky_slope) < 0.1 * np.linalg.norm(sky_slope)    # the sky plane keeps its gradient
+    assert np.linalg.norm(slope(flat)) < 0.1 * np.linalg.norm(sky_slope)                # the level has none
+    one = ex.correct_extinction(I[..., 1], X, K, x_ref=x_ref, sky=S[..., 1], valid=valid, pedestal=405.0)
+    assert np.allclose(one[ok], flat[ok][:, 1], rtol=1e-6, atol=1e-3)
+    _raises(ValueError, lambda: ex.correct_extinction(I, X, K, x_ref=x_ref, sky=S, pedestal=level, keep_sky=True))
+    _raises(ValueError, lambda: ex.correct_extinction(I, X, K, x_ref=x_ref, sky=S, pedestal=S))
+    _raises(ValueError, lambda: ex.correct_extinction(I, X, K, x_ref=x_ref, sky=S, pedestal=[1.0, 2.0]))
+
+
+def test_true_sky_offsets_are_refracted_point_by_point():
+    """Since 1.5.0.  A plate fitted on stars gives true sky offsets; treating them as apparent ones misses the
+    differential refraction (about 1 % of the vertical offset with the Sun at 9°).  The true route is checked
+    against an independent construction: gnomonic offsets about the Sun's TRUE place in horizontal
+    coordinates, then astropy's refraction on each altitude."""
+    try:
+        import astropy.units as u
+        from astropy.coordinates import SkyCoord
+    except ImportError:
+        return                                                  # the route needs astropy; nothing to test without it
+    from astropy.utils import iers
+    # as in the solar-route test: the date is inside the IERS tables bundled with astropy; no download is attempted
+    with iers.conf.set_temp('auto_download', False), iers.conf.set_temp('auto_max_age', None):
+        site = ex.Site(lat_deg=42.299407, lon_deg=-5.02503, height_m=798.0, pressure_hpa=930.0, temperature_c=20.0)
+        when = "2026-08-12T18:29:34"
+        sol = ex.solar_horizontal(site, when)
+        scale = 30.0                                                # arcsec per pixel: ±1.7° of sky above and below the Sun
+        g = EclipseGeometry((401, 601), (300.0, 200.0), 946.66 / scale, north_deg=20.0, arcsec_per_px=scale)
+        Xa, ia = ex.airmass_map_from_site(g, site, when)
+        Xt, it = ex.airmass_map_from_site(g, site, when, offsets="true", step_px=32)
+        assert ia["offsets"] == "apparent" and it["offsets"] == "true" and it["spline_max_error_deg"] < 2e-6, it
+        assert abs(Xa[200, 300] - sol["airmass"]) < 1e-9 and abs(Xt[200, 300] - sol["airmass"]) < 1e-6   # the Sun itself
+        # independent construction of the true route at scattered pixels
+        frame = ex._altaz_frame(site, when, True)[0]
+        bare = ex._altaz_frame(site, when, False)[0]
+        n = np.array(direction_of_pa(0.0, g.north_deg, g.mirrored)) / scale
+        e = np.array(direction_of_pa(90.0, g.north_deg, g.mirrored)) / scale
+        minv = np.linalg.inv(np.array([[n[0], e[0]], [n[1], e[1]]]))
+        q = math.radians(sol["zenith_pa_deg"])
+        h0 = math.radians(sol["true_altitude_deg"])
+        rng = np.random.default_rng(3)
+        px, py = rng.uniform(0, 600, 60), rng.uniform(0, 400, 60)
+        nn = (minv[0, 0] * (px - 300.0) + minv[0, 1] * (py - 200.0)) * ex.ARCSEC
+        ee = (minv[1, 0] * (px - 300.0) + minv[1, 1] * (py - 200.0)) * ex.ARCSEC
+        xi, eta = nn * math.cos(q) + ee * math.sin(q), -nn * math.sin(q) + ee * math.cos(q)
+        den = np.sqrt(1 + xi * xi + eta * eta)
+        alt_true = np.degrees(np.arcsin((math.sin(h0) + xi * math.cos(h0)) / den))
+        az = sol["azimuth_deg"] + np.degrees(np.arctan2(eta, math.cos(h0) - xi * math.sin(h0)))
+        seen = SkyCoord(alt=alt_true * u.deg, az=az * u.deg, frame=bare).icrs.transform_to(frame).alt.deg
+        got = Xt[np.round(py).astype(int), np.round(px).astype(int)]
+        want = ex.kasten_young(np.asarray(seen))
+        slope = np.abs(np.gradient(Xt.astype(np.float64), axis=0)).max()          # half a pixel of rounding, in air mass
+        assert np.max(np.abs(got - want)) < 0.5 * slope + 2e-4, np.max(np.abs(got - want))
+        # the size and the sign of what the apparent route misses: above the Sun the true direction is seen lower
+        up, dn = (20, 300), (380, 300)
+        da_up = math.degrees(math.atan(180 * scale * ex.ARCSEC))                  # 1.5° on the image
+        alt = lambda Xm, p: float(np.interp(-Xm[p], -ex.kasten_young(np.linspace(5, 13, 4001)), np.linspace(5, 13, 4001)))
+        miss_up = alt(Xa, up) - alt(Xt, up)
+        miss_dn = alt(Xt, dn) - alt(Xa, dn)
+        assert 0.004 * da_up < miss_up < 0.02 * da_up and 0.004 * da_up < miss_dn < 0.03 * da_up, (miss_up, miss_dn, da_up)
+        assert Xt[up] > Xa[up] and Xt[dn] < Xa[dn]
+        _raises(ValueError, lambda: ex.airmass_map_from_site(g, site, when, offsets="plate"))

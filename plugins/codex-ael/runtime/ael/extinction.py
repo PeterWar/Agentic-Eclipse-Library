@@ -243,15 +243,83 @@ def airmass_map(geometry: EclipseGeometry, sun_altitude_deg: float, *, zenith_pa
     return out
 
 
+def _true_sky_altitude(geometry: EclipseGeometry, site: Site, time_utc: str, north_px, east_px, arcsec_per_px,
+                       step_px: int, check_points: int, seed: int):
+    """Apparent altitude (degrees) of every pixel when the image vectors map pixels to **true** sky offsets.
+
+    A plate fitted on catalogue star positions takes a pixel to where that direction is on the sky, not to
+    where the atmosphere shows it.  Each node of a grid (``step_px``) is taken to its true direction — an
+    offset on the sphere from the Sun's true place, by the gnomonic separation and the position angle
+    counted from the zenith's — and then refracted with astropy, point by point; the altitude is
+    interpolated with a bicubic spline and checked against the exact transformation at ``check_points``
+    random pixels.  The offsets are made in the horizontal frame itself, so the Sun's gravitational light
+    deflection (which astropy applies to catalogue directions, 1.75″ at the limb) does not enter.
+    """
+    from scipy.interpolate import RectBivariateSpline
+
+    u, _, _, SkyCoord, _, _ = _astropy()
+    minv = np.linalg.inv(_sky_axes(geometry, north_px, east_px, arcsec_per_px))
+    frame, _, _ = _altaz_frame(site, time_utc, True)
+    true_frame = _altaz_frame(site, time_utc, False)[0]
+    sol = solar_horizontal(site, time_utc)
+    sun = SkyCoord(alt=sol["true_altitude_deg"] * u.deg, az=sol["azimuth_deg"] * u.deg, frame=true_frame)
+    zpa = math.radians(sol["zenith_pa_deg"])
+    sx, sy = geometry.sun_xy
+    h, w = geometry.shape
+
+    def alt_of(x, y):
+        dx, dy = np.asarray(x, np.float64) - sx, np.asarray(y, np.float64) - sy
+        n = (minv[0, 0] * dx + minv[0, 1] * dy) * ARCSEC
+        e = (minv[1, 0] * dx + minv[1, 1] * dy) * ARCSEC
+        # angle from the zenith's direction; its sense does not matter for an altitude (a mirror about the vertical)
+        there = sun.directional_offset_by((np.arctan2(e, n) - zpa) * u.rad, np.arctan(np.hypot(n, e)) * u.rad)
+        seen = SkyCoord(alt=there.alt, az=there.az, frame=true_frame).transform_to(frame)
+        return np.asarray(seen.alt.deg, np.float64)
+
+    rows = np.unique(np.r_[np.arange(0, h, step_px), h - 1]).astype(np.float64)
+    cols = np.unique(np.r_[np.arange(0, w, step_px), w - 1]).astype(np.float64)
+    yy, xx = np.meshgrid(rows, cols, indexing="ij")
+    grid = alt_of(xx.ravel(), yy.ravel()).reshape(yy.shape)
+    spline = RectBivariateSpline(rows, cols, grid, kx=min(3, len(rows) - 1), ky=min(3, len(cols) - 1))
+    alt = spline(np.arange(h, dtype=np.float64), np.arange(w, dtype=np.float64), grid=True)
+    rng = np.random.default_rng(seed)
+    px, py = rng.uniform(0, w - 1, check_points), rng.uniform(0, h - 1, check_points)
+    err = float(np.max(np.abs(spline.ev(py, px) - alt_of(px, py))))
+    return alt, dict(step_px=int(step_px), spline_max_error_deg=err)
+
+
 def airmass_map_from_site(geometry: EclipseGeometry, site: Site, time_utc: str, *, north_px=None, east_px=None,
-                          arcsec_per_px: float | None = None, dtype=np.float64):
+                          arcsec_per_px: float | None = None, dtype=np.float64, offsets: str = "apparent",
+                          step_px: int = 64, check_points: int = 200, seed: int = 0):
     """Air mass of every pixel from the site and the time: the Sun's apparent altitude and the zenith's
     position angle come from astropy (:func:`solar_horizontal`), the projection on the image from the
-    geometry (celestial north and plate scale) or from ``north_px``/``east_px``.  Returns ``(X, info)``."""
+    geometry (celestial north and plate scale) or from ``north_px``/``east_px``.  Returns ``(X, info)``.
+
+    ``offsets`` says what the image vectors measure:
+
+    * ``"apparent"`` (default): offsets on the sky as the camera saw it — a scale from the optics or the
+      ephemeris, a direction from a level mount.  One gnomonic projection about the Sun's apparent place.
+    * ``"true"`` (since 1.5.0): offsets between catalogue directions — ``north_px``/``east_px`` or a scale and
+      a north angle **fitted on stars**.  Each pixel is taken to its true direction and refracted point by
+      point (grid of ``step_px``, bicubic spline, checked at ``check_points`` random pixels).  With a low
+      Sun the two differ by the differential refraction: about 1 % of the vertical offset at 9° altitude,
+      0.03 in air mass at the corners of a 6° field, 1 % in the extinction factor there.  It is the same
+      route as :func:`airmass_map_from_wcs`, without needing a WCS object.
+    """
+    if offsets not in ("apparent", "true"):
+        raise ValueError("offsets is 'apparent' or 'true'")
     info = solar_horizontal(site, time_utc)
+    if offsets == "true":
+        alt, tinfo = _true_sky_altitude(geometry, site, time_utc, north_px, east_px, arcsec_per_px, step_px,
+                                        check_points, seed)
+        X = kasten_young(alt)
+        info = dict(info, method="true sky offsets from the Sun, refracted point by point (astropy), bicubic spline",
+                    offsets="true", airmass_at_sun=info["airmass"], **tinfo)
+        return (X if np.dtype(dtype) == np.float64 else X.astype(dtype)), info
     X = airmass_map(geometry, info["apparent_altitude_deg"], zenith_pa_deg=info["zenith_pa_deg"],
                     north_px=north_px, east_px=east_px, arcsec_per_px=arcsec_per_px, dtype=dtype)
-    info = dict(info, method="astropy Sun + gnomonic projection on the image", airmass_at_sun=info["airmass"])
+    info = dict(info, method="astropy Sun + gnomonic projection on the image", offsets="apparent",
+                airmass_at_sun=info["airmass"])
     return X, info
 
 
@@ -354,7 +422,7 @@ def _sky_for(sky, shape) -> tuple[np.ndarray, bool]:
 
 
 def correct_extinction(image, airmass, k, *, x_ref: float, sky, valid=None, keep_sky: bool = False,
-                       block_rows: int = 512) -> np.ndarray:
+                       pedestal=None, block_rows: int = 512) -> np.ndarray:
     """Differential-extinction correction of a **linear** image: ``(image − sky)·10^(0.4·k·(X − x_ref))``.
 
     * ``image``: (H, W) or (H, W, C) linear data, sky included.
@@ -363,6 +431,10 @@ def correct_extinction(image, airmass, k, *, x_ref: float, sky, valid=None, keep
     * ``k``: mag per air mass, one value (achromatic: colour ratios unchanged) or one per channel.
     * ``x_ref``: the reference air mass — at the Sun, or where a photometric zero point was evaluated.
     * ``keep_sky``: add the same sky back after the correction (for display pipelines that expect it).
+    * ``pedestal`` (since 1.5.0): add a **constant** level back instead — a scalar or one value per channel,
+      for example the sky at the Sun's centre.  A display pipeline then gets the level and the colour of the
+      sky it expects on a uniform background, without the gradient of the atmosphere (a sky plane left in the
+      image is what ring-normalising filters turn into dark and bright zones).  Not together with ``keep_sky``.
 
     Returns float32 with ``NaN`` wherever there is no data (``valid`` False, non-finite input, line of sight
     below the horizon).  Nothing is filled.  Computed in float64 by blocks of rows.
@@ -376,6 +448,13 @@ def correct_extinction(image, airmass, k, *, x_ref: float, sky, valid=None, keep
     channels = a.shape[2] if a.ndim == 3 else None
     kk = _k_vector(k, channels)
     S, per_pixel = _sky_for(sky, a.shape)
+    P = 0.0
+    if pedestal is not None:
+        if keep_sky:
+            raise ValueError("give keep_sky or pedestal, not both")
+        P, ped_per_pixel = _sky_for(pedestal, a.shape)
+        if ped_per_pixel:
+            raise ValueError("pedestal is a constant: a scalar or one value per channel")
     v = None
     if valid is not None:
         v = np.asarray(valid, bool)
@@ -390,7 +469,7 @@ def correct_extinction(image, airmass, k, *, x_ref: float, sky, valid=None, keep
         Eb = extinction_factor(Xb, kk, x_ref)
         if channels is not None and Eb.ndim == 2:
             Eb = Eb[..., None]
-        ob = (ab - Sb) * Eb + (Sb if keep_sky else 0.0)
+        ob = (ab - Sb) * Eb + (Sb if keep_sky else P)
         ok = np.isfinite(Xb)
         if v is not None:
             ok &= v[sl]

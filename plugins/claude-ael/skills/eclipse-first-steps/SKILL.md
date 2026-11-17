@@ -5,7 +5,7 @@ description: Guide a newcomer through inspecting and processing their own total 
 
 # First steps with eclipse photographs
 
-Read [setup and operating instructions](../../docs/USAGE.md) before running AEL. This plugin holds instructions only: run the AEL 1.4.2 engine installed and checked as that guide describes. Respond in the user's language. Work on user-selected inputs and write new output directories.
+Read [setup and operating instructions](../../docs/USAGE.md) before running AEL. This plugin holds instructions only: run the AEL 1.5.0 engine installed and checked as that guide describes. Respond in the user's language. Work on user-selected inputs and write new output directories.
 
 Use an already-stated goal. Otherwise ask whether the user wants to process photos, continue an existing edit, make an animation, or explore the library. A library question does not imply permission to process every image on disk.
 
@@ -13,7 +13,7 @@ Use an already-stated goal. Otherwise ask whether the user wants to process phot
 2. Check the installed AEL version and its Python dependencies as the guide describes, then run `selftest`. For an exploration request, `demo-motion --out NEW_DIR` needs no private photographs and must be described as synthetic test data.
 3. For processing, read [the recipe guide](../../docs/DEVELOP.md). Measure black level, linearity/saturation, registration, solar geometry and colour response. Do not reuse the author's camera settings or guess them from filenames. Separate optical trains and correct distortion before fusion.
 4. Preserve the linear result, valid mask, coverage, geometry and receipt. Explain missing calibration and clipped regions. Keep missing data empty.
-5. Add requested filter layers or a full-canvas structure view. Explain the default filters and the unresolved ACHF/WOW boundary effects in [field lessons](../../docs/FIELD_LESSONS.md), that the default WOW is the edge-aware one since 1.3.5 (WOW bilateral, with guided range weights, renamed), and that where the data reach the lunar limb the plain WOW draws rings next to it and the edge-aware WOW does not; do not silently present these as proven fine structure. Show the result before adopting a change to an existing look.
+5. Add requested filter layers or a full-canvas structure view. Explain the default filters and the boundary effects that remain (both WOW layers; the ACHF along straight edges) in [field lessons](../../docs/FIELD_LESSONS.md), that the default WOW is the edge-aware one since 1.3.5 (WOW bilateral, with guided range weights, renamed), and that where the data reach the lunar limb the plain WOW draws rings next to it and the edge-aware WOW does not; do not silently present these as proven fine structure. Show the result before adopting a change to an existing look. Since AEL 1.5.0 the filter layers keep off the lunar limb, prominences and beads by themselves: after `filters`, read `gates.verdict` and show the user `inner_limit_map.png`, as `corona-filter-layers` says.
 
 Choose the matching bundled skill for the stage: `eclipse-calibration-stacking`, `corona-filter-layers`, `eclipse-artefact-diagnosis`, `corona-views-motion`, or `coronagraph-comparison`. The package's synthetic tests do not replace validation of the user's observation.
 

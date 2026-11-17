@@ -4,7 +4,9 @@ import json
 from pathlib import Path
 import numpy as np
 from . import io, photoshop
-from .filterbank import ALIASES,DEFAULTS,EXTRA,LARSON_SEKANINA,NAMES,make_filter,red_excess_mask
+from . import gates as G
+from .filterbank import ALIASES,DEFAULTS,EDGES,EXTRA,LARSON_SEKANINA,NAMES,level_through_zones,make_filter,red_excess_mask
+from .zones import inner_zones,zones_preview
 from .geometry import EclipseGeometry
 
 # Starting opacities of the default layers, from the author's 2026 image, where the Overlay layer was the edge-aware WOW
@@ -29,6 +31,7 @@ LAYER_LABELS={'nrgf':('01','NRGF'),'nrgf_log':('01','NRGF log'),'rhef':('02','RH
               'hessian_ridge':('10','Hessian ridge'),'steerable_g2':('11','Steerable G2'),'mmt':('12','Median transform'),
               'noise_gate':('13','Noise gating'),'coherence_diffusion':('14','Coherence diffusion'),
               # since 1.4.2: NAFE keeps the number of the author's 2026 test layer; then one family each
+              'fnrgf':('01','FNRGF'),          # since 1.5.0: next to the NRGF, as in the author's files
               'nafe':('09','NAFE'),'larson_sekanina_1':('15','Larson-Sekanina 1°'),
               'larson_sekanina_0.4':('15','Larson-Sekanina 0.4°'),'swap':('16','SWAP filter')}
 
@@ -79,17 +82,42 @@ def tone_map(rgb, valid, *, scale, strength=10., highlight_ceiling=.9):
 
 
 def filters_from_config(config_path,out_dir,*,progress=print):
+    """Linear stack → filter layers over a display base, a preview and (``"photoshop": true``) a verified 16-bit PSB.
+
+    Since 1.5.0 two recipe keys decide how the layers treat what is not corona and the edges of the data:
+
+    - ``"inner_limit"``: ``"auto"`` (default), ``true`` or ``false``. With the Moon in the geometry, the single map of
+      the inner limit (:func:`ael.zones.inner_zones`) is measured on the image; no filter sees the core (limb,
+      chromosphere, prominences, beads), the hydrogen light is taken out of the filters' input, an Overlay layer is
+      transparent in the core and a Multiply layer carries only its level through it. The map is written next to the
+      layers (``inner_limit_map.png``: look at it) and the receipt says what each criterion found. ``"auto"`` goes on
+      without the map, and says so, when the geometry has no Moon or the map cannot be measured; ``true`` stops.
+    - ``"edges"``: ``"unbiased"`` (default) or ``"classic"`` (:data:`ael.filterbank.EDGES`).
+
+    With the map, every Overlay and Multiply layer goes through gate L (:func:`ael.gates.inner_limit`): it starts
+    where the map says, like the others, and carries no detail inside the core. **A layer that fails is written
+    switched off** and stays out of the preview (``"gates": "report"`` in the recipe only reports, and the receipt says
+    the gate was not enforced). The returned dictionary and the receipt carry ``gates["verdict"]``: ``PASS``, ``WARN``
+    (look where it says), ``FAIL`` (``gates["failed"]`` names the layers; those that were visible are switched off
+    and listed in ``switched_off_by_a_gate``; with no layer named, the layers do not start at the same place) or
+    ``NOT JUDGED`` (no map).
+
+    Gate D (:func:`ael.gates.gramophone`, fine concentric rings) is not run here: without a control it cannot tell the
+    rings a step adds from those the data carry (the exposure transitions of an HDR stack are concentric). Run it
+    yourself, with the plain layer as ``control``, whenever a layer is shown with a yardstick measured on another
+    layer, or made from a base that went through a new step."""
     path=Path(config_path).resolve(); root=path.parent
     cfg=json.loads(path.read_text())
     allowed={'input','geometry','valid','exclude','coverage','min_coverage','alpha','white_balance',
              'camera_to_linear_rgb','moon_margin_px','filters','display','photoshop','opacities','visible','icc','note',
-             'achf_display'}
+             'achf_display','inner_limit','edges','gates'}
     if set(cfg)-allowed: raise ValueError(f'unknown recipe keys: {sorted(set(cfg)-allowed)}')
     def resolve(v):
         p=Path(v).expanduser(); return p if p.is_absolute() else root/p
     def load(key): return np.asarray(io.load_array(resolve(cfg[key])))
     a=load('input').astype(np.float32)
-    if a.ndim==2: a=np.repeat(a[...,None],3,axis=-1)
+    mono_input=a.ndim==2
+    if mono_input: a=np.repeat(a[...,None],3,axis=-1)
     if a.ndim!=3 or a.shape[-1]!=3: raise ValueError('input must be a linear HxW or HxWx3 array')
     geo=EclipseGeometry.from_json(resolve(cfg['geometry']))
     if tuple(a.shape[:2])!=tuple(geo.shape): raise ValueError('geometry does not match input canvas')
@@ -139,6 +167,14 @@ def filters_from_config(config_path,out_dir,*,progress=print):
         raise ValueError('opacities must be finite in [0,1]')
     achf_display=cfg.get('achf_display','rings')
     if achf_display not in ('rings','global'): raise ValueError("achf_display is 'rings' or 'global'")
+    edges=cfg.get('edges','unbiased')
+    if edges not in EDGES: raise ValueError(f'edges is one of {EDGES}')
+    inner=cfg.get('inner_limit','auto')
+    if not (isinstance(inner,bool) or inner=='auto'): raise ValueError('inner_limit is "auto", true or false')
+    enforce=cfg.get('gates','enforce')
+    if enforce not in ('enforce','report'): raise ValueError('gates is "enforce" or "report"')
+    has_moon=geo.moon_xy is not None and geo.moon_radius_px is not None
+    if inner is True and not has_moon: raise ValueError('inner_limit needs the Moon in the geometry (run `ael geometry`)')
     stretch=cfg['display']
     if set(stretch)-{'scale','asinh','highlight_ceiling'}: raise ValueError('unknown display parameter')
     scale=float(stretch['scale']); strength=float(stretch.get('asinh',10))
@@ -156,6 +192,30 @@ def filters_from_config(config_path,out_dir,*,progress=print):
                       linear_reference_peak=.98)
     out=Path(out_dir).resolve(); out.mkdir(parents=True,exist_ok=False)
     outputs={}; params=[]; expected=[]
+    # The inner limit (since 1.5.0): one map for every layer, measured on the image
+    zones=None; lum_f,valid_f=lum,valid; inner_info=dict(used=False)
+    if inner is False: inner_info['why_not']='switched off in the recipe ("inner_limit": false)'
+    elif not has_moon: inner_info['why_not']='the geometry has no Moon: no map could be made; filters act on every observed pixel'
+    else:
+        progress('inner limit: measuring the map (limb, chromosphere, prominences, beads)')
+        try:
+            zones=inner_zones(lum if mono_input else rgb,valid,geo)
+        except ValueError as exc:
+            if inner is True: raise
+            inner_info['why_not']=f'the map could not be measured ({exc}); filters act on every observed pixel'
+        if zones is not None:
+            lum_f=(zones.clean[...,0]+2*zones.clean[...,1]+zones.clean[...,2])/4
+            valid_f=valid & ~zones.core & np.isfinite(lum_f) & (lum_f>0)
+            np.save(out/'inner_limit_core.npy',zones.core); outputs['inner_limit_core']=out/'inner_limit_core.npy'
+            np.save(out/'inner_limit_classes.npy',zones.classes); outputs['inner_limit_classes']=out/'inner_limit_classes.npy'
+            outputs['inner_limit_map']=io.save_png(out/'inner_limit_map.png',zones_preview(zones,lum))
+            inner_info=dict(used=True,**zones.info,
+                            read_me='inner_limit_map.png: corona grey, limb white, chromosphere pink, prominences red, beads '
+                                    'cyan, corona whose input was cleaned brown. Check it by eye, enlarged: every red or '
+                                    'pink pixel must be emission and no corona must be coloured.')
+            for w in zones.info['warnings']: progress(f'inner limit: warning: {w}')
+    core_weight=None if zones is None else zones.core.astype(np.float32)
+    layer_gates={}; starts=[]; hidden=[]
     export=bool(cfg.get('photoshop',False))
     doc=photoshop.new_document(geo.shape[1],geo.shape[0]) if export else None
     comp=np.zeros_like(base)
@@ -181,25 +241,76 @@ def filters_from_config(config_path,out_dir,*,progress=print):
     for i,(name,label) in enumerate(zip(names,layer_names(names))):
         progress(f'filter {i+1}/{len(names)}: {name}')
         kw=dict(exclude=prominences) if name in LARSON_SEKANINA else {}
-        image,mode,info=make_filter(name,lum,valid,geo,achf_display=achf_display,**kw)
+        image,mode,info=make_filter(name,lum_f,valid_f,geo,achf_display=achf_display,edges=edges,**kw)
         if name in LARSON_SEKANINA: info=dict(info,excluded='prominences: red_excess_mask (R/G above 1.12 times its annulus)')
-        observed=valid & np.isfinite(image)
+        observed=valid_f & np.isfinite(image)
+        image=np.where(observed,image,np.nan)
+        if zones is not None and mode=='multiply':
+            # a Multiply layer carries its level, and nothing else, through the core (an Overlay layer is transparent there)
+            image,_=level_through_zones(image,observed,core_weight)
+            observed=valid & np.isfinite(image)
         al=layer_alpha(alpha,observed,mode)
         opacity=float(opacities.get(name,DEFAULT_OPACITY.get(name,1)))
         if not np.isfinite(opacity) or not 0<=opacity<=1: raise ValueError('opacity must be in [0,1]')
         visible=name in visible_names
         image=np.where(observed,image,np.nan)
         domain_checks.append(bool(np.isnan(image[~valid]).all() and (al[~valid]==0).all()))
+        verdicts={}
+        if mode not in ('overlay','multiply'):
+            verdicts['note']='a whole view in Normal mode, not a detail layer: gate L does not apply'
+        elif zones is not None:
+            li=G.inner_limit({name:(image,al)},zones.core,geo,valid=valid)['layers'][name]
+            fails=list(li['failures']); notes=[w for w in li['warnings'] if w.startswith('a streak')]
+            warns=[w for w in li['warnings'] if not w.startswith('a streak')]
+            if mode=='multiply':
+                # In the core this layer IS its level (level_through_zones): L1 reads the slope of that level across a
+                # core a few pixels wide as fine detail. Reported, not enforced (the author accepted by eye, on his 2026
+                # image, a layer that failed L1 this way).
+                warns+=[f+' — the level this Multiply layer carries through the core, not filter detail: look at it; '
+                        'not enforced' for f in fails if f.startswith('L1')]
+                fails=[f for f in fails if not f.startswith('L1')]
+            verdicts['inner_limit']=dict(verdict='FAIL' if fails else 'WARN' if warns else 'PASS',failures=fails,
+                                         warnings=warns,notes=notes,
+                                         start_error_median_px=li['measure']['d50_error_median_px'],
+                                         detail_inside_core_levels_8bit=li['measure']['detail_inside_core_levels_8bit'])
+            starts.append((name,li['measure']['d50_per_sector']))
+        failed=[g for g,v in verdicts.items() if isinstance(v,dict) and v['verdict']=='FAIL']
+        if failed and enforce=='enforce':
+            if visible: hidden.append(name)
+            visible=False
+        layer_gates[name]=verdicts
+        said=', '.join(f"{g} {v['verdict']}" for g,v in verdicts.items() if isinstance(v,dict))
+        if said: progress(f'  gates: {name}: {said}'+(' → written switched off' if failed and enforce=='enforce' else ''))
         for suffix,arr in (('layer',image),('alpha',al)):
             p=out/f'{name}_{suffix}.npy'; np.save(p,arr); outputs[f'{name}_{suffix}']=p
         add(label,image,al,mode,opacity,visible)
         params.append(dict(name=name,layer=label,mode=mode,opacity=opacity,visible=visible,parameters=info,
-                           observed_pixels=int(observed.sum()),alpha='same as display base on observed domain'))
+                           observed_pixels=int(observed.sum()),alpha='same as display base on observed domain',
+                           gates=verdicts,switched_off_by_a_gate=bool(failed and enforce=='enforce')))
     outputs['preview']=io.save_png(out/'preview.png',np.round(np.clip(comp,0,1)*255).astype(np.uint8))
     outputs['display']=io.save_tiff(out/'display.tif',photoshop.to_u16(comp),description='Display only; not linear photometry')
     gates={'nothing_outside_data':all(domain_checks),
            'positive_display_base_not_clipped':display_info['positive_base_clip_pixels']==0,
            'photoshop_native':'not checked (no application is opened)'}
+    between=G.inner_limit_between(starts) if len(starts)>1 else None
+    worst=[v['verdict'] for lg in layer_gates.values() for v in lg.values() if isinstance(v,dict)]
+    if between is not None: worst.append(between['verdict'])
+    verdict='FAIL' if 'FAIL' in worst else 'WARN' if 'WARN' in worst else 'PASS' if 'PASS' in worst else 'NOT JUDGED'
+    failed_layers=[n for n,lg in layer_gates.items() if any(isinstance(v,dict) and v['verdict']=='FAIL' for v in lg.values())]
+    if verdict=='NOT JUDGED':
+        gates['why_not_judged']=inner_info.get('why_not','the recipe has no Overlay or Multiply layer to check against the map')
+    gates.update(layers=layer_gates,inner_limit_between_layers=between,failed=failed_layers,
+                 switched_off_by_a_gate=hidden,verdict=verdict,
+                 enforced=enforce=='enforce',
+                 how_to_read='PASS: use the layers. WARN: look at the layer where the warning says before using it. '
+                             'FAIL: a layer failed (gates.failed names it); if it was visible it is in the file '
+                             'switched off and out of the preview (switched_off_by_a_gate); do not switch it on without '
+                             'finding the cause where it is born (docs/INNER_LIMIT.md). FAIL with no layer named: the '
+                             'layers do not start at the same place (inner_limit_between_layers). NOT JUDGED: no map of '
+                             'the inner limit was made (the reason is in parameters.inner_limit.why_not), so no layer '
+                             'was checked against one. Never change a threshold to pass a layer. "notes" are '
+                             'uncalibrated measurements (a streak that follows the limb: the first pixels of every '
+                             'operator next to a hole see one side only); they do not change the verdict.')
     if doc is not None:
         icc=resolve(cfg['icc']).read_bytes() if 'icc' in cfg else None
         outputs['psb']=photoshop.save(doc,out/'corona.psb',photoshop.to_u16(comp),icc=icc)
@@ -208,10 +319,16 @@ def filters_from_config(config_path,out_dir,*,progress=print):
     inputs={key:resolve(cfg[key]) for key in ('input','geometry','valid','exclude','coverage','alpha','icc') if key in cfg}
     inputs['config']=path
     receipt=io.write_receipt(out/'receipt.json',product='corona filter layers',inputs=inputs,outputs=outputs,
-        parameters=dict(recipe=cfg,layers=params,display=display_info),gates=gates,
+        parameters=dict(recipe=cfg,layers=params,display=display_info,edges=edges,inner_limit=inner_info),gates=gates,
         notes='Generalised operators, not an exact replay of historical project recipes. No reconstructed saturation, '
         'stars or lunar texture. NRGF-log is a measured-data variant, not historical inward extrapolation. '
         'Linear reference is scaled to retain positive range; negative RGB is clipped in 16-bit display only. '
         'Original signed floating HDR input is authoritative. '
         'No scientific or native Photoshop validation implied by file roundtrip.')
-    return dict(files={k:str(v) for k,v in outputs.items()},receipt=str(receipt))
+    summary={n:{g:v['verdict'] for g,v in lg.items() if isinstance(v,dict)} for n,lg in layer_gates.items()}
+    return dict(files={k:str(v) for k,v in outputs.items()},receipt=str(receipt),
+                gates=dict(verdict=verdict,layers=summary,failed=failed_layers,switched_off_by_a_gate=hidden,
+                           between_layers=None if between is None else between['verdict']),
+                inner_limit=dict(used=inner_info['used'],**({'why_not':inner_info['why_not']} if not inner_info['used'] else
+                                 dict(map=str(outputs['inner_limit_map']),pixels=inner_info['pixels'],
+                                      warnings=inner_info['warnings']))))

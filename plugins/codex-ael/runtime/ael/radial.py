@@ -137,6 +137,30 @@ def _chain_terms(sets, covered, statistic):
     return terms
 
 
+def _anchored_chain(terms, whole):
+    """The chain terms summed along a run, **anchored on its whole annuli** (since 1.5.0).
+
+    A plain cumulative sum starts at the first annulus of the run. When that end is the cut one — the annuli next to
+    an off-centre Moon — whatever the bridging adds there is carried to every annulus beyond, the whole ones
+    included: on the author's 2026 canvas (Moon 14 px off the Sun, data up to the limb) the profile drifted until the
+    layer read −18 spreads from 1.5 R☉ outwards. Whole annuli need no bridging, so they are the reference: zero on
+    them, the sum counted from the nearest whole annulus on either side of a cut stretch (blended linearly across a
+    stretch that has whole annuli on both sides). A run with no whole annulus keeps the plain sum."""
+    c = np.cumsum(terms)
+    idx = np.flatnonzero(whole)
+    if not len(idx):
+        return c
+    out = np.zeros_like(c)
+    first, last = idx[0], idx[-1]
+    out[:first] = c[:first] - c[first]
+    out[last + 1:] = c[last + 1:] - c[last]
+    for g in np.flatnonzero(np.diff(idx) > 1):
+        a, b = idx[g], idx[g + 1]
+        w = (np.arange(a + 1, b) - a) / (b - a)
+        out[a + 1:b] = (1 - w) * (c[a + 1:b] - c[a]) + w * (c[a + 1:b] - c[b])
+    return out
+
+
 def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=True,
                     min_count=50, smooth_bins=0., spread_about='profile', partial_annuli='observed'):
     """Evaluate annular mean/spread at the actual radius, without image smoothing.
@@ -160,8 +184,11 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
     out of an annulus, its median and spread are those of the angles left, and they jump when a bright or a faint
     sector leaves: the filter draws that jump as a ring around the Sun. With ``'chain'`` every step of the profile and
     of the spread from one annulus to the next is measured on the position-angle cells (1 degree) that both annuli
-    cover, wherever those cells change; where they do not change, the step is the usual one, so whole annuli give
-    exactly the ``'observed'`` result. No pixel is filled in: only the two curves the filter divides by are bridged.
+    cover, wherever those cells change; where they do not change, the step is the usual one. The steps are summed from
+    the nearest whole annulus (:func:`_anchored_chain`, since 1.5.0), so whole annuli give exactly the ``'observed'``
+    result wherever the cut annuli are; up to 1.4.2 the sum started at the first annulus of the run, and cut annuli
+    next to an off-centre Moon shifted the profile of every annulus beyond. No pixel is filled in: only the two
+    curves the filter divides by are bridged.
     """
     if spread_about not in ('profile', 'bin'):
         raise ValueError("spread_about must be 'profile' or 'bin'")
@@ -361,7 +388,7 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
             pieces = [slice(cuts[k]-lo, cuts[k+1]-lo) for k in run]
             terms = _chain_terms([(au[s], here[s]) for s in pieces], covered[run], np.median if robust else np.mean)
             if terms is not None and terms.any():
-                nd = fwd(tr, inv(tr, nd)*np.exp(np.cumsum(terms)))
+                nd = fwd(tr, inv(tr, nd)*np.exp(_anchored_chain(terms, covered[run].all(axis=1))))
                 s1 = _node_derivatives(nd, anchors[run])[0]
                 y = smooth(nd, run)
                 res = au-along(y, run, ru, tr, s1 if smooth_bins == 0 else _node_derivatives(y, anchors[run])[0])
@@ -369,7 +396,7 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
             spread_of = ((lambda z: 1.4826*np.median(np.abs(z-np.median(z)))) if robust else np.std)
             terms = _chain_terms([(res[s], here[s]) for s in pieces], covered[run], spread_of)
             if terms is not None and terms.any():
-                sp = sp*np.exp(np.cumsum(terms))
+                sp = sp*np.exp(_anchored_chain(terms, covered[run].all(axis=1)))
         resid[lo:hi] = res; sd2[run] = sp; angular[run] = angular_spread(res, run, au)
         dIdy = 1. if tr[0] == 'lin' else np.exp(nd) if tr[0] == 'log' else tr[1]*np.cosh(nd)
         floor[run] = eps*(mag[run]+np.abs(s1*dIdy)*anchors[run])+4*tiny
@@ -384,14 +411,31 @@ def continuous_nrgf(img, valid, geometry, *, center='sun', bin_px=1., robust=Tru
     return out
 
 
-def radial_quantile_rank(img, valid, geometry, sector_deg=None, bin_px=2., *, min_count=12):
+def radial_quantile_rank(img, valid, geometry, sector_deg=None, bin_px=2., *, min_count=12, smooth_bins=0,
+                         partial_windows='observed', whole_share=.97):
     """Interpolate measured log-intensity quantiles in radius/angle, then invert.
 
     257 quantiles per observed cell; local angular nodes every quarter-sector.
     Only immediate populated neighbours contribute. No image blur, extrapolated
     radiance or output outside valid positive samples. Constant distributions rank
     at one half; ties use the midpoint of the coincident quantile interval.
+
+    ``smooth_bins`` (since 1.5.0; 0 = off, as before): an odd number of annuli over which every quantile curve is
+    smoothed along the radius with a local parabola, node by node. Each annulus measures its quantiles with its own
+    sampling noise, and a ranking prints that noise as fine arcs around the Sun, different in every sector: on the
+    author's 2026 image the 60° layer carried arcs of 0.6 display levels with a period of two annuli that a person saw
+    and a gate comparing sectors with each other could not. The image itself is not smoothed.
+
+    ``partial_windows='chain'`` (since 1.5.0; local sectors only): a cell (annulus, angular node) whose angular window
+    the Moon or the frame cuts does not have its whole reference population, and its quantiles are those of the angles
+    left. With ``'chain'`` the quantile table of such a cell (observed share of the window below ``whole_share``) is
+    that of the next annulus outwards plus the change of the quantiles from one annulus to the other, measured on the
+    half-degree angles both have inside the window, and so on inwards from the first whole window. With the window
+    whole it is the usual table. A window that the *frame* cuts (its whole neighbours lie inwards) is left as
+    observed. No pixel is filled in: only the population a pixel is ranked against changes.
     """
+    if partial_windows not in ('observed', 'chain'):
+        raise ValueError("partial_windows must be 'observed' or 'chain'")
     a, m, radius = _observed(img, valid, geometry, bin_px, min_count)
     m &= a > 0
     if sector_deg is not None:
@@ -429,6 +473,45 @@ def radial_quantile_rank(img, valid, geometry, sector_deg=None, bin_px=2., *, mi
             sample = values[np.abs((angles-j*step+180) % 360-180) <= sector_deg/2]
             if len(sample) >= min_count:
                 table[k, j] = np.quantile(sample, probabilities)
+    if sector_deg is not None and partial_windows == 'chain':
+        # angular cells of half a degree, or wider where the innermost annulus is too small to put six pixels in each
+        # (an empty cell must mean a missing angle, not the pixel grid)
+        nm = int(np.clip(2*np.pi*(first+.5)*bin_px*bin_px/6, 36, 720)); mic = np.floor(theta/360*nm).astype(np.int64) % nm
+        pres = np.zeros((nb, nm), bool); pres[bins, mic] = True
+        micang = (np.arange(nm)+.5)*360/nm
+        for j in range(na):
+            inw = np.abs((micang-j*step+180) % 360-180) <= sector_deg/2
+            fr = pres[:, inw].mean(1)
+            # Inwards only, and only from a window that is whole or was itself bridged from a whole one: the Moon cuts
+            # the inner annuli and leaves the outer ones whole. A window the frame cuts has its whole neighbours on the
+            # inside; bridging it from the outside would anchor it on the corner of the image. Those stay as observed.
+            anchored = False
+            for k in range(nb-2, -1, -1):
+                if not np.isfinite(table[k+1, j, 0]):
+                    anchored = False
+                elif fr[k+1] >= whole_share:
+                    anchored = True
+                if count[k] < min_count or fr[k] >= whole_share or not anchored:
+                    if fr[k] < whole_share:
+                        anchored = False
+                    continue
+                com = pres[k] & pres[k+1] & inw
+                ia = order[cuts[k]:cuts[k+1]]; ib = order[cuts[k+1]:cuts[k+2]]
+                sa = v[ia][com[mic[ia]]]; sb = v[ib][com[mic[ib]]]
+                if com.sum() < .25*inw.sum() or len(sa) < min_count or len(sb) < min_count:
+                    anchored = False
+                    continue
+                table[k, j] = np.sort(table[k+1, j]+np.quantile(sa, probabilities)-np.quantile(sb, probabilities))
+    if smooth_bins:
+        from scipy.signal import savgol_filter
+        w = int(smooth_bins)
+        if w < 5 or w % 2 == 0:
+            raise ValueError('smooth_bins must be an odd number of annuli, at least 5')
+        for j in range(na):                                     # along the radius, inside each run of populated annuli
+            ok = np.flatnonzero(np.isfinite(table[:, j, 0]))
+            for run in np.split(ok, np.flatnonzero(np.diff(ok) != 1)+1):
+                if len(run) > w:
+                    table[run, j] = np.sort(savgol_filter(table[run, j].astype(np.float64), w, 2, axis=0, mode='interp'), axis=1)
     u = np.clip(r/bin_px-.5-first, 0, nb-1)
     k0 = np.floor(u).astype(int)
     k1 = np.minimum(k0+1, nb-1)

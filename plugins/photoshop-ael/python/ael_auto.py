@@ -1753,6 +1753,11 @@ def run_auto(cfg: dict) -> dict:
                       "note": f"AEL {name} connector: AEL's default filter layers over the display base"}
         if colour:
             layers_cfg.update(white_balance=colour["white_balance"], camera_to_linear_rgb=colour["camera_to_linear_rgb"])
+        if hasattr(develop, "EDGES"):
+            # AEL 1.5.0 gives its filter step an inner limit and operators that lean less on the edges of the data.
+            # The connectors keep the operators of 1.4.2 (the inner limit has not been tried inside the two programs);
+            # the NRGF carries its corrected chain.
+            layers_cfg.update(inner_limit=False, edges="classic")
 
         state = {"done": 0}
 

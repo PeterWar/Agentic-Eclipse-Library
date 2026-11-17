@@ -26,10 +26,10 @@ SHARED = ["LICENSE", "docs", "examples", "skills", "assets/synthetic-workflow.pn
 SKIP = {".DS_Store", "__pycache__"}
 EXCLUDE = {Path("skills/eclipse-astrophotography/agents/openai.yaml")}  # Codex interface metadata
 
-VERSION = "1.4.2"
+VERSION = "1.5.0"
 WHEEL = f"agentic_eclipse_library-{VERSION}-py3-none-any.whl"
 WHEEL_URL = f"https://github.com/PeterWar/Agentic-Eclipse-Library/releases/download/v{VERSION}/{WHEEL}"
-WHEEL_SHA256 = "a86e0e75c01a8bbc59173c03d82afbeda68bbab0a73de326c4a3ca7223007e25"
+WHEEL_SHA256 = "88d9aed00cf37558842fb6c6cbe7af85c0863b24a0ee7bc4dded77cae11dce1a"
 RELEASE_URL = f"https://github.com/PeterWar/Agentic-Eclipse-Library/releases/tag/v{VERSION}"
 
 MANIFEST = {
@@ -131,7 +131,7 @@ and ask before replacing it; do not mix these instructions with another version'
 
 Before installing, tell the user what will be downloaded and from where, and wait for their approval:
 
-- the AEL {VERSION} wheel (about 250 KB) from the project's GitHub release, which pip checks against the SHA-256
+- the AEL {VERSION} wheel (about 300 KB) from the project's GitHub release, which pip checks against the SHA-256
   fingerprint written below;
 - its dependencies, normally from PyPI: numpy ≥ 1.24, scipy ≥ 1.10, opencv-python-headless ≥ 4.8, pillow ≥ 9,
   tifffile ≥ 2023.1 and imageio ≥ 2.30; the `raw` extra adds rawpy ≥ 0.19 and astropy ≥ 5 for RAW and FITS
@@ -267,9 +267,12 @@ polar views, motion check sheets and animations. A photograph is not an absolute
 Calibration, registration, geometry and any spatial cloud correction require measured inputs; AEL does
 not infer all of these from a folder of RAWs. Photoshop itself is optional.
 
-Known limitations in {VERSION} include bands near data boundaries in ACHF/WOW, some fine-detail sign inversion
+Since 1.5.0 the filter layers keep off the lunar limb, prominences and beads by one map measured on the image, and
+the MGN, the isotropic ACHF, the local RHEF and the Hessian layer draw weaker bands along the edges of the data; that was set
+on one image, the author's of 2026 ([the inner limit](docs/INNER_LIMIT.md)).
+Known limitations in {VERSION} include bands near data boundaries in both WOW layers, some fine-detail sign inversion
 in the worst sectors of the default edge-aware WOW, and rings of the plain WOW next to a lunar limb that the data reach; of the
-layers new in 1.4.2, a light ring of NAFE next to the lunar limb and the copies at ±Δθ of the Larson–Sekanina layers. See [field lessons](docs/FIELD_LESSONS.md). Passing the package's
+layers of 1.4.2, a light ring of NAFE next to the lunar limb and the copies at ±Δθ of the Larson–Sekanina layers. See [field lessons](docs/FIELD_LESSONS.md). Passing the package's
 known-truth tests does not validate a new astronomical observation. Missing data stays missing. Synthetic examples
 are labelled and must never be used as pixels in an observed image.
 
@@ -280,7 +283,7 @@ are labelled and must never be used as pixels in an observed image.
 - **Runs locally.** The skills run the AEL {VERSION} package with `python -m ael` in the Python environment you
   choose. It reads the files selected for the task and writes new output folders; Claude checks that each output
   folder is new before a command writes to it. To write MP4 animations, AEL runs ffmpeg if it is already installed.
-- **Fetches, only with your approval.** Installing AEL downloads its wheel (about 250 KB) from this project's
+- **Fetches, only with your approval.** Installing AEL downloads its wheel (about 300 KB) from this project's
   GitHub release v{VERSION}; pip refuses it unless its SHA-256 fingerprint matches the one written in the setup
   instructions. pip normally downloads the dependencies from PyPI: NumPy, SciPy, OpenCV, Pillow, tifffile and
   imageio, plus rawpy and Astropy for RAW and FITS, and psd-tools for Photoshop files. AEL itself has no network
