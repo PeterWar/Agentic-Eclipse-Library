@@ -93,20 +93,77 @@ function aelBridgeId( text )
    return id;
 }
 
+// True when PixInsight runs on Windows. Chosen when the script is read, as in aelBridgeOpenUrl.
+function aelBridgeOnWindows()
+{
+   let windows = false;
+#ifeq __PI_PLATFORM__ MSWINDOWS
+   windows = true;
+#endif
+   return windows;
+}
+
+// A path with "/" between its folders, as PixInsight writes it on every system. Windows itself, its environment
+// variables and Python there write "\".
+function aelBridgeSlashes( path )
+{
+   return String( path ).replace( /\\/g, "/" );
+}
+
+// The paths of Windows in an answer from Python ("C:\..." and "\\server\...") with "/", in place: PixInsight's own
+// functions take a path apart at "/" only. Other texts are left as they are.
+function aelBridgeResultPaths( value )
+{
+   if ( typeof value == "string" )
+      return /^([A-Za-z]:\\|\\\\)/.test( value ) ? aelBridgeSlashes( value ) : value;
+   if ( value && typeof value == "object" )
+      for ( let key in value )
+         value[key] = aelBridgeResultPaths( value[key] );
+   return value;
+}
+
 function aelBridgeParseJson( text, context )
 {
    let begin = text.indexOf( "{" );
    let end = text.lastIndexOf( "}" );
    if ( begin < 0 || end < begin )
       throw new Error( context + " did not return a JSON object.\n" + text );
+   let parsed;
    try
    {
-      return JSON.parse( text.substring( begin, end + 1 ) );
+      parsed = JSON.parse( text.substring( begin, end + 1 ) );
    }
    catch ( error )
    {
       throw new Error( context + " returned invalid JSON: " + error + "\n" + text );
    }
+   return aelBridgeOnWindows() ? aelBridgeResultPaths( parsed ) : parsed;
+}
+
+// What a Python started from here needs of the environment of Windows. A process started by PixInsight gets only the
+// variables it is handed, and without these a Python on Windows does not find the packages installed for the user
+// alone (APPDATA), a folder for its temporary files (TEMP) or the home folder. PYTHONUTF8 makes it read and write
+// text as UTF-8, as PixInsight does and as Python does by itself on the other systems, so a folder with an accent in
+// its name arrives whole.
+var AEL_BRIDGE_WINDOWS_VARIABLES = [ "SystemRoot", "SystemDrive", "windir", "ComSpec", "PATH", "PATHEXT", "TEMP", "TMP",
+                                     "USERPROFILE", "HOMEDRIVE", "HOMEPATH", "APPDATA", "LOCALAPPDATA", "ProgramData",
+                                     "ProgramFiles", "ProgramFiles(x86)", "ProgramW6432", "CommonProgramFiles",
+                                     "USERNAME", "USERDOMAIN", "COMPUTERNAME", "NUMBER_OF_PROCESSORS",
+                                     "PROCESSOR_ARCHITECTURE", "OS",
+                                     // what chooses the user's Python and where pip puts its packages
+                                     "PYTHONUSERBASE", "PY_PYTHON", "PY_PYTHON3", "PYTHON_MANAGER_DEFAULT",
+                                     "VIRTUAL_ENV" ];
+
+function aelBridgeWindowsEnvironment()
+{
+   let environment = [ "PYTHONUTF8=1", "PYTHONIOENCODING=utf-8" ];
+   for ( let i = 0; i < AEL_BRIDGE_WINDOWS_VARIABLES.length; ++i )
+   {
+      let value = aelBridgeEnvironmentVariable( AEL_BRIDGE_WINDOWS_VARIABLES[i] );
+      if ( value.length > 0 )
+         environment.push( AEL_BRIDGE_WINDOWS_VARIABLES[i] + "=" + value );
+   }
+   return environment;
 }
 
 function aelBridgeEnvironment( aelRoot )
@@ -114,6 +171,8 @@ function aelBridgeEnvironment( aelRoot )
    let environment = [ "PYTHONDONTWRITEBYTECODE=1" ];
    if ( aelRoot && aelRoot.trim().length > 0 )
       environment.push( "PYTHONPATH=" + aelRoot.trim() );
+   if ( aelBridgeOnWindows() )
+      environment = environment.concat( aelBridgeWindowsEnvironment() );
    return environment;
 }
 
@@ -161,7 +220,7 @@ function aelBridgeProbe( pythonPath, aelRoot )
 {
    if ( !pythonPath || pythonPath.trim().length == 0 )
       return { ok: false, kind: "bad_path", message: "No Python interpreter was specified." };
-   if ( !File.exists( pythonPath ) )
+   if ( !aelBridgeFileExists( pythonPath ) )
       return { ok: false, kind: "bad_path", message: "Python executable not found: " + pythonPath };
    if ( !File.exists( AEL_BRIDGE_CHECK_SCRIPT ) )
       throw new Error( "Bridge preflight helper not found: " + AEL_BRIDGE_CHECK_SCRIPT + "\n\nKeep the connector's folder "
@@ -201,6 +260,192 @@ function aelBridgeMatches( pattern )
    finally
    {
       try { finder.end(); } catch ( error ) {}
+   }
+   return found;
+}
+
+// True if the file is there. On Windows the Python of the Microsoft Store is an "app execution alias", a kind of link
+// that a plain test for a file may not see: there, a file that its folder lists counts too.
+function aelBridgeFileExists( path )
+{
+   if ( File.exists( path ) )
+      return true;
+   return aelBridgeOnWindows() && aelBridgeMatches( path ).length > 0;
+}
+
+// The paths of python.exe in what ``py -0p`` prints, one installed Python per line, in its order.
+function aelBridgeLauncherListed( text )
+{
+   let found = [];
+   let lines = String( text ).split( /\r?\n/ );
+   for ( let i = 0; i < lines.length; ++i )
+   {
+      let match = /[A-Za-z]:\\[^\r\n"<>|*?]*\.exe/.exec( lines[i] );
+      if ( match && found.indexOf( aelBridgeSlashes( match[0] ) ) < 0 )
+         found.push( aelBridgeSlashes( match[0] ) );
+   }
+   return found;
+}
+
+// The interpreters that a launcher starts (py.exe, which comes with Python on Windows): first the one it starts by
+// default, which is where ``py -m pip install`` puts the packages, then its Python 3, then every Python it lists.
+// The launcher is asked and the Pythons it names are used: a script run through the launcher itself would have its
+// first line read to choose a Python, which is not what is wanted here. It is told not to install anything to answer.
+function aelBridgeLauncherPythons( launcher )
+{
+   let found = [];
+   function note( path )
+   {
+      path = aelBridgeSlashes( path ).trim();
+      if ( path.length > 0 && found.indexOf( path ) < 0 )
+         found.push( path );
+   }
+   let environment = aelBridgeEnvironment( "" ).concat( [ "PYTHON_MANAGER_AUTOMATIC_INSTALL=false" ] );
+   let question = "import sys; print(sys.executable)";
+   let asks = [ [ "-c", question ], [ "-3", "-c", question ] ];
+   for ( let i = 0; i < asks.length; ++i )
+   {
+      let run = aelBridgeRun( launcher, asks[i], File.systemTempDirectory, environment, 15000 );
+      if ( !run.ok )
+         continue;
+      let lines = run.stdout.split( /\r?\n/ );
+      for ( let j = lines.length - 1; j >= 0; --j )
+         if ( lines[j].trim().length > 0 )
+         {
+            note( lines[j] );
+            break;
+         }
+   }
+   let list = aelBridgeRun( launcher, [ "-0p" ], File.systemTempDirectory, environment, 15000 );
+   if ( list.ok )
+   {
+      let listed = aelBridgeLauncherListed( list.stdout );
+      for ( let i = 0; i < listed.length; ++i )
+         note( listed[i] );
+   }
+   return found;
+}
+
+// The folders that Windows names in its environment, where a Python can be: ``home`` (USERPROFILE), ``local``
+// (LOCALAPPDATA), ``programs`` (the Program Files folders), ``data`` (ProgramData), ``system`` (SystemRoot), ``drive``
+// (SystemDrive) and ``path``, the folders of PATH in their order.
+function aelBridgeWindowsPlaces()
+{
+   function variable( name, otherwise )
+   {
+      let value = aelBridgeSlashes( aelBridgeEnvironmentVariable( name ) ).trim();
+      return value.length > 0 ? value : otherwise;
+   }
+   let home = variable( "USERPROFILE", File.homeDirectory );
+   let drive = variable( "SystemDrive", "C:" );
+   let programs = [];
+   let names = [ "ProgramFiles", "ProgramW6432", "ProgramFiles(x86)" ];
+   for ( let i = 0; i < names.length; ++i )
+   {
+      let folder = variable( names[i], "" );
+      if ( folder.length > 0 && programs.indexOf( folder ) < 0 )
+         programs.push( folder );
+   }
+   return { home: home, local: variable( "LOCALAPPDATA", home + "/AppData/Local" ), programs: programs,
+            data: variable( "ProgramData", drive + "/ProgramData" ), system: variable( "SystemRoot", drive + "/Windows" ),
+            drive: drive, path: variable( "PATH", "" ).split( ";" ) };
+}
+
+// The interpreters of a Windows computer that are there, in the order they are tried. Windows has no bin/python: a
+// Python is python.exe in its own folder, a virtual environment keeps it in Scripts, and py.exe starts the one the
+// user has by default. The order: the Pythons of the launcher (its default first), the ones in PATH, the folders where the installers of
+// python.org put it (the newest version first), conda, the virtual environments and, last, the aliases of the
+// Microsoft Store (which are the Store's Python when it is installed, and only an invitation to install it when not).
+// ``places`` is what aelBridgeWindowsPlaces() gives; nothing here depends on the system the script runs on.
+function aelBridgeWindowsPythons( places )
+{
+   let found = [], seen = {}, aliases = [];
+   function clean( path )
+   {
+      return aelBridgeSlashes( path ).trim().replace( /^"+|"+$/g, "" ).replace( /\/+$/, "" );
+   }
+   function add( path )
+   {
+      path = clean( path );
+      let key = path.toLowerCase();
+      if ( path.length == 0 || seen[key] )
+         return;
+      seen[key] = true;
+      if ( aelBridgeFileExists( path ) )
+         found.push( path );
+   }
+   // Python313, Python39, pythoncore-3.14-64: the version in a folder's name, as one number that sorts.
+   function version( folder )
+   {
+      let match = /([0-9])\.?([0-9]+)/.exec( File.extractName( folder ) + File.extractExtension( folder ) );
+      return match ? parseInt( match[1] ) * 1000 + parseInt( match[2] ) : 0;
+   }
+   function newestFirst( pattern, file )
+   {
+      let folders = aelBridgeMatches( pattern );
+      folders.sort( function( a, b ) { return version( b ) - version( a ) || (a < b ? -1 : a > b ? 1 : 0); } );
+      for ( let i = 0; i < folders.length; ++i )
+         add( folders[i] + "/" + file );
+   }
+   let path = [];
+   for ( let i = 0; i < places.path.length; ++i )
+      if ( clean( places.path[i] ).length > 0 )
+         path.push( clean( places.path[i] ) );
+
+   // 1. the Pythons of the launcher
+   let launchers = [ places.system + "/py.exe", places.local + "/Programs/Python/Launcher/py.exe" ];
+   for ( let i = 0; i < path.length; ++i )
+      launchers.push( path[i] + "/py.exe" );
+   let asked = {};
+   for ( let i = 0; i < launchers.length; ++i )
+   {
+      let launcher = clean( launchers[i] );
+      if ( asked[launcher.toLowerCase()] || !aelBridgeFileExists( launcher ) )
+         continue;
+      asked[launcher.toLowerCase()] = true;
+      let started = aelBridgeLauncherPythons( launcher );
+      for ( let j = 0; j < started.length; ++j )
+         add( started[j] );
+   }
+   // 2. PATH, the Store's aliases set aside for the end
+   for ( let i = 0; i < path.length; ++i )
+      if ( /\/WindowsApps$/i.test( path[i] ) )
+         aliases.push( path[i] );
+      else
+      {
+         add( path[i] + "/python.exe" );
+         add( path[i] + "/python3.exe" );
+      }
+   // 3. where the installers put it
+   newestFirst( places.local + "/Programs/Python/Python3*", "python.exe" );
+   newestFirst( places.local + "/Python/*", "python.exe" );
+   for ( let i = 0; i < places.programs.length; ++i )
+      newestFirst( places.programs[i] + "/Python3*", "python.exe" );
+   newestFirst( places.drive + "/Python3*", "python.exe" );
+   // 4. conda
+   let condaParents = [ places.home, places.local, places.data, places.drive ];
+   let condaNames = [ "miniconda3", "anaconda3", "miniforge3", "mambaforge" ];
+   for ( let i = 0; i < condaParents.length; ++i )
+      for ( let j = 0; j < condaNames.length; ++j )
+         add( condaParents[i] + "/" + condaNames[j] + "/python.exe" );
+   // 5. virtual environments and pyenv
+   let environments = [ places.home + "/.venvs", places.home + "/.virtualenvs", places.home + "/venvs" ];
+   for ( let i = 0; i < environments.length; ++i )
+   {
+      let folders = aelBridgeMatches( environments[i] + "/*" );
+      folders.sort();
+      for ( let j = 0; j < folders.length; ++j )
+         add( folders[j] + "/Scripts/python.exe" );
+   }
+   add( places.home + "/venv/Scripts/python.exe" );
+   add( places.home + "/.venv/Scripts/python.exe" );
+   newestFirst( places.home + "/.pyenv/pyenv-win/versions/*", "python.exe" );
+   // 6. the aliases of the Microsoft Store
+   aliases.push( places.local + "/Microsoft/WindowsApps" );
+   for ( let i = 0; i < aliases.length; ++i )
+   {
+      add( aliases[i] + "/python.exe" );
+      add( aliases[i] + "/python3.exe" );
    }
    return found;
 }
@@ -263,6 +508,20 @@ function aelBridgeEnvironmentVariable( name )
    }
 }
 
+// What to do on Windows when no Python serves, with what was tried. On Windows the command is ``py``: ``python3``
+// there is often the Microsoft Store's invitation to install Python, which installs nothing with pip.
+function aelBridgeWindowsAdvice( diagnostics )
+{
+   return "No Python 3.10 or later with AEL's dependencies was found. Install Python 3 from python.org, and then, in "
+          + "the Command Prompt: py -m pip install --upgrade numpy scipy opencv-python-headless pillow tifffile imageio rawpy "
+          + "exifread\nThen close PixInsight and open it again. The AEL it needs comes with the connector. To use one "
+          + "particular Python, set the environment variable AEL_PYTHON to the full path of its python.exe.\n\n"
+          + (diagnostics.length > 0 ? "Tried:\n" + diagnostics.join( "\n" )
+             : "No python.exe was found: not through the py launcher, in the folders of PATH, where the installers of "
+               + "python.org put it, in conda, in a virtual environment of the home folder or in the Microsoft Store's "
+               + "aliases.");
+}
+
 function aelBridgeCandidates( preferred, aelRoot )
 {
    let candidates = [];
@@ -280,7 +539,10 @@ function aelBridgeCandidates( preferred, aelRoot )
    let saved = Settings.read( AEL_BRIDGE_SETTINGS_KEY + "pythonPath", DataType.UTF8String );
    if ( saved )
       add( saved );
-   add( aelBridgeEnvironmentVariable( "AEL_PYTHON" ) );
+   let chosen = aelBridgeEnvironmentVariable( "AEL_PYTHON" );
+   if ( aelBridgeOnWindows() )   // as Windows writes it, and as it is often set: C:\...\python.exe, with or without quotes
+      chosen = aelBridgeSlashes( chosen ).trim().replace( /^"+|"+$/g, "" );
+   add( chosen );
 #ifeq __PI_PLATFORM__ MACOSX
    addAll( aelBridgeVersionedPythons( "/opt/homebrew/bin" ) );
    addAll( aelBridgeVersionedPythons( "/usr/local/bin" ) );
@@ -289,40 +551,59 @@ function aelBridgeCandidates( preferred, aelRoot )
    addAll( aelBridgeVersionedPythons( "/usr/local/bin" ) );
    addAll( aelBridgeVersionedPythons( "/usr/bin" ) );
 #endif
-#ifeq __PI_PLATFORM__ MSWINDOWS
-   add( "python" );
-#endif
-   // Virtual environments, one folder per environment: ~/.venvs/<name>/bin/python and the like.
-   let environments = [ File.homeDirectory + "/.venvs", File.homeDirectory + "/.virtualenvs", File.homeDirectory + "/venvs" ];
-   for ( let i = 0; i < environments.length; ++i )
+   let diagnostics = [];
+   let next = 0;
+   // Tries the candidates not tried yet, in order; the first that serves, or null.
+   function tryNew()
    {
-      let folders = aelBridgeMatches( environments[i] + "/*" );
-      folders.sort();
-      for ( let j = 0; j < folders.length; ++j )
-         add( folders[j] + "/bin/python" );
+      for ( ; next < candidates.length; ++next )
+      {
+         let probe = aelBridgeProbe( candidates[next], aelRoot );
+         if ( probe.ok )
+         {
+            probe.diagnostics = diagnostics;
+            return probe;
+         }
+         diagnostics.push( candidates[next] + ": " + probe.message );
+      }
+      return null;
    }
-   add( File.homeDirectory + "/venv/bin/python" );
-   add( File.homeDirectory + "/.venv/bin/python" );
-   add( File.homeDirectory + "/.pyenv/shims/python" );
-   add( File.homeDirectory + "/miniconda3/bin/python" );
-   add( File.homeDirectory + "/anaconda3/bin/python" );
-   add( File.homeDirectory + "/miniforge3/bin/python" );
-   add( File.homeDirectory + "/mambaforge/bin/python" );
+   if ( aelBridgeOnWindows() )
+   {
+      // The Python chosen, saved or named in AEL_PYTHON first: the search that follows starts the launchers.
+      let served = tryNew();
+      if ( served )
+         return served;
+      addAll( aelBridgeWindowsPythons( aelBridgeWindowsPlaces() ) );
+   }
+   else
+   {
+      // Virtual environments, one folder per environment: ~/.venvs/<name>/bin/python and the like.
+      let environments = [ File.homeDirectory + "/.venvs", File.homeDirectory + "/.virtualenvs", File.homeDirectory + "/venvs" ];
+      for ( let i = 0; i < environments.length; ++i )
+      {
+         let folders = aelBridgeMatches( environments[i] + "/*" );
+         folders.sort();
+         for ( let j = 0; j < folders.length; ++j )
+            add( folders[j] + "/bin/python" );
+      }
+      add( File.homeDirectory + "/venv/bin/python" );
+      add( File.homeDirectory + "/.venv/bin/python" );
+      add( File.homeDirectory + "/.pyenv/shims/python" );
+      add( File.homeDirectory + "/miniconda3/bin/python" );
+      add( File.homeDirectory + "/anaconda3/bin/python" );
+      add( File.homeDirectory + "/miniforge3/bin/python" );
+      add( File.homeDirectory + "/mambaforge/bin/python" );
+   }
 #ifeq __PI_PLATFORM__ MACOSX
    add( "/usr/bin/python3" );
 #endif
 
-   let diagnostics = [];
-   for ( let i = 0; i < candidates.length; ++i )
-   {
-      let probe = aelBridgeProbe( candidates[i], aelRoot );
-      if ( probe.ok )
-      {
-         probe.diagnostics = diagnostics;
-         return probe;
-      }
-      diagnostics.push( candidates[i] + ": " + probe.message );
-   }
+   let served = tryNew();
+   if ( served )
+      return served;
+   if ( aelBridgeOnWindows() )
+      throw new Error( aelBridgeWindowsAdvice( diagnostics ) );
    throw new Error( "No Python 3.10 or later with AEL's dependencies was found. Install Python 3, and then, in the "
                     + "Terminal: python3 -m pip install numpy scipy opencv-python-headless pillow tifffile imageio\n"
                     + "The AEL it needs comes with the connector. To use one particular Python, set the environment "

@@ -113,7 +113,15 @@ class Progress:
                    "elapsed_s": round(time.time() - self.start, 1)}
         temporary = self.path.with_suffix(".tmp")
         temporary.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
-        temporary.replace(self.path)
+        # On Windows a file cannot be replaced while the connector is reading it. The connector reads it for an
+        # instant, twice a second: wait for it, and if it is still busy leave this note unwritten (the next step
+        # writes its own), so that a busy note does not stop the run.
+        for _ in range(10):
+            try:
+                temporary.replace(self.path)
+                break
+            except PermissionError:
+                time.sleep(0.05)
 
 
 # --- what the files are ---------------------------------------------------------------------------------------
