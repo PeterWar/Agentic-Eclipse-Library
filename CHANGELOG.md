@@ -2,8 +2,8 @@
 
 ## Unreleased
 
-**PixInsight connector: a Python is found on Windows.** Reported by a user on Windows: with Python and AEL's
-dependencies installed, the connector answered *No Python 3.10 or later with AEL's dependencies was found*. On Windows
+**PixInsight connector: a Python is found on Windows.** Reported by a user on Windows: with Python installed, the
+connector answered *No Python 3.10 or later with AEL's dependencies was found*. On Windows
 it tried one candidate of its own, the bare name `python`, and refused it before starting it, because a bare name is
 not a file; every other place it looked in was a folder of macOS or Linux (`bin/python`). Its message also advised
 `python3 -m pip install …`, which on Windows is often the Microsoft Store's invitation to install Python. Not yet run
@@ -11,8 +11,9 @@ on a Windows computer: what follows was checked on macOS, on a made-up Windows d
 (`plugins/pixinsight-ael/tests/windows_search.py`, 26 checks).
 
 - **The search on Windows** (`aelBridgeWindowsPythons`): the Pythons of the `py` launcher (its default first, where
-  `py -m pip install` puts the packages), `python.exe` in the folders of `PATH`, the folders of the python.org installers (newest version first), conda, the virtual environments
-  of the home folder (`Scripts\python.exe`) and, last, the Microsoft Store's aliases. Only what is there is tried.
+  `py -m pip install` puts the packages), `python.exe` in the folders of `PATH`, the folders of the python.org
+  installers (newest version first), conda, the virtual environments of the home folder (`Scripts\python.exe`) and,
+  last, the Microsoft Store's aliases. Only what is there is tried.
   `AEL_PYTHON` may be written as Windows writes a path, with `\` and with quotes; a Python that is chosen, saved or
   named there and serves is used without looking further.
 - **The environment of the Python on Windows.** A process started from PixInsight gets only the variables it is
@@ -21,8 +22,8 @@ on a Windows computer: what follows was checked on macOS, on a made-up Windows d
   read as PixInsight writes them.
 - **Paths in the answers.** Python on Windows answers with `C:\…`; the connector turns them to `/` before it opens a
   result, since PixInsight's functions take a path apart at `/`.
-- **The message on Windows** says `py -m pip install --upgrade …` in the Command Prompt, names `rawpy` and `exifread`, asks to
-  restart PixInsight, and lists the Pythons that were tried with the reason for each, or says that none was found.
+- **The message on Windows** says `py -m pip install --upgrade …` in the Command Prompt, names `rawpy` and
+  `exifread`, asks to restart PixInsight, and lists the Pythons that were tried with the reason for each, or says that none was found.
 - **Progress note** (`python/ael_auto.py`, both connectors): on Windows a file cannot be replaced while another
   program reads it, and the connector reads the progress note twice a second. The engine now waits for it and, if it
   is still busy, skips that note, so a busy note does not stop the run. This applies on every system; it has no
